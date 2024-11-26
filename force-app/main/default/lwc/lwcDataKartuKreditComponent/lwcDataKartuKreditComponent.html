@@ -1,0 +1,369 @@
+<!--
+    LWC Name    : lwcDatakartuKreditComponent.html
+    Created Date       : 11 September 2024
+    @description       : This is class ..
+    @author            : Rakeyan Nuramria
+    Modification Log :
+    Ver   Date         Author                            Modification
+    1.0   11/09/2024   Rakeyan Nuramria                  Initial Version
+    1.0   07/10/2024   Rakeyan Nuramria                  Adjust UI
+    1.0   09/10/2024   Rakeyan Nuramria                  [FROM SIT] Adjust UI to add another fields
+    1.0   09/10/2024   Rakeyan Nuramria                  [FROM SIT] Adjust UI change to textarea for alamat
+    1.0   31/10/2024   Rakeyan Nuramria                  [FROM SIT] Adjust UI to take out billing statment & autodebet
+    1.0   31/10/2024   Rakeyan Nuramria                  [FROM SIT] Adjust UI to show note for tanggal cetak & jatuh tempo
+-->
+
+<template>
+    <lightning-card icon-name="" variant="base" class="custom-card slds-m-top_xx-small slds-card_boundary">
+        <div slot="title">
+        </div>
+        <div slot="actions">
+            <template if:false={isCloseHidden}>
+                <lightning-button-icon icon-name="utility:close" alternative-text="Close" title="Close"
+                    onclick={handleCloseDataKartu} class="cssClass" variant="bare">
+                </lightning-button-icon>
+            </template>
+        </div>
+
+        <template if:true={isLoading}>
+            <div class="spinner-container" style="height:6rem;position:relative">
+                <div role="status" class="slds-spinner slds-spinner_small">
+                    <span class="slds-assistive-text">Loading</span>
+                    <div class="slds-spinner__dot-a"></div>
+                    <div class="slds-spinner__dot-b"></div>
+                </div>
+            </div>
+        </template>
+
+        <template if:false={isLoading}>
+            <template if:true={hasError}>
+                <div class="slds-text-color_error slds-m-top_medium slds-text-align_center">
+                    <b>{errorMsg}</b>
+                </div>
+            </template>
+            <!-- Main Card Body  -->
+            <template if:false={hasError}>
+                <div class="slds-grid slds-wrap slds-m-around_medium">
+                    <!-- Column 1 -->
+                    <div class="slds-col slds-size_4-of-12 slds-medium-size_4-of-12 slds-large-size_4-of-12">
+                        <!-- Tanggal Lahir -->
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label" for="tanggal-lahir">Tanggal Lahir</label>
+                            <div class="slds-form-element__control">
+                                <input class="slds-input text-bold" type="text" id="tanggal-lahir" readonly
+                                    value={cardInfo.tanggalLahir} />
+                            </div>
+                        </div>
+                        <!-- Limit Kartu Kredit -->
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label" for="limit-kartu">Limit Kartu Kredit</label>
+                            <div class="slds-form-element__control">
+                                <input class="slds-input text-bold" type="text" id="limit-kartu" readonly
+                                    value={cardInfo.limitKartu} />
+                            </div>
+                        </div>
+                        <!-- Nomor Handphone Terdaftar -->
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label" for="nomor-handphone">Nomor Handphone
+                                Terdaftar</label>
+                            <div class="slds-form-element__control">
+                                <input class="slds-input text-bold" type="text" id="nomor-handphone" readonly
+                                    value={cardInfo.noHandphone} />
+                            </div>
+                        </div>
+                        <!-- Nomor telephone Kantor -->
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label" for="nomor-kantor">Nomor telephone Kantor</label>
+                            <div class="slds-form-element__control">
+                                <input class="slds-input text-bold" type="text" id="nomor-kantor" readonly
+                                    value={cardInfo.noKantor} />
+                            </div>
+                        </div>
+                        <!-- Nomor Telephone Rumah -->
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label" for="nomor-rumah">Nomor Telephone Rumah</label>
+                            <div class="slds-form-element__control">
+                                <input class="slds-input text-bold" type="text" id="nomor-rumah" readonly
+                                    value={cardInfo.noRumah} />
+                            </div>
+                        </div>
+                        <!-- Nomor Telephone Kerabat Tidak Serumah -->
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label" for="nomor-kerabat">Nomor Telephone Kerabat Tidak
+                                Serumah</label>
+                            <div class="slds-form-element__control">
+                                <input class="slds-input text-bold" type="text" id="nomor-kerabat" readonly
+                                    value={cardInfo.noKerabat} />
+                            </div>
+                        </div>
+                        <!-- Nama Kerabat Tidak Serumah -->
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label" for="nama-kerabat">Nama Kerabat Tidak
+                                Serumah</label>
+                            <div class="slds-form-element__control">
+                                <input class="slds-input text-bold" type="text" id="nama-kerabat" readonly
+                                    value={cardInfo.namaKerabat} />
+                            </div>
+                        </div>
+                        <!-- Expired Kartu -->
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label" for="expired-kartu">Expired Kartu</label>
+                            <div class="slds-form-element__control">
+                                <input class="slds-input text-bold" type="text" id="expired-kartu" readonly
+                                    value={cardInfo.expiredKartu} />
+                            </div>
+                        </div>
+                        <!-- Tanggal Cetak -->
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label" for="tanggal-cetak">Tanggal Cetak <i>(format :
+                                    dd)</i></label>
+                            <div class="slds-form-element__control">
+                                <input class="slds-input text-bold" type="text" id="tanggal-cetak" readonly
+                                    value={cardInfo.tglCetak} />
+                            </div>
+                        </div>
+                        <!-- Tanggal Jatuh Tempo -->
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label" for="tanggal-jatuh-tempo">Tanggal Jatuh
+                                Tempo <i>(format : dd)</i></label>
+                            <div class="slds-form-element__control">
+                                <input class="slds-input text-bold" type="text" id="tanggal-jatuh-tempo" readonly
+                                    value={cardInfo.tglJatuhTempo} />
+                            </div>
+                        </div>
+                        <!-- Nominal Full Payment  -->
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label" for="nominal-full-payment">Nominal Full Payment
+                            </label>
+                            <div class="slds-form-element__control">
+                                <input class="slds-input text-bold" type="text" id="nominal-full-payment" readonly
+                                    value={cardInfo.nominalFullPayment} />
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Column 2 -->
+                    <div class="slds-col slds-size_4-of-12 slds-medium-size_4-of-12 slds-large-size_4-of-12">
+                        <!-- Nominal Minimum Payment -->
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label" for="nominal-minumum-payment">Nominal Minimum
+                                Payment</label>
+                            <div class="slds-form-element__control">
+                                <input class="slds-input text-bold" type="text" id="nominal-minumum-payment" readonly
+                                    value={cardInfo.nominalMinPayment} />
+                            </div>
+                        </div>
+                        <!-- Nominal Tagihan Berjalan -->
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label" for="Nominal-tagihan-berjalan">Nominal Tagihan
+                                Berjalan</label>
+                            <div class="slds-form-element__control">
+                                <input class="slds-input text-bold" type="text" id="Nominal-tagihan-berjalan" readonly
+                                    value={cardInfo.nominalTagihanBerjalan} />
+                            </div>
+                        </div>
+                        <!-- Nominal Pembayaran Terakhir -->
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label" for="nominal-pembayaran-terakhir">Nominal Pembayaran
+                                Terakhir</label>
+                            <div class="slds-form-element__control">
+                                <input class="slds-input text-bold" type="text" id="nominal-pembayaran-terakhir"
+                                    readonly value={cardInfo.nominalPembayaranTerakhir} />
+                            </div>
+                        </div>
+                        <!-- Nomor NIK -->
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label" for="nomor-NIK">Nomor NIK</label>
+                            <div class="slds-form-element__control">
+                                <input class="slds-input text-bold" type="text" id="nomor-NIK" readonly
+                                    value={cardInfo.noNIK} />
+                            </div>
+                        </div>
+                        <!-- Nomor NPWP -->
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label" for="nomor-NPWP">Nomor NPWP</label>
+                            <div class="slds-form-element__control">
+                                <input class="slds-input text-bold" type="text" id="nomor-NPWP" readonly
+                                    value={cardInfo.noNPWP} />
+                            </div>
+                        </div>
+                        <!-- Jenis Kelamin -->
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label" for="jenis-kelamin">Jenis Kelamin</label>
+                            <div class="slds-form-element__control">
+                                <input class="slds-input text-bold" type="text" id="jenis-kelamin" readonly
+                                    value={cardInfo.jenisKelamin} />
+                            </div>
+                        </div>
+                        <!-- Jabatan Kerja -->
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label" for="jabatan-kerja">Jabatan Kerja</label>
+                            <div class="slds-form-element__control">
+                                <input class="slds-input text-bold" type="text" id="jabatan-kerja" readonly
+                                    value={cardInfo.jabatanKerja} />
+                            </div>
+                        </div>
+                        <!-- Sisa Limit -->
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label" for="sisa-limit">Sisa Limit</label>
+                            <div class="slds-form-element__control">
+                                <input class="slds-input text-bold" type="text" id="sisa-limit" readonly
+                                    value={cardInfo.sisaLimit} />
+                            </div>
+                        </div>
+                        <!-- Limit Cicilan -->
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label" for="limit-cicilan">Limit Cicilan</label>
+                            <div class="slds-form-element__control">
+                                <input class="slds-input text-bold" type="text" id="limit-cicilan" readonly
+                                    value={cardInfo.limitCicilan} />
+                            </div>
+                        </div>
+                        <!-- Sisa Limit Cicilan -->
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label" for="sisa-limit-cicilan">Sisa Limit Cicilan</label>
+                            <div class="slds-form-element__control">
+                                <input class="slds-input text-bold" type="text" id="sisa-limit-cicilan" readonly
+                                    value={cardInfo.sisaLimitCicilan} />
+                            </div>
+                        </div>
+                        <!-- Alamat Pengiriman Billing Statement -->
+                        <!-- <div class="slds-form-element"> -->
+                        <!-- <label class="slds-form-element__label" for="alamat-billing">Alamat Pengiriman Billing
+                                Statement</label>
+                            <div class="slds-form-element__control">
+                                <input class="slds-input text-bold" type="text" id="alamat-billing" readonly
+                                    value={cardInfo.alamatBilling} />
+                            </div> -->
+
+                        <!-- <span class="slds-form-element__label">Alamat Pengiriman Pengiriman Billing Statement</span>
+                            <div class="slds-form-element__control">
+                                <div class="slds-form-element__static slds-m-bottom_x-small slds-m-top_x-small">
+                                    <p><b>{cardInfo.alamatBilling}</b></p>
+                                </div>
+                            </div>
+                        </div> -->
+                    </div>
+
+                    <!-- Column 3 -->
+                    <div class="slds-col slds-size_4-of-12 slds-medium-size_4-of-12 slds-large-size_4-of-12">
+                        <!-- Alamat Pengiriman Kartu -->
+                        <div class="slds-form-element">
+                            <!-- <label class="slds-form-element__label" for="alamat-pengiriman-kartu">Alamat Pengiriman
+                                Kartu</label>
+                            <div class="slds-form-element__control">
+                                <input class="slds-input text-bold" type="text" id="alamat-pengiriman-kartu" readonly
+                                    value={cardInfo.alamatPengirimanKartu} />
+                            </div> -->
+
+                            <span class="slds-form-element__label">Alamat Pengiriman Kartu</span>
+                            <div class="slds-form-element__control">
+                                <div class="slds-form-element__static slds-m-bottom_x-small slds-m-top_x-small">
+                                    <p><b>{cardInfo.alamatPengirimanKartu}</b></p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Alamat Kantor -->
+                        <div class="slds-form-element">
+                            <!-- <label class="slds-form-element__label" for="alamat-kantor">Alamat Kantor</label>
+                            <div class="slds-form-element__control">
+                                <input class="slds-input text-bold" type="text" id="alamat-kantor" readonly
+                                    value={cardInfo.alamatKantor} />
+                            </div> -->
+
+                            <span class="slds-form-element__label">Alamat Kantor</span>
+                            <div class="slds-form-element__control">
+                                <div class="slds-form-element__static slds-m-bottom_x-small slds-m-top_x-small">
+                                    <p><b>{cardInfo.alamatKantor}</b></p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Alamat Rumah -->
+                        <div class="slds-form-element">
+                            <!-- <label class="slds-form-element__label" for="alamat-rumah">Alamat Rumah</label>
+                            <div class="slds-form-element__control">
+                                <input class="slds-input text-bold" type="text" id="alamat-rumah" readonly
+                                    value={cardInfo.alamatRumah} />
+                            </div> -->
+
+                            <span class="slds-form-element__label">Alamat Rumah</span>
+                            <div class="slds-form-element__control">
+                                <div class="slds-form-element__static slds-m-bottom_x-small slds-m-top_x-small">
+                                    <p><b>{cardInfo.alamatRumah}</b></p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Alamat Email -->
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label" for="alamat-email">Alamat Email</label>
+                            <div class="slds-form-element__control">
+                                <input class="slds-input text-bold" type="text" id="alamat-email" readonly
+                                    value={cardInfo.alamatEmail} />
+                            </div>
+                        </div>
+                        <!-- Nominal Gaji/Pendapatan -->
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label" for="nominal-gaji">Nominal Gaji/Pendapatan</label>
+                            <div class="slds-form-element__control">
+                                <input class="slds-input text-bold" type="text" id="nominal-gaji" readonly
+                                    value={cardInfo.nominalGaji} />
+                            </div>
+                        </div>
+                        <!-- Nama Lengkap Ibu Kandung -->
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label" for="nama-ibu-kandung">Nama Lengkap Ibu
+                                Kandung</label>
+                            <div class="slds-form-element__control">
+                                <input class="slds-input text-bold" type="text" id="nama-ibu-kandung" readonly
+                                    value={cardInfo.namaIbuKandung} />
+                            </div>
+                        </div>
+                        <!-- Nomor Kartu  -->
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label" for="nomor-kartu">Nomor Kartu </label>
+                            <div class="slds-form-element__control">
+                                <input class="slds-input text-bold" type="text" id="nomor-kartu" readonly
+                                    value={cardInfo.noKartu} />
+                            </div>
+                        </div>
+                        <!-- Nama Cetak di Kartu Kredit -->
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label" for="nama-cetak">Nama Cetak di Kartu Kredit</label>
+                            <div class="slds-form-element__control">
+                                <input class="slds-input text-bold" type="text" id="nama-cetak" readonly
+                                    value={cardInfo.namaCetak} />
+                            </div>
+                        </div>
+                        <!-- Alasan Pemblokiran -->
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label" for="alasan-blokir">Alasan Pemblokiran</label>
+                            <div class="slds-form-element__control">
+                                <input class="slds-input text-bold" type="text" id="alasan-blokir" readonly
+                                    value={cardInfo.alasanPemblokiran} />
+                            </div>
+                        </div>
+                        <!-- Tanggal Terakhir Maintenance Kartu Kredit -->
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label" for="tanggal-terkahir-maintenance">Tanggal Terakhir
+                                Maintenance Kartu Kredit</label>
+                            <div class="slds-form-element__control">
+                                <input class="slds-input text-bold" type="text" id="tanggal-terkahir-maintenance"
+                                    readonly value={cardInfo.tglTerkahirMaintenance} />
+                            </div>
+                        </div>
+                        <!-- Nomor Rekening yang Terdaftar Autodebet -->
+                        <!-- <div class="slds-form-element">
+                            <label class="slds-form-element__label" for="nomor-rekening">Nomor Rekening yang Terdaftar
+                                Autodebet</label>
+                            <div class="slds-form-element__control">
+                                <input class="slds-input text-bold" type="text" id="nomor-rekening" readonly
+                                    value={cardInfo.noRekening} />
+                            </div>
+                        </div> -->
+                    </div>
+                </div>
+            </template>
+        </template>
+        <!-- End Main Card Body  -->
+    </lightning-card>
+</template>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Date_Within_OLA__c</fullName>
+    <externalId>false</externalId>
+    <formula>ISBLANK(SCC_Call_Type__c  ) &amp;&amp;  (MONTH( TODAY()) == MONTH(  DATEVALUE(CreatedDate ) )&amp;&amp;
+  YEAR( TODAY()) == YEAR( DATEVALUE(CreatedDate) ) &amp;&amp;  (DAY( TODAY())- DAY(DATEVALUE( CreatedDate) )&lt;=1 ))</formula>
+    <label>Date Within OLA</label>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

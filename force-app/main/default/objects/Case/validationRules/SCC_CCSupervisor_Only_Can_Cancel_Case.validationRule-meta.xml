@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>SCC_CCSupervisor_Only_Can_Cancel_Case</fullName>
+    <active>true</active>
+    <description>This error message is dispayed when non CC supervisor users tries to cancel the case</description>
+    <errorConditionFormula>AND(
+     ISCHANGED(Status), ISPICKVAL(Status, &quot;Cancelled&quot;),
+NOT($Permission.Change_owner_Custom_permission)
+)</errorConditionFormula>
+    <errorDisplayField>Status</errorDisplayField>
+    <errorMessage>Hanya Supervisor yang dapat melakukan Cancel case.
+Please reach out to your supervisor to cancel the case</errorMessage>
+</ValidationRule>

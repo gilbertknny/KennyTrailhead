@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>SCC_BO_NFT_Validation</fullName>
+    <active>false</active>
+    <errorConditionFormula>NOT($Permission.By_Pass_Validation_for_Migration) &amp;&amp; Case_Owner_X_User__c = FALSE &amp;&amp;
+( ISCHANGED( SCC_Call_Type__c ) || ISCHANGED( Terminal_ID__c ) || ISCHANGED( SCC_Call_Type_Feature__c ) || ISCHANGED( SCC_Waktu_Transaksi__c ))</errorConditionFormula>
+    <errorMessage>Tidak bisa update case milik orang lain</errorMessage>
+</ValidationRule>

@@ -1,0 +1,693 @@
+<!--
+    LWC Name           : lwcCustomerFinancialInfo.html
+    Created Date       : 28 August 2024
+    @description       : This is class ..
+    @author            : Rakeyan Nuramria
+    Modification Log :
+    Ver   Date         Author                            Modification
+    1.0   28/08/2024   Rakeyan Nuramria                  Initial Version
+    1.0   04/09/2024   Rakeyan Nuramria                  Adjust button for mutasi rekening
+    1.0   05/09/2024   Rakeyan Nuramria                  Adjust to connect component mutasi rekening for simpanan
+    1.0   06/09/2024   Rakeyan Nuramria                  Adjust to connect component mutasi rekening for kredit and others
+    1.0   09/10/2024   Rakeyan Nuramria                  [FROM SIT] Adjust logic to pass cardNo to mutasi
+-->
+
+<template>
+    <lightning-card icon-name="utility:case" variant="base">
+        <div slot="title">
+            Informasi Finansial
+        </div>
+        <div slot="actions">
+
+        </div>
+        <!-- <div slot="footer">
+    
+      </div> -->
+        <!-- Main Card Body  -->
+        <div class="slds-m-around_small">
+            <!-- Brimo Card -->
+            <!-- <div>
+                <lightning-card icon-name="" variant="base">
+                    <div slot="title">
+                        Brimo
+                    </div>
+                    <div class="table-container">
+                        <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                            <thead>
+                                <tr class="slds-line-height_reset">
+                                    <th class="th-base-color" scope="col">
+                                        <div class="slds-truncate slds-text-align_center" title="Opportunity Name">
+                                            Status</div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="slds-hint-parent">
+                                    <td data-label="Opportunity Name">
+                                        <div class="slds-truncate slds-text-align_center" title="">
+                                            <p style="color:green">Aktif</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </lightning-card>
+            </div> -->
+            <!-- End Brimo Card -->
+
+            <!-- Simpanan Card -->
+            <lightning-card icon-name="" variant="base">
+                <div slot="title">Simpanan</div>
+                <!-- Simpanan Body Card -->
+                <div class="slds-grid slds-gutters_x-small slds-wrap table-scrollable">
+
+                    <!-- Column for No -->
+                    <div class="slds-col slds-large-size_1-of-12 slds-medium-size_1-of-12 slds-size_1-of-12">
+                        <table class="slds-table slds-table_cell-buffer slds-table_bordered table-container">
+                            <thead>
+                                <tr class="slds-line-height_reset">
+                                    <th class="th-base-color" scope="col">
+                                        <div class="slds-truncate slds-text-align_center" title="No.">No.</div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- <template for:each={processedSimpananData} for:item="data">
+                                    <tr class="slds-hint-parent custom-row-height" key={data.no}>
+                                        <td data-label="No">
+                                            <div class="slds-truncate slds-text-align_center" title="">{data.no}</div>
+                                        </td>
+                                    </tr>
+                                </template> -->
+                                <!-- Loop through the processedSimpananData -->
+                                <template for:each={processedSimpananData} for:item="data">
+                                    <!-- Loop through the simpanan array within each data item -->
+                                    <template for:each={data.simpanan} for:item="simpanan" for:index="index">
+                                        <tr class="slds-hint-parent custom-row-height" key={data.accountNumber}>
+                                            <td data-label="No">
+                                                <!-- <div class="slds-truncate slds-text-align_center" title="">{data.no}
+                                                </div> -->
+                                                <div class="slds-truncate slds-text-align_center" title="">{simpanan.no}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Column for Produk -->
+                    <div class="slds-col slds-large-size_3-of-12 slds-medium-size_3-of-12 slds-size_3-of-12">
+                        <table class="slds-table slds-table_cell-buffer slds-table_bordered table-container">
+                            <thead>
+                                <tr class="slds-line-height_reset">
+                                    <th class="th-base-color" scope="col">
+                                        <div class="slds-truncate slds-text-align_center" title="Produk">Produk</div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- <template for:each={processedSimpananData} for:item="data">
+                                    <tr class="slds-hint-parent custom-row-height" key={data.no}>
+                                        <td data-label="Produk">
+                                            <div class="slds-truncate slds-text-align_center" title="">{data.produk}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </template> -->
+                                <template for:each={processedSimpananData} for:item="data">
+                                    <template for:each={data.simpanan} for:item="simpanan" for:index="index">
+                                        <tr class="slds-hint-parent custom-row-height" key={data.accountNumber}>
+                                            <td data-label="Produk">
+                                                <div class="slds-truncate slds-text-align_center" title="">
+                                                    {simpanan.product}</div>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Column for Nomor Rekening -->
+                    <div class="slds-col slds-large-size_2-of-12 slds-medium-size_2-of-12 slds-size_2-of-12">
+                        <table class="slds-table slds-table_cell-buffer slds-table_bordered table-container">
+                            <thead>
+                                <tr class="slds-line-height_reset">
+                                    <th class="th-base-color" scope="col">
+                                        <div class="slds-truncate slds-text-align_center" title="Nomor Rekening">Nomor
+                                            Rekening</div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- <template for:each={processedSimpananData} for:item="data">
+                                    <tr class="slds-hint-parent custom-row-height" key={data.no}>
+                                        <td data-label="Nomor Rekening">
+                                            <div class="slds-truncate slds-text-align_center" title="">
+                                                {data.nomorRekening}</div>
+                                        </td>
+                                    </tr>
+                                </template> -->
+                                <template for:each={processedSimpananData} for:item="data">
+                                    <template for:each={data.simpanan} for:item="simpanan" for:index="index">
+                                        <tr class="slds-hint-parent custom-row-height" key={data.accountNumber}>
+                                            <td data-label="Nomor Rekening">
+                                                <div class="slds-truncate slds-text-align_center" title="">
+                                                    {simpanan.accountNumber}</div>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Column for Status -->
+                    <div class="slds-col slds-large-size_2-of-12 slds-medium-size_2-of-12 slds-size_2-of-12">
+                        <table class="slds-table slds-table_cell-buffer slds-table_bordered table-container">
+                            <thead>
+                                <tr class="slds-line-height_reset">
+                                    <th class="th-base-color" scope="col">
+                                        <div class="slds-truncate slds-text-align_center" title="Status">Status</div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- <template for:each={processedSimpananData} for:item="data">
+                                    <tr class="slds-hint-parent custom-row-height" key={data.no}>
+                                        <td data-label="Status">
+                                            <div class="slds-truncate slds-text-align_center" title="">
+                                                <span class={data.customStatus}>{data.status}</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </template> -->
+                                <template for:each={processedSimpananData} for:item="data">
+                                    <template for:each={data.simpanan} for:item="simpanan" for:index="index">
+                                        <tr class="slds-hint-parent custom-row-height" key={data.accountNumber}>
+                                            <td data-label="Status">
+                                                <div class="slds-truncate slds-text-align_center" title="">
+                                                    <span class={simpanan.customStatus}>{simpanan.status}</span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Column for Brimo -->
+                    <div class="slds-col slds-large-size_2-of-12 slds-medium-size_2-of-12 slds-size_2-of-12">
+                        <table class="slds-table slds-table_cell-buffer slds-table_bordered table-container">
+                            <thead>
+                                <tr class="slds-line-height_reset">
+                                    <th class="th-base-color" scope="col">
+                                        <div class="slds-truncate slds-text-align_center" title="Brimo">Brimo</div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- <template for:each={processedSimpananData} for:item="data">
+                                    <tr class="slds-hint-parent custom-row-height" key={data.no}>
+                                        <td data-label="Brimo">
+                                            <div class="slds-truncate slds-text-align_center" title="">
+                                                <span class={data.customBrimo}>{data.brimo}</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </template> -->
+                                <template for:each={processedSimpananData} for:item="data">
+                                    <template for:each={data.simpanan} for:item="simpanan" for:index="index">
+                                        <tr class="slds-hint-parent custom-row-height" key={data.accountNumber}>
+                                            <td data-label="Brimo">
+                                                <div class="slds-truncate slds-text-align_center" title="">
+                                                    <span class={simpanan.customBrimo}>{simpanan.brimo}</span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Column for Action -->
+                    <div class="slds-col slds-large-size_2-of-12 slds-medium-size_2-of-12 slds-size_2-of-12">
+                        <table
+                            class="slds-table slds-table_cell-buffer slds-table_bordered slds-no-row-hover table-container">
+                            <thead>
+                                <tr class="slds-line-height_reset">
+                                    <th class="th-base-color" scope="col">
+                                        <div class="slds-truncate slds-text-align_center" title="Action">Action</div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- <template for:each={processedSimpananData} for:item="data">
+                                    <tr class="slds-hint-parent custom-row-height" key={data.no}>
+                                        <td data-label="Action">
+                                            <div class="slds-truncate slds-text-align_center" title="">
+                                                <button class="slds-button slds-button_neutral custom-button"
+                                                    data-index={data.no} onclick={handleClickMutasiSimpanan}>Mutasi
+                                                    Rekening</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </template> -->
+                                <template for:each={processedSimpananData} for:item="data">
+                                    <template for:each={data.simpanan} for:item="simpanan" for:index="index">
+                                        <tr class="slds-hint-parent custom-row-height" key={data.accountNumber}>
+                                            <td data-label="Action">
+                                                <div class="slds-truncate slds-text-align_center" title="">
+                                                    <!-- <button class="slds-button slds-button_neutral custom-button"
+                                                        data-index={data.no} onclick={handleClickMutasiSimpanan}>
+                                                        Mutasi Rekening
+                                                    </button> -->
+                                                    <button class="slds-button slds-button_neutral custom-button"
+                                                        data-account-number={simpanan.accountNumber}
+                                                        data-card-no={simpanan.cardNo}
+                                                        onclick={handleClickMutasiSimpanan}>
+                                                        Mutasi Transaksi
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+                <!-- End Simpanan Body Card -->
+            </lightning-card>
+
+
+
+            <!-- End Simpanan Card -->
+
+            <!-- Child Component - Show Mutasi Simpanan -->
+            <div class="scrollable-simpanan-container">
+                <template if:true={isMutasiSimpananVisible}>
+                    <c-lwc-mutasi-rekening-component class="mutasi-simpanan-component"
+                        onclose={handleCloseMutasiSimpanan} no-rekening={selectedNomorRekening}
+                        no-kartu={selectedNomorKartu} is-close-hidden={isCloseHidden} account-id={accountId}
+                        record-id={recordId}></c-lwc-mutasi-rekening-component>
+                </template>
+            </div>
+            <!-- End Child Component - Show Mutasi Simpanan -->
+
+            <!-- Kartu Kredit Card -->
+            <lightning-card icon-name="" variant="base">
+                <div slot="title">Kartu Kredit</div>
+                <!-- Kredit Body Card -->
+                <div class="slds-grid slds-gutters_x-small slds-wrap table-scrollable">
+
+                    <!-- Column for No -->
+                    <div class="slds-col slds-large-size_1-of-12 slds-medium-size_1-of-12 slds-size_1-of-12">
+                        <table class="slds-table slds-table_cell-buffer slds-table_bordered table-container">
+                            <thead>
+                                <tr class="slds-line-height_reset">
+                                    <th class="th-base-color" scope="col">
+                                        <div class="slds-truncate slds-text-align_center" title="No.">No.</div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={processedKreditData} for:item="data">
+                                    <template for:each={data.cardlink} for:item="cardlink" for:index="index">
+                                        <tr class="slds-hint-parent custom-row-height" key={data.cardNo}>
+                                            <td data-label="No">
+                                                <!-- <div class="slds-truncate slds-text-align_center" title="">{data.no}
+                                                </div> -->
+                                                <div class="slds-truncate slds-text-align_center" title="">{cardlink.no}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Column for Produk -->
+                    <div class="slds-col slds-large-size_3-of-12 slds-medium-size_3-of-12 slds-size_3-of-12">
+                        <table class="slds-table slds-table_cell-buffer slds-table_bordered table-container">
+                            <thead>
+                                <tr class="slds-line-height_reset">
+                                    <th class="th-base-color" scope="col">
+                                        <div class="slds-truncate slds-text-align_center" title="Produk">Produk</div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={processedKreditData} for:item="data">
+                                    <template for:each={data.cardlink} for:item="cardlink" for:index="index">
+                                        <tr class="slds-hint-parent custom-row-height" key={data.cardNo}>
+                                            <td data-label="Produk">
+                                                <div class="slds-truncate slds-text-align_center" title="">
+                                                    {cardlink.product}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Column for Nomor Kartu -->
+                    <div class="slds-col slds-large-size_4-of-12 slds-medium-size_4-of-12 slds-size_4-of-12">
+                        <table class="slds-table slds-table_cell-buffer slds-table_bordered table-container">
+                            <thead>
+                                <tr class="slds-line-height_reset">
+                                    <th class="th-base-color" scope="col">
+                                        <div class="slds-truncate slds-text-align_center" title="Nomor Kartu">Nomor
+                                            Kartu</div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={processedKreditData} for:item="data">
+                                    <template for:each={data.cardlink} for:item="cardlink" for:index="index">
+                                        <tr class="slds-hint-parent custom-row-height" key={data.cardNo}>
+                                            <td data-label="Nomor Kartu">
+                                                <div class="slds-truncate slds-text-align_center" title="">
+                                                    {cardlink.cardNo}</div>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Column for Status -->
+                    <div class="slds-col slds-large-size_2-of-12 slds-medium-size_2-of-12 slds-size_2-of-12">
+                        <table class="slds-table slds-table_cell-buffer slds-table_bordered table-container">
+                            <thead>
+                                <tr class="slds-line-height_reset">
+                                    <th class="th-base-color" scope="col">
+                                        <div class="slds-truncate slds-text-align_center" title="Status">Status</div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={processedKreditData} for:item="data">
+                                    <template for:each={data.cardlink} for:item="cardlink" for:index="index">
+                                        <tr class="slds-hint-parent custom-row-height" key={data.cardNo}>
+                                            <td data-label="Status">
+                                                <div class="slds-truncate slds-text-align_center" title="">
+                                                    <span class={cardlink.customStatus}>{cardlink.status}</span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Column for Action -->
+                    <div class="slds-col slds-large-size_2-of-12 slds-medium-size_2-of-12 slds-size_2-of-12">
+                        <table
+                            class="slds-table slds-table_cell-buffer slds-table_bordered slds-no-row-hover table-container">
+                            <thead>
+                                <tr class="slds-line-height_reset">
+                                    <th class="th-base-color" scope="col">
+                                        <div class="slds-truncate slds-text-align_center" title="Action">Action</div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={processedKreditData} for:item="data">
+                                    <template for:each={data.cardlink} for:item="cardlink" for:index="index">
+                                        <tr class="slds-hint-parent custom-row-height" key={data.cardNo}>
+                                            <td data-label="Action">
+                                                <div class="slds-truncate slds-text-align_center" title="">
+                                                    <button class="slds-button slds-button_neutral custom-button"
+                                                        data-card-no={cardlink.cardNo}
+                                                        onclick={handleClickMutasiKredit}>Mutasi
+                                                        Transaksi</button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+                <!-- End Kredit Body Card -->
+            </lightning-card>
+
+            <!-- End Kartu Kredit Card -->
+
+            <!-- Child Component - Show Mutasi Kredit -->
+            <div class="scrollable-kredit-container">
+                <template if:true={isMutasiKreditVisible}>
+                    <c-lwc-mutasi-rekening-kredit-component class="mutasi-kredit-component"
+                        onclose={handleCloseMutasiKredit} no-kartu={selectedNomorKartu} is-close-hidden={isCloseHidden}
+                        account-id={accountId} record-id={recordId}></c-lwc-mutasi-rekening-kredit-component>
+                </template>
+            </div>
+            <!-- End Child Component - Show Mutasi Kredit -->
+
+            <!-- Pinjaman Card -->
+            <lightning-card icon-name="" variant="base">
+                <div slot="title">Pinjaman</div>
+                <!-- Pinjaman Body Card -->
+                <div class="slds-grid slds-gutters_x-small slds-wrap table-scrollable">
+
+                    <!-- Column for No -->
+                    <div class="slds-col slds-large-size_1-of-12 slds-medium-size_1-of-12 slds-size_1-of-12">
+                        <table class="slds-table slds-table_cell-buffer slds-table_bordered table-container">
+                            <thead>
+                                <tr class="slds-line-height_reset">
+                                    <th class="th-base-color" scope="col">
+                                        <div class="slds-truncate slds-text-align_center" title="No.">No.</div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={processedPinjamanData} for:item="data">
+                                    <template for:each={data.pinjaman} for:item="pinjaman" for:index="index">
+                                        <tr class="slds-hint-parent custom-row-height" key={data.accountNumber}>
+                                            <td data-label="No">
+                                                <div class="slds-truncate slds-text-align_center" title="">{pinjaman.no}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Column for Produk -->
+                    <div class="slds-col slds-large-size_5-of-12 slds-medium-size_5-of-12 slds-size_5-of-12">
+                        <table class="slds-table slds-table_cell-buffer slds-table_bordered table-container">
+                            <thead>
+                                <tr class="slds-line-height_reset">
+                                    <th class="th-base-color" scope="col">
+                                        <div class="slds-truncate slds-text-align_center" title="Produk">Produk</div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={processedPinjamanData} for:item="data">
+                                    <template for:each={data.pinjaman} for:item="pinjaman" for:index="index">
+                                        <tr class="slds-hint-parent custom-row-height" key={data.accountNumber}>
+                                            <td data-label="Produk">
+                                                <div class="slds-truncate slds-text-align_center" title="">
+                                                    {pinjaman.product}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Column for Nomor Rekening -->
+                    <div class="slds-col slds-large-size_6-of-12 slds-medium-size_6-of-12 slds-size_6-of-12">
+                        <table class="slds-table slds-table_cell-buffer slds-table_bordered table-container">
+                            <thead>
+                                <tr class="slds-line-height_reset">
+                                    <th class="th-base-color" scope="col">
+                                        <div class="slds-truncate slds-text-align_center" title="Nomor Rekening">Nomor
+                                            Rekening</div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={processedPinjamanData} for:item="data">
+                                    <template for:each={data.pinjaman} for:item="pinjaman" for:index="index">
+                                        <tr class="slds-hint-parent custom-row-height" key={data.accountNumber}>
+                                            <td data-label="Nomor Rekening">
+                                                <div class="slds-truncate slds-text-align_center" title="">
+                                                    {pinjaman.accountNumber}</div>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Column for Status -->
+                    <!-- <div class="slds-col slds-large-size_4-of-12 slds-medium-size_4-of-12 slds-size_4-of-12">
+                        <table class="slds-table slds-table_cell-buffer slds-table_bordered table-container">
+                            <thead>
+                                <tr class="slds-line-height_reset">
+                                    <th class="th-base-color" scope="col">
+                                        <div class="slds-truncate slds-text-align_center" title="Status">Status</div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={processedPinjamanData} for:item="data">
+                                    <template for:each={data.pinjaman} for:item="pinjaman" for:index="index">
+                                        <tr class="slds-hint-parent custom-row-height" key={data.accountNumber}>
+                                            <td data-label="Status">
+                                                <div class="slds-truncate slds-text-align_center" title="">
+                                                    <span class={pinjaman.customStatus}>{pinjaman.status}</span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div> -->
+
+                </div>
+                <!-- End Pinjaman Body Card -->
+            </lightning-card>
+            <!-- End Pinjaman Card -->
+
+            <!-- Investasi Card -->
+            <lightning-card icon-name="" variant="base">
+                <div slot="title">Investasi</div>
+                <!-- Investasi Body Card -->
+                <div class="slds-grid slds-gutters_x-small slds-wrap table-scrollable">
+
+                    <!-- Column for No -->
+                    <div class="slds-col slds-large-size_1-of-12 slds-medium-size_1-of-12 slds-size_1-of-12">
+                        <table class="slds-table slds-table_cell-buffer slds-table_bordered table-container">
+                            <thead>
+                                <tr class="slds-line-height_reset">
+                                    <th class="th-base-color" scope="col">
+                                        <div class="slds-truncate slds-text-align_center" title="No.">No.</div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={processedInvestasiData} for:item="data">
+                                    <template for:each={data.investasi} for:item="investasi" for:index="index">
+                                        <tr class="slds-hint-parent custom-row-height" key={data.accountNumber}>
+                                            <td data-label="No">
+                                                <div class="slds-truncate slds-text-align_center" title="">
+                                                    {investasi.no}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Column for Produk -->
+                    <div class="slds-col slds-large-size_3-of-12 slds-medium-size_3-of-12 slds-size_3-of-12">
+                        <table class="slds-table slds-table_cell-buffer slds-table_bordered table-container">
+                            <thead>
+                                <tr class="slds-line-height_reset">
+                                    <th class="th-base-color" scope="col">
+                                        <div class="slds-truncate slds-text-align_center" title="Produk">Produk</div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={processedInvestasiData} for:item="data">
+                                    <template for:each={data.investasi} for:item="investasi" for:index="index">
+                                        <tr class="slds-hint-parent custom-row-height" key={data.accountNumber}>
+                                            <td data-label="Produk">
+                                                <div class="slds-truncate slds-text-align_center" title="">
+                                                    {investasi.product}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Column for Nomor Rekening -->
+                    <div class="slds-col slds-large-size_4-of-12 slds-medium-size_4-of-12 slds-size_4-of-12">
+                        <table class="slds-table slds-table_cell-buffer slds-table_bordered table-container">
+                            <thead>
+                                <tr class="slds-line-height_reset">
+                                    <th class="th-base-color" scope="col">
+                                        <div class="slds-truncate slds-text-align_center" title="Nomor Rekening">Nomor
+                                            Rekening</div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={processedInvestasiData} for:item="data">
+                                    <template for:each={data.investasi} for:item="investasi" for:index="index">
+                                        <tr class="slds-hint-parent custom-row-height" key={data.accountNumber}>
+                                            <td data-label="Nomor Rekening">
+                                                <div class="slds-truncate slds-text-align_center" title="">
+                                                    {investasi.accountNumber}</div>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Column for Status -->
+                    <div class="slds-col slds-large-size_4-of-12 slds-medium-size_4-of-12 slds-size_4-of-12">
+                        <table class="slds-table slds-table_cell-buffer slds-table_bordered table-container">
+                            <thead>
+                                <tr class="slds-line-height_reset">
+                                    <th class="th-base-color" scope="col">
+                                        <div class="slds-truncate slds-text-align_center" title="Status">Status</div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={processedInvestasiData} for:item="data">
+                                    <template for:each={data.investasi} for:item="investasi" for:index="index">
+                                        <tr class="slds-hint-parent custom-row-height" key={data.accountNumber}>
+                                            <td data-label="Status">
+                                                <div class="slds-truncate slds-text-align_center" title="">
+                                                    <span class={investasi.customStatus}>{investasi.status}</span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+                <!-- End Investasi Body Card -->
+            </lightning-card>
+            <!-- End Investasi Card -->
+
+        </div>
+        <!-- Main Card Body  -->
+    </lightning-card>
+</template>

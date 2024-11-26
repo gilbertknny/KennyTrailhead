@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>60.0</apiVersion>
+    <constants>
+        <description>This will store the value of Data Administrator profile</description>
+        <name>DataAdmin</name>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Data Administrator</stringValue>
+        </value>
+    </constants>
+    <constants>
+        <description>This will store SystemAdmin</description>
+        <name>SystemAdmin</name>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>System Administrator</stringValue>
+        </value>
+    </constants>
+    <customErrors>
+        <description>This will throw an error message to the users trying to delete the task record</description>
+        <name>SCC_Display_error</name>
+        <label>Display error</label>
+        <locationX>440</locationX>
+        <locationY>395</locationY>
+        <customErrorMessages>
+            <errorMessage>{!$Label.SCC_Task_Record_cannot_be_Deleted}</errorMessage>
+            <isFieldError>false</isFieldError>
+        </customErrorMessages>
+    </customErrors>
+    <decisions>
+        <description>This will decide to display error</description>
+        <name>Error_Decision</name>
+        <label>Error Decision</label>
+        <locationX>176</locationX>
+        <locationY>287</locationY>
+        <defaultConnector>
+            <targetReference>SCC_Display_error</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>System_Admin</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Profile.Name</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <elementReference>SystemAdmin</elementReference>
+                </rightValue>
+            </conditions>
+            <label>System Admin?</label>
+        </rules>
+        <rules>
+            <name>Data_Admin</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Profile.Name</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <elementReference>DataAdmin</elementReference>
+                </rightValue>
+            </conditions>
+            <label>Data Admin?</label>
+        </rules>
+    </decisions>
+    <description>This flow will restrict users except the system admin and the Data admin from deleting task records.</description>
+    <environments>Default</environments>
+    <interviewLabel>SCC_Users_Cannot_Delete_Tasks {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>SCC_Users_Cannot_Delete_Tasks</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Error_Decision</targetReference>
+        </connector>
+        <object>Task</object>
+        <recordTriggerType>Delete</recordTriggerType>
+        <triggerType>RecordBeforeDelete</triggerType>
+    </start>
+    <status>Active</status>
+    <variables>
+        <description>This will indicate non-admin user</description>
+        <name>NotSystemAdmin</name>
+        <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

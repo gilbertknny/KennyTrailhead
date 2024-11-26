@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Invocable_Case_Resolution_Action_1</name>
+        <label>Invocable Case Resolution Action 1</label>
+        <locationX>50</locationX>
+        <locationY>350</locationY>
+        <actionName>SCC_CaseResolution_Invoc</actionName>
+        <actionType>apex</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>csid</name>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>source</name>
+            <value>
+                <stringValue>CHM Support</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>tipe</name>
+            <value>
+                <stringValue>Pembukuan</stringValue>
+            </value>
+        </inputParameters>
+        <nameSegment>SCC_CaseResolution_Invoc</nameSegment>
+        <versionSegment>1</versionSegment>
+    </actionCalls>
+    <apiVersion>61.0</apiVersion>
+    <choices>
+        <name>Closed_Tiket</name>
+        <choiceText>Closed Tiket</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Closed Tiket</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>Pembukuan_Ulang</name>
+        <choiceText>Pembukuan Ulang</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Pembukuan Ulang</stringValue>
+        </value>
+    </choices>
+    <decisions>
+        <name>Check_Action</name>
+        <label>Check Action</label>
+        <locationX>314</locationX>
+        <locationY>242</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Outcome_1_of_Check_Action</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Action</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <elementReference>Pembukuan_Ulang</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Invocable_Case_Resolution_Action_1</targetReference>
+            </connector>
+            <label>Retry Pembukuan</label>
+        </rules>
+        <rules>
+            <name>Forced_Closed</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Action</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <elementReference>Closed_Tiket</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Records_1</targetReference>
+            </connector>
+            <label>Forced Closed</label>
+        </rules>
+    </decisions>
+    <environments>Default</environments>
+    <interviewLabel>Case Pembukuan Ulang or Manual Closed {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Case Pembukuan Ulang or Manual Closed</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>Flow</processType>
+    <recordUpdates>
+        <name>Update_Records_1</name>
+        <label>Update Records 1</label>
+        <locationX>314</locationX>
+        <locationY>350</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>SCC_Closure_Comments__c</field>
+            <value>
+                <elementReference>Keterangan_Closing</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>SCC_Resolution_Category__c</field>
+            <value>
+                <stringValue>Tidak Mengirimkan Notifikasi</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Status</field>
+            <value>
+                <stringValue>Closed</stringValue>
+            </value>
+        </inputAssignments>
+        <object>Case</object>
+    </recordUpdates>
+    <screens>
+        <name>Manual_Action_Case</name>
+        <label>Manual Action Case</label>
+        <locationX>314</locationX>
+        <locationY>134</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>true</allowPause>
+        <connector>
+            <targetReference>Check_Action</targetReference>
+        </connector>
+        <fields>
+            <name>Action</name>
+            <choiceReferences>Pembukuan_Ulang</choiceReferences>
+            <choiceReferences>Closed_Tiket</choiceReferences>
+            <dataType>String</dataType>
+            <fieldText>Action</fieldText>
+            <fieldType>RadioButtons</fieldType>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>true</isRequired>
+        </fields>
+        <fields>
+            <name>Keterangan_Closing</name>
+            <fieldText>Keterangan Closing</fieldText>
+            <fieldType>LargeTextArea</fieldType>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>true</isRequired>
+            <visibilityRule>
+                <conditionLogic>and</conditionLogic>
+                <conditions>
+                    <leftValueReference>Action</leftValueReference>
+                    <operator>EqualTo</operator>
+                    <rightValue>
+                        <elementReference>Closed_Tiket</elementReference>
+                    </rightValue>
+                </conditions>
+            </visibilityRule>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+    <start>
+        <locationX>188</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Manual_Action_Case</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <variables>
+        <name>recordId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

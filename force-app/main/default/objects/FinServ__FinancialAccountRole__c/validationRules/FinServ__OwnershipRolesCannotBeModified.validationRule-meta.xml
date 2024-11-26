@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>FinServ__OwnershipRolesCannotBeModified</fullName>
+    <active>true</active>
+    <description>Enforces that changes to Related Contact, Related Account, Role fields are not allowed when fields are non editable.</description>
+    <errorConditionFormula>1!=1</errorConditionFormula>
+    <errorMessage>This record cannot be modified because ownership can be specified on the financial account only.</errorMessage>
+</ValidationRule>

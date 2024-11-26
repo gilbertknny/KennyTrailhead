@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>60.0</apiVersion>
+    <assignments>
+        <description>If not system, assign variable as false</description>
+        <name>If_not_System_Admin</name>
+        <label>If not System Admin</label>
+        <locationX>534</locationX>
+        <locationY>611</locationY>
+        <assignmentItems>
+            <assignToReference>NotSystemAdmin</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Check_all_the_user_profile</targetReference>
+        </connector>
+    </assignments>
+    <constants>
+        <description>This will store SystemAdmin</description>
+        <name>SystemAdmin</name>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>System Administrator</stringValue>
+        </value>
+    </constants>
+    <customErrors>
+        <description>This will throw an error message to the users trying to delete the chatter post</description>
+        <name>SCC_Display_error</name>
+        <label>Display error</label>
+        <locationX>50</locationX>
+        <locationY>995</locationY>
+        <customErrorMessages>
+            <errorMessage>{!$Label.SCC_Chatter_cannot_be_deleted_by_users}</errorMessage>
+            <isFieldError>false</isFieldError>
+        </customErrorMessages>
+    </customErrors>
+    <decisions>
+        <description>This will check if the user is system Admin</description>
+        <name>Check_if_System_Admin</name>
+        <label>Check if System Admin</label>
+        <locationX>402</locationX>
+        <locationY>503</locationY>
+        <defaultConnector>
+            <targetReference>If_not_System_Admin</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Yes</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Check_all_the_user_profile.Name</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <elementReference>SystemAdmin</elementReference>
+                </rightValue>
+            </conditions>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>This will decide to display error</description>
+        <name>Error_Decision</name>
+        <label>Error Decision</label>
+        <locationX>182</locationX>
+        <locationY>887</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>If_not_system_AdminUser</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>If_not_System_Admin</leftValueReference>
+                <operator>WasVisited</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>SCC_Display_error</targetReference>
+            </connector>
+            <label>If not system Admin User</label>
+        </rules>
+    </decisions>
+    <description>This flow throws an error message to the users who try to delete the chatter</description>
+    <environments>Default</environments>
+    <interviewLabel>Chatter Cannot be deleted by the users {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Chatter Cannot be deleted by the users</label>
+    <loops>
+        <description>This will iterate the previous values</description>
+        <name>Check_all_the_user_profile</name>
+        <label>Check all the user profile</label>
+        <locationX>182</locationX>
+        <locationY>395</locationY>
+        <collectionReference>Get_User_s_profile</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Check_if_System_Admin</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>Error_Decision</targetReference>
+        </noMoreValuesConnector>
+    </loops>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <description>This will fetch User&apos;s profile</description>
+        <name>Get_User_s_profile</name>
+        <label>Get User&apos;s profile</label>
+        <locationX>182</locationX>
+        <locationY>287</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Check_all_the_user_profile</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$User.ProfileId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>Profile</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <start>
+        <locationX>56</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Get_User_s_profile</targetReference>
+        </connector>
+        <object>FeedItem</object>
+        <recordTriggerType>Delete</recordTriggerType>
+        <triggerType>RecordBeforeDelete</triggerType>
+    </start>
+    <status>Active</status>
+    <variables>
+        <description>This will indicate non-admin user</description>
+        <name>NotSystemAdmin</name>
+        <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

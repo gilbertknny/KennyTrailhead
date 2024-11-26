@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Param_Team_Dashboard__c</fullName>
+    <description>Backup: (CreatedBy.Id = $User.Id) || (OwnerId = $User.Id)</description>
+    <externalId>false</externalId>
+    <formula>( CreatedBy.Team_Dashboard__c  = $User.Team_Dashboard__c  ) || ( Owner:User.Team_Dashboard__c    = $User.Team_Dashboard__c  )</formula>
+    <label>Param Team Dashboard</label>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

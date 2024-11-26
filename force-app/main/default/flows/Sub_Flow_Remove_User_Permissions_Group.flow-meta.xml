@@ -1,0 +1,423 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>62.0</apiVersion>
+    <decisions>
+        <description>Any Permission Set Assignments?</description>
+        <name>Any_Permission_Set_Assignments</name>
+        <label>Any Permission Set Assignments?</label>
+        <locationX>182</locationX>
+        <locationY>758</locationY>
+        <defaultConnector>
+            <targetReference>Get_Permission_Set_License_Assignment</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No</defaultConnectorLabel>
+        <rules>
+            <name>Yes_Found_Permission_Set_Assignments</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Permission_Set_Assignments</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Loop_Permission_Set_Assignments</targetReference>
+            </connector>
+            <label>Yes - Found Permission Set Assignments</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>Any Permission Set Group?</description>
+        <name>Any_Permission_Set_Group</name>
+        <label>Any Permission Set Group?</label>
+        <locationX>182</locationX>
+        <locationY>350</locationY>
+        <defaultConnector>
+            <targetReference>Get_Permission_Set_Assignments</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No</defaultConnectorLabel>
+        <rules>
+            <name>Yes_Groups_Found</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Permission_Set_Group</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Delete_Permission_Set_Group</targetReference>
+            </connector>
+            <label>Yes - Groups Found</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>Any Permission Set Licenses?</description>
+        <name>Any_Permission_Set_Licenses</name>
+        <label>Any Permission Set Licenses?</label>
+        <locationX>182</locationX>
+        <locationY>1658</locationY>
+        <defaultConnector>
+            <targetReference>Get_Queue_Assignments</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No</defaultConnectorLabel>
+        <rules>
+            <name>Yes_Found_Licenses</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Permission_Set_License_Assignment</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Delete_Permission_Set_License_Assignments</targetReference>
+            </connector>
+            <label>Yes - Found Licenses</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>Any Queues?</description>
+        <name>Any_Queues</name>
+        <label>Any Queues?</label>
+        <locationX>182</locationX>
+        <locationY>2066</locationY>
+        <defaultConnectorLabel>No</defaultConnectorLabel>
+        <rules>
+            <name>Yes_Found_Queues</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Queue_Assignments</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Delete_Queue_Assignments</targetReference>
+            </connector>
+            <label>Yes - Found Queues</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>Is Owned by a Profile?</description>
+        <name>Is_Owned_by_a_Profile</name>
+        <label>Is Owned by a Profile?</label>
+        <locationX>338</locationX>
+        <locationY>1082</locationY>
+        <defaultConnector>
+            <targetReference>Loop_Permission_Set_Assignments</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Yes</defaultConnectorLabel>
+        <rules>
+            <name>No</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Permission_Set</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Delete_Permission_Set</targetReference>
+            </connector>
+            <label>No</label>
+        </rules>
+    </decisions>
+    <description>[Sub-Flow] Remove User&apos;s Permissions &amp; Public Group &amp; Queue</description>
+    <environments>Default</environments>
+    <formulas>
+        <description>PermissionSet15Digits</description>
+        <name>PermissionSet15Digits</name>
+        <dataType>String</dataType>
+        <expression>LEFT({!Loop_Permission_Set_Assignments.PermissionSet.Id}, 15)</expression>
+    </formulas>
+    <interviewLabel>[Sub-Flow] Remove User Permissions {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Sub-Flow - Remove User Permissions &amp; Group</label>
+    <loops>
+        <description>Loop Permission Set Assignments</description>
+        <name>Loop_Permission_Set_Assignments</name>
+        <label>Loop Permission Set Assignments</label>
+        <locationX>118</locationX>
+        <locationY>866</locationY>
+        <collectionReference>Get_Permission_Set_Assignments</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Get_Permission_Set</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>Get_Permission_Set_License_Assignment</targetReference>
+        </noMoreValuesConnector>
+    </loops>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordDeletes>
+        <description>Delete Permission Set</description>
+        <name>Delete_Permission_Set</name>
+        <label>Delete Permission Set</label>
+        <locationX>206</locationX>
+        <locationY>1190</locationY>
+        <connector>
+            <targetReference>Loop_Permission_Set_Assignments</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>PermissionSetId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>PermissionSet15Digits</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>AssigneeId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Loop_Permission_Set_Assignments.Assignee.Id</elementReference>
+            </value>
+        </filters>
+        <object>PermissionSetAssignment</object>
+    </recordDeletes>
+    <recordDeletes>
+        <description>Delete Permission Set Group</description>
+        <name>Delete_Permission_Set_Group</name>
+        <label>Delete Permission Set Group</label>
+        <locationX>50</locationX>
+        <locationY>458</locationY>
+        <connector>
+            <targetReference>Get_Permission_Set_Assignments</targetReference>
+        </connector>
+        <inputReference>Get_Permission_Set_Group</inputReference>
+    </recordDeletes>
+    <recordDeletes>
+        <description>Delete Permission Set License Assignments</description>
+        <name>Delete_Permission_Set_License_Assignments</name>
+        <label>Delete Permission Set License Assignments</label>
+        <locationX>50</locationX>
+        <locationY>1766</locationY>
+        <connector>
+            <targetReference>Get_Queue_Assignments</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>AssigneeId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_User.Id</elementReference>
+            </value>
+        </filters>
+        <object>PermissionSetLicenseAssign</object>
+    </recordDeletes>
+    <recordDeletes>
+        <description>Delete Queue Assignments</description>
+        <name>Delete_Queue_Assignments</name>
+        <label>Delete Queue Assignments</label>
+        <locationX>50</locationX>
+        <locationY>2174</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>UserOrGroupId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_User.Id</elementReference>
+            </value>
+        </filters>
+        <object>GroupMember</object>
+    </recordDeletes>
+    <recordLookups>
+        <description>Get Permission Set</description>
+        <name>Get_Permission_Set</name>
+        <label>Get Permission Set</label>
+        <locationX>338</locationX>
+        <locationY>974</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Is_Owned_by_a_Profile</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Loop_Permission_Set_Assignments.PermissionSet.Id</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>IsOwnedByProfile</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>PermissionSet</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <description>Get Permission Set Assignments</description>
+        <name>Get_Permission_Set_Assignments</name>
+        <label>Get Permission Set Assignments</label>
+        <locationX>182</locationX>
+        <locationY>650</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Any_Permission_Set_Assignments</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>AssigneeId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_User.Id</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>PermissionSetId</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>PermissionSetAssignment</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <description>Get Permission Set Group</description>
+        <name>Get_Permission_Set_Group</name>
+        <label>Get Permission Set Group</label>
+        <locationX>182</locationX>
+        <locationY>242</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Any_Permission_Set_Group</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>AssigneeId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_User.Id</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>PermissionSetGroupId</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>PermissionSetAssignment</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <description>Get Permission Set License Assignment</description>
+        <name>Get_Permission_Set_License_Assignment</name>
+        <label>Get Permission Set License Assignment</label>
+        <locationX>182</locationX>
+        <locationY>1550</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Any_Permission_Set_Licenses</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>AssigneeId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_User.Id</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>PermissionSetLicenseId</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>PermissionSetLicenseAssign</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <description>Get Queue Assignments</description>
+        <name>Get_Queue_Assignments</name>
+        <label>Get Queue Assignments</label>
+        <locationX>182</locationX>
+        <locationY>1958</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Any_Queues</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>UserOrGroupId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_User.Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>GroupMember</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <description>Get User</description>
+        <name>Get_User</name>
+        <label>Get User</label>
+        <locationX>182</locationX>
+        <locationY>134</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Get_Permission_Set_Group</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>UserID</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>User</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <start>
+        <locationX>56</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Get_User</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <variables>
+        <description>UserID</description>
+        <name>UserID</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

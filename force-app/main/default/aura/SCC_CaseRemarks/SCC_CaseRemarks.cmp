@@ -1,0 +1,7 @@
+<aura:component implements="flexipage:availableForAllPageTypes,force:hasRecordId,force:lightningQuickAction,lightning:actionOverride,lightning:hasPageReference" 
+                access="global" controller="SCC_CaseResolution_UI">
+                <aura:attribute name="recordId" type="String"/>
+                <aura:attribute name="case" type="Case" default="{ 'sobjectType': 'Case' }"/>
+                <aura:handler name="init" value="{! this }" action="{! c.init }"/>
+                <ui:inputTextArea aura:id="field" label="Remark"  value="{!v.case.SCC_Drone_Remark_Update__c}" rows="7" cols="20" disabled="true"/>
+</aura:component>

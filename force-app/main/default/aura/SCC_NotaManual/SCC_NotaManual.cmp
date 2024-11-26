@@ -1,0 +1,71 @@
+<aura:component controller="SCC_NotaManualController" implements="flexipage:availableForAllPageTypes,force:hasRecordId,force:lightningQuickActionWithoutHeader,lightning:actionOverride,lightning:hasPageReference" access="global">
+    <aura:attribute name="notaManual" type="SCC_Nota_Manual__c" />
+    <aura:attribute name="recordId" type="Id" />
+    <aura:attribute name="showSpinner" type="Boolean" default="false" />
+    <aura:attribute name="caseDetails" type="object"/>
+
+<aura:if isTrue="{!v.showSpinner}">
+    <div class="custom-spinner">
+        <div role="status" class="slds-spinner slds-spinner_medium slds-spinner_brand">
+            <span class="slds-assistive-text">Loading</span>
+            <div class="slds-spinner__dot-a"></div>
+            <div class="slds-spinner__dot-b"></div>
+        </div>
+    </div>
+</aura:if>
+
+    <aura:handler name="init" value="{!this}" action="{!c.createNotaManual}" />
+    
+    <lightning:card title="Informasi Ticket" class="slds-modal_large">
+        <div class="slds-p-around_medium">
+            <form class="slds-form slds-form_stacked">
+                <lightning:input label="Jenis Transaksi" name="jenisTransaksi" value="{!v.notaManual.SCC_Jenis_Transaksi__c}" disabled="true" />
+                <lightning:input label="No. Rekening" name="noRekening" value="{!v.notaManual.SCC_No_Rekening__c}" disabled="true" />
+                <lightning:input label="No. Telepon" name="noTelepon" value="{!v.notaManual.SCC_No_Telepon__c}" disabled="true" />
+                <lightning:input label="Nama Nasabah" name="namaNasabah" value="{!v.notaManual.SCC_Nama_Nasabah__c}" disabled="true" />
+                <lightning:input label="No. Kartu" name="noKartu" value="{!v.notaManual.SCC_No_Kartu__c}" disabled="true" />
+            </form>
+        </div>
+    </lightning:card>
+    
+    <lightning:card title="Analisa Permasalahan" class="slds-modal_large">
+        <div class="slds-p-around_medium">
+            <form class="slds-form slds-form_stacked">
+                <lightning:input label="Branchcode" name="branchcode" value="{!v.notaManual.SCC_Branchcode__c}" disabled="true" />
+                <lightning:input label="Keterangan" name="keterangan" value="{!v.notaManual.SCC_Keterangan__c}" />
+            </form>
+        </div>
+    </lightning:card>
+
+    <div class="slds-grid slds-wrap">
+        <div class="slds-col slds-size_1-of-2">
+            <lightning:card title="Pembukuan Debit" class="slds-modal_large">
+                <div class="slds-p-around_medium">
+                    <form class="slds-form slds-form_stacked">
+                        <lightning:input label="Rekening Titipan" name="rekeningTitipan" value="{!v.notaManual.SCC_Rekening_Titipan__c}" disabled="true"/>
+                        <lightning:input type="number" label="Jumlah" name="jumlahDebit" value="{!v.notaManual.SCC_Jumlah_Debit__c}" formatter="decimal" onchange="{!c.calculateTotal}" />
+                        <lightning:input type="number" label="Rekening Fee" name="rekeningFee" value="{!v.notaManual.SCC_Rekening_Fee__c}" />
+                        <lightning:input type="number" label="Jumlah Fee" name="jumlahFee" value="{!v.notaManual.SCC_Jumlah_Fee__c}" formatter="decimal" onchange="{!c.calculateTotal}" />
+                        <lightning:input type="number" label="Total" name="total" value="{!v.notaManual.SCC_Total__c}" disabled="true" />
+                    </form>
+                </div>
+            </lightning:card>
+        </div>
+        <div class="slds-col slds-size_1-of-2">
+            <lightning:card title="Pembukuan Kredit" class="slds-modal_large">
+                <div class="slds-p-around_medium">
+                    <form class="slds-form slds-form_stacked">
+                        <lightning:input label="Rekening Nasabah" name="rekeningNasabah" value="{!v.notaManual.SCC_Rekening_Nasabah__c}" disabled="true" />
+                        <lightning:input label="Nama" name="nama" value="{!v.notaManual.SCC_Nama_Nasabah__c}" disabled="true" />
+                        <lightning:input type="number" label="Jumlah" name="jumlahKredit" value="{!v.notaManual.SCC_Total__c}" formatter="decimal" disabled="true" />
+                    </form>
+                </div>
+            </lightning:card>
+        </div>
+    </div>
+    
+        <div class="slds-text-align_center slds-m-top_medium">
+        <lightning:button class="slds-m-right_medium" variant="neutral" label="Cancel" onclick="{!c.handleCancel}" />
+        <lightning:button class="slds-m-left_medium" variant="brand" label="Save" onclick="{!c.handleSave}" />
+    	</div>
+</aura:component>

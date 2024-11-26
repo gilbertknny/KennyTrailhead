@@ -1,0 +1,257 @@
+<apex:page renderAs="PDF" showHeader="false" applyHtmlTag="false" applyBodyTag="false" controller="Ctrl_PDF_ReportBranch">
+    <html xmlns="http://www.w3.org/1999/xhtml">
+        <head>
+            <style type="text/css">
+                @page {
+                margin-top: 70px;
+                margin-bottom: 70px;
+                margin-left: 0;
+                margin-right: 0;
+                size: A4 portrait;
+                page-break:always; 
+                page-break-inside:avoid;
+                letter-spacing: 5px;
+                
+                @top-left {
+                content: element(header);                
+                }
+                                
+                @bottom-left {
+                content: element(footer);
+                }
+                }
+                
+                div.header {
+                padding: 0px;
+                position: running(header);
+                font-family:sans-serif !important;
+                }
+                div.footer {
+                display: block;
+                padding: 0;
+                position: running(footer);
+                font-family:sans-serif !important;
+                }
+                .pagefooter:before{
+                content: counter(page) "/" counter(pages);
+                }
+                .pagenumber:before {
+                content: counter(page);
+                }
+                .pagecount:before {
+                content: counter(pages);
+                }
+                div.content{
+                width:80%;
+                margin:auto;
+                font-size:15px;
+                font-family:sans-serif !important;
+                }
+                .grid, .grid th, .grid td{
+                line-height:1.2;
+                border: 1px solid black;
+                border-collapse: collapse;
+                }
+                .grid td, .grid th{
+                padding:3px 3px 3px 3px;
+                }
+                .center{
+                vertical-align:top;
+                text-align: center;
+                }
+                .right{
+                text-align: right;
+                }
+                .left{
+                vertical-align:top;
+                text-align: left;
+                }
+                .top{
+                vertical-align:top;
+                }
+                .ttd{
+                width:50%;
+                height:130px;
+                vertical-align:top;
+                text-align:center;
+                font-weight:bold;
+                }
+                .no-border{
+                border: 0px !important; 
+                padding:0px !important;
+                }
+                .pgbreak{
+                page-break-before: always;
+                margin-top:10px;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="header" style="margin:30px 50px 0 85px;z-index:0;">
+                <div>
+                    <div class="left">
+                        <apex:image value="{!$Resource.PDFHeader1}" height="40px"></apex:image>
+                    </div>
+                    <div class="right" style="position:relative;bottom:40px;right:35px;"><apex:image value="{!$Resource.PDFHeader2}" height="40px"></apex:image></div>
+                </div>
+                
+            </div>   
+            <div class="footer" style="margin:0 0 0 80px; vertical-align:top;">
+                <div style="position: relative;">
+                    <div>
+                        <apex:image value="{!$Resource.PDFFooter1}" height="60px"></apex:image>
+                    </div>
+                    <div class="right" style="position:relative;bottom:40px;right:90px;"><div class="pagefooter"></div></div>
+                </div>
+            </div>
+            <div class="content">
+                <table style="width:100%;" class="grid">
+                    <tr>
+                        <th colspan="3" style="font-size:18px;text-align:center;height:50px">FORM PENERIMAAN PENGADUAN</th>
+                    </tr>
+                    <tr>
+                        <th colspan="3" style="font-size:18px;text-align:center;background-color:blue;color:white;height:40px;">Tiket Detail</th>
+                    </tr>
+                    <tr>
+                        <td style="width:170px;" class="top">Trouble Ticket ID</td>
+                        <td style="width:10px;" class="center">:</td>
+                        <td>{!cs.case_number__c}</td>
+                    </tr>
+                    <tr>
+                        <td class="top">CallType ID</td>
+                        <td class="center">:</td>
+                        <td>{!cs.SCC_Call_Type__r.External_Id__c}</td>
+                    </tr>
+                    <tr>
+                        <td class="top">Deskripsi</td>
+                        <td class="center">:</td>
+                        <td>{!cs.SSC_Call_Type_Description__c}</td>
+                    </tr>
+                    <tr>
+                        <td class="top">Nama Nasabah</td>
+                        <td class="center">:</td>
+                        <td>{!cs.Account.Name}</td>
+                    </tr>
+                    <tr>
+                        <td class="top">Nomor Kartu</td>
+                        <td class="center">:</td>
+                        <td>{!cs.SCC_Card_Number__c}</td>
+                    </tr>
+                    <tr>
+                        <td class="top">Nomor Rekening</td>
+                        <td class="center">:</td>
+                        <td>{!cs.SCC_Account_Number__c}</td>
+                    </tr>
+                    <tr>
+                        <td class="top">Nominal</td>
+                        <td class="center">:</td>
+                        <td>{!amount}</td>
+                    </tr>
+                    <tr>
+                        <td class="top">Tanggal Transaksi</td>
+                        <td class="center">:</td>
+                        <td>{!tgltransaksi}</td>
+                    </tr>
+                    <tr>
+                        <td class="top">Tanggal Buat</td>
+                        <td class="center">:</td>
+                        <td>{!tglbuat}</td>
+                    </tr>
+                    <tr>
+                        <td class="top">Nomor Telepon</td>
+                        <td class="center">:</td>
+                        <td>{!cs.SCC_Cust_Phone1__c}</td>
+                    </tr>
+                    <tr>
+                        <td class="top">Detail</td>
+                        <td class="center">:</td>
+                        <td>
+                            <div>
+                                <apex:outputText value="{!cs.Description}" style="white-space:pre-line;text-align:justify;"></apex:outputText>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" style="font-weight:bold;text-align:justify;">Kepada Nasabah/Perwakilan Nasabah, sudah dijelaskan oleh Petugas tentang tatacara penyelesaian 
+                            Pengaduan serta jangka waktu penyelesaian Pengaduan, Nasabah/Perwakilan Nasabah dapat memahami penjelasan Petugas
+                        </td>
+                    </tr>
+                    <tr class="no-border">
+                        <td colspan="3" class="no-border">
+                            <table width="100%" class="grid">
+                                <tr>
+                                    <td class="ttd">Tanda Tangan Petugas BRI</td>
+                                    <td class="ttd">Tanda Tangan Nama Nasabah</td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+                
+                <apex:outputPanel rendered="{!isBOUser}">
+                    <table style="width:100%;" class="grid pgbreak">
+                        <tr>
+                            <th colspan="3" style="font-size:18px;text-align:center;background-color:blue;color:white;height:40px;">GIC Pelaksana</th>
+                        </tr>
+                        <tr>
+                            <td style="width:170px;" class="top">GIC</td>
+                            <td class="center" style="width:10px;">:</td>
+                            <td>{!gic}</td>
+                        </tr>
+                        <tr>
+                            <td class="top">Agent Pelaksana</td>
+                            <td class="center">:</td>
+                            <td>{!agentname}</td>
+                        </tr>
+                    </table>
+                    
+                    <br/>
+                    <table style="width:100%;" class="grid">
+                        <tr>
+                            <th colspan="3" style="font-size:18px;text-align:center;background-color:blue;color:white;height:40px;">Remark</th>
+                        </tr>
+                        <tr class="no-border">
+                            <td colspan="3" class="no-border">
+                                <table width="100%" class="grid">
+                                   <tr>
+                                        <th style="width:170px;">Tanggal Remark</th>
+                                        <th>Log Remark Tiket</th>
+                                    </tr>
+                                    <apex:repeat value="{!listremark}" var="item">
+                                        <tr>
+                                            <td class="left">{!item.tanggal}</td>
+                                            <td class="left">{!item.deskripsi}</td>
+                                        </tr>
+                                    </apex:repeat>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                    <br/>
+                    
+                    <table style="width:100%;" class="grid">
+                        <tr>
+                            <th colspan="3" style="font-size:18px;text-align:center;background-color:blue;color:white;height:40px;">Log Aktivitas</th>
+                        </tr>
+                        <tr class="no-border">
+                            <td colspan="3" class="no-border">
+                                <table width="100%" class="grid">
+                                    <tr>
+                                        <th style="width:170px;">Tanggal Log</th>
+                                        <th>Log Aktivitas Tiket</th>
+                                    </tr>
+                                    <apex:repeat value="{!listhistory}" var="item">
+                                        <tr>
+                                            <td class="left">{!item.tanggal}</td>
+                                            <td class="left">{!item.deskripsi}</td>
+                                        </tr>
+                                    </apex:repeat>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </apex:outputPanel>
+            </div>
+        </body>
+    </html>
+</apex:page>

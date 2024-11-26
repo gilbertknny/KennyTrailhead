@@ -1,0 +1,386 @@
+<!--
+    LWC Name    : lwcDPLKInformation.html
+    Created Date       : ?? September 2024
+    @description       : This is class ..
+    @author            : Rakeyan Nuramria
+    Modification Log :
+    Ver   Date         Author                            Modification
+    1.0   ??/09/2024   Rakeyan Nuramria                  Initial Version
+    1.0   24/09/2024   Rakeyan Nuramria                  Adjust UI for API
+    1.0   26/09/2024   Rakeyan Nuramria                  [FROM SIT] Bug fixing for tgl lahir & kantor
+    1.0   31/10/2024   Rakeyan Nuramria                  [FROM SIT] Adjust UI to scrollable horizontally
+-->
+
+<template>
+    <lightning-card title="" icon-name="" variant="base" class="custom-card slds-m-top_xx-small slds-card_boundary">
+        <div class="slds-grid slds-gutters_x-small slds-m-around_small">
+            <div class="slds-col ">
+                <lightning-radio-group name="searchRadioGroupRequired" label="Pencarian Berdasarkan" options={options}
+                    value={methodValue} type="button" required disabled={hasText} onchange={handleRadioChange}
+                    class="lightning-radio-group-custom custom-radio-group">
+                </lightning-radio-group>
+            </div>
+            <div class="slds-col ">
+                <lightning-input class="custom-input" label="Masukkan Nomor ID atau Nomor DPLK" type="search"
+                    onchange={handleInputChange} value={searchValue}>
+                </lightning-input>
+            </div>
+            <div class="slds-col " style="margin-top: 20px;">
+                <lightning-button variant="brand" disabled={hasText} label="Cari" class="search-button-mt"
+                    onclick={searchData}>
+                </lightning-button>
+            </div>
+        </div>
+        <template if:true={errorMessage}>
+            <p class="slds-text-color_error slds-m-left_large">{errorMessage}</p>
+        </template>
+
+        <template if:true={isLoading}>
+            <!-- <div class="slds-m-top_medium">
+                <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+            </div> -->
+
+            <lightning-card class="custom-card slds-m-top_xx-small slds-card_boundary">
+                <div class="spinner-container" style="height:6rem;position:relative">
+                    <div role="status" class="slds-spinner slds-spinner_small">
+                        <span class="slds-assistive-text">Loading</span>
+                        <div class="slds-spinner__dot-a"></div>
+                        <div class="slds-spinner__dot-b"></div>
+                    </div>
+                </div>
+            </lightning-card>
+
+        </template>
+
+    </lightning-card>
+
+    <template if:true={hasError}>
+        <div class="slds-text-color_error slds-m-top_medium slds-text-align_center">
+            <b>{errorMsg}</b>
+        </div>
+    </template>
+
+    <template if:true={dataSI.length}>
+        <template for:each={dataSI} for:item="dplkItem">
+            <lightning-card key={dplkItem.cifno} title="Informasi DPLK"
+                class="custom-card slds-m-top_xx-small slds-card_boundary">
+                <div class="slds-grid slds-wrap slds-m-around_medium">
+                    <!-- Column 1 -->
+                    <div class="slds-col slds-size_6-of-12">
+                        <!-- Kantor Pembukaan -->
+                        <div class="slds-form-element slds-form-element_horizontal">
+                            <label class="slds-form-element__label" for="kantor_pembukaan_cabang">Kantor Pembukaan
+                                DPLK</label>
+                            <div class="slds-form-element__control">
+                                <input type="text" class="slds-input text-bold" id="kantor_pembukaan_cabang" readonly
+                                    value={dplkItem.kantor_pembukaan_cabang} />
+                            </div>
+                        </div>
+                        <!-- No. Account DPLK -->
+                        <div class="slds-form-element slds-form-element_horizontal">
+                            <label class="slds-form-element__label" for="nomor_akun_dplk">No. Account DPLK</label>
+                            <div class="slds-form-element__control">
+                                <input type="text" class="slds-input text-bold" id="nomor_akun_dplk" readonly
+                                    value={dplkItem.nomor_akun_dplk} />
+                            </div>
+                        </div>
+                        <!-- No. Handphone -->
+                        <div class="slds-form-element slds-form-element_horizontal">
+                            <label class="slds-form-element__label" for="nomor_handphone">No. Handphone</label>
+                            <div class="slds-form-element__control">
+                                <input type="text" class="slds-input text-bold" id="nomor_handphone" readonly
+                                    value={dplkItem.nomor_handphone} />
+                            </div>
+                        </div>
+                        <!-- CIF DPLK -->
+                        <div class="slds-form-element slds-form-element_horizontal">
+                            <label class="slds-form-element__label" for="cif_dplk">CIF DPLK</label>
+                            <div class="slds-form-element__control">
+                                <input type="text" class="slds-input text-bold" id="cif_dplk" readonly
+                                    value={dplkItem.cif_dplk} />
+                            </div>
+                        </div>
+                        <!-- Nama Nasabah -->
+                        <div class="slds-form-element slds-form-element_horizontal">
+                            <label class="slds-form-element__label" for="nama_nasabah">Nama Nasabah</label>
+                            <div class="slds-form-element__control">
+                                <input type="text" class="slds-input text-bold" id="nama_nasabah" readonly
+                                    value={dplkItem.nama_nasabah} />
+                            </div>
+                        </div>
+                        <!-- Tanggal Lahir -->
+                        <div class="slds-form-element slds-form-element_horizontal">
+                            <label class="slds-form-element__label" for="tanggal_lahir">Tanggal Lahir</label>
+                            <div class="slds-form-element__control">
+                                <input type="text" class="slds-input text-bold" id="tanggal_lahir" readonly
+                                    value={dplkItem.tanggal_lahir} />
+                            </div>
+                        </div>
+                        <!-- Tanggal Registrasi -->
+                        <div class="slds-form-element slds-form-element_horizontal">
+                            <label class="slds-form-element__label" for="tgl_registrasi">Tanggal Registrasi</label>
+                            <div class="slds-form-element__control">
+                                <input type="text" class="slds-input text-bold" id="tgl_registrasi" readonly
+                                    value={dplkItem.tgl_registrasi} />
+                            </div>
+                        </div>
+                        <!-- Anggota Corporate/Individu -->
+                        <div class="slds-form-element slds-form-element_horizontal">
+                            <label class="slds-form-element__label" for="anggota_korporat_individu">Anggota
+                                Corporate/Individu</label>
+                            <div class="slds-form-element__control">
+                                <input type="text" class="slds-input text-bold" id="anggota_korporat_individu" readonly
+                                    value={dplkItem.anggota_korporat_individu} />
+                            </div>
+                        </div>
+                        <!-- No. Pegawai (Jika Corporate) -->
+                        <div class="slds-form-element slds-form-element_horizontal">
+                            <label class="slds-form-element__label" for="no_pegawai_korporat">No. Pegawai (Jika
+                                Corporate)</label>
+                            <div class="slds-form-element__control">
+                                <input type="text" class="slds-input text-bold" id="no_pegawai_korporat" readonly
+                                    value={dplkItem.no_pegawai_korporat} />
+                            </div>
+                        </div>
+                        <!-- No. Rekening BRI -->
+                        <div class="slds-form-element slds-form-element_horizontal">
+                            <label class="slds-form-element__label" for="nomor_rekening_bri">No. Rekening
+                                BRI</label>
+                            <div class="slds-form-element__control">
+                                <input type="text" class="slds-input text-bold" id="nomor_rekening_bri" readonly
+                                    value={dplkItem.nomor_rekening_bri} />
+                            </div>
+                        </div>
+                        <!-- No. Kartu DPLK -->
+                        <div class="slds-form-element slds-form-element_horizontal">
+                            <label class="slds-form-element__label" for="nomor_kartu_dplk">No. Kartu DPLK</label>
+                            <div class="slds-form-element__control">
+                                <input type="text" class="slds-input text-bold" id="nomor_kartu_dplk" readonly
+                                    value={dplkItem.nomor_kartu_dplk} />
+                            </div>
+                        </div>
+                        <!-- Status DPLK -->
+                        <div class="slds-form-element slds-form-element_horizontal">
+                            <label class="slds-form-element__label" for="status_dplk">Status DPLK</label>
+                            <div class="slds-form-element__control">
+                                <input type="text" class="slds-input text-bold" id="status_dplk" readonly
+                                    value={dplkItem.status_dplk} />
+                            </div>
+                        </div>
+                        <!-- Sistem Pembayaran Iuran -->
+                        <div class="slds-form-element slds-form-element_horizontal">
+                            <label class="slds-form-element__label" for="sistem_pembayaran_iuran">Sistem Pembayaran
+                                Iuran</label>
+                            <div class="slds-form-element__control">
+                                <input type="text" class="slds-input text-bold" id="sistem_pembayaran_iuran" readonly
+                                    value={dplkItem.sistem_pembayaran_iuran} />
+                            </div>
+                        </div>
+                        <!-- Jenis Investasi yang Dipilih -->
+                        <div class="slds-form-element slds-form-element_horizontal">
+                            <label class="slds-form-element__label" for="jenis_investasi">Jenis Investasi yang
+                                Dipilih</label>
+                            <div class="slds-form-element__control">
+                                <input type="text" class="slds-input text-bold" id="jenis_investasi" readonly
+                                    value={dplkItem.jenis_investasi} />
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Column 2 -->
+                    <div class="slds-col slds-size_6-of-12">
+                        <!-- Total Iuran -->
+                        <div class="slds-form-element slds-form-element_horizontal">
+                            <label class="slds-form-element__label" for="iuran">Total Iuran</label>
+                            <div class="slds-form-element__control">
+                                <input type="text" class="slds-input text-bold" id="iuran" readonly
+                                    value={dplkItem.iuran} />
+                            </div>
+                        </div>
+                        <ul class="info-list">
+                            <li>
+                                <div class="slds-form-element slds-form-element_horizontal">
+                                    <label class="slds-form-element__label" for="iuran_peserta">Iuran
+                                        Peserta</label>
+                                    <div class="slds-form-element__control">
+                                        <input type="text" class="slds-input text-bold" id="iuran_peserta" readonly
+                                            value="" />
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="slds-form-element slds-form-element_horizontal">
+                                    <label class="slds-form-element__label" for="iuran_pemberi_kerja">Iuran Pemberi
+                                        Kerja</label>
+                                    <div class="slds-form-element__control">
+                                        <input type="text" class="slds-input text-bold" id="iuran_pemberi_kerja"
+                                            readonly value="" />
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="slds-form-element slds-form-element_horizontal">
+                                    <label class="slds-form-element__label" for="iuran_tambahan">Iuran
+                                        Tambahan</label>
+                                    <div class="slds-form-element__control">
+                                        <input type="text" class="slds-input text-bold" id="iuran_tambahan" readonly
+                                            value="" />
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                        <!-- Pengembangan -->
+                        <div class="slds-form-element slds-form-element_horizontal">
+                            <label class="slds-form-element__label" for="pengembangan">Pengembangan</label>
+                            <div class="slds-form-element__control">
+                                <input type="text" class="slds-input text-bold" id="pengembangan" readonly
+                                    value={dplkItem.pengembangan} />
+                            </div>
+                        </div>
+                        <ul class="info-list">
+                            <li>
+                                <div class="slds-form-element slds-form-element_horizontal">
+                                    <label class="slds-form-element__label" for="pengembangan_peserta">Pengembangan
+                                        Peserta</label>
+                                    <div class="slds-form-element__control">
+                                        <input type="text" class="slds-input text-bold" id="pengembangan_peserta"
+                                            readonly value="" />
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="slds-form-element slds-form-element_horizontal">
+                                    <label class="slds-form-element__label"
+                                        for="pengembangan_pemberi_kerja">Pengembangan Pemberi Kerja</label>
+                                    <div class="slds-form-element__control">
+                                        <input type="text" class="slds-input text-bold" id="pengembangan_pemberi_kerja"
+                                            readonly value="" />
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="slds-form-element slds-form-element_horizontal">
+                                    <label class="slds-form-element__label" for="pengembangan_tambahan">Pengembangan
+                                        Tambahan</label>
+                                    <div class="slds-form-element__control">
+                                        <input type="text" class="slds-input text-bold" id="pengembangan_tambahan"
+                                            readonly value="" />
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                        <!-- Pengalihan -->
+                        <div class="slds-form-element slds-form-element_horizontal">
+                            <label class="slds-form-element__label" for="pengalihan">Pengalihan</label>
+                            <div class="slds-form-element__control">
+                                <input type="text" class="slds-input text-bold" id="pengalihan" readonly
+                                    value={dplkItem.pengalihan} />
+                            </div>
+                        </div>
+                        <ul class="info-list">
+                            <li>
+                                <div class="slds-form-element slds-form-element_horizontal">
+                                    <label class="slds-form-element__label" for="pengalihan_peserta">Pengalihan
+                                        Peserta</label>
+                                    <div class="slds-form-element__control">
+                                        <input type="text" class="slds-input text-bold" id="pengalihan_peserta" readonly
+                                            value="" />
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="slds-form-element slds-form-element_horizontal">
+                                    <label class="slds-form-element__label" for="pengalihan_pemberi_kerja">Pengalihan
+                                        Pemberi Kerja</label>
+                                    <div class="slds-form-element__control">
+                                        <input type="text" class="slds-input text-bold" id="pengalihan_pemberi_kerja"
+                                            readonly value="" />
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="slds-form-element slds-form-element_horizontal">
+                                    <label class="slds-form-element__label" for="pengalihan_tambahan">Pengalihan
+                                        Tambahan</label>
+                                    <div class="slds-form-element__control">
+                                        <input type="text" class="slds-input text-bold" id="pengalihan_tambahan"
+                                            readonly value="" />
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                        <!-- Total Saldo -->
+                        <div class="slds-form-element slds-form-element_horizontal">
+                            <label class="slds-form-element__label" for="total_saldo">Total Saldo</label>
+                            <div class="slds-form-element__control">
+                                <input type="text" class="slds-input text-bold" id="total_saldo" readonly
+                                    value={dplkItem.total_saldo} />
+                            </div>
+                        </div>
+                        <!-- Alamat Email -->
+                        <div class="slds-form-element slds-form-element_horizontal">
+                            <label class="slds-form-element__label" for="alamat_email">Alamat Email</label>
+                            <div class="slds-form-element__control">
+                                <input type="text" class="slds-input text-bold" id="alamat_email" readonly
+                                    value={dplkItem.alamat_email} />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </lightning-card>
+
+
+        </template>
+    </template>
+
+    <template if:true={dataTransaction.length}>
+        <!-- <hr>
+            <div style="height: 300px">
+                <lightning-datatable key-field="id" data={dataTransaction} columns={columns}
+                    hide-checkbox-column></lightning-datatable>
+            </div> -->
+
+        <lightning-card icon-name="" variant="base" class="custom-card slds-m-top_xx-small slds-card_boundary">
+            <div class="slds-p-around_small slds-m-top_xx-small">
+                <div class="slds-scrollable_y custom-scroll">
+                    <table class="slds-table slds-table_bordered slds-table_fixed-layout custom-table">
+                        <thead>
+                            <tr class="slds-line-height_reset">
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Tanggal Transaksi">Tanggal Transaksi</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Nama Transaksi">Nama Transaksi
+                                    </div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Kode Cabang">Kode Cabang</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="ID Transaksi">ID Transaksi
+                                    </div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Keterangan">Keterangan
+                                    </div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template for:each={dataTransaction} for:item="row">
+                                <tr key={row.id_transaksi} class="slds-hint-parent">
+                                    <td>{row.tanggal_transaksi}</td>
+                                    <td>{row.nama_transaksi}</td>
+                                    <td>{row.branch_code}</td>
+                                    <td>{row.id_transaksi}</td>
+                                    <td>{row.keterangan}</td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </lightning-card>
+    </template>
+
+
+</template>

@@ -1,0 +1,42 @@
+.THIS .slds-card__header-title {
+    color: #0070d2;
+}
+.THIS .separator {
+    margin: 0 5px;
+}
+
+.THIS .slds-input, .THIS .slds-select {
+    margin-bottom: 1rem;
+}
+
+.THIS .section {
+    margin-bottom: 1.5rem;
+}
+.THIS .custom-spinner {
+    display: inline-block;
+    position: relative;
+    width: 2rem;
+    height: 2rem;
+}
+
+.THIS .custom-spinner div {
+    box-sizing: border-box;
+    display: block;
+    position: absolute;
+    width: 1.5rem;
+    height: 1.5rem;
+    margin: 8px;
+    border: 2px solid #0052cc; /* Warna border spinner */
+    border-radius: 50%;
+    animation: custom-spinner-animation 0.6s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+    border-color: #0052cc transparent transparent transparent;
+}
+
+@keyframes custom-spinner-animation {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}

@@ -1,0 +1,18 @@
+<template>
+    <lightning-card title="Incident Files">
+        <template if:true={files}>
+            <lightning-datatable
+                key-field="id"
+                data={files}
+                columns={columns}
+                hide-checkbox-column="true"
+                onsort={handleSort}
+                sorted-by={sortedBy}
+                sorted-direction={sortedDirection}>
+            </lightning-datatable>
+        </template>
+        <template if:true={boolerror}>
+            Maaf, terjadi kesalahan!
+        </template>
+    </lightning-card>
+</template>

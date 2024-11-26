@@ -1,0 +1,91 @@
+<template>
+    <lightning-card title="Pencarian Nasabah" icon-name="standard:account">
+        <template if:true={error}>
+            <div class="slds-text-color_error">
+                {error}
+            </div>
+        </template>
+
+        <template if:true={errorMsg}>
+            <div class="slds-text-color_error">
+                {errorMsg}
+            </div>
+        </template>
+        <div class="slds-p-around_medium">
+            <div>
+                <lightning-input type="text"
+                                 class="accountField"
+                                 label="Nomor Rekening"
+                                 value={accountNumber}
+                                 onchange={handleAccountName}
+                                 disabled={disableAccountField}></lightning-input>
+                <div style="color: red;">{accountNumberError}</div>
+            </div>
+            <div>
+                <lightning-input type="text"
+                                 class="debitCreditField"
+                                 label="Nomor Kartu Debit"
+                                 value={debitCreditNumber}
+                                 onchange={handleDebitCreditNo}
+                                 disabled={disableDebitCreditField}></lightning-input>
+                <div style="color: red;">{cardNumberError}</div>
+            </div>
+            <div>
+                <lightning-input type="text"
+                                 class="idField"
+                                 label="Nomor ID"
+                                 value={idValue}
+                                 onchange={handleNIK}
+                                 disabled={disableIdField}></lightning-input>
+            </div>
+            <div>
+                <lightning-input type="text"
+                                 class="phoneField"
+                                 label="Nomor Handphone"
+                                 value={phoneNumber}
+                                 onchange={handlePhone}
+                                 disabled={disablePhoneField}></lightning-input>
+                <div style="color: red;">{phoneNumberError}</div>
+            </div>
+        </div>
+           
+
+        <lightning-layout>
+            <lightning-layout-item size="6" small-device-size="2" medium-device-size="2" large-device-size="2"
+                                   padding="around-small">
+                <lightning-button label="Cari"
+                                  variant="brand"
+                                  onclick={handleSearch}
+                                  disabled={isSearchDisabled}></lightning-button>
+            </lightning-layout-item>
+        </lightning-layout><br/>
+
+        <template if:true={searchData}>
+            <div class="slds-m-top_medium table-container">
+                <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="small-column">No</th>  
+                            <th scope="col">Nama</th>
+                            <th scope="col">Phone Number</th>
+                            <th scope="col">Search Number</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={formattedSearchData} for:item="record" for:index="index">
+                            <tr key={record.accountId}>
+                                <td>{record.columnNumber}</td> <!-- Display the formatted column number -->
+                                <td>
+                                    <a href="#" onclick={navigateToAccountDetail} data-accountid={record.accountId}>{record.demographicInfo}</a>
+                                </td>
+                                <td>{record.handphone}</td>
+                                <td>{phoneNumber}</td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+            </div>
+        </template>
+        
+</lightning-card>
+</template>

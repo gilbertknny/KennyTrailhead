@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>SCC_Status_BRICARE__c</fullName>
+    <externalId>false</externalId>
+    <formula>CASE(TEXT(Status),
+&apos;New&apos;, &apos;New&apos;,
+&apos;Working&apos;, &apos;In Progress&apos;,
+&apos;Waiting Document&apos;, &apos;Returned&apos;,
+&apos;Return&apos;, &apos;Returned&apos;,
+&apos;Returned&apos;, &apos;Returned&apos;,
+&apos;Escalated&apos;, &apos;Assigned&apos;,
+&apos;Closed&apos;, &apos;Closed&apos;,
+&apos;Cancelled&apos;,&apos;Cancel&apos;,
+&apos;Not Used&apos;)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Status BRICARE</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

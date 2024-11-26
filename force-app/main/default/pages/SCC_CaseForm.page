@@ -1,0 +1,39 @@
+<apex:page standardController="Case" extensions="SCC_CaseController">
+    <apex:slds />
+    <apex:form rendered="{!renderForm}">
+        <div class="slds-grid slds-gutters">
+            <div class="slds-col">
+                <apex:pageMessages />
+                <div class="slds-box">
+                    <h2 class="slds-text-heading_medium">Create Case</h2>
+                    <apex:pageBlockSection >
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label" for="origin"></label>
+                            <div class="slds-form-element__control">
+                                <apex:inputField value="{!caseObj.Origin}" styleClass="slds-input" required="true" id="origin"/>
+                            </div>
+                        </div>
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label" for="email"></label>
+                            <div class="slds-form-element__control">
+                                <apex:inputField value="{!caseObj.SCC_Email__c}" styleClass="slds-input" required="false" id="email"/>
+                            </div>
+                        </div>
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label" for="phone"></label>
+                            <div class="slds-form-element__control">
+                                <apex:inputField value="{!caseObj.Cust_Current_Phone__c}" styleClass="slds-input" required="false" id="phone" onkeypress="return event.charCode >= 48 && event.charCode <= 57"/>
+                            </div>
+                        </div>
+                    </apex:pageBlockSection>
+                    <div class="slds-m-top_medium">
+                        <apex:commandButton value="Save" action="{!saveCase}" styleClass="slds-button slds-button_brand"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </apex:form>
+    <apex:form rendered="{!renderErrorForm}">
+        <apex:pageMessages />
+    </apex:form>
+</apex:page>

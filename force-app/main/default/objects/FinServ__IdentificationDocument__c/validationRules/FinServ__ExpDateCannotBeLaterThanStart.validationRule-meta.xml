@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>FinServ__ExpDateCannotBeLaterThanStart</fullName>
+    <active>true</active>
+    <description>Error message when the expiration date is earlier than the issue date.</description>
+    <errorConditionFormula>FinServ__IssueDate__c &gt; FinServ__ExpirationDate__c</errorConditionFormula>
+    <errorMessage>The expiration date can&apos;t be earlier than the issue date.</errorMessage>
+</ValidationRule>

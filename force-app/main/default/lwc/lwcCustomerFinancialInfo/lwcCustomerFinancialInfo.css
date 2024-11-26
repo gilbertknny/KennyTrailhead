@@ -1,0 +1,110 @@
+.custom-table {
+    width: 100%;
+}
+
+.th-base-color {
+    background-color: #0176D3; 
+    color:#ffffff
+}
+
+.custom-table-height {
+    height: 100%;
+    
+}
+.custom-row-height {
+    height: 41px;
+}
+
+.smaller-button {
+    transform: scale(0.8);
+    font-size: 14px;
+    transform-origin: center;
+}
+
+:host .small-button {
+    --slds-c-button-line-height: 1rem;
+    /* line-height: inherit; */
+}
+
+.table-container {
+    border-radius: 0.25rem;
+    overflow: hidden;
+
+    width: 100%; /* Ensure the table takes the full width of the container */
+    table-layout: fixed;
+}
+
+.table-scrollable {
+    max-height: 300px; /* Adjust height as necessary */
+    overflow-y: auto;
+}
+
+
+.custom-button {
+    /* width: 70%; */
+    /* height: 50px; */
+    /* transform: scale(0.8); */
+    /* font-size: smaller ; */
+    /*white-space: nowrap; /* Ensure text doesn't wrap to the next line */
+    /*overflow: hidden; /* Hide overflow text if the content is too large */
+    /*text-overflow: ellipsis; /* Add ellipsis if text overflows */
+
+    white-space: nowrap; 
+   /*width: 100%; /* Make the button take the full width of the cell */
+    max-width: 100%; 
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+    box-sizing: border-box; /* Ensure padding is included in the width */
+}
+
+.slds-truncate {
+    max-width: 100%; 
+    display: flex;
+    justify-content: center; /* Center the button horizontally */
+    padding: 0; /* Remove padding from the container to avoid overflow */
+}
+
+.slds-hint-parent td {
+    padding: 0.25rem; /* Reduce padding to give more space */
+}
+
+.slds-col {
+    min-width: 0; /* Prevent columns from expanding beyond available space */
+}
+
+.slds-table_cell-buffer {
+    padding-left: 0; 
+    padding-right: 0; 
+}
+
+/* Status styling */
+.status-aktif {
+    color: #28a745;
+    background-color: #d4edda;
+    padding: 5px 10px; 
+    border-radius: 4px; 
+    font-weight: bold; 
+    text-transform: capitalize;
+}
+
+.status-nonaktif {
+    color: #dc3545;
+    background-color: #f8d7da; 
+    padding: 5px 10px; 
+    border-radius: 4px; 
+    font-weight: bold; 
+    text-transform: capitalize; 
+}
+
+
+/* for PoC */
+
+.slds-truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.column-action .slds-text-align_center {
+    text-align: center;
+}

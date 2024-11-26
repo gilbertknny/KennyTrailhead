@@ -1,0 +1,16 @@
+<!-- caseWithAccountInfo.html -->
+<template>
+    <lightning-card title="Informasi Nasabah" icon-name={iconName}>
+        <div
+            class="slds-form-element slds-form-element_readonly slds-var-p-left_x-small slds-var-p-right_x-small slds-var-p-top_xxx-small slds-var-p-bottom_xxx-small slds-border_bottom">
+            <span class="slds-form-element__label">Nama Nasabah</span>
+            <div class="slds-form-element__control">
+                <div class="slds-form-element__static">{accountName}
+                    <template if:true={checkAgeValue}>
+                        <span style="float: right;">{age} Years Old</span>
+                    </template>
+                </div>
+            </div>
+        </div>
+    </lightning-card>
+</template>

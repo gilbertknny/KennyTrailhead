@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>SproutSocialApp__Debug_Logs</fullName>
+    <columns>NAME</columns>
+    <columns>SproutSocialApp__Type__c</columns>
+    <columns>SproutSocialApp__Location__c</columns>
+    <columns>SproutSocialApp__Message__c</columns>
+    <columns>CREATED_DATE</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>SproutSocialApp__Type__c</field>
+        <operation>equals</operation>
+        <value>Debug</value>
+    </filters>
+    <label>Debug Logs</label>
+</ListView>

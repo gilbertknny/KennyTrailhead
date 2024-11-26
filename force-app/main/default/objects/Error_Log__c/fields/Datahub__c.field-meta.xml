@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Datahub__c</fullName>
+    <externalId>false</externalId>
+    <formula>AND(OR(CONTAINS(Class_Name__c, &apos;datahub&apos;), CONTAINS(Class_Name__c, &apos;DataHub&apos;), CONTAINS(Endpoint__c, &apos;DataHub&apos;)),  NOT(OR(ISBLANK(Class_Name__c), ISBLANK(Endpoint__c))))</formula>
+    <label>Datahub</label>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

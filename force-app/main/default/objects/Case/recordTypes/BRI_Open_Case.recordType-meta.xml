@@ -1,0 +1,1193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RecordType xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>BRI_Open_Case</fullName>
+    <active>true</active>
+    <businessProcess>BRI Care</businessProcess>
+    <compactLayoutAssignment>Case_Compact_Layout</compactLayoutAssignment>
+    <description>This record type is for BRI Cases</description>
+    <label>BRI Open Case</label>
+    <picklistValues>
+        <picklist>Approval_Status__c</picklist>
+        <values>
+            <fullName>Approved</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Draft</fullName>
+            <default>true</default>
+        </values>
+        <values>
+            <fullName>Rejected</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Waiting for Checker</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Waiting for Signer</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Call_Type__c</picklist>
+        <values>
+            <fullName>8812</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Case_Reason__c</picklist>
+        <values>
+            <fullName>Nasabah UKO Metro</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pengaduan yang berulang</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pengaduan yang disampaikan dengan kemarahan dan ancaman %28hard complaint%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pengaduan yang disampaikan kembali karena belum menyetujui hasil investigasi sanggahan transaksi sebelumnya</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pengaduan yang disampaikan oleh tokoh masyarakat setempat%2C pejabat daerah setempat%2C termasuk wartawan dan Lembaga Sosial Masyarakat %28LSM%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pengaduan yang masuk ke media massa %28cetak%2Felektronik%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pengaduan yang masuk media sosial dan berpotensi viral</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pengaduan yang melebihi SLA yang dijanjikan</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Divisi__c</picklist>
+        <values>
+            <fullName>Application Management %26 Operation Division</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>BRILink Business Division</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bespoke Tech-Enabled Value Chain Team</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Card%2C Digital Lending %26 Assets Product Development Division</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Digital Banking Development %26 Operation Division</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Distribution Network Division</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Funding %26 Retail Payment Strategy Division</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>IT INFRASTRUCTURE %26 OPERATION DIVISION</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Information Security Division</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Investment Service Division</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Micro Business Development Division</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Operational Excellent Desk</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Operational Risk Division</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Payment Operation Division</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Service %26 Contact Center Division</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Transaction Banking Division</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ultra Micro Business Division</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Value Chain %26 Assets Product Development Division</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Kanwil__c</picklist>
+        <values>
+            <fullName>Bandung</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Banjarmasin</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>DKI</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>DKI2</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Denpasar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>KANWIL BANDAR LAMPUNG</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>KANWIL JAKARTA 3</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>KANWIL JAYAPURA</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>KANWIL MALANG</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>KANWIL PEKANBARU</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Makassar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Manado</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Medan</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Padang</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Palembang</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Semarang</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Surabaya</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Yogyakarta</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Origin</picklist>
+        <values>
+            <fullName>App Store</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Apple App Store</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>BPKN</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>BRIPENS</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bank Indonesia</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Email</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Facebook</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Google Play Store</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Instagram</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>MMS</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Media Cetak</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Media Konsumen</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Media Online</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Media Umum Lainya</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>OJK</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ombudsman</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>PKSS Oten</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>PPID</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Phone</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Play Store</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Qlola Live Chat</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SP4N LAPOR</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Surat</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Twitter</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Unit Kerja Operasional %28Walk in%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Video Banking</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>WhatsApp</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>X</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>YouTube</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Priority</picklist>
+        <values>
+            <fullName>High %28Urgent%2FCritical%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Low</fullName>
+            <default>true</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Progress_Ticket__c</picklist>
+        <values>
+            <fullName>Belum Dikerjakan</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sedang Dikerjakan</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sudah Dikerjakan</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Reason</picklist>
+        <values>
+            <fullName>Nasabah UKO Metro</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pengaduan yang berulang</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pengaduan yang disampaikan dengan kemarahan dan ancaman %28hard complaint%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pengaduan yang disampaikan kembali karena belum menyetujui hasil investigasi sanggahan transaksi sebelumnya</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pengaduan yang disampaikan oleh tokoh masyarakat setempat%2C pejabat daerah setempat%2C termasuk wartawan dan Lembaga Sosial Masyarakat %28LSM%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pengaduan yang masuk ke media massa %28cetak%2Felektronik%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pengaduan yang masuk media sosial dan berpotensi viral</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pengaduan yang melebihi SLA yang dijanjikan</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>SCC_Bersedia_di_survey__c</picklist>
+        <values>
+            <fullName>Tidak</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ya</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>SCC_Cancel_reasons__c</picklist>
+        <values>
+            <fullName>Lainnya</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tidak termasuk jenis pengaduan%2E</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>SCC_Case_Category__c</picklist>
+        <values>
+            <fullName>Complaint - Non-Transaction</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Complaint - Transaction</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Customer Feedback %2F Sentiment Monitoring</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Fraud %2F Suspicious Transactions</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Inquiry</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Platform %26 Device Support</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Products %2F Promotion Inquiry</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Request</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Third Party Support</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>SCC_Channel_Transaksi__c</picklist>
+        <values>
+            <fullName>ATM %2F CRM BRI</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>ATM Bank Lain</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Agen BRILink</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>BRI Credit Card Mobile</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>BRIMO</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Branch %2F Kantor BRI</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CERIA</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>E-Commerce</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>EDC BRI</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>EDC Bank Lain</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>IBBIZ</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Non channel</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>QLOLA</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>QRIS BRI</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>QRIS Bank Lain</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>SCC_IRIS_Resolution_Type__c</picklist>
+        <values>
+            <fullName>Permanent Solution</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Workaround Solution</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>SCC_IRIS_Status__c</picklist>
+        <values>
+            <fullName>In Progress</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Resolved</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>SCC_Next_Escalation_Level__c</picklist>
+        <values>
+            <fullName>SCC_Level1_Escalation_team%5F%5Fc</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SCC_Level2_Escalation_team%5F%5Fc</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SCC_Level3_Escalation_team%5F%5Fc</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SCC_Level4_Escalation_team%5F%5Fc</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>SCC_Product_L1__c</picklist>
+        <values>
+            <fullName>Investment</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Loans</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Savings</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Servicing</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Transaction Banking</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>SCC_Product_L2__c</picklist>
+        <values>
+            <fullName>Aplikasi Commodity Chain</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bancassurance</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Briguna Digital</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cash Management</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>DPLK %28Pension Fund%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Deposito</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Digital Savings</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Electronic Money</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Giro %28CA%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Government Programme</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Informasi Promo%2C Program%2C Produk</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Internet Banking</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>KPR %28Mortgage%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>KPR%2C KUR%2C KMK%2C KI</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>KTA %28Personal Loan%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>KTA - Digital</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>KUR %28Business Loan - Micro%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>KUR Ritel</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kartu Debit</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kartu Kredit %28Credit Card%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kredit Investasi %28Investment Loan%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kredit Modal Kerja %28Working Capital%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kupedes</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Merchant Solutions</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mobile Banking</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>PPID</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pawning</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SBN %28Bonds%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Safe Deposit</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Senyum Mobile</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Servicing - Layanan Cabang</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Servicing - Layanan Contact Center</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tabungan %28SA%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Taspen</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Transaction Solution</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Trustee %26 Wali Amanat</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Virtual Account</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>SCC_Resolution_Category__c</picklist>
+        <values>
+            <fullName>Dokumen Tidak Lengkap</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Non-Transactional</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tidak Mengirimkan Notifikasi</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>SCC_SLA_Status__c</picklist>
+        <values>
+            <fullName>In Progress</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Met</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Missed</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>SCC_Segment__c</picklist>
+        <values>
+            <fullName>Individu Priority %26 Private</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Individu Umum</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Korporasi</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>UMKM</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>SCC_Source_Import__c</picklist>
+        <values>
+            <fullName>BRI Care</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Omni 4</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Omni 5</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Zendesk</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>SCC_Status_Transaksi__c</picklist>
+        <values>
+            <fullName>Berhasil</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Gagal</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>SCC_Sub_Escalation_Level__c</picklist>
+        <values>
+            <fullName>Escalation Level 1</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Escalation Level 2</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Escalation Level 3</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Escalation Level 4</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>SCC_User__c</picklist>
+        <values>
+            <fullName>Call</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Non Call</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Team_Name__c</picklist>
+        <values>
+            <fullName>APP - IT Service Desk Function</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Autorization%2C Chargeback %26 UserCo - Defa</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bespoke Tech-Enabled Value Chain Team</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Brilink Business - Operation %26 Risk</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Business Operation - Default</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CDD - Auth%2CChrgbck %26 UserCo - CHARGEBACK</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CDD - Auth%2CChrgbck %26 UserCo - OTO</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CDD - Auth%2CChrgbck %26 UserCo - UserCo</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CDD - Business Monitoring%26Perform - MIS</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CDD - Business Operation Team - Delivery</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CDD - Business Operation Team - ITEM</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CDD - Business Operation Team - LKK</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CDD - Business Operation Team - MSU</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CDD - Business Partnership Team - PRN</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CDD - CLF-1 Credit Card Init - APLIK</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CDD - CLF-1 Credit Card Init - PS</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CDD - Clf-1 Credit Card Init - Analyst</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CDD - Clf-1 Credit Card Init - DATAM</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CDD - Clf-1 Credit Card Init - LIMIT</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CDD - Clf-1 Credit Card Init - SSU</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CDD - Clf-1 Credit Card Init - Verif</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CDD - Coll Card %26 Digital Lending - BJM</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CDD - Coll Card %26 Digital Lending - BRI</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CDD - Coll Card %26 Digital Lending - DPS</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CDD - Coll Card %26 Digital Lending - FE</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CDD - Coll Card %26 Digital Lending - HC</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CDD - Coll Card %26 Digital Lending - KPR</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CDD - Coll Card %26 Digital Lending - MDN</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CDD - Coll Card %26 Digital Lending - MKS</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CDD - Coll Card %26 Digital Lending - MR</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CDD - Coll Card %26 Digital Lending - RE</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CDD - Coll Card %26 Digital Lending - SBY</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CDD - Coll Card %26 Digital Lending - SMG</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CDD - Coll Card %26 Digital Lending-CERIA</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CDD - Coll Mortgage %26 SBL - KPR Briguna</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CDD - Marketing Strategy %26 Data Analitic</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CDD - Strgy%26Prod Briguna Dgtl%26Purna-CLS</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CDD - Strgy%26Prod Credit Card%26Dgtl Lend</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CLF - 1 Credit Card Init - Default</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Collection Card %26 Digital Lending - Defa</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Contact Center Team - Default</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>DDB - Helpdesk</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>DDB - Operational - CERIA</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>DDB - Operational - Digital Apps</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>DDB - Operational - Ecosystem</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>DNR - Echannel Infrastructure Operation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>DNR - Echannel Operation Monitoring</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Distribution Network Div</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>FST - Merchant Care %26 Operation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>FST - Merchant Implementation Management</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>FST - Online Payment %26 Card Services</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>FST - Transaction %26 Service Compliance</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>INV - Business Operation DPLK Team</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>INV - TCS Operation Team</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Information Security Division</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Micro Business Development Division</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>ORD - Fraud Management %26 Recovery Desk</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Operational Excellence Desk</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>POD - Payment System Reconciliation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SCC - Contact Center</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SCC - Contact Center - Telesales</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SCC - Customer Handling Management</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SCC - Customer Resolution</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SCC - Dispute Resolution</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SCC - Helpdesk</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SCC - Non Fraud Transaction - ACQUIRER</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SCC - Non Fraud Transaction - ISSUER</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SCC - Non Fraud Transaction - ON US</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SCC - Operation Implementation Assurance</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SCC - Quality Assurance</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SCC - Service %26 Implementation Assurance</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>TRB - Operation %26 Help Desk</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ultra Micro Business Division</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Value Chain %26 Assets Product Development</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Type</picklist>
+        <values>
+            <fullName>Incident</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Problem</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Question</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Unit_Type__c</picklist>
+        <values>
+            <fullName>BRANCH</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>BRILINK</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CDD</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>ITE</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>ONS</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>RPM</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+</RecordType>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>60.0</apiVersion>
+    <customErrors>
+        <name>Cannot_change_owner</name>
+        <label>Cannot change owner</label>
+        <locationX>50</locationX>
+        <locationY>431</locationY>
+        <customErrorMessages>
+            <errorMessage>Tidak bisa ganti owner</errorMessage>
+            <isFieldError>false</isFieldError>
+        </customErrorMessages>
+    </customErrors>
+    <decisions>
+        <name>Which_Permission</name>
+        <label>Which Permission?</label>
+        <locationX>182</locationX>
+        <locationY>323</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>CC_Maker</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>$Permission.CC_Maker</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Permission.Branch_Maker</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Cannot_change_owner</targetReference>
+            </connector>
+            <label>CC Maker</label>
+        </rules>
+    </decisions>
+    <environments>Default</environments>
+    <formulas>
+        <name>PriorIsNotQueue</name>
+        <dataType>Boolean</dataType>
+        <expression>LEFT({!$Record__Prior.OwnerId}, 3)  != &apos;00G&apos;</expression>
+    </formulas>
+    <interviewLabel>Case - CC Maker cannot change owner {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Case - CC Maker cannot change owner</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>56</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Which_Permission</targetReference>
+        </connector>
+        <filterFormula>AND(ISCHANGED({!$Record.OwnerId}), !ISCHANGED({!$Record.SCC_Sub_Escalation_Level__c}), !{!$Record.Case_Owner_X_User__c}, TEXT({!$Record.Status}) != &apos;Waiting Document&apos;, NOT({!$Permission.By_Pass_Validation_for_Migration}))</filterFormula>
+        <object>Case</object>
+        <recordTriggerType>Update</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Obsolete</status>
+    <triggerOrder>630</triggerOrder>
+</Flow>

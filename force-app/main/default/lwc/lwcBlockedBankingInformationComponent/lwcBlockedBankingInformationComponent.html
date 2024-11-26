@@ -1,0 +1,76 @@
+<!--
+    LWC Name    : lwcBlockedBankingInformationComponent.html
+    Created Date       : ?? September 2024
+    @description       : This is class ..
+    @author            : Rakeyan Nuramria
+    Modification Log :
+    Ver   Date         Author                            Modification
+    1.0   ??/09/2024   Rakeyan Nuramria                  Initial Version
+    1.0   ??/09/2024   Rakeyan Nuramria                  Adjust UI
+    1.0   09/10/2024   Ardyta Yudianto                   [FROM SIT] Adjust UI to scrollable horizontally
+    1.0   09/10/2024   Rakeyan Nuramria                  [FROM SIT] Add title card
+-->
+
+<template>
+    <lightning-card title="Informasi Hold Rekening" icon-name="" variant="base"
+        class="custom-card slds-m-around_small slds-card_boundary">
+        <div class="slds-p-around_small slds-m-top_xx-small">
+
+            <template if:true={isLoading}>
+                <div class="spinner-container" style="height:6rem;position:relative">
+                    <div role="status" class="slds-spinner slds-spinner_small">
+                        <span class="slds-assistive-text">Loading</span>
+                        <div class="slds-spinner__dot-a"></div>
+                        <div class="slds-spinner__dot-b"></div>
+                    </div>
+                </div>
+            </template>
+
+            <template if:false={isLoading}>
+                <template if:true={hasError}>
+                    <div class="slds-text-color_error slds-text-align_center">
+                        <b>{errorMsg}</b>
+                    </div>
+                </template>
+
+                <template if:true={data.length}>
+                    <div class="slds-scrollable_y custom-scroll">
+                        <table class="slds-table slds-table_bordered slds-table_fixed-layout custom-table">
+                            <thead>
+                                <tr class="slds-line-height_reset">
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Status Blokir Saldo">Status Blokir Saldo</div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Nominal Blokir Saldo">Nominal Blokir Saldo
+                                        </div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Unit Kerja Blokir">Unit Kerja Blokir</div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Tanggal Blokir">Tanggal Blokir</div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Keterangan Blokir">Keterangan Blokir</div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={data} for:item="row">
+                                    <tr key={row.acctNo} class="slds-hint-parent">
+                                        <td>{row.holdType}</td>
+                                        <td>{row.holdAmt}</td>
+                                        <td>{row.holdBranch}</td>
+                                        <td>{row.holdDate}</td>
+                                        <td>{row.holdRemark}</td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </template>
+            </template>
+        </div>
+    </lightning-card>
+</template>

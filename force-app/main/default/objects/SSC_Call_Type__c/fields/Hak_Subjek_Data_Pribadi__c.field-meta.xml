@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Hak_Subjek_Data_Pribadi__c</fullName>
+    <description>Termasuk Bagian dari Case Type untuk Perlidungan Data Pribadi</description>
+    <externalId>false</externalId>
+    <label>Hak Subjek Data Pribadi</label>
+    <required>false</required>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Hak Menunda Pemrosesan</fullName>
+                <default>false</default>
+                <label>Hak Menunda Pemrosesan</label>
+            </value>
+            <value>
+                <fullName>Hak Mengakhiri Pemrosesan</fullName>
+                <default>false</default>
+                <label>Hak Mengakhiri Pemrosesan</label>
+            </value>
+            <value>
+                <fullName>Hak atas Pembaruan</fullName>
+                <default>false</default>
+                <label>Hak atas Pembaruan</label>
+            </value>
+            <value>
+                <fullName>Hak Akses</fullName>
+                <default>false</default>
+                <label>Hak Akses</label>
+            </value>
+            <value>
+                <fullName>Hak Menarik Persetujuan</fullName>
+                <default>false</default>
+                <label>Hak Menarik Persetujuan</label>
+            </value>
+            <value>
+                <fullName>Hak atas Akses</fullName>
+                <default>false</default>
+                <label>Hak atas Akses</label>
+            </value>
+            <value>
+                <fullName>Aduan PDP</fullName>
+                <default>false</default>
+                <label>Aduan PDP</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

@@ -1,0 +1,103 @@
+<aura:component controller="SCC_AccountDPLKCtrl" implements="flexipage:availableForAllPageTypes,force:appHostable" access="global">
+    <aura:attribute name="options" type="List" default="[
+        {'label': 'No account DPLK', 'value': 'account_number'},
+        {'label': 'Nomor ID', 'value': 'id_number'}
+        ]"/>
+    <aura:attribute name="methodValue" type="String" default=""/>
+    <aura:attribute name="searchValue" type="String" default=""/>
+    <aura:attribute name="isLoading" type="Boolean" default="false"/>
+    <aura:attribute name="dataSI" type="List"/>
+    <aura:attribute name="dataTransaction" type="List"/>
+    <aura:attribute name="columns" type="List"/>
+    <aura:attribute name="hasText" type="Boolean" default="false" />
+    <aura:attribute name="errorMessage" type="String" default=""/>
+
+    <lightning:card title="">
+        <lightning:layout >
+            <lightning:layoutItem padding="around-small">
+                <lightning:radioGroup name="searchRadioGroupRequired"
+                            label="Pencarian Berdasarkan"
+                            options="{! v.options }"
+                            value="{! v.methodValue }"
+                            type="button"
+                            required="true"
+                            disabled="{!v.hasText}"/>
+            </lightning:layoutItem>
+            <lightning:layoutItem padding="around-small">
+                <lightning:input
+                    aura:id="enter-search"
+                    name="enter-search"
+                    label="Masukkan id number atau nomor rekening DPLK sesuai pilihan di samping"
+                    type="search"
+                    onchange="{!c.handleInputChange}" 
+                    value="{! v.searchValue }"
+                />
+            </lightning:layoutItem>
+            <lightning:layoutItem padding="around-small">
+                <lightning:button variant="brand" disabled="{!!v.hasText}" label="Cari" class="search-button-mt" onclick="{! c.searchData }"/>
+                <aura:if isTrue="{! v.isLoading }">
+                    <lightning:spinner alternativeText="Loading" size="medium"/>
+                </aura:if>
+            </lightning:layoutItem>
+        </lightning:layout>
+
+        <aura:if isTrue="{!v.errorMessage}">
+            <p class="slds-text-color_error">{!v.errorMessage}</p>
+        </aura:if>
+
+        <!-- iterate over dataSI attribute -->
+        <aura:if isTrue="{! not(empty(v.dataSI)) }">
+            <aura:iteration items="{! v.dataSI }" var="dplk_item">
+                <lightning:layout >
+                    <lightning:layoutItem size="6" padding="around-small">
+                        <p>Kantor Pembukaan DPLK <span class="info-value">{! dplk_item.kantor_pembukaan_cabang }</span></p>
+                        <p>No. Account DPLK <span class="info-value">{! dplk_item.nomor_akun_dplk }</span></p>
+                        <p>No. Handphone <span class="info-value">{! dplk_item.nomor_handphone }</span></p>
+                        <p>CIF DPLK <span class="info-value">{! dplk_item.cif_dplk }</span></p>
+                        <p>Nama Nasabah <span class="info-value">{! dplk_item.nama_nasabah }</span></p>
+                        <p>Tanggal Lahir <span class="info-value"><lightning:formattedDateTime value="{! dplk_item.tanggal_lahir }" /></span></p>
+                        <!-- <p>Tanggal Registrasi <span class="info-value">{! dplk_item.tgl_registrasi }</span></p> -->
+                        <p>Tanggal Registrasi <span class="info-value"><lightning:formattedDateTime value="{! dplk_item.tgl_registrasi }" year="numeric" month="short" day="2-digit" hour="2-digit" minute="2-digit" hour12="false" /></span></p>
+                        <p>Anggota corporate/individu <span class="info-value">{! dplk_item.anggota_korporat_individu }</span></p>
+                        <p>No. Pegawai (Jika Corporate) <span class="info-value">{! dplk_item.no_pegawai_korporat }</span></p>
+                        <p>No. Rekening BRI <span class="info-value">{! dplk_item.nomor_rekening_bri }</span></p>
+                        <p>No. Kartu DPLK <span class="info-value">{! dplk_item.nomor_kartu_dplk }</span></p>
+                        <p>Status DPLK <span class="info-value">{! dplk_item.status_dplk }</span></p>
+                        <p>Sistem Pembayaran Iuran <span class="info-value">{! dplk_item.sistem_pembayaran_iuran }</span></p>
+                        <p>Jenis Investasi yang Dipilih <span class="info-value">{! dplk_item.jenis_investasi }</span></p>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="6" padding="around-small">
+                        <p>Total Iuran <span class="info-value">{! dplk_item.iuran }</span></p>
+                        <p>- Iuran Peserta</p>
+                        <p>- Iuran Pemberi Kerja</p>
+                        <p>- Iuran Tambahan</p>
+                        <p></p>
+                        <p>Pengembangan <span class="info-value">{! dplk_item.pengembangan }</span></p>
+                        <p>- Pengembangan Peserta</p>
+                        <p>- Pengembangan Pemberi Kerja</p>
+                        <p>- Pengembangan Tambahan</p>
+                        <p></p>
+                        <p>Pengalihan <span class="info-value">{! dplk_item.pengalihan }</span></p>
+                        <p>- Pengalihan Peserta</p>
+                        <p>- Pengalihan Pemberi Kerja</p>
+                        <p>- Pengalihan Tambahan</p>
+                        <p></p>
+                        <p>Total Saldo <span class="info-value">{! dplk_item.total_saldo }</span></p>
+                        <p>Alamat Email <span class="info-value"><lightning:formattedEmail value="{! dplk_item.alamat_email }" /></span></p>
+                    </lightning:layoutItem>
+                </lightning:layout>
+                <hr />
+            </aura:iteration>
+        </aura:if>
+
+        <aura:if isTrue="{! not(empty(v.dataTransaction)) }">
+            <div style="height: 300px">
+                <lightning:datatable
+                        keyField="id"
+                        data="{! v.dataTransaction }"
+                        columns="{! v.columns }"
+                        hideCheckboxColumn="true"/>
+            </div>
+        </aura:if>
+    </lightning:card>
+</aura:component>

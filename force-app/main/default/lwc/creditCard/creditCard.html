@@ -1,0 +1,258 @@
+<template>
+    <lightning-accordion allow-multiple-sections-open onsectiontoggle={handleAccordionSectionToggle}>
+        <lightning-accordion-section label="Kartu Kredit" name="customerPortfolio" class="custom-section" onclick={handleAccordionSectionClick}>
+            <template if:true={error}  >
+                <div class="slds-text-color_error">
+                    {error}
+                </div>
+            </template>
+
+            <template if:true={showCustomerData}>
+                <div class="slds-m-top_medium slds-scrollable_x">
+                <table class="slds-table slds-table_bordered  slds-table_cell-buffer">
+                    
+                    <thead>
+                        <tr>
+                            <th scope="col">Nomor Kartu</th>
+                            <th scope="col">Nama</th>
+                            <th scope="col">CIF</th>
+                            <th scope="col">Jenis Kartu</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
+               
+                    <tbody>
+                    
+                        <template for:each={customerData} for:item="detail">
+                            <tr key={detail.id} data-id={detail.cardNumber}>
+                                <td>{detail.cardNumber}</td>
+                                <td>{detail.Nama}</td>
+                                <td>{detail.cifno}</td>
+                                <td>{detail.productType}</td>
+                                <td>{detail.status}</td>
+                                <td>
+                                   
+                    
+                                
+                                        <!-- With icon-name -->
+                                        <div class="slds-p-around_medium lgc-bg">
+                                            <lightning-button-menu alternative-text="Show menu" menu-alignment="auto">
+                                                <lightning-menu-item value="MenuItemOne" label="Data Transaksi" key={detail.id} data-id={detail.id}  onclick={handleDataTransaksiClick} ></lightning-menu-item>
+                                                <lightning-menu-item value="MenuItemTwo" label="Data Kartu" key={detail.id} data-id={detail.cardNumber}  onclick={handleDataKartu} ></lightning-menu-item>
+            
+                                            </lightning-button-menu>
+                                        </div>
+                                   
+                                </td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+            </div>
+        </template>
+            <template if:true={parsedData1}>
+                <div class="slds-m-top_medium slds-scrollable_x">
+                    <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                        <!-- Table header -->
+                        <thead>
+                            <tr>
+                                <th scope="col">Tanggal Transaksi</th>
+                                <th scope="col">Tanggal Posting</th>
+                                <th scope="col">Deskripsi Transaksi</th>
+                                <th scope="col">Nominal Transaksi</th>
+                                <th scope="col">Kode Transaksi</th>
+                                <th scope="col">Ref Number</th>
+                                <th scope="col">Approval Code</th>
+                                <th scope="col">Keterangan Response</th>
+                                <th scope="col">Waktu Sisa Penagihan Merchant</th>
+                            </tr>
+                        </thead>
+                        <!-- Table body -->
+                        <tbody>
+                            <!-- Loop through each transaction item in parsedData1.CPAHF -->
+                            <template for:each={parsedData1.CPAHF} for:item="transaction">
+                                <tr key={transaction.appCodeReffNum}>
+                                    <!-- Display transaction details in each row -->
+                                    <td>{transaction.tanggalTransaksi}</td>
+                                    <td>{transaction.tanggalPostingTagihan}</td>
+                                    <td>{transaction.deskripsiTransaksi}</td>
+                                    <td>{transaction.nominalTransaksi}</td>
+                                    <td>{transaction.kodeTransaksi}</td>
+                                    <td>{transaction.refferenceNumber}</td>
+                                    <td>{transaction.approvalCode}</td>
+                                    <td>{transaction.keteranganTransaksi}</td>
+                                    <td>{transaction.waktuSisaPenagihanMerchant}</td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </div>
+            </template>
+           
+            <template if:true={parsedData2}>
+                <template for:each={parsedData2} for:item="transaction">
+                    <!-- Iterate over each item in parsedData1.data -->
+                    <li key={transaction.appCodeReffNum} class="field-container">
+                        <!-- Display transaction details -->
+                        <div class="slds-box slds-theme_default">
+                            <div class="slds-grid slds-wrap slds-gutters">
+                                <div class="slds-col slds-size_1-of-3 slds-p-around_medium">
+                                    <p class="slds-text-title"><b>Limit Kartu Kredit:</b></p>
+                                    <p>{transaction.limitKartuKredit}</p>
+                                </div>
+                                <div class="slds-col slds-size_1-of-3 slds-p-around_medium">
+                                    <p class="slds-text-title"><b>Nomor handphone terdaftar:</b></p>
+                                    <p>{transaction.nomorHandphoneTerdaftar}</p>
+                                </div>
+                                <div class="slds-col slds-size_1-of-3 slds-p-around_medium">
+                                    <p class="slds-text-title"><b>Nomor telephone kantor:</b></p>
+                                    <p>{transaction.nomorTelephoneKantor}</p>
+                                </div>
+                                <div class="slds-col slds-size_1-of-3 slds-p-around_medium">
+                                    <p class="slds-text-title"><b>Nomor telephone rumah:</b></p>
+                                    <p>{transaction.nomorTelephoneRumah}</p>
+                                </div>
+                                <div class="slds-col slds-size_1-of-3 slds-p-around_medium">
+                                    <p class="slds-text-title"><b>Nomor telephone kerabat tidak serumah:</b></p>
+                                    <p>{transaction.nomorTelephoneKerabatTidakSerumah}</p>
+                                </div>
+                                <div class="slds-col slds-size_1-of-3 slds-p-around_medium">
+                                    <p class="slds-text-title"><b>Expired Kartu:</b></p>
+                                    <p>{transaction.expiredKartu}</p>
+                                </div>
+                                <div class="slds-col slds-size_1-of-3 slds-p-around_medium">
+                                    <p class="slds-text-title"><b>Tanggal cetak:</b></p>
+                                    <p>{transaction.tanggalCetakCycle}</p>
+                                </div>
+                                <div class="slds-col slds-size_1-of-3 slds-p-around_medium">
+                                    <p class="slds-text-title"><b>Tanggal jatuh tempo:</b></p>
+                                    <p>{transaction.tanggalJatuhTempo}</p>
+                                </div>
+                                <div class="slds-col slds-size_1-of-3 slds-p-around_medium">
+                                    <p class="slds-text-title"><b>Nomor NIK:</b></p>
+                                    <p>{transaction.nomorNik}</p>
+                                </div>
+                                <div class="slds-col slds-size_1-of-3 slds-p-around_medium">
+                                    <p class="slds-text-title"><b>Jenis Kelamin:</b></p>
+                                    <p>Rp.{transaction.jenisKelamin}</p>
+                                </div>
+                                <div class="slds-col slds-size_1-of-3 slds-p-around_medium">
+                                    <p class="slds-text-title"><b>Jabatan Kerja:</b></p>
+                                    <p>{transaction.jabatanKerja}</p>
+                                </div>
+                                <div class="slds-col slds-size_1-of-3 slds-p-around_medium">
+                                    <p class="slds-text-title"><b>Sisa Limit:</b></p>
+                                    <p>{transaction.sisaLimitNasabah}</p>
+                                </div>
+                                <div class="slds-col slds-size_1-of-3 slds-p-around_medium">
+                                    <p class="slds-text-title"><b>Limit Tarik Tunai:</b></p>
+                                    <p>{transaction.limitTarikTunaiNasabah}</p>
+                                </div>
+                                <div class="slds-col slds-size_1-of-3 slds-p-around_medium">
+                                    <p class="slds-text-title"><b>Sisa limit tarik tunai:</b></p>
+                                    <p>{transaction.sisaLimitTarikTunaiNasabah}</p>
+                                </div>
+                                <div class="slds-col slds-size_1-of-3 slds-p-around_medium">
+                                    <p class="slds-text-title"><b>Limit Cicilan:</b></p>
+                                    <p>{transaction.limitCicilanNasabah}</p>
+                                </div>
+                                <div class="slds-col slds-size_1-of-3 slds-p-around_medium">
+                                    <p class="slds-text-title"><b>Sisa limit cicilan:</b></p>
+                                    <p>{transaction.sisaLimitCicilanNasabah}</p>
+                                </div>
+                                <div class="slds-col slds-size_1-of-3 slds-p-around_medium">
+                                    <p class="slds-text-title"><b>Alamat kantor:</b></p>
+                                     <!-- Concatenate alamatKantorDepan, alamatKantorTengah, and alamatKantorBelakang -->
+                        <p>{transaction.alamatKantorDepan } {transaction.alamatKantorTengah } {transaction.alamatKantorBelakang }</p>
+                                </div>
+                                <div class="slds-col slds-size_1-of-3 slds-p-around_medium">
+                                    <p class="slds-text-title"><b>Alamat Rumah:</b></p>
+                                    <p>{transaction.alamatRumah}</p>
+                                </div>
+                                <div class="slds-col slds-size_1-of-3 slds-p-around_medium">
+                                    <p class="slds-text-title"><b>Alamat email:</b></p>
+                                    <p>{transaction.alamatEmail}</p>
+                                </div>
+                                <div class="slds-col slds-size_1-of-3 slds-p-around_medium">
+                                    <p class="slds-text-title"><b>Nominal gaji / pendapatan:</b></p>
+                                    <p>{transaction.nominalPendapatanPerBulan}</p>
+                                </div>
+                                <div class="slds-col slds-size_1-of-3 slds-p-around_medium">
+                                    <p class="slds-text-title"><b>Nama lengkap ibu kandung:</b></p>
+                                    <p>{transaction.namaLengkapIbuKandung}</p>
+                                </div>
+                                <div class="slds-col slds-size_1-of-3 slds-p-around_medium">
+                                    <p class="slds-text-title"><b>Nomor Kartu:</b></p>
+                                    <p>{transaction.cardNo}</p>
+                                </div>
+                                <div class="slds-col slds-size_1-of-3 slds-p-around_medium">
+                                    <p class="slds-text-title"><b>Nama Cetak di Kartu Kredit:</b></p>
+                                    <p>{transaction.namaCetakKartu}</p>
+                                </div>
+                                <div class="slds-col slds-size_1-of-3 slds-p-around_medium">
+                                    <p class="slds-text-title"><b>Tanggal terakhir maintenance kartu kredit:</b></p>
+                                    <p>{transaction.tanggalTerakhirMaintenanceKartu}</p>
+                                </div>
+                                <!-- Add more columns here if needed -->
+                            </div>
+                        </div>
+                    </li>
+                </template>
+            </template>
+       
+            
+        </lightning-accordion-section>
+        <lightning-accordion-section label="Data Pengajuan" name="customerSearch" class="custom-section">
+            <div class="slds-grid slds-gutters">
+                <div class="slds-col slds-size_1-of-3">
+                    <lightning-input label="NIK" value={nik}></lightning-input>
+                </div>
+                <div class="slds-col slds-size_1-of-3 slds-align_absolute-center">
+                    <lightning-button label="Cari" variant="brand" onclick={handleSearch}></lightning-button>
+                </div>
+            </div>  
+            <template if:true={error1} >
+                <div class="slds-text-color_error">
+                    {error1}
+                </div>
+            </template>
+            <template if:true={showresult}>
+               
+                <div class="slds-m-top_medium slds-scrollable_x">
+                    <table class="slds-table slds-table_cell-buffer slds-table_bordered" >
+                        <thead>
+                            <tr>
+                                <th scope="col">Nama nasabah lengkap</th>
+                                <th scope="col">NIK</th>
+                                <th scope="col">Tanggal Lahir</th>
+                                <th scope="col">Kode aplikasi pengajuan (KNP)</th>
+                                <th scope="col">Tanggal pengajuan</th>
+                                <th scope="col">Channel pengajuan kartu kredit</th>
+                                <th scope="col">Nomor kartu kredit (saat sudah disetujui)</th>
+                                <th scope="col">Progress pengajuan kartu kredit</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template for:each={customerData1} for:item="record">
+                                <tr key={record.id}>
+                                    <td>{record.namaNasabahLengkap}</td>
+                                    <td>{record.nik}</td>
+                                    <td>{record.tanggalLahir}</td>
+                                    <td>{record.nomorAplikasiPengajuan}</td>
+                                    <td>{record.tanggalPengajuan}</td>
+                                    <td>{record.channelPengajuan}</td>
+                                    <td>{record.nomorKartuKredit}</td>
+                                    <td>{record.progressPengajuan}</td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </div>
+            </template>
+        
+        
+       
+        </lightning-accordion-section>
+    </lightning-accordion>
+</template>

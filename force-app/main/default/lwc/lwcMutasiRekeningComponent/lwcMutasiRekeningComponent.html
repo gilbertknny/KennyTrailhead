@@ -1,0 +1,180 @@
+<!--
+    LWC Name    : lwcMutasiRekeningComponent.html
+    Created Date       : 03 September 2024
+    @description       : This is class ..
+    @author            : Rakeyan Nuramria
+    Modification Log :
+    Ver   Date         Author                            Modification
+    1.0   03/09/2024   Rakeyan Nuramria                  Initial Version
+    1.0   06/09/2024   Rakeyan Nuramria                  Adjust UI
+    1.0   09/09/2024   Rakeyan Nuramria                  Add spinner and adjust UI
+    1.0   17/09/2024   Rakeyan Nuramria                  Add blocked info component
+    1.0   21/09/2024   Rakeyan Nuramria                  Adjust UI for API & Others
+    1.0   01/10/2024   Rakeyan Nuramria                  Adjust UI for create & update case
+    1.0   09/10/2024   Rakeyan Nuramria                  [FROM SIT] Adjust UI to scrollable horizontally
+    1.0   23/10/2024   Rakeyan Nuramria                  Adjust UI for combination remarks column
+-->
+<template>
+    <!-- Main Card Section -->
+    <div>
+        <lightning-card icon-name="" variant="base" class="custom-card slds-m-around_medium slds-card_boundary">
+            <div slot="title" class="slds-m-top_small slds-m-left_small">
+                Pencarian Mutasi Rekening
+            </div>
+            <div slot="actions">
+                <template if:false={isCloseHidden}>
+                    <lightning-button-icon icon-name="utility:close" alternative-text="Close" title="Close"
+                        onclick={handleCloseMutasiRek} class="cssClass" variant="bare">
+                    </lightning-button-icon>
+                </template>
+            </div>
+
+            <!-- Card Body -->
+            <div class="main-container slds-p-around_medium">
+                <!-- Date Picker Section -->
+                <lightning-card title="" class="custom-card slds-m-bottom_small slds-card_boundary">
+                    <div class="slds-grid slds-gutters slds-wrap slds-align-middle">
+                        <div class="slds-col slds-size_3-of-12 slds-m-left_small">
+                            <lightning-input type="date" label="Tanggal Awal" value={startDate}
+                                onchange={handleStartDateChange}></lightning-input>
+                        </div>
+                        <div class="slds-col slds-size_3-of-12">
+                            <lightning-input type="date" label="Tanggal Akhir" value={endDate}
+                                onchange={handleEndDateChange}></lightning-input>
+                        </div>
+                        <div class="slds-col slds-size_1-of-12 slds-align-middle" style="margin-top: 20px;">
+                            <lightning-button variant="brand" label="Search" title="Search"
+                                onclick={handleSearch}></lightning-button>
+                        </div>
+                    </div>
+                </lightning-card>
+                <!-- End Date Picker Section -->
+
+                <!-- Spinner Section -->
+                <template if:true={isLoading}>
+                    <lightning-card icon-name="" variant="base">
+                        <div class="slds-is-relative slds-align_absolute-center">
+                            <lightning-spinner alternative-text="Loading" size="small"></lightning-spinner>
+                        </div>
+                    </lightning-card>
+                </template>
+
+                <template if:true={showTable}>
+                    <!-- Datatable Mutasi Rekening Section -->
+                    <lightning-card icon-name="" variant="base"
+                        class="custom-card slds-m-top_xx-small slds-card_boundary">
+                        <div class="slds-p-around_small slds-m-top_xx-small">
+                            <div class="slds-scrollable_y custom-scroll">
+                                <table class="slds-table slds-table_bordered slds-table_fixed-layout custom-table">
+                                    <thead>
+                                        <tr class="slds-line-height_reset">
+                                            <th scope="col" style="width: 50px;" class="th-base-color">
+                                                <div class="slds-truncate slds-text-align_center" title="Select"></div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="Nomor Rekening">Nomor Rekening</div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="Tanggal Transaksi">Tanggal Transaksi
+                                                </div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="Jam Transaksi">Jam Transaksi</div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="Remark Transaksi">Remark Transaksi
+                                                </div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="Jenis Transaksi">Jenis Transaksi</div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="Mutasi Debit">Mutasi Debit</div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="Mutasi Kredit">Mutasi Kredit</div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="User Id">User Id</div>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <template for:each={filteredData} for:item="row">
+                                            <tr key={row.id} class="slds-hint-parent">
+                                                <td>
+                                                    <lightning-input type="checkbox" data-id={row.id}
+                                                        checked={row.isSelected} onchange={handleCheckboxChange}
+                                                        disabled={row.isDisabled}></lightning-input>
+                                                </td>
+                                                <td>{row.noRek}</td>
+                                                <td>{row.customDate}</td>
+                                                <td>{row.customTime}</td>
+                                                <td>{row.trremk} | {row.tlbds1}</td>
+                                                <td>{row.glsign}</td>
+                                                <td>{row.mutasiDebet}</td>
+                                                <td>{row.mutasiKredit}</td>
+                                                <td>{row.truser}</td>
+                                            </tr>
+                                        </template>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </lightning-card>
+                    <!-- End Datatable Mutasi Rekening Section -->
+
+                    <!-- Create Case Button -->
+                    <!-- <div class="slds-m-top_medium slds-text-align_center">
+                        <lightning-button variant="brand" label="Create Case" title="Create Case"
+                            onclick={handleCreateCase} disabled={isCreateButtonDisabled}></lightning-button>
+                    </div> -->
+
+                    <div class="slds-m-top_medium slds-text-align_center">
+                        <template if:true={isLoadingCreateCase}>
+                            <!-- <lightning-spinner alternative-text="Loading" size="small"></lightning-spinner> -->
+                            <div class="spinner-container" style="height:6rem;position:relative">
+                                <div role="status" class="slds-spinner slds-spinner_small">
+                                    <span class="slds-assistive-text">Loading</span>
+                                    <div class="slds-spinner__dot-a"></div>
+                                    <div class="slds-spinner__dot-b"></div>
+                                </div>
+                            </div>
+                        </template>
+                        <template if:true={showCreateCaseButton}>
+                            <template if:false={isLoadingCreateCase}>
+                                <lightning-button variant="brand" label="Create Case" title="Create Case"
+                                    onclick={handleCreateCase} disabled={isCreateButtonDisabled}>
+                                </lightning-button>
+                            </template>
+                        </template>
+                        <template if:true={isLoadingUpdateCase}>
+                            <!-- <lightning-spinner alternative-text="Loading" size="small"></lightning-spinner> -->
+                            <div class="spinner-container" style="height:6rem;position:relative">
+                                <div role="status" class="slds-spinner slds-spinner_small">
+                                    <span class="slds-assistive-text">Loading</span>
+                                    <div class="slds-spinner__dot-a"></div>
+                                    <div class="slds-spinner__dot-b"></div>
+                                </div>
+                            </div>
+                        </template>
+                        <template if:true={showUpdateCaseButton}>
+                            <template if:false={isLoadingUpdateCase}>
+                                <lightning-button variant="brand" label="Update Case" title="Update Case"
+                                    onclick={handleUpdateCase} disabled={isUpdateButtonDisabled}>
+                                </lightning-button>
+                            </template>
+                        </template>
+                    </div>
+                </template>
+            </div>
+        </lightning-card>
+
+        <!-- <template if:true={showBlockedInformation}> -->
+        <!-- <lightning-card icon-name="" variant="base" class="custom-card slds-m-around_medium slds-card_boundary"> -->
+        <c-lwc-blocked-banking-information-component class="blocked-banking-component" record-id={recordId}
+            no-rekening={noRekening}></c-lwc-blocked-banking-information-component>
+        <!-- </lightning-card> -->
+        <!-- </template> -->
+    </div>
+</template>

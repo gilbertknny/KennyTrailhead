@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Queue_RO__c</fullName>
+    <externalId>false</externalId>
+    <formula>TRIM(IF(SCC_Tipe_Unit_Kerja__c == &apos;KW&apos; &amp;&amp; 
+(CONTAINS(UPPER(SCC_Orgeh_Description__c),&apos;BRILINK&apos;) || CONTAINS(UPPER(SCC_Orgeh_Description__c),&apos;MICRO ECOSYSTEMS&apos;)),
+&apos;RO - Brilink&apos;+ &apos; &apos; + TRIM(RIGHT(Branch_Unit__c,LEN(Branch_Unit__c)-(FIND(&apos;KANWIL&apos;,Branch_Unit__c)+6))),
+IF(SCC_Tipe_Unit_Kerja__c == &apos;KW&apos; &amp;&amp; 
+(CONTAINS(UPPER(SCC_Orgeh_Description__c),&apos;OPERATION&apos;) || CONTAINS(UPPER(SCC_Orgeh_Description__c),&apos;NETWORK&apos;) || CONTAINS(UPPER(SCC_Orgeh_Description__c),&apos;SERVICE&apos;)),
+&apos;RO - ONS&apos; + &apos; &apos; + TRIM(RIGHT(Branch_Unit__c,LEN(Branch_Unit__c)-(FIND(&apos;KANWIL&apos;,Branch_Unit__c)+6))),
+IF(SCC_Tipe_Unit_Kerja__c == &apos;KW&apos; &amp;&amp; 
+CONTAINS(UPPER(SCC_Orgeh_Description__c),&apos;MERCHANT&apos;),
+&apos;RO - RPM&apos; + &apos; &apos; + TRIM(RIGHT(Branch_Unit__c,LEN(Branch_Unit__c)-(FIND(&apos;KANWIL&apos;,Branch_Unit__c)+6))),
+IF(SCC_Tipe_Unit_Kerja__c == &apos;KW&apos; &amp;&amp; 
+(CONTAINS(UPPER(SCC_Orgeh_Description__c),&apos;INFORMATION&apos;) || CONTAINS(UPPER(SCC_Orgeh_Description__c),&apos;TECHNOLOGY&apos;)),
+&apos;RO - ITE&apos; + &apos; &apos; + TRIM(RIGHT(Branch_Unit__c,LEN(Branch_Unit__c)-(FIND(&apos;KANWIL&apos;,Branch_Unit__c)+6))),
+&apos;&apos;)))))</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Queue RO</label>
+    <required>false</required>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

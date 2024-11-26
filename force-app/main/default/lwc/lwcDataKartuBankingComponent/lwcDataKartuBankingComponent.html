@@ -1,0 +1,294 @@
+<!--
+    LWC Name    : lwcDatakartuBankingComponent.html
+    Created Date       : 11 September 2024
+    @description       : This is class ..
+    @author            : Rakeyan Nuramria
+    Modification Log :
+    Ver   Date         Author                            Modification
+    1.0   11/09/2024   Rakeyan Nuramria                  Initial Version
+    1.0   ??/09/2024   Suherbing                         Adjust for Blockir component
+    1.0   27/09/2024   Rakeyan Nuramria                  [FROM SIT] Adjust UI
+    1.0   30/09/2024   Rakeyan Nuramria                  [FROM SIT] Fixing UI
+    1.0   01/10/2024   Rakeyan Nuramria                  [FROM SIT] Fixing UI detail data shown even no data
+    1.0   02/10/2024   Rakeyan Nuramria                  Adjust blokir kartu component
+    1.0   04/10/2024   Rakeyan Nuramria                  [FROM SIT] lempar terminal by PN/Employee Number
+    1.0   09/10/2024   Rakeyan Nuramria                  [FROM SIT] Adjust UI to scrollable horizontally
+    1.0   09/10/2024   Rakeyan Nuramria                  Pass caseId for blokir component
+-->
+
+<template>
+    <lightning-card icon-name="History Update Kartu" variant="base"
+        class="custom-card slds-m-top_xx-small slds-card_boundary">
+        <div slot="title">
+        </div>
+        <div slot="actions">
+            <template if:false={isCloseHidden}>
+                <lightning-button-icon icon-name="utility:close" alternative-text="Close" title="Close"
+                    onclick={handleCloseDataKartu} class="cssClass" variant="bare">
+                </lightning-button-icon>
+            </template>
+        </div>
+
+        <template if:true={isLoading}>
+            <div class="spinner-container" style="height:6rem;position:relative">
+                <div role="status" class="slds-spinner slds-spinner_small">
+                    <span class="slds-assistive-text">Loading</span>
+                    <div class="slds-spinner__dot-a"></div>
+                    <div class="slds-spinner__dot-b"></div>
+                </div>
+            </div>
+        </template>
+
+        <template if:false={isLoading}>
+            <template if:true={hasError}>
+                <div class="slds-text-color_error slds-m-top_medium slds-text-align_center">
+                    <b>{errorMsg}</b>
+                </div>
+            </template>
+            <!-- Main Card Body  -->
+            <template if:true={detailDataHasValues}>
+                <div class="slds-grid slds-wrap slds-m-around_medium">
+                    <div class="slds-col slds-size_4-of-12 slds-medium-size_4-of-12 slds-large-size_4-of-12">
+                        <!-- Card Number -->
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label" for="card-number">Card Number</label>
+                            <div class="slds-form-element__control">
+                                <input class="slds-input text-bold" type="text" id="card-number" readonly
+                                    value={detailData.cardNo} />
+                            </div>
+                        </div>
+                        <!-- Card Type -->
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label" for="card-type">Card Type</label>
+                            <div class="slds-form-element__control">
+                                <input class="slds-input text-bold" type="text" id="card-type" readonly
+                                    value={detailData.type} />
+                            </div>
+                        </div>
+                        <!-- Account Name -->
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label" for="account-name">Account Name</label>
+                            <div class="slds-form-element__control">
+                                <input class="slds-input text-bold" type="text" id="account-name" readonly
+                                    value={detailData.name} />
+                            </div>
+                        </div>
+                        <!-- Issue Date -->
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label" for="issue-date">Issue Date</label>
+                            <div class="slds-form-element__control">
+                                <input class="slds-input text-bold" type="text" id="issue-date" readonly
+                                    value={detailData.issueDate} />
+                            </div>
+                        </div>
+                        <!-- Expired Date -->
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label" for="expired-date">Expired Date</label>
+                            <div class="slds-form-element__control">
+                                <input class="slds-input text-bold" type="text" id="expired-date" readonly
+                                    value={detailData.expDate} />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="slds-col slds-size_4-of-12 slds-medium-size_4-of-12 slds-large-size_4-of-12">
+                        <!-- Tanggal Aktivitas -->
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label" for="tanggal-aktivitas">Tanggal Aktivitas</label>
+                            <div class="slds-form-element__control">
+                                <input class="slds-input text-bold" type="text" id="tanggal-aktivitas" readonly
+                                    value={detailData.activeDate} />
+                            </div>
+                        </div>
+                        <!-- Card Status -->
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label" for="card-status">Card Status</label>
+                            <div class="slds-form-element__control">
+                                <input class="slds-input text-bold" type="text" id="card-status" readonly
+                                    value={detailData.cardStatus} />
+                            </div>
+                        </div>
+                        <!-- Keterangan Status Kartu -->
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label" for="ket-status-kartu">Keterangan Status
+                                Kartu</label>
+                            <div class="slds-form-element__control">
+                                <input class="slds-input text-bold" type="text" id="ket-status-kartu" readonly
+                                    value={detailData.statusDesc} />
+                            </div>
+                        </div>
+                        <!-- Last Date Maintenance -->
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label" for="last-date-maintenance">Last Date
+                                Maintenance</label>
+                            <div class="slds-form-element__control">
+                                <input class="slds-input text-bold" type="text" id="last-date-maintenance" readonly
+                                    value={detailData.lastMaint} />
+                            </div>
+                        </div>
+                        <!-- Last Maintenance User -->
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label" for="last-maintenance-user">Last Maintenance
+                                User</label>
+                            <div class="slds-form-element__control">
+                                <input class="slds-input text-bold" type="text" id="last-maintenance-user" readonly
+                                    value={detailData.userMaint} />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="slds-col slds-size_4-of-12 slds-medium-size_4-of-12 slds-large-size_4-of-12">
+                        <!-- History Update Kartu -->
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label" for="history-update-kartu">History Update
+                                Kartu</label>
+                            <div class="slds-form-element__control">
+                                <!-- <input class="slds-input text-bold" type="text" id="history-update-kartu" readonly
+                            value={cardInfo.historyUpdateKartu} /> -->
+                                <!-- <a href={handleOpenHistoryKartu}>History Update Kartu</a> -->
+                                <button class="slds-button" onclick={handleOpenHistoryKartu}>History Update
+                                    Kartu</button>
+                            </div>
+                        </div>
+
+                        <!-- Blokir Kartu Section -->
+                        <br>
+                        <!-- Button Blokir Kartu -->
+                        <!-- <button class="slds-button slds-button_brand" onclick={handleBlokir}>Blokir Kartu</button> -->
+                        <!-- Include the child LWC component for blokir handler -->
+                        <c-lwc-blokir-kartu-handler card-number={selectedNomorKartu} user-maintain={employeeNumber}
+                            terminal-id={employeeNumber} is-blokir={forBlokir} onblokirsuccess={handleBlokirSuccess}
+                            onblokirerror={handleBlokirError} card-status={cardStatus} record-id={recordId}>
+                        </c-lwc-blokir-kartu-handler>
+
+                        <!-- Modal -->
+                        <!-- <template if:true={isModalOpen}>
+                    <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_medium">
+                        <div class="slds-modal__container">
+
+                            <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                                title="Close" onclick={handleCloseModal}>
+                                <lightning-icon icon-name="utility:close" alternative-text="close"
+                                    size="small"></lightning-icon>
+                                <span class="slds-assistive-text">Close</span>
+                            </button>
+
+                            Modal Body
+                            <div class="slds-modal__content slds-p-around_medium">
+                                <p>Apakah anda yakin ingin melakukan Card Blocking BL (Blokir Kartu) pada Kartu
+                                    <b> {selectedNomorKartu} </b>?
+                                </p>
+                                <div class="slds-align_absolute-center slds-m-top_medium">
+                                    <lightning-button variant="brand" label="Ya"
+                                        onclick={handleConfirmationBlock}></lightning-button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </section>
+
+                    Modal Backdrop
+                    <div class="slds-backdrop slds-backdrop_open"></div>
+                </template> -->
+
+                        <!-- End Blokir Kartu Section -->
+                    </div>
+                </div>
+            </template>
+        </template>
+        <!-- End Main Card Body  -->
+
+    </lightning-card>
+
+    <template if:true={showHistoryKartu}>
+        <template if:true={hasErrorTst}>
+            <lightning-card title="" variant="base" class="custom-card slds-m-top_xx-small slds-card_boundary">
+                <div slot="actions">
+                    <lightning-button-icon icon-name="utility:close" alternative-text="Close" title="Close"
+                        onclick={hendleCloseHistoryKartu} class="cssClass" variant="bare">
+                    </lightning-button-icon>
+                </div>
+                <div class="slds-text-color_error slds-m-top_small slds-text-align_center">
+                    <b>{errorMsgTst}</b>
+                </div>
+            </lightning-card>
+        </template>
+
+        <template if:true={historyData.length}>
+            <lightning-card title="History Update Kartu" variant="base"
+                class="custom-card slds-m-top_x-small slds-card_boundary">
+                <div slot="actions">
+                    <lightning-button-icon icon-name="utility:close" alternative-text="Close" title="Close"
+                        onclick={hendleCloseHistoryKartu} class="cssClass" variant="bare">
+                    </lightning-button-icon>
+                </div>
+
+
+                <div class="slds-m-around_small">
+                    <div class="slds-scrollable_y custom-scroll">
+                        <table class="slds-table slds-table_bordered slds-table_fixed-layout custom-table">
+                            <thead>
+                                <tr class="slds-line-height_reset">
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Work Unit">Work Unit</div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Card Number">Card Number</div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Card Status">Card Status</div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Issue Date">Issue Date</div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Activitaion Date">Activitaion Date</div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Last Maintenace">Last Maintenace</div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Type Code">Type Code</div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Expired Date">Expired Date</div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Renewal Date">Renewal Date</div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Blokir Date">Blokir Date</div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="User Blokir">User Blokir</div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="No Rekening">No Rekening</div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={historyData} for:item="data" for:index="index">
+                                    <tr key={data.cardNo} class="slds-hint-parent">
+                                        <td>{data.branchCode}</td>
+                                        <td>{data.cardNo}</td>
+                                        <td>{data.cardStatus}</td>
+                                        <td>{data.issueDate}</td>
+                                        <td>{data.activeDate}</td>
+                                        <td>{data.lastMaint}</td>
+                                        <td>{data.typeCode}</td>
+                                        <td>{data.expDate}</td>
+                                        <td>{data.renewalDate}</td>
+                                        <td>{data.blockDate}</td>
+                                        <td>{data.userBlock}</td>
+                                        <td>{data.accNo}</td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </lightning-card>
+        </template>
+    </template>
+</template>

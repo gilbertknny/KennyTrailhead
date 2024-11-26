@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>BRI_Case_Picked_Up_By_Agent_Confirmation_Email</name>
+        <label>BRI Case Picked Up By Agent Confirmation Email</label>
+        <locationX>176</locationX>
+        <locationY>323</locationY>
+        <actionName>Case.BRI_Case_Picked_Up_By_Agent_Confirmation_Email</actionName>
+        <actionType>emailAlert</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>SObjectRowId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>Case.BRI_Case_Picked_Up_By_Agent_Confirmation_Email</nameSegment>
+        <versionSegment>1</versionSegment>
+    </actionCalls>
+    <apiVersion>60.0</apiVersion>
+    <description>UST010</description>
+    <environments>Default</environments>
+    <formulas>
+        <name>dateValue</name>
+        <dataType>Date</dataType>
+        <expression>DATEVALUE({!$Record.CreatedDate})</expression>
+    </formulas>
+    <formulas>
+        <name>timeValue</name>
+        <dataType>String</dataType>
+        <expression>MID(TEXT({!$Record.CreatedDate}), 12, 8)</expression>
+    </formulas>
+    <interviewLabel>Send Email Notification to Customer {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>BRI Send Email Notification to Customer</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>BRI_Case_Picked_Up_By_Agent_Confirmation_Email</targetReference>
+        </connector>
+        <doesRequireRecordChangedToMeetCriteria>true</doesRequireRecordChangedToMeetCriteria>
+        <filterFormula>NOT({!$Permission.By_Pass_Validation_for_Migration}) &amp;&amp; ISPICKVAL({!$Record.Origin} ,&apos;Email&apos;) &amp;&amp; ISPICKVAL({!$Record.Status} ,&apos;Working&apos;)</filterFormula>
+        <object>Case</object>
+        <recordTriggerType>Update</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+    <textTemplates>
+        <name>sendEmailSubject</name>
+        <isViewedAsPlainText>false</isViewedAsPlainText>
+        <text>Ticket Creation Confirmation {!$Record.CaseNumber}</text>
+    </textTemplates>
+    <textTemplates>
+        <name>sendEmailTemplate</name>
+        <isViewedAsPlainText>false</isViewedAsPlainText>
+        <text>&lt;p&gt;&lt;span style=&quot;font-size: 10pt; font-family: &amp;quot;Segoe UI&amp;quot;, sans-serif; color: rgb(68, 68, 68);&quot;&gt;Yth. {!$Record.Contact.Salutation} {!$Record.Contact.FirstName} {!$Record.Contact.LastName}&amp;nbsp;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;font-size: 10pt; font-family: &amp;quot;Segoe UI&amp;quot;, sans-serif; color: rgb(68, 68, 68);&quot;&gt;Terima kasih telah menghubungi BRI. Laporan{!$Record.Contact.Salutation} telah diterima dengan detail:&amp;nbsp;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;font-size: 10pt; font-family: &amp;quot;Segoe UI&amp;quot;, sans-serif; color: rgb(68, 68, 68);&quot;&gt;Tanggal &amp;amp; Waktu : {!dateValue} Pukul {!timeValue} WIB&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;font-size: 10pt; font-family: &amp;quot;Segoe UI&amp;quot;, sans-serif; color: rgb(68, 68, 68);&quot;&gt;Nomor Tiket : {!$Record.CaseNumber}&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;font-size: 10pt; font-family: &amp;quot;Segoe UI&amp;quot;, sans-serif; color: rgb(68, 68, 68);&quot;&gt;Status Pengaduan : {!$Record.Status}&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;font-size: 10pt; font-family: &amp;quot;Segoe UI&amp;quot;, sans-serif; color: rgb(68, 68, 68);&quot;&gt;Informasi resmi BRI dapat diakses melalui WhatsApp Sabrina 08121214 017, pusat bantuan dan layanan bebas pulsa di Aplikasi BRImo, Contact BRI1500017 atau +6221 1500017 jika Anda berada di luar negeri.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;font-size: 10pt; font-family: &amp;quot;Segoe UI&amp;quot;, sans-serif; color: rgb(68, 68, 68);&quot;&gt;Dengan senang hati kami akan melayani Anda&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;font-size: 10pt; font-family: &amp;quot;Segoe UI&amp;quot;, sans-serif; color: rgb(68, 68, 68);&quot;&gt;Terima Kasih&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;font-size: 10pt; font-family: &amp;quot;Segoe UI&amp;quot;, sans-serif; color: rgb(68, 68, 68);&quot;&gt;Hormat Kami,&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;font-size: 10pt; font-family: &amp;quot;Segoe UI&amp;quot;, sans-serif; color: rgb(68, 68, 68);&quot;&gt;BRI&lt;/span&gt;&lt;/p&gt;</text>
+    </textTemplates>
+    <triggerOrder>420</triggerOrder>
+</Flow>

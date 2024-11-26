@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Reason_High_Tidak_Bisa_Diubah</fullName>
+    <active>true</active>
+    <description>Apabila Closed, maka Alasan High (Urgent) tidak bisa diubah!</description>
+    <errorConditionFormula>IsClosed__c = TRUE
+&amp;&amp;
+ISCHANGED(Reason)</errorConditionFormula>
+    <errorMessage>Apabila Closed, maka Alasan High (Urgent) tidak bisa diubah!</errorMessage>
+</ValidationRule>

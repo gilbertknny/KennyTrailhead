@@ -1,0 +1,32 @@
+<template>
+    <c-expandable-section id="1" label="Formulir">
+        <lightning-card>
+            <template if:true={isSpinner}>
+                <lightning-spinner alternative-text="Loading" variant="brand" size="large">
+                </lightning-spinner>
+            </template>
+            <div class="slds-form slds-var-m-around_small">
+                <div class="slds-form-element slds-form-element_horizontal">
+                    <template if:true={errorCheck}>
+                        <div style="font-weight:bold;font-size:15px;text-align:center">{error}</div>
+                    </template>
+                    <template if:false={errorCheck}>
+                        <div class="slds-form-element__label">Formulir Detail</div>
+                        <div class="slds-form-element__control">
+                            <lightning-combobox name="picklist" value={selectedValue} placeholder="Select an Option"
+                                options={options} onchange={handleChange} variant="label-hidden" disabled={isDisabled} class="start-select">
+                            </lightning-combobox>
+                        </div>
+                        <!--<br/>
+                        <div class="slds-form-element__label">Detail Informasi</div>
+                        <div class="slds-form-element__control">
+                            <lightning-textarea variant="label-hidden" readonly name="description" value={description} >
+                            </lightning-textarea>
+                        </div>-->
+                    </template>
+                </div>
+            </div>
+        </lightning-card>
+    </c-expandable-section>
+    
+</template>

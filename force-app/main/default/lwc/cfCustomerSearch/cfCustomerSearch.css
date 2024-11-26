@@ -1,0 +1,21 @@
+.table-container {
+    overflow-x: auto;
+    max-width: 100%;
+}
+
+.slds-table {
+    table-layout: fixed;
+    width: 100%;
+}
+
+.slds-table th, .slds-table td {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.small-column {
+    width: 55px; /* Adjust the width as needed */
+    max-width: 55px;
+    min-width: 55px;
+}

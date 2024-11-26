@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Auto_Settlement__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF( SCC_Call_Type__r.External_Id__c = &apos;8812&apos; &amp;&amp;  Terminal_ID__c != null &amp;&amp;  Count_EJ__c &gt; 0 &amp;&amp;  SCC_Amount__c &lt;= SCC_Call_Type__r.Setting_Automation_Settlement__r.Nominal__c, TRUE,
+IF( SCC_Call_Type__r.External_Id__c = &apos;8915&apos; &amp;&amp;  Terminal_ID__c != null &amp;&amp;  Count_EJ__c &gt; 0 &amp;&amp;  SCC_Amount__c &lt;= SCC_Call_Type__r.Setting_Automation_Settlement__r.Nominal__c &amp;&amp; (Count_BAO__c &gt; 0 || Attachment_Settlement__c = true), TRUE, FALSE))</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Auto Settlement</label>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

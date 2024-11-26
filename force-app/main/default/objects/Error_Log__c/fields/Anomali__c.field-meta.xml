@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Anomali__c</fullName>
+    <externalId>false</externalId>
+    <label>Anomali</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>MultiselectPicklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Access Datahub Not Create Case</fullName>
+                <default>false</default>
+                <label>Access Datahub Not Create Case</label>
+            </value>
+            <value>
+                <fullName>Access Outside Business Hours</fullName>
+                <default>false</default>
+                <label>Access Outside Business Hours</label>
+            </value>
+            <value>
+                <fullName>Extremely Frequency Access Datahub</fullName>
+                <default>false</default>
+                <label>Extremely Frequency Access Datahub</label>
+            </value>
+            <value>
+                <fullName>Access Data Outside BRI IP</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Access Data Outside BRI IP</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+    <visibleLines>4</visibleLines>
+</CustomField>

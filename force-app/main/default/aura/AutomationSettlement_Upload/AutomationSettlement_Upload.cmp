@@ -1,0 +1,29 @@
+<aura:component implements="force:lightningQuickAction,force:hasRecordId" controller="AutomationSettlement_Upload">
+    <aura:attribute name="fileCount" type="Integer" default="0"/>
+    <aura:attribute name="recordId" type="String"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <div class="slds-card">
+        <div class="slds-card__header slds-grid">
+            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                <div class="slds-media__figure">
+                    <lightning:icon iconName="doctype:attachment" size="small"/>
+                </div>
+                <div class="slds-media__body">
+                    <h2 class="slds-card__header-title">
+                        <span>Attachment Settlement</span>
+                    </h2>
+                </div>
+            </header>
+        </div>
+        <div class="slds-card__body slds-card__body_inner">
+            <!-- lightning:fileUpload Component -->
+            <lightning:fileUpload
+                aura:id="fileUploader"
+                recordId="{!v.recordId}"
+                onuploadfinished="{!c.handleUploadFinished}"
+                label="Upload Files"
+                multiple="true"/>
+        </div>
+    </div>
+</aura:component>

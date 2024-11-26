@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>X5570_UNIT_TEREMPA_TANJUNG_PINANG_Case</fullName>
+    <columns>Nomor_Tiket__c</columns>
+    <columns>CASES.STATUS</columns>
+    <columns>CASES.CREATED_DATE_DATE_ONLY</columns>
+    <columns>SCC_Call_Type__c</columns>
+    <columns>ACCOUNT.NAME</columns>
+    <columns>SCC_Card_Number__c</columns>
+    <columns>SCC_Account_Number__c</columns>
+    <columns>SCC_Amount__c</columns>
+    <columns>SCC_Waktu_Transaksi__c</columns>
+    <columns>SCC_Cust_Phone1__c</columns>
+    <columns>Returned_Case__c</columns>
+    <columns>Dokumen_Nasabah_c__c</columns>
+    <columns>SCC_Case_Owner__c</columns>
+    <columns>Within_Target_OLA__c</columns>
+    <columns>Within_Target_SLA__c</columns>
+    <filterScope>Queue</filterScope>
+    <filters>
+        <field>CASES.STATUS</field>
+        <operation>notEqual</operation>
+        <value>Disconnected,Cancelled,Closed</value>
+    </filters>
+    <label>5570 - UNIT TEREMPA TANJUNG PINANG</label>
+    <queue>X5570_UNIT_TEREMPA_TANJUNG_PINANG</queue>
+    <sharedTo>
+        <group>X5570_UNIT_TEREMPA_TANJUNG_PINANG</group>
+    </sharedTo>
+</ListView>

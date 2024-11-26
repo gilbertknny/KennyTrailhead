@@ -1,0 +1,137 @@
+<!--
+    LWC Name    : lwcDataPengajuanKreditComponent.html
+    Created Date       : 12 September 2024
+    @description       : This is class ..
+    @author            : Rakeyan Nuramria
+    Modification Log :
+    Ver   Date         Author                            Modification
+    1.0   12/09/2024   Rakeyan Nuramria                  Initial Version
+    1.0   24/09/2024   Rakeyan Nuramria                  Adjust UI for API
+-->
+
+<template>
+
+    <!-- Search Section -->
+    <lightning-card title="" variant="base" class="custom-card slds-m-top_xx-small slds-card_boundary">
+        <div class="slds-grid slds-gutters slds-m-around_small">
+            <div class="slds-col" style="display: flex; flex-direction: column;">
+                <lightning-input label="NIK" value={nik} onchange={handleNIKChange}
+                    disabled={disableNIKField}></lightning-input>
+                <div style="color: red; min-height: 20px;">{nikNumberError}</div> <!-- Adjust min-height as needed -->
+            </div>
+            <div class="slds-col" style="align-self: flex-start; margin-top: 22px;">
+                <lightning-button label="Cari" variant="brand" onclick={handleSearch}
+                    disabled={isCariButtonDisabled}></lightning-button>
+            </div>
+        </div>
+    </lightning-card>
+    <!-- End Search Section -->
+
+
+    <template if:true={isLoading}>
+        <div class="spinner-container" style="height:6rem;position:relative">
+            <div role="status" class="slds-spinner slds-spinner_small">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </template>
+
+    <!-- Result Data Section -->
+    <template if:false={isLoading}>
+        <template if:true={hasError}>
+            <div class="slds-text-color_error slds-m-top_medium slds-text-align_center">
+                <b>{errorMsg}</b>
+            </div>
+        </template>
+        <template if:true={showResult}>
+            <template if:true={data}>
+                <lightning-card icon-name="" variant="base" class="custom-card slds-m-top_xx-small slds-card_boundary">
+                    <div class="slds-grid slds-wrap slds-m-around_medium">
+                        <!-- Column 1 -->
+                        <div class="slds-col slds-size_6-of-12 slds-medium-size_6-of-12 slds-large-size_6-of-12">
+                            <!-- Nama Lengkap Nasabah -->
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label" for="nama-nasabah">Nama Lengkap Nasabah</label>
+                                <div class="slds-form-element__control">
+                                    <input class="slds-input text-bold" type="text" id="nama-nasabah" readonly
+                                        value={data.namaNasabahLengkap} />
+                                </div>
+                            </div>
+                            <!-- NIK -->
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label" for="nik">NIK</label>
+                                <div class="slds-form-element__control">
+                                    <input class="slds-input text-bold" type="text" id="nik" readonly
+                                        value={data.nik} />
+                                </div>
+                            </div>
+                            <!-- Tanggal Lahir -->
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label" for="tanggal-lahir">Tanggal Lahir</label>
+                                <div class="slds-form-element__control">
+                                    <input class="slds-input text-bold" type="text" id="tanggal-lahir" readonly
+                                        value={data.tanggalLahir} />
+                                </div>
+                            </div>
+                            <!-- Kode Pengajuan Aplikasi (KNP) -->
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label" for="kode-pengajuan">Kode Pengajuan Aplikasi
+                                    (KNP)</label>
+                                <div class="slds-form-element__control">
+                                    <input class="slds-input text-bold" type="text" id="kode-pengajuan" readonly
+                                        value={data.nomorAplikasiPengajuan} />
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Column 2 -->
+                        <div class="slds-col slds-size_6-of-12 slds-medium-size_6-of-12 slds-large-size_6-of-12">
+                            <!-- Tanggal Pengajuan -->
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label" for="tanggal-pengajuan">Tanggal
+                                    Pengajuan</label>
+                                <div class="slds-form-element__control">
+                                    <input class="slds-input text-bold" type="text" id="tanggal-pengajuan" readonly
+                                        value={data.tanggalPengajuan} />
+                                </div>
+                            </div>
+                            <!-- Channel Pengajuan Kartu Kredit -->
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label" for="channel-pengajuan">Channel Pengajuan Kartu
+                                    Kredit</label>
+                                <div class="slds-form-element__control">
+                                    <input class="slds-input text-bold" type="text" id="channel-pengajuan" readonly
+                                        value={data.channelPengajuan} />
+                                </div>
+                            </div>
+                            <!-- Nomor Kartu Kredit (Saat sudah disetujui) -->
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label" for="nomor-kartu">Nomor Kartu Kredit (Saat sudah
+                                    disetujui)</label>
+                                <div class="slds-form-element__control">
+                                    <input class="slds-input text-bold" type="text" id="nomor-kartu" readonly
+                                        value={data.nomorKartuKredit} />
+                                </div>
+                            </div>
+                            <!-- Progress Pengajuan Kartu Kredit -->
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label" for="progress-pengajuan">Progress Pengajuan
+                                    Kartu
+                                    Kredit</label>
+                                <div class="slds-form-element__control">
+                                    <input class="slds-input text-bold" type="text" id="progress-pengajuan" readonly
+                                        value={data.progressPengajuan} />
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </lightning-card>
+            </template>
+        </template>
+    </template>
+    <!-- End Result Data Section -->
+
+</template>

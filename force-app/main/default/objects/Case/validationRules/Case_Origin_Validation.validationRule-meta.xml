@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Case_Origin_Validation</fullName>
+    <active>true</active>
+    <description>Case origin cannot be updated</description>
+    <errorConditionFormula>AND(
+ISCHANGED( Origin ),
+NOT(ISNEW()),
+!$Permission.By_Pass_Validation_for_Migration,
+NOT(ISPICKVAL(PRIORVALUE
+(Origin),
+&apos;&apos;))
+)</errorConditionFormula>
+    <errorDisplayField>Origin</errorDisplayField>
+    <errorMessage>Anda tidak dapat mengubah origin kasus.</errorMessage>
+</ValidationRule>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Value_Conversion__c</fullName>
+    <externalId>false</externalId>
+    <fieldManageability>DeveloperControlled</fieldManageability>
+    <label>Value Conversion</label>
+    <required>false</required>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>STR.UPPER</fullName>
+                <default>true</default>
+                <label>STR.UPPER</label>
+            </value>
+            <value>
+                <fullName>STR.LOWER</fullName>
+                <default>false</default>
+                <label>STR.LOWER</label>
+            </value>
+            <value>
+                <fullName>DATE.GMT</fullName>
+                <default>false</default>
+                <label>DATE.GMT</label>
+            </value>
+            <value>
+                <fullName>NUMBERSTR</fullName>
+                <default>false</default>
+                <label>NUMBERSTR</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

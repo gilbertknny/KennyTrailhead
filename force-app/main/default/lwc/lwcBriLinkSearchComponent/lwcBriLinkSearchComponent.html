@@ -1,0 +1,387 @@
+<!--
+    LWC Name           : lwcBriLinkSearchComponent.html
+    Created Date       : 16 September 2024
+    @description       : This is class ..
+    @author            : Rakeyan Nuramria
+    Modification Log :
+    Ver   Date         Author                            Modification
+    1.0   16/09/2024   Rakeyan Nuramria                  Initial Version
+    1.0   25/09/2024   Rakeyan Nuramria                  Adjust UI forAPI
+    1.0   09/10/2024   Ardyta Yudianto                   [FROM SIT] Adjust UI to scrollable horizontally
+    1.0   31/10/2024   Rakeyan Nuramria                  [FROM SIT] Adjust UI to show data
+-->
+
+<template>
+
+    <!-- Search Section -->
+    <lightning-card title="" variant="base" class="custom-card slds-m-top_xx-small slds-card_boundary">
+        <div class="slds-grid slds-gutters slds-m-around_small">
+            <div class="slds-col">
+                <lightning-input label="TID" value={tid} onchange={handleTidChange}
+                    disabled={disableTidField}></lightning-input>
+            </div>
+            <div class="slds-col">
+                <lightning-input label="MID" value={mid} onchange={handleMidChange}
+                    disabled={disableMidField}></lightning-input>
+            </div>
+            <!-- <div class="slds-col">
+                <lightning-input label="Id Outlet" value={idOutlet} onchange={handleIdOutletChange}
+                    disabled={disableIdOutletField}></lightning-input>
+            </div> -->
+            <div class="slds-col" style="align-content: center; margin-top: 20px">
+                <lightning-button label="Cari" variant="brand" onclick={handleSearch}
+                    disabled={isHandleSearchDisabled}></lightning-button>
+            </div>
+        </div>
+
+        <template if:true={errorMessage}>
+            <div class="slds-text-color_error slds-m-left_small">
+                {errorMessage}
+            </div>
+        </template>
+    </lightning-card>
+    <!-- End Search Section -->
+
+    <template if:true={isLoading}>
+        <lightning-card class="custom-card slds-m-top_xx-small slds-card_boundary">
+            <div class="spinner-container" style="height:6rem;position:relative">
+                <div role="status" class="slds-spinner slds-spinner_small">
+                    <span class="slds-assistive-text">Loading</span>
+                    <div class="slds-spinner__dot-a"></div>
+                    <div class="slds-spinner__dot-b"></div>
+                </div>
+            </div>
+        </lightning-card>
+
+    </template>
+
+    <template if:true={hasError}>
+        <div class="slds-text-color_error slds-m-top_medium slds-text-align_center">
+            <b>{errorMsg}</b>
+        </div>
+    </template>
+
+    <!-- Result Data Section -->
+    <template if:true={showSearchResults}>
+        <lightning-card icon-name="" variant="base" class="custom-card slds-m-top_xx-small slds-card_boundary">
+            <div class="slds-p-around_small slds-m-top_xx-small">
+                <div class="slds-scrollable_y custom-scroll">
+                    <table class="slds-table slds-table_bordered slds-table_fixed-layout custom-table">
+                        <thead>
+                            <tr class="slds-line-height_reset">
+                                <th scope="col">
+                                    <div class="slds-truncate" title="MID Induk">MID Induk</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Merchant">Merchant</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Status">Status</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Tanggal Pasang">Tanggal Pasang</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Detail">Detail</div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template for:each={data} for:item="row">
+                                <tr key={row.kode_agen} class="slds-hint-parent">
+                                    <td>{row.mid}</td>
+                                    <td>{row.nama_merchant}</td>
+                                    <td>{row.status}</td>
+                                    <td>{row.tanggal_dibuat}</td>
+                                    <td>
+                                        <lightning-button data-id={row.mid} label="Lihat"
+                                            onclick={showDetail}></lightning-button>
+                                    </td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </lightning-card>
+
+        <!-- Detail Section -->
+        <template for:each={data} for:item="data">
+            <template if:true={data.showSection}>
+                <lightning-card key={data.mid} icon-name="" variant="base"
+                    class="custom-card slds-m-top_xx-small slds-card_boundary">
+                    <div slot="actions">
+                        <template if:false={isCloseHidden}>
+                            <lightning-button-icon data-id={data.mid} icon-name="utility:close" alternative-text="Close"
+                                title="Close" onclick={handleCloseDetail} class="cssClass" variant="bare">
+                            </lightning-button-icon>
+                        </template>
+                    </div>
+                    <div class="slds-m-around_medium" style="border: 1px solid #ccc;">
+                        <div class="slds-grid slds-wrap slds-m-around_medium">
+                            <div class="slds-col slds-size_1-of-2">
+                                <!-- Nama Agen BRILink -->
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="nama_agen">Nama Agen BRILink
+                                        EDC</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input text-bold" type="text" id="nama_agen" readonly
+                                            value={currentDetailData.nama_agen} />
+                                    </div>
+                                </div>
+                                <!-- Alamat Agent BRILink -->
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="alamat_agen">Alamat Agent
+                                        BRILink</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input text-bold" type="text" id="alamat_agen" readonly
+                                            value={currentDetailData.alamat_agen} />
+                                    </div>
+                                </div>
+                                <!-- Nomor Rekening -->
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="nomor_rekening">Nomor Rekening</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input text-bold" type="text" id="nomor_rekening" readonly
+                                            value={currentDetailData.nomor_rekening} />
+                                    </div>
+                                </div>
+                                <!-- Nama Ibu Kandung -->
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="nama_ibu_kandung">Nama Ibu
+                                        Kandung</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input text-bold" type="text" id="nama_ibu_kandung" readonly
+                                            value={currentDetailData.nama_ibu_kandung} />
+                                    </div>
+                                </div>
+                                <!-- Tanggal Lahir -->
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="tanggal_lahir">Tanggal Lahir</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input text-bold" type="text" id="tanggal_lahir" readonly
+                                            value={currentDetailData.tanggal_lahir} />
+                                    </div>
+                                </div>
+                                <!-- Nama Lengkap -->
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="nama_lengkap">Nama Lengkap</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input text-bold" type="text" id="nama_lengkap" readonly
+                                            value={currentDetailData.nama_lengkap} />
+                                    </div>
+                                </div>
+                                <!-- Kode Channel Agent BRILnk -->
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="kode_channel">Kode Channel Agent
+                                        BRILnk</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input text-bold" type="text" id="kode_channel" readonly
+                                            value={currentDetailData.kode_channel} />
+                                    </div>
+                                </div>
+                                <!-- MID / Kode BRILink -->
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="mid">MID / Kode BRILink</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input text-bold" type="text" id="mid" readonly
+                                            value={currentDetailData.mid} />
+                                    </div>
+                                </div>
+                                <!-- Telepon -->
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="telepon">Telepon</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input text-bold" type="text" id="telepon" readonly
+                                            value={currentDetailData.telepon} />
+                                    </div>
+                                </div>
+                                <!-- Kode Uker Pengelola -->
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="kode_uker_pengelola">Kode Uker
+                                        Pengelola</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input text-bold" type="text" id="kode_uker_pengelola"
+                                            readonly value={currentDetailData.kode_uker_pengelola} />
+                                    </div>
+                                </div>
+                                <!-- Regional Office Pengelola -->
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="region_office_pengelola">Regional
+                                        Office
+                                        Pengelola</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input text-bold" type="text" id="region_office_pengelola"
+                                            readonly value={currentDetailData.region_office_pengelola} />
+                                    </div>
+                                </div>
+                                <!-- Jenis Usaha BRILink -->
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="jenis_usaha">Jenis Usaha
+                                        BRILink</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input text-bold" type="text" id="jenis_usaha" readonly
+                                            value={currentDetailData.jenis_usaha} />
+                                    </div>
+                                </div>
+                                <!-- Nomor Kartu Debit -->
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="nomor_kartu_debit">Nomor Kartu
+                                        Debit</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input text-bold" type="text" id="nomor_kartu_debit" readonly
+                                            value={currentDetailData.nomor_kartu_debit} />
+                                    </div>
+                                </div>
+                                <!-- Nomor Kontak PAB -->
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="nomor_kontak_pab">Nomor Kontak
+                                        PAB</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input text-bold" type="text" id="nomor_kontak_pab" readonly
+                                            value={currentDetailData.nomor_kontak_pab} />
+                                    </div>
+                                </div>
+                                <!-- Status Agen BRILink -->
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="status">Status Agen BRILink</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input text-bold" type="text" id="status" readonly
+                                            value={currentDetailData.status} />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Column 2 -->
+                            <div class="slds-col slds-size_1-of-2">
+                                <!-- Kode Merchant BRILink WEB -->
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="kode_merchant">Kode Merchant BRILink
+                                        WEB</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input text-bold" type="text" id="kode_merchant" readonly
+                                            value={currentDetailData.kode_merchant} />
+                                    </div>
+                                </div>
+                                <!-- Kode Agen (BRILink Web) -->
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="kode_agen">Kode Agen (BRILink
+                                        Web)</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input text-bold" type="text" id="kode_agen" readonly
+                                            value={currentDetailData.kode_agen} />
+                                    </div>
+                                </div>
+                                <!-- Nama Merchant BRILink WEB -->
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="nama_merchant">Nama Merchant BRILink
+                                        WEB</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input text-bold" type="text" id="nama_merchant" readonly
+                                            value={currentDetailData.nama_merchant} />
+                                    </div>
+                                </div>
+                                <!-- Nomor KTP -->
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="nomor_ktp">Nomor KTP</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input text-bold" type="text" id="nomor_ktp" readonly
+                                            value={currentDetailData.nomor_ktp} />
+                                    </div>
+                                </div>
+                                <!-- No SIUP / TDP -->
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="nomor_siup">No SIUP / TDP</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input text-bold" type="text" id="nomor_siup" readonly
+                                            value={currentDetailData.nomor_siup} />
+                                    </div>
+                                </div>
+                                <!-- No Rekening Pelimpahan Merchant -->
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="nomor_rekening_pelimpahan">No Rekening
+                                        Pelimpahan Merchant</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input text-bold" type="text" id="nomor_rekening_pelimpahan"
+                                            readonly value={currentDetailData.nomor_rekening_pelimpahan} />
+                                    </div>
+                                </div>
+                                <!-- No Rekening Pinjaman -->
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="nomor_rekening_pinjaman">No Rekening
+                                        Pinjaman</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input text-bold" type="text" id="nomor_rekening_pinjaman"
+                                            readonly value={currentDetailData.nomor_rekening_pinjaman} />
+                                    </div>
+                                </div>
+                                <!-- Limit Transaksi -->
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="limit_transaksi">Limit
+                                        Transaksi</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input text-bold" type="text" id="limit_transaksi" readonly
+                                            value={currentDetailData.limit_transaksi} />
+                                    </div>
+                                </div>
+                                <!-- Sharing Fee -->
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="sharing_fee">Sharing Fee</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input text-bold" type="text" id="sharing_fee" readonly
+                                            value={currentDetailData.sharing_fee} />
+                                    </div>
+                                </div>
+                                <!-- PIC Unit Kerja -->
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="pic_uker">PIC Unit Kerja</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input text-bold" type="text" id="pic_uker" readonly
+                                            value={currentDetailData.pic_uker} />
+                                    </div>
+                                </div>
+                                <!-- Tanggal Dibuat -->
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="tanggal_dibuat">Tanggal Dibuat</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input text-bold" type="text" id="tanggal_dibuat" readonly
+                                            value={currentDetailData.tanggal_dibuat} />
+                                    </div>
+                                </div>
+                                <!-- Tanggal Modifikasi Terakhir -->
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="tanggal_modifikasi">Tanggal Modifikasi
+                                        Terakhir</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input text-bold" type="text" id="tanggal_modifikasi" readonly
+                                            value={currentDetailData.tanggal_modifikasi} />
+                                    </div>
+                                </div>
+                                <!-- Modifikasi Oleh -->
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="modifikasi_oleh">Modifikasi
+                                        Oleh</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input text-bold" type="text" id="modifikasi_oleh" readonly
+                                            value={currentDetailData.modifikasi_oleh} />
+                                    </div>
+                                </div>
+                                <!-- Jenis Jaringan -->
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="jenis_jaringan">Jenis Jaringan</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input text-bold" type="text" id="jenis_jaringan" readonly
+                                            value={currentDetailData.jenis_jaringan} />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </lightning-card>
+            </template>
+        </template>
+        <!-- End Detail Section -->
+    </template>
+    <!-- End Result Data Section -->
+
+</template>

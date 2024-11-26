@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Maker_Checker_NFT_Cannot_Close_Case</fullName>
+    <active>true</active>
+    <errorConditionFormula>($Permission.BO_Checker_NFT = TRUE || $Permission.BO_Maker_NFT = TRUE) &amp;&amp; TEXT(Status) = &apos;Closed&apos; &amp;&amp; NOT($Permission.By_Pass_Validation_for_Migration) &amp;&amp; NOT(ISCHANGED(SCC_Remark__c)) &amp;&amp; NOT(ISCHANGED(SCC_Drone_Remark_Update__c))</errorConditionFormula>
+    <errorMessage>Anda tidak boleh menutup Case</errorMessage>
+</ValidationRule>

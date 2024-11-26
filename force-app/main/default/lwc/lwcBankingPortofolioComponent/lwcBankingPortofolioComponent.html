@@ -1,0 +1,214 @@
+<!--
+    LWC Name           : lwcBankingPortofolioComponent.html
+    Created Date       : 10 September 2024
+    @description       : This is class ..
+    @author            : Rakeyan Nuramria
+    Modification Log :
+    Ver   Date         Author                            Modification
+    1.0   10/09/2024   Rakeyan Nuramria                  Initial Version
+    1.0   23/09/2024   Rakeyan Nuramria                  Adjust UI for API
+    1.0   01/10/2024   Rakeyan Nuramria                  Adjust for Blokir Kartu (BL/PL)
+    1.0   09/10/2024   Rakeyan Nuramria                  [FROM SIT] Adjust UI to scrollable horizontally
+    1.0   09/10/2024   Rakeyan Nuramria                  [FROM SIT] Adjust logic to pass cardNo to mutasi
+-->
+
+<template>
+    <!-- Banking Protofolio Section -->
+    <lightning-card icon-name="" variant="base" class="custom-card slds-m-top_xx-small slds-card_boundary">
+        <div class="slds-p-around_small slds-m-top_xx-small">
+            <div class="slds-scrollable_y custom-scroll">
+                <table class="slds-table slds-table_bordered slds-table_fixed-layout custom-table">
+                    <thead>
+                        <tr class="slds-line-height_reset">
+                            <th scope="col">
+                                <div class="slds-truncate" title="Nama">Nama</div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="Nomor Rekening">Nomor Rekening</div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="Nomor Kartu">Nomor Kartu</div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="CIF">CIF</div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="Produk">Produk</div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="Tipe Produk">Tipe Produk</div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="Status">Status</div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="Tanggal Buka Rekening">Tanggal Buka Rekening</div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="Status Transaksi">Action</div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={processedSimpananData} for:item="data">
+                            <template for:each={data.simpanan} for:item="simpanan" for:index="index">
+                                <tr key={simpanan.accountNumber} class="slds-hint-parent">
+                                    <td>{data.demografi.namaSesuaiIdentitas}</td>
+                                    <td>{simpanan.accountNumber}</td>
+                                    <!-- <template if:true={simpanan.cardList}>
+                                        <template for:each={simpanan.cardList} for:item="card" for:index="cardIndex">
+                                            <td key={card.cardNo}>{card.cardNo}</td>
+                                        </template>
+                                    </template> -->
+                                    <td>{simpanan.cardNo}</td>
+                                    <td>{simpanan.cifno}</td>
+                                    <td>{simpanan.product}</td>
+                                    <td>{simpanan.productType}</td>
+                                    <td>{simpanan.status}</td>
+                                    <td>{simpanan.openAccountDate}</td>
+                                    <td>
+                                        <lightning-button-menu alternative-text="Action" icon-name="utility:down"
+                                            class="slds-m-left_x-small custom-button-menu" menu-alignment="auto">
+                                            <lightning-menu-item label="Mutasi Rekening" value="mutasi_rekening"
+                                                data-nomor-rekening={simpanan.accountNumber}
+                                                data-nomor-kartu={simpanan.cardNo} onclick={handleMutasiAction}
+                                                onclose={handleCloseMutasiBanking}
+                                                is-close-hidden={isCloseHidden}></lightning-menu-item>
+                                            <!-- <lightning-menu-item label="Data Kartu" value="data_kartu"
+                                                data-nomor-kartu={simpanan.nomorKartu} onclose={handleCloseDataKartu}
+                                                onclick={handleDataKartuAction}></lightning-menu-item> -->
+                                            <!-- <template for:each={simpanan.cardList} for:item="card"
+                                                for:index="cardIndex"> -->
+                                            <lightning-menu-item key={simpanan.cardNo} label="Data Kartu"
+                                                value="data_kartu" data-nomor-kartu={simpanan.cardNo}
+                                                onclose={handleCloseDataKartu}
+                                                onclick={handleDataKartuAction}></lightning-menu-item>
+                                            <!-- </template> -->
+                                        </lightning-button-menu>
+                                    </td>
+                                </tr>
+                            </template>
+                        </template>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </lightning-card>
+    <!-- End Banking Protofolio Section -->
+
+    <!-- Mutasi Banking Section -->
+    <template if:true={showMutasiBanking}>
+        <lightning-card icon-name="" variant="base" class="custom-card slds-m-top_xx-small slds-card_boundary">
+            <div class="scrollable-banking-container">
+                <c-lwc-mutasi-rekening-component class="mutasi-banking-component" onclose={handleCloseMutasiBanking}
+                    no-rekening={selectedNomorRekening} no-kartu={selectedNomorKartu}
+                    record-id={recordId}></c-lwc-mutasi-rekening-component>
+            </div>
+        </lightning-card>
+    </template>
+    <!-- End Mutasi Banking Section -->
+
+    <!-- Data Kartu Section -->
+    <template if:true={showDataKartu}>
+        <!-- <lightning-card icon-name="" variant="base" class="custom-card slds-m-top_xx-small slds-card_boundary"> -->
+        <div class="scrollable-data-kartu-container">
+            <c-lwc-data-kartu-banking-component class="data-kartu-component" onclose={handleCloseDataKartu}
+                no-kartu={selectedNomorKartu} record-id={recordId}
+                for-blokir={forBlokir}></c-lwc-data-kartu-banking-component>
+        </div>
+        <!-- </lightning-card> -->
+    </template>
+    <!-- EndData Kartu Section -->
+
+
+
+
+
+
+</template>
+
+
+<!-- <template>
+    <lightning-card title="Customer Account Details" class="slds-card">
+    <div class="slds-p-around_medium custom-scroll">
+        <table class="slds-table slds-table_bordered slds-table_cell-buffer slds-table_fixed-layout custom-table">
+            <thead>
+                <tr class="slds-line-height_reset">
+                    <th scope="col">
+                        <div class="slds-truncate slds-text-align_center" title="Name">Name</div>
+                    </th>
+                    <th scope="col">
+                        <div class="slds-truncate slds-text-align_center" title="Nomor Rekening">Nomor Rekening</div>
+                    </th>
+                    <th scope="col">
+                        <div class="slds-truncate slds-text-align_center" title="Nomor Kartu">Nomor Kartu</div>
+                    </th>
+                    <th scope="col">
+                        <div class="slds-truncate slds-text-align_center" title="CIF">CIF</div>
+                    </th>
+                    <th scope="col">
+                        <div class="slds-truncate slds-text-align_center" title="Produk">Produk</div>
+                    </th>
+                    <th scope="col">
+                        <div class="slds-truncate slds-text-align_center" title="Tipe Produk">Tipe Produk</div>
+                    </th>
+                    <th scope="col">
+                        <div class="slds-truncate slds-text-align_center" title="Status">Status</div>
+                    </th>
+                    <th scope="col">
+                        <div class="slds-truncate slds-text-align_center" title="Tanggal Buka Rekening">Tanggal Buka
+                            Rekening</div>
+                    </th>
+                    <th scope="col">
+                        <div class="slds-truncate slds-text-align_center" title="Actions">Actions</div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <template for:each={data} for:item="row">
+                    <tr key={row.id} class="slds-hint-parent">
+                        <td>
+                            <div class="slds-truncate slds-text-align_center" title={row.name}>{row.name}</div>
+                        </td>
+                        <td>
+                            <div class="slds-truncate slds-text-align_center" title={row.nomorRekening}>
+                                {row.nomorRekening}</div>
+                        </td>
+                        <td>
+                            <div class="slds-truncate slds-text-align_center" title={row.nomorKartu}>{row.nomorKartu}
+                            </div>
+                        </td>
+                        <td>
+                            <div class="slds-truncate slds-text-align_center" title={row.cif}>{row.cif}</div>
+                        </td>
+                        <td>
+                            <div class="slds-truncate slds-text-align_center" title={row.produk}>{row.produk}</div>
+                        </td>
+                        <td>
+                            <div class="slds-truncate slds-text-align_center" title={row.tipeProduk}>{row.tipeProduk}
+                            </div>
+                        </td>
+                        <td>
+                            <div class="slds-truncate slds-text-align_center" title={row.status}>{row.status}</div>
+                        </td>
+                        <td>
+                            <div class="slds-truncate slds-text-align_center" title={row.tanggalBuka}>{row.tanggalBuka}
+                            </div>
+                        </td>
+                        <td>
+                            <lightning-button-menu alternative-text="Actions" icon-name="utility:down"
+                                class="slds-m-left_x-small custom-button-menu" menu-alignment="auto">
+                                <lightning-menu-item label="Mutasi Rekening" value="mutasi_rekening"
+                                    onclick={handleRowAction}></lightning-menu-item>
+                                <lightning-menu-item label="Data Kartu" value="data_kartu"
+                                    onclick={handleRowAction}></lightning-menu-item>
+                            </lightning-button-menu>
+                        </td>
+                    </tr>
+                </template>
+            </tbody>
+        </table>
+    </div>
+    </lightning-card>
+</template> -->

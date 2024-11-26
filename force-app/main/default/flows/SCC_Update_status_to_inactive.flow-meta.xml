@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>60.0</apiVersion>
+    <assignments>
+        <description>This will update status to inactive</description>
+        <name>SCC_Update_status_to_inactive</name>
+        <label>Update status to inactive</label>
+        <locationX>264</locationX>
+        <locationY>576</locationY>
+        <assignmentItems>
+            <assignToReference>SCC_Query_all_the_records.SCC_Status__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Inactive</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>SCC_Query_all_the_records</targetReference>
+        </connector>
+    </assignments>
+    <decisions>
+        <description>This will check if status is active</description>
+        <name>SCC_Check_if_status_is_active</name>
+        <label>Check if status is active</label>
+        <locationX>396</locationX>
+        <locationY>468</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>SCC_check_if_status_is_activeorinactive</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>SCC_Query_all_the_records.SCC_Status__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Active</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>SCC_Update_status_to_inactive</targetReference>
+            </connector>
+            <label>check if status is active</label>
+        </rules>
+    </decisions>
+    <description>This flow will update status to inactive when end date is passed</description>
+    <environments>Default</environments>
+    <formulas>
+        <description>This will return current date</description>
+        <name>SCC_Currentdate</name>
+        <dataType>DateTime</dataType>
+        <expression>NOW()</expression>
+    </formulas>
+    <interviewLabel>Update status to inactive {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Update status to inactive</label>
+    <loops>
+        <description>This will iterate all the records</description>
+        <name>SCC_Query_all_the_records</name>
+        <label>Query all the records</label>
+        <locationX>176</locationX>
+        <locationY>360</locationY>
+        <collectionReference>SCC_Get_all_announcement_records</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>SCC_Check_if_status_is_active</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>SCC_Update_all_announcements</targetReference>
+        </noMoreValuesConnector>
+    </loops>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <description>This will get all records</description>
+        <name>SCC_Get_all_announcement_records</name>
+        <label>Get all announcement records</label>
+        <locationX>176</locationX>
+        <locationY>252</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>SCC_Query_all_the_records</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>SCC_End_Date__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>SCC_End_Date__c</field>
+            <operator>LessThanOrEqualTo</operator>
+            <value>
+                <elementReference>SCC_Currentdate</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>SCC_Status__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Active</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>SCC_Announcement__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordUpdates>
+        <description>This will update all announcement status to inactive</description>
+        <name>SCC_Update_all_announcements</name>
+        <label>Update all announcements</label>
+        <locationX>176</locationX>
+        <locationY>852</locationY>
+        <inputReference>SCC_Query_all_the_records</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>SCC_Get_all_announcement_records</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>SCC_End_Date__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>SCC_Status__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Active</stringValue>
+            </value>
+        </filters>
+        <object>SCC_Announcement__c</object>
+        <schedule>
+            <frequency>Daily</frequency>
+            <startDate>2024-04-12</startDate>
+            <startTime>00:00:00.000Z</startTime>
+        </schedule>
+        <triggerType>Scheduled</triggerType>
+    </start>
+    <status>Active</status>
+    <variables>
+        <description>This will hold current date and time</description>
+        <name>SCC_CurrentDateTime</name>
+        <dataType>DateTime</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <elementReference>SCC_Currentdate</elementReference>
+        </value>
+    </variables>
+</Flow>

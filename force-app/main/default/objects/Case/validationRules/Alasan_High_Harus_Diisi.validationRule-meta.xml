@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Alasan_High_Harus_Diisi</fullName>
+    <active>true</active>
+    <description>Apabila Priority High, maka Alasan High (Urgent) harus diisi!</description>
+    <errorConditionFormula>TEXT(Priority) == &apos;High (Urgent/Critical)&apos;
+&amp;&amp;
+(TEXT(Status) == &apos;Escalated&apos;
+||
+TEXT(Status) == &apos;Waiting Document&apos;
+||
+TEXT(Status) == &apos;Closed&apos;
+||
+TEXT(Status) == &apos;Return&apos;)
+&amp;&amp;
+TEXT(Reason) == null
+&amp;&amp;
+Case_Cutoff__c == TRUE
+&amp;&amp;
+NOT($Permission.By_Pass_Validation_for_Migration) &amp;&amp; NOT( $Profile.Name = &apos;Salesforce API Only System Integrations&apos;)</errorConditionFormula>
+    <errorMessage>Apabila Priority High, maka Alasan High (Urgent) harus diisi!</errorMessage>
+</ValidationRule>

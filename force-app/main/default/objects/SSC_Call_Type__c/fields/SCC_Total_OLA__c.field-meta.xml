@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>SCC_Total_OLA__c</fullName>
+    <description>This is the sum of all Back Office OLA levels</description>
+    <externalId>false</externalId>
+    <formula>SCC_Agent_SLA__c  +  SCC_Level1_OLA__c  +  SCC_Level2_OLA__c  +  SCC_Level3_OLA__c  +  SCC_Level4_OLA__c</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Total BO OLA</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>
