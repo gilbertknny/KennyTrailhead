@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <columns>
+        <field>Case.Nomor_Tiket__c</field>
+    </columns>
+    <columns>
+        <field>Case.SCC_Call_Type__c</field>
+    </columns>
+    <columns>
+        <field>Case.SSC_Call_Type_Description__c</field>
+    </columns>
+    <columns>
+        <field>CREATED</field>
+    </columns>
+    <columns>
+        <aggregateTypes>Sum</aggregateTypes>
+        <field>Case.SLA_saat_ini__c</field>
+    </columns>
+    <columns>
+        <field>OWNER</field>
+    </columns>
+    <columns>
+        <field>STATUS</field>
+    </columns>
+    <description>Pending Submiter</description>
+    <filter>
+        <criteriaItems>
+            <column>CREATED</column>
+            <columnToColumn>false</columnToColumn>
+            <isUnlocked>true</isUnlocked>
+            <operator>equals</operator>
+            <value>Devita Roesi Kusuma Putri,Diva Purwaningsih,Mayasa Kurnia Dwi Ayuningsih,Neni Widyastuti,Rike Artianingrum Royanika Hakim,Aufa Lonosky,Shevie Juana Nuraini,Siti Mayza,Siti Para Umainah,Elfiyana Dianti,Abdullah Rifqi Husaini,Restuning Amalia,Tat Chirotul Khasanah</value>
+        </criteriaItems>
+        <criteriaItems>
+            <column>STATUS</column>
+            <columnToColumn>false</columnToColumn>
+            <isUnlocked>true</isUnlocked>
+            <operator>equals</operator>
+            <value>New,Working</value>
+        </criteriaItems>
+    </filter>
+    <format>Tabular</format>
+    <name>Ticket Agent AL Dila_SMG</name>
+    <params>
+        <name>units</name>
+        <value>d</value>
+    </params>
+    <params>
+        <name>co</name>
+        <value>1</value>
+    </params>
+    <reportType>CaseList</reportType>
+    <scope>organization</scope>
+    <showDetails>true</showDetails>
+    <showGrandTotal>true</showGrandTotal>
+    <showSubTotals>true</showSubTotals>
+    <sortColumn>CREATED</sortColumn>
+    <sortOrder>Asc</sortOrder>
+    <timeFrameFilter>
+        <dateColumn>CREATED_DATEONLY</dateColumn>
+        <interval>INTERVAL_CUSTOM</interval>
+    </timeFrameFilter>
+</Report>

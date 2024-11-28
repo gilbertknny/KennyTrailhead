@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <columns>
+        <field>Case.Case_Number__c</field>
+    </columns>
+    <columns>
+        <field>Case.SCC_Call_Type__c</field>
+    </columns>
+    <columns>
+        <field>Case.SSC_Call_Type_Description__c</field>
+    </columns>
+    <columns>
+        <field>CREATED_DATE</field>
+    </columns>
+    <columns>
+        <field>STATUS</field>
+    </columns>
+    <columns>
+        <field>DESCRIPTION</field>
+    </columns>
+    <filter>
+        <criteriaItems>
+            <column>STATUS</column>
+            <columnToColumn>false</columnToColumn>
+            <isUnlocked>true</isUnlocked>
+            <operator>equals</operator>
+            <value>Escalated,New,Waiting Document,Working</value>
+        </criteriaItems>
+        <criteriaItems>
+            <column>Case.SCC_Call_Type__c</column>
+            <columnToColumn>false</columnToColumn>
+            <isUnlocked>true</isUnlocked>
+            <operator>equals</operator>
+            <value>8615,8616,8617,8618. 8619,8987,7703,7705,8637,8638,8705,8717,8986,8229,8203,8200,2207,8623,8624,8625,8626,8627,8628,8629,8630,8631,8632,8633,8634,8636,8982,1713,8113,8610</value>
+        </criteriaItems>
+    </filter>
+    <format>Tabular</format>
+    <name>FST Report</name>
+    <params>
+        <name>units</name>
+        <value>h</value>
+    </params>
+    <params>
+        <name>co</name>
+        <value>1</value>
+    </params>
+    <reportType>CaseList</reportType>
+    <scope>organization</scope>
+    <showDetails>true</showDetails>
+    <showGrandTotal>true</showGrandTotal>
+    <showSubTotals>true</showSubTotals>
+    <timeFrameFilter>
+        <dateColumn>CREATED_DATEONLY</dateColumn>
+        <interval>INTERVAL_CUSTOM</interval>
+    </timeFrameFilter>
+</Report>

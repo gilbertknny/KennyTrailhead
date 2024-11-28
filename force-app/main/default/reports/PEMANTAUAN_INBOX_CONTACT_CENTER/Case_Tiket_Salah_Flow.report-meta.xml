@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <columns>
+        <field>Case.Nomor_Tiket__c</field>
+    </columns>
+    <columns>
+        <field>Case.SCC_Call_Type__c</field>
+    </columns>
+    <columns>
+        <field>Case.SSC_Call_Type_Description__c</field>
+    </columns>
+    <columns>
+        <field>STATUS</field>
+    </columns>
+    <columns>
+        <aggregateTypes>Sum</aggregateTypes>
+        <field>Case.SLA_saat_ini__c</field>
+    </columns>
+    <columns>
+        <field>OWNER</field>
+    </columns>
+    <columns>
+        <field>Case.Site_CCT__c</field>
+    </columns>
+    <columns>
+        <field>Case.SCC_Site_User__c</field>
+    </columns>
+    <columns>
+        <field>CREATED</field>
+    </columns>
+    <description>Report Ini digunakan untuk memantau tiket yang dibuat Contact Center namun SALAH FLOW
+Laporan ini dipantau oleh PIC AL Inbox masing masing Site yang bertugas.</description>
+    <filter>
+        <criteriaItems>
+            <column>STATUS</column>
+            <columnToColumn>false</columnToColumn>
+            <isUnlocked>true</isUnlocked>
+            <operator>equals</operator>
+            <value>New,Waiting Document,Working</value>
+        </criteriaItems>
+        <criteriaItems>
+            <column>OWNER</column>
+            <columnToColumn>false</columnToColumn>
+            <isUnlocked>true</isUnlocked>
+            <operator>equals</operator>
+            <value>FST - Merchant Care &amp; Operation,CDD - Strgy&amp;Prod Credit Card&amp;Dgtl Lend,DDB - Helpdesk,ORD - Monitoring,CDD - Clf-1 Credit Card Init - DATAM,CDD - Coll Card &amp; Digital Lending-CERIA,ORD - Investigasi Litigasi,CDD - CLF-1 Credit Card Init - APLIK,CDD - Business Partnership Team - PRN,CDD - Clf-1 Credit Card Init - SSU,SCC - Contact Center - Telesales,CDD - Business Operation Team - MSU,CDD - Business Operation Team - LKK,CDD - Marketing Strategy &amp; Data Analitic,CDD - Auth,Chrgbck &amp; UserCo - OTO,Chrgbck &amp; UserCo - CHARGEBACK,CDD - Coll Card &amp; Digital Lending - FE,CDD - Business Operation Team - ITEM,CDD - Business Operation Team - Delivery,CDD - Clf-1 Credit Card Init - LIMIT,CDD - Business Monitoring&amp;Perform - MIS,CDD - Coll Card &amp; Digital Lending - RE,CDD - Coll Card &amp; Digital Lending - MR,CDD - Coll Card &amp; Digital Lending - HC,FST - Transaction &amp; Service Compliance,FST - Merchant Implementation Management,SCC - Customer Resolution,Bespoke Tech-Enabled Value Chain Team,INV - TCS Operation Team,Micro Business Development,SCC - Service &amp; Implementation Assurance,SCC - Quality Assurance,SCC - Non Fraud Transaction - ISSUER,FST - Online Payment &amp; Card Services,DNR - Echannel Operation Monitoring,DNR - Echannel Infrastructure Operation,ORD - Sanggahan Kartu,ORD - Sanggaha</value>
+        </criteriaItems>
+    </filter>
+    <format>Tabular</format>
+    <name>Case TiketSalah Flow</name>
+    <params>
+        <name>units</name>
+        <value>d</value>
+    </params>
+    <params>
+        <name>co</name>
+        <value>1</value>
+    </params>
+    <reportType>CaseList</reportType>
+    <scope>organization</scope>
+    <showDetails>true</showDetails>
+    <showGrandTotal>true</showGrandTotal>
+    <showSubTotals>true</showSubTotals>
+    <timeFrameFilter>
+        <dateColumn>CREATED_DATEONLY</dateColumn>
+        <interval>INTERVAL_CUSTOM</interval>
+    </timeFrameFilter>
+</Report>

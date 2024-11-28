@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <columns>
+        <field>Case.Case_Number__c</field>
+    </columns>
+    <columns>
+        <field>Case.SCC_Call_Type__c</field>
+    </columns>
+    <columns>
+        <field>Case.SSC_Call_Type_Description__c</field>
+    </columns>
+    <columns>
+        <field>CREATED_DATEONLY</field>
+    </columns>
+    <columns>
+        <field>Case.BRI_CreatedTime__c</field>
+    </columns>
+    <columns>
+        <field>STATUS</field>
+    </columns>
+    <columns>
+        <field>Case.GIC_Pelaksana__c</field>
+    </columns>
+    <columns>
+        <field>Case.User_PN__c</field>
+    </columns>
+    <columns>
+        <field>Case.Unit_Kerja__c</field>
+    </columns>
+    <description>Report untuk jumlah tiket di hari yg sama dengan mengubah tanggal dalam menu filter</description>
+    <format>Tabular</format>
+    <name>Report Per Jam</name>
+    <params>
+        <name>units</name>
+        <value>h</value>
+    </params>
+    <params>
+        <name>co</name>
+        <value>1</value>
+    </params>
+    <reportType>CaseList</reportType>
+    <scope>organization</scope>
+    <showDetails>true</showDetails>
+    <showGrandTotal>true</showGrandTotal>
+    <showSubTotals>true</showSubTotals>
+    <timeFrameFilter>
+        <dateColumn>CREATED_DATEONLY</dateColumn>
+        <endDate>2024-08-13</endDate>
+        <interval>INTERVAL_CUSTOM</interval>
+        <startDate>2024-08-13</startDate>
+    </timeFrameFilter>
+</Report>

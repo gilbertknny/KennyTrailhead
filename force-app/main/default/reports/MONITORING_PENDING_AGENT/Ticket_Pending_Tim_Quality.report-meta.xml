@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <columns>
+        <field>Case.Case_Number__c</field>
+    </columns>
+    <columns>
+        <field>Case.SCC_Call_Type__c</field>
+    </columns>
+    <columns>
+        <field>Case.SSC_Call_Type_Description__c</field>
+    </columns>
+    <columns>
+        <field>CREATED</field>
+    </columns>
+    <columns>
+        <aggregateTypes>Sum</aggregateTypes>
+        <field>Case.SLA_saat_ini__c</field>
+    </columns>
+    <columns>
+        <field>STATUS</field>
+    </columns>
+    <filter>
+        <criteriaItems>
+            <column>OWNER</column>
+            <columnToColumn>false</columnToColumn>
+            <isUnlocked>false</isUnlocked>
+            <operator>equals</operator>
+            <value>Mentari Nur Islami,Annisatul Mufidah,Zain Oktarifah,Deva Anggita Yunia Putri,Aprilia Handikna Pramtama,Pramita,Anik Nofitiani,Nur Lathifah Rachmadhani,Tri,Mustika Sari,Dea Andiva Putri,Tiara Yunita Utami,Devi Sulistyo,Indri Marliana Sulistyawati,Anendya Surya Paramita,Ellizabeth Kristin Permatasari,Nita Sulistiani,Fithri Rahmawati,Dwi Danu Winarno,Irwiyatun Nikmah,Herlina Khusnita,Nurlatifa Rasmining Kusuma,Diah Angga Kurnianingtyas,Novita Sari,Mega Kusumaning Tiyas,Misty Ratnadya Pridadi,Randika,Khoirotul Mutmainah,Hananto Widodo</value>
+        </criteriaItems>
+        <criteriaItems>
+            <column>STATUS</column>
+            <columnToColumn>false</columnToColumn>
+            <isUnlocked>true</isUnlocked>
+            <operator>equals</operator>
+            <value>Escalated,New,Waiting Document,Working</value>
+        </criteriaItems>
+    </filter>
+    <format>Tabular</format>
+    <name>Ticket Pending Tim Quality</name>
+    <params>
+        <name>units</name>
+        <value>h</value>
+    </params>
+    <params>
+        <name>co</name>
+        <value>1</value>
+    </params>
+    <reportType>CaseList</reportType>
+    <scope>organization</scope>
+    <showDetails>true</showDetails>
+    <showGrandTotal>true</showGrandTotal>
+    <showSubTotals>true</showSubTotals>
+    <timeFrameFilter>
+        <dateColumn>CREATED_DATEONLY</dateColumn>
+        <interval>INTERVAL_CUSTOM</interval>
+    </timeFrameFilter>
+</Report>

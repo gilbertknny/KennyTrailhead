@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <columns>
+        <field>Case.Case_Number__c</field>
+    </columns>
+    <columns>
+        <field>Case.SSC_Call_Type_Description__c</field>
+    </columns>
+    <columns>
+        <field>Case.SCC_Call_Type__c</field>
+    </columns>
+    <columns>
+        <field>Case.Cust_Current_Phone__c</field>
+    </columns>
+    <columns>
+        <field>Case.SCC_Email__c</field>
+    </columns>
+    <columns>
+        <field>CREATED_DATEONLY</field>
+    </columns>
+    <description>No TT, Jenis Laporan, Calltype, Deskripsi, Produk, Tanggal Pembuatan, site user &amp; usergroup, status, PN Pembuat</description>
+    <format>Tabular</format>
+    <name>Tiket 8 Aug s.d 15 Sept</name>
+    <params>
+        <name>units</name>
+        <value>h</value>
+    </params>
+    <params>
+        <name>co</name>
+        <value>1</value>
+    </params>
+    <reportType>CaseList</reportType>
+    <scope>organization</scope>
+    <showDetails>true</showDetails>
+    <showGrandTotal>true</showGrandTotal>
+    <showSubTotals>true</showSubTotals>
+    <timeFrameFilter>
+        <dateColumn>CREATED_DATEONLY</dateColumn>
+        <endDate>2024-09-15</endDate>
+        <interval>INTERVAL_CUSTOM</interval>
+        <startDate>2024-09-15</startDate>
+    </timeFrameFilter>
+</Report>
