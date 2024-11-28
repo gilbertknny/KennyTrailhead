@@ -103,7 +103,7 @@
                         <valueListItems>
                             <value>Case.AutomationSettlement</value>
                             <visibilityRule>
-                                <booleanFilter>1 AND (2 OR 3) AND 4 AND 5</booleanFilter>
+                                <booleanFilter>1 AND (2 OR 3) AND 4 AND 5 AND 6</booleanFilter>
                                 <criteria>
                                     <leftValue>{!Record.Auto_Settlement__c}</leftValue>
                                     <operator>EQUAL</operator>
@@ -128,6 +128,11 @@
                                     <leftValue>{!Record.SCC_Count_Queuetrans__c}</leftValue>
                                     <operator>GT</operator>
                                     <rightValue>0</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.Case_Owner_X_User__c}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>true</rightValue>
                                 </criteria>
                             </visibilityRule>
                         </valueListItems>

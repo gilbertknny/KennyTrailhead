@@ -9,6 +9,7 @@
     1.1   26/08/2024   Rakeyan Nuramria                  Adjust the UI
     1.1   03/10/2024   Rakeyan Nuramria                  Adjust the UI for functionality
     1.1   29/10/2024   Rakeyan Nuramria                  Adjust the UI for show data Kantor Pembuka Rekening
+    2.0   08/11/2024   Rakeyan Nuramria                  Cleansing code + Add/adjust to UI v2 for adjusted category (Banking Individual/Non Individual & Kredit Individual/Non Individual)
 -->
 
 <template>
@@ -55,83 +56,220 @@
 
             <!-- Primary Card -->
             <lightning-card title="Primary">
-                <!-- <div slot="title">
-                    Primary
-                </div> -->
                 <!-- Primary Card Body  -->
                 <div class="slds-m-around_small">
-                    <!-- <lightning-layout multiple-rows="true">
-                        <lightning-layout-item size="11" padding="around-small">
-                            <lightning-input type="text" label="Nama Nasabah" disabled variant="standard"
-                                onchange={changeHandler}></lightning-input>
-                        </lightning-layout-item>
-                        <lightning-layout-item size="1" padding="around-small">
-                            <lightning-input type="checkbox" label="Basic option" name="input1" variant="label-hidden"
-                                class="checkbox-align"></lightning-input>
-                        </lightning-layout-item>
-                        
-                    </lightning-layout> -->
                     <div class="slds-grid slds-gutters slds-wrap">
-                        <!-- Nama Nasabah -->
-                        <template if:true={Banking}>
-                            <div class="slds-col slds-large-size_11-of-12 slds-medium-size_11-of-12 slds-size_11-of-12">
-                                <lightning-input value={demografiData.namaSesuaiIdentitas} type="text"
-                                    label="Nama Nasabah" disabled variant="standard"
-                                    onchange={changeHandler}></lightning-input>
-                            </div>
-                        </template>
-                        <template if:true={Credit}>
-                            <div class="slds-col slds-large-size_11-of-12 slds-medium-size_11-of-12 slds-size_11-of-12">
-                                <lightning-input value={cardInfo.namaLengkap} type="text" label="Nama Nasabah" disabled
-                                    variant="standard" onchange={changeHandler}></lightning-input>
-                            </div>
-                        </template>
 
-                        <div class="slds-col slds-large-size_1-of-12 slds-medium-size_1-of-12 slds-size_1-of-12">
-                            <lightning-input type="checkbox" label="" name="namaLengkap" variant="label-hidden"
-                                class="checkbox-align" data-id="namaLengkap" checked={checkboxStates.namaLengkap}
-                                onchange={handleCheckboxChange} disabled={isCheckboxDisabled}></lightning-input>
-                        </div>
-
-                        <!-- Tanggal Lahir -->
+                        <!-- Primary Banking Body  -->
                         <template if:true={Banking}>
-                            <div class="slds-col slds-large-size_11-of-12 slds-medium-size_11-of-12 slds-size_11-of-12">
-                                <lightning-input value={demografiData.tanggalLahir} type="text" label="Tanggal Lahir"
-                                    disabled variant="standard" onchange={changeHandler}></lightning-input>
-                            </div>
-                        </template>
-                        <template if:true={Credit}>
-                            <div class="slds-col slds-large-size_11-of-12 slds-medium-size_11-of-12 slds-size_11-of-12">
-                                <lightning-input value={cardInfo.tanggalLahir} type="text" label="Tanggal Lahir"
-                                    disabled variant="standard" onchange={changeHandler}></lightning-input>
-                            </div>
-                        </template>
+                            <!-- Primary Banking Individual  -->
+                            <template if:true={isBankingIndividual}>
 
-                        <div class="slds-col slds-large-size_1-of-12 slds-medium-size_1-of-12 slds-size_1-of-12">
-                            <lightning-input type="checkbox" label="" name="tglLahir" variant="label-hidden"
-                                class="checkbox-align" data-id="tglLahir" checked={checkboxStates.tglLahir}
-                                onchange={handleCheckboxChange} disabled={isCheckboxDisabled}></lightning-input>
-                        </div>
-                        <!-- Ibu Kandung -->
-                        <template if:true={Banking}>
-                            <div class="slds-col slds-large-size_11-of-12 slds-medium-size_11-of-12 slds-size_11-of-12">
-                                <lightning-input value={demografiData.namaGadisIbuKandung} type="text"
-                                    label="Nama Gadis Ibu Kandung" disabled variant="standard"
-                                    onchange={changeHandler}></lightning-input>
-                            </div>
+                                <!-- Nama Nasabah-->
+                                <div
+                                    class="slds-col slds-large-size_11-of-12 slds-medium-size_11-of-12 slds-size_11-of-12">
+                                    <lightning-input value={demografiData.namaSesuaiIdentitas} type="text"
+                                        label="Nama Nasabah" disabled variant="standard"
+                                        onchange={changeHandler}></lightning-input>
+                                </div>
+
+                                <div
+                                    class="slds-col slds-large-size_1-of-12 slds-medium-size_1-of-12 slds-size_1-of-12">
+                                    <lightning-input type="checkbox" label="" name="namaLengkap" variant="label-hidden"
+                                        class="checkbox-align" data-id="namaLengkap"
+                                        checked={checkboxStates.namaLengkap} onchange={handleCheckboxChange}
+                                        disabled={isCheckboxDisabled}></lightning-input>
+                                </div>
+
+                                <!-- Tanggal Lahir-->
+                                <div
+                                    class="slds-col slds-large-size_11-of-12 slds-medium-size_11-of-12 slds-size_11-of-12">
+                                    <lightning-input value={demografiData.tanggalLahir} type="text"
+                                        label="Tanggal Lahir" disabled variant="standard"
+                                        onchange={changeHandler}></lightning-input>
+                                </div>
+
+                                <div
+                                    class="slds-col slds-large-size_1-of-12 slds-medium-size_1-of-12 slds-size_1-of-12">
+                                    <lightning-input type="checkbox" label="" name="tglLahir" variant="label-hidden"
+                                        class="checkbox-align" data-id="tglLahir" checked={checkboxStates.tglLahir}
+                                        onchange={handleCheckboxChange} disabled={isCheckboxDisabled}></lightning-input>
+                                </div>
+
+                                <!-- Nama Gadis Ibu Kandung-->
+                                <div
+                                    class="slds-col slds-large-size_11-of-12 slds-medium-size_11-of-12 slds-size_11-of-12">
+                                    <lightning-input value={demografiData.namaGadisIbuKandung} type="text"
+                                        label="Nama Gadis Ibu Kandung" disabled variant="standard"
+                                        onchange={changeHandler}></lightning-input>
+                                </div>
+
+                                <div
+                                    class="slds-col slds-large-size_1-of-12 slds-medium-size_1-of-12 slds-size_1-of-12">
+                                    <lightning-input type="checkbox" label="" name="ibuKandung" variant="label-hidden"
+                                        class="checkbox-align" data-id="ibuKandung" checked={checkboxStates.ibuKandung}
+                                        onchange={handleCheckboxChange} disabled={isCheckboxDisabled}></lightning-input>
+                                </div>
+
+                            </template>
+                            <!-- End Primary Banking Individual  -->
+
+                            <!-- Primary Banking Non-Individual  -->
+                            <template if:true={isBankingNonIndividual}>
+
+                                <!-- Nama Nasabah -->
+
+                                <div
+                                    class="slds-col slds-large-size_11-of-12 slds-medium-size_11-of-12 slds-size_11-of-12">
+                                    <lightning-input value={demografiData.namaSesuaiIdentitas} type="text"
+                                        label="Nama Nasabah" disabled variant="standard"
+                                        onchange={changeHandler}></lightning-input>
+                                </div>
+
+                                <div
+                                    class="slds-col slds-large-size_1-of-12 slds-medium-size_1-of-12 slds-size_1-of-12">
+                                    <lightning-input type="checkbox" label="" name="namaLengkap" variant="label-hidden"
+                                        class="checkbox-align" data-id="namaLengkap"
+                                        checked={checkboxStates.namaLengkap} onchange={handleCheckboxChange}
+                                        disabled={isCheckboxDisabled}></lightning-input>
+                                </div>
+
+                                <!-- Tanggal Berdiri -->
+                                <div
+                                    class="slds-col slds-large-size_11-of-12 slds-medium-size_11-of-12 slds-size_11-of-12">
+                                    <lightning-input value={demografiData.tanggalAktaPendirian} type="text"
+                                        label="Tanggal Berdiri" disabled variant="standard"
+                                        onchange={changeHandler}></lightning-input>
+                                </div>
+
+                                <div
+                                    class="slds-col slds-large-size_1-of-12 slds-medium-size_1-of-12 slds-size_1-of-12">
+                                    <lightning-input type="checkbox" label="" name="tglBerdiri" variant="label-hidden"
+                                        class="checkbox-align" data-id="tglBerdiri" checked={checkboxStates.tglBerdiri}
+                                        onchange={handleCheckboxChange} disabled={isCheckboxDisabled}></lightning-input>
+                                </div>
+
+                                <!-- Nama Gadis Ibu Kandung -->
+                                <div
+                                    class="slds-col slds-large-size_11-of-12 slds-medium-size_11-of-12 slds-size_11-of-12">
+                                    <lightning-input value={demografiData.namaGadisIbuKandung} type="text"
+                                        label="Nama Gadis Ibu Kandung" disabled variant="standard"
+                                        onchange={changeHandler}></lightning-input>
+                                </div>
+
+                                <div
+                                    class="slds-col slds-large-size_1-of-12 slds-medium-size_1-of-12 slds-size_1-of-12">
+                                    <lightning-input type="checkbox" label="" name="ibuKandung" variant="label-hidden"
+                                        class="checkbox-align" data-id="ibuKandung" checked={checkboxStates.ibuKandung}
+                                        onchange={handleCheckboxChange} disabled={isCheckboxDisabled}></lightning-input>
+                                </div>
+
+                                <!-- NPWP -->
+                                <div
+                                    class="slds-col slds-large-size_11-of-12 slds-medium-size_11-of-12 slds-size_11-of-12">
+                                    <lightning-input value={demografiData.NPWP} type="text" label="NPWP" disabled
+                                        variant="standard" onchange={changeHandler}></lightning-input>
+                                </div>
+                                <div
+                                    class="slds-col slds-large-size_1-of-12 slds-medium-size_1-of-12 slds-size_1-of-12">
+                                    <lightning-input type="checkbox" label="" name="npwp" variant="label-hidden"
+                                        class="checkbox-align" data-id="npwp" checked={checkboxStates.npwp}
+                                        onchange={handleCheckboxChange} disabled={isCheckboxDisabled}></lightning-input>
+                                </div>
+
+                            </template>
+                            <!-- End Primary Banking Non-Individual  -->
                         </template>
+                        <!-- End Primary Banking Body  -->
+
+                        <!-- Primary Credit Body  -->
                         <template if:true={Credit}>
-                            <div class="slds-col slds-large-size_11-of-12 slds-medium-size_11-of-12 slds-size_11-of-12">
-                                <lightning-input value={cardInfo.namaIbuKandung} type="text"
-                                    label="Nama Gadis Ibu Kandung" disabled variant="standard"
-                                    onchange={changeHandler}></lightning-input>
-                            </div>
+                            <!-- Primary Credit Individual  -->
+                            <template if:true={isKreditIndividual}>
+
+                                <!-- Nama Nasabah -->
+                                <div
+                                    class="slds-col slds-large-size_11-of-12 slds-medium-size_11-of-12 slds-size_11-of-12">
+                                    <lightning-input value={cardInfo.namaLengkap} type="text" label="Nama Nasabah"
+                                        disabled variant="standard" onchange={changeHandler}></lightning-input>
+                                </div>
+
+                                <div
+                                    class="slds-col slds-large-size_1-of-12 slds-medium-size_1-of-12 slds-size_1-of-12">
+                                    <lightning-input type="checkbox" label="" name="namaLengkap" variant="label-hidden"
+                                        class="checkbox-align" data-id="namaLengkap"
+                                        checked={checkboxStates.namaLengkap} onchange={handleCheckboxChange}
+                                        disabled={isCheckboxDisabled}></lightning-input>
+                                </div>
+                                <!-- Tanggal Lahir -->
+                                <div
+                                    class="slds-col slds-large-size_11-of-12 slds-medium-size_11-of-12 slds-size_11-of-12">
+                                    <lightning-input value={cardInfo.tanggalLahir} type="text" label="Tanggal Lahir"
+                                        disabled variant="standard" onchange={changeHandler}></lightning-input>
+                                </div>
+
+                                <div
+                                    class="slds-col slds-large-size_1-of-12 slds-medium-size_1-of-12 slds-size_1-of-12">
+                                    <lightning-input type="checkbox" label="" name="tglLahir" variant="label-hidden"
+                                        class="checkbox-align" data-id="tglLahir" checked={checkboxStates.tglLahir}
+                                        onchange={handleCheckboxChange} disabled={isCheckboxDisabled}></lightning-input>
+                                </div>
+
+                                <!-- Nama Gadis Ibu Kandung -->
+                                <div
+                                    class="slds-col slds-large-size_11-of-12 slds-medium-size_11-of-12 slds-size_11-of-12">
+                                    <lightning-input value={cardInfo.namaIbuKandung} type="text"
+                                        label="Nama Gadis Ibu Kandung" disabled variant="standard"
+                                        onchange={changeHandler}></lightning-input>
+                                </div>
+
+                                <div
+                                    class="slds-col slds-large-size_1-of-12 slds-medium-size_1-of-12 slds-size_1-of-12">
+                                    <lightning-input type="checkbox" label="" name="ibuKandung" variant="label-hidden"
+                                        class="checkbox-align" data-id="ibuKandung" checked={checkboxStates.ibuKandung}
+                                        onchange={handleCheckboxChange} disabled={isCheckboxDisabled}></lightning-input>
+                                </div>
+
+                            </template>
+                            <!-- End Primary Credit Individual  -->
+
+                            <!-- Primary Credit Non-Individual  -->
+                            <template if:true={isKreditNonIndividual}>
+
+                                <!-- Nama PIC -->
+                                <div
+                                    class="slds-col slds-large-size_11-of-12 slds-medium-size_11-of-12 slds-size_11-of-12">
+                                    <lightning-input value={cardInfo.namaLengkap} type="text" label="Nama PIC" disabled
+                                        variant="standard" onchange={changeHandler}></lightning-input>
+                                </div>
+
+                                <div
+                                    class="slds-col slds-large-size_1-of-12 slds-medium-size_1-of-12 slds-size_1-of-12">
+                                    <lightning-input type="checkbox" label="" name="namaLengkap" variant="label-hidden"
+                                        class="checkbox-align" data-id="namaLengkap"
+                                        checked={checkboxStates.namaLengkap} onchange={handleCheckboxChange}
+                                        disabled={isCheckboxDisabled}></lightning-input>
+                                </div>
+                                <!-- Nomor Handphone PIC -->
+                                <div
+                                    class="slds-col slds-large-size_11-of-12 slds-medium-size_11-of-12 slds-size_11-of-12">
+                                    <lightning-input value={cardInfo.noHandphone} type="text"
+                                        label="Nomor Handphone PIC" disabled variant="standard"
+                                        onchange={changeHandler}></lightning-input>
+                                </div>
+
+                                <div
+                                    class="slds-col slds-large-size_1-of-12 slds-medium-size_1-of-12 slds-size_1-of-12">
+                                    <lightning-input type="checkbox" label="" name="noHpBRINets" variant="label-hidden"
+                                        class="checkbox-align" data-id="noHpBRINets"
+                                        checked={checkboxStates.noHpBRINets} onchange={handleCheckboxChange}
+                                        disabled={isCheckboxDisabled}></lightning-input>
+                                </div>
+
+                            </template>
+                            <!-- End Primary Credit Non-Individual  -->
                         </template>
-                        <div class="slds-col slds-large-size_1-of-12 slds-medium-size_1-of-12 slds-size_1-of-12">
-                            <lightning-input type="checkbox" label="" name="ibuKandung" variant="label-hidden"
-                                class="checkbox-align" data-id="ibuKandung" checked={checkboxStates.ibuKandung}
-                                onchange={handleCheckboxChange} disabled={isCheckboxDisabled}></lightning-input>
-                        </div>
+                        <!-- End Primary Credit Body  -->
 
                     </div>
                 </div>
@@ -141,121 +279,82 @@
 
             <!-- Secondary Card -->
             <lightning-card title="Secondary">
-                <!-- <div slot="title">
-                    Secondary
-                </div> -->
-                <!-- Secondary Card Body  -->
                 <div class="slds-m-around_small">
-                    <!-- <lightning-layout multiple-rows="true">
-                        <lightning-layout-item size="11" padding="around-small">
-                            <lightning-input type="text" label="Nama Nasabah" disabled variant="standard"
-                                onchange={changeHandler}></lightning-input>
-                        </lightning-layout-item>
-                        <lightning-layout-item size="1" padding="around-small">
-                            <lightning-input type="checkbox" label="Basic option" name="input1" variant="label-hidden"
-                                class="checkbox-align"></lightning-input>
-                        </lightning-layout-item>
-                        
-                    </lightning-layout> -->
                     <div class="slds-grid slds-gutters slds-wrap">
-                        <!-- Nomor Handphone (BRINets) -->
+
+                        <!-- Secondary Banking Body  -->
                         <template if:true={Banking}>
-                            <div class="slds-col slds-large-size_11-of-12 slds-medium-size_11-of-12 slds-size_11-of-12">
-                                <lightning-input value={demografiData.handphone} type="text"
-                                    label="Nomor Handphone (BRINets)" disabled variant="standard"
-                                    onchange={changeHandler}></lightning-input>
-                            </div>
-                        </template>
-                        <template if:true={Credit}>
-                            <div class="slds-col slds-large-size_11-of-12 slds-medium-size_11-of-12 slds-size_11-of-12">
-                                <lightning-input value={cardInfo.noHandphone} type="text"
-                                    label="Nomor Handphone (BRINets)" disabled variant="standard"
-                                    onchange={changeHandler}></lightning-input>
-                            </div>
-                        </template>
-                        <div class="slds-col slds-large-size_1-of-12 slds-medium-size_1-of-12 slds-size_1-of-12">
-                            <lightning-input type="checkbox" label="" name="noHpBRINets" variant="label-hidden"
-                                class="checkbox-align" data-id="noHpBRINets" checked={checkboxStates.noHpBRINets}
-                                onchange={handleCheckboxChange} disabled={isCheckboxDisabled}></lightning-input>
-                        </div>
-                        <!-- Nomor Handphone (WBS) -->
-                        <template if:true={Banking}>
-                            <div class="slds-col slds-large-size_11-of-12 slds-medium-size_11-of-12 slds-size_11-of-12">
-                                <lightning-input value={demografiData.handphone} type="text"
-                                    label="Nomor Handphone (WBS)" disabled variant="standard"
-                                    onchange={changeHandler}></lightning-input>
-                            </div>
-                        </template>
-                        <template if:true={Credit}>
-                            <div class="slds-col slds-large-size_11-of-12 slds-medium-size_11-of-12 slds-size_11-of-12">
-                                <lightning-input value={cardInfo.noHandphone} type="text" label="Nomor Handphone (WBS)"
-                                    disabled variant="standard" onchange={changeHandler}></lightning-input>
-                            </div>
-                        </template>
-                        <div class="slds-col slds-large-size_1-of-12 slds-medium-size_1-of-12 slds-size_1-of-12">
-                            <lightning-input type="checkbox" label="" name="noHpWBS" variant="label-hidden"
-                                class="checkbox-align" data-id="noHpWBS" checked={checkboxStates.noHpWBS}
-                                onchange={handleCheckboxChange} disabled={isCheckboxDisabled}></lightning-input>
-                        </div>
-                        <!-- Transaksi Terakhir -->
-                        <!-- <template if:true={Banking}>
-                            <div class="slds-col slds-large-size_11-of-12 slds-medium-size_11-of-12 slds-size_11-of-12">
-                                <lightning-input value={} type="text" label="Transaksi Terakhir" disabled
-                                    variant="standard" onchange={changeHandler}></lightning-input>
-                            </div>
-                            <div class="slds-col slds-large-size_1-of-12 slds-medium-size_1-of-12 slds-size_1-of-12">
-                                <lightning-input type="checkbox" label="" name="trxTerakhir" variant="label-hidden"
-                                    class="checkbox-align" data-id="trxTerakhir" checked={checkboxStates.trxTerakhir}
-                                    onchange={handleCheckboxChange}></lightning-input>
-                            </div>
-                        </template> -->
-                        <!-- NIK -->
-                        <template if:true={Banking}>
-                            <div class="slds-col slds-large-size_11-of-12 slds-medium-size_11-of-12 slds-size_11-of-12">
-                                <lightning-input value={demografiData.nomorIdentitas} type="text" label="NIK" disabled
-                                    variant="standard" onchange={changeHandler}></lightning-input>
-                            </div>
-                        </template>
-                        <template if:true={Credit}>
-                            <div class="slds-col slds-large-size_11-of-12 slds-medium-size_11-of-12 slds-size_11-of-12">
-                                <lightning-input value={cardInfo.noNIK} type="text" label="NIK" disabled
-                                    variant="standard" onchange={changeHandler}></lightning-input>
-                            </div>
-                        </template>
-                        <div class="slds-col slds-large-size_1-of-12 slds-medium-size_1-of-12 slds-size_1-of-12">
-                            <lightning-input type="checkbox" label="" name="nik" variant="label-hidden"
-                                class="checkbox-align" data-id="nik" checked={checkboxStates.nik}
-                                onchange={handleCheckboxChange} disabled={isCheckboxDisabled}></lightning-input>
-                        </div>
-                        <!-- Jenis Rekening -->
-                        <template if:true={Banking}>
-                            <!-- <template if:true={simpananData}>
-                                <template for:each={simpananData} for:item='simpanan'>
-                                    <div key={simpanan.accountNumber}
-                                        class="slds-col slds-large-size_11-of-12 slds-medium-size_11-of-12 slds-size_11-of-12">
-                                        <lightning-input value={simpanan.productType} type="text" label="Jenis Rekening"
-                                            disabled variant="standard" onchange={changeHandler}></lightning-input>
-                                    </div>
-                                </template>
-                            </template>
-                            <template if:false={simpananData.length}>
+                            <!-- Secondary Banking Individual  -->
+                            <template if:true={isBankingIndividual}>
+
+                                <!-- Nomor Handphone (BRINets) -->
                                 <div
                                     class="slds-col slds-large-size_11-of-12 slds-medium-size_11-of-12 slds-size_11-of-12">
-                                    <lightning-input value="" type="text" label="Jenis Rekening" disabled
-                                        variant="standard" onchange={changeHandler}></lightning-input>
+                                    <lightning-input value={demografiData.handphone} type="text"
+                                        label="Nomor Handphone (BRINets)" disabled variant="standard"
+                                        onchange={changeHandler}></lightning-input>
                                 </div>
-                            </template> -->
 
-                            <template if:true={simpananData}>
-                                <template if:true={selectedSimpanan}>
-                                    <div
-                                        class="slds-col slds-large-size_11-of-12 slds-medium-size_11-of-12 slds-size_11-of-12">
-                                        <lightning-input value={selectedSimpanan.productType} type="text"
-                                            label="Jenis Rekening" disabled variant="standard">
-                                        </lightning-input>
-                                    </div>
+                                <div
+                                    class="slds-col slds-large-size_1-of-12 slds-medium-size_1-of-12 slds-size_1-of-12">
+                                    <lightning-input type="checkbox" label="" name="noHpBRINets" variant="label-hidden"
+                                        class="checkbox-align" data-id="noHpBRINets"
+                                        checked={checkboxStates.noHpBRINets} onchange={handleCheckboxChange}
+                                        disabled={isCheckboxDisabled}></lightning-input>
+                                </div>
+
+                                <!-- Nomor Handphone (WBS) -->
+                                <div
+                                    class="slds-col slds-large-size_11-of-12 slds-medium-size_11-of-12 slds-size_11-of-12">
+                                    <lightning-input value={demografiData.handphone} type="text"
+                                        label="Nomor Handphone (WBS)" disabled variant="standard"
+                                        onchange={changeHandler}></lightning-input>
+                                </div>
+
+                                <div
+                                    class="slds-col slds-large-size_1-of-12 slds-medium-size_1-of-12 slds-size_1-of-12">
+                                    <lightning-input type="checkbox" label="" name="noHpWBS" variant="label-hidden"
+                                        class="checkbox-align" data-id="noHpWBS" checked={checkboxStates.noHpWBS}
+                                        onchange={handleCheckboxChange} disabled={isCheckboxDisabled}></lightning-input>
+                                </div>
+
+                                <!-- NIK -->
+                                <div
+                                    class="slds-col slds-large-size_11-of-12 slds-medium-size_11-of-12 slds-size_11-of-12">
+                                    <lightning-input value={demografiData.nomorIdentitas} type="text" label="NIK"
+                                        disabled variant="standard" onchange={changeHandler}></lightning-input>
+                                </div>
+
+                                <div
+                                    class="slds-col slds-large-size_1-of-12 slds-medium-size_1-of-12 slds-size_1-of-12">
+                                    <lightning-input type="checkbox" label="" name="nik" variant="label-hidden"
+                                        class="checkbox-align" data-id="nik" checked={checkboxStates.nik}
+                                        onchange={handleCheckboxChange} disabled={isCheckboxDisabled}></lightning-input>
+                                </div>
+
+                                <!-- Jenis Rekening -->
+                                <template if:true={simpananData}>
+                                    <template if:true={selectedSimpanan}>
+                                        <div
+                                            class="slds-col slds-large-size_11-of-12 slds-medium-size_11-of-12 slds-size_11-of-12">
+                                            <lightning-input value={selectedSimpanan.productType} type="text"
+                                                label="Jenis Rekening" disabled variant="standard">
+                                            </lightning-input>
+                                        </div>
+                                    </template>
+                                    <template if:false={selectedSimpanan}>
+                                        <template if:false={isInputHidden}>
+                                            <div
+                                                class="slds-col slds-large-size_11-of-12 slds-medium-size_11-of-12 slds-size_11-of-12">
+                                                <lightning-input value="" type="text" label="Jenis Rekening" disabled
+                                                    variant="standard">
+                                                </lightning-input>
+                                            </div>
+                                        </template>
+                                    </template>
                                 </template>
-                                <template if:false={selectedSimpanan}>
+
+                                <template if:false={simpananData.length}>
                                     <div
                                         class="slds-col slds-large-size_11-of-12 slds-medium-size_11-of-12 slds-size_11-of-12">
                                         <lightning-input value="" type="text" label="Jenis Rekening" disabled
@@ -263,62 +362,38 @@
                                         </lightning-input>
                                     </div>
                                 </template>
-                            </template>
 
-                            <template if:false={simpananData.length}>
                                 <div
-                                    class="slds-col slds-large-size_11-of-12 slds-medium-size_11-of-12 slds-size_11-of-12">
-                                    <lightning-input value="" type="text" label="Jenis Rekening" disabled
-                                        variant="standard">
-                                    </lightning-input>
+                                    class="slds-col slds-large-size_1-of-12 slds-medium-size_1-of-12 slds-size_1-of-12">
+                                    <lightning-input type="checkbox" label="" name="jenisRekening"
+                                        variant="label-hidden" class="checkbox-align" data-id="jenisRekening"
+                                        checked={checkboxStates.jenisRekening} onchange={handleCheckboxChange}
+                                        disabled={isCheckboxDisabled}></lightning-input>
                                 </div>
-                            </template>
 
-                            <div class="slds-col slds-large-size_1-of-12 slds-medium-size_1-of-12 slds-size_1-of-12">
-                                <lightning-input type="checkbox" label="" name="jenisRekening" variant="label-hidden"
-                                    class="checkbox-align" data-id="jenisRekening"
-                                    checked={checkboxStates.jenisRekening} onchange={handleCheckboxChange}
-                                    disabled={isCheckboxDisabled}></lightning-input>
-                            </div>
-                        </template>
-                        <!-- Kantor Pembuka Rekening -->
-                        <!-- <template if:true={Banking}>
-                            <template if:true={demografiData}>
-                                <div
-                                    class="slds-col slds-large-size_11-of-12 slds-medium-size_11-of-12 slds-size_11-of-12">
-                                    <lightning-input value={concatenatedAlamatKantor} type="text"
-                                        label="Kantor Pembuka Rekening" disabled variant="standard"
-                                        onchange={changeHandler}></lightning-input>
-                                </div>
-                            </template>
-                            <template if:false={demografiData}>
-                                <div
-                                    class="slds-col slds-large-size_11-of-12 slds-medium-size_11-of-12 slds-size_11-of-12">
-                                    <lightning-input value="" type="text" label="Kantor Pembuka Rekening" disabled
-                                        variant="standard" onchange={changeHandler}></lightning-input>
-                                </div>
-                            </template>
-                            <div class="slds-col slds-large-size_1-of-12 slds-medium-size_1-of-12 slds-size_1-of-12">
-                                <lightning-input type="checkbox" label="" name="kantorPembuka" variant="label-hidden"
-                                    class="checkbox-align" data-id="kantorPembuka"
-                                    checked={checkboxStates.kantorPembuka} onchange={handleCheckboxChange}
-                                    disabled={isCheckboxDisabled}></lightning-input>
-                            </div>
-                        </template> -->
-
-                        <!--V2 - using 4 digits from account number -->
-
-                        <template if:true={Banking}>
-                            <template if:true={simpananData}>
-                                <template if:true={selectedSimpanan}>
-                                    <div
-                                        class="slds-col slds-large-size_11-of-12 slds-medium-size_11-of-12 slds-size_11-of-12">
-                                        <lightning-input value={selectedSimpanan.kodeKantorCabang} type="text"
-                                            label="Kantor Pembuka Rekening" disabled variant="standard">
-                                        </lightning-input>
-                                    </div>
+                                <!-- Kantor Pembuka Rekening -->
+                                <template if:true={simpananData}>
+                                    <template if:true={selectedSimpanan}>
+                                        <div
+                                            class="slds-col slds-large-size_11-of-12 slds-medium-size_11-of-12 slds-size_11-of-12">
+                                            <lightning-input value={selectedSimpanan.kodeKantorCabang} type="text"
+                                                label="Kantor Pembuka Rekening" disabled variant="standard">
+                                            </lightning-input>
+                                        </div>
+                                    </template>
+                                    <template if:false={selectedSimpanan}>
+                                        <template if:false={isInputHidden}>
+                                            <div
+                                                class="slds-col slds-large-size_11-of-12 slds-medium-size_11-of-12 slds-size_11-of-12">
+                                                <lightning-input value="" type="text" label="Kantor Pembuka Rekening"
+                                                    disabled variant="standard">
+                                                </lightning-input>
+                                            </div>
+                                        </template>
+                                    </template>
                                 </template>
-                                <template if:false={selectedSimpanan}>
+
+                                <template if:false={simpananData.length}>
                                     <div
                                         class="slds-col slds-large-size_11-of-12 slds-medium-size_11-of-12 slds-size_11-of-12">
                                         <lightning-input value="" type="text" label="Kantor Pembuka Rekening" disabled
@@ -326,131 +401,388 @@
                                         </lightning-input>
                                     </div>
                                 </template>
-                            </template>
 
-                            <template if:false={simpananData.length}>
                                 <div
-                                    class="slds-col slds-large-size_11-of-12 slds-medium-size_11-of-12 slds-size_11-of-12">
-                                    <lightning-input value="" type="text" label="Kantor Pembuka Rekening" disabled
-                                        variant="standard">
-                                    </lightning-input>
+                                    class="slds-col slds-large-size_1-of-12 slds-medium-size_1-of-12 slds-size_1-of-12">
+                                    <lightning-input type="checkbox" label="" name="kantorPembuka"
+                                        variant="label-hidden" class="checkbox-align" data-id="kantorPembuka"
+                                        checked={checkboxStates.kantorPembuka} onchange={handleCheckboxChange}
+                                        disabled={isCheckboxDisabled}></lightning-input>
                                 </div>
-                            </template>
 
-                            <div class="slds-col slds-large-size_1-of-12 slds-medium-size_1-of-12 slds-size_1-of-12">
-                                <lightning-input type="checkbox" label="" name="kantorPembuka" variant="label-hidden"
-                                    class="checkbox-align" data-id="kantorPembuka"
-                                    checked={checkboxStates.kantorPembuka} onchange={handleCheckboxChange}
-                                    disabled={isCheckboxDisabled}></lightning-input>
-                            </div>
-                        </template>
-
-                        <!-- END V2 - using 4 digits from account number -->
-
-                        <!-- NPWP -->
-                        <template if:true={Credit}>
-                            <div class="slds-col slds-large-size_11-of-12 slds-medium-size_11-of-12 slds-size_11-of-12">
-                                <lightning-input value={cardInfo.noNPWP} type="text" label="NPWP" disabled
-                                    variant="standard" onchange={changeHandler}></lightning-input>
-                            </div>
-                            <div class="slds-col slds-large-size_1-of-12 slds-medium-size_1-of-12 slds-size_1-of-12">
-                                <lightning-input type="checkbox" label="" name="npwp" variant="label-hidden"
-                                    class="checkbox-align" data-id="npwp" checked={checkboxStates.npwp}
-                                    onchange={handleCheckboxChange} disabled={isCheckboxDisabled}></lightning-input>
-                            </div>
-                        </template>
-                        <!-- Expired Date Kartu -->
-                        <template if:true={Credit}>
-                            <div class="slds-col slds-large-size_11-of-12 slds-medium-size_11-of-12 slds-size_11-of-12">
-                                <lightning-input value={cardInfo.expiredKartu} type="text" label="Expired Date Kartu"
-                                    disabled variant="standard" onchange={changeHandler}></lightning-input>
-                            </div>
-                            <div class="slds-col slds-large-size_1-of-12 slds-medium-size_1-of-12 slds-size_1-of-12">
-                                <lightning-input type="checkbox" label="" name="expiredKartu" variant="label-hidden"
-                                    class="checkbox-align" data-id="expiredKartu" checked={checkboxStates.expiredKartu}
-                                    onchange={handleCheckboxChange} disabled={isCheckboxDisabled}></lightning-input>
-                            </div>
-                        </template>
-                        <!-- Alamat Rumah -->
-                        <template if:true={Banking}>
-                            <div class="slds-col slds-large-size_11-of-12 slds-medium-size_11-of-12 slds-size_11-of-12">
-                                <lightning-input value={demografiData.alamatSesuaiID} type="text" label="Alamat Rumah"
-                                    disabled variant="standard" onchange={changeHandler}></lightning-input>
-                            </div>
-                        </template>
-                        <template if:true={Credit}>
-                            <div class="slds-col slds-large-size_11-of-12 slds-medium-size_11-of-12 slds-size_11-of-12">
-                                <lightning-input value={cardInfo.alamatRumah} type="text" label="Alamat Rumah" disabled
-                                    variant="standard" onchange={changeHandler}></lightning-input>
-                            </div>
-                        </template>
-                        <div class="slds-col slds-large-size_1-of-12 slds-medium-size_1-of-12 slds-size_1-of-12">
-                            <lightning-input type="checkbox" label="" name="alamatRumah" variant="label-hidden"
-                                class="checkbox-align" data-id="alamatRumah" checked={checkboxStates.alamatRumah}
-                                onchange={handleCheckboxChange} disabled={isCheckboxDisabled}></lightning-input>
-                        </div>
-                        <!-- Limit Kartu Kredit -->
-                        <template if:true={Credit}>
-                            <div class="slds-col slds-large-size_11-of-12 slds-medium-size_11-of-12 slds-size_11-of-12">
-                                <lightning-input value={cardInfo.limitKartu} type="text" label="Limit Kartu Kredit"
-                                    disabled variant="standard" onchange={changeHandler}></lightning-input>
-                            </div>
-                            <div class="slds-col slds-large-size_1-of-12 slds-medium-size_1-of-12 slds-size_1-of-12">
-                                <lightning-input type="checkbox" label="" name="limitKartu" variant="label-hidden"
-                                    class="checkbox-align" data-id="limitKartu" checked={checkboxStates.limitKartu}
-                                    onchange={handleCheckboxChange} disabled={isCheckboxDisabled}></lightning-input>
-                            </div>
-                        </template>
-                        <!-- Alamat Email -->
-                        <template if:true={Banking}>
-                            <div class="slds-col slds-large-size_11-of-12 slds-medium-size_11-of-12 slds-size_11-of-12">
-                                <lightning-input value={demografiData.email} type="text" label="Alamat Email" disabled
-                                    variant="standard" onchange={changeHandler}></lightning-input>
-                            </div>
-                        </template>
-                        <template if:true={Credit}>
-                            <div class="slds-col slds-large-size_11-of-12 slds-medium-size_11-of-12 slds-size_11-of-12">
-                                <lightning-input value={cardInfo.alamatEmail} type="text" label="Alamat Email" disabled
-                                    variant="standard" onchange={changeHandler}></lightning-input>
-                            </div>
-                        </template>
-
-                        <div class="slds-col slds-large-size_1-of-12 slds-medium-size_1-of-12 slds-size_1-of-12">
-                            <lightning-input type="checkbox" label="" name="alamatEmail" variant="label-hidden"
-                                class="checkbox-align" data-id="alamatEmail" checked={checkboxStates.alamatEmail}
-                                onchange={handleCheckboxChange} disabled={isCheckboxDisabled}></lightning-input>
-                        </div>
-                        <!-- Kontak Darurat -->
-                        <template if:true={Banking}>
-                            <div class="slds-col slds-large-size_11-of-12 slds-medium-size_11-of-12 slds-size_11-of-12">
-                                <lightning-input value={demografiData.nomorHandphoneKontakDarurat} type="text"
-                                    label="Kontak Darurat" disabled variant="standard"
-                                    onchange={changeHandler}></lightning-input>
-                            </div>
-                        </template>
-                        <template if:true={Credit}>
-                            <template if:true={detailKreditData.length}>
+                                <!-- Alamat Rumah -->
                                 <div
                                     class="slds-col slds-large-size_11-of-12 slds-medium-size_11-of-12 slds-size_11-of-12">
-                                    <lightning-input value={demografiKreditData.nomorHandphoneKontakDarurat} type="text"
+                                    <lightning-input value={demografiData.alamatSesuaiID} type="text"
+                                        label="Alamat Rumah" disabled variant="standard"
+                                        onchange={changeHandler}></lightning-input>
+                                </div>
+
+                                <div
+                                    class="slds-col slds-large-size_1-of-12 slds-medium-size_1-of-12 slds-size_1-of-12">
+                                    <lightning-input type="checkbox" label="" name="alamatRumah" variant="label-hidden"
+                                        class="checkbox-align" data-id="alamatRumah"
+                                        checked={checkboxStates.alamatRumah} onchange={handleCheckboxChange}
+                                        disabled={isCheckboxDisabled}></lightning-input>
+                                </div>
+
+                                <!-- Alamat Email -->
+                                <div
+                                    class="slds-col slds-large-size_11-of-12 slds-medium-size_11-of-12 slds-size_11-of-12">
+                                    <lightning-input value={demografiData.email} type="text" label="Alamat Email"
+                                        disabled variant="standard" onchange={changeHandler}></lightning-input>
+                                </div>
+
+                                <div
+                                    class="slds-col slds-large-size_1-of-12 slds-medium-size_1-of-12 slds-size_1-of-12">
+                                    <lightning-input type="checkbox" label="" name="alamatEmail" variant="label-hidden"
+                                        class="checkbox-align" data-id="alamatEmail"
+                                        checked={checkboxStates.alamatEmail} onchange={handleCheckboxChange}
+                                        disabled={isCheckboxDisabled}></lightning-input>
+                                </div>
+
+                                <!-- Kontak Darurat -->
+                                <div
+                                    class="slds-col slds-large-size_11-of-12 slds-medium-size_11-of-12 slds-size_11-of-12">
+                                    <lightning-input value={demografiData.nomorHandphoneKontakDarurat} type="text"
                                         label="Kontak Darurat" disabled variant="standard"
                                         onchange={changeHandler}></lightning-input>
                                 </div>
+
+                                <div
+                                    class="slds-col slds-large-size_1-of-12 slds-medium-size_1-of-12 slds-size_1-of-12">
+                                    <lightning-input type="checkbox" label="" name="kontakDarurat"
+                                        variant="label-hidden" class="checkbox-align" data-id="kontakDarurat"
+                                        checked={checkboxStates.kontakDarurat} onchange={handleCheckboxChange}
+                                        disabled={isCheckboxDisabled}></lightning-input>
+                                </div>
+
                             </template>
-                            <template if:false={detailKreditData.length}>
+                            <!-- End Secondary Banking Individual  -->
+
+                            <!-- Secondary Banking Non-Individual  -->
+                            <template if:true={isBankingNonIndividual}>
+
+                                <!-- Nomor Handphone (BRINets) -->
                                 <div
                                     class="slds-col slds-large-size_11-of-12 slds-medium-size_11-of-12 slds-size_11-of-12">
-                                    <lightning-input value="" type="text" label="Kontak Darurat" disabled
+                                    <lightning-input value={demografiData.handphone} type="text"
+                                        label="Nomor Handphone (BRINets)" disabled variant="standard"
+                                        onchange={changeHandler}></lightning-input>
+                                </div>
+
+                                <div
+                                    class="slds-col slds-large-size_1-of-12 slds-medium-size_1-of-12 slds-size_1-of-12">
+                                    <lightning-input type="checkbox" label="" name="noHpBRINets" variant="label-hidden"
+                                        class="checkbox-align" data-id="noHpBRINets"
+                                        checked={checkboxStates.noHpBRINets} onchange={handleCheckboxChange}
+                                        disabled={isCheckboxDisabled}></lightning-input>
+                                </div>
+
+                                <!-- Nama PIC 1 -->
+                                <div
+                                    class="slds-col slds-large-size_11-of-12 slds-medium-size_11-of-12 slds-size_11-of-12">
+                                    <lightning-input value={demografiData.nama1} type="text" label="Nama PIC 1" disabled
                                         variant="standard" onchange={changeHandler}></lightning-input>
                                 </div>
-                            </template>
-                        </template>
 
-                        <div class="slds-col slds-large-size_1-of-12 slds-medium-size_1-of-12 slds-size_1-of-12">
-                            <lightning-input type="checkbox" label="" name="kontakDarurat" variant="label-hidden"
-                                class="checkbox-align" data-id="kontakDarurat" checked={checkboxStates.kontakDarurat}
-                                onchange={handleCheckboxChange} disabled={isCheckboxDisabled}></lightning-input>
-                        </div>
+                                <div
+                                    class="slds-col slds-large-size_1-of-12 slds-medium-size_1-of-12 slds-size_1-of-12">
+                                    <lightning-input type="checkbox" label="" name="namaPIC1" variant="label-hidden"
+                                        class="checkbox-align" data-id="namaPIC1" checked={checkboxStates.namaPIC1}
+                                        onchange={handleCheckboxChange} disabled={isCheckboxDisabled}></lightning-input>
+                                </div>
+
+                                <!-- Jabatan PIC 1 -->
+                                <div
+                                    class="slds-col slds-large-size_11-of-12 slds-medium-size_11-of-12 slds-size_11-of-12">
+                                    <lightning-input value={demografiData.jabatan1} type="text" label="Jabatan PIC 1"
+                                        disabled variant="standard" onchange={changeHandler}></lightning-input>
+                                </div>
+
+                                <div
+                                    class="slds-col slds-large-size_1-of-12 slds-medium-size_1-of-12 slds-size_1-of-12">
+                                    <lightning-input type="checkbox" label="" name="jabatanPIC1" variant="label-hidden"
+                                        class="checkbox-align" data-id="jabatanPIC1"
+                                        checked={checkboxStates.jabatanPIC1} onchange={handleCheckboxChange}
+                                        disabled={isCheckboxDisabled}></lightning-input>
+                                </div>
+
+                                <!-- Nama PIC 2 -->
+                                <div
+                                    class="slds-col slds-large-size_11-of-12 slds-medium-size_11-of-12 slds-size_11-of-12">
+                                    <lightning-input value={demografiData.nama2} type="text" label="Nama PIC 2" disabled
+                                        variant="standard" onchange={changeHandler}></lightning-input>
+                                </div>
+
+                                <div
+                                    class="slds-col slds-large-size_1-of-12 slds-medium-size_1-of-12 slds-size_1-of-12">
+                                    <lightning-input type="checkbox" label="" name="namaPIC2" variant="label-hidden"
+                                        class="checkbox-align" data-id="namaPIC2" checked={checkboxStates.namaPIC2}
+                                        onchange={handleCheckboxChange} disabled={isCheckboxDisabled}></lightning-input>
+                                </div>
+
+                                <!-- Jabatan PIC 2  -->
+                                <div
+                                    class="slds-col slds-large-size_11-of-12 slds-medium-size_11-of-12 slds-size_11-of-12">
+                                    <lightning-input value={demografiData.jabatan2} type="text" label="Jabatan PIC 2"
+                                        disabled variant="standard" onchange={changeHandler}></lightning-input>
+                                </div>
+
+                                <div
+                                    class="slds-col slds-large-size_1-of-12 slds-medium-size_1-of-12 slds-size_1-of-12">
+                                    <lightning-input type="checkbox" label="" name="jabatanPIC2" variant="label-hidden"
+                                        class="checkbox-align" data-id="jabatanPIC2"
+                                        checked={checkboxStates.jabatanPIC2} onchange={handleCheckboxChange}
+                                        disabled={isCheckboxDisabled}></lightning-input>
+                                </div>
+
+                                <!-- Nama PIC 3 -->
+                                <div
+                                    class="slds-col slds-large-size_11-of-12 slds-medium-size_11-of-12 slds-size_11-of-12">
+                                    <lightning-input value={demografiData.nama3} type="text" label="Nama PIC 3" disabled
+                                        variant="standard" onchange={changeHandler}></lightning-input>
+                                </div>
+
+                                <div
+                                    class="slds-col slds-large-size_1-of-12 slds-medium-size_1-of-12 slds-size_1-of-12">
+                                    <lightning-input type="checkbox" label="" name="namaPIC3" variant="label-hidden"
+                                        class="checkbox-align" data-id="namaPIC3" checked={checkboxStates.namaPIC3}
+                                        onchange={handleCheckboxChange} disabled={isCheckboxDisabled}></lightning-input>
+                                </div>
+
+                                <!-- Jabatan PIC 3 -->
+                                <div
+                                    class="slds-col slds-large-size_11-of-12 slds-medium-size_11-of-12 slds-size_11-of-12">
+                                    <lightning-input value={demografiData.jabatan3} type="text" label="Jabatan PIC 3"
+                                        disabled variant="standard" onchange={changeHandler}></lightning-input>
+                                </div>
+
+                                <div
+                                    class="slds-col slds-large-size_1-of-12 slds-medium-size_1-of-12 slds-size_1-of-12">
+                                    <lightning-input type="checkbox" label="" name="jabatanPIC3" variant="label-hidden"
+                                        class="checkbox-align" data-id="jabatanPIC3"
+                                        checked={checkboxStates.jabatanPIC3} onchange={handleCheckboxChange}
+                                        disabled={isCheckboxDisabled}></lightning-input>
+                                </div>
+
+                                <!-- Alamat Kantor -->
+                                <div
+                                    class="slds-col slds-large-size_11-of-12 slds-medium-size_11-of-12 slds-size_11-of-12">
+                                    <lightning-input value={demografiData.alamatKantor} type="text"
+                                        label="Alamat Kantor" disabled variant="standard"
+                                        onchange={changeHandler}></lightning-input>
+                                </div>
+
+                                <div
+                                    class="slds-col slds-large-size_1-of-12 slds-medium-size_1-of-12 slds-size_1-of-12">
+                                    <lightning-input type="checkbox" label="" name="alamatKantor" variant="label-hidden"
+                                        class="checkbox-align" data-id="alamatKantor"
+                                        checked={checkboxStates.alamatKantor} onchange={handleCheckboxChange}
+                                        disabled={isCheckboxDisabled}></lightning-input>
+                                </div>
+
+                            </template>
+                            <!-- End Secondary Banking Non-Individual  -->
+                        </template>
+                        <!-- End Secondary Banking Body  -->
+
+                        <!-- Secondary Banking Body  -->
+                        <template if:true={Credit}>
+                            <!-- Secondary Credit Individual  -->
+                            <template if:true={isKreditIndividual}>
+
+                                <!-- Nomor Handphone (BRINets) -->
+                                <div
+                                    class="slds-col slds-large-size_11-of-12 slds-medium-size_11-of-12 slds-size_11-of-12">
+                                    <lightning-input value={cardInfo.noHandphone} type="text"
+                                        label="Nomor Handphone (BRINets)" disabled variant="standard"
+                                        onchange={changeHandler}></lightning-input>
+                                </div>
+
+                                <div
+                                    class="slds-col slds-large-size_1-of-12 slds-medium-size_1-of-12 slds-size_1-of-12">
+                                    <lightning-input type="checkbox" label="" name="noHpBRINets" variant="label-hidden"
+                                        class="checkbox-align" data-id="noHpBRINets"
+                                        checked={checkboxStates.noHpBRINets} onchange={handleCheckboxChange}
+                                        disabled={isCheckboxDisabled}></lightning-input>
+                                </div>
+
+                                <!-- Nomor Handphone (WBS) -->
+                                <div
+                                    class="slds-col slds-large-size_11-of-12 slds-medium-size_11-of-12 slds-size_11-of-12">
+                                    <lightning-input value={cardInfo.noHandphone} type="text"
+                                        label="Nomor Handphone (WBS)" disabled variant="standard"
+                                        onchange={changeHandler}></lightning-input>
+                                </div>
+
+                                <div
+                                    class="slds-col slds-large-size_1-of-12 slds-medium-size_1-of-12 slds-size_1-of-12">
+                                    <lightning-input type="checkbox" label="" name="noHpWBS" variant="label-hidden"
+                                        class="checkbox-align" data-id="noHpWBS" checked={checkboxStates.noHpWBS}
+                                        onchange={handleCheckboxChange} disabled={isCheckboxDisabled}></lightning-input>
+                                </div>
+
+                                <!-- NIK -->
+                                <div
+                                    class="slds-col slds-large-size_11-of-12 slds-medium-size_11-of-12 slds-size_11-of-12">
+                                    <lightning-input value={cardInfo.noNIK} type="text" label="NIK" disabled
+                                        variant="standard" onchange={changeHandler}></lightning-input>
+                                </div>
+
+                                <div
+                                    class="slds-col slds-large-size_1-of-12 slds-medium-size_1-of-12 slds-size_1-of-12">
+                                    <lightning-input type="checkbox" label="" name="nik" variant="label-hidden"
+                                        class="checkbox-align" data-id="nik" checked={checkboxStates.nik}
+                                        onchange={handleCheckboxChange} disabled={isCheckboxDisabled}></lightning-input>
+                                </div>
+
+                                <!-- NPWP -->
+
+                                <div
+                                    class="slds-col slds-large-size_11-of-12 slds-medium-size_11-of-12 slds-size_11-of-12">
+                                    <lightning-input value={cardInfo.noNPWP} type="text" label="NPWP" disabled
+                                        variant="standard" onchange={changeHandler}></lightning-input>
+                                </div>
+
+                                <div
+                                    class="slds-col slds-large-size_1-of-12 slds-medium-size_1-of-12 slds-size_1-of-12">
+                                    <lightning-input type="checkbox" label="" name="npwp" variant="label-hidden"
+                                        class="checkbox-align" data-id="npwp" checked={checkboxStates.npwp}
+                                        onchange={handleCheckboxChange} disabled={isCheckboxDisabled}></lightning-input>
+                                </div>
+
+                                <!-- Expired Date Kartu -->
+                                <div
+                                    class="slds-col slds-large-size_11-of-12 slds-medium-size_11-of-12 slds-size_11-of-12">
+                                    <lightning-input value={cardInfo.expiredKartu} type="text"
+                                        label="Expired Date Kartu" disabled variant="standard"
+                                        onchange={changeHandler}></lightning-input>
+                                </div>
+
+                                <div
+                                    class="slds-col slds-large-size_1-of-12 slds-medium-size_1-of-12 slds-size_1-of-12">
+                                    <lightning-input type="checkbox" label="" name="expiredKartu" variant="label-hidden"
+                                        class="checkbox-align" data-id="expiredKartu"
+                                        checked={checkboxStates.expiredKartu} onchange={handleCheckboxChange}
+                                        disabled={isCheckboxDisabled}></lightning-input>
+                                </div>
+
+                                <!-- Alamat Rumah -->
+                                <div
+                                    class="slds-col slds-large-size_11-of-12 slds-medium-size_11-of-12 slds-size_11-of-12">
+                                    <lightning-input value={cardInfo.alamatRumah} type="text" label="Alamat Rumah"
+                                        disabled variant="standard" onchange={changeHandler}></lightning-input>
+                                </div>
+
+                                <div
+                                    class="slds-col slds-large-size_1-of-12 slds-medium-size_1-of-12 slds-size_1-of-12">
+                                    <lightning-input type="checkbox" label="" name="alamatRumah" variant="label-hidden"
+                                        class="checkbox-align" data-id="alamatRumah"
+                                        checked={checkboxStates.alamatRumah} onchange={handleCheckboxChange}
+                                        disabled={isCheckboxDisabled}></lightning-input>
+                                </div>
+
+                                <!-- Limit Kartu Kredit -->
+                                <div
+                                    class="slds-col slds-large-size_11-of-12 slds-medium-size_11-of-12 slds-size_11-of-12">
+                                    <lightning-input value={cardInfo.limitKartu} type="text" label="Limit Kartu Kredit"
+                                        disabled variant="standard" onchange={changeHandler}></lightning-input>
+                                </div>
+
+                                <div
+                                    class="slds-col slds-large-size_1-of-12 slds-medium-size_1-of-12 slds-size_1-of-12">
+                                    <lightning-input type="checkbox" label="" name="limitKartu" variant="label-hidden"
+                                        class="checkbox-align" data-id="limitKartu" checked={checkboxStates.limitKartu}
+                                        onchange={handleCheckboxChange} disabled={isCheckboxDisabled}></lightning-input>
+                                </div>
+
+                                <!-- Alamat Email -->
+                                <div
+                                    class="slds-col slds-large-size_11-of-12 slds-medium-size_11-of-12 slds-size_11-of-12">
+                                    <lightning-input value={cardInfo.alamatEmail} type="text" label="Alamat Email"
+                                        disabled variant="standard" onchange={changeHandler}></lightning-input>
+                                </div>
+
+                                <div
+                                    class="slds-col slds-large-size_1-of-12 slds-medium-size_1-of-12 slds-size_1-of-12">
+                                    <lightning-input type="checkbox" label="" name="alamatEmail" variant="label-hidden"
+                                        class="checkbox-align" data-id="alamatEmail"
+                                        checked={checkboxStates.alamatEmail} onchange={handleCheckboxChange}
+                                        disabled={isCheckboxDisabled}></lightning-input>
+                                </div>
+
+                                <!-- Kontak Darurat -->
+                                <div
+                                    class="slds-col slds-large-size_11-of-12 slds-medium-size_11-of-12 slds-size_11-of-12">
+                                    <lightning-input value={cardInfo.kontakDarurat} type="text" label="Kontak Darurat"
+                                        disabled variant="standard" onchange={changeHandler}></lightning-input>
+                                </div>
+
+                                <div
+                                    class="slds-col slds-large-size_1-of-12 slds-medium-size_1-of-12 slds-size_1-of-12">
+                                    <lightning-input type="checkbox" label="" name="kontakDarurat"
+                                        variant="label-hidden" class="checkbox-align" data-id="kontakDarurat"
+                                        checked={checkboxStates.kontakDarurat} onchange={handleCheckboxChange}
+                                        disabled={isCheckboxDisabled}></lightning-input>
+                                </div>
+
+                            </template>
+                            <!-- End Secondary Credit Individual  -->
+
+                            <!-- Secondary Credit Non-Individual  -->
+                            <template if:true={isKreditNonIndividual}>
+
+                                <!-- Alamat Instansi -->
+                                <div
+                                    class="slds-col slds-large-size_11-of-12 slds-medium-size_11-of-12 slds-size_11-of-12">
+                                    <lightning-input value={cardInfo.alamatKantor} type="text" label="Alamat Instansi"
+                                        disabled variant="standard" onchange={changeHandler}></lightning-input>
+                                </div>
+
+                                <div
+                                    class="slds-col slds-large-size_1-of-12 slds-medium-size_1-of-12 slds-size_1-of-12">
+                                    <lightning-input type="checkbox" label="" name="alamatKantor" variant="label-hidden"
+                                        class="checkbox-align" data-id="alamatKantor"
+                                        checked={checkboxStates.alamatKantor} onchange={handleCheckboxChange}
+                                        disabled={isCheckboxDisabled}></lightning-input>
+                                </div>
+
+                                <!-- Nomor Telepon Instansi -->
+                                <div
+                                    class="slds-col slds-large-size_11-of-12 slds-medium-size_11-of-12 slds-size_11-of-12">
+                                    <lightning-input value={cardInfo.noKantor} type="text"
+                                        label="Nomor Telepon Instansi" disabled variant="standard"
+                                        onchange={changeHandler}></lightning-input>
+                                </div>
+
+                                <div
+                                    class="slds-col slds-large-size_1-of-12 slds-medium-size_1-of-12 slds-size_1-of-12">
+                                    <lightning-input type="checkbox" label="" name="noKantor" variant="label-hidden"
+                                        class="checkbox-align" data-id="noKantor" checked={checkboxStates.noKantor}
+                                        onchange={handleCheckboxChange} disabled={isCheckboxDisabled}></lightning-input>
+                                </div>
+
+                                <!-- Expired Kartu -->
+                                <div
+                                    class="slds-col slds-large-size_11-of-12 slds-medium-size_11-of-12 slds-size_11-of-12">
+                                    <lightning-input value={cardInfo.expiredKartu} type="text" label="Expired Kartu"
+                                        disabled variant="standard" onchange={changeHandler}></lightning-input>
+                                </div>
+
+                                <div
+                                    class="slds-col slds-large-size_1-of-12 slds-medium-size_1-of-12 slds-size_1-of-12">
+                                    <lightning-input type="checkbox" label="" name="expiredKartu" variant="label-hidden"
+                                        class="checkbox-align" data-id="expiredKartu"
+                                        checked={checkboxStates.expiredKartu} onchange={handleCheckboxChange}
+                                        disabled={isCheckboxDisabled}></lightning-input>
+                                </div>
+
+                            </template>
+                            <!-- End Secondary Credit Non-Individual  -->
+                        </template>
+                        <!-- End Secondary Credit Body  -->
+
                     </div>
                 </div>
                 <!-- End Secondary Card Body  -->

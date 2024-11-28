@@ -20737,6 +20737,15 @@ Updated by JV to restrict access to knowledge; except read only.</description>
         <allowEdit>true</allowEdit>
         <allowRead>true</allowRead>
         <modifyAllRecords>true</modifyAllRecords>
+        <object>Formulir_Detail__c</object>
+        <viewAllRecords>true</viewAllRecords>
+    </objectPermissions>
+    <objectPermissions>
+        <allowCreate>true</allowCreate>
+        <allowDelete>true</allowDelete>
+        <allowEdit>true</allowEdit>
+        <allowRead>true</allowRead>
+        <modifyAllRecords>true</modifyAllRecords>
         <object>Knowledge__kav</object>
         <viewAllRecords>true</viewAllRecords>
     </objectPermissions>
@@ -21814,6 +21823,14 @@ Updated by JV to restrict access to knowledge; except read only.</description>
     </userPermissions>
     <userPermissions>
         <enabled>true</enabled>
+        <name>CreateCustomizeReports</name>
+    </userPermissions>
+    <userPermissions>
+        <enabled>true</enabled>
+        <name>CreateReportFolders</name>
+    </userPermissions>
+    <userPermissions>
+        <enabled>true</enabled>
         <name>CustomizeApplication</name>
     </userPermissions>
     <userPermissions>
@@ -21823,6 +21840,10 @@ Updated by JV to restrict access to knowledge; except read only.</description>
     <userPermissions>
         <enabled>true</enabled>
         <name>EditKnowledge</name>
+    </userPermissions>
+    <userPermissions>
+        <enabled>true</enabled>
+        <name>EditMyReports</name>
     </userPermissions>
     <userPermissions>
         <enabled>true</enabled>
@@ -21867,6 +21888,10 @@ Updated by JV to restrict access to knowledge; except read only.</description>
     <userPermissions>
         <enabled>true</enabled>
         <name>ManageProfilesPermissionsets</name>
+    </userPermissions>
+    <userPermissions>
+        <enabled>true</enabled>
+        <name>ManageReportsInPubFolders</name>
     </userPermissions>
     <userPermissions>
         <enabled>true</enabled>

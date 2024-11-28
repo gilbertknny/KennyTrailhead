@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>Get Update User</label>
+    <protected>false</protected>
+    <values>
+        <field>Correlation_ID__c</field>
+        <value xsi:type="xsd:string">correlationID</value>
+    </values>
+    <values>
+        <field>HTTP_Method__c</field>
+        <value xsi:type="xsd:string">POST</value>
+    </values>
+    <values>
+        <field>IDCC_ClientID__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>IDCC_Content_Type__c</field>
+        <value xsi:type="xsd:string">application/json</value>
+    </values>
+    <values>
+        <field>IDCC_EndPoint__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>IDCC_Password__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>Interface_Configuration__c</field>
+        <value xsi:type="xsd:string">BRIGate_Dev</value>
+    </values>
+    <values>
+        <field>Msg_Mapping__c</field>
+        <value xsi:type="xsd:string">Get_Update_User</value>
+    </values>
+    <values>
+        <field>Named_Credential_Overwrite__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>Result_Verification__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>Sub_URL__c</field>
+        <value xsi:type="xsd:string">/gateway/apiCHM/1.0/user/list</value>
+    </values>
+    <values>
+        <field>Test_Data__c</field>
+        <value xsi:type="xsd:string">{
+    &quot;status&quot;: true,
+    &quot;code&quot;: 200,
+    &quot;message&quot;: &quot;Success to get Users Data&quot;,
+    &quot;data&quot;: [
+        &quot;Type|Pernr|Nama|CorpTitle|Hilfm|Htext|TipeUker|Area|SubArea|CostCenter|Orgeh|AreaDesc|SubAreaDesc|CostCenterDesc|OrgehDesc|Branch|DatePosition&quot;,
+        &quot;T|00002613|Tetty Siagian|A|066|Customer Service|UN|KW02|RB02|WB33670|50562519|Regional Office Medan|Medan Iskandar|UNIT MEDAN LABUHAN|TERAS PASAR RAMBE|05321|2024-05-07T00:00:00+07:00&quot;,
+        &quot;T|00002808|Nurmiani|A|066|Customer Service|KCP|KW02|RB17|WB36701|70360348|Regional Office Medan|Sisingamangarja|KCP AKSARA|FUNGSI OPERASIONAL &amp; LAYANAN|00693|2024-05-07T00:00:00+07:00&quot;,
+        &quot;C|00002813|Netty Herawaty Sitorus|A|066|Customer Service|KCP|KW02|RB17|WB36706|70360336|Regional Office Medan|Sisingamangarja|KCP SUKARAMAI|FUNGSI OPERASIONAL &amp; LAYANAN|01086|2024-05-07T00:00:00+07:00&quot;,
+        &quot;A|00002815|Elizabeth Riris Siagian|A|066|Customer Service|KC|KW02|RB20|WB40410|50415410|Regional Office Medan|Medan Gatsu|KK RS HELVETIA|KANTOR KAS RS HELVETIA|00404|2024-05-07T00:00:00+07:00&quot;,
+        &quot;C|00002896|Agus Irwansyah Hutabarat|A|066|Customer Service|UN|KW02|RB03|WB08523|50427380|Regional Office Medan|Sibolga|BRI UNIT PANDAN|TERAS PANDAN|03827|2024-05-07T00:00:00+07:00&quot;
+]
+}</value>
+    </values>
+    <values>
+        <field>Test_Mode__c</field>
+        <value xsi:type="xsd:boolean">false</value>
+    </values>
+    <values>
+        <field>Timeout__c</field>
+        <value xsi:type="xsd:double">15000.0</value>
+    </values>
+    <values>
+        <field>Update_Method_overwrite__c</field>
+        <value xsi:type="xsd:string">POST</value>
+    </values>
+    <values>
+        <field>http_code_field__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>response_message_field__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>test_http_code__c</field>
+        <value xsi:type="xsd:double">200.0</value>
+    </values>
+</CustomMetadata>

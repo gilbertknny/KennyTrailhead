@@ -12,6 +12,8 @@
     1.1   04/10/2024   Rakeyan Nuramria                  Adjust logic checkbox
     1.1   29/10/2024   Rakeyan Nuramria                  Adjust request param for cardlink
     1.1   29/10/2024   Rakeyan Nuramria                  [FROM SIT] fix bug & just logic show data for Credit with edge case (on check for edge case)
+    1.1   30/10/2024   Rakeyan Nuramria                  [FROM SIT - ON GOING] Add logic based on Case Status for showing the data & disabled checkbox
+    1.1   08/11/2024   Rakeyan Nuramria                  Cleansing code + Adjust logic for show data based on the new category (Banking/Credit => Non/Individual)
 **/
 
 import { LightningElement, wire, api,track } from 'lwc';
@@ -21,6 +23,10 @@ import UpdateVerification from '@salesforce/apex/SCC_CaseBRICare.UpdateVerificat
 import getCustomerVerification from '@salesforce/apex/SCC_CaseBRICare.getCustomerVerification';
 import { refreshApex } from '@salesforce/apex';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+
+//for Case object
+import { getRecord, getFieldValue } from 'lightning/uiRecordApi';
+import STATUS_FIELD from '@salesforce/schema/Case.Status';
 
 
 export default class LwcCustomerVerification extends LightningElement {
@@ -64,27 +70,33 @@ export default class LwcCustomerVerification extends LightningElement {
     @track isChecked = false;
     @track isSubmitDisabled = true;
     @track isCancelDisabled = true;
-    // @track checkboxStates = {
-    //     namaLengkap: false,
-    //     tglLahir: false,
-    //     ibuKandung: false,
-    //     noHpBRINets: false,
-    //     noHpWBS: false,
-    //     trxTerakhir: false,
-    //     nik: false,
-    //     jenisRekening: false,
-    //     kantorPembuka: false,
-    //     npwp: false,
-    //     expiredKartu: false,
-    //     alamatRumah: false,
-    //     limitKartu: false,
-    //     alamatEmail: false,
-    //     kontakDarurat: false
-
-
-    // };
 
     @track checkboxStates = this.getDefaultCheckboxStates();
+
+    @track isDataVisible = true; // New property to control data visibility
+
+    @track isInputHidden = false; // property to control extra text input
+
+    //for show data by category
+    @track isBankingIndividual = false;
+    @track isBankingNonIndividual = false;
+    @track isKreditIndividual = false;
+    @track isKreditNonIndividual = false;
+
+    // Wire the Case record to get its status
+    @wire(getRecord, { recordId: '$recordId', fields: [STATUS_FIELD] })
+    caseRecord;
+
+    // Get the current case status
+    get caseStatus() {
+        return this.caseRecord.data ? getFieldValue(this.caseRecord.data, STATUS_FIELD) : null;
+    }
+
+    // Check if the component should be disabled
+    get isComponentDisabled() {
+        const disabledStatuses = ['Waiting Document', 'Escalated', 'Closed'];
+        return disabledStatuses.includes(this.caseStatus);
+    }
 
     getDefaultCheckboxStates() {
         return {
@@ -102,25 +114,20 @@ export default class LwcCustomerVerification extends LightningElement {
             alamatRumah: false,
             limitKartu: false,
             alamatEmail: false,
-            kontakDarurat: false
+            kontakDarurat: false,
+
+            //added in 09-11-2024
+            tglBerdiri: false,
+            namaPIC1: false,
+            namaPIC2: false,
+            namaPIC3: false,
+            jabatanPIC1: false,
+            jabatanPIC2: false,
+            jabatanPIC3: false,
+            alamatKantor: false,
+            noKantor: false
         };
     }
-
-    // Dynamic options for the rek/kartu combobox
-    // get options() {
-    //     if (this.category === 'Banking') {
-    //         return this.simpananData.map(account => ({
-    //             label: account.accountNumber, // Adjust according to your data structure
-    //             value: account.accountNumber
-    //         }));
-    //     } else if (this.category === 'Credit') {
-    //         return this.kreditData.map(card => ({
-    //             label: card.cardNumber, // Adjust according to your data structure
-    //             value: card.cardNumber
-    //         }));
-    //     }
-    //     return []; // Return an empty array if no category is matched
-    // }
 
     get selectedSimpanan() {
         // Find the simpanan that matches the selected rekening
@@ -128,6 +135,11 @@ export default class LwcCustomerVerification extends LightningElement {
     }
 
     get isCheckboxDisabled() {
+
+        if (this.isComponentDisabled) {
+            return true;
+        }
+
         if (this.Banking) {
             return this.selectedNomorRekening === '';
         } else if (this.Credit) {
@@ -159,12 +171,59 @@ export default class LwcCustomerVerification extends LightningElement {
             { label: "Banking", value: "Banking" },
             { label: "Credit", value: "Credit" }
         ];
+        
+        // this.fetchListCardCustomer();
         this.fetchDataCustomer();
         // this.handleClearBankingResult();
         console.log('zxc init');
     }
 
+    fetchListCardCustomer() {
+
+        this.isLoading = true;
+
+        console.log('zxc Function fetchListCardCustomer called...');
+
+        this.isLoading = true;
+
+        const requestPayload = { 
+            idcs: this.recordId 
+        };
+
+        getPortofolio(requestPayload)
+            .then(result => {
+                console.log('zxc Response fetchListCardCustomer received:', result);
+                console.log('zxc Response fetchListCardCustomer received:', JSON.stringify(result, null, 2));
+
+                const response = result?.data?.[0]; 
+                if (response && response.portofolioPerbankan) {
+                    
+                    //for card list
+                    this.listKartuBanking = response.portofolioPerbankan.simpanan || [];
+                    this.listKartuKredit = response.portofolioPerbankan.cardlink || [];
+
+                    this.errorMsg = '';
+                    this.hasError = false;
+
+                    this.setDefaultSelectedOption();
+                    this.fetchDataCustomerVerification();
+                } else {
+                    console.warn('Portfolio perbankan not found');
+                    this.handleSearchError('Data tidak ditemukan');
+                }
+            })
+            .catch(error => {
+                console.error('Error during search:', error.message);
+                this.handleSearchError('Data tidak ditemukan');
+            })
+            .finally(() => {
+                this.isLoading = false;
+                console.log('Loading state set to false.');
+            });
+    }
+
     fetchDataCustomer() {
+
         console.log('zxc Function fetchDataCustomer called...');
 
         this.isLoading = true;
@@ -211,8 +270,26 @@ export default class LwcCustomerVerification extends LightningElement {
                     this.errorMsg = '';
                     this.hasError = false;
 
+                    //logic to show data based on Customer Type
+                    const customerType = this.demografiData.tipeNasabahDesc;
+                    if (customerType && (customerType.toLowerCase().includes("non") || customerType.toLowerCase().includes("corp"))) {
+                        // If the customer type includes "non" or "corp", it's a non-individual banking type
+                        this.isBankingNonIndividual = true;
+                        this.isBankingIndividual = false;
+                    } else {
+                        // Otherwise, it's an individual banking type
+                        this.isBankingNonIndividual = false;
+                        this.isBankingIndividual = true;
+                    }
+                    //End logic to show data based on Customer Type
+
                     this.setDefaultSelectedOption();
                     this.fetchDataCustomerVerification();
+
+                    if (!this.validateCaseStatusState()) {
+                        return;
+                    }
+
                 } else {
                     console.warn('Portfolio perbankan not found');
                     this.handleSearchError('Data tidak ditemukan');
@@ -228,105 +305,8 @@ export default class LwcCustomerVerification extends LightningElement {
             });
     }
 
-    // fetchDataDetailKredit() {
-    //     console.log('zxc Function fetchDataDetailKredit called...');
-
-    //     const requestPayload = { 
-    //         CardNumber : this.selectedNomorKartu, //add this if using getCardLinkbyCardNumber
-    //         idcs: this.recordId
-    //     };
-
-    //     console.log('zxc Request cardlink payload:', JSON.stringify(requestPayload));
-
-    //     getCardLinkbyCardNumber(requestPayload)
-    //     .then(result => {
-    //         console.log('zxc Response result getCardLink received:', result);
-    //         console.log('zxc Response result getCardLink received:', JSON.stringify(result));
-
-    //         // Check if result is defined and has data
-    //         if (result && result.response && result.response.data && result.response.data.length > 0) {
-    //             const responseData = result.response.data;
-
-    //             // Initialize a temporary array to hold processed entries
-    //             this.detailKreditData = responseData.map(item => {
-    //                 return {
-    //                     customerData: item.customerData || [],
-    //                     cardData: item.cardHolderData || [],
-    //                     additionalData: item.additionalData || []
-    //                 };
-    //             });
-
-    //             // Iterate through each entry in the response data
-    //             responseData.forEach(item => {
-    //                 const responseCustomerData = item.customerData;
-    //                 const responseCardData = item.cardHolderData;
-    //                 const responseAdditionalData = item.additionalData;
-
-    //                 // Process responseCustomerData data
-    //                 if (responseCustomerData && responseCustomerData.length > 0) {
-    //                     this.customerData.push(...responseCustomerData.map(customer => ({
-    //                         ...customer,
-    //                     })));
-    //                 } else {
-    //                     this.handleSearchError('zxc Data tidak ditemukan for responseCustomerData');
-    //                 }
-
-    //                 // Process responseCardData data
-    //                 if (responseCardData && responseCardData.length > 0) {
-
-    //                     //for input customerName into cardData
-    //                     const customerMap = new Map(
-    //                         this.customerData.map(customer => [customer.customerNumber, customer.namaLengkap])
-    //                     );
-
-    //                     this.cardData.push(...responseCardData.map(card => ({
-    //                         ...card,
-    //                         customerName: customerMap.get(card.customerNumber) || 'N/A'
-    //                     })));
-    //                     console.log('Combined Card Data:', JSON.stringify(this.cardData));
-    //                 } else {
-    //                     this.handleSearchError('Data tidak ditemukan for responseCardData');
-    //                 }
-
-    //                 // Process responseAdditionalData data
-    //                 if (responseAdditionalData && responseAdditionalData.length > 0) {
-    //                     this.additionalData.push(...responseAdditionalData.map(additional => ({
-    //                         ...additional,
-    //                     })));
-    //                 } else {
-    //                     this.handleSearchError('Data tidak ditemukan for responseAdditionalData');
-    //                 }
-    //             });
-
-    //             // Log the processed data
-    //             console.log('zxc Formatted responseCustomerData Data:', JSON.stringify(this.customerData, null, 2));
-    //             console.log('zxc Formatted responseCardData Data:', JSON.stringify(this.cardData, null, 2));
-    //             console.log('zxc Formatted responseAdditionalData Data:', JSON.stringify(this.additionalData, null, 2));
-
-    //             this.processedData();
-    //             this.fetchDataCustomerVerification();
-
-
-    //             this.errorMsg = '';
-    //             this.hasError = false;
-    //             this.isLoading = false;
-    //         } else {
-    //             console.log('zxc Data tidak ditemukan')
-    //             // this.handleSearchError('Data tidak ditemukan');
-    //         }
-    //     })
-    //     .catch(error => {
-    //         console.error('zxc Error during search:', error.message);
-    //         // this.handleSearchError('An error occurred: ' + error.message);
-    //     })
-    //     .finally(() => {
-    //         // this.isLoading = false;
-    //         console.log('zxc Loading state set to false.');
-    //     });
-    // }
-
-    
     fetchDataDetailKredit() {
+
         console.log('zxc Function fetchDataDetailKredit called...');
     
         this.isLoading = true;
@@ -384,9 +364,36 @@ export default class LwcCustomerVerification extends LightningElement {
                         ...additional
                     })));
                 });
+
+                // logic to show data based on Customer Type
+                    let isFound = false;
+                    this.cardData.forEach(card => {
+                        const customerType = card.customerNumber;  // Access the customerNumber for each card
+                        console.log('poi customerType ', customerType);
+
+                        if (customerType && customerType.substring(0, 4) === '5534') {
+                            this.isKreditNonIndividual = true;
+                            this.isKreditIndividual = false;
+                            isFound = true;
+                        }
+                    });
+
+                    if (!isFound) {
+                        this.isKreditIndividual = true;
+                        this.isKreditNonIndividual = false;
+                    }
+
+                    console.log('poi isKreditNonIndividual ', this.isKreditNonIndividual);
+                    console.log('poi isKreditIndividual ', this.isKreditIndividual);
+                // End logic to show data based on Customer Type
     
                 this.processedData();
                 this.fetchDataCustomerVerification();
+
+                if (!this.validateCaseStatusState()) {
+                    return;
+                }
+
                 this.errorMsg = '';
                 this.hasError = false;
                 this.isLoading = false;
@@ -409,149 +416,6 @@ export default class LwcCustomerVerification extends LightningElement {
         });
     }
     
-    
-
-    /**
-    fetchDataDetailKredit() {
-        console.log('zxc Function fetchDataDetailKredit called...');
-        const requestPayload = { 
-            CardNumber: this.selectedNomorKartu,
-            idcs: this.recordId
-        };
-    
-        console.log('Request Payload:', JSON.stringify(requestPayload));
-    
-        getCardLinkbyCardNumber(requestPayload)
-        .then(result => {
-            console.log('API Response:', JSON.stringify(result));
-    
-            // Reset variables to ensure no residual data
-            this.customerData = [];
-            this.cardData = [];
-            this.additionalData = [];
-    
-            if (result?.response?.data?.length > 0) {
-                const responseData = result.response.data;
-    
-                // Populate data arrays from the response
-                this.customerData = responseData.flatMap(item => item.customerData || []);
-                this.cardData = responseData.flatMap(item => {
-                    const customerMap = new Map(
-                        this.customerData.map(customer => [customer.customerNumber, customer.namaLengkap])
-                    );
-                    return (item.cardHolderData || []).map(card => ({
-                        ...card,
-                        customerName: customerMap.get(card.customerNumber) || 'N/A'
-                    }));
-                });
-                this.additionalData = responseData.flatMap(item => item.additionalData || []);
-    
-                console.log('Formatted Customer Data:', JSON.stringify(this.customerData, null, 2));
-                console.log('Formatted Card Data:', JSON.stringify(this.cardData, null, 2));
-                console.log('Formatted Additional Data:', JSON.stringify(this.additionalData, null, 2));
-    
-                this.errorMsg = '';
-                this.hasError = false;
-                this.processedData();
-            } else {
-                console.log('No data found');
-                this.handleSearchError('Data tidak ditemukan');
-            }
-        })
-        .catch(error => {
-            console.error('Error during search:', error.message);
-            this.handleSearchError('An error occurred: ' + error.message);
-        })
-        .finally(() => {
-            console.log('Completed fetchDataDetailKredit');
-        });
-    }
-    */
-    
-
-    /**
-    fetchDataDetailKredit() {
-        console.log('zxc Function fetchDataDetailKredit called...');
-    
-        // Resetting state before fetching new data
-        this.detailKreditData = [];
-        this.customerData = [];
-        this.cardData = [];
-        this.additionalData = [];
-        this.errorMsg = '';
-        this.hasError = false;
-        this.isLoading = true;
-    
-        const requestPayload = { 
-            CardNumber: this.selectedNomorKartu,
-            idcs: this.recordId
-        };
-    
-        getCardLinkbyCardNumber(requestPayload)
-        .then(result => {
-            console.log('zxc Response result getCardLink received:', result);
-    
-            // Check if result has valid data
-            if (result && result.response && result.response.data && Array.isArray(result.response.data) && result.response.data.length > 0) {
-                const responseData = result.response.data;
-    
-                // Populate detailKreditData safely
-                this.detailKreditData = responseData.map(item => ({
-                    customerData: Array.isArray(item.customerData) ? item.customerData : [],
-                    cardData: Array.isArray(item.cardHolderData) ? item.cardHolderData : [],
-                    additionalData: Array.isArray(item.additionalData) ? item.additionalData : []
-                }));
-    
-                responseData.forEach(item => {
-                    // Append customer data safely
-                    this.customerData.push(...(Array.isArray(item.customerData) ? item.customerData : []).map(customer => ({
-                        ...customer
-                    })));
-    
-                    // Prepare a customer map for cardData
-                    const customerMap = new Map(
-                        this.customerData.map(customer => [customer.customerNumber, customer.namaLengkap])
-                    );
-    
-                    // Append card data safely
-                    this.cardData.push(...(Array.isArray(item.cardHolderData) ? item.cardHolderData : []).map(card => ({
-                        ...card,
-                        customerName: customerMap.get(card.customerNumber) || 'N/A'
-                    })));
-    
-                    // Append additional data safely
-                    this.additionalData.push(...(Array.isArray(item.additionalData) ? item.additionalData : []).map(additional => ({
-                        ...additional
-                    })));
-                });
-    
-                this.processedData();
-                this.fetchDataCustomerVerification();
-                this.errorMsg = '';
-                this.hasError = false;
-                this.isLoading = false;
-    
-                console.log('zxc Customer Data:', JSON.stringify(this.customerData, null, 2));
-                console.log('zxc Card Data:', JSON.stringify(this.cardData, null, 2));
-                console.log('zxc Additional Data:', JSON.stringify(this.additionalData, null, 2));
-            } else {
-                console.log('zxc Data tidak ditemukan');
-                this.handleSearchError('Data tidak ditemukan');
-            }
-        })
-        .catch(error => {
-            console.error('zxc Error during search:', error.message);
-            this.handleSearchError('An error occurred: ' + error.message);
-        })
-        .finally(() => {
-            this.isLoading = false;
-            console.log('zxc Loading state set to false.');
-        });
-    }
-    */    
-     
-    
-
     fetchDataCustomerVerification() {
         console.log('zxc fetchDataCustomerVerification called..')
         const norek = this.selectedNomorRekening || this.selectedNomorKartu;
@@ -605,82 +469,22 @@ export default class LwcCustomerVerification extends LightningElement {
             limitKartu: data.Limit_Kartu_Kredit__c || false,
             alamatEmail: data.Alamat_Email__c || false,
             kontakDarurat: data.Kontak_Darurat__c || false,
+
+            //newly added 09-11-2024
+            tglBerdiri: data.Tanggal_Berdiri__c || false,
+            namaPIC1: data.Nama_PIC_1__c || false,
+            namaPIC2: data.Nama_PIC_2__c || false,
+            namaPIC3: data.Nama_PIC_3__c || false,
+            jabatanPIC1: data.Jabatan_PIC_1__c || false,
+            jabatanPIC2: data.Jabatan_PIC_2__c || false,
+            jabatanPIC3: data.Jabatan_PIC_3__c || false,
+            alamatKantor: data.Alamat_Kantor__c || false,
+            noKantor: data.Nomor_Telepon_Instansi__c || false
         };
 
         this.updateButtonState();
         console.log('Checkbox states updated:', JSON.stringify(this.checkboxStates, null, 2));
     }
-
-    /** 
-    processedData() {
-        if (this.detailKreditData && this.detailKreditData.length > 0) {
-            const data = this.detailKreditData[0];
-    
-            // Assuming customerData is an array with one object
-            if (data.customerData && data.customerData.length > 0) {
-                this.customerData = data.customerData[0]; // Directly assign the first customer
-            }
-    
-            // Filter cardData to find the relevant card based on noKartu
-            if (data.cardData && data.cardData.length > 0) {
-                // const matchingCard = data.cardData.find(card => card.customerNumber === this.selectedNomorKartu);
-                // if (matchingCard) {
-                //     this.cardData = matchingCard; // Assign the matched card
-                // }
-
-                this.cardData = data.cardData[0]
-            }
-    
-            // Assuming additionalData is an array with one object
-            if (data.additionalData && data.additionalData.length > 0) {
-                this.additionalData = data.additionalData[0]; // Directly assign the first additional
-            }
-    
-            // Consolidate data into cardInfo
-            this.cardInfo = {
-                // From customerData
-                namaLengkap: `${this.customerData.namaDepan} ${this.customerData.namaBelakang}`,
-                tanggalLahir: this.customerData.tanggalLahir || '',
-                noHandphone: this.customerData.nomorHandphoneTerdaftar || '',
-                noKantor: this.customerData.nomorTelephoneKantor || '',
-                noRumah: this.customerData.nomorTelephoneRumah || '',
-                noKerabat: this.customerData.nomorTelephoneKerabatTidakSerumah || '',
-                namaKerabat: this.customerData.namaKerabatTidakSerumah || '',
-                noNIK: this.customerData.nomorNik || '',
-                noNPWP: this.customerData.nomorNpwp || '',
-                jenisKelamin: this.customerData.jenisKelamin || '',
-                jabatanKerja: this.customerData.jabatanKerja || '',
-                sisaLimit: this.customerData.sisaLimitNasabah || '',
-                limitCicilan: this.customerData.limitCicilanNasabah || '',
-                alamatBilling: this.customerData.alamatBilling || '',
-                alamatEmail: this.customerData.alamatEmail || '',
-                alamatPengirimanKartu: this.customerData.alamatPengirimanKartu || '', // This needs to be set properly
-                alamatKantor: `${this.customerData.alamatKantorDepan}, ${this.customerData.alamatKantorTengah}, ${this.customerData.alamatKantorBelakang}`  || '',
-                alamatRumah: `${this.customerData.alamatRumahDepan}, ${this.customerData.alamatRumahBelakang}`  || '',
-                // From cardData
-                limitKartu: this.formatCurrencyIDR(this.cardData.limitKartuKredit)  || this.formatCurrencyIDR(0),
-                expiredKartu: this.cardData.expiredKartu  || '',
-                tglCetak: this.cardData.tanggalCetakCycle  || '',
-                tglJatuhTempo: this.cardData.tanggalJatuhTempo  || '',
-                nominalFullPayment: this.cardData.nominalFullPayment  || '',
-                nominalMinPayment: this.cardData.nominalMinimumPayment  || '',
-                nominalTagihanBerjalan: this.cardData.nominalTagihanBerjalan  || '',
-                nominalPembayaranTerakhir: this.cardData.nominalPembayaranTerakhir  || '',
-                noKartu: this.cardData.customerNumber  || '',
-                namaCetak: this.cardData.namaCetakKartu  || '',
-                tglTerkahirMaintenance: this.cardData.tanggalTerakhirMaintenanceKartu  || '',
-                noRekening: this.cardData.noRekening  || '',
-                // From additionalData
-                nominalGaji: this.additionalData.nominalPendapatanPerBulan  || '',
-                namaIbuKandung: this.additionalData.namaLengkapIbuKandung  || '',
-            };
-
-            console.log('zxc cardInfo : ', JSON.stringify(this.cardInfo, null, 2));
-        }
-    }
-    */
-
-
     
     processedData() {
         // Check if detailKreditData exists and contains data
@@ -698,43 +502,44 @@ export default class LwcCustomerVerification extends LightningElement {
     
             // Consolidate data into cardInfo
             this.cardInfo = {
-                // From customerData
-                namaLengkap: `${this.customerData.namaDepan || ''} ${this.customerData.namaBelakang || ''}`,
-                tanggalLahir: this.customerData.tanggalLahir || '',
-                noHandphone: this.customerData.nomorHandphoneTerdaftar || '',
-                noKantor: this.customerData.nomorTelephoneKantor || '',
-                noRumah: this.customerData.nomorTelephoneRumah || '',
-                noKerabat: this.customerData.nomorTelephoneKerabatTidakSerumah || '',
-                namaKerabat: this.customerData.namaKerabatTidakSerumah || '',
-                noNIK: this.customerData.nomorNik || '',
-                noNPWP: this.customerData.nomorNpwp || '',
-                jenisKelamin: this.customerData.jenisKelamin || '',
-                jabatanKerja: this.customerData.jabatanKerja || '',
-                sisaLimit: this.customerData.sisaLimitNasabah || '',
-                limitCicilan: this.customerData.limitCicilanNasabah || '',
-                alamatBilling: this.customerData.alamatBilling || '',
-                alamatEmail: this.customerData.alamatEmail || '',
-                alamatPengirimanKartu: this.customerData.alamatPengirimanKartu || '',
-                alamatKantor: `${this.customerData.alamatKantorDepan || ''}, ${this.customerData.alamatKantorTengah || ''}, ${this.customerData.alamatKantorBelakang || ''}`,
-                alamatRumah: `${this.customerData.alamatRumahDepan || ''}, ${this.customerData.alamatRumahBelakang || ''}`,
-                
+                // From customerData               
+                namaLengkap: `${(this.customerData.namaDepan || '').trim()}${this.customerData.namaTengah ? ' ' + this.customerData.namaTengah.trim() : ''}${this.customerData.namaBelakang ? ' ' + this.customerData.namaBelakang.trim() : ''}`,
+                tanggalLahir: (this.customerData.tanggalLahir || '').trim(),
+                noHandphone: (this.customerData.nomorHandphoneTerdaftar || '').trim(),
+                noKantor: (this.customerData.nomorTelephoneKantor || '').trim(),
+                noRumah: (this.customerData.nomorTelephoneRumah || '').trim(),
+                noKerabat: (this.customerData.nomorTelephoneKerabatTidakSerumah || '').trim(),
+                namaKerabat: (this.customerData.namaKerabatTidakSerumah || '').trim(),
+                kontakDarurat: `${(this.customerData.namaKerabatTidakSerumah || '').trim()}${this.customerData.namaKerabatTidakSerumah && this.customerData.nomorTelephoneKerabatTidakSerumah ? ' | ' : ''}${(this.customerData.nomorTelephoneKerabatTidakSerumah || '').trim()}`,
+                noNIK: (this.customerData.nomorNik || '').trim(),
+                noNPWP: (this.customerData.nomorNpwp || '').trim(),
+                jenisKelamin: (this.customerData.jenisKelamin || '').trim(),
+                jabatanKerja: (this.customerData.jabatanKerja || '').trim(),
+                sisaLimit: (this.customerData.sisaLimitNasabah || '').trim(),
+                limitCicilan: (this.customerData.limitCicilanNasabah || '').trim(),
+                alamatBilling: (this.customerData.alamatBilling || '').trim(),
+                alamatEmail: (this.customerData.alamatEmail || '').trim(),
+                alamatPengirimanKartu: (this.customerData.alamatPengirimanKartu || '').trim(), 
+                alamatKantor: `${(this.customerData.alamatKantorDepan || '').trim()}${this.customerData.alamatKantorTengah ? ', ' + this.customerData.alamatKantorTengah.trim() : ''}${this.customerData.alamatKantorBelakang ? ', ' + this.customerData.alamatKantorBelakang.trim() : ''}`,
+                alamatRumah: `${(this.customerData.alamatRumahDepan || '').trim()}${this.customerData.alamatRumahBelakang ? ', ' + this.customerData.alamatRumahBelakang.trim() : ''}`,
+               
                 // From cardData
-                limitKartu: this.formatCurrencyIDR(this.cardData.limitKartuKredit) || this.formatCurrencyIDR(0),
-                expiredKartu: this.cardData.expiredKartu || '',
-                tglCetak: this.cardData.tanggalCetakCycle || '',
-                tglJatuhTempo: this.cardData.tanggalJatuhTempo || '',
-                nominalFullPayment: this.cardData.nominalFullPayment || '',
-                nominalMinPayment: this.cardData.nominalMinimumPayment || '',
-                nominalTagihanBerjalan: this.cardData.nominalTagihanBerjalan || '',
-                nominalPembayaranTerakhir: this.cardData.nominalPembayaranTerakhir || '',
-                noKartu: this.cardData.customerNumber || '',
-                namaCetak: this.cardData.namaCetakKartu || '',
-                tglTerkahirMaintenance: this.cardData.tanggalTerakhirMaintenanceKartu || '',
-                noRekening: this.cardData.noRekening || '',
+                limitKartu: this.formatNumber(this.cardData.limitKartuKredit) || this.formatNumber(0),
+                expiredKartu: (this.cardData.expiredKartu || '').trim(),
+                tglCetak: (this.cardData.tanggalCetakCycle || '').trim(),
+                tglJatuhTempo: (this.cardData.tanggalJatuhTempo || '').trim(),
+                nominalFullPayment: (this.cardData.nominalFullPayment || '').trim(),
+                nominalMinPayment: (this.cardData.nominalMinimumPayment || '').trim(),
+                nominalTagihanBerjalan: (this.cardData.nominalTagihanBerjalan || '').trim(),
+                nominalPembayaranTerakhir: (this.cardData.nominalPembayaranTerakhir || '').trim(),
+                noKartu: (this.cardData.customerNumber || '').trim(),
+                namaCetak: (this.cardData.namaCetakKartu || '').trim(),
+                tglTerkahirMaintenance: (this.cardData.tanggalTerakhirMaintenanceKartu || '').trim(),
+                noRekening: (this.cardData.noRekening || '').trim(),
                 
                 // From additionalData
-                nominalGaji: this.additionalData.nominalPendapatanPerBulan || '',
-                namaIbuKandung: this.additionalData.namaLengkapIbuKandung || '',
+                nominalGaji: (this.additionalData.nominalPendapatanPerBulan || '').trim(),
+                namaIbuKandung: (this.additionalData.namaLengkapIbuKandung || '').trim(),
             };
     
             console.log('zxc cardInfo:', JSON.stringify(this.cardInfo, null, 2));
@@ -742,24 +547,6 @@ export default class LwcCustomerVerification extends LightningElement {
             console.warn('zxc Warning: detailKreditData is empty or undefined.');
         }
     }
-    
-
-    
-
-    // setDefaultSelectedOption() {
-    //     if (this.category === 'Banking' && this.simpananData.length > 0) {
-    //         this.selectedOption = this.simpananData[0].accountNumber; // Set default to first account number
-        
-    //         this.selectedNomorRekening = this.selectedOption;
-    //         console.log("zxc initial selectedNomorRekening : ", this.selectedNomorRekening);
-        
-    //     }
-    //         // } else if (this.category === 'Credit' && this.kreditData.length > 0) {
-    //     //     this.selectedOption = this.kreditData[0].cardNumber; // Set default to first card number
-    //     // }
-
-    //     // this.selectedOption = '';
-    // }
 
     setDefaultSelectedOption() {
         if (this.category === 'Banking' && this.simpananData.length > 0) {
@@ -783,270 +570,20 @@ export default class LwcCustomerVerification extends LightningElement {
         console.log('Error Message:', errorMessage);
     }
 
-    // handleChange(event) {
-    //     const { name, value } = event.target;
-
-    //     /**
-    //     if (name === 'category') {
-    //         this.category = value;
-
-    //         // Update visibility based on the selected category
-    //         this.Banking = (value === 'Banking');
-    //         this.Credit = (value === 'Credit');
-
-    //         // Set default selected option based on the new category
-    //         this.setDefaultSelectedOption();
-    //     } else {
-    //         this.selectedOption = value; // Store the selected option
-    //     }
-    //      */
-        
-    //     if (name === 'category') {
-    //         this.category = value;
-    //         this.Banking = (value === 'Banking');
-    //         this.Credit = (value === 'Credit');
-
-    //         this.setDefaultSelectedOption();
-
-    //         // this.selectedOption = '';
-    //         // this.handleClearBankingResult();
-    //         // this.handleClearKreditResult();
-    //     } else {
-    //         this.selectedOption = value;
-
-    //         if (this.category === 'Banking') {
-    //             this.selectedNomorRekening = value;
-    //             console.log('zxc selectedNomorRekening : ', this.selectedNomorRekening);
-    //             // if (this.selectedNomorRekening != '') {
-    //             //     this.fetchDataCustomer();
-    //             // } else {
-    //             //     this.handleClearBankingResult();
-    //             // }
-
-    //         } else if (this.category === 'Credit') {
-    //             this.handleClearKreditResult();
-    //             this.selectedNomorKartu = value;
-    //             console.log('zxc selectedNomorKartu : ', this.selectedNomorKartu);
-    //             if (this.selectedNomorKartu != '') {
-    //                 this.fetchDataDetailKredit();
-    //             } else {
-
-    //                 this.handleClearKreditResult();
-    //             }
-    //         }
-    //     }
-    // }
-
-    /** 
-    handleChange(event) {
-        const { name, value } = event.target;
-    
-        if (name === 'category') {
-            this.category = value;
-            this.Banking = (value === 'Banking');
-            this.Credit = (value === 'Credit');
-    
-            this.setDefaultSelectedOption();
-            this.clearCheckboxStates();
-    
-            // Clear previous selections if needed
-            this.selectedNomorRekening = '';
-            this.selectedNomorKartu = '';
-            this.handleClearBankingResult();
-            this.handleClearKreditResult();
-            
-        } else {
-            this.selectedOption = value; // Store the selected option
-    
-            if (this.category === 'Banking') {
-                this.selectedNomorRekening = value;
-                console.log('Selected Nomor Rekening: ', this.selectedNomorRekening);
-                // Fetch customer verification data if a valid selection is made
-                if (this.selectedNomorRekening !== '') {
-                    this.fetchDataCustomer();
-                    this.fetchDataCustomerVerification(); // Fetch based on banking details
-                } else {
-                    this.selectedNomorRekening = '';
-                    this.handleClearBankingResult();
-                    this.clearCheckboxStates();
-
-                }
-    
-            } else if (this.category === 'Credit') {
-                this.selectedNomorKartu = value;
-                console.log('Selected Nomor Kartu: ', this.selectedNomorKartu);
-                // Fetch customer verification data if a valid selection is made
-                if (this.selectedNomorKartu !== '') {
-                    this.fetchDataDetailKredit();
-                    this.fetchDataCustomerVerification(); // Fetch based on credit details
-                } else {
-                    this.selectedNomorKartu = '';
-                    this.handleClearKreditResult();
-                    tthis.clearCheckboxStates();
-                }
-            }
+    validateCaseStatusState() {
+        if (this.isComponentDisabled) {
+            this.clearAllData();
+            this.isInputHidden = true;
+            this.errorMsg = 'Data tidak dapat ditampilkan karena status case tidak sesuai';
+            console.log('Data tidak dapat ditampilkan karena status case tidak sesuai');
+            this.hasError = true;
+            return false;
         }
+        return true;
     }
-    */
-    
-    // DEFAULT USE
-    // handleChange(event) {
-    //     const { name, value } = event.target;
-    
-    //     if (name === 'category') {
-    //         this.category = value;
-    //         this.Banking = (value === 'Banking');
-    //         this.Credit = (value === 'Credit');
-    
-    //         this.setDefaultSelectedOption();
-    //         this.clearCheckboxStates();
-    
-    //         // Clear previous selections if needed
-    //         this.concatenatedAlamatKantor = '';
-    //         this.selectedNomorRekening = '';
-    //         this.selectedNomorKartu = '';
-    //         this.handleClearBankingResult();
-    //         this.handleClearKreditResult();
-    
-    //     } else {
-    //         this.selectedOption = value; // Store the selected option
-    
-    //         if (this.category === 'Banking') {
-    //             this.selectedNomorRekening = value;
-    //             if (value) {
-    //                 console.log('Selected Nomor Rekening: ', this.selectedNomorRekening);
-    //                 // Fetch data only if the value is not empty
-    //                 this.fetchDataCustomer();
-    //                 // this.fetchDataCustomerVerification(); 
-    //             } else {
-    //                 // Handle default value or empty selection case
-    //                 this.selectedNomorRekening = '';
-    //                 this.concatenatedAlamatKantor = '';
-    //                 this.handleClearBankingResult();
-    //                 this.clearCheckboxStates();
-    //             }
-    
-    //         } else if (this.category === 'Credit') {
-    //             this.selectedNomorKartu = value;
-    //             if (value) {
-    //                 console.log('Selected Nomor Kartu: ', this.selectedNomorKartu);
-    //                 // Fetch data only if the value is not empty
-    //                 this.fetchDataDetailKredit();
-    //                 // this.fetchDataCustomerVerification(); 
-    //             } else {
-    //                 // Handle default value or empty selection case
-    //                 this.selectedNomorKartu = '';
-    //                 this.handleClearKreditResult();
-    //                 this.clearCheckboxStates();
-    //             }
-    //         }
-    //     }
-    // }
-
-    // NEW 29/10/2024 - ON TESTING
-    // handleChange(event) {
-    //     const { name, value } = event.target;
-    
-    //     if (name === 'category') {
-    //         this.category = value;
-    //         this.Banking = (value === 'Banking');
-    //         this.Credit = (value === 'Credit');
-    
-    //         // Set default selected option only when switching category
-    //         this.setDefaultSelectedOption();
-    
-    //         // Clear selections and reset only if the category changes
-    //         this.clearCheckboxStates();
-    //         this.concatenatedAlamatKantor = '';
-    //         this.selectedNomorRekening = '';
-    //         this.selectedNomorKartu = '';
-    //         this.handleClearBankingResult();
-    //         this.handleClearKreditResult();
-    //     } else {
-    //         // Handle account number selection
-    //         this.selectedOption = value; // Store the selected option
-    
-    //         if (this.category === 'Banking') {
-    //             this.selectedNomorRekening = value;
-    //             if (value) {
-    //                 console.log('Selected Nomor Rekening: ', this.selectedNomorRekening);
-    //                 this.fetchDataCustomer(); // Fetch data for the selected account
-    //             } else {
-    //                 // Clear fields if no selection
-    //                 this.selectedNomorRekening = '';
-    //                 this.concatenatedAlamatKantor = '';
-    //                 this.handleClearBankingResult();
-    //                 this.clearCheckboxStates();
-    //             }
-    //         } else if (this.category === 'Credit') {
-    //             this.selectedNomorKartu = value;
-    //             if (value) {
-    //                 console.log('Selected Nomor Kartu: ', this.selectedNomorKartu);
-    //                 this.fetchDataDetailKredit(); // Fetch data for the selected card
-    //             } else {
-    //                 this.selectedNomorKartu = '';
-    //                 this.handleClearKreditResult();
-    //                 this.clearCheckboxStates();
-    //             }
-    //         }
-    //     }
-    // }
-
-    /**
-    handleChange(event) {
-        const { name, value } = event.target;
-    
-        if (name === 'category') {
-            // Update the category and reset selections
-            this.category = value;
-            this.Banking = (value === 'Banking');
-            this.Credit = (value === 'Credit');
-    
-            // Set default selected option when switching category
-            this.setDefaultSelectedOption();
-    
-            // Clear data based on the new category
-            if (this.Banking) {
-                this.handleClearKreditResult();
-                this.handleClearBankingResult();
-            } else if (this.Credit) {
-                this.handleClearBankingResult();
-                this.handleClearKreditResult();
-            }
-    
-            // Clear checkbox states regardless of category switch
-            this.clearCheckboxStates();
-    
-        } else {
-            // Handle account/card selection
-            this.selectedOption = value; // Store the selected option
-    
-            if (this.category === 'Banking') {
-                this.selectedNomorRekening = value;
-                if (value) {
-                    console.log('Selected Nomor Rekening: ', this.selectedNomorRekening);
-                    this.fetchDataCustomer();
-                } else {
-                    // Clear Banking data for empty selection
-                    this.handleClearBankingResult();
-                    this.clearCheckboxStates();
-                }
-            } else if (this.category === 'Credit') {
-                this.selectedNomorKartu = value;
-                if (value) {
-                    console.log('Selected Nomor Kartu: ', this.selectedNomorKartu);
-                    this.fetchDataDetailKredit();
-                } else {
-                    // Clear Credit data for empty selection
-                    this.handleClearKreditResult();
-                    this.clearCheckboxStates();
-                }
-            }
-        }
-    }
-    */
 
     handleChange(event) {
+
         const { name, value } = event.target;
     
         if (name === 'category') {
@@ -1100,8 +637,6 @@ export default class LwcCustomerVerification extends LightningElement {
         }
     }
     
-    
-
     handleClearBankingResult(){
         //for portofolio
         this.demografiData = {};
@@ -1136,44 +671,38 @@ export default class LwcCustomerVerification extends LightningElement {
             limitKartu: false,
             alamatEmail: false,
             kontakDarurat: false,
+
+            //added in 09-11-2024
+            tglBerdiri: false,
+            namaPIC1: false,
+            namaPIC2: false,
+            namaPIC3: false,
+            jabatanPIC1: false,
+            jabatanPIC2: false,
+            jabatanPIC3: false,
+            alamatKantor: false,
+            noKantor: false
         };
         this.updateButtonState(); // Update button state after clearing
     }
 
-    // handleCheckboxChange(event) {
-    //     const checkboxId = event.target.dataset.id; // Get the data-id of the checkbox
-    //     const checked = event.target.checked; // Get the checked state
-
-    //     // Update the corresponding checkbox state
-    //     this.checkboxStates[checkboxId] = checked;
-
-    //     // Enable or disable buttons based on any checkbox being checked
-    //     this.isSubmitDisabled = !(this.checkboxStates.namaLengkap || 
-    //         this.checkboxStates.tglLahir || 
-    //         this.checkboxStates.ibuKandung ||
-    //         this.checkboxStates.noHpBRINets ||
-    //         this.checkboxStates.noHpWBS ||
-    //         this.checkboxStates.trxTerakhir ||
-    //         this.checkboxStates.nik ||
-    //         this.checkboxStates.jenisRekening ||
-    //         this.checkboxStates.kantorPembuka ||
-    //         this.checkboxStates.npwp ||
-    //         this.checkboxStates.expiredKartu ||
-    //         this.checkboxStates.alamatRumah ||
-    //         this.checkboxStates.limitKartu ||
-    //         this.checkboxStates.alamatEmail ||
-    //         this.checkboxStates.kontakDarurat
-    //         );
-    //     this.isCancelDisabled = this.isSubmitDisabled;
-
-    //     // Log the checkbox state
-    //     console.log(`zxc Checkbox "${checkboxId}" is now ${checked ? 'checked' : 'unchecked'}.`);
-    //     // console.log(`zxc Submit button is ${this.isSubmitDisabled ? 'disabled' : 'enabled'}.`);
-    //     // console.log(`zxc Cancel button is ${this.isCancelDisabled ? 'disabled' : 'enabled'}.`);
-    //     console.log('zxc checkboxStates : ', JSON.stringify(this.checkboxStates, null, 2));
-    // }
-
+    clearAllData() {
+        this.demografiData = {};
+        this.simpananData = [];
+        this.kreditData = [];
+        // this.listKartuBanking = [];
+        // this.listKartuKredit = [];
+        this.concatenatedAlamatKantor = '';
+        this.demografiKreditData = {};
+        this.cardInfo = {};
+        this.detailKreditData = [];
+        this.customerData = [];
+        this.cardData = [];
+        this.additionalData = [];
+        // this.clearCheckboxStates();
+    }
     updateButtonState() {
+
         // Enable or disable buttons based on any checkbox being checked
         // this.isSubmitDisabled = !Object.values(this.checkboxStates).some(value => value);
         // this.isCancelDisabled = this.isSubmitDisabled;
@@ -1181,23 +710,43 @@ export default class LwcCustomerVerification extends LightningElement {
         // console.log(`Submit button is ${this.isSubmitDisabled ? 'disabled' : 'enabled'}.`);
         // console.log(`Cancel button is ${this.isCancelDisabled ? 'disabled' : 'enabled'}.`);
 
-        this.isSubmitDisabled = !(this.checkboxStates.namaLengkap || 
-            this.checkboxStates.tglLahir || 
-            this.checkboxStates.ibuKandung ||
-            this.checkboxStates.noHpBRINets ||
-            this.checkboxStates.noHpWBS ||
-            this.checkboxStates.trxTerakhir ||
-            this.checkboxStates.nik ||
-            this.checkboxStates.jenisRekening ||
-            this.checkboxStates.kantorPembuka ||
-            this.checkboxStates.npwp ||
-            this.checkboxStates.expiredKartu ||
-            this.checkboxStates.alamatRumah ||
-            this.checkboxStates.limitKartu ||
-            this.checkboxStates.alamatEmail ||
-            this.checkboxStates.kontakDarurat
-        );
-        this.isCancelDisabled = this.isSubmitDisabled;
+        if(this.isComponentDisabled){
+            this.isSubmitDisabled = true;
+            this.isCancelDisabled = true;
+        } else {
+
+            this.isSubmitDisabled = !(this.checkboxStates.namaLengkap || 
+                this.checkboxStates.tglLahir || 
+                this.checkboxStates.ibuKandung ||
+                this.checkboxStates.noHpBRINets ||
+                this.checkboxStates.noHpWBS ||
+                this.checkboxStates.trxTerakhir ||
+                this.checkboxStates.nik ||
+                this.checkboxStates.jenisRekening ||
+                this.checkboxStates.kantorPembuka ||
+                this.checkboxStates.npwp ||
+                this.checkboxStates.expiredKartu ||
+                this.checkboxStates.alamatRumah ||
+                this.checkboxStates.limitKartu ||
+                this.checkboxStates.alamatEmail ||
+                this.checkboxStates.kontakDarurat ||
+
+                //added in 09-11-2024
+                this.checkboxStates.tglBerdiri ||
+                this.checkboxStates.namaPIC1 ||
+                this.checkboxStates.namaPIC2 ||
+                this.checkboxStates.namaPIC3 ||
+                this.checkboxStates.jabatanPIC1 ||
+                this.checkboxStates.jabatanPIC2 ||
+                this.checkboxStates.jabatanPIC3 ||
+                this.checkboxStates.alamatKantor ||
+                this.checkboxStates.noKantor
+            );
+            this.isCancelDisabled = this.isSubmitDisabled;
+
+        }
+
+        
     }
 
     handleCheckboxChange(event) {
@@ -1218,6 +767,7 @@ export default class LwcCustomerVerification extends LightningElement {
     }
 
     handleSubmit() {
+
         console.log('zxc handleSubmit clicked..');
 
         const customerVerification = this.wrapperCustomerVerification();
@@ -1236,23 +786,6 @@ export default class LwcCustomerVerification extends LightningElement {
 
     handleCancel() {
         // Clear the checkboxes and disable buttons
-        // this.checkboxStates = {
-        //     namaLengkap: false,
-        //     tglLahir: false,
-        //     ibuKandung: false,
-        //     noHpBRINets: false,
-        //     noHpWBS: false,
-        //     trxTerakhir: false,
-        //     nik: false,
-        //     jenisRekening: false,
-        //     kantorPembuka: false,
-        //     npwp: false,
-        //     expiredKartu: false,
-        //     alamatRumah: false,
-        //     limitKartu: false,
-        //     alamatEmail: false,
-        //     kontakDarurat: false
-        // };
 
         this.checkboxStates = this.getDefaultCheckboxStates();
 
@@ -1269,52 +802,6 @@ export default class LwcCustomerVerification extends LightningElement {
         console.log('zxc Cancel button clicked. Resetting the form.');
         console.log('zxc Checkboxes have been unchecked, and buttons have been disabled.');
     }
-
-    formatCurrencyIDR(amount) {
-        return new Intl.NumberFormat('id-ID', {
-            style: 'currency',
-            currency: 'IDR',
-        }).format(amount);
-    }
-
-
-    // Dynamically populate the options for either banking or credit
-    // get options() {
-    //     if (this.category === 'Banking') {
-    //         return this.simpananData.map((simpanan, index) => {
-    //             return { label: `${simpanan.accountNumber}`, value: simpanan.accountNumber };
-    //         });
-    //     } else if (this.category === 'Credit') {
-    //         return this.kreditData.map((kredit, index) => {
-    //             return { label: `${kredit.cardNumber}`, value: kredit.cardNumber };
-    //         });
-    //     }
-    //     return [];
-    // }
-
-    // wrapperCustomerVerification() {
-    //     const customerVerification = {
-    //         Case__c: this.recordId,
-    //         Name: this.selectedNomorRekening || this.selectedNomorKartu || '',
-    //         Nama_Nasabah__c: this.checkboxStates.namaLengkap || false,
-    //         Tanggal_Lahir__c: this.checkboxStates.tglLahir || false,
-    //         Nama_Ibu_Kandung__c: this.checkboxStates.ibuKandung || false,
-    //         Nomor_HP_BRINets__c: this.checkboxStates.noHpBRINets || false,
-    //         Nomor_HP_WBS__c: this.checkboxStates.noHpWBS || false,
-    //         Transaksi_Terakhir__c: this.checkboxStates.trxTerakhir || false,
-    //         NIK__c: this.checkboxStates.nik || false,
-    //         Jenis_Rekening__c: this.checkboxStates.jenisRekening || false,
-    //         Kantor_Pembuka_Rekening__c: this.checkboxStates.kantorPembuka || false,
-    //         NPWP__c: this.checkboxStates.npwp || false,
-    //         Expired_Date_Kartu__c: this.checkboxStates.expiredKartu || false,
-    //         Alamat_Rumah__c: this.checkboxStates.alamatRumah || false,
-    //         Limit_Kartu_Kredit__c: this.checkboxStates.limitKartu || false,
-    //         Alamat_Email__c: this.checkboxStates.alamatEmail || false,
-    //         Kontak_Darurat__c: this.checkboxStates.kontakDarurat || false
-    //     };
-    
-    //     return customerVerification;
-    // }
 
     wrapperCustomerVerification() {
         const isNewRecord = !this.customerVerificationData || 
@@ -1339,6 +826,15 @@ export default class LwcCustomerVerification extends LightningElement {
             Limit_Kartu_Kredit__c: this.checkboxStates.limitKartu ? true : false,
             Alamat_Email__c: this.checkboxStates.alamatEmail ? true : false,
             Kontak_Darurat__c: this.checkboxStates.kontakDarurat ? true : false,
+            Tanggal_Berdiri__c: this.checkboxStates.tglBerdiri ? true : false,
+            Nama_PIC_1__c: this.checkboxStates.namaPIC1 ? true : false,
+            Nama_PIC_2__c: this.checkboxStates.namaPIC2 ? true : false,
+            Nama_PIC_3__c: this.checkboxStates.namaPIC3 ? true : false,
+            Jabatan_PIC_1__c: this.checkboxStates.jabatanPIC1 ? true : false,
+            Jabatan_PIC_2__c: this.checkboxStates.jabatanPIC2 ? true : false,
+            Jabatan_PIC_3__c: this.checkboxStates.jabatanPIC3 ? true : false,
+            Alamat_Kantor__c: this.checkboxStates.alamatKantor ? true : false,
+            Nomor_Telepon_Instansi__c: this.checkboxStates.noKantor ? true : false,
         };
 
         return customerVerification;
@@ -1351,6 +847,47 @@ export default class LwcCustomerVerification extends LightningElement {
             variant,
         });
         this.dispatchEvent(evt);
+    }
+
+    formatCurrencyIDR(amount) {
+        return new Intl.NumberFormat('id-ID', {
+            style: 'currency',
+            currency: 'IDR',
+        }).format(amount);
+    }
+
+    formatCurrency(value) {
+        const parsedValue = parseFloat(value);
+        const formatterCurrency = new Intl.NumberFormat('id-ID', {
+            style: 'currency',
+            currency: 'IDR',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+        });
+        return formatterCurrency.format(parsedValue);
+    }
+
+    formatNumber(numberString) {
+        // Parse the input string to a float
+        const parsedNumber = parseFloat(numberString);
+        if (isNaN(parsedNumber)) return '0';
+    
+        // Convert to string with two decimal places
+        const fixedNumber = parsedNumber.toFixed(2);
+        
+        // Split into integer and decimal parts
+        const [integerPart, decimalPart] = fixedNumber.split('.');
+    
+        // Format the integer part with dots as thousands separators
+        const formattedIntegerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    
+        // If decimal part is zero, return just the integer part
+        if (decimalPart === '00') {
+            return formattedIntegerPart;
+        }
+    
+        // Return formatted currency string with comma for the decimal part
+        return `${formattedIntegerPart},${decimalPart}`;
     }
 
 }

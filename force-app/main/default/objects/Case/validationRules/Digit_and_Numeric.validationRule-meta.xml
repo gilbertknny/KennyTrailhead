@@ -12,7 +12,7 @@ REGEX(SCC_Card_Number__c, &quot;^[0-9]{16}$&quot;)
 )
 )
 )
-&amp;&amp; ( SCC_Call_Type__r.External_Id__c = &apos;8812&apos; || SCC_Call_Type__r.External_Id__c = &apos;8915&apos; || Sent_to_Drone__c = TRUE ) &amp;&amp; NOT($Permission.By_Pass_Validation_for_Migration) &amp;&amp; NOT(OR(CreatedBy.Alias   = &apos;Migrasi&apos;, CreatedBy.Alias = &apos;migration&apos;, CreatedBy.Alias = &apos;bhart&apos;))</errorConditionFormula>
+&amp;&amp; ( SCC_Call_Type__r.External_Id__c = &apos;8812&apos; || SCC_Call_Type__r.External_Id__c = &apos;8915&apos; || Sent_to_Drone__c = TRUE ) &amp;&amp; NOT($Permission.By_Pass_Validation_for_Migration) &amp;&amp; NOT(OR(CreatedBy.Alias   = &apos;Migrasi&apos;, CreatedBy.Alias = &apos;migration&apos;, CreatedBy.Alias = &apos;bhart&apos;)) &amp;&amp; NOT( ISPICKVAL(Origin, &apos;MMS&apos;))</errorConditionFormula>
     <errorDisplayField>SCC_Card_Number__c</errorDisplayField>
     <errorMessage>Harap Isi Dengan 16 Digit Angka</errorMessage>
 </ValidationRule>
