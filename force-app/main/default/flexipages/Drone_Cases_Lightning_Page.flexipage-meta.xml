@@ -139,7 +139,7 @@
                         <valueListItems>
                             <value>Submit</value>
                             <visibilityRule>
-                                <booleanFilter>(1 OR 2) AND 3 AND 4</booleanFilter>
+                                <booleanFilter>(1 OR 2) AND 3 AND 4 AND 5</booleanFilter>
                                 <criteria>
                                     <leftValue>{!Record.Approval_Status__c}</leftValue>
                                     <operator>EQUAL</operator>
@@ -159,6 +159,11 @@
                                     <leftValue>{!Record.Case_Owner_X_User__c}</leftValue>
                                     <operator>EQUAL</operator>
                                     <rightValue>true</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.Status}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>Escalated</rightValue>
                                 </criteria>
                             </visibilityRule>
                         </valueListItems>
