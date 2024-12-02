@@ -11,6 +11,7 @@
     1.2   03/09/2024   Rakeyan Nuramria                  Adjust the UI for API banking
     1.2   18/09/2024   Rakeyan Nuramria                  Adjust the UI for all API
     1.2   21/11/2024   Rakeyan Nuramria                  [FROM SIT] Hide Search NIK & Phone in Cardlink (req by surrounding BRI team )
+    1.2   29/11/2024   Rakeyan Nuramria                  [FROM SIT] Adjust showing name for all category (Adjusting to the new logic)
 -->
 
 
@@ -139,9 +140,13 @@
                                                 for:index="index">
                                                 <tr key={record.acc.Id}>
                                                     <td class="slds-text-align_center">{record.columnNumber}</td>
-                                                    <td class="slds-text-align_center">
+                                                    <!-- <td>
                                                         <a href="#" onclick={navigateToAccountDetail}
                                                             data-accountid={record.acc.Id}>{record.acc.Name}</a>
+                                                    </td> -->
+                                                    <td class="slds-text-align_center">
+                                                        <a href="#" onclick={navigateToAccountDetail}
+                                                            data-accountid={record.acc.Id}>{record.formattedName}</a>
                                                     </td>
                                                     <td class="slds-text-align_center">{record.acc.Phone}</td>
                                                     <td class="slds-text-align_center">{record.acc.SCC_cifno__c}</td>
@@ -268,9 +273,13 @@
                                                 for:index="index">
                                                 <tr key={record.acc.Id}>
                                                     <td>{record.columnNumber}</td>
-                                                    <td>
+                                                    <!-- <td>
                                                         <a href="#" onclick={navigateToAccountDetail}
                                                             data-accountid={record.acc.Id}>{record.acc.Name}</a>
+                                                    </td> -->
+                                                    <td>
+                                                        <a href="#" onclick={navigateToAccountDetail}
+                                                            data-accountid={record.acc.Id}>{record.formattedName}</a>
                                                     </td>
                                                     <td>{record.acc.Phone}</td>
                                                     <td>{record.acc.SCC_cifno__c}</td>
@@ -386,9 +395,13 @@
                                                 for:index="index">
                                                 <tr key={record.acc.Id}>
                                                     <td>{record.columnNumber}</td>
-                                                    <td>
+                                                    <!-- <td>
                                                         <a href="#" onclick={navigateToAccountDetail}
                                                             data-accountid={record.acc.Id}>{record.acc.Name}</a>
+                                                    </td> -->
+                                                    <td>
+                                                        <a href="#" onclick={navigateToAccountDetail}
+                                                            data-accountid={record.acc.Id}>{record.formattedName}</a>
                                                     </td>
                                                     <td>{record.bp.nomor_rekening}</td>
                                                     <td>{record.bp.cifno}</td>
@@ -502,9 +515,13 @@
                                                 for:index="index">
                                                 <tr key={record.acc.Id}>
                                                     <td>{record.columnNumber}</td>
-                                                    <td>
+                                                    <!-- <td>
                                                         <a href="#" onclick={navigateToAccountDetail}
                                                             data-accountid={record.acc.Id}>{record.acc.Name}</a>
+                                                    </td> -->
+                                                    <td>
+                                                        <a href="#" onclick={navigateToAccountDetail}
+                                                            data-accountid={record.acc.Id}>{record.formattedName}</a>
                                                     </td>
                                                     <td>{record.mp.jenis_merchant}</td>
                                                     <td>{record.mp.cifno}</td>
@@ -580,9 +597,13 @@
                                                 for:index="index">
                                                 <tr key={record.acc.Id}>
                                                     <td>{record.columnNumber}</td>
-                                                    <td>
+                                                    <!-- <td>
                                                         <a href="#" onclick={navigateToAccountDetail}
                                                             data-accountid={record.acc.Id}>{record.si.nama_nasabah}</a>
+                                                    </td> -->
+                                                    <td>
+                                                        <a href="#" onclick={navigateToAccountDetail}
+                                                            data-accountid={record.acc.Id}>{record.formattedName}</a>
                                                     </td>
                                                     <td>{record.si.nomor_akun_dplk}</td>
                                                     <td>{record.si.cifno}</td>

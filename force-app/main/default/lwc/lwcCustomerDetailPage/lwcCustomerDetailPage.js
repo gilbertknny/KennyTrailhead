@@ -13,6 +13,7 @@
     2.1   09/10/2024   Rakeyan Nuramria                  [ON GOING] Add condition for show data if clcd in the JSON return
     2.1   10/10/2024   Rakeyan Nuramria                  [DONE] Add condition for show data if clcd in the JSON return
     2.1   14/10/2024   Rakeyan Nuramria                  Adjust show error
+    2.1   28/11/2024   Rakeyan Nuramria                  Adjust showing alamat banking/cardlink & name to namaLengkap for cardlink
 **/
 
 import { LightningElement, wire, track, api } from 'lwc';
@@ -442,7 +443,8 @@ export default class LwcCustomerDetailPage extends LightningElement {
     
                 this.namaNasabahInput = cpgData.demografi.namaSesuaiIdentitas || '';
                 this.usiaInput = cpgData.demografi.umur || '';
-                this.alamatInput = cpgData.demografi.alamatSesuaiID + ' ' + cpgData.demografi.alamatSesuaiID2 || '';
+                // this.alamatInput = cpgData.demografi.alamatSesuaiID + ' ' + cpgData.demografi.alamatSesuaiID2 || '';
+                this.alamatInput = `${(cpgData.demografi.alamatSesuaiID || '').trim()}${cpgData.demografi.alamatSesuaiID2 ? ' ' + cpgData.demografi.alamatSesuaiID2.trim() : ''}`;
                 this.noHpInput = cpgData.demografi.handphone || '';
                 this.emailInput = cpgData.demografi.email || '';
                 this.jenisNasabahInput = cpgData.demografi.nasabahPrioritas;
@@ -461,9 +463,10 @@ export default class LwcCustomerDetailPage extends LightningElement {
                 const clcdCustomerData = result.clcd.response.customerData ? result.clcd.response.customerData[0] : null;
                 const clcdCardHolderData = result.clcd.response.cardHolderData ? result.clcd.response.cardHolderData[0] : null;
     
-                this.namaNasabahInput = clcdCustomerData ? clcdCustomerData.namaDepan + ' ' + clcdCustomerData.namaBelakang : '';
+                this.namaNasabahInput = clcdCustomerData ? clcdCustomerData.namaLengkap ||  clcdCustomerData.namaDepan + ' ' + clcdCustomerData.namaBelakang : '';
                 this.usiaInput = clcdCustomerData ? this.calculateAge(clcdCustomerData.tanggalLahir) : '';
-                this.alamatInput = clcdCustomerData ? clcdCustomerData.alamatRumahDepan + ', ' + clcdCustomerData.alamatRumahBelakang : '';
+                // this.alamatInput = clcdCustomerData ? clcdCustomerData.alamatRumahDepan + ', ' + clcdCustomerData.alamatRumahBelakang : '';
+                this.alamatInput = `${(clcdCustomerData.alamatRumahDepan || '').trim()}${clcdCustomerData.alamatRumahBelakang ? ', ' + clcdCustomerData.alamatRumahBelakang.trim() : ''}`;
                 this.noHpInput = clcdCustomerData ? clcdCustomerData.nomorHandphoneTerdaftar : '';
                 this.emailInput = clcdCustomerData ? clcdCustomerData.alamatEmail : '';
     

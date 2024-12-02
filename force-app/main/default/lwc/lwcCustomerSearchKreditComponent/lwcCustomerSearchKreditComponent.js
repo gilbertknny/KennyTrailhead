@@ -8,8 +8,9 @@
     1.0   12/09/2024   Rakeyan Nuramria                  Initial Version
     1.0   25/09/2024   Rakeyan Nuramria                  Add API Functionality
     1.0   27/09/2024   Rakeyan Nuramria                  Adjust API Functionality
-    1.0   07/10/2024   Rakeyan Nuramria                  [ON GOING] Adjust API Functionality to using getCardLink
+    1.0   07/10/2024   Rakeyan Nuramria                  Adjust API Functionality to using getCardLink
     1.0   08/10/2024   Rakeyan Nuramria                  Adjust API Functionality to using getCardLink
+    1.0   29/11/2024   Rakeyan Nuramria                  [FROM SIT] Fix bug clear result when search & adjust showing data cardlink
 
 **/
 
@@ -165,6 +166,14 @@ export default class LwcCustomerSearchKreditComponent extends LightningElement {
         this.dataKredit = [];
         this.showSearchResults = false;
         this.error = '';
+        this.errorMessage = '';
+        this.hasError = false;
+
+        this.portofolioData = [];
+        this.customerKreditData = [];
+        this.cardData = [];
+        this.additionalData = [];
+        this.cardInfo = {};
     }
 
     clearInputFields() {
@@ -239,6 +248,8 @@ export default class LwcCustomerSearchKreditComponent extends LightningElement {
     }
 
     handleSearchByCardlink(){
+        this.clearSearchResults();
+
         this.isLoading = true;
         console.log('qwe Function fetchDataDetailKredit called...');
 
@@ -361,44 +372,44 @@ export default class LwcCustomerSearchKreditComponent extends LightningElement {
     
             // Consolidate data into cardInfo
             this.cardInfo = {
-                // From customerData
-                namaLengkap: `${this.customerKreditData.namaDepan} ${this.customerKreditData.namaBelakang}`,
-                tanggalLahir: this.customerKreditData.tanggalLahir || '-',
-                noHandphone: this.customerKreditData.nomorHandphoneTerdaftar || '-',
-                noKantor: this.customerKreditData.nomorTelephoneKantor || '-',
-                noRumah: this.customerKreditData.nomorTelephoneRumah || '-',
-                noKerabat: this.customerKreditData.nomorTelephoneKerabatTidakSerumah || '-',
-                namaKerabat: this.customerKreditData.namaKerabatTidakSerumah || '-',
-                noNIK: this.customerKreditData.nomorNik || '-',
-                noNPWP: this.customerKreditData.nomorNpwp || '-',
-                jenisKelamin: this.customerKreditData.jenisKelamin || '-',
-                jabatanKerja: this.customerKreditData.jabatanKerja || '-',
-                sisaLimit: this.customerKreditData.sisaLimitNasabah || '-',
-                limitCicilan: this.customerKreditData.limitCicilanNasabah || '-',
-                alamatBilling: this.customerKreditData.alamatBilling || '-',
-                alamatEmail: this.customerKreditData.alamatEmail || '-',
-                alamatPengirimanKartu: this.customerKreditData.alamatPengirimanKartu || '-', // This needs to be set properly
-                alamatKantor: `${this.customerKreditData.alamatKantorDepan}, ${this.customerKreditData.alamatKantorTengah}, ${this.customerKreditData.alamatKantorBelakang}`  || '-',
-                alamatRumah: `${this.customerKreditData.alamatRumahDepan}, ${this.customerKreditData.alamatRumahBelakang}`  || '-',
+                // From customerData using this.customerKreditData
+                namaLengkap: `${(this.customerKreditData.namaLengkap).trim()}` || `${(this.customerKreditData.namaDepan || '').trim()}${this.customerKreditData.namaTengah ? ' ' + this.customerKreditData.namaTengah.trim() : ''}${this.customerKreditData.namaBelakang ? ' ' + this.customerKreditData.namaBelakang.trim() : '-'}`,
+                tanggalLahir: (this.customerKreditData.tanggalLahir || '-').trim(),
+                noHandphone: (this.customerKreditData.nomorHandphoneTerdaftar || '-').trim(),
+                noKantor: (this.customerKreditData.nomorTelephoneKantor || '-').trim(),
+                noRumah: (this.customerKreditData.nomorTelephoneRumah || '-').trim(),
+                noKerabat:(this.customerKreditData.nomorTelephoneKerabatTidakSerumah || '-').trim(),
+                namaKerabat: (this.customerKreditData.namaKerabatTidakSerumah || '-').trim(),
+                kontakDarurat: `${(this.customerKreditData.namaKerabatTidakSerumah || '-').trim()}${this.customerKreditData.namaKerabatTidakSerumah && this.customerKreditData.nomorTelephoneKerabatTidakSerumah ? ' | ' : ''}${(this.customerKreditData.nomorTelephoneKerabatTidakSerumah || '-').trim()}`,
+                noNIK: (this.customerKreditData.nomorNik || '-').trim(),
+                noNPWP: (this.customerKreditData.nomorNpwp || '-').trim(),
+                jenisKelamin: (this.customerKreditData.jenisKelamin || '-').trim(),
+                jabatanKerja: (this.customerKreditData.jabatanKerja || '-').trim(),
+                sisaLimit: (this.customerKreditData.sisaLimitNasabah || '-').trim(),
+                limitCicilan: (this.customerKreditData.limitCicilanNasabah || '-').trim(),
+                alamatBilling: (this.customerKreditData.alamatBilling || '-').trim(),
+                alamatEmail: (this.customerKreditData.alamatEmail || '-').trim(),
+                alamatPengirimanKartu: (this.customerKreditData.alamatPengirimanKartu || '-').trim(), 
+                alamatKantor: `${(this.customerKreditData.alamatKantorDepan || '').trim()}${this.customerKreditData.alamatKantorTengah ? ', ' + this.customerKreditData.alamatKantorTengah.trim() : ''}${this.customerKreditData.alamatKantorBelakang ? ', ' + this.customerKreditData.alamatKantorBelakang.trim() : '-'}`,
                 // From cardData
-                limitKartu: this.formatCurrencyIDR(this.cardData.limitKartuKredit)  || this.formatCurrencyIDR(0),
-                expiredKartu: this.cardData.expiredKartu  || '-',
-                customerNumber: this.cardData.customerNumber  || '-',
-                tglCetak: this.cardData.tanggalCetakCycle  || '-',
-                tglJatuhTempo: this.cardData.tanggalJatuhTempo  || '-',
-                nominalFullPayment: this.cardData.nominalFullPayment  || '-',
-                nominalMinPayment: this.cardData.nominalMinimumPayment  || '-',
-                nominalTagihanBerjalan: this.cardData.nominalTagihanBerjalan  || '-',
-                nominalPembayaranTerakhir: this.cardData.nominalPembayaranTerakhir  || '-',
-                noKartu: this.cardData.customerNumber  || '-',
-                namaCetak: this.cardData.namaCetakKartu  || '-',
-                tglTerkahirMaintenance: this.cardData.tanggalTerakhirMaintenanceKartu  || '-',
-                noRekening: this.cardData.noRekening  || '-',
-                jenisKartu: this.cardData.jenisKartu || '-',
-                status: this.cardData.status || '-',
+                limitKartu: this.formatNumber(this.cardData.limitKartuKredit)  || this.formatNumber(0),
+                expiredKartu: (this.cardData.expiredKartu  || '-').trim(),
+                customerNumber: (this.cardData.customerNumber  || '-').trim(),
+                tglCetak: (this.cardData.tanggalCetakCycle  || '-').trim(),
+                tglJatuhTempo: (this.cardData.tanggalJatuhTempo  || '-').trim(),
+                nominalFullPayment: (this.cardData.nominalFullPayment || '-').trim(),
+                nominalMinPayment: (this.cardData.nominalMinimumPayment || '-').trim(),
+                nominalTagihanBerjalan: (this.cardData.nominalTagihanBerjalan || '-').trim(),
+                nominalPembayaranTerakhir: (this.cardData.nominalPembayaranTerakhir || '-').trim(),
+                noKartu: (this.cardData.customerNumber || '-').trim(),
+                namaCetak: (this.cardData.namaCetakKartu || '-').trim(),
+                tglTerkahirMaintenance: (this.cardData.tanggalTerakhirMaintenanceKartu || '').trim(),
+                noRekening: (this.cardData.noRekening || '-').trim(),
+                jenisKartu: (this.cardData.jenisKartu || '-').trim(),
+                status: (this.cardData.status || '-').trim(),
                 // From additionalData
-                nominalGaji: this.additionalData.nominalPendapatanPerBulan  || '-',
-                namaIbuKandung: this.additionalData.namaLengkapIbuKandung  || '-',
+                nominalGaji: (this.additionalData.nominalPendapatanPerBulan || '-').trim(),
+                namaIbuKandung: (this.additionalData.namaLengkapIbuKandung || '-').trim(),
             };
 
             console.log('qwe cardInfo : ', JSON.stringify(this.cardInfo, null, 2));
@@ -475,6 +486,29 @@ export default class LwcCustomerSearchKreditComponent extends LightningElement {
             style: 'currency',
             currency: 'IDR',
         }).format(amount);
+    }
+
+    formatNumber(numberString) {
+        // Parse the input string to a float
+        const parsedNumber = parseFloat(numberString);
+        if (isNaN(parsedNumber)) return '0';
+    
+        // Convert to string with two decimal places
+        const fixedNumber = parsedNumber.toFixed(2);
+        
+        // Split into integer and decimal parts
+        const [integerPart, decimalPart] = fixedNumber.split('.');
+    
+        // Format the integer part with dots as thousands separators
+        const formattedIntegerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    
+        // If decimal part is zero, return just the integer part
+        if (decimalPart === '00') {
+            return formattedIntegerPart;
+        }
+    
+        // Return formatted currency string with comma for the decimal part
+        return `${formattedIntegerPart},${decimalPart}`;
     }
 
     handleSearchError(errorMessage) {

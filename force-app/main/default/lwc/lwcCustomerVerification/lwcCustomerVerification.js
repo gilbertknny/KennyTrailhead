@@ -14,6 +14,7 @@
     1.1   29/10/2024   Rakeyan Nuramria                  [FROM SIT] fix bug & just logic show data for Credit with edge case (on check for edge case)
     1.1   30/10/2024   Rakeyan Nuramria                  [FROM SIT - ON GOING] Add logic based on Case Status for showing the data & disabled checkbox
     1.1   08/11/2024   Rakeyan Nuramria                  Cleansing code + Adjust logic for show data based on the new category (Banking/Credit => Non/Individual)
+    1.1   28/11/2024   Rakeyan Nuramria                  Adjust showing name using namaLengkap for cardlink
 **/
 
 import { LightningElement, wire, api,track } from 'lwc';
@@ -500,10 +501,10 @@ export default class LwcCustomerVerification extends LightningElement {
             // Populate additionalData with first object if available, otherwise set to empty object
             this.additionalData = (data.additionalData && data.additionalData.length > 0) ? data.additionalData[0] : {};
     
-            // Consolidate data into cardInfo
+            // Consolidate data into cardInfo for Cardlink
             this.cardInfo = {
                 // From customerData               
-                namaLengkap: `${(this.customerData.namaDepan || '').trim()}${this.customerData.namaTengah ? ' ' + this.customerData.namaTengah.trim() : ''}${this.customerData.namaBelakang ? ' ' + this.customerData.namaBelakang.trim() : ''}`,
+                namaLengkap: `${(this.customerData.namaLengkap).trim()}` || `${(this.customerData.namaDepan || '').trim()}${this.customerData.namaTengah ? ' ' + this.customerData.namaTengah.trim() : ''}${this.customerData.namaBelakang ? ' ' + this.customerData.namaBelakang.trim() : ''}`,
                 tanggalLahir: (this.customerData.tanggalLahir || '').trim(),
                 noHandphone: (this.customerData.nomorHandphoneTerdaftar || '').trim(),
                 noKantor: (this.customerData.nomorTelephoneKantor || '').trim(),

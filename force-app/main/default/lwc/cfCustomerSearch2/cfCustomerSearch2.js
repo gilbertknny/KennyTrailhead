@@ -13,6 +13,7 @@
     1.1   19/09/2024   Rakeyan Nuramria                  Add clear result if input empty
     1.1   30/09/2024   Rakeyan Nuramria                  adjust label in options
     1.1   14/10/2024   Rakeyan Nuramria                  Add another options + Bug fixing for clear input/disable if move to banking section
+    1.2   29/11/2024   Rakeyan Nuramria                  [FROM SIT] Adjust showing name for all category (Adjusting to the new logic)
 **/
 
 import { LightningElement, track, wire } from 'lwc';
@@ -1247,7 +1248,8 @@ export default class cfCustomerSearch2 extends NavigationMixin(LightningElement)
     
         return dataArray.map((record, index) => ({
             ...record,
-            columnNumber: index + 1
+            columnNumber: index + 1,
+            formattedName: record.acc.Name || record.acc.LastName
         }));
     }
     
@@ -1273,7 +1275,8 @@ export default class cfCustomerSearch2 extends NavigationMixin(LightningElement)
     
         return dataArrayKredit.map((record, index) => ({
             ...record,
-            columnNumber: index + 1
+            columnNumber: index + 1,
+            formattedName: record.acc.Name || record.acc.LastName
         }));
     }
 
@@ -1298,7 +1301,8 @@ export default class cfCustomerSearch2 extends NavigationMixin(LightningElement)
     
         return dataArray.map((record, index) => ({
             ...record,
-            columnNumber: index + 1
+            columnNumber: index + 1,
+            formattedName: record.acc.Name || record.acc.LastName
         }));
     }
 
@@ -1323,7 +1327,8 @@ export default class cfCustomerSearch2 extends NavigationMixin(LightningElement)
     
         return dataArray.map((record, index) => ({
             ...record,
-            columnNumber: index + 1
+            columnNumber: index + 1,
+            formattedName: record.acc.Name || record.acc.LastName
         }));
     }
     
@@ -1348,7 +1353,8 @@ export default class cfCustomerSearch2 extends NavigationMixin(LightningElement)
     
         return dataArray.map((record, index) => ({
             ...record,
-            columnNumber: index + 1
+            columnNumber: index + 1,
+            formattedName: record.acc.Name || record.acc.LastName
         }));
     }
     

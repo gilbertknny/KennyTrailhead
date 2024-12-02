@@ -15,6 +15,7 @@
     1.0   07/10/2024   Rakeyan Nuramria                  Adjust logic to input TID
     1.0   09/10/2024   Rakeyan Nuramria                  [FROM SIT] Adjust logic to input Nomor Kartu Rekening
     1.0   31/10/2024   Rakeyan Nuramria                  [FROM SIT] Adjust logic to show nominal/price/saldo number
+    1.0   29/11/2024   Rakeyan Nuramria                  [FROM SIT] Fix validating start date & end date mutasi
 **/
 
 import { LightningElement, api, track,wire } from 'lwc';
@@ -136,38 +137,81 @@ export default class LwcMutasiRekeningComponent extends NavigationMixin(Lightnin
 
     handleStartDateChange(event) {
         this.startDate = event.target.value;
-        this.validateDateRange();
+        this.validateDateField();
     }
 
     handleEndDateChange(event) {
         this.endDate = event.target.value;
-        this.validateDateRange();
+        this.validateDateField();
     }
 
-    validateDateRange() {
+    validateDateField() {
         const today = this.getTodayDate();
         
-        if (this.startDate > today) {
-            this.showToast('Error', 'Tanggal Awal tidak boleh melebihi hari ini.', 'error', '','');
-            this.startDate = today;
-        }
+        // if (this.startDate > today) {
+        //     this.showToast('Error', 'Tanggal Awal tidak boleh melebihi hari ini.', 'error', '','');
+        //     this.startDate = today;
+        // }
 
-        if (this.endDate > today) {
-            this.showToast('Error', 'Tanggal Akhir tidak boleh melebihi hari ini.', 'error', '','');
-            this.endDate = today; 
-        }
+        // if (this.endDate > today) {
+        //     this.showToast('Error', 'Tanggal Akhir tidak boleh melebihi hari ini.', 'error', '','');
+        //     this.endDate = today; 
+        // }
 
-        if (this.startDate && this.endDate) {
-            const start = new Date(this.startDate);
-            const end = new Date(this.endDate);
-            const diffDays = (end - start) / (1000 * 60 * 60 * 24);
+        // if (this.startDate && this.endDate) {
+        //     const start = new Date(this.startDate);
+        //     const end = new Date(this.endDate);
+        //     const diffDays = (end - start) / (1000 * 60 * 60 * 24);
 
-            if (diffDays > 31) {
-                this.showToast('Error', 'Jarak tanggal tidak boleh lebih dari 31 hari.', 'error', '','');
-                // this.endDate = ''; 
+        //     if (diffDays > 31) {
+        //         this.showToast('Error', 'Jarak tanggal tidak boleh lebih dari 31 hari.', 'error', '','');
+        //         // this.endDate = ''; 
+        //     }
+        // }
+
+         // Use setTimeout to allow for state change processing
+         setTimeout(() => {
+            if (this.startDate > today) {
+                this.showToast('Error', 'Tanggal Awal tidak boleh melebihi hari ini.', 'error', '', '');
+                this.startDate = today;
+                // After setting the date to today, manually reset the input value
+                this.template.querySelector('lightning-input[label="Tanggal Awal"]').value = today;
             }
-        }
+
+            if (this.endDate > today) {
+                this.showToast('Error', 'Tanggal Akhir tidak boleh melebihi hari ini.', 'error', '', '');
+                this.endDate = today;
+                // After setting the date to today, manually reset the input value
+                this.template.querySelector('lightning-input[label="Tanggal Akhir"]').value = today;
+            }
+
+            // Validate the range between start and end dates
+            // if (this.startDate && this.endDate) {
+            //     const start = new Date(this.startDate);
+            //     const end = new Date(this.endDate);
+            //     const diffDays = (end - start) / (1000 * 60 * 60 * 24);
+
+            //     if (diffDays > 31) {
+            //         this.showToast('Error', 'Jarak tanggal tidak boleh lebih dari 31 hari.', 'error', '', '');
+            //     }
+            // }
+        }, 0); // Set to 0 to delay the reset to the next event loop iteration
     }
+
+    validateDateRange(startDate, endDate) {
+        const start = new Date(startDate);
+        const end = new Date(endDate);
+        const diffDays = (end - start) / (1000 * 60 * 60 * 24);
+    
+        // If the difference exceeds 31 days, return false and show an error
+        if (diffDays > 31) {
+            this.showToast('Error', 'Jarak tanggal tidak boleh lebih dari 31 hari.', 'error', '', '');
+            return false;  // Invalid date range
+        }
+        return true;  // Valid date range
+    }
+    
+
 
     // handleCheckboxChange(event) {
     //     const selectedId = event.target.dataset.id;
@@ -755,6 +799,13 @@ export default class LwcMutasiRekeningComponent extends NavigationMixin(Lightnin
         this.showTable = false;
 
         if (this.startDate && this.endDate) {
+
+            // Call range validation method
+            if (!this.validateDateRange(this.startDate, this.endDate)) {
+                // If validation fails, return early
+                this.isLoading = false;
+                return;
+            }
 
             let requestPayload = '';
 
