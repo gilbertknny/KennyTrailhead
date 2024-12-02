@@ -2,7 +2,6 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>SCC_First_Contact_Resolution__c</fullName>
     <description>First Contact Resolution</description>
-    <externalId>false</externalId>
     <formula>IF(ISPICKVAL(SCC_Next_Escalation_Level__c , &apos;SCC_Level1_Escalation_team__c&apos;),true,false) &amp;&amp; TEXT(Status) = &apos;Closed&apos; &amp;&amp;  Returned_Case__c = False</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
     <label>First Contact Resolution</label>

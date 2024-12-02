@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Social_Media__c</fullName>
-    <externalId>false</externalId>
-    <formula>OR(TEXT(Origin)==&quot;Instagram&quot;,
+    <formula>OR(
+TEXT(Origin)==&quot;Instagram&quot;,
 TEXT(Origin)==&quot;YouTube&quot;,
 TEXT(Origin)==&quot;App Store&quot;,
 TEXT(Origin)==&quot;Play Store&quot;,
 TEXT(Origin)==&quot;Twitter&quot;,
-TEXT(Origin)==&quot;Facebook&quot;)</formula>
-    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+TEXT(Origin)==&quot;X&quot;,
+TEXT(Origin)==&quot;Facebook&quot;,
+TEXT(Origin)==&quot;Google Play Store&quot;,
+TEXT(Origin)==&quot;Apple App Store&quot;
+)</formula>
     <label>Social Media</label>
     <trackHistory>false</trackHistory>
     <trackTrending>false</trackTrending>

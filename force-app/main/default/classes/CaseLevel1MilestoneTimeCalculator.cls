@@ -19,6 +19,7 @@ global without sharing class CaseLevel1MilestoneTimeCalculator implements Suppor
                 timeValue = Integer.valueOf(calls[0].SCC_Level1_OLA__c * 60 * iHour) - iTotal; 
             }
         }
+        if(timeValue <= 0) timeValue = 1;
         return timeValue;
     }   
 }

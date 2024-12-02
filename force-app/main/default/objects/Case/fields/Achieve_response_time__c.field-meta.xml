@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Achieve_response_time__c</fullName>
-    <externalId>false</externalId>
     <formula>IF(AND
      (OR(ISPICKVAL(Origin, &quot;Twitter&quot;),ISPICKVAL(Origin, &quot;Instagram&quot;),ISPICKVAL(Origin, &quot;Facebook&quot;), 
          ISPICKVAL(Origin, &quot;YouTube&quot;)) , 

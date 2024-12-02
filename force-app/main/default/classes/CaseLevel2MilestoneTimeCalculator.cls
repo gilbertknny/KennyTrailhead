@@ -11,13 +11,8 @@ global without sharing class CaseLevel2MilestoneTimeCalculator implements Suppor
         if(listar.size()>0) iTotal = Integer.ValueOf(listar[0].get('Total'));  
         Case c = [SELECT Priority, SCC_Call_Type__c FROM Case WHERE Id = :caseId WITH SECURITY_ENFORCED];
         List<SSC_Call_Type__c> calls = [SELECT Id, SCC_Level2_OLA__c FROM SSC_Call_Type__c WHERE Id = :c.SCC_Call_Type__c WITH SECURITY_ENFORCED];
-        if (!calls.isEmpty()) {
-            if (iTotal > (Integer.valueOf(calls[0].SCC_Level2_OLA__c * 60 * iHour))) {
-                timeValue = 1 * 60 * iHour; 
-            }  else {
-                timeValue = Integer.valueOf(calls[0].SCC_Level2_OLA__c * 60 * iHour) - iTotal;
-            }
-        }
+        if (!calls.isEmpty()) timeValue = Integer.valueOf(calls[0].SCC_Level2_OLA__c * 60 * iHour) - iTotal;  
+        if(timeValue <= 0) timeValue = 1;
         return timeValue;
     }   
 }

@@ -9,17 +9,22 @@ public with sharing class BristarSummary_API_Ctrl {
             rc = maprc?.get('Mandatory');
             return createErrorResponse(rc);
         }
+        Date strDate = Date.valueOf(jreq.startDate);
+        Date endDate = Date.valueOf(jreq.endDate);
 
         List<String> conditions = new List<String>();
         conditions.add('Date__c >= ' + jreq.startDate + ' AND Date__c <= ' + jreq.endDate + 'AND Status != \'Cancelled\' AND Status != \'Disconnected\'');
         String flag = '';
         String orderBy = '';
+        String status='ALL';
         // Check if status ticket is not empty
         if (String.isNotBlank(jreq.statusTicket)) {
             if (jreq.statusTicket == 'OPEN') {
+                status = 'OPEN';
                 conditions.add('IsClosed__c = false');
             } else if (jreq.statusTicket == 'CLOSED') {
                 conditions.add('IsClosed__c = true');
+                status = 'CLOSED';
             }else{
                 rc = maprc?.get('Data_Not_Found');
                 return createErrorResponse(rc);
@@ -83,15 +88,15 @@ public with sharing class BristarSummary_API_Ctrl {
         Integer pageSize = String.isNotBlank(jreq.lmt) ? Integer.valueOf(jreq.lmt) : null;
 
         if(flag == 'KP'){
-            return processSummaryDataKP(query, maprc, jreq.area);
+            return processSummaryDataKP(maprc, jreq.area, status, jreq.startDate, jreq.endDate);
         }else if (flag == 'KP1'){
             return processDetailDataKP(query, maprc, jreq.area, jreq.costCenter, jreq.startDate, jreq.endDate, page, pageSize, jreq.statusTicket);
         }else if (flag == 'RO'){
-            return processSummaryDataRO(query, maprc, jreq.area);
+            return processSummaryDataRO(maprc, jreq.area, status, jreq.startDate, jreq.endDate);
         }else if(flag == 'RO1'){
-            return processSummaryDataRO1(query, maprc, jreq.area, jreq.region);
+            return processSummaryDataRO1(maprc, jreq.area, jreq.region, status, jreq.startDate, jreq.endDate);
         }else if(flag == 'RO2'){
-            return processSummaryDataRO2(query, maprc, jreq.area, jreq.region, jreq.mainBranch);
+            return processSummaryDataRO2(maprc, jreq.area, jreq.region, jreq.mainBranch, status, jreq.startDate, jreq.endDate);
         }else if(flag == 'RO3'){
             return processDetailDataRO(query, maprc, jreq.area, jreq.region, jreq.mainBranch, jreq.branch, jreq.startDate, jreq.endDate, page, pageSize, jreq.statusTicket);
         }else{
@@ -123,79 +128,131 @@ public with sharing class BristarSummary_API_Ctrl {
         return query;
     }
 
-    public static String processSummaryDataKP(String query, Map<String, SCC_Custom_API_Response_Code__mdt> maprc, String area) {
+    public static String processSummaryDataKP(Map<String, SCC_Custom_API_Response_Code__mdt> maprc, String area, String status, String startDate, String endDate) {
+        // Initialize the response wrapper
         BristarSummary_API_Wrapper.GetResponseKP_Model jres = new BristarSummary_API_Wrapper.GetResponseKP_Model();
-        // List<BristarSummary_API_Wrapper.GetDetailKP_Model> divisionSummaryList = new List<BristarSummary_API_Wrapper.GetDetailKP_Model>();
-        Map<String, BristarSummary_API_Wrapper.GetDetailKP_Model> divisionSummaryMap = new Map<String, BristarSummary_API_Wrapper.GetDetailKP_Model>();
+        List<BristarSummary_API_Wrapper.GetDetailKP_Model> divisionSummaryList = new List<BristarSummary_API_Wrapper.GetDetailKP_Model>();
+
+        // Base condition for case queries
+        String caseBaseCondition = 
+            'Area__c = \'KP00\' ' +
+            'AND Date__c >= '+startDate+' ' +
+            'AND Date__c <= '+endDate +' ' +
+            'AND Status IN (\'New\',\'Waiting Document\',\'Working\',\'Escalated\',\'Closed\') ' +
+            'AND Cost_Center__c != null ';
+    
+        // Execute aggregate queries
+        List<AggregateResult> open = getCaseAggregateResultsKP('', false, caseBaseCondition);
+        List<AggregateResult> closed = getCaseAggregateResultsKP('', true,caseBaseCondition);
+        List<AggregateResult> onSlaOpen = getCaseAggregateResultsKP(' AND Within_Target_SLA__c = \'Sesuai SLA\'', false, caseBaseCondition);
+        List<AggregateResult> overSlaOpen = getCaseAggregateResultsKP(' AND Within_Target_SLA__c = \'Melebihi SLA\'', false, caseBaseCondition);
+        List<AggregateResult> onSlaClosed = getCaseAggregateResultsKP(' AND Within_Target_SLA__c = \'Sesuai SLA\'', true, caseBaseCondition);
+        List<AggregateResult> overSlaClosed = getCaseAggregateResultsKP(' AND Within_Target_SLA__c = \'Melebihi SLA\'', true, caseBaseCondition);
+        List<AggregateResult> onSla = getCaseAggregateResultsKP(' AND Within_Target_SLA__c = \'Sesuai SLA\'', null,caseBaseCondition);
+        List<AggregateResult> overSla = getCaseAggregateResultsKP(' AND Within_Target_SLA__c = \'Melebihi SLA\'', null,caseBaseCondition);
+
+        // Fetch master list of cost centers
+        List<AggregateResult> masterResults = [
+            SELECT Cost_Center__c, Cost_Center_Description__c
+            FROM Orgeh__c
+            WHERE Cost_Center__c != null
+            GROUP BY Cost_Center__c, Cost_Center_Description__c
+        ];
+
+        // Create maps for efficient lookups
+        Map<String, Integer> openCountMap = createCountMapKP(open);
+        Map<String, Integer> closedCountMap = createCountMapKP(closed);
+        Map<String, Integer> onSlaCountOpenMap = createCountMapKP(onSlaOpen);
+        Map<String, Integer> overSlaCountOpenMap = createCountMapKP(overSlaOpen);
+        Map<String, Integer> onSlaCountClosedMap = createCountMapKP(onSlaClosed);
+        Map<String, Integer> overSlaCountClosedMap = createCountMapKP(overSlaClosed);
+        Map<String, Integer> onSlaCountMap = createCountMapKP(onSla);
+        Map<String, Integer> overSlaCountMap = createCountMapKP(overSla);
+    
+        for (AggregateResult result : masterResults) {
+            BristarSummary_API_Wrapper.GetDetailKP_Model wrapper = new BristarSummary_API_Wrapper.GetDetailKP_Model();
         
-        Set<String> masterCostCenters = new Set<String>();
-        Map<String, String> masterCostCenterDescriptions = new Map<String, String>();
-
-        List<AggregateResult> results = [SELECT Cost_Center__c, Cost_Center_Description__c
-                                        FROM Orgeh__c
-                                        WHERE Cost_Center__c != null
-                                        GROUP BY Cost_Center__c, Cost_Center_Description__c];
-        
-        System.debug('AggregateResult :'+results);
-
-        for (AggregateResult ar : results) {
-            String costCenter = (String)ar.get('Cost_Center__c');
-            String description = (String)ar.get('Cost_Center_Description__c');
-            masterCostCenters.add(costCenter);
-            masterCostCenterDescriptions.put(costCenter, description);
-        }
-
-        // Process cases
-        Set<String> processedCostCenters = new Set<String>();
-        for (Case cs : Database.query(query)) {
-            System.debug('cs :'+cs);
-            String divisiKey = cs.Cost_Center__c;
-            processedCostCenters.add(divisiKey);
+            // Set basic cost center details
+            wrapper.costCenter = (String) result.get('Cost_Center__c');
+            wrapper.costCenterDesc = (String) result.get('Cost_Center_Description__c');
             
-            if (!divisionSummaryMap.containsKey(divisiKey)) {
-                BristarSummary_API_Wrapper.GetDetailKP_Model evdkp = new BristarSummary_API_Wrapper.GetDetailKP_Model();
-                evdkp.costCenter = divisiKey != null ? divisiKey : '';
-                evdkp.costCenterDesc = cs.Cost_Center_Description__c != null ? cs.Cost_Center_Description__c : '';
-                evdkp.openTicket = '0';
-                evdkp.closedTicket = '0';
-                evdkp.overSla = '0';
-                evdkp.onSla = '0';
-                divisionSummaryMap.put(divisiKey, evdkp);
+            // Check status
+            if(status == 'OPEN'){
+                // Lookup and set counts from other aggregate results
+                wrapper.openTicket = String.valueOf(openCountMap.get(wrapper.costCenter) != null ? openCountMap.get(wrapper.costCenter) : 0);
+                wrapper.closedTicket = '0';
+                wrapper.onSla = String.valueOf(onSlaCountOpenMap.get(wrapper.costCenter) != null ? onSlaCountOpenMap.get(wrapper.costCenter) : 0);
+                wrapper.overSla = String.valueOf(overSlaCountOpenMap.get(wrapper.costCenter) != null ? overSlaCountOpenMap.get(wrapper.costCenter) : 0);
+            }else if(status == 'CLOSED'){
+                // Lookup and set counts from other aggregate results
+                wrapper.openTicket = '0';
+                wrapper.closedTicket = String.valueOf(closedCountMap.get(wrapper.costCenter) != null ? closedCountMap.get(wrapper.costCenter) : 0);
+                wrapper.onSla = String.valueOf(onSlaCountClosedMap.get(wrapper.costCenter) != null ? onSlaCountClosedMap.get(wrapper.costCenter) : 0);
+                wrapper.overSla = String.valueOf(overSlaCountClosedMap.get(wrapper.costCenter) != null ? overSlaCountClosedMap.get(wrapper.costCenter) : 0);
+            }else if(status == 'ALL'){
+                system.debug('Run Status ALL');
+                // Lookup and set counts from other aggregate results
+                wrapper.openTicket = String.valueOf(openCountMap.get(wrapper.costCenter) != null ? openCountMap.get(wrapper.costCenter) : 0);
+                wrapper.closedTicket = String.valueOf(closedCountMap.get(wrapper.costCenter) != null ? closedCountMap.get(wrapper.costCenter) : 0);
+                wrapper.onSla = String.valueOf(onSlaCountMap.get(wrapper.costCenter) != null ? onSlaCountMap.get(wrapper.costCenter) : 0);
+                wrapper.overSla = String.valueOf(overSlaCountMap.get(wrapper.costCenter) != null ? overSlaCountMap.get(wrapper.costCenter) : 0);
             }
-            
-            BristarSummary_API_Wrapper.GetDetailKP_Model divisionSummary = divisionSummaryMap.get(divisiKey);
-            updateDivisionSummaryKP(divisionSummary, cs);
+            divisionSummaryList.add(wrapper);
         }
-
-        // Create empty data for master Cost Centers not found in Cases
-        for (String masterCostCenter : masterCostCenters) {
-            if (!processedCostCenters.contains(masterCostCenter)) {
-                BristarSummary_API_Wrapper.GetDetailKP_Model evdkp = new BristarSummary_API_Wrapper.GetDetailKP_Model();
-                evdkp.costCenter = masterCostCenter;
-                evdkp.costCenterDesc = masterCostCenterDescriptions.get(masterCostCenter);
-                evdkp.openTicket = '0';
-                evdkp.closedTicket = '0';
-                evdkp.overSla = '0';
-                evdkp.onSla = '0';
-                divisionSummaryMap.put(masterCostCenter, evdkp);
-            }
-        }
-
-
-       // Convert the map values to a list
-       List<BristarSummary_API_Wrapper.GetDetailKP_Model> divisionSummaryList = new List<BristarSummary_API_Wrapper.GetDetailKP_Model>(divisionSummaryMap.values());
-        
-       // Sort divisionSummary by totalActivities (descending order)
-       divisionSummaryList.sort(new TotalKPComparator());
-
+    
+        // Sort the summary list
+        divisionSummaryList.sort(new TotalKPComparator());
+    
+        // Set response details
         jres.divisionSummary = divisionSummaryList;
         jres.area = area;
-
+    
         SCC_Custom_API_Response_Code__mdt rc = maprc?.get('Success');
         jres.responseCode = rc?.Response_Code__c;
         jres.responseMessage = rc?.Description__c;
-
+    
+        // Return the final API response
         return BristarSummary_API_Ctrl.returnAPIKP(jres);
+    }
+
+    // Helper method to fetch aggregate results dynamically
+    public static List<AggregateResult> getCaseAggregateResultsKP(String additionalCondition, Boolean isClosed, String caseBaseCondition) {
+        // Start building the query
+        String query = 'SELECT Cost_Center__c, Cost_Center_Description__c, COUNT(Id) recordCount ' +
+            'FROM Case ' +
+            'WHERE ' + caseBaseCondition;
+
+        // Add the IsClosed condition only if isClosed is not null
+        if (isClosed != null) {
+        query += ' AND IsClosed = :isClosed';
+        }
+
+        // Add any additional conditions
+        if (!String.isEmpty(additionalCondition)) {
+        query += additionalCondition;
+        }
+
+        // Finalize the query with grouping and ordering
+        query += ' GROUP BY Cost_Center__c, Cost_Center_Description__c ' +
+        'ORDER BY COUNT(Id) DESC';
+
+        system.debug('query kp :'+query);
+
+        // Execute the query
+        return Database.query(query);
+    }
+
+    // Helper method to create a map of Cost Center to Record Count
+    private static Map<String, Integer> createCountMapKP(List<AggregateResult> aggregateResults) {
+        Map<String, Integer> countMap = new Map<String, Integer>();
+        
+        for (AggregateResult result : aggregateResults) {
+            String costCenter = (String) result.get('Cost_Center__c');
+            Integer recordCount = (Integer) result.get('recordCount');
+            countMap.put(costCenter, recordCount);
+        }
+        
+        return countMap;
     }
 
     // Comparator class remains the same
@@ -224,83 +281,80 @@ public with sharing class BristarSummary_API_Ctrl {
         return returnJson;
     }
 
-    private static String processSummaryDataRO(String query, Map<String, SCC_Custom_API_Response_Code__mdt> maprc, String area) {
+    private static String processSummaryDataRO(Map<String, SCC_Custom_API_Response_Code__mdt> maprc, String area, String status, String startdate, String endDate) {
         BristarSummary_API_Wrapper.GetResponseRO_Model jres = new BristarSummary_API_Wrapper.GetResponseRO_Model();
         // List<BristarSummary_API_Wrapper.GetDetailRO_Model> regionSummaryList = new List<BristarSummary_API_Wrapper.GetDetailRO_Model>();
-        Map<String, BristarSummary_API_Wrapper.GetDetailRO_Model> regionSummaryMap = new Map<String, BristarSummary_API_Wrapper.GetDetailRO_Model>();
+        List<BristarSummary_API_Wrapper.GetDetailRO_Model> regionSummaryMap = new List<BristarSummary_API_Wrapper.GetDetailRO_Model>();
 
-        Set<String> masterRegions = new Set<String>();
-        Map<String, String> masterRegionDescriptions = new Map<String, String>();
+        // Base condition for case queries
+        String caseBaseCondition = 
+            'Area__c != \'KP00\' ' +
+            'AND Region__c != null ' +
+            'AND Main_branch__c != null ' +
+            'AND CodeBranch__c != null ' +
+            'AND Date__c >= '+startdate+' ' +
+            'AND Date__c <= '+endDate+' ' +
+            'AND Status IN (\'New\',\'Waiting Document\',\'Working\',\'Escalated\',\'Closed\')';
+    
+        // Execute aggregate queries
+        List<AggregateResult> open = getCaseAggregateResultsRO('', false, caseBaseCondition);
+        List<AggregateResult> closed = getCaseAggregateResultsRO('', true,caseBaseCondition);
+        List<AggregateResult> onSlaOpen = getCaseAggregateResultsRO(' AND Within_Target_SLA__c = \'Sesuai SLA\'', false, caseBaseCondition);
+        List<AggregateResult> overSlaOpen = getCaseAggregateResultsRO(' AND Within_Target_SLA__c = \'Melebihi SLA\'', false, caseBaseCondition);
+        List<AggregateResult> onSlaClosed = getCaseAggregateResultsRO(' AND Within_Target_SLA__c = \'Sesuai SLA\'', true, caseBaseCondition);
+        List<AggregateResult> overSlaClosed = getCaseAggregateResultsRO(' AND Within_Target_SLA__c = \'Melebihi SLA\'', true, caseBaseCondition);
+        List<AggregateResult> onSla = getCaseAggregateResultsRO(' AND Within_Target_SLA__c = \'Sesuai SLA\'', null,caseBaseCondition);
+        List<AggregateResult> overSla = getCaseAggregateResultsRO(' AND Within_Target_SLA__c = \'Melebihi SLA\'', null,caseBaseCondition);
 
-        // First, get the valid BranchCode__c values from Branch_Unit__c
-        Set<String> validBranchCodes = new Set<String>();
-        for(Branch_Unit__c bu : [SELECT BranchCode__c 
-                                FROM Branch_Unit__c 
-                                WHERE Uker_type__c != 'RO' AND Region__c != 'KP'
-                                AND BranchCode__c != null ]) {
-            validBranchCodes.add(bu.BranchCode__c);
-        }
-
-        List<AggregateResult> results = [SELECT Region__c, Region_Name__c
+        List<AggregateResult> masterResults = [SELECT Region__c, Region_Name__c
                                         FROM Branch_Unit__c
-                                        WHERE Region__c != null AND Uker_type__c != 'RO' AND Region__c != 'KP'
+                                        WHERE Region__c != null AND Uker_type__c != 'RO' AND Region__c != 'KP' AND Kode_Cabang__c != null AND BranchCode__c != null
                                         GROUP BY Region__c, Region_Name__c];
         
-        System.debug('AggregateResult :'+results);
+        // Create maps to efficiently look up counts
+        Map<String, Integer> openCountMap = createCountMapRO(open);
+        Map<String, Integer> closedCountMap = createCountMapRO(closed);
+        Map<String, Integer> onSlaCountOpenMap = createCountMapRO(onSlaOpen);
+        Map<String, Integer> overSlaCountOpenMap = createCountMapRO(overSlaOpen);
+        Map<String, Integer> onSlaCountClosedMap = createCountMapRO(onSlaClosed);
+        Map<String, Integer> overSlaCountClosedMap = createCountMapRO(overSlaClosed);
+        Map<String, Integer> onSlaCountMap = createCountMapRO(onSla);
+        Map<String, Integer> overSlaCountMap = createCountMapRO(overSla);
 
-        for (AggregateResult ar : results) {
-            String region = (String)ar.get('Region__c');
-            String description = (String)ar.get('Region_Name__c');
-            masterRegions.add(region);
-            masterRegionDescriptions.put(region, description);
-        }
-        // Process cases with additional branch filtering
-        Set<String> processedRegions = new Set<String>();
-
-        for (Case cs : Database.query(query)) {
-            // Only include cases where Branch_Code__c matches valid branch codes
-            if (validBranchCodes.contains(cs.Branch_Code__c)) {
-                // filteredCases.add(cs);
-                String regionKey = cs.Region__c;
-                processedRegions.add(regionKey);
-                
-                if (!regionSummaryMap.containsKey(regionKey)) {
-                    BristarSummary_API_Wrapper.GetDetailRO_Model evdkp = new BristarSummary_API_Wrapper.GetDetailRO_Model();
-                    evdkp.region = regionKey != null ? regionKey : '';
-                    evdkp.regionDesc = cs.Region_Name__c != null ? cs.Region_Name__c : '';
-                    evdkp.openTicket = '0';
-                    evdkp.closedTicket = '0';
-                    evdkp.overSla = '0';
-                    evdkp.onSla = '0';
-                    regionSummaryMap.put(regionKey, evdkp);
-                }
-                
-                BristarSummary_API_Wrapper.GetDetailRO_Model regionSummary = regionSummaryMap.get(regionKey);
-                updateRegionSummaryRO(regionSummary, cs);
-            }
-        }
-
-        // Create empty data for master Cost Centers not found in Cases
-        for (String masterRegion : masterRegions) {
-            if (!processedRegions.contains(masterRegion)) {
-                BristarSummary_API_Wrapper.GetDetailRO_Model evdkp = new BristarSummary_API_Wrapper.GetDetailRO_Model();
-                evdkp.region = masterRegion;
-                evdkp.regionDesc = masterRegionDescriptions.get(masterRegion);
-                evdkp.openTicket = '0';
-                evdkp.closedTicket = '0';
-                evdkp.overSla = '0';
-                evdkp.onSla = '0';
-                regionSummaryMap.put(masterRegion, evdkp);
-            }
-        }
-
-        // Convert the map values to a list
-        List<BristarSummary_API_Wrapper.GetDetailRO_Model> regionSummaryList = new List<BristarSummary_API_Wrapper.GetDetailRO_Model>(regionSummaryMap.values());
+        for (AggregateResult result : masterResults) {
+            BristarSummary_API_Wrapper.GetDetailRO_Model wrapper = new BristarSummary_API_Wrapper.GetDetailRO_Model();
         
-        // Sort divisionSummary by totalActivities (descending order)
-        regionSummaryList.sort(new TotalROComparator());
+            // Set basic cost center details
+            wrapper.region = (String) result.get('Region__c');
+            wrapper.regionDesc = (String) result.get('Region_Name__c');
+            
+            // Check status
+            if(status == 'OPEN'){
+                // Lookup and set counts from other aggregate results
+                wrapper.openTicket = String.valueOf(openCountMap.get(wrapper.region) != null ? openCountMap.get(wrapper.region) : 0);
+                wrapper.closedTicket = '0';
+                wrapper.onSla = String.valueOf(onSlaCountOpenMap.get(wrapper.region) != null ? onSlaCountOpenMap.get(wrapper.region) : 0);
+                wrapper.overSla = String.valueOf(overSlaCountOpenMap.get(wrapper.region) != null ? overSlaCountOpenMap.get(wrapper.region) : 0);
+            }else if(status == 'CLOSED'){
+                // Lookup and set counts from other aggregate results
+                wrapper.openTicket = '0';
+                wrapper.closedTicket = String.valueOf(closedCountMap.get(wrapper.region) != null ? closedCountMap.get(wrapper.region) : 0);
+                wrapper.onSla = String.valueOf(onSlaCountClosedMap.get(wrapper.region) != null ? onSlaCountClosedMap.get(wrapper.region) : 0);
+                wrapper.overSla = String.valueOf(overSlaCountClosedMap.get(wrapper.region) != null ? overSlaCountClosedMap.get(wrapper.region) : 0);
+            }else if(status == 'ALL'){
+                // Lookup and set counts from other aggregate results
+                wrapper.openTicket = String.valueOf(openCountMap.get(wrapper.region) != null ? openCountMap.get(wrapper.region) : 0);
+                wrapper.closedTicket = String.valueOf(closedCountMap.get(wrapper.region) != null ? closedCountMap.get(wrapper.region) : 0);
+                wrapper.onSla = String.valueOf(onSlaCountMap.get(wrapper.region) != null ? onSlaCountMap.get(wrapper.region) : 0);
+                wrapper.overSla = String.valueOf(overSlaCountMap.get(wrapper.region) != null ? overSlaCountMap.get(wrapper.region) : 0);
+            }
+            regionSummaryMap.add(wrapper);
+        }
 
-        jres.regionSummary = regionSummaryList;
+        // Sort divisionSummary by totalActivities (descending order)
+        regionSummaryMap.sort(new TotalROComparator());
+
+        jres.regionSummary = regionSummaryMap;
         jres.area = area;
 
         SCC_Custom_API_Response_Code__mdt rc = maprc?.get('Success');
@@ -308,6 +362,46 @@ public with sharing class BristarSummary_API_Ctrl {
         jres.responseMessage = rc?.Description__c;
 
         return BristarSummary_API_Ctrl.returnAPIRO(jres);
+    }
+
+    // Helper method to fetch aggregate results dynamically
+    public static List<AggregateResult> getCaseAggregateResultsRO(String additionalCondition, Boolean isClosed, String caseBaseCondition) {
+        // Start building the query
+        String query = 'SELECT Region__c, COUNT(Id) recordCount ' +
+            'FROM Case ' +
+            'WHERE ' + caseBaseCondition;
+
+        // Add the IsClosed condition only if isClosed is not null
+        if (isClosed != null) {
+        query += ' AND IsClosed = :isClosed';
+        }
+
+        // Add any additional conditions
+        if (!String.isEmpty(additionalCondition)) {
+        query += additionalCondition;
+        }
+
+        // Finalize the query with grouping and ordering
+        query += ' GROUP BY Region__c ' +
+        'ORDER BY COUNT(Id) DESC';
+
+        system.debug('query kp :'+query);
+
+        // Execute the query
+        return Database.query(query);
+    }
+
+    // Helper method to create a map of Cost Center to Record Count
+    private static Map<String, Integer> createCountMapRO(List<AggregateResult> aggregateResults) {
+        Map<String, Integer> countMap = new Map<String, Integer>();
+        
+        for (AggregateResult result : aggregateResults) {
+            String region = (String) result.get('Region__c');
+            Integer recordCount = (Integer) result.get('recordCount');
+            countMap.put(region, recordCount);
+        }
+        
+        return countMap;
     }
 
     // Comparator class remains the same
@@ -336,89 +430,85 @@ public with sharing class BristarSummary_API_Ctrl {
         return returnJson;
     }
 
-    private static String processSummaryDataRO1(String query, Map<String, SCC_Custom_API_Response_Code__mdt> maprc, String area, String region) {
+    private static String processSummaryDataRO1(Map<String, SCC_Custom_API_Response_Code__mdt> maprc, String area, String region, String status, String startdate, String endDate) {
         BristarSummary_API_Wrapper.GetResponseRO1_Model jres = new BristarSummary_API_Wrapper.GetResponseRO1_Model();
         // List<BristarSummary_API_Wrapper.GetDetailRO1_Model> mainBranchSummaryList = new List<BristarSummary_API_Wrapper.GetDetailRO1_Model>();
-        Map<String, BristarSummary_API_Wrapper.GetDetailRO1_Model> mainBranchSummaryMap = new Map<String, BristarSummary_API_Wrapper.GetDetailRO1_Model>();
+        List<BristarSummary_API_Wrapper.GetDetailRO1_Model> mainBranchSummaryMap = new List<BristarSummary_API_Wrapper.GetDetailRO1_Model>();
 
-        String regionDesc = '';
+        // Base condition for case queries
+        String caseBaseCondition = 
+            'Area__c != \'KP00\' ' +
+            'AND Region__c != null ' +
+            'AND Region__c = \''+region+'\' ' +
+            'AND Main_branch__c != null ' +
+            'AND CodeBranch__c != null ' +
+            'AND Date__c >= '+startdate+' ' +
+            'AND Date__c <= '+endDate+' ' +
+            'AND Status IN (\'New\',\'Waiting Document\',\'Working\',\'Escalated\',\'Closed\')';
+    
+        // Execute aggregate queries
+        List<AggregateResult> open = getCaseAggregateResultsRO1('', false, caseBaseCondition);
+        List<AggregateResult> closed = getCaseAggregateResultsRO1('', true,caseBaseCondition);
+        List<AggregateResult> onSlaOpen = getCaseAggregateResultsRO1(' AND Within_Target_SLA__c = \'Sesuai SLA\'', false, caseBaseCondition);
+        List<AggregateResult> overSlaOpen = getCaseAggregateResultsRO1(' AND Within_Target_SLA__c = \'Melebihi SLA\'', false, caseBaseCondition);
+        List<AggregateResult> onSlaClosed = getCaseAggregateResultsRO1(' AND Within_Target_SLA__c = \'Sesuai SLA\'', true, caseBaseCondition);
+        List<AggregateResult> overSlaClosed = getCaseAggregateResultsRO1(' AND Within_Target_SLA__c = \'Melebihi SLA\'', true, caseBaseCondition);
+        List<AggregateResult> onSla = getCaseAggregateResultsRO1(' AND Within_Target_SLA__c = \'Sesuai SLA\'', null,caseBaseCondition);
+        List<AggregateResult> overSla = getCaseAggregateResultsRO1(' AND Within_Target_SLA__c = \'Melebihi SLA\'', null,caseBaseCondition);
 
-        Set<String> masterMainBranchs = new Set<String>();
-        Map<String, String> masterMainBranchsDescriptions = new Map<String, String>();
-
-        // First, get the valid BranchCode__c values from Branch_Unit__c
-        Set<String> validBranchCodes = new Set<String>();
-        for(Branch_Unit__c bu : [SELECT BranchCode__c 
-                                FROM Branch_Unit__c 
-                                WHERE Uker_type__c != 'RO' AND Region__c != 'KP'
-                                AND BranchCode__c != null]) {
-            validBranchCodes.add(bu.BranchCode__c);
-        }
-
-        List<AggregateResult> results = [SELECT Kode_Cabang__c, Nama_Cabang__c
+        List<AggregateResult> masterResults = [SELECT Kode_Cabang__c, Nama_Cabang__c
                                         FROM Branch_Unit__c
-                                        WHERE Kode_Cabang__c != null AND Region__c = : region AND Uker_type__c != 'RO' AND Region__c != 'KP'
+                                        WHERE Kode_Cabang__c != null AND Region__c = : region AND Uker_type__c != 'RO' AND Region__c != 'KP' AND BranchCode__c != null
                                         GROUP BY Kode_Cabang__c, Nama_Cabang__c];
 
-        for (AggregateResult ar : results) {
-            String mainBranch = (String)ar.get('Kode_Cabang__c');
-            String description = (String)ar.get('Nama_Cabang__c');
-            masterMainBranchs.add(mainBranch);
-            masterMainBranchsDescriptions.put(mainBranch, description);
-        }
-        // Process cases
-        Set<String> processedMainBranchs = new Set<String>();
+        // Create maps to efficiently look up counts
+        Map<String, Integer> openCountMap = createCountMapRO1(open);
+        Map<String, Integer> closedCountMap = createCountMapRO1(closed);
+        Map<String, Integer> onSlaCountOpenMap = createCountMapRO1(onSlaOpen);
+        Map<String, Integer> overSlaCountOpenMap = createCountMapRO1(overSlaOpen);
+        Map<String, Integer> onSlaCountClosedMap = createCountMapRO1(onSlaClosed);
+        Map<String, Integer> overSlaCountClosedMap = createCountMapRO1(overSlaClosed);
+        Map<String, Integer> onSlaCountMap = createCountMapRO1(onSla);
+        Map<String, Integer> overSlaCountMap = createCountMapRO1(overSla);
 
-        for (Case cs : Database.query(query)) {
-            // Only include cases where Branch_Code__c matches valid branch codes
-            System.debug('case branch :'+cs.Branch_Code__c);
-            if (validBranchCodes.contains(cs.Branch_Code__c)){
-                // filteredCases.add(cs);
-                String mainBranchKey = cs.Main_Branch__c;
-                processedMainBranchs.add(mainBranchKey);
-                if (!mainBranchSummaryMap.containsKey(mainBranchKey)) {
-                    BristarSummary_API_Wrapper.GetDetailRO1_Model evdkp = new BristarSummary_API_Wrapper.GetDetailRO1_Model();
-                    evdkp.mainBranch = mainBranchKey != null ? mainBranchKey : '';
-                    evdkp.mainBranchDesc = cs.Main_Branch_Description__c != null ? cs.Main_Branch_Description__c : '';
-                    evdkp.openTicket = '0';
-                    evdkp.closedTicket = '0';
-                    evdkp.overSla = '0';
-                    evdkp.onSla = '0';
-                    mainBranchSummaryMap.put(mainBranchKey, evdkp);
-                }
-
-                BristarSummary_API_Wrapper.GetDetailRO1_Model mainBranchSummary = mainBranchSummaryMap.get(mainBranchKey);
-                updateMainBranchSummaryRO(mainBranchSummary, cs);
-
-                if (String.isBlank(regionDesc) && cs.Region_Name__c != null) {
-                    regionDesc = cs.Region_Name__c;
-                }
-            }
-        }
-
-        // Create empty data for master Cost Centers not found in Cases
-        for (String masterMainBranch : masterMainBranchs) {
-            if (!processedMainBranchs.contains(masterMainBranch)) {
-                BristarSummary_API_Wrapper.GetDetailRO1_Model evdkp = new BristarSummary_API_Wrapper.GetDetailRO1_Model();
-                evdkp.mainBranch = masterMainBranch;
-                evdkp.mainBranchDesc = masterMainBranchsDescriptions.get(masterMainBranch);
-                evdkp.openTicket = '0';
-                evdkp.closedTicket = '0';
-                evdkp.overSla = '0';
-                evdkp.onSla = '0';
-                mainBranchSummaryMap.put(masterMainBranch, evdkp);
-            }
-        }
-
-        // Convert the map values to a list
-        List<BristarSummary_API_Wrapper.GetDetailRO1_Model> mainBranchSummaryList = new List<BristarSummary_API_Wrapper.GetDetailRO1_Model>(mainBranchSummaryMap.values());
+        for (AggregateResult result : masterResults) {
+            BristarSummary_API_Wrapper.GetDetailRO1_Model wrapper = new BristarSummary_API_Wrapper.GetDetailRO1_Model();
         
-        // Sort divisionSummary by totalActivities (descending order)
-        mainBranchSummaryList.sort(new TotalRO1Comparator());
+            // Set basic cost center details
+            wrapper.mainBranch = (String) result.get('Kode_Cabang__c');
+            wrapper.MainBranchDesc = (String) result.get('Nama_Cabang__c');
+            
+            // Check status
+            if(status == 'OPEN'){
+                // Lookup and set counts from other aggregate results
+                wrapper.openTicket = String.valueOf(openCountMap.get(wrapper.mainBranch) != null ? openCountMap.get(wrapper.mainBranch) : 0);
+                wrapper.closedTicket = '0';
+                wrapper.onSla = String.valueOf(onSlaCountOpenMap.get(wrapper.mainBranch) != null ? onSlaCountOpenMap.get(wrapper.mainBranch) : 0);
+                wrapper.overSla = String.valueOf(overSlaCountOpenMap.get(wrapper.mainBranch) != null ? overSlaCountOpenMap.get(wrapper.mainBranch) : 0);
+            }else if(status == 'CLOSED'){
+                // Lookup and set counts from other aggregate results
+                wrapper.openTicket = '0';
+                wrapper.closedTicket = String.valueOf(closedCountMap.get(wrapper.mainBranch) != null ? closedCountMap.get(wrapper.mainBranch) : 0);
+                wrapper.onSla = String.valueOf(onSlaCountClosedMap.get(wrapper.mainBranch) != null ? onSlaCountClosedMap.get(wrapper.mainBranch) : 0);
+                wrapper.overSla = String.valueOf(overSlaCountClosedMap.get(wrapper.mainBranch) != null ? overSlaCountClosedMap.get(wrapper.mainBranch) : 0);
+            }else if(status == 'ALL'){
+                // Lookup and set counts from other aggregate results
+                wrapper.openTicket = String.valueOf(openCountMap.get(wrapper.mainBranch) != null ? openCountMap.get(wrapper.mainBranch) : 0);
+                wrapper.closedTicket = String.valueOf(closedCountMap.get(wrapper.mainBranch) != null ? closedCountMap.get(wrapper.mainBranch) : 0);
+                wrapper.onSla = String.valueOf(onSlaCountMap.get(wrapper.mainBranch) != null ? onSlaCountMap.get(wrapper.mainBranch) : 0);
+                wrapper.overSla = String.valueOf(overSlaCountMap.get(wrapper.mainBranch) != null ? overSlaCountMap.get(wrapper.mainBranch) : 0);
+            }
+            mainBranchSummaryMap.add(wrapper);
+        }
 
-        jres.mainBranchSummary = mainBranchSummaryList;
+        // Sort divisionSummary by totalActivities (descending order)
+        mainBranchSummaryMap.sort(new TotalRO1Comparator());
+
+        jres.mainBranchSummary = mainBranchSummaryMap;
         jres.area = area;
+
         jres.region = region;
+        String regionDesc = [SELECT Region_Name__c FROM Branch_Unit__c WHERE Region__c = :region LIMIT 1].Region_Name__c;
         jres.regionDesc = regionDesc;
 
         SCC_Custom_API_Response_Code__mdt rc = maprc?.get('Success');
@@ -427,6 +517,47 @@ public with sharing class BristarSummary_API_Ctrl {
 
         return BristarSummary_API_Ctrl.returnAPIRO1(jres);
     }
+
+    // Helper method to fetch aggregate results dynamically
+    public static List<AggregateResult> getCaseAggregateResultsRO1(String additionalCondition, Boolean isClosed, String caseBaseCondition) {
+         // Start building the query
+         String query = 'SELECT Main_Branch__c, COUNT(Id) recordCount ' +
+         'FROM Case ' +
+         'WHERE ' + caseBaseCondition;
+
+        // Add the IsClosed condition only if isClosed is not null
+        if (isClosed != null) {
+        query += ' AND IsClosed = :isClosed';
+        }
+
+        // Add any additional conditions
+        if (!String.isEmpty(additionalCondition)) {
+        query += additionalCondition;
+        }
+
+        // Finalize the query with grouping and ordering
+        query += ' GROUP BY Main_Branch__c ' +
+        'ORDER BY COUNT(Id) DESC';
+
+        system.debug('query kp :'+query);
+
+        // Execute the query
+        return Database.query(query);
+    }
+
+    // Helper method to create a map of Cost Center to Record Count
+    private static Map<String, Integer> createCountMapRO1(List<AggregateResult> aggregateResults) {
+        Map<String, Integer> countMap = new Map<String, Integer>();
+        
+        for (AggregateResult result : aggregateResults) {
+            String mainBranch = (String) result.get('Main_Branch__c');
+            Integer recordCount = (Integer) result.get('recordCount');
+            countMap.put(mainBranch, recordCount);
+        }
+        
+        return countMap;
+    }
+
 
     // Comparator class remains the same
     private class TotalRO1Comparator implements Comparator<BristarSummary_API_Wrapper.GetDetailRO1_Model> {
@@ -454,102 +585,141 @@ public with sharing class BristarSummary_API_Ctrl {
         return returnJson;
     }
 
-    private static String processSummaryDataRO2(String query, Map<String, SCC_Custom_API_Response_Code__mdt> maprc, String area, String region, String mainBranch) {
+    private static String processSummaryDataRO2(Map<String, SCC_Custom_API_Response_Code__mdt> maprc, String area, String region, String mainBranch, String status, String startdate, String endDate) {
         BristarSummary_API_Wrapper.GetResponseRO2_Model jres = new BristarSummary_API_Wrapper.GetResponseRO2_Model();
-        Map<String, BristarSummary_API_Wrapper.GetDetailRO2_Model> branchSummaryMap = new Map<String, BristarSummary_API_Wrapper.GetDetailRO2_Model>();
+        List<BristarSummary_API_Wrapper.GetDetailRO2_Model> branchSummaryMap = new List<BristarSummary_API_Wrapper.GetDetailRO2_Model>();
 
-        String regionDesc = '';
-        String mainBranchDesc = '';
+        // Base condition for case queries
+        String caseBaseCondition = 
+            'Area__c != \'KP00\' ' +
+            'AND Region__c != null ' +
+            'AND Region__c = \''+region+'\' ' +
+            'AND Main_Branch__c = \''+mainBranch+'\' ' +
+            'AND Main_branch__c != null ' +
+            'AND CodeBranch__c != null ' +
+            'AND Date__c >= '+startdate+' ' +
+            'AND Date__c <= '+endDate+' ' +
+            'AND Status IN (\'New\',\'Waiting Document\',\'Working\',\'Escalated\',\'Closed\')';
+    
+        // Execute aggregate queries
+        List<AggregateResult> open = getCaseAggregateResultsRO2('', false, caseBaseCondition);
+        List<AggregateResult> closed = getCaseAggregateResultsRO2('', true,caseBaseCondition);
+        List<AggregateResult> onSlaOpen = getCaseAggregateResultsRO2(' AND Within_Target_SLA__c = \'Sesuai SLA\'', false, caseBaseCondition);
+        List<AggregateResult> overSlaOpen = getCaseAggregateResultsRO2(' AND Within_Target_SLA__c = \'Melebihi SLA\'', false, caseBaseCondition);
+        List<AggregateResult> onSlaClosed = getCaseAggregateResultsRO2(' AND Within_Target_SLA__c = \'Sesuai SLA\'', true, caseBaseCondition);
+        List<AggregateResult> overSlaClosed = getCaseAggregateResultsRO2(' AND Within_Target_SLA__c = \'Melebihi SLA\'', true, caseBaseCondition);
+        List<AggregateResult> onSla = getCaseAggregateResultsRO2(' AND Within_Target_SLA__c = \'Sesuai SLA\'', null,caseBaseCondition);
+        List<AggregateResult> overSla = getCaseAggregateResultsRO2(' AND Within_Target_SLA__c = \'Melebihi SLA\'', null,caseBaseCondition);
 
-        Set<String> masterBranchs = new Set<String>();
-        Map<String, String> masterBranchsDescriptions = new Map<String, String>();
-
-        // First, get the valid BranchCode__c values from Branch_Unit__c
-        Set<String> validBranchCodes = new Set<String>();
-        for(Branch_Unit__c bu : [SELECT BranchCode__c 
-                                FROM Branch_Unit__c 
-                                WHERE Uker_type__c != 'RO' AND Region__c != 'KP'
-                                AND BranchCode__c != null]) {
-            validBranchCodes.add(bu.BranchCode__c);
-        }
-
-        List<Branch_Unit__c> results = [SELECT BranchCode__c, Name
+        List<AggregateResult> masterResults = [SELECT Branch_Code__c, Name
                                         FROM Branch_Unit__c
-                                        WHERE Kode_Cabang__c != null AND Name != null AND Region__c = : region AND Kode_Cabang__c = : mainBranch AND Uker_type__c != 'RO'
-                                        ORDER BY BranchCode__c ASC];
+                                        WHERE Kode_Cabang__c != null AND Branch_Code__c != null AND Region__c = : region AND Kode_Cabang__c = : mainBranch AND Uker_type__c != 'RO'
+                                        GROUP BY Branch_Code__c, Name];
+
+        // Create maps to efficiently look up counts
+        Map<String, Integer> openCountMap = createCountMapRO2(open);
+        Map<String, Integer> closedCountMap = createCountMapRO2(closed);
+        Map<String, Integer> onSlaCountOpenMap = createCountMapRO2(onSlaOpen);
+        Map<String, Integer> overSlaCountOpenMap = createCountMapRO2(overSlaOpen);
+        Map<String, Integer> onSlaCountClosedMap = createCountMapRO2(onSlaClosed);
+        Map<String, Integer> overSlaCountClosedMap = createCountMapRO2(overSlaClosed);
+        Map<String, Integer> onSlaCountMap = createCountMapRO2(onSla);
+        Map<String, Integer> overSlaCountMap = createCountMapRO2(overSla);
+
+        for (AggregateResult result : masterResults) {
+            BristarSummary_API_Wrapper.GetDetailRO2_Model wrapper = new BristarSummary_API_Wrapper.GetDetailRO2_Model();
         
-        System.debug('Branch_Unit__c :'+results);
-
-        for (Branch_Unit__c ar : results) {
-            String branch = (String)ar.get('BranchCode__c');
-            String description = (String)ar.get('Name');
-            masterBranchs.add(branch);
-            masterBranchsDescriptions.put(branch, description);
-        }
-        // Process cases
-        Set<String> processedBranchs = new Set<String>();
-
-        for (Case cs : Database.query(query)) {
-            if (validBranchCodes.contains(cs.Branch_Code__c)) {
-                String branchKey = cs.Branch_Code__c;
-                processedBranchs.add(branchKey);
-
-                if (!branchSummaryMap.containsKey(branchKey)) {
-                    BristarSummary_API_Wrapper.GetDetailRO2_Model evdkp = new BristarSummary_API_Wrapper.GetDetailRO2_Model();
-                    evdkp.branch = branchKey != null ? branchKey : '';
-                    evdkp.branchDesc = cs.Branch_Unit_Name__c != null ? cs.Branch_Unit_Name__c : '';
-                    evdkp.openTicket = '0';
-                    evdkp.closedTicket = '0';
-                    evdkp.overSla = '0';
-                    evdkp.onSla = '0';
-                    branchSummaryMap.put(branchKey, evdkp);
-                }
-
-                BristarSummary_API_Wrapper.GetDetailRO2_Model branchSummary = branchSummaryMap.get(branchKey);
-                updateBranchSummaryRO(branchSummary, cs);
-
-                if (String.isBlank(regionDesc) && cs.Region_Name__c != null) {
-                    regionDesc = cs.Region_Name__c;
-                }
-        
-                if (String.isBlank(mainBranchDesc) && cs.Main_Branch_Description__c != null) {
-                    mainBranchDesc = cs.Main_Branch_Description__c;
-                }
+            // Set basic cost center details
+            String branchCode = (String) result.get('Branch_Code__c');
+            wrapper.branch = branchCode != null ? padLeft(branchCode, 5, '0') : '00000';
+            wrapper.branchDesc = (String) result.get('Name');
+            
+            // Check status
+            if(status == 'OPEN'){
+                // Lookup and set counts from other aggregate results
+                wrapper.openTicket = String.valueOf(openCountMap.get(wrapper.branch) != null ? openCountMap.get(wrapper.branch) : 0);
+                wrapper.closedTicket = '0';
+                wrapper.onSla = String.valueOf(onSlaCountOpenMap.get(wrapper.branch) != null ? onSlaCountOpenMap.get(wrapper.branch) : 0);
+                wrapper.overSla = String.valueOf(overSlaCountOpenMap.get(wrapper.branch) != null ? overSlaCountOpenMap.get(wrapper.branch) : 0);
+            }else if(status == 'CLOSED'){
+                // Lookup and set counts from other aggregate results
+                wrapper.openTicket = '0';
+                wrapper.closedTicket = String.valueOf(closedCountMap.get(wrapper.branch) != null ? closedCountMap.get(wrapper.branch) : 0);
+                wrapper.onSla = String.valueOf(onSlaCountClosedMap.get(wrapper.branch) != null ? onSlaCountClosedMap.get(wrapper.branch) : 0);
+                wrapper.overSla = String.valueOf(overSlaCountClosedMap.get(wrapper.branch) != null ? overSlaCountClosedMap.get(wrapper.branch) : 0);
+            }else if(status == 'ALL'){
+                // Lookup and set counts from other aggregate results
+                wrapper.openTicket = String.valueOf(openCountMap.get(wrapper.branch) != null ? openCountMap.get(wrapper.branch) : 0);
+                wrapper.closedTicket = String.valueOf(closedCountMap.get(wrapper.branch) != null ? closedCountMap.get(wrapper.branch) : 0);
+                wrapper.onSla = String.valueOf(onSlaCountMap.get(wrapper.branch) != null ? onSlaCountMap.get(wrapper.branch) : 0);
+                wrapper.overSla = String.valueOf(overSlaCountMap.get(wrapper.branch) != null ? overSlaCountMap.get(wrapper.branch) : 0);
             }
+            branchSummaryMap.add(wrapper);
         }
 
-        // Create empty data for master Cost Centers not found in Cases
-        for (String masterBranch : masterBranchs) {
-            if (!processedBranchs.contains(masterBranch)) {
-                BristarSummary_API_Wrapper.GetDetailRO2_Model evdkp = new BristarSummary_API_Wrapper.GetDetailRO2_Model();
-                evdkp.branch = masterBranch;
-                evdkp.branchDesc = masterBranchsDescriptions.get(masterBranch);
-                evdkp.openTicket = '0';
-                evdkp.closedTicket = '0';
-                evdkp.overSla = '0';
-                evdkp.onSla = '0';
-                branchSummaryMap.put(masterBranch, evdkp);
-            }
-        }
-
-        // Convert the map values to a list
-        List<BristarSummary_API_Wrapper.GetDetailRO2_Model> branchSummaryList = new List<BristarSummary_API_Wrapper.GetDetailRO2_Model>(branchSummaryMap.values());
-        
         // Sort divisionSummary by totalActivities (descending order)
-        branchSummaryList.sort(new TotalRO2Comparator());
+        branchSummaryMap.sort(new TotalRO2Comparator());
 
-        jres.branchSummary = branchSummaryList;
+        jres.branchSummary = branchSummaryMap;
         jres.area = area;
         jres.region = region;
-        jres.regionDesc = regionDesc;
+        jres.regionDesc = [SELECT Region_Name__c, Nama_Cabang__c FROM Branch_Unit__c WHERE Region__c = :region AND Kode_Cabang__c = :mainBranch LIMIT 1].Region_Name__c;
         jres.mainBranch = mainBranch;
-        jres.mainBranchDesc = mainBranchDesc;
+        jres.mainBranchDesc = [SELECT Region_Name__c, Nama_Cabang__c FROM Branch_Unit__c WHERE Region__c = :region AND Kode_Cabang__c = :mainBranch LIMIT 1].Nama_Cabang__c;
 
         SCC_Custom_API_Response_Code__mdt rc = maprc?.get('Success');
         jres.responseCode = rc?.Response_Code__c;
         jres.responseMessage = rc?.Description__c;
 
         return BristarSummary_API_Ctrl.returnAPIRO2(jres);
+    }
+
+    // Helper method to fetch aggregate results dynamically
+    public static List<AggregateResult> getCaseAggregateResultsRO2(String additionalCondition, Boolean isClosed, String caseBaseCondition) {
+        // Start building the query
+        String query = 'SELECT CodeBranch__c, COUNT(Id) recordCount ' +
+        'FROM Case ' +
+        'WHERE ' + caseBaseCondition;
+
+       // Add the IsClosed condition only if isClosed is not null
+       if (isClosed != null) {
+       query += ' AND IsClosed = :isClosed';
+       }
+
+       // Add any additional conditions
+       if (!String.isEmpty(additionalCondition)) {
+       query += additionalCondition;
+       }
+
+       // Finalize the query with grouping and ordering
+       query += ' GROUP BY CodeBranch__c ' +
+       'ORDER BY COUNT(Id) DESC';
+
+       system.debug('query kp :'+query);
+
+       // Execute the query
+       return Database.query(query);
+    }
+
+    // Utility method for padding
+    public static String padLeft(String input, Integer length, String padChar) {
+        while (input.length() < length) {
+            input = padChar + input;
+        }
+        return input;
+    }
+
+    // Helper method to create a map of Cost Center to Record Count
+    private static Map<String, Integer> createCountMapRO2(List<AggregateResult> aggregateResults) {
+        Map<String, Integer> countMap = new Map<String, Integer>();
+        
+        for (AggregateResult result : aggregateResults) {
+            String branch = (String) result.get('CodeBranch__c');
+            Integer recordCount = (Integer) result.get('recordCount');
+            countMap.put(branch, recordCount);
+        }
+        
+        return countMap;
     }
 
      // Comparator class remains the same
@@ -585,7 +755,7 @@ public with sharing class BristarSummary_API_Ctrl {
             divisionSummary.openTicket = String.valueOf(Integer.valueOf(divisionSummary.openTicket) + 1);
         }
         
-        if (cs.Within_Target_SLA__c == 'Melibihi SLA') {
+        if (cs.Within_Target_SLA__c == 'Melebihi SLA') {
             divisionSummary.overSla = String.valueOf(Integer.valueOf(divisionSummary.overSla) + 1);
         } else if (cs.Within_Target_SLA__c == 'Sesuai SLA') {
             divisionSummary.onSla = String.valueOf(Integer.valueOf(divisionSummary.onSla) + 1);
@@ -599,7 +769,7 @@ public with sharing class BristarSummary_API_Ctrl {
             regionSummary.openTicket = String.valueOf(Integer.valueOf(regionSummary.openTicket) + 1);
         }
         
-        if (cs.Within_Target_SLA__c == 'Melibihi SLA') {
+        if (cs.Within_Target_SLA__c == 'Melebihi SLA') {
             regionSummary.overSla = String.valueOf(Integer.valueOf(regionSummary.overSla) + 1);
         } else if (cs.Within_Target_SLA__c == 'Sesuai SLA') {
             regionSummary.onSla = String.valueOf(Integer.valueOf(regionSummary.onSla) + 1);
@@ -613,7 +783,7 @@ public with sharing class BristarSummary_API_Ctrl {
             mainBranchSummary.openTicket = String.valueOf(Integer.valueOf(mainBranchSummary.openTicket) + 1);
         }
         
-        if (cs.Within_Target_SLA__c == 'Melibihi SLA') {
+        if (cs.Within_Target_SLA__c == 'Melebihi SLA') {
             mainBranchSummary.overSla = String.valueOf(Integer.valueOf(mainBranchSummary.overSla) + 1);
         } else if (cs.Within_Target_SLA__c == 'Sesuai SLA') {
             mainBranchSummary.onSla = String.valueOf(Integer.valueOf(mainBranchSummary.onSla) + 1);
@@ -627,7 +797,7 @@ public with sharing class BristarSummary_API_Ctrl {
             branchSummary.openTicket = String.valueOf(Integer.valueOf(branchSummary.openTicket) + 1);
         }
         
-        if (cs.Within_Target_SLA__c == 'Melibihi SLA') {
+        if (cs.Within_Target_SLA__c == 'Melebihi SLA') {
             branchSummary.overSla = String.valueOf(Integer.valueOf(branchSummary.overSla) + 1);
         } else if (cs.Within_Target_SLA__c == 'Sesuai SLA') {
             branchSummary.onSla = String.valueOf(Integer.valueOf(branchSummary.onSla) + 1);
@@ -650,6 +820,7 @@ public with sharing class BristarSummary_API_Ctrl {
                 cases = Database.query(query);
             } else {
                 // If no pagination, just execute the query as is
+                query += ' LIMIT 50000';
                 cases = Database.query(query);
             }
 
@@ -761,6 +932,8 @@ public with sharing class BristarSummary_API_Ctrl {
         if (page != null && pageSize != null) {
             Integer offset = (page - 1) * pageSize;
             paginationClause = ' LIMIT :pageSize OFFSET :offset';
+        }else{
+            paginationClause = ' LIMIT 50000';
         }
 
         // Combine the query
@@ -873,7 +1046,7 @@ public with sharing class BristarSummary_API_Ctrl {
                 openTicketCount++;
             }
             
-            if (cs.Within_Target_SLA__c == 'Melibihi SLA') {
+            if (cs.Within_Target_SLA__c == 'Melebihi SLA') {
                 overSlaCount++;
             } else if (cs.Within_Target_SLA__c == 'Sesuai SLA') {
                 onSlaCount++;
@@ -908,7 +1081,7 @@ public with sharing class BristarSummary_API_Ctrl {
                 openTicketCount++;
             }
             
-            if (cs.Within_Target_SLA__c == 'Melibihi SLA') {
+            if (cs.Within_Target_SLA__c == 'Melebihi SLA') {
                 overSlaCount++;
             } else if (cs.Within_Target_SLA__c == 'Sesuai SLA') {
                 onSlaCount++;
@@ -931,7 +1104,7 @@ public with sharing class BristarSummary_API_Ctrl {
         }else{
             ticket.status = status;
         }
-        ticket.caseType = cs.SCC_Call_Type__r.Name;
+        ticket.caseType = cs.SCC_Call_Type__r.Name != null ? cs.SCC_Call_Type__r.Name : '';
         ticket.caseDescription = cs.SCC_Call_Type__r.SSC_Case_Description__c != null ? cs.SCC_Call_Type__r.SSC_Case_Description__c : '';
         ticket.slaSaatIni = cs.SLA_saat_ini__c != null ? String.valueOf(cs.SLA_saat_ini__c) : '';
         ticket.targetSla = cs.Total_SLA_2__c != null ? String.valueOf(cs.Total_SLA_2__c) : '';

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Change_Sub_Level_Eskalasi</fullName>
+    <active>false</active>
+    <description>Mengubah &apos;Sub Level Eskalasi&apos; hanya dapat dilakukan pada Status tertentu</description>
+    <errorConditionFormula>NOT(TEXT(Status) = &apos;Waiting Document&apos; || (TEXT(PRIORVALUE(Status)) != &apos;Escalated&apos; &amp;&amp; TEXT(Status) = &apos;Escalated&apos;)) &amp;&amp; ISCHANGED(SCC_Sub_Escalation_Level__c)</errorConditionFormula>
+    <errorMessage>User hanya dapat mengubah field &apos;Sub Level Eskalasi&apos; ketika status berada pada &apos;Waiting Document&apos;</errorMessage>
+</ValidationRule>

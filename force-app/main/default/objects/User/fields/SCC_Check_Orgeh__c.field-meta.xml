@@ -2,7 +2,6 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>SCC_Check_Orgeh__c</fullName>
     <description>Checks if current login User orgeh id is equal to team orgeh id</description>
-    <externalId>false</externalId>
     <formula>$User.SCC_Orgeh__c = SCC_Orgeh__c</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
     <label>Check Orgeh</label>

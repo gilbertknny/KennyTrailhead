@@ -407,7 +407,8 @@ public with sharing class SCC_CaseResoultion_DataHub_Wrapper {
         @AuraEnabled public string	auxtrc 	{get;set;}
         @AuraEnabled public string	serial 	{get;set;}
         @AuraEnabled public string	tlbds1 	{get;set;}
-        @AuraEnabled public string	tlbds2 	{get;set;}       
+        @AuraEnabled public string	tlbds2 	{get;set;}    
+        @AuraEnabled public string	remarkCustom 	{get;set;}   
     }
 
     public class DataMachineRequest{
@@ -551,6 +552,7 @@ public with sharing class SCC_CaseResoultion_DataHub_Wrapper {
         @AuraEnabled public	List<CardLinkfinancialInformation>	financialInformation	{get;set;}
         @AuraEnabled public	CardLinkPortofolio	portofolio	{get;set;}
         @AuraEnabled public String	customerNumber	{get;set;}
+        @AuraEnabled public String	namaLengkap	{get;set;}
     }
 
     public class CardLinkResponseData{

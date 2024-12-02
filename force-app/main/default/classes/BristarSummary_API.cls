@@ -24,7 +24,7 @@ global with sharing class BristarSummary_API{
         try{
             String reqobj = requestApi?.requestBody?.toString(); 
             BristarSummary_API_Wrapper.GetRequest_Model jreq = (BristarSummary_API_Wrapper.GetRequest_Model) json.deserialize(reqobj, BristarSummary_API_Wrapper.GetRequest_Model.class);
-            returnJson = BristarSummary_API_Ctrl.GetBristarSummary(jreq);
+            returnJson = NewBristarSummary_API_Ctrl.GetBristarSummary(jreq);
             BristarSummary_API.insertErrorLog(null, requestApi,responsApi,returnJson);
         }
         catch(Exception exc){
@@ -44,7 +44,7 @@ global with sharing class BristarSummary_API{
             if(String.isBlank(jres.responseCode)) {
                 jres.responseCode = maprc?.get('General_Error')?.Response_Code__c;
             }
-            returnJson = BristarSummary_API_Ctrl.returnAPI(jres);
+            returnJson = NewBristarSummary_API_Ctrl.returnAPI(jres);
             BristarSummary_API.insertErrorLog(exc, requestApi, responsApi,returnJson);
         }
         Restcontext.response.addHeader('Content-Type', 'application/json');

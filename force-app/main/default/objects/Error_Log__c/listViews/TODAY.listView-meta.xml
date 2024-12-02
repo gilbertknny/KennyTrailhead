@@ -11,9 +11,14 @@
     <columns>Class_Name__c</columns>
     <filterScope>Everything</filterScope>
     <filters>
-        <field>Endpoint__c</field>
+        <field>CREATED_DATE</field>
+        <operation>equals</operation>
+        <value>TODAY</value>
+    </filters>
+    <filters>
+        <field>User_Run__c</field>
         <operation>contains</operation>
-        <value>cardlink</value>
+        <value>dwi hartini</value>
     </filters>
     <label>TODAY</label>
 </ListView>

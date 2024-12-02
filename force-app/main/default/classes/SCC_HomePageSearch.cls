@@ -49,6 +49,8 @@ public with sharing class SCC_HomePageSearch {
         List<SCC_CaseResoultion_DataHub_Wrapper.CardLinkCustomerData> listcus = new List<SCC_CaseResoultion_DataHub_Wrapper.CardLinkCustomerData>();
         Map<String,SCC_CaseResoultion_DataHub_Wrapper.CardLinkCustomerData> mapclcd = new Map<String,SCC_CaseResoultion_DataHub_Wrapper.CardLinkCustomerData>();
         Map<String,Account> mapacc = new Map<String,Account>();
+        String rtperson = Schema.getGlobalDescribe().get('Account').getDescribe().getRecordTypeInfosByDeveloperName().get('PersonAccount').getRecordTypeId();
+        String rtbu = Schema.getGlobalDescribe().get('Account').getDescribe().getRecordTypeInfosByDeveloperName().get('IndustriesBusiness').getRecordTypeId();
         try{
             String msg = '';
             SCC_CaseResoultion_DataHub_Wrapper.CardLinkRequest req = new SCC_CaseResoultion_DataHub_Wrapper.CardLinkRequest();
@@ -130,36 +132,34 @@ public with sharing class SCC_HomePageSearch {
             }
             if(!listcus.isEmpty()){
                 List<String> listcifno = new List<String>();
+                map<String,String> mapexist2 = new Map<String,String>();
                 map<String,String> mapexist = new Map<String,String>();
                 for(SCC_CaseResoultion_DataHub_Wrapper.CardLinkCustomerData clcd:listcus){
-                    mapexist.put(clcd.customerNumber,null);
+                    mapexist2.put(clcd.customerNumber,null);
                 }
-                if(!mapexist.isEmpty()){
-                    List<Account> listacc = [select id,RecordTypeId,SCC_cifno__c from account where SCC_cifno__c in :mapexist.keySet()];
-                    if(!listacc.isEmpty()){
-                        for(Account acc:listacc){
-                            mapexist.put(acc.SCC_cifno__c,acc.RecordTypeId);
-                        }
-                    }
-                }
+                mapexist = setmapexist(mapexist2);
                 for(SCC_CaseResoultion_DataHub_Wrapper.CardLinkCustomerData clcd:listcus){
                     mapclcd.put(clcd.customerNumber,clcd);
                     String rtexist = mapexist.get(clcd.customerNumber); 
-                    String rtperson = Schema.getGlobalDescribe().get('Account').getDescribe().getRecordTypeInfosByDeveloperName().get('PersonAccount').getRecordTypeId();
-                    String rtbu = Schema.getGlobalDescribe().get('Account').getDescribe().getRecordTypeInfosByDeveloperName().get('IndustriesBusiness').getRecordTypeId();
                     Account acc = new Account();
-                    acc.Phone = setphone(clcd.nomorHandphoneTerdaftar);
+                    String nama = String.isNotBlank(clcd.namaLengkap) ? clcd.namaLengkap.trim() : clcd.namaDepan.trim()+' '+clcd.namaTengah.trim()+' '+clcd.namaBelakang.trim() ;
+                    if(!String.isBlank(clcd.nomorHandphoneTerdaftar)) {
+                        acc.Phone = setphone(clcd.nomorHandphoneTerdaftar);
+                    }
                     acc.SCC_cifno__c = clcd.customerNumber;
-                    acc.SCC_Primary_Email__c = SCC_LegacyCaseAPICtrl.validateAndSetEmail(clcd.alamatEmail);
-                    
+                    if(!String.isBlank(clcd.alamatEmail)) {
+                        acc.SCC_Primary_Email__c = SCC_LegacyCaseAPICtrl.validateAndSetEmail(clcd.alamatEmail);
+                    }
                     if(!clcd.customerNumber.startsWithIgnoreCase(label.CardLink_Corporate) && (rtexist==null || rtexist==rtperson)){
-                        acc.PersonEmail = SCC_LegacyCaseAPICtrl.validateAndSetEmail(clcd.alamatEmail);
-                        acc.Lastname  = clcd.namaDepan.trim()+' '+clcd.namaTengah.trim()+' '+clcd.namaBelakang.trim() ;
+                        if(!String.isBlank(clcd.alamatEmail)) {
+                            acc.PersonEmail = SCC_LegacyCaseAPICtrl.validateAndSetEmail(clcd.alamatEmail);
+                        }
+                        acc.Lastname  =  nama;
                         acc.SCC_Tipe_Nasabah__c = 'Individu';
                         acc.RecordTypeId = rtperson;
                     }
                     else{
-                        acc.name  = clcd.namaDepan.trim()+' '+clcd.namaTengah.trim()+' '+clcd.namaBelakang.trim() ;
+                        acc.name  = nama;
                         acc.SCC_Tipe_Nasabah__c = 'Non-Individu';
                         acc.RecordTypeId = rtbu;
                     }
@@ -196,6 +196,8 @@ public with sharing class SCC_HomePageSearch {
         List<CustomerProfile> listcp = new List<CustomerProfile>();
         SCC_CaseResoultion_DataHub_Wrapper.DPLKRequest req = new SCC_CaseResoultion_DataHub_Wrapper.DPLKRequest();
         SCC_CaseResoultion_DataHub_Wrapper.DPLKResponse res = new SCC_CaseResoultion_DataHub_Wrapper.DPLKResponse();
+        String rtperson = Schema.getGlobalDescribe().get('Account').getDescribe().getRecordTypeInfosByDeveloperName().get('PersonAccount').getRecordTypeId();
+        String rtbu = Schema.getGlobalDescribe().get('Account').getDescribe().getRecordTypeInfosByDeveloperName().get('IndustriesBusiness').getRecordTypeId();
         try{
             req.acctNo = acctNo;
             req.idNumber = idNumber;
@@ -206,17 +208,42 @@ public with sharing class SCC_HomePageSearch {
                 res = SCC_CaseResoultion_DataHub.DPLK(req, 'DataHubDPLKAccountNumber','Home','');
             }
             if(!res?.SI_DPLK.isEmpty()){
+                map<String,String> mapexist2 = new Map<String,String>();
+                map<String,String> mapexist = new Map<String,String>();
+                for(SCC_CaseResoultion_DataHub_Wrapper.SI_DPLK si:res?.SI_DPLK){
+                    mapexist2.put(si.cifno,null);
+                }
+                mapexist = setmapexist(mapexist2);
                 for(SCC_CaseResoultion_DataHub_Wrapper.SI_DPLK si:res?.SI_DPLK){
                     mapdplk.put(si.cifno,si);
+                    String rtid = null;
+                    if(mapexist.containsKey(si.cifno)){
+                        rtid = mapexist.get(si.cifno);
+                    }   
+                    else{
+                        rtid = rtperson;
+                    }
                     Account acc = new Account();
-                    acc.LastName = si.nama_nasabah;
-                    acc.SCC_Tipe_Nasabah__c = 'Individu';
-                    acc.PersonEmail = SCC_LegacyCaseAPICtrl.validateAndSetEmail(si.alamat_email);
-                    acc.SCC_Primary_Email__c = SCC_LegacyCaseAPICtrl.validateAndSetEmail(si.alamat_email);
-                    acc.RecordTypeId = Schema.getGlobalDescribe().get('Account').getDescribe().getRecordTypeInfosByDeveloperName().get('PersonAccount').getRecordTypeId();
-                    //acc.SCC_TanggalLahir__c = calculateAge(demographicInfo?.tanggalLahir);
+                    acc.RecordTypeId = rtid;
                     acc.SCC_cifno__c = si.cifno;
-                    acc.Phone =setphone(si.nomor_handphone);
+                    if(!String.isBlank(si.nomor_handphone)){
+                        acc.Phone =setphone(si.nomor_handphone);
+                    }
+                    if(rtid == rtperson){
+                        acc.LastName = si.nama_nasabah;
+                        acc.SCC_Tipe_Nasabah__c = 'Individu';
+                        if(!String.isBlank(si.alamat_email)){
+                            acc.PersonEmail = SCC_LegacyCaseAPICtrl.validateAndSetEmail(si.alamat_email);
+                            acc.SCC_Primary_Email__c = SCC_LegacyCaseAPICtrl.validateAndSetEmail(si.alamat_email);
+                        }
+                    }
+                    else{
+                        acc.Name = si.nama_nasabah;
+                        acc.SCC_Tipe_Nasabah__c = 'Non-Individu';
+                        if(!String.isBlank(si.alamat_email)){
+                            acc.SCC_Primary_Email__c = SCC_LegacyCaseAPICtrl.validateAndSetEmail(si.alamat_email);
+                        }
+                    }
                     mapacc.put( si.cifno,acc);
                 }
                 if(!mapacc.isEmpty()){
@@ -244,6 +271,8 @@ public with sharing class SCC_HomePageSearch {
         SCC_CaseResoultion_DataHub_Wrapper.MerchantProfileResposne res = new SCC_CaseResoultion_DataHub_Wrapper.MerchantProfileResposne();
         Map<String,SCC_CaseResoultion_DataHub_Wrapper.MerchantProfile> mapm = new Map<String,SCC_CaseResoultion_DataHub_Wrapper.MerchantProfile>();
         Map<String,Account> mapacc = new Map<String,Account>();
+        String rtperson = Schema.getGlobalDescribe().get('Account').getDescribe().getRecordTypeInfosByDeveloperName().get('PersonAccount').getRecordTypeId();
+        String rtbu = Schema.getGlobalDescribe().get('Account').getDescribe().getRecordTypeInfosByDeveloperName().get('IndustriesBusiness').getRecordTypeId();
         String mdh = '';
         String msg = '';
         try{
@@ -257,19 +286,49 @@ public with sharing class SCC_HomePageSearch {
             }
             res = SCC_CaseResoultion_DataHub.MerchantProfile(req, mdh,'Home','');
             if(res?.MERCHANT_PROFILE!=NULL){
+                map<String,String> mapexist2 = new Map<String,String>();
+                map<String,String> mapexist = new Map<String,String>();
+                for(SCC_CaseResoultion_DataHub_Wrapper.MerchantProfile mp:res?.MERCHANT_PROFILE){
+                    mapexist2.put(mp.cifno,null);
+                }
+                mapexist = setmapexist(mapexist2);
                 for(SCC_CaseResoultion_DataHub_Wrapper.MerchantProfile mp : res.MERCHANT_PROFILE){
                     mapm.put(mp.cifno,mp);
-                    Account acc = new Account();
+                    String rtid = null;
+                    if(mapexist.containsKey(mp.cifno)){
+                        rtid = mapexist.get(mp.cifno);
+                    }   
+                    else{
+                        rtid = rtbu;
+                    }
+                    String nama = '';
                     if(String.isNotBlank(mp?.nama_merchant_edc) && mp?.nama_merchant_edc!='NULL'){
-                        acc.name = mp.nama_merchant_edc;
+                        nama = mp.nama_merchant_edc;
                     }
                     else if(String.isNotBlank(mp?.nama_merchant_qris)){
-                        acc.name = mp.nama_merchant_qris;
-                    } 
-                    acc.SCC_Tipe_Nasabah__c = 'Non-Individu';
-                    acc.RecordTypeId = Schema.getGlobalDescribe().get('Account').getDescribe().getRecordTypeInfosByDeveloperName().get('IndustriesBusiness').getRecordTypeId();
-                    acc.Phone = setphone(mp.telpon);
-                    acc.scc_cifno__c = mp.cifno;
+                        nama = mp.nama_merchant_qris;
+                    }
+                    Account acc = new Account();
+                    acc.RecordTypeId = rtid;
+                    acc.SCC_cifno__c = mp.cifno;
+                    if(!String.isBlank(mp.telpon)){
+                        acc.Phone = setphone(mp.telpon);
+                    }
+                    if(rtid == rtperson){
+                        acc.Lastname = nama;
+                        acc.SCC_Tipe_Nasabah__c = 'Individu';
+                        if(!String.isBlank(mp.email)){
+                            acc.PersonEmail = SCC_LegacyCaseAPICtrl.validateAndSetEmail(mp.email);
+                            acc.SCC_Primary_Email__c = SCC_LegacyCaseAPICtrl.validateAndSetEmail(mp.email);
+                        }
+                    }
+                    else{
+                        acc.name = nama;
+                        acc.SCC_Tipe_Nasabah__c = 'Non-Individu';
+                        if(!String.isBlank(mp.email)){
+                            acc.SCC_Primary_Email__c = SCC_LegacyCaseAPICtrl.validateAndSetEmail(mp.email);
+                        }
+                    }
                     mapacc.put( mp.cifno,acc);
                 }
                 if(!mapacc.isEmpty()){
@@ -302,6 +361,8 @@ public with sharing class SCC_HomePageSearch {
         SCC_CaseResoultion_DataHub_Wrapper.BRILinkProfileResponse res = new SCC_CaseResoultion_DataHub_Wrapper.BRILinkProfileResponse();
         Map<String,SCC_CaseResoultion_DataHub_Wrapper.BRILinkProfile> mapb = new Map<String,SCC_CaseResoultion_DataHub_Wrapper.BRILinkProfile>();
         Map<String,Account> mapacc = new Map<String,Account>();
+        String rtperson = Schema.getGlobalDescribe().get('Account').getDescribe().getRecordTypeInfosByDeveloperName().get('PersonAccount').getRecordTypeId();
+        String rtbu = Schema.getGlobalDescribe().get('Account').getDescribe().getRecordTypeInfosByDeveloperName().get('IndustriesBusiness').getRecordTypeId();
         String mdh = '';
         String msg = '';
         try{
@@ -315,19 +376,42 @@ public with sharing class SCC_HomePageSearch {
             }
             res = SCC_CaseResoultion_DataHub.BRILinkProfile(req, mdh,'Home','');
             if(res?.BRILINK_PROFILE!=NULL){
+                map<String,String> mapexist2 = new Map<String,String>();
+                map<String,String> mapexist = new Map<String,String>();
+                for(SCC_CaseResoultion_DataHub_Wrapper.BRILinkProfile bp:res?.BRILINK_PROFILE){
+                    mapexist2.put(bp.cifno,null);
+                }
+                mapexist = setmapexist(mapexist2);
                 for(SCC_CaseResoultion_DataHub_Wrapper.BRILinkProfile bp : res.BRILINK_PROFILE){
                     mapb.put(bp.cifno,bp);
-                    Account acc = new Account();
+                    String rtid = null;
+                    if(mapexist.containsKey(bp.cifno)){
+                        rtid = mapexist.get(bp.cifno);
+                    }   
+                    else{
+                        rtid = rtbu;
+                    }
+                    String nama = '';
                     if(String.isNotBlank(bp?.nama_lengkap)){
-                        acc.name = bp.nama_lengkap;
+                        nama = bp.nama_lengkap;
                     }
                     else if(String.isNotBlank(bp?.nama_merchant)){
-                        acc.name = bp.nama_merchant;
+                        nama = bp.nama_merchant;
                     }
-                    acc.SCC_Tipe_Nasabah__c = 'Non-Individu';
-                    acc.RecordTypeId = Schema.getGlobalDescribe().get('Account').getDescribe().getRecordTypeInfosByDeveloperName().get('IndustriesBusiness').getRecordTypeId();
-                    acc.Phone = setphone(bp.telepon);
-                    acc.scc_cifno__c = bp.cifno;
+                    Account acc = new Account();
+                    acc.RecordTypeId = rtid;
+                    acc.SCC_cifno__c = bp.cifno;
+                    if(!String.isBlank(bp.telepon)){
+                        acc.Phone = setphone(bp.telepon);
+                    }
+                    if(rtid == rtperson){
+                        acc.Lastname = nama;
+                        acc.SCC_Tipe_Nasabah__c = 'Individu';
+                    }
+                    else{
+                        acc.name = nama;
+                        acc.SCC_Tipe_Nasabah__c = 'Non-Individu';
+                    }
                     mapacc.put( bp.cifno,acc);
                 }
                 if(!mapacc.isEmpty()){
@@ -372,6 +456,19 @@ public with sharing class SCC_HomePageSearch {
         return ph;
     }
     
+    public static map<String,String> setmapexist(map<String,String> mapexist){
+        map<String,String> mapex = new map<String,String>();
+        if(!mapexist.isEmpty()){
+            List<Account> listacc = [select id,RecordTypeId,SCC_cifno__c from account where SCC_cifno__c in :mapexist.keySet()];
+            if(!listacc.isEmpty()){
+                for(Account acc:listacc){
+                    mapex.put(acc.SCC_cifno__c,acc.RecordTypeId);
+                }
+            }
+        }
+        return mapex;
+    }
+
     public class CustomerProfile{
         @AuraEnabled public SCC_CaseResoultion_DataHub_Wrapper.CustomerProfileResponse res {get;set;}
         @AuraEnabled public SCC_CaseResoultion_DataHub_Wrapper.CardLinkCustomerData cld {get;set;}

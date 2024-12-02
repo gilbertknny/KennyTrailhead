@@ -289,13 +289,17 @@ public with sharing class SCC_LegacyCaseAPICtrl {
             if(demographicInfo.tipeNasabah == 'P'|| String.isBlank(demographicInfo.tipeNasabah) || demographicInfo.tipeNasabah == null){
                 acc.LastName = nasabah;
                 acc.SCC_Tipe_Nasabah__c = 'Individu';
-                acc.PersonEmail = validateAndSetEmail(demographicInfo.email);
-                acc.SCC_Primary_Email__c = validateAndSetEmail(demographicInfo.email);
+                if(!String.isBlank(demographicInfo.email)) { 
+                    acc.PersonEmail = validateAndSetEmail(demographicInfo.email); 
+                    acc.SCC_Primary_Email__c = validateAndSetEmail(demographicInfo.email);
+                }
                 acc.RecordTypeId = Schema.getGlobalDescribe().get('Account').getDescribe().getRecordTypeInfosByDeveloperName().get('PersonAccount').getRecordTypeId();
             }else{ //if(demographicInfo.tipeNasabah == 'O'){
                 acc.Name = nasabah;      
                 acc.SCC_Tipe_Nasabah__c = 'Non-Individu';
-                acc.SCC_Primary_Email__c = validateAndSetEmail(demographicInfo.email);
+                if(!String.isBlank(demographicInfo.email)) { 
+                    acc.SCC_Primary_Email__c = validateAndSetEmail(demographicInfo.email);
+                }
                 acc.RecordTypeId = Schema.getGlobalDescribe().get('Account').getDescribe().getRecordTypeInfosByDeveloperName().get('IndustriesBusiness').getRecordTypeId();
             }
             acc.SCC_TanggalLahir__c = calculateAge(demographicInfo?.tanggalLahir);

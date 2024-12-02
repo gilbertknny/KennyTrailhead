@@ -2,7 +2,7 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Area__c</fullName>
     <externalId>false</externalId>
-    <formula>CreatedBy.Title</formula>
+    <formula>IF( BEGINS( OwnerId ,&apos;005&apos;) , Owner:User.SCC_Area__c, IF( Branch_Code__c != &apos;&apos;, &apos;&apos;, IF( Cost_Center__c != &apos;&apos;, &apos;KP00&apos;,&apos;KP00&apos;) ) )</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
     <label>Area</label>
     <required>false</required>
