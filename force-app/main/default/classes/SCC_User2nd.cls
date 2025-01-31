@@ -64,6 +64,7 @@ global with sharing class SCC_User2nd implements Queueable, Database.AllowsCallo
             us.TimeZoneSidKey = 'Asia/Jakarta';
             us.EmailEncodingKey = 'UTF-8';
             us.LanguageLocaleKey = 'en_US';
+            us.EMAILPREFERENCESAUTOBCC = false;
             us.SCC_HILFM__c = userDetail[5];
             us.SCC_HTEXT__c = userDetail[6];
             us.SCC_Tipe_Unit_Kerja__c = userDetail[7];

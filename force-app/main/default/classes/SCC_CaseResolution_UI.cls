@@ -296,12 +296,31 @@ public with sharing class SCC_CaseResolution_UI {
                     Integer startIndex = 0;
                     Integer previousStartIndex = 0;
                     
-                    // Find all occurrences of 'transaction end' in lowercase version
-                    while(lowercaseBody.indexOf('transaction end', startIndex) != -1) {
-                        Integer endIndex = lowercaseBody.indexOf('transaction end', startIndex);
-                        // But take the slice from original text to maintain formatting
-                        logLines.add(originalBody.substring(previousStartIndex, endIndex));
-                        startIndex = endIndex + 'transaction end'.length();
+                    // Define search patterns for both variations
+                    String[] searchPatterns = new String[]{'transaction end', 'transaction_end'};
+                    
+                    // Search for both patterns
+                    while (true) {
+                        Integer minIndex = -1;
+                        String matchedPattern = '';
+                        
+                        // Find the earliest occurrence of any pattern
+                        for (String pattern : searchPatterns) {
+                            Integer currentIndex = lowercaseBody.indexOf(pattern, startIndex);
+                            if (currentIndex != -1 && (minIndex == -1 || currentIndex < minIndex)) {
+                                minIndex = currentIndex;
+                                matchedPattern = pattern;
+                            }
+                        }
+                        
+                        // If no pattern is found, break the loop
+                        if (minIndex == -1) {
+                            break;
+                        }
+                        
+                        // Add the log line using the found pattern
+                        logLines.add(originalBody.substring(previousStartIndex, minIndex));
+                        startIndex = minIndex + matchedPattern.length();
                         previousStartIndex = startIndex;
                     }
                     

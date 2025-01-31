@@ -34,7 +34,7 @@ public without sharing class SCC_HttpReq_NotificationCase {
                     }
                 }else{ //BRANCH
                     String Uker_Type = mapbu.get(cs.Branch_Code__c);
-                    if(Uker_Type != 'RO'){ //EXCLUDE UKER TYPE (RO) -> GS 08.11.24
+                    //if(Uker_Type != 'RO'){ //EXCLUDE UKER TYPE (RO) -> GS 08.11.24
                         //PER BRANCH
                         Integer total = mapbranchtotal.get(cs.Branch_Code__c);
                         if(total == null) mapbranchtotal.put(cs.Branch_Code__c,1);
@@ -51,7 +51,7 @@ public without sharing class SCC_HttpReq_NotificationCase {
                             if(totalregion == null) mapregiontotal.put(cs.Kode_Kanwil__c,1);
                             else mapregiontotal.put(cs.Kode_Kanwil__c,totalregion+1);
                         }
-                    }
+                    //}
                 }
             }
         }
@@ -122,12 +122,13 @@ public without sharing class SCC_HttpReq_NotificationCase {
             system.debug('code:'+code);
             system.debug('total:'+total);
             system.debug('strmsg:'+strmsg);
+            if(code != null && code != '' && tipe != 'PUSAT') code = ('00000'+code).right(5);
             String uker_type = mapbu.get(code);
             if(tipe == 'PUSAT') uker_type = 'KP';
             
             if(uker_type != null && uker_type != ''){
                 if(uker_type == 'RO') is_konsolidasi = true;
-                else if (uker_type == 'KCP' || uker_type == 'U') is_konsolidasi = false;
+                else if (uker_type == 'KCP' || uker_type == 'U' || uker_type == 'KK') is_konsolidasi = false; //Add KK non Konsolidasi -> GS 06.12.24
                 Case cs = new Case();
                 if(tipe == 'BRANCH'){
                     cs.Main_Branch__c = code; //BRANCH API

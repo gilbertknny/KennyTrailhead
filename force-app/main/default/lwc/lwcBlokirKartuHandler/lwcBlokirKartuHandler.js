@@ -82,7 +82,7 @@ export default class LwcBlokirKartuHandler extends LightningElement {
             return !((this.cardStatus == 'AA' || 
             this.cardStatus == 'NA' || 
             this.cardStatus == 'DS' || 
-            this.cardStatus == 'PS') && (this.userMaintain != '' || this.userMaintain != null) && this.permissionSets.includes('SCC_CC_Agent_Leader') && caseType == '8704');
+            this.cardStatus == 'PS') && (this.userMaintain != '' || this.userMaintain != null) && this.permissionSets.includes('CC Agent Leader') && caseType == '8704');
         } else {
             console.log('disable 2');
             console.log('user PN :',this.terminalId);
@@ -91,7 +91,7 @@ export default class LwcBlokirKartuHandler extends LightningElement {
             this.cardStatus == 'DS' || 
             this.cardStatus == 'PS' || 
             this.cardStatus == 'TL' || 
-            this.cardStatus == 'CL') && this.terminalId != null && caseType == '8405' && (this.permissionSets.includes('SCC_CC_Agent_Leader') || this.permissionSets.includes('SCC_CC_Maker')));
+            this.cardStatus == 'CL') && this.terminalId != null && caseType == '8405' && (this.permissionSets.includes('CC Agent Leader') || this.permissionSets.includes('SCC_CC_Maker')));
         }
     }
 

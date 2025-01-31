@@ -1,3 +1,10 @@
+/**
+* @description       : Queue Notification to Leader Every Hour
+* @last modified on  : 03/12/2024
+* @last modified by  : Alvin Vigo, Lucas Kalasuvich
+**/
+
+
 public with sharing class SCC_CaseResolution_Invoc {
     @InvocableMethod(label='Invocable Case Resolution' description='Invocable code model can call from apex/flow' category='Invocable')    
     public static void invocablevoid(List< FlowInputValues > flowinput) {
@@ -31,7 +38,7 @@ public with sharing class SCC_CaseResolution_Invoc {
             //SCC_Rekon.FlagDataRekonFuture(fi.csid);
         }
         else if(fi.tipe=='Auto Closed Rekon'){
-            String cond = '(isclosed = false OR IsClosed__c = false) and (SCC_Call_Type__r.external_id__c='+'\'8812'+'\' or SCC_Call_Type__r.external_id__c='+'\'8915'+'\') and IsLocked__c=false and SCC_Account_Number__c != null and CreatedDate = THIS_MONTH and Status = '+'\'Escalated'+'\' and (Approval_Status__c='+'\'draft'+'\' or Approval_Status__c='+'\'rejected'+'\')';
+            String cond = '(isclosed = false OR IsClosed__c = false) and (SCC_Call_Type__r.external_id__c='+'\'8812'+'\' or SCC_Call_Type__r.external_id__c='+'\'8915'+'\') and IsLocked__c=false and SCC_Account_Number__c != null and Status = '+'\'Escalated'+'\' and (Approval_Status__c='+'\'draft'+'\' or Approval_Status__c='+'\'rejected'+'\')';
             String addfield = ',SCC_Call_Type__r.name,SCC_Call_Type__r.External_id__c,SCC_Call_Type_Feature__r.Fitur_ID__c,Terminal_ID__r.name,account.name';
             String allfield = SOQL_SOBJECT.getallfield('Case');
             String queries = SOQL_SOBJECT.SOQL(allfield, addfield, 'Case', cond, '', '', '');

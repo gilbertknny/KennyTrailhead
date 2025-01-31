@@ -9,6 +9,7 @@ global without sharing class CaseOLAKanpusMilestoneTimeCalculator implements Sup
                                         GROUP BY MilestoneTypeId LIMIT 1]; 
         if(listar.size()>0) iTotal = Integer.ValueOf(listar[0].get('Total'));                    
         Integer timeValue = Integer.ValueOf(Label.HourInOLAKanpus) - iTotal; 
+        if(timeValue <= 0) timeValue = 1;
         return timeValue;
     }   
 }

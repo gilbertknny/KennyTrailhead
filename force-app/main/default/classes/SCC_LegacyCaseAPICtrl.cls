@@ -83,7 +83,10 @@ public with sharing class SCC_LegacyCaseAPICtrl {
             }
         }
         if(String.isNotBlank(jreq.NomorKartu)){
-            if(!jreq.NomorKartu.isNumeric() || jreq.NomorKartu.length()>16){
+            if(jreq.TipeIntegrasi == 'MMS'){
+                cs.SCC_Card_Number__c = jreq.NomorKartu;
+            }
+            else if(!jreq.NomorKartu.isNumeric() || jreq.NomorKartu.length()>16){
                 jres = setResponse('NomorKartu');
                 cekct = true;
             }

@@ -16,6 +16,7 @@
     1.0   09/10/2024   Rakeyan Nuramria                  [FROM SIT] Adjust logic to input Nomor Kartu Rekening
     1.0   31/10/2024   Rakeyan Nuramria                  [FROM SIT] Adjust logic to show nominal/price/saldo number
     1.0   29/11/2024   Rakeyan Nuramria                  [FROM SIT] Fix validating start date & end date mutasi
+    1.0   02/12/2024   Rakeyan Nuramria                  [FROM SIT] Fix jam transaksi mutasi
 **/
 
 import { LightningElement, api, track,wire } from 'lwc';
@@ -370,7 +371,8 @@ export default class LwcMutasiRekeningComponent extends NavigationMixin(Lightnin
         return this.data.map((row, index) => {
             const dateObject = new Date(row.tglTran);
             const customDate = dateObject.toISOString().split('T')[0]; 
-            const customTime = dateObject.toTimeString().split(' ')[0];
+            // const customTime = dateObject.toTimeString().split(' ')[0];
+            const customTime = this.formatTime(row.jamTran);
 
             return {
                 ...row,
@@ -389,69 +391,227 @@ export default class LwcMutasiRekeningComponent extends NavigationMixin(Lightnin
         
     }
 
+    // handleCreateCase() {
+    //     // Handle case creation logic based on selected row
+    //     // const selectedRow = this.filteredData.find(row => row.isSelected);
+    //     // if (selectedRow) {
+    //     //     console.log('Creating case for row : ', selectedRow);
+
+    //     // }
+
+    //     this.isLoadingCreateCase = true;
+
+    //     const selectedRow = this.filteredData.find(row => row.isSelected);
+    //     console.log('jkl selectedRow', JSON.stringify(this.selectedRow, null, 2));
+    //     console.log('handleCreateCase clicked..');
+        
+    //     if (selectedRow) {
+    //         console.log('zzz masuk kondisi selectedRow : ', selectedRow);
+    //         const fields = {};
+
+    //         fields['RecordTypeId'] = this.recordTypeId;
+
+    //        // Format the date field (SCC_Transaction_Date__c)
+    //         const formattedDate = new Date(selectedRow.customDate).toISOString().split('T')[0];
+    //         fields['SCC_Transaction_Date__c'] = formattedDate || null;
+
+    //         // Combine date and time to create the datetime field (SCC_Waktu_Transaksi__c)
+    //         if (selectedRow.customDate && selectedRow.customTime) {
+    //         console.log('zzz masuk selectedRow.customDate ', selectedRow.customDate + ' && selectedRow.customTime ', selectedRow.customTime);
+
+    //             // const date = new Date(selectedRow.customDate);
+
+    //             // // Use the formatTime function to ensure time is correctly formatted
+    //             // // const timeParts = selectedRow.customTime.split(':');
+    //             // const formattedTime = this.formatTime(selectedRow.customTime);
+    //             // const timeParts = formattedTime.split(':');
+    //             // const hours = parseInt(timeParts[0], 10);
+    //             // const minutes = parseInt(timeParts[1], 10);
+    //             // const seconds = timeParts.length > 2 ? parseInt(timeParts[2], 10) : 0; // Default to 0 if seconds are not provided
+
+    //             // date.setHours(hours, minutes, seconds);
+
+    //             // // Convert the updated date (with time) to ISO 8601 format
+    //             // const formattedDateTime = date.toISOString(); // format YYYY-MM-DDTHH:mm:ss.sssZ
+
+    //             // fields['SCC_Waktu_Transaksi__c'] = formattedDateTime || null;
+
+    //             /**  v2 - Based on fixing */
+    //                 //Ensure time is correctly formatted (HH:mm:ss)
+    //                 const formattedTime = formatTime(selectedRow.customTime); // This function ensures correct formatting of the time
+
+    //                 // Combine formattedDate and formattedTime to form the DateTime string
+    //                 const combinedDateTime = `${formattedDate}T${formattedTime}`;
+
+    //                 // Convert the combined string into a Date object
+    //                 const dateTimeObject = new Date(combinedDateTime); 
+
+    //                 // Ensure the DateTime object is valid
+    //                 if (!isNaN(dateTimeObject)) {
+    //                     console.log('zzz masuk kondisi isNaN');
+                        
+    //                     fields['SCC_Waktu_Transaksi__c'] = dateTimeObject.toISOString(); // Convert to ISO string format
+    //                 } else {
+    //                     console.log('zzz tidak kondisi isNaN');
+    //                     fields['SCC_Waktu_Transaksi__c'] = null; // Fallback in case of invalid date/time
+    //                 }
+    //             /**  End v2 - Based on fixing */
+
+    //         } else {
+    //             fields['SCC_Waktu_Transaksi__c'] = null; // Handle the case where either date or time is missing
+    //         }
+            
+    //         //v1, use this if using the IDR Formatter Currency
+    //         // const rawDebet = selectedRow.mutasiDebet.replace(/[^0-9,-]/g, '').replace(',', '.');
+    //         // const rawKredit = selectedRow.mutasiKredit.replace(/[^0-9,-]/g, '').replace(',', '.');
+    
+    //         // console.log('Nominal Debet:', rawDebet);
+    //         // console.log('Nominal Kredit:', rawKredit);
+    
+    //         // const mutasiDebet = Number(rawDebet);
+    //         // const mutasiKredit = Number(rawKredit);
+    
+    //         // console.log('Nominal Debet:', mutasiDebet);
+    //         // console.log('Nominal Kredit:', mutasiKredit);
+    
+    //         // if (mutasiDebet === 0 && mutasiKredit !== 0) {
+    //         //     fields['SCC_Amount__c'] = parseFloat(mutasiKredit.toFixed(2)); 
+    //         // } else if (mutasiKredit === 0 && mutasiDebet !== 0) {
+    //         //     fields['SCC_Amount__c'] = parseFloat(mutasiDebet.toFixed(2)); 
+    //         // }
+    //         //END v1, use this if using the IDR Formatter Currency
+
+    //         // v2, use this if using formatNumber method
+    //         const rawDebet = selectedRow.mutasiDebet.replace(/[^0-9,-]/g, '').replace(',', '.');
+    //         const rawKredit = selectedRow.mutasiKredit.replace(/[^0-9,-]/g, '').replace(',', '.');
+
+    //         console.log('Nominal Debet:', rawDebet);
+    //         console.log('Nominal Kredit:', rawKredit);
+
+    //         // Convert raw strings to numbers
+    //         const mutasiDebet = Number(rawDebet);
+    //         const mutasiKredit = Number(rawKredit);
+
+    //         console.log('Nominal Debet:', mutasiDebet);
+    //         console.log('Nominal Kredit:', mutasiKredit);
+
+    //         // Format the output to the desired currency format
+    //         if (mutasiDebet === 0 && mutasiKredit !== 0) {
+    //             fields['SCC_Amount__c'] = mutasiKredit; // No need to use toFixed here
+    //             console.log('Formatted Kredit Amount:', this.formatNumber(fields['SCC_Amount__c'].toString()));
+    //         } else if (mutasiKredit === 0 && mutasiDebet !== 0) {
+    //             fields['SCC_Amount__c'] = mutasiDebet; // No need to use toFixed here
+    //             console.log('Formatted Debet Amount:', this.formatNumber(fields['SCC_Amount__c'].toString()));
+    //         }
+    //         // END v2, use this if using formatNumber method
+    
+    //         fields['SCC_Account_Number__c'] = String(selectedRow.noRek) || null;
+
+    //         // fields['SCC_Card_Number__c'] = String(selectedRow.noKartu) || null;
+    //         fields['SCC_Card_Number__c'] = this.noKartu || null;
+
+    //         // fields['SCC_Terminal_ID__c'] = String(this.tidValue) || null;
+    //         // console.log('asd tid for input create case : ', this.tidValue);
+    //         fields['SCC_Terminal_ID__c'] = this.tidValue || null;
+    //         fields['AccountId'] = this.accountId;
+
+    //         const recordInput = { apiName: 'Case', fields };
+
+    //         createRecord(recordInput)
+    //             .then(caseRecord => {
+    //                 console.log('Successfully created record:', caseRecord);
+    //                 console.log('Created Case ID:', caseRecord.id);
+    //                 this.showToast(
+    //                     'Sukses', 
+    //                     'Record berhasil ditambahkan! ', 
+    //                     'success', 
+    //                     caseRecord.id, 
+    //                     'Case' // Change this to 'Case' or whatever your object API name is
+    //                 );
+
+    //                 // Optionally delete the selected row from the data
+    //                 // this.deleteSelectedRow(selectedRow.noRek);
+
+    //                 this.selectedRow = null;
+    //                 this.filteredData = this.processedData();
+    //                 this.isCreateButtonDisabled = true;
+
+    //                 // Refresh the Apex data after creating the record
+    //                 // return refreshApex(this.filteredData); // Adjust based on where you store the data
+
+    //             })
+    //             .catch(error => {
+    //                 const errorMessage = error.body?.message || 'An unknown error occurred.';
+    //                 console.log('Error dalam pembuatan case:', errorMessage);
+    //                 this.showToast('Error', `Error dalam pembuatan case: ${errorMessage}`, 'error');
+    //             })
+    //             .finally(() => {
+    //                 this.isLoadingCreateCase = false;
+    //             });
+    //     } else {
+    //         this.showToast('Error', 'No row selected. Please select a row to create a case.', 'error');
+    //     }
+    // }
+
+    /** v2 - Enchanced function for created Case created in 02 Desember 2024 */
     handleCreateCase() {
-        // Handle case creation logic based on selected row
-        // const selectedRow = this.filteredData.find(row => row.isSelected);
-        // if (selectedRow) {
-        //     console.log('Creating case for row : ', selectedRow);
-
-        // }
-
         this.isLoadingCreateCase = true;
 
         const selectedRow = this.filteredData.find(row => row.isSelected);
-        console.log('jkl selectedRow', JSON.stringify(this.selectedRow, null, 2));
-        console.log('handleCreateCase clicked..');
-        
+        console.log('Selected Row:', JSON.stringify(selectedRow, null, 2));
+
         if (selectedRow) {
+            console.log('Selected Row Data:', selectedRow);
             const fields = {};
 
             fields['RecordTypeId'] = this.recordTypeId;
 
-           // Format the date field (SCC_Transaction_Date__c)
+            // Format the date field (SCC_Transaction_Date__c)
             const formattedDate = new Date(selectedRow.customDate).toISOString().split('T')[0];
-            fields['SCC_Transaction_Date__c'] = formattedDate || null;
+            if (!formattedDate) {
+                console.error('Invalid customDate:', selectedRow.customDate);
+                this.showToast('Error', 'Invalid transaction date', 'error');
+                this.isLoadingCreateCase = false;
+                return; // Abort the process if date is invalid
+            }
+            fields['SCC_Transaction_Date__c'] = formattedDate;
 
             // Combine date and time to create the datetime field (SCC_Waktu_Transaksi__c)
-            if (selectedRow.customDate && selectedRow.customTime) {
-                const date = new Date(selectedRow.customDate);
+            if (formattedDate && selectedRow.customTime) {
+                console.log('Custom Date and Time:', formattedDate, selectedRow.customTime);
 
-                const timeParts = selectedRow.customTime.split(':');
-                const hours = parseInt(timeParts[0], 10);
-                const minutes = parseInt(timeParts[1], 10);
-                const seconds = timeParts.length > 2 ? parseInt(timeParts[2], 10) : 0; // Default to 0 if seconds are not provided
+                // Ensure time is correctly formatted (HH:mm:ss)
+                const formattedTime = selectedRow.customTime;
+                if (!formattedTime) {
+                    console.error('Invalid customTime:', selectedRow.customTime);
+                    this.showToast('Error', 'Invalid transaction time', 'error');
+                    this.isLoadingCreateCase = false;
+                    return; // Abort the process if time is invalid
+                }
 
-                date.setHours(hours, minutes, seconds);
+                // Combine formattedDate and formattedTime to form the DateTime string
+                const combinedDateTime = `${formattedDate}T${formattedTime}`;
 
-                // Convert the updated date (with time) to ISO 8601 format
-                const formattedDateTime = date.toISOString(); // format YYYY-MM-DDTHH:mm:ss.sssZ
+                // Convert the combined string into a Date object
+                const dateTimeObject = new Date(combinedDateTime);
 
-                fields['SCC_Waktu_Transaksi__c'] = formattedDateTime || null;
+                // Ensure the DateTime object is valid
+                if (isNaN(dateTimeObject)) {
+                    console.error('Invalid DateTime:', combinedDateTime);
+                    this.showToast('Error', 'Invalid transaction datetime', 'error');
+                    this.isLoadingCreateCase = false;
+                    return; // Abort the process if DateTime is invalid
+                }
+
+                fields['SCC_Waktu_Transaksi__c'] = dateTimeObject.toISOString(); // Convert to ISO string format
             } else {
-                fields['SCC_Waktu_Transaksi__c'] = null; // Handle the case where either date or time is missing
+                console.error('Missing customDate or customTime');
+                this.showToast('Error', 'Transaction date or time is missing', 'error');
+                this.isLoadingCreateCase = false;
+                return; // Abort the process if either date or time is missing
             }
-            
-            //v1, use this if using the IDR Formatter Currency
-            // const rawDebet = selectedRow.mutasiDebet.replace(/[^0-9,-]/g, '').replace(',', '.');
-            // const rawKredit = selectedRow.mutasiKredit.replace(/[^0-9,-]/g, '').replace(',', '.');
-    
-            // console.log('Nominal Debet:', rawDebet);
-            // console.log('Nominal Kredit:', rawKredit);
-    
-            // const mutasiDebet = Number(rawDebet);
-            // const mutasiKredit = Number(rawKredit);
-    
-            // console.log('Nominal Debet:', mutasiDebet);
-            // console.log('Nominal Kredit:', mutasiKredit);
-    
-            // if (mutasiDebet === 0 && mutasiKredit !== 0) {
-            //     fields['SCC_Amount__c'] = parseFloat(mutasiKredit.toFixed(2)); 
-            // } else if (mutasiKredit === 0 && mutasiDebet !== 0) {
-            //     fields['SCC_Amount__c'] = parseFloat(mutasiDebet.toFixed(2)); 
-            // }
-            //END v1, use this if using the IDR Formatter Currency
 
-            // v2, use this if using formatNumber method
+            // Handle the currency fields (mutasiDebet and mutasiKredit)
             const rawDebet = selectedRow.mutasiDebet.replace(/[^0-9,-]/g, '').replace(',', '.');
             const rawKredit = selectedRow.mutasiKredit.replace(/[^0-9,-]/g, '').replace(',', '.');
 
@@ -462,67 +622,186 @@ export default class LwcMutasiRekeningComponent extends NavigationMixin(Lightnin
             const mutasiDebet = Number(rawDebet);
             const mutasiKredit = Number(rawKredit);
 
-            console.log('Nominal Debet:', mutasiDebet);
-            console.log('Nominal Kredit:', mutasiKredit);
+            console.log('Nominal Debet (Number):', mutasiDebet);
+            console.log('Nominal Kredit (Number):', mutasiKredit);
 
             // Format the output to the desired currency format
             if (mutasiDebet === 0 && mutasiKredit !== 0) {
-                fields['SCC_Amount__c'] = mutasiKredit; // No need to use toFixed here
-                console.log('Formatted Kredit Amount:', this.formatNumber(fields['SCC_Amount__c'].toString()));
+                fields['SCC_Amount__c'] = mutasiKredit;
             } else if (mutasiKredit === 0 && mutasiDebet !== 0) {
-                fields['SCC_Amount__c'] = mutasiDebet; // No need to use toFixed here
-                console.log('Formatted Debet Amount:', this.formatNumber(fields['SCC_Amount__c'].toString()));
+                fields['SCC_Amount__c'] = mutasiDebet;
             }
-            // END v2, use this if using formatNumber method
-    
+
             fields['SCC_Account_Number__c'] = String(selectedRow.noRek) || null;
-
-            // fields['SCC_Card_Number__c'] = String(selectedRow.noKartu) || null;
             fields['SCC_Card_Number__c'] = this.noKartu || null;
-
-            // fields['SCC_Terminal_ID__c'] = String(this.tidValue) || null;
-            // console.log('asd tid for input create case : ', this.tidValue);
             fields['SCC_Terminal_ID__c'] = this.tidValue || null;
             fields['AccountId'] = this.accountId;
 
+            // Prepare record input
             const recordInput = { apiName: 'Case', fields };
 
+            // Create the case record
             createRecord(recordInput)
                 .then(caseRecord => {
                     console.log('Successfully created record:', caseRecord);
                     console.log('Created Case ID:', caseRecord.id);
                     this.showToast(
-                        'Sukses', 
-                        'Record berhasil ditambahkan! ', 
-                        'success', 
-                        caseRecord.id, 
+                        'Sukses',
+                        'Record berhasil ditambahkan! anda akan diarahkan ke halaman Case. Atau ',
+                        'success',
+                        caseRecord.id,
                         'Case' // Change this to 'Case' or whatever your object API name is
                     );
 
-                    // Optionally delete the selected row from the data
-                    // this.deleteSelectedRow(selectedRow.noRek);
-
+                    // Clear the selected row and update the filtered data
                     this.selectedRow = null;
                     this.filteredData = this.processedData();
                     this.isCreateButtonDisabled = true;
 
-                    // Refresh the Apex data after creating the record
-                    // return refreshApex(this.filteredData); // Adjust based on where you store the data
-
+                    setTimeout(() => {
+                    // Navigate to the newly created record after the delay
+                    this.navigateToRecord(caseRecord.id, 'Case'); // Pass 'Case' as the objectApiName
+                    }, 700);
                 })
                 .catch(error => {
                     const errorMessage = error.body?.message || 'An unknown error occurred.';
-                    console.log('Error dalam pembuatan case:', errorMessage);
-                    this.showToast('Error', `Error dalam pembuatan case: ${errorMessage}`, 'error');
+                    console.error('Error creating case:', errorMessage);
+                    this.showToast('Error', `Error creating case: ${errorMessage}`, 'error');
                 })
                 .finally(() => {
-                    this.isLoadingCreateCase = false;
+                    this.isLoadingCreateCase = false; // Make sure loading is turned off after the process is done
                 });
-        } else {
-            this.showToast('Error', 'No row selected. Please select a row to create a case.', 'error');
-        }
-    }
 
+        } else {
+            // Show an error if no row is selected
+            this.showToast('Error', 'No row selected. Please select a row to create a case.', 'error');
+            this.isLoadingCreateCase = false; // Turn off the loading state if no row is selected
+        }
+    }    
+
+    /** End v2 - Enchanced function created in 02 Desember 2024 */
+
+    // handleUpdateCase() {
+    //     // Handle case update logic based on selected row
+    //     this.isLoadingUpdateCase = true;
+    
+    //     const selectedRow = this.filteredData.find(row => row.isSelected);
+    //     console.log('handleUpdateCase clicked..');
+        
+    //     if (selectedRow) {
+    //         const fields = {};
+    
+    //         fields['Id'] = this.recordId;
+    
+    //         // Format the date field (SCC_Transaction_Date__c)
+    //         const formattedDate = new Date(selectedRow.customDate).toISOString().split('T')[0];
+    //         fields['SCC_Transaction_Date__c'] = formattedDate || null;
+    
+    //         // Combine date and time to create the datetime field (SCC_Waktu_Transaksi__c)
+    //         if (selectedRow.customDate && selectedRow.customTime) {
+    //             const date = new Date(selectedRow.customDate);
+    
+    //             // Use the formatTime function to ensure time is correctly formatted
+    //             // const timeParts = selectedRow.customTime.split(':');
+    //             const formattedTime = this.formatTime(selectedRow.customTime);
+    //             const timeParts = formattedTime.split(':');
+    //             const hours = parseInt(timeParts[0], 10);
+    //             const minutes = parseInt(timeParts[1], 10);
+    //             const seconds = timeParts.length > 2 ? parseInt(timeParts[2], 10) : 0;
+    
+    //             date.setHours(hours, minutes, seconds);
+    //             const formattedDateTime = date.toISOString();
+    
+    //             fields['SCC_Waktu_Transaksi__c'] = formattedDateTime || null;
+    //         } else {
+    //             fields['SCC_Waktu_Transaksi__c'] = null;
+    //         }
+    
+    //         //v1, use this if using the IDR Formatter Currency
+    //         // const rawDebet = selectedRow.mutasiDebet.replace(/[^0-9,-]/g, '').replace(',', '.');
+    //         // const rawKredit = selectedRow.mutasiKredit.replace(/[^0-9,-]/g, '').replace(',', '.');
+    
+    //         // console.log('Nominal Debet:', rawDebet);
+    //         // console.log('Nominal Kredit:', rawKredit);
+    
+    //         // const mutasiDebet = Number(rawDebet);
+    //         // const mutasiKredit = Number(rawKredit);
+    
+    //         // console.log('Nominal Debet:', mutasiDebet);
+    //         // console.log('Nominal Kredit:', mutasiKredit);
+    
+    //         // if (mutasiDebet === 0 && mutasiKredit !== 0) {
+    //         //     fields['SCC_Amount__c'] = parseFloat(mutasiKredit.toFixed(2)); 
+    //         // } else if (mutasiKredit === 0 && mutasiDebet !== 0) {
+    //         //     fields['SCC_Amount__c'] = parseFloat(mutasiDebet.toFixed(2)); 
+    //         // }
+    //         //END v1, use this if using the IDR Formatter Currency
+
+    //         // v2, use this if using formatNumber method
+    //         const rawDebet = selectedRow.mutasiDebet.replace(/[^0-9,-]/g, '').replace(',', '.');
+    //         const rawKredit = selectedRow.mutasiKredit.replace(/[^0-9,-]/g, '').replace(',', '.');
+
+    //         console.log('Nominal Debet:', rawDebet);
+    //         console.log('Nominal Kredit:', rawKredit);
+
+    //         // Convert raw strings to numbers
+    //         const mutasiDebet = Number(rawDebet);
+    //         const mutasiKredit = Number(rawKredit);
+
+    //         console.log('Nominal Debet:', mutasiDebet);
+    //         console.log('Nominal Kredit:', mutasiKredit);
+
+    //         // Format the output to the desired currency format
+    //         if (mutasiDebet === 0 && mutasiKredit !== 0) {
+    //             fields['SCC_Amount__c'] = mutasiKredit; // No need to use toFixed here
+    //             console.log('Formatted Kredit Amount:', this.formatNumber(fields['SCC_Amount__c'].toString()));
+    //         } else if (mutasiKredit === 0 && mutasiDebet !== 0) {
+    //             fields['SCC_Amount__c'] = mutasiDebet; // No need to use toFixed here
+    //             console.log('Formatted Debet Amount:', this.formatNumber(fields['SCC_Amount__c'].toString()));
+    //         }
+    //         // END v2, use this if using formatNumber method
+    
+    //         fields['SCC_Account_Number__c'] = String(selectedRow.noRek) || null; 
+    //         // fields['SCC_Card_Number__c'] = String(selectedRow.noKartu) || null;
+    //         fields['SCC_Card_Number__c'] = this.noKartu || null;
+    //         // console.log('asd tid for input create case : ', this.tidValue);
+    //         fields['SCC_Terminal_ID__c'] = this.tidValue || null;
+
+    //         fields['AccountId'] = this.accountId;
+    
+    //         const recordInput = { fields };
+    
+    //         updateRecord(recordInput)
+    //             .then(caseRecord => {
+    //                 console.log('Successfully updated record: ', caseRecord);
+    //                 this.showToast(
+    //                     'Sukses', 
+    //                     'Record berhasil diperbarui. ', 
+    //                     'success', 
+    //                     caseRecord.id, 
+    //                     'Case'
+    //                 );
+    
+    //                 // Optionally refresh the data
+    //                 this.selectedRow = null;
+    //                 this.filteredData = this.processedData();
+    //                 this.isUpdateButtonDisabled = true;
+    
+    //             })
+    //             .catch(error => {
+    //                 const errorMessage = error.body?.message || 'An unknown error occurred.';
+    //                 console.log('Error dalam pembaruan case:', errorMessage);
+    //                 this.showToast('Error', `Error dalam pembaruan case: ${errorMessage}`, 'error');
+    //             })
+    //             .finally(() => {
+    //                 this.isLoadingUpdateCase = false;
+    //             });
+    //     } else {
+    //         this.showToast('Error', 'No row selected. Please select a row to update a case.', 'error');
+    //     }
+    // }
+    
+    /** v2 - Enchanced function for created Case created in 02 Desember 2024 */
     handleUpdateCase() {
         // Handle case update logic based on selected row
         this.isLoadingUpdateCase = true;
@@ -543,7 +822,9 @@ export default class LwcMutasiRekeningComponent extends NavigationMixin(Lightnin
             if (selectedRow.customDate && selectedRow.customTime) {
                 const date = new Date(selectedRow.customDate);
     
-                const timeParts = selectedRow.customTime.split(':');
+                // Use the formatTime function to ensure time is correctly formatted
+                const formattedTime = selectedRow.customTime;
+                const timeParts = formattedTime.split(':');
                 const hours = parseInt(timeParts[0], 10);
                 const minutes = parseInt(timeParts[1], 10);
                 const seconds = timeParts.length > 2 ? parseInt(timeParts[2], 10) : 0;
@@ -556,40 +837,20 @@ export default class LwcMutasiRekeningComponent extends NavigationMixin(Lightnin
                 fields['SCC_Waktu_Transaksi__c'] = null;
             }
     
-            //v1, use this if using the IDR Formatter Currency
-            // const rawDebet = selectedRow.mutasiDebet.replace(/[^0-9,-]/g, '').replace(',', '.');
-            // const rawKredit = selectedRow.mutasiKredit.replace(/[^0-9,-]/g, '').replace(',', '.');
-    
-            // console.log('Nominal Debet:', rawDebet);
-            // console.log('Nominal Kredit:', rawKredit);
-    
-            // const mutasiDebet = Number(rawDebet);
-            // const mutasiKredit = Number(rawKredit);
-    
-            // console.log('Nominal Debet:', mutasiDebet);
-            // console.log('Nominal Kredit:', mutasiKredit);
-    
-            // if (mutasiDebet === 0 && mutasiKredit !== 0) {
-            //     fields['SCC_Amount__c'] = parseFloat(mutasiKredit.toFixed(2)); 
-            // } else if (mutasiKredit === 0 && mutasiDebet !== 0) {
-            //     fields['SCC_Amount__c'] = parseFloat(mutasiDebet.toFixed(2)); 
-            // }
-            //END v1, use this if using the IDR Formatter Currency
-
-            // v2, use this if using formatNumber method
+            // Handle currency fields (mutasiDebet and mutasiKredit)
             const rawDebet = selectedRow.mutasiDebet.replace(/[^0-9,-]/g, '').replace(',', '.');
             const rawKredit = selectedRow.mutasiKredit.replace(/[^0-9,-]/g, '').replace(',', '.');
-
+    
             console.log('Nominal Debet:', rawDebet);
             console.log('Nominal Kredit:', rawKredit);
-
+    
             // Convert raw strings to numbers
             const mutasiDebet = Number(rawDebet);
             const mutasiKredit = Number(rawKredit);
-
+    
             console.log('Nominal Debet:', mutasiDebet);
             console.log('Nominal Kredit:', mutasiKredit);
-
+    
             // Format the output to the desired currency format
             if (mutasiDebet === 0 && mutasiKredit !== 0) {
                 fields['SCC_Amount__c'] = mutasiKredit; // No need to use toFixed here
@@ -598,14 +859,10 @@ export default class LwcMutasiRekeningComponent extends NavigationMixin(Lightnin
                 fields['SCC_Amount__c'] = mutasiDebet; // No need to use toFixed here
                 console.log('Formatted Debet Amount:', this.formatNumber(fields['SCC_Amount__c'].toString()));
             }
-            // END v2, use this if using formatNumber method
     
-            fields['SCC_Account_Number__c'] = String(selectedRow.noRek) || null; 
-            // fields['SCC_Card_Number__c'] = String(selectedRow.noKartu) || null;
+            fields['SCC_Account_Number__c'] = String(selectedRow.noRek) || null;
             fields['SCC_Card_Number__c'] = this.noKartu || null;
-            // console.log('asd tid for input create case : ', this.tidValue);
             fields['SCC_Terminal_ID__c'] = this.tidValue || null;
-
             fields['AccountId'] = this.accountId;
     
             const recordInput = { fields };
@@ -626,6 +883,11 @@ export default class LwcMutasiRekeningComponent extends NavigationMixin(Lightnin
                     this.filteredData = this.processedData();
                     this.isUpdateButtonDisabled = true;
     
+                    // delay before navigating
+                    // setTimeout(() => {
+                    //     // Navigate to the updated record after the delay
+                    //     this.navigateToRecord(caseRecord.id, 'Case'); // Pass 'Case' as the objectApiName
+                    // }, 700);
                 })
                 .catch(error => {
                     const errorMessage = error.body?.message || 'An unknown error occurred.';
@@ -633,13 +895,14 @@ export default class LwcMutasiRekeningComponent extends NavigationMixin(Lightnin
                     this.showToast('Error', `Error dalam pembaruan case: ${errorMessage}`, 'error');
                 })
                 .finally(() => {
-                    this.isLoadingUpdateCase = false;
+                    this.isLoadingUpdateCase = false; // Ensure loading state is turned off
                 });
         } else {
             this.showToast('Error', 'No row selected. Please select a row to update a case.', 'error');
         }
     }
     
+    /** End v2 - Enchanced function for created Case created in 02 Desember 2024 */
 
     deleteSelectedRow(rowId) {
         // Remove the selected row from data
@@ -993,6 +1256,25 @@ export default class LwcMutasiRekeningComponent extends NavigationMixin(Lightnin
         return formatterCurrency.format(parsedValue);
     }
 
+     // Helper function to format time like 'jamTran' (e.g., '173705' => '17:37:05')
+    formatTime(jamTran) {
+        // Convert the jamTran number to a string
+        let timeStr = jamTran.toString();
+
+        // Ensure the time string has 6 digits, padding with zeros if necessary
+        while (timeStr.length < 6) {
+            timeStr = '0' + timeStr;
+        }
+
+        // Extract hours, minutes, and seconds
+        const hours = timeStr.substring(0, 2);
+        const minutes = timeStr.substring(2, 4);
+        const seconds = timeStr.substring(4, 6);
+
+        // Format the time as HH:mm:ss
+        return `${hours}:${minutes}:${seconds}`;
+    }
+
     showToast(title, message, variant, recordId = null, objectApiName = null) {
         // Check if both recordId and objectApiName are provided for generating a link
         if (recordId && objectApiName) {
@@ -1032,9 +1314,22 @@ export default class LwcMutasiRekeningComponent extends NavigationMixin(Lightnin
                 title: title,
                 message: message,
                 variant: variant,
-                duration:5000,
+                duration:6000,
             });
             this.dispatchEvent(event);
         }
+    }
+
+    // function to navigate to a record with dynamic objectApiName
+    navigateToRecord(recordId, objectApiName) {
+        // Use the NavigationMixin to navigate to the record's page
+        this[NavigationMixin.Navigate]({
+            type: 'standard__recordPage',
+            attributes: {
+                recordId: recordId,
+                objectApiName: objectApiName, // Use dynamic objectApiName
+                actionName: 'view'
+            }
+        });
     }
 }

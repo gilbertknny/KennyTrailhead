@@ -36,8 +36,9 @@ public without sharing class SCC_HttpReq_Monitoring {
                     	else maporgehuser.get(ms.Orgeh__c).add(ms.User__c);
                     }
                 }else{ //BRANCH
-                    String Uker_Type = mapbu.get(ms.Branch_Code__c); 
-                    if(Uker_Type != 'RO'){ //EXCLUDE UKER TYPE (RO) -> GS 08.11.24
+                    String Uker_Type = mapbu.get(ms.Branch_Code__c);
+                    //RO KONSOLIDASI TRUE -> GS 10.12.24
+                    //if(Uker_Type != 'RO'){ //EXCLUDE UKER TYPE (RO) -> GS 08.11.24
                         //PER BRANCH
                         Integer total = mapbranchtotal.get(ms.Branch_Code__c);
                         if(total == null) mapbranchtotal.put(ms.Branch_Code__c,Integer.valueOf(ms.Total__c));
@@ -68,7 +69,7 @@ public without sharing class SCC_HttpReq_Monitoring {
                             else mapregionuser.get(ms.Kode_Kanwil__c).add(ms.User__c);
                             
                         }
-                    }
+                    //}
                 }
             }
         }
@@ -144,12 +145,12 @@ public without sharing class SCC_HttpReq_Monitoring {
             system.debug('total:'+total);
             system.debug('setUser-Size:'+setUser.size());
             system.debug('strmsg:'+strmsg);
-            
+            if(code != null && code != '' && tipe != 'PUSAT') code = ('00000'+code).right(5);
             String uker_type = mapbu.get(code);
             if(tipe == 'PUSAT') uker_type = 'KP';
             if(uker_type != null && uker_type != ''){
                 if(uker_type == 'RO') is_konsolidasi = true;
-                else if (uker_type == 'KCP' || uker_type == 'U') is_konsolidasi = false;
+                else if (uker_type == 'KCP' || uker_type == 'U' || uker_type == 'KK') is_konsolidasi = false; //Add KK non Konsolidasi -> GS 06.12.24
                 Monitoring_Summary__c ms = new Monitoring_Summary__c();
                 if(tipe == 'BRANCH'){
                     ms.Branch_API__c = code;

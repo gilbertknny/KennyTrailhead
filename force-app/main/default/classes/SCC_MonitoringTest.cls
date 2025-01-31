@@ -42,6 +42,12 @@ public class SCC_MonitoringTest {
     
     static testMethod void testProcess(){
         system.schedule('Monitoring Summary', '0 0 0 * * ?', new SCC_Sch_Monitoring());
-        SCC_Monitoring.execute(null,null);
+        system.schedule('Monitoring Summary 1', '0 0 0 * * ?', new SCC_Sch_Monitoring1());
+        system.schedule('Monitoring Summary 2', '0 0 0 * * ?', new SCC_Sch_Monitoring2());
+        SCC_Monitoring.execute(null,null,'Extremely');
+        SCC_Monitoring.execute(null,null,'Business_Hours');
+        SCC_Monitoring.execute(null,null,'Not_Create_Case');
+        List<Monitoring_Summary__c> recordset = new List<Monitoring_Summary__c>();
+        database.executebatch(new SCC_Batch_ActionMonitoring(recordset,'update'),200);
     }
 }

@@ -12,6 +12,9 @@
     1.2   18/09/2024   Rakeyan Nuramria                  Adjust the UI for all API
     1.2   21/11/2024   Rakeyan Nuramria                  [FROM SIT] Hide Search NIK & Phone in Cardlink (req by surrounding BRI team )
     1.2   29/11/2024   Rakeyan Nuramria                  [FROM SIT] Adjust showing name for all category (Adjusting to the new logic)
+    //release 3
+    1.2   11/12/2024   Rakeyan Nuramria                  [FROM SIT] Unhide Search NIK & Phone in Cardlink (req by surrounding BRI team )
+
 -->
 
 
@@ -180,14 +183,14 @@
                             disabled={disableCreditCardField}></lightning-input> -->
 
                         <!-- Hide in 21/11/2024 -- uncomment this after API surrounding already fixed -->
-                        <!-- <lightning-input type="text" class="idField" label="Nomor ID (NIK)" value={idValue}
+                        <lightning-input type="text" class="idField" label="Nomor ID (NIK)" value={idValue}
                             onchange={handleNIK} disabled={disableIdField}></lightning-input>
-                        <div style="color: red;">{nikNumberError}</div> -->
+                        <div style="color: red;">{nikNumberError}</div>
                     </div>
                     <div>
-                        <!-- <lightning-input type="text" class="phoneField" label="Nomor Handphone" value={phoneNumber}
+                        <lightning-input type="text" class="phoneField" label="Nomor Handphone" value={phoneNumber}
                             onchange={handlePhone} disabled={disablePhoneField}></lightning-input>
-                        <div style="color: red;">{phoneNumberError}</div> -->
+                        <div style="color: red;">{phoneNumberError}</div>
                     </div>
                     <!-- END Hide in 21/11/2024 -- uncomment this after API surrounding already fixed -->
 

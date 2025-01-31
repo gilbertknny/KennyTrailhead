@@ -16,6 +16,7 @@
     1.0   09/10/2024   Rakeyan Nuramria                  [FROM SIT] remove mapping for nomor rekening for create/update case
     1.0   10/10/2024   Rakeyan Nuramria                  [FROM SIT] Adjust logic to show message if data mutasi empty & refresh data
     1.0   31/10/2024   Rakeyan Nuramria                  [FROM SIT] Adjust logic to show nominal/price/saldo number
+    1.0   02/12/2024   Rakeyan Nuramria                  [FROM SIT] Adjust logic to automatily navigate to record Case + cleansing code
 **/
 
 import { LightningElement, api, track, wire } from 'lwc';
@@ -51,18 +52,6 @@ export default class LwcMutasiRekeningKreditComponent extends  NavigationMixin(L
     @track errorMsg = '';
     @track hasError = false;
     @track errorMessage = '';
-    // @track data = [
-    //     { id: '1', tglTransaksi: '2024-09-01', tglPosting: '2024-09-02', descTransaksi: 'J-CO Mangga Dua', nominalTransaksi: 500000, kodeTransaksi: 1001, refNumber: 2121, approvalCode: 123456, ketResponse: 'Approved', statusTransaksi: 'Tercetak', waktuPenagihan: '0' },
-    //     { id: '2', tglTransaksi: '2024-09-02', tglPosting: '2024-09-04', descTransaksi: 'J-CO Mangga Dua', nominalTransaksi: 2000000, kodeTransaksi: 1002, refNumber: 2121, approvalCode: 654321, ketResponse: 'Approved', statusTransaksi: 'Tercetak', waktuPenagihan: '0' },
-    //     { id: '3', tglTransaksi: '2024-09-03', tglPosting: '2024-09-06', descTransaksi: 'J-CO Mangga Dua', nominalTransaksi: 1500000, kodeTransaksi: 1003, refNumber: 2121, approvalCode: 789012, ketResponse: 'Approved', statusTransaksi: 'Tercetak', waktuPenagihan: '0' },
-    //     { id: '4', tglTransaksi: '2024-09-03', tglPosting: '2024-09-08', descTransaksi: 'J-CO Mangga Dua', nominalTransaksi: 300000, kodeTransaksi: 1004, refNumber: 2121, approvalCode: 345678, ketResponse: 'Approved', statusTransaksi: 'Tercetak', waktuPenagihan: '0' },
-    //     { id: '5', tglTransaksi: '2024-09-04', tglPosting: '2024-09-10', descTransaksi: 'J-CO Mangga Dua', nominalTransaksi: 100000, kodeTransaksi: 1005, refNumber: 2121, approvalCode: 987654, ketResponse: 'Approved', statusTransaksi: 'Tercetak', waktuPenagihan: '0' },
-    //     { id: '6', tglTransaksi: '2024-09-04', tglPosting: '2024-09-12', descTransaksi: 'J-CO Mangga Dua', nominalTransaksi: 1200000, kodeTransaksi: 1006, refNumber: 2121, approvalCode: 112233, ketResponse: 'Approved', statusTransaksi: 'Tercetak', waktuPenagihan: '0' },
-    //     { id: '7', tglTransaksi: '2024-09-05', tglPosting: '2024-09-14', descTransaksi: 'J-CO Mangga Dua', nominalTransaksi: 800000, kodeTransaksi: 1007, refNumber: 2121, approvalCode: 445566, ketResponse: 'Approved', statusTransaksi: 'Tercetak', waktuPenagihan: '0' },
-    //     { id: '8', tglTransaksi: '2024-09-05', tglPosting: '2024-09-16', descTransaksi: 'J-CO Mangga Dua', nominalTransaksi: 3000000, kodeTransaksi: 1008, refNumber: 2121, approvalCode: 778899, ketResponse: 'Approved', statusTransaksi: 'Tercetak', waktuPenagihan: '0' },
-    //     { id: '9', tglTransaksi: '2024-09-05', tglPosting: '2024-09-18', descTransaksi: 'J-CO Mangga Dua', nominalTransaksi: 600000, kodeTransaksi: 1009, refNumber: 2121, approvalCode: 990011, ketResponse: 'Approved', statusTransaksi: 'Tercetak', waktuPenagihan: '0' },
-    //     { id: '10', tglTransaksi: '2024-09-06', tglPosting: '2024-09-20', descTransaksi: 'J-CO Mangga Dua', nominalTransaksi: 250000, kodeTransaksi: 1010, refNumber: 2121, approvalCode: 223344, ketResponse: 'Approved', statusTransaksi: 'Tercetak', waktuPenagihan: '0' }
-    // ];
     
     columns = [
         { label: 'Tanggal Transaksi ', fieldName: 'tglTransaksi', type: 'date' },
@@ -170,27 +159,6 @@ export default class LwcMutasiRekeningKreditComponent extends  NavigationMixin(L
         }
     }
 
-    // handleCheckboxChange(event) {
-    //     const selectedId = event.target.dataset.id;
-    
-    //     console.log(`Checkbox clicked with ID: ${selectedId}`);
-    
-    //     // Update the state of the checkboxes
-    //     this.filteredData = this.filteredData.map(row => {
-    //         if (row.id === selectedId) {
-    //             return { ...row, isSelected: !row.isSelected };
-    //         } else {
-    //             return { ...row, isSelected: false };
-    //         }
-    //     });
-    
-    //     // Check if any checkbox is selected
-    //     const isAnySelected = this.filteredData.some(row => row.isSelected);
-    
-    //     // Disable or enable the Create Case button based on the checkbox selection
-    //     this.isCreateButtonDisabled = !isAnySelected;
-    // }
-
     handleCheckboxChange(event) {
         const selectedId = event.target.dataset.id;
     
@@ -236,16 +204,6 @@ export default class LwcMutasiRekeningKreditComponent extends  NavigationMixin(L
                 .then(result => {
                     console.log('Response mutasi rekening received:', result);
 
-                    // if (result && result.CPAHF) {
-                    //     this.data = result.CPAHF;
-                    //     this.filteredData = this.processedData();
-                    //     console.log('Filtered Data:', this.filteredData);
-                    //     this.showTable = true;
-                    // } else {
-                    //     this.handleSearchError('Data mutasi kartu kosong.');
-                    //     this.showToast('Error', 'Data tidak ditemukan', 'error', '','');
-                    // }
-
                     if (result && result.CPAHF && Array.isArray(result.CPAHF) && result.CPAHF.length > 0) {
                         this.data = result.CPAHF;
                         this.filteredData = this.processedData();
@@ -280,16 +238,6 @@ export default class LwcMutasiRekeningKreditComponent extends  NavigationMixin(L
                     console.log('Response mutasi rekening received:', result);
                     console.log('Response mutasi rekening received:', JSON.stringify(result, null, 2));
 
-                    // if (result && result.CPAHF) {
-                    //     this.data = result.CPAHF;
-                    //     this.filteredData = this.processedData();
-                    //     console.log('Filtered Data:', this.filteredData);
-                    //     this.showTable = true;
-                    // } else {
-                    //     this.handleSearchError('Data mutasi kartu kosong.');
-                    //     this.showToast('Error', 'Data tidak ditemukan', 'error', '','');
-                    // }
-
                     if (result && result.CPAHF && Array.isArray(result.CPAHF) && result.CPAHF.length > 0) {
                         this.data = result.CPAHF;
                         this.filteredData = this.processedData();
@@ -315,13 +263,6 @@ export default class LwcMutasiRekeningKreditComponent extends  NavigationMixin(L
     }
 
     processedData() {
-        // return this.filteredData.map(row => {
-        //     return {
-        //         ...row,
-        //         isSelected: this.selectedRow === row.id,
-        //         // isDisabled: this.selectedRow && this.selectedRow !== row.id
-        //     };
-        // });
 
         const formatterCurrency = new Intl.NumberFormat('id-ID', {
             style: 'currency',
@@ -329,28 +270,6 @@ export default class LwcMutasiRekeningKreditComponent extends  NavigationMixin(L
             minimumFractionDigits: 0, // Adjust as needed
             maximumFractionDigits: 2, // Adjust as needed
         });
-
-
-        // return this.data.map((row, index) => {
-        //     const dateTransaksi = new Date(row.tanggalTransaksi);
-        //     const datePostingan = new Date(row.tanggalPostingTransaksi);
-        //     const cstmTglTransaksi = dateTransaksi.toISOString().split('T')[0]; 
-        //     const cstmTglPostingan = datePostingan.toISOString().split('T')[0]; 
-
-        //     // const customTime = dateObject.toTimeString().split(' ')[0];
-
-        //     return {
-        //         ...row,
-        //         id: index + 1,
-        //         cstmTglTransaksi,
-        //         cstmTglPostingan,
-        //         nominalTransaksi: formatterCurrency.format(row.nominalTransaksi),
-        //         // waktuTransaksi: row.waktuTransaksi,
-        //         // isSelected: this.selectedRow === (index + 1).toString() ,
-        //         isSelected: this.selectedRow === (index + 1).toString(),
-        //         // isDisabled: row.isProcessed || false //for disabled after case being created
-        //     };
-        // });
 
         return this.data.map((row, index) => {
             // Convert 'YYYYMMDD' format to 'YYYY-MM-DD' for valid Date parsing
@@ -400,11 +319,6 @@ export default class LwcMutasiRekeningKreditComponent extends  NavigationMixin(L
     }
 
     handleCreateCase() {
-        // Handle case creation logic based on selected row
-        // const selectedRow = this.filteredData.find(row => row.isSelected);
-        // if (selectedRow) {
-        //     console.log('Creating case for row : ', selectedRow);
-        // }
 
         this.isLoadingCreateCase = true;
 
@@ -419,32 +333,6 @@ export default class LwcMutasiRekeningKreditComponent extends  NavigationMixin(L
            // Format the date field (SCC_Transaction_Date__c)
             const formattedDate = new Date(selectedRow.cstmTglTransaksi).toISOString().split('T')[0];
             fields['SCC_Transaction_Date__c'] = formattedDate || null;
-
-            // Combine date and time to create the datetime field (SCC_Waktu_Transaksi__c)
-            // if (selectedRow.cstmTglTransaksi && selectedRow.waktuTransaksi) {
-            //     const date = new Date(selectedRow.cstmTglTransaksi);
-
-            //     const timeParts = selectedRow.waktuTransaksi.split(':');
-            //     const hours = parseInt(timeParts[0], 10);
-            //     const minutes = parseInt(timeParts[1], 10);
-            //     const seconds = timeParts.length > 2 ? parseInt(timeParts[2], 10) : 0; // Default to 0 if seconds are not provided
-
-            //     date.setHours(hours, minutes, seconds);
-
-            //     // Convert the updated date (with time) to ISO 8601 format
-            //     const formattedDateTime = date.toISOString(); // format YYYY-MM-DDTHH:mm:ss.sssZ
-
-            //     fields['SCC_Waktu_Transaksi__c'] = formattedDateTime || null;
-            // } else {
-            //     fields['SCC_Waktu_Transaksi__c'] = null; // Handle the case where either date or time is missing
-            // }
-
-
-             //v1, use this if using the IDR Formatter Currency
-            // const rawNominal = selectedRow.nominalTransaksi.replace(/[^0-9,-]/g, '').replace(',', '.');
-            // const mutasiTransaksi = Number(rawNominal);
-            // fields['SCC_Amount__c'] = parseFloat(mutasiTransaksi.toFixed(2));
-            //END v1, use this if using the IDR Formatter Currency
 
             // v2, use this if using formatNumber method
             const rawNominal = selectedRow.nominalTransaksi.replace(/[^0-9,-]/g, '').replace(',', '.');
@@ -476,7 +364,7 @@ export default class LwcMutasiRekeningKreditComponent extends  NavigationMixin(L
                     console.log('Created Case ID:', caseRecord.id);
                     this.showToast(
                         'Sukses', 
-                        'Record berhasil ditambahkan! ', 
+                        'Record berhasil ditambahkan! anda akan diarahkan ke halaman Case. Atau ', 
                         'success', 
                         caseRecord.id, 
                         'Case' // Change this to 'Case' or whatever your object API name is
@@ -492,6 +380,11 @@ export default class LwcMutasiRekeningKreditComponent extends  NavigationMixin(L
                     // Refresh the Apex data after creating the record
                     // return refreshApex(this.filteredData); // Adjust based on where you store the data
 
+                    setTimeout(() => {
+                        // Navigate to the newly created record after the delay
+                        this.navigateToRecord(caseRecord.id, 'Case'); // Pass 'Case' as the objectApiName
+                        }, 700);
+
                 })
                 .catch(error => {
                     const errorMessage = error.message || 'An unknown error occurred.';
@@ -506,204 +399,6 @@ export default class LwcMutasiRekeningKreditComponent extends  NavigationMixin(L
             this.showToast('Error', 'No row selected. Please select a row to create a case.', 'error');
         }
     }
-
-    // handleCreateCase() {
-    //     // Handle case creation logic based on selected row
-    //     // const selectedRow = this.filteredData.find(row => row.isSelected);
-    //     // if (selectedRow) {
-    //     //     console.log('Creating case for row : ', selectedRow);
-
-    //     // }
-
-    //     this.isLoadingCreateCase = true;
-
-    //     const selectedRow = this.filteredData.find(row => row.isSelected);
-    //     console.log('handleCreateCase clicked..');
-        
-    //     if (selectedRow) {
-    //         const fields = {};
-
-    //         fields['RecordTypeId'] = this.recordTypeId;
-
-    //        // Format the date field (SCC_Transaction_Date__c)
-    //         const formattedDate = new Date(selectedRow.customDate).toISOString().split('T')[0];
-    //         fields['SCC_Transaction_Date__c'] = formattedDate || null;
-
-    //         // Combine date and time to create the datetime field (SCC_Waktu_Transaksi__c)
-    //         if (selectedRow.cstmTglTransaksi && selectedRow.waktuTransaksi) {
-    //             const date = new Date(selectedRow.cstmTglTransaksi);
-
-    //             const timeParts = selectedRow.customTime.split(':');
-    //             const hours = parseInt(timeParts[0], 10);
-    //             const minutes = parseInt(timeParts[1], 10);
-    //             const seconds = timeParts.length > 2 ? parseInt(timeParts[2], 10) : 0; // Default to 0 if seconds are not provided
-
-    //             date.setHours(hours, minutes, seconds);
-
-    //             // Convert the updated date (with time) to ISO 8601 format
-    //             const formattedDateTime = date.toISOString(); // format YYYY-MM-DDTHH:mm:ss.sssZ
-
-    //             fields['SCC_Waktu_Transaksi__c'] = formattedDateTime || null;
-    //         } else {
-    //             fields['SCC_Waktu_Transaksi__c'] = null; // Handle the case where either date or time is missing
-    //         }
-
-            
-    //         // const mutasiDebet = Number(selectedRow.mutasiDebet);
-    //         // const mutasiKredit = Number(selectedRow.mutasiKredit); 
-
-    //         // console.log('Nominal Debet:', mutasiDebet);
-    //         // console.log('Nominal Kredit:', mutasiKredit);
-
-    //         const rawDebet = selectedRow.mutasiDebet.replace(/[^0-9,-]/g, '').replace(',', '.');
-    //         const rawKredit = selectedRow.mutasiKredit.replace(/[^0-9,-]/g, '').replace(',', '.'); 
-
-    //         console.log('Nominal Debet:', rawDebet);
-    //         console.log('Nominal Kredit:', rawKredit);
-
-    //         const mutasiDebet = Number(rawDebet);
-    //         const mutasiKredit = Number(rawKredit);
-
-    //         console.log('Nominal Debet:', mutasiDebet);
-    //         console.log('Nominal Kredit:', mutasiKredit);
-            
-    //         if (mutasiDebet === 0 && mutasiKredit !== 0) {
-    //             fields['SCC_Amount__c'] = parseFloat(mutasiKredit.toFixed(2)); 
-    //         } else if (mutasiKredit === 0 && mutasiDebet !== 0) {
-    //             fields['SCC_Amount__c'] = parseFloat(mutasiDebet.toFixed(2)); 
-    //         }
-    
-    //         fields['SCC_Account_Number__c'] = String(selectedRow.noKartu) || null; 
-    //         fields['SCC_Card_Number__c'] = String(selectedRow.noKartu) || null;
-    //         // fields['SCC_Terminal_ID__c'] = String(selectedRow.trremk) || null;
-    //         fields['AccountId'] = this.accountId;
-
-    //         const recordInput = { apiName: 'Case', fields };
-
-    //         createRecord(recordInput)
-    //             .then(caseRecord => {
-    //                 console.log('Successfully created record:', caseRecord);
-    //                 console.log('Created Case ID:', caseRecord.id);
-    //                 this.showToast(
-    //                     'Sukses', 
-    //                     'Record berhasil ditambahkan! ', 
-    //                     'success', 
-    //                     caseRecord.id, 
-    //                     'Case' // Change this to 'Case' or whatever your object API name is
-    //                 );
-
-    //                 // Optionally delete the selected row from the data
-    //                 // this.deleteSelectedRow(selectedRow.noRek);
-
-    //                 this.selectedRow = null;
-    //                 this.filteredData = this.processedData();
-    //                 this.isCreateButtonDisabled = true;
-
-    //                 // Refresh the Apex data after creating the record
-    //                 // return refreshApex(this.filteredData); // Adjust based on where you store the data
-
-    //             })
-    //             .catch(error => {
-    //                 const errorMessage = error.body?.message || 'An unknown error occurred.';
-    //                 console.log('Error dalam pembuatan case:', errorMessage);
-    //                 this.showToast('Error', `Error dalam pembuatan case: ${errorMessage}`, 'error');
-    //             })
-    //             .finally(() => {
-    //                 this.isLoadingCreateCase = false;
-    //             });
-    //     } else {
-    //         this.showToast('Error', 'No row selected. Please select a row to create a case.', 'error');
-    //     }
-    // }
-
-    /**
-    handleUpdateCase() {
-        // Handle case update logic based on selected row
-        this.isLoadingUpdateCase = true;
-    
-        const selectedRow = this.filteredData.find(row => row.isSelected);
-        console.log('handleUpdateCase clicked..');
-        
-        if (selectedRow) {
-            const fields = {};
-    
-            fields['Id'] = this.recordId;
-    
-            // Format the date field (SCC_Transaction_Date__c)
-            const formattedDate = new Date(selectedRow.customDate).toISOString().split('T')[0];
-            fields['SCC_Transaction_Date__c'] = formattedDate || null;
-    
-            // Combine date and time to create the datetime field (SCC_Waktu_Transaksi__c)
-            if (selectedRow.cstmTglTransaksi && selectedRow.waktuTransaksi) {
-                const date = new Date(selectedRow.cstmTglTransaksi);
-    
-                const timeParts = selectedRow.customTime.split(':');
-                const hours = parseInt(timeParts[0], 10);
-                const minutes = parseInt(timeParts[1], 10);
-                const seconds = timeParts.length > 2 ? parseInt(timeParts[2], 10) : 0;
-    
-                date.setHours(hours, minutes, seconds);
-                const formattedDateTime = date.toISOString();
-    
-                fields['SCC_Waktu_Transaksi__c'] = formattedDateTime || null;
-            } else {
-                fields['SCC_Waktu_Transaksi__c'] = null;
-            }
-    
-            const rawDebet = selectedRow.mutasiDebet.replace(/[^0-9,-]/g, '').replace(',', '.');
-            const rawKredit = selectedRow.mutasiKredit.replace(/[^0-9,-]/g, '').replace(',', '.');
-    
-            console.log('Nominal Debet:', rawDebet);
-            console.log('Nominal Kredit:', rawKredit);
-    
-            const mutasiDebet = Number(rawDebet);
-            const mutasiKredit = Number(rawKredit);
-    
-            console.log('Nominal Debet:', mutasiDebet);
-            console.log('Nominal Kredit:', mutasiKredit);
-    
-            if (mutasiDebet === 0 && mutasiKredit !== 0) {
-                fields['SCC_Amount__c'] = parseFloat(mutasiKredit.toFixed(2)); 
-            } else if (mutasiKredit === 0 && mutasiDebet !== 0) {
-                fields['SCC_Amount__c'] = parseFloat(mutasiDebet.toFixed(2)); 
-            }
-    
-            fields['SCC_Account_Number__c'] = String(selectedRow.noKartu) || null; 
-            fields['SCC_Card_Number__c'] = String(selectedRow.noKartu) || null;
-            fields['AccountId'] = this.accountId;
-    
-            const recordInput = { fields };
-    
-            updateRecord(recordInput)
-                .then(caseRecord => {
-                    console.log('Successfully updated record:', caseRecord);
-                    this.showToast(
-                        'Sukses', 
-                        'Record berhasil diperbarui.', 
-                        'success', 
-                        caseRecord.id, 
-                        'Case'
-                    );
-    
-                    // Optionally refresh the data
-                    this.selectedRow = null;
-                    this.filteredData = this.processedData();
-                    this.isUpdateButtonDisabled = true;
-    
-                })
-                .catch(error => {
-                    const errorMessage = error.body?.message || 'An unknown error occurred.';
-                    console.log('Error dalam pembaruan case:', errorMessage);
-                    this.showToast('Error', `Error dalam pembaruan case: ${errorMessage}`, 'error');
-                })
-                .finally(() => {
-                    this.isLoadingUpdateCase = false;
-                });
-        } else {
-            this.showToast('Error', 'No row selected. Please select a row to update a case.', 'error');
-        }
-    }
-    */
 
     handleUpdateCase() {
         this.isLoadingUpdateCase = true;
@@ -794,60 +489,6 @@ export default class LwcMutasiRekeningKreditComponent extends  NavigationMixin(L
             this.showToast('Error', 'No row selected. Please select a row to update a case.', 'error');
         }
     }
-    
-
-    // handleSearch() {
-    //     if (this.startDate && this.endDate) {
-    //         const start = new Date(this.startDate);
-    //         const end = new Date(this.endDate);
-
-    //         this.filteredData = this.data.filter(record => {
-    //             const recordDate = new Date(record.tglTransaksi);
-    //             return recordDate >= start && recordDate <= end;
-    //         });
-
-    //         if (this.filteredData.length > 0) {
-    //             this.showTable = true;
-    //         } else {
-    //             this.showTable = false;
-    //             this.showToast('Info', 'Data tidak ditemukan untuk rentang tanggal yang dipilih.', 'info');
-    //         }
-    //     } else {
-    //         this.showTable = false; 
-    //         this.showToast('Error', 'Pilih tanggal terlebih dahulu.', 'error');
-    //     }
-    // }
-
-    //HandleSearch with spinner
-    // handleSearch() {
-    //     this.isLoading = false;
-    //     this.showTable = false;
-    //     if (this.startDate && this.endDate) {
-    //         this.isLoading = true;
-    //         const start = new Date(this.startDate);
-    //         const end = new Date(this.endDate);
-
-    //         // Simulating data processing with a delay
-    //         setTimeout(() => {
-    //             this.filteredData = this.data.filter(record => {
-    //                 const recordDate = new Date(record.tglTransaksi);
-    //                 return recordDate >= start && recordDate <= end;
-    //             });
-
-    //             if (this.filteredData.length > 0) {
-    //                 this.showTable = true;
-    //             } else {
-    //                 this.showTable = false;
-    //                 this.showToast('Info', 'Data tidak ditemukan untuk rentang tanggal yang dipilih.', 'info');
-    //             }
-                
-    //             this.isLoading = false; // Hide spinner after processing
-    //         }, 1000); // Simulating a delay of 1 second
-    //     } else {
-    //         this.showTable = false;
-    //         this.showToast('Error', 'Pilih tanggal terlebih dahulu.', 'error');
-    //     }
-    // }
 
     handleSearchError(errorMessage) {
         this.showUpdateCaseButton = false;
@@ -991,5 +632,18 @@ export default class LwcMutasiRekeningKreditComponent extends  NavigationMixin(L
             });
             this.dispatchEvent(event);
         }
+    }
+
+    // function to navigate to a record with dynamic objectApiName
+    navigateToRecord(recordId, objectApiName) {
+        // Use the NavigationMixin to navigate to the record's page
+        this[NavigationMixin.Navigate]({
+            type: 'standard__recordPage',
+            attributes: {
+                recordId: recordId,
+                objectApiName: objectApiName, // Use dynamic objectApiName
+                actionName: 'view'
+            }
+        });
     }
 }

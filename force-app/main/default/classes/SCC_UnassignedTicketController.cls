@@ -58,7 +58,23 @@ public with sharing class SCC_UnassignedTicketController {
         Id batchJobId;
         if (!agentIds.isEmpty()) {
             if (!caseIds.isEmpty()) {
-                List<Case> casesToUpdate = [SELECT Id, OwnerId, Status FROM Case WHERE Id IN :caseIds];
+                List<Case> casesToUpdate = new List<Case>();
+                Integer agentCounter = 0;
+                for (Integer i = 0; i < caseIds.size(); i++) {
+                    Case thisCase = new Case();
+                    thisCase.Id = caseIds[i];
+                    thisCase.OwnerId = agentIds[agentCounter];
+                    thisCase.Maker__c = agentIds[agentCounter];
+                    thisCase.Assign_Date_NFT__c = DateTime.Now();
+                    casesToUpdate.add(thisCase);
+                    
+                    agentCounter += 1;
+                    if (agentCounter == agentIds.size()){
+                        agentCounter = 0;
+                    }
+                }
+                
+                /*List<Case> casesToUpdate = [SELECT Id, OwnerId, Status FROM Case WHERE Id IN :caseIds];
                 
                 Integer numCases = caseIds.size() / agentIds.size();
                 Integer remainingCases = math.mod(caseIds.size(), agentIds.size());
@@ -73,7 +89,7 @@ public with sharing class SCC_UnassignedTicketController {
                         //casesToUpdate[j].Checker__c = UserInfo.getUserId();
                     }
                     caseCounter += numCasesForAgent;
-                }
+                }*/
                 
                 System.debug('casesToUpdate');
                 System.debug(casesToUpdate);

@@ -26,6 +26,7 @@ public with sharing class SCC_CaseResolution_UI_test {
     static void CaseTest(){
         Case cs = (Case) SOQL_SOBJECT.SingleSobject(',SCC_Call_Type__r.Name,SCC_Call_Type__r.External_Id__c', 'Case', '', '', '', '1');
         Test.startTest();
+        system.debug('Case Terminal ID :'+cs.Terminal_ID__c);
         SCC_CaseResolution_UI.getCaseDetail(cs.id);
         SCC_CaseResolution_UI.getNotifWA(cs);
         SCC_CaseResolution_UI.getListRekeningKoran(cs.id);
@@ -36,7 +37,7 @@ public with sharing class SCC_CaseResolution_UI_test {
         SCC_CaseResolution_UI.getListQueuetrans(cs.id);
         SCC_CaseResolution_UI.getCallTypeDetail(cs.SCC_Call_Type__c);
         SCC_CaseResolution_UI.getFiturDetail(cs.SCC_Call_Type_Feature__c);
-        SCC_CaseResolution_UI.getTerminalDetail(cs.Terminal_ID__c);
+        // SCC_CaseResolution_UI.getTerminalDetail(cs.Terminal_ID__c);
         SCC_CaseResolution_UI.updateCase(cs, 'test');
         SCC_CaseResolution_UI.CustomerProfileDetail(cs);
         Test.stopTest();

@@ -1,11 +1,10 @@
 public class SCC_Monitoring {
-    public static void execute(String strdt,Date dt){
+    public static void execute(String strdt,Date dt,String action){
         if(strdt == null) strdt = 'YESTERDAY';
         if(dt == null) dt = Date.Today().addDays(-1);
-        
-        Extremely(strdt,dt);
-        Business_Hours(strdt,dt);
-        Not_Create_Case(strdt,dt);
+        if(action == 'Extremely') Extremely(strdt,dt);
+        if(action == 'Business_Hours') Business_Hours(strdt,dt);
+        if(action == 'Not_Create_Case') Not_Create_Case(strdt,dt);
     }
     
     public static void Extremely(String strdt,Date dt){
@@ -14,19 +13,25 @@ public class SCC_Monitoring {
         String recordTypeName = 'extremely frequency';
         String menu = 'Home';
         String destination = 'Data Hub';
-        String querypf = 'SELECT User_Run__r.Profile.Name ProfileName FROM Error_Log__c ';
+        List<String> listprofile = new List<String>();
+        List<Profile> listpf = [SELECT Id,Name FROM Profile ORDER BY Name ASC];
+        for(Profile pf : listpf){
+            listprofile.add(pf.Name);
+        }
+        /*String querypf = 'SELECT User_Run__r.Profile.Name ProfileName FROM Error_Log__c ';
         querypf += 'WHERE Error_Datetime__c = ' + strdt + ' ';
         querypf += 'AND Response_Status_Code__c = 200 ';
         querypf += 'AND Menu__c !=: menu ';
         querypf += 'AND Destination__c =: destination ';
         querypf += 'GROUP BY User_Run__r.Profile.Name ';
-        querypf += 'ORDER BY User_Run__r.Profile.Name ASC ';
+        //querypf += 'ORDER BY User_Run__r.Profile.Name ASC ';
+        querypf += 'LIMIT 10000 ';
         List<AggregateResult> listpf = Database.query(querypf);
         
         List<String> listprofile = new List<String>();
         for(AggregateResult pf : listpf){
             listprofile.add((String)pf.get('ProfileName'));
-        }
+        }*/
         
         List<Monitoring_Summary__c> listupdatems = new List<Monitoring_Summary__c>();
         List<Monitoring_Summary__c> listinsertms = new List<Monitoring_Summary__c>();
@@ -60,6 +65,7 @@ public class SCC_Monitoring {
                     queryar += 'GROUP BY User_Run__c ';
                     queryar += 'HAVING COUNT(Id) >:iJum ';
                     queryar += 'ORDER BY User_Run__c ASC ';
+                    queryar += 'LIMIT 20000 ';
                     List<AggregateResult> listar = Database.query(queryar);
                     system.debug('listar:'+listar);
                     for(AggregateResult ar : listar){
@@ -88,34 +94,11 @@ public class SCC_Monitoring {
         }
         
         system.debug('listuserid:'+listuserid);
-        if(listuserid.size()>0){
-            String queryel = 'SELECT Id,Anomali__c,User_Run__c FROM Error_Log__c ';
-            queryel += 'WHERE Error_Datetime__c = ' + strdt + ' ';
-            queryel += 'AND Response_Status_Code__c = 200 ';
-            queryel += 'AND Menu__c !=: menu ';
-            queryel += 'AND Destination__c =: destination ';
-            queryel += 'AND User_Run__c IN:listuserid ';
-            queryel += 'ORDER BY User_Run__c ASC, Error_Datetime__c ASC ';
-            List<Error_Log__c> listel = Database.query(queryel);
-            if(listel.size()>0){
-                List<Error_Log__c> listelnew = new List<Error_Log__c>();
-                for(Error_Log__c el : listel){
-                    if(el.Anomali__c == '' || el.Anomali__c == null){
-                        el.Anomali__c = anomali;
-                        listelnew.add(el);
-                    }else if(!el.Anomali__c.contains(anomali)){
-                        el.Anomali__c = el.Anomali__c + ';' + anomali;
-                        listelnew.add(el);
-                    }
-                }
-                system.debug('listelnew:'+listelnew);
-                if(listelnew.size()>0) update listelnew;
-            }
-        }
+        if(listuserid.size()>0) database.executebatch(new SCC_Batch_ActionMonitoringLog(strdt,menu,destination,listuserid,anomali),200);
         system.debug('listinsertms:'+listinsertms);
         system.debug('listupdatems:'+listupdatems);
-        if(listinsertms.size()>0) insert listinsertms;
-        if(listupdatems.size()>0) update listupdatems;
+        if(listinsertms.size()>0) database.executebatch(new SCC_Batch_ActionMonitoring(listinsertms,'insert'),200); //insert listinsertms;
+        if(listupdatems.size()>0) database.executebatch(new SCC_Batch_ActionMonitoring(listupdatems,'update'),200); //update listupdatems;
     }
     
     public static void Business_Hours(String strdt,Date dt){
@@ -150,6 +133,7 @@ public class SCC_Monitoring {
         queryel += 'AND Menu__c !=: menu ';
         queryel += 'AND Destination__c =: destination ';
         queryel += 'ORDER BY User_Run__c ASC, Error_Datetime__c ASC ';
+        queryel += 'LIMIT 20000 ';
         List<Error_Log__c> listel = Database.query(queryel);
         List<Error_Log__c> listelnew = new List<Error_Log__c>();
         Map<String,String> mapuseranomali = new Map<String,String>();
@@ -184,7 +168,7 @@ public class SCC_Monitoring {
             }
         }
         system.debug('listelnew:'+listelnew);
-        if(listelnew.size()>0) update listelnew;
+        if(listelnew.size()>0) database.executebatch(new SCC_Batch_ActionMonitoring(listelnew,'update'),200); //update listelnew;
         String queryar = 'SELECT User_Run__c,COUNT(Id) Total FROM Error_Log__c ';
         queryar += 'WHERE Error_Datetime__c = ' + strdt + ' ';
         queryar += 'AND Response_Status_Code__c = 200 ';
@@ -193,6 +177,7 @@ public class SCC_Monitoring {
         queryar += 'AND Anomali__c INCLUDES(:anomali) ';
         queryar += 'GROUP BY User_Run__c ';
         queryar += 'ORDER BY User_Run__c ASC ';
+        queryar += 'LIMIT 20000 ';
         List<AggregateResult> listar = Database.query(queryar);
         Map<String,Integer> mapUserTotal = new Map<String,Integer>();
         for(AggregateResult ar : listar){
@@ -233,8 +218,10 @@ public class SCC_Monitoring {
         }
         system.debug('listinsertms:'+listinsertms);
         system.debug('listupdatems:'+listupdatems);
-        if(listinsertms.size()>0) insert listinsertms;
-        if(listupdatems.size()>0) update listupdatems;
+        //if(listinsertms.size()>0) insert listinsertms;
+        //if(listupdatems.size()>0) update listupdatems;
+        if(listinsertms.size()>0) database.executebatch(new SCC_Batch_ActionMonitoring(listinsertms,'insert'),200); //insert listinsertms;
+        if(listupdatems.size()>0) database.executebatch(new SCC_Batch_ActionMonitoring(listupdatems,'update'),200); //update listupdatems;
     }
     
     public static void Not_Create_Case(String strdt,Date dt){
@@ -255,6 +242,7 @@ public class SCC_Monitoring {
         query += 'AND Menu__c !=:menu ';
         query += 'AND Destination__c =: destination ';
         query += 'ORDER BY User_Run__c ASC, Error_Datetime__c ASC ';
+        query += 'LIMIT 10000 ';
         List<Error_Log__c> listel = Database.query(query);
         List<Error_Log__c> listelnew = new List<Error_Log__c>();
         List<String> listaccountid = new List<String>();
@@ -263,13 +251,13 @@ public class SCC_Monitoring {
             if(el.Object_Name__c == 'Account') listaccountid.add(el.RelatedId__c);
             else if(el.Object_Name__c == 'Case') listcaseid.add(el.RelatedId__c);
         }
-        String querych1 = 'SELECT Id,Case.AccountId FROM CaseHistory WHERE Case.AccountId IN:listaccountid AND CreatedDate = ' +strdt;
+        String querych1 = 'SELECT Id,Case.AccountId FROM CaseHistory WHERE Case.AccountId IN:listaccountid AND CreatedDate = ' +strdt + ' LIMIT 10000 ';
         List<CaseHistory> listch1 = Database.query(querych1);
         Map<String,String> maphistory = new Map<String,String>();
         for(CaseHistory ch : listch1){
             maphistory.put(ch.Case.AccountId,ch.Id);
         }
-        String querych2 = 'SELECT Id,CaseId FROM CaseHistory WHERE CaseId IN:listcaseid AND CreatedDate = ' +strdt;
+        String querych2 = 'SELECT Id,CaseId FROM CaseHistory WHERE CaseId IN:listcaseid AND CreatedDate = ' +strdt + ' LIMIT 10000 ';
         List<CaseHistory> listch2 = Database.query(querych2);
         for(CaseHistory ch : listch2){
             maphistory.put(ch.CaseId,ch.Id);
@@ -296,7 +284,7 @@ public class SCC_Monitoring {
             
         }
         system.debug('listelnew:'+listelnew);
-        if(listelnew.size()>0) update listelnew;
+        if(listelnew.size()>0) database.executebatch(new SCC_Batch_ActionMonitoring(listelnew,'update'),200); //update listelnew;
         String queryar = 'SELECT User_Run__c,COUNT(Id) Total FROM Error_Log__c ';
         queryar += 'WHERE Error_Datetime__c = ' + strdt + ' ';
         queryar += 'AND Response_Status_Code__c = 200 ';
@@ -305,6 +293,7 @@ public class SCC_Monitoring {
         queryar += 'AND Anomali__c INCLUDES(:anomali) ';
         queryar += 'GROUP BY User_Run__c ';
         queryar += 'ORDER BY User_Run__c ASC ';
+        queryar += 'LIMIT 10000 ';
         List<AggregateResult> listar = Database.query(queryar);
         Map<String,Integer> mapUserTotal = new Map<String,Integer>();
         for(AggregateResult ar : listar){
@@ -345,8 +334,10 @@ public class SCC_Monitoring {
         }
         system.debug('listinsertms:'+listinsertms);
         system.debug('listupdatems:'+listupdatems);
-        if(listinsertms.size()>0) insert listinsertms;
-        if(listupdatems.size()>0) update listupdatems;
+        //if(listinsertms.size()>0) insert listinsertms;
+        //if(listupdatems.size()>0) update listupdatems;
+        if(listinsertms.size()>0) database.executebatch(new SCC_Batch_ActionMonitoring(listinsertms,'insert'),200); //insert listinsertms;
+        if(listupdatems.size()>0) database.executebatch(new SCC_Batch_ActionMonitoring(listupdatems,'update'),200); //update listupdatems;
     }
     
     public static boolean validateHours(Time tm, Time StartTime, Time EndTime){
