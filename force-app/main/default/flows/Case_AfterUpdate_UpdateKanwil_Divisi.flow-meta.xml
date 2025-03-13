@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>61.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <assignments>
         <name>Assignment_5</name>
         <label>Assignment 5</label>
         <locationX>50</locationX>
-        <locationY>719</locationY>
+        <locationY>755</locationY>
         <assignmentItems>
             <assignToReference>$Record.Cost_Center_Description__c</assignToReference>
             <operator>Assign</operator>
@@ -59,12 +60,15 @@
                 <stringValue>Kantor Pusat</stringValue>
             </value>
         </assignmentItems>
+        <connector>
+            <targetReference>Update_Case</targetReference>
+        </connector>
     </assignments>
     <assignments>
         <name>Copy_1_of_Update_User_Detail</name>
         <label>Copy 1 of Update User Detail</label>
         <locationX>974</locationX>
-        <locationY>827</locationY>
+        <locationY>863</locationY>
         <assignmentItems>
             <assignToReference>$Record.Branch_Unit_Name__c</assignToReference>
             <operator>Assign</operator>
@@ -94,7 +98,7 @@
             </value>
         </assignmentItems>
         <assignmentItems>
-            <assignToReference>$Record.Region__c</assignToReference>
+            <assignToReference>$Record.Region_Name__c</assignToReference>
             <operator>Assign</operator>
             <value>
                 <elementReference>Get_Branch_Queue.Region_Name__c</elementReference>
@@ -111,21 +115,21 @@
             <assignToReference>$Record.Cost_Center__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>Get_Orgeh_Queue.Cost_Center__c</elementReference>
+                <elementReference>Get_Orgeh_Queue.Orgeh__r.Cost_Center__c</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
             <assignToReference>$Record.Cost_Center_Description__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>Get_Orgeh_Queue.Cost_Center_Description__c</elementReference>
+                <elementReference>Get_Orgeh_Queue.Orgeh__r.Cost_Center_Description__c</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
             <assignToReference>$Record.Divisi__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>Get_Orgeh_Queue.Divisi__c</elementReference>
+                <elementReference>Get_Orgeh_Queue.Orgeh__r.Divisi__c</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
@@ -146,7 +150,7 @@
             <assignToReference>$Record.Orgeh__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>Get_Orgeh_Queue.External_Id__c</elementReference>
+                <elementReference>Get_Orgeh_Queue.Orgeh__r.External_Id__c</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
@@ -164,7 +168,7 @@
         <name>region</name>
         <label>region</label>
         <locationX>842</locationX>
-        <locationY>1043</locationY>
+        <locationY>1079</locationY>
         <assignmentItems>
             <assignToReference>$Record.Region__c</assignToReference>
             <operator>Assign</operator>
@@ -179,12 +183,15 @@
                 <stringValue>Kantor Pusat</stringValue>
             </value>
         </assignmentItems>
+        <connector>
+            <targetReference>Update_Case</targetReference>
+        </connector>
     </assignments>
     <assignments>
         <name>Update_Case_Branch_Assignmenmt</name>
         <label>Update Case Branch Assignmenmt</label>
         <locationX>578</locationX>
-        <locationY>1043</locationY>
+        <locationY>1079</locationY>
         <assignmentItems>
             <assignToReference>$Record.Divisi__c</assignToReference>
             <operator>Assign</operator>
@@ -203,12 +210,15 @@
                 <elementReference>Get_Branch_Master.Id</elementReference>
             </value>
         </assignmentItems>
+        <connector>
+            <targetReference>Update_Case</targetReference>
+        </connector>
     </assignments>
     <assignments>
         <name>Update_Case_RO_Assignmenmt</name>
         <label>Update Case RO Assignmenmt</label>
         <locationX>314</locationX>
-        <locationY>1151</locationY>
+        <locationY>1187</locationY>
         <assignmentItems>
             <assignToReference>$Record.Divisi__c</assignToReference>
             <operator>Assign</operator>
@@ -227,12 +237,15 @@
                 <elementReference>Get_Branch_RO.Id</elementReference>
             </value>
         </assignmentItems>
+        <connector>
+            <targetReference>Update_Case</targetReference>
+        </connector>
     </assignments>
     <assignments>
         <name>Update_User_Detail</name>
         <label>Update User Detail</label>
         <locationX>446</locationX>
-        <locationY>827</locationY>
+        <locationY>863</locationY>
         <assignmentItems>
             <assignToReference>$Record.Branch_Unit_Name__c</assignToReference>
             <operator>Assign</operator>
@@ -283,7 +296,7 @@
         <name>Cek_Pusat</name>
         <label>Cek Pusat</label>
         <locationX>248</locationX>
-        <locationY>503</locationY>
+        <locationY>539</locationY>
         <defaultConnector>
             <targetReference>Get_Branch_Master</targetReference>
         </defaultConnector>
@@ -308,7 +321,7 @@
         <name>Cek_RO</name>
         <label>Cek RO</label>
         <locationX>446</locationX>
-        <locationY>935</locationY>
+        <locationY>971</locationY>
         <defaultConnector>
             <targetReference>Update_Case_Branch_Assignmenmt</targetReference>
         </defaultConnector>
@@ -340,7 +353,7 @@
         <name>Check_Cabang_atau_Pusat</name>
         <label>Check Cabang atau Pusat</label>
         <locationX>974</locationX>
-        <locationY>935</locationY>
+        <locationY>971</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>Pusat_Area</name>
@@ -362,7 +375,7 @@
         <name>Check_User</name>
         <label>Check User</label>
         <locationX>611</locationX>
-        <locationY>287</locationY>
+        <locationY>323</locationY>
         <defaultConnector>
             <targetReference>Queue</targetReference>
         </defaultConnector>
@@ -409,7 +422,7 @@
         <name>Get_Branch_Master</name>
         <label>Get Branch Master</label>
         <locationX>446</locationX>
-        <locationY>611</locationY>
+        <locationY>647</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>GetKanwil</targetReference>
@@ -430,7 +443,7 @@
         <name>Get_Branch_Queue</name>
         <label>Get Branch Queue</label>
         <locationX>974</locationX>
-        <locationY>611</locationY>
+        <locationY>647</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Get_Kanwil_Queue</targetReference>
@@ -451,7 +464,7 @@
         <name>Get_Branch_RO</name>
         <label>Get Branch RO</label>
         <locationX>314</locationX>
-        <locationY>1043</locationY>
+        <locationY>1079</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Update_Case_RO_Assignmenmt</targetReference>
@@ -472,7 +485,7 @@
         <name>Get_Kanwil_Queue</name>
         <label>Get Kanwil Queue</label>
         <locationX>974</locationX>
-        <locationY>719</locationY>
+        <locationY>755</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Copy_1_of_Update_User_Detail</targetReference>
@@ -507,7 +520,7 @@
         <name>Get_Orgeh</name>
         <label>Get Orgeh</label>
         <locationX>50</locationX>
-        <locationY>611</locationY>
+        <locationY>647</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Assignment_5</targetReference>
@@ -528,7 +541,7 @@
         <name>Get_Orgeh_Queue</name>
         <label>Get Orgeh Queue</label>
         <locationX>974</locationX>
-        <locationY>503</locationY>
+        <locationY>539</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Get_Branch_Queue</targetReference>
@@ -542,14 +555,14 @@
             </value>
         </filters>
         <getFirstRecordOnly>true</getFirstRecordOnly>
-        <object>Orgeh__c</object>
+        <object>Orgeh_Queue_Name__c</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordLookups>
         <name>Get_User</name>
         <label>Get User</label>
         <locationX>248</locationX>
-        <locationY>395</locationY>
+        <locationY>431</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Cek_Pusat</targetReference>
@@ -570,7 +583,7 @@
         <name>GetKanwil</name>
         <label>Get Kanwil</label>
         <locationX>446</locationX>
-        <locationY>719</locationY>
+        <locationY>755</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Update_User_Detail</targetReference>
@@ -605,7 +618,7 @@
         <name>Queue</name>
         <label>Queue</label>
         <locationX>974</locationX>
-        <locationY>395</locationY>
+        <locationY>431</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Get_Orgeh_Queue</targetReference>
@@ -629,19 +642,25 @@
         <object>Group</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
+    <recordUpdates>
+        <name>Update_Case</name>
+        <label>Update Case</label>
+        <locationX>611</locationX>
+        <locationY>1547</locationY>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
     <start>
         <locationX>485</locationX>
         <locationY>0</locationY>
         <connector>
             <targetReference>Check_User</targetReference>
         </connector>
-        <filterFormula>ISNEW() || ISCHANGED({!$Record.OwnerId})</filterFormula>
         <object>Case</object>
         <recordTriggerType>CreateAndUpdate</recordTriggerType>
-        <triggerType>RecordBeforeSave</triggerType>
+        <triggerType>RecordAfterSave</triggerType>
     </start>
-    <status>Active</status>
-    <triggerOrder>320</triggerOrder>
+    <status>Obsolete</status>
+    <triggerOrder>1050</triggerOrder>
     <variables>
         <name>CaseVar</name>
         <dataType>SObject</dataType>

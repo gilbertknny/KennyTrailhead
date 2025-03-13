@@ -10,7 +10,7 @@
     1.0   09/10/2024   Rakeyan Nuramria                  [FROM SIT] Adjust UI to scrollable horizontally
     1.0   23/10/2024   Rakeyan Nuramria                  Adjust UI CSS bold for detail transaction
     1.0   31/10/2024   Rakeyan Nuramria                  [FROM SIT] Adjust UI to show data
-
+    1.1   26/02/2025   Nabila Febri Viola                Change row index from TID to MID for Detail Merchant
 -->
 
 <template>
@@ -121,7 +121,7 @@
                                                 <!-- <lightning-menu-item label="Transaksi Merchant" value=""
                                                     onclick={handleTransaksiAction}
                                                     onclose={handleCloseTransaksi}></lightning-menu-item> -->
-                                                <lightning-menu-item label="Detail" value="" data-id={row.tid}
+                                                <lightning-menu-item label="Detail" value="" data-id={row.mid}
                                                     onclose={handleCloseDetail}
                                                     onclick={showDetail}></lightning-menu-item>
                                             </lightning-button-menu>
@@ -140,11 +140,11 @@
         <!-- Detail Section -->
         <template for:each={data} for:item="data">
             <template if:true={data.showSection}>
-                <lightning-card key={data.tid} title="Detail Merchant" variant="base"
+                <lightning-card key={data.mid} title="Detail Merchant" variant="base"
                     class="custom-card slds-m-top_small slds-card_boundary">
                     <div slot="actions">
                         <template if:false={isCloseHidden}>
-                            <lightning-button-icon data-id={data.tid} icon-name="utility:close" alternative-text="Close"
+                            <lightning-button-icon data-id={data.mid} icon-name="utility:close" alternative-text="Close"
                                 title="Close" onclick={handleCloseMerchantDetail} class="cssClass" variant="bare">
                             </lightning-button-icon>
                         </template>

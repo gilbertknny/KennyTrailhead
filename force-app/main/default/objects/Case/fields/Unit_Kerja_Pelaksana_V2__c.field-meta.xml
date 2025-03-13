@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Unit_Kerja_Pelaksana_V2__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF(
+    Is_Queue__c,
+    Owner:Queue.QueueName,
+    IF(
+        ISBLANK(Owner:User.Branch_Unit__c),
+        Owner:User.SCC_Orgeh_Description__c,
+        Owner:User.Branch_Unit__c
+    )
+)</formula>
+    <label>Unit Kerja Pelaksana V2</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Call_SCC_PushNotif_CIA</name>
+        <label>Call SCC_PushNotif_CIA</label>
+        <locationX>358</locationX>
+        <locationY>623</locationY>
+        <actionName>SCC_PushNotif_CIA</actionName>
+        <actionType>apex</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>accountNumber</name>
+            <value>
+                <elementReference>$Record.SCC_Account_Number__c</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>requestRefNum</name>
+            <value>
+                <elementReference>RandomRefNum</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>ticketStatus</name>
+            <value>
+                <elementReference>$Record.Status_BRIMO__c</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>troubleTicketId</name>
+            <value>
+                <elementReference>$Record.Case_Number__c</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>SCC_PushNotif_CIA</nameSegment>
+    </actionCalls>
+    <apiVersion>62.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <decisions>
+        <name>Check_Status_BRIMO</name>
+        <label>Check Status BRIMO</label>
+        <locationX>358</locationX>
+        <locationY>323</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>New</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.SCC_Account_Number__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>StatusBRIMO_Formula</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>New</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.push_notif_CIA_isNew__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Push_Notification_CIA_is_New</targetReference>
+            </connector>
+            <label>New</label>
+        </rules>
+        <rules>
+            <name>In_Progress</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>StatusBRIMO_Formula</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>In Progress</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record__Prior.Status_BRIMO__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>In Progress</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Call_SCC_PushNotif_CIA</targetReference>
+            </connector>
+            <label>In Progress</label>
+        </rules>
+        <rules>
+            <name>Closed</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>StatusBRIMO_Formula</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Closed</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record__Prior.Status_BRIMO__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>Closed</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Call_SCC_PushNotif_CIA</targetReference>
+            </connector>
+            <label>Closed</label>
+        </rules>
+    </decisions>
+    <description>push notif CIA with integration from SF
+
+add random ref number adjustment in flow - 22/10/2024
+
+adjusmnent for adding logic for push notification isNew , adding flag push_notif_CIA_isNew  - 23/10/2024</description>
+    <environments>Default</environments>
+    <formulas>
+        <name>isNew</name>
+        <dataType>Boolean</dataType>
+        <expression>isNew()</expression>
+    </formulas>
+    <formulas>
+        <name>RandomRefNum</name>
+        <dataType>String</dataType>
+        <expression>TEXT(YEAR({!$Flow.CurrentDate})) &amp; 
+LPAD(MID(TEXT({!$Flow.CurrentDateTime}), 12, 2), 2, &apos;0&apos;) &amp; 
+LPAD(MID(TEXT({!$Flow.CurrentDateTime}), 15, 2), 2, &apos;0&apos;) &amp; 
+LEFT(TEXT(UNIXTIMESTAMP({!$Flow.CurrentDateTime})), 4)</expression>
+    </formulas>
+    <formulas>
+        <name>StatusBRIMO_Formula</name>
+        <dataType>String</dataType>
+        <expression>CASE(
+    TEXT({!$Record.Status}),
+    &quot;New&quot;, &quot;New&quot;,
+    &quot;Waiting Document&quot;, &quot;In Progress&quot;,
+    &quot;Working&quot;, &quot;In Progress&quot;,
+    &quot;Escalated&quot;, &quot;In Progress&quot;,
+    &quot;Closed&quot;, &quot;Closed&quot;,
+    &quot;Not Used&quot;
+)</expression>
+    </formulas>
+    <interviewLabel>[Case] Push notification CIA {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>[Case] Push notification CIA</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <name>Update_Push_Notification_CIA_is_New</name>
+        <label>Update Push Notification CIA is New</label>
+        <locationX>50</locationX>
+        <locationY>431</locationY>
+        <connector>
+            <targetReference>Call_SCC_PushNotif_CIA</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>push_notif_CIA_isNew__c</field>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>232</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Check_Status_BRIMO</targetReference>
+        </connector>
+        <filterLogic>(1 AND 2) OR (1 AND 3)</filterLogic>
+        <filters>
+            <field>SCC_Account_Number__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Status</field>
+            <operator>IsChanged</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Status</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>New</stringValue>
+            </value>
+        </filters>
+        <object>Case</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

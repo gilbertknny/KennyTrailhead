@@ -40,7 +40,7 @@ public with sharing class SCC_ApexApproval_Signer {
             totalRecords = allCaseIds.size();
             totalPages = (Integer)Math.ceil((Decimal)totalRecords / pageSize);
 
-            caseList = [SELECT Id, CaseNumber, SCC_Call_Type__r.Name, SCC_Call_Type_Feature__c, SCC_Card_Number__c, CreatedDate, SCC_Amount__c, Approval_Status__c, Count_Nota__c, SCC_Count_Queuetrans__c, SCC_Call_Type_Feature__r.Name
+            caseList = [SELECT Id, CaseNumber, SCC_Call_Type__r.Name, SCC_Call_Type_Feature__c, SCC_Card_Number__c, CreatedDate, SCC_Amount__c, Priority, Net_SLA_Saat_Ini__c, Approval_Status__c, Count_Nota__c, SCC_Count_Queuetrans__c, SCC_Call_Type_Feature__r.Name
                         FROM Case 
                         WHERE Approval_Status__c = 'Waiting for Signer' and SCC_Call_Type__c != null and status = 'Escalated' and SCC_Card_Number__c != null and isclosed__c = false
                         ORDER BY CreatedDate
@@ -67,7 +67,7 @@ public with sharing class SCC_ApexApproval_Signer {
     }
 
     @AuraEnabled
-    public static Map<String, Object> getSearchCases(Integer pageNumber, Integer pageSize, String calltype, String noTicket, String tanggalKomplain, String cekNota) {
+    public static Map<String, Object> getSearchCases(Integer pageNumber, Integer pageSize, String calltype, String noTicket, String tanggalKomplain, String priority, String cekNota) {
         Map<String, Object> result = new Map<String, Object>();
         try {
             String baseQuery = ' FROM Case WHERE Approval_Status__c = \'Waiting for Signer\' and SCC_Call_Type__c != null and SCC_Card_Number__c != null and isclosed__c = false and status = \'Escalated\'';
@@ -84,6 +84,9 @@ public with sharing class SCC_ApexApproval_Signer {
                 Date tanggalKomplainDate = Date.valueOf(tanggalKomplain);
                 conditions.add('DAY_ONLY(CreatedDate) = :tanggalKomplainDate');
             }
+            if (!String.isEmpty(priority)) {
+                conditions.add('Priority = :priority');
+            }
             if (!String.isEmpty(cekNota)) {
                 if (cekNota == 'Ada Nota') {
                     conditions.add('SCC_Count_Queuetrans__c > 0'); 
@@ -98,7 +101,7 @@ public with sharing class SCC_ApexApproval_Signer {
                 baseQuery += conditionString;
             }
 
-            String query = 'SELECT Id, CaseNumber, SCC_Call_Type__r.Name, SCC_Call_Type_Feature__c, SCC_Card_Number__c, CreatedDate, SCC_Amount__c, Approval_Status__c, Count_Nota__c, SCC_Count_Queuetrans__c, SCC_Call_Type_Feature__r.Name' + baseQuery;
+            String query = 'SELECT Id, CaseNumber, SCC_Call_Type__r.Name, SCC_Call_Type_Feature__c, SCC_Card_Number__c, CreatedDate, SCC_Amount__c, Priority, Net_SLA_Saat_Ini__c, Approval_Status__c, Count_Nota__c, SCC_Count_Queuetrans__c, SCC_Call_Type_Feature__r.Name' + baseQuery;
             query += ' ORDER BY CreatedDate LIMIT :pageSize OFFSET :offset';
 
             String queryCount = 'SELECT COUNT()' + baseQuery;

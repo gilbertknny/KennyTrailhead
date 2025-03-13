@@ -10,7 +10,12 @@
             <operation>equals</operation>
             <value>True</value>
         </filterItems>
-        <isOptional>false</isOptional>
+        <filterItems>
+            <field>SSC_Call_Type__c.External_Id__c</field>
+            <operation>notEqual</operation>
+            <value>8615,8616,8617,8618,8619,8623,8624,8625,8626,8627,8628,8629,8630,8631,8632,8633,8634,8635,8636</value>
+        </filterItems>
+        <isOptional>true</isOptional>
     </lookupFilter>
     <referenceTo>SSC_Call_Type__c</referenceTo>
     <relationshipLabel>Cases</relationshipLabel>

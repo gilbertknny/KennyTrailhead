@@ -9,7 +9,8 @@
     <aura:attribute name="searchKeyword" type="String" />
     <aura:attribute name="searchCalltype" type="String" />
     <aura:attribute name="searchNoTicket" type="String" />
-    <aura:attribute name="searchTanggalKomplain" type="String" />  
+    <aura:attribute name="searchTanggalKomplain" type="String" /> 
+    <aura:attribute name="searchPriority" type="String" />  
     <aura:attribute name="searchNota" type="String" />  
     <aura:attribute name="allCaseIds" type="String[]" />
     <aura:attribute name="selectedCaseIds" type="String[]" />
@@ -26,16 +27,23 @@
     <!-- Formulir Pencarian -->
     <div class="slds-box slds-theme_default search-container">
         <div class="slds-grid slds-gutters">
-            <div class="slds-col slds-size_1-of-4">
+            <div class="slds-col slds-size_1-of-5">
                 <lightning:input type="text" label="Case Type" value="{!v.searchCalltype}" placeholder="Cari dan pilih Case Type di sini." />
             </div>
-            <div class="slds-col slds-size_1-of-4">
+            <div class="slds-col slds-size_1-of-5">
                 <lightning:input type="text" label="No Ticket" value="{!v.searchNoTicket}" placeholder="Masukkan No Ticket" />
             </div>
-            <div class="slds-col slds-size_1-of-4">
+            <div class="slds-col slds-size_1-of-5">
                 <lightning:input type="date" label="Tanggal Komplain" value="{!v.searchTanggalKomplain}" placeholder="Masukkan Tanggal Komplain" />
             </div>
-            <div class="slds-col slds-size_1-of-4">
+            <div class="slds-col slds-size_1-of-5">
+                <lightning:select label="Priority" value="{!v.searchPriority}">
+                    <option value="">Pilih Priority</option>
+                    <option value="High (Urgent/Critical)">High (Urgent)</option>
+                    <option value="Low">Low</option>
+                </lightning:select>
+            </div>
+            <div class="slds-col slds-size_1-of-5">
                 <lightning:select label="Cek Nota" value="{!v.searchNota}">
                     <option value="">Pilih Status Nota</option>
                     <option value="Ada Nota">Ada Nota</option>
@@ -63,9 +71,11 @@
                     <th scope="col">No Ticket</th>
                     <th scope="col">Case Type</th>
                     <th scope="col">Fitur ID</th>
-                    <th scope="col">No Kartu</th>
+                    <!-- <th scope="col">No Kartu</th> -->
                     <th scope="col">Tanggal Komplain</th>
                     <th scope="col">Amount</th>
+                    <th scope="col">Priority</th>
+                    <th scope="col">SLA Saat Ini</th>
                     <th scope="col">Status</th>
                     <th scope="col">Nota</th>
                     <th scope="col">Aksi</th>
@@ -81,11 +91,13 @@
                         <td class="slds-truncate">{!case.CaseNumber}</td>
                         <td class="slds-truncate">{!case.SCC_Call_Type__r.Name}</td>
                         <td class="slds-truncate">{!case.SCC_Call_Type_Feature__r.Name}</td>
-                        <td class="slds-truncate">{!case.SCC_Card_Number__c}</td>
+                        <!-- <td class="slds-truncate">{!case.SCC_Card_Number__c}</td> -->
                         <td class="slds-truncate">{!case.CreatedDate}</td>
                         <td class="slds-truncate right-align">
                             <ui:outputNumber value="{!case.SCC_Amount__c}"/>
                         </td>
+                        <td class="slds-truncate">{!case.Priority}</td>
+                        <td class="slds-truncate">{!case.Net_SLA_Saat_Ini__c}</td>
                         <td class="slds-truncate">{!case.Approval_Status__c}</td>
                         <td class="slds-truncate">
                             <lightning:input type="checkbox" checked="{!case.SCC_Count_Queuetrans__c > 0}" disabled="true" />

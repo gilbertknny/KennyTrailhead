@@ -16,7 +16,7 @@ public without sharing class SCC_HttpReq_NotificationCase {
                              AND ((Area__c = 'KP00' AND Cost_Center__c != null) OR (Area__c != 'KP00' AND Region__c != null AND Main_Branch__c != null))
                              AND IsClosed = FALSE
                              ORDER BY Kode_Kanwil__c ASC,Main_Branch__c ASC,Branch_Code__c ASC,SCC_Owner_Orgeh__c ASC
-                             LIMIT 50000];
+                             LIMIT 40000];
         if(Test.isRunningTest()) listcs = [SELECT Id,Kode_Kanwil__c,Branch_Code__c,Main_Branch__c,SCC_Owner_Orgeh__c FROM Case LIMIT 10];
         Map<String,Integer> mapbranchtotal = new Map<String,Integer>();
         Map<String,Integer> mapcabangtotal = new Map<String,Integer>();

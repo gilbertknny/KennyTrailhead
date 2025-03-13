@@ -833,15 +833,17 @@ public with sharing class Object_Test {
     }
 
     public static SCC_RekonWrapper.ResponseRekon responseRekon(){
-        SCC_RekonWrapper.ResponseRekonResult dat = responseRekonResult(200000,'Unmatch','Sedang Dikerjakan','2022-07-09T17:00:00.000Z');
+        SCC_RekonWrapper.ResponseRekonResult dat = responseRekonResult(200000,'Match','Sedang Dikerjakan','2022-07-09T17:00:00.000Z');
         SCC_RekonWrapper.ResponseRekonResult dat2 = responseRekonResult(300000,'Match','','2022-07-09T18:00:00.000Z');
         SCC_RekonWrapper.ResponseRekonResult dat3 = responseRekonResult(400000,'Unmatch','Tidak Dikerjakan','2022-07-09T19:00:00.000Z');
-        SCC_RekonWrapper.ResponseRekonResult dat4 = responseRekonResult(400000,'Unmatch','Transaction Successful','2022-07-09T19:00:00.000Z');
+        SCC_RekonWrapper.ResponseRekonResult dat4 = responseRekonResult(400000,'Match','Transaction Successful','2022-07-09T20:00:00.000Z');
+        SCC_RekonWrapper.ResponseRekonResult dat5 = responseRekonResult(500000,'Match','Sedang Proses','2022-07-09T21:00:00.000Z');
         List<SCC_RekonWrapper.ResponseRekonResult> listdat = new List<SCC_RekonWrapper.ResponseRekonResult>();
         listdat.add(dat);
         listdat.add(dat2);
         listdat.add(dat3);
         listdat.add(dat4);
+        listdat.add(dat5);
         SCC_RekonWrapper.ResponseRekonData resdat = new SCC_RekonWrapper.ResponseRekonData();
         resdat.result = listdat;
         SCC_RekonWrapper.ResponseRekon res = new SCC_RekonWrapper.ResponseRekon();

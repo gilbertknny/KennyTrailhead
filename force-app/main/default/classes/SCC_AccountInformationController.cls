@@ -6,7 +6,7 @@ public without sharing class SCC_AccountInformationController {
             throw new AuraHandledException('Current user does not have permission to access Account records.');
         }
         try {
-            return [SELECT Id, SCC_cifno__c, Name, SCC_Address__c, SCC_Jenis_Nasabah__c, SCC_TanggalLahir__c,
+            return [SELECT Id, SCC_cifno__c, Name, SCC_Address__c, Provinsi__c, SCC_Jenis_Nasabah__c, SCC_TanggalLahir__c,
                 SCC_Tipe_Nasabah__c, Phone, SCC_Primary_Email__c, SCC_Facebook__c, SCC_Instagram__c,
                 SCC_X__c,RecordType.Name FROM Account WHERE Id = :recordId LIMIT 1];
         } catch (Exception e) {
@@ -36,6 +36,20 @@ public without sharing class SCC_AccountInformationController {
             update accToUpdate;
         } catch (Exception e) {
             throw new AuraHandledException('Error updating account fields: ' + e.getMessage());
+        }
+    }
+    
+    @AuraEnabled
+    public static void updateAccountFromDatahub(Id accountId, String provinsi, String age) {
+        if (Schema.sObjectType.Account.isUpdateable()) {
+            try {
+                Account accToUpdate = new Account(Id = accountId);
+                accToUpdate.Provinsi__c = provinsi;
+                accToUpdate.SCC_TanggalLahir__c = age;
+                update accToUpdate;
+            } catch (Exception e) {
+                throw new AuraHandledException('Error updating account fields: ' + e.getMessage());
+            }        
         }
     }
 }

@@ -67,7 +67,7 @@
         helper.navigateToRecord(component, caseId);
     },
     approveTicket: function(component, event, helper) {
-        //helper.approveSelectedTickets(component);
+        helper.approveSelectedTickets(component);
         let selectedCases = [];
         let checkboxes = component.find("caseCheckbox");
 

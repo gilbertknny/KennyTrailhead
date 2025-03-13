@@ -94,4 +94,29 @@ public class SCC_AccountInformationControllerTest {
         }
         Test.stopTest();
     }
+    
+    @IsTest
+    static void testupdateAccountFromDatahub() {
+        // Get the Id of the test Account
+        Account testAccount = [SELECT Id FROM Account LIMIT 1];
+        
+        Test.startTest();
+        SCC_AccountInformationController.updateAccountFromDatahub(testAccount.Id, 'JAWA BARAT', '33');
+        Account updatedAccount = [SELECT Provinsi__c, SCC_TanggalLahir__c FROM Account WHERE Id = :testAccount.Id];
+        System.assertEquals('JAWA BARAT', updatedAccount.Provinsi__c, 'Provinsi should be updated');
+        System.assertEquals('33', updatedAccount.SCC_TanggalLahir__c, 'TanggalLahir should be updated');
+        Test.stopTest();
+    }
+    
+    @IsTest
+    static void testupdateAccountFromDatahubError() {
+        Test.startTest();
+        try {
+            SCC_AccountInformationController.updateAccountFromDatahub(null, 'JAWA BARAT', '33');
+            System.assert(false, 'Exception should have been thrown for no fields to update');
+        } catch (AuraHandledException e) {
+            System.assertEquals('Script-thrown exception', e.getMessage());
+        }
+        Test.stopTest();
+    }
 }

@@ -3,7 +3,6 @@
     <fullName>sf_devops__Prerelease__c</fullName>
     <deprecated>false</deprecated>
     <description>The last non-versioned stage in the pipeline that is used to create a version.</description>
-    <externalId>false</externalId>
     <formula>AND( NOT( sf_devops__Versioned__c ) ,  sf_devops__Next_Stage__r.sf_devops__Versioned__c )</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
     <label>Prerelease</label>

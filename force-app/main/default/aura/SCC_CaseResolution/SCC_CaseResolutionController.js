@@ -322,13 +322,13 @@
             for (var i = 0; i < allRecords.length; i++) {
                 var recc = allRecords[i];
                 console.log("StatusPenyelesaian",recc.data.StatusPenyelesaian);
-                if (recc.data.StatusPenyelesaian != 'Sedang Dikerjakan') {
+                if (recc.data.StatusPenyelesaian != 'Sedang Dikerjakan'&& recc.data.StatusPenyelesaian != 'Sedang Proses') {
                     recc.isDisabled = false;
                 }
                 selectedRecords.push(recc);
             }
             for (var i = 0; i < PaginationList.length; i++) {
-                if (PaginationList[i].data.StatusPenyelesaian != 'Sedang Dikerjakan') {
+                if (PaginationList[i].data.StatusPenyelesaian != 'Sedang Dikerjakan'&& recc.data.StatusPenyelesaian != 'Sedang Proses') {
                     PaginationList[i].isDisabled = false;
                 } 
                 updatedPaginationList.push(PaginationList[i]);

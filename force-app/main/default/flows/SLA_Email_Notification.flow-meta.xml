@@ -15,9 +15,9 @@
             </value>
         </inputParameters>
         <nameSegment>Case.Perpanjangan_SLA_via_WA</nameSegment>
-        <versionSegment>1</versionSegment>
     </actionCalls>
     <apiVersion>61.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <decisions>
         <name>Case_Closed_2</name>
         <label>Case Closed?</label>
@@ -96,7 +96,8 @@
         </scheduledPaths>
         <triggerType>RecordAfterSave</triggerType>
     </start>
-    <status>Obsolete</status>
+    <status>Draft</status>
+    <triggerOrder>1200</triggerOrder>
     <variables>
         <name>AttachmentId</name>
         <dataType>SObject</dataType>

@@ -682,7 +682,7 @@ public with sharing class SCC_CaseResolution_UI {
             this.isChecked = isChecked;
             this.num = num;
             this.data = data;
-            if(data?.StatusPenyelesaian=='Sedang Dikerjakan') {
+            if(data?.StatusPenyelesaian=='Sedang Dikerjakan'|| data?.StatusPenyelesaian=='Sedang Proses') {
                 this.isDisabled = true;
             }
             else{

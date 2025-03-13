@@ -306,6 +306,7 @@ public with sharing class SCC_LegacyCaseAPICtrl {
                 acc.RecordTypeId = Schema.getGlobalDescribe().get('Account').getDescribe().getRecordTypeInfosByDeveloperName().get('IndustriesBusiness').getRecordTypeId();
             }
             acc.SCC_TanggalLahir__c = calculateAge(demographicInfo?.tanggalLahir);
+            acc.Provinsi__c = demographicInfo?.propinsiSesuaiID;
             acc.SCC_cifno__c = cifNumber;
             acc.Phone = demographicInfo?.handphone;
             acc.SCC_Jenis_Nasabah__c = (String.isnotBlank(demographicInfo?.nasabahPrioritas) || String.isNotBlank(demographicInfo?.prioritas)) ? 'Prioritas' : 'Non-Prioritas';

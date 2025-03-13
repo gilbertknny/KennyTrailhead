@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <assignments>
         <name>pageNamesInOrder_Assignment</name>
         <label>pageNamesInOrder_Assignment</label>
@@ -68,7 +69,7 @@
     <processMetadataValues>
         <name>BrandingSet</name>
         <value>
-            <stringValue>sb_customer_feedback_survey_1_79078e4d_f33a_492c_8e5f_66832d8c36a4</stringValue>
+            <stringValue>sb_customer_feedback_survey_4_fa7cf303_f582_4ce3_8dae_38106561f306</stringValue>
         </value>
     </processMetadataValues>
     <processMetadataValues>
@@ -85,6 +86,12 @@
     </processMetadataValues>
     <processMetadataValues>
         <name>hasWelcomePage</name>
+        <value>
+            <booleanValue>false</booleanValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>isAutosaveEnabled</name>
         <value>
             <booleanValue>false</booleanValue>
         </value>
@@ -143,7 +150,7 @@
             <choiceReferences>c_7f0956aa_c4cc_43ee_be64_14a86e7df09d</choiceReferences>
             <dataType>Number</dataType>
             <extensionName>survey:runtimeRating</extensionName>
-            <fieldText>&lt;p&gt;&lt;span class=&quot;ql-cursor&quot;&gt;&lt;/span&gt;Yang terhormat Bapak / Ibu. Terima kasih telah menghubungkan Contact BRI. Untuk meningkatkan kualitas layanan Contact BRI bagi nasabah, mohon kesediaannya memberikan survey penilaian kepuasan Bapak/Ibu terhadap layanan Contact BRI dengan memberikan rating sebagai berikut.&lt;/p&gt;</fieldText>
+            <fieldText>&lt;p&gt;Yang terhormat Bapak / Ibu. Terima kasih telah &lt;span style=&quot;font-size: 13px;&quot;&gt;menghubungi layanan pengaduan nasabah BRI. Untuk meningkatkan kualitas layanan, kami mohon kesediaan Bapak/Ibu untuk memberikan penilaian kepuasan terhadap layanan pengaduan yang Bapak/Ibu dapatkan dengan mengisi rating berikut :&lt;/span&gt;&lt;/p&gt;</fieldText>
             <fieldType>ComponentChoice</fieldType>
             <isRequired>true</isRequired>
             <scale>0</scale>
@@ -179,12 +186,24 @@
                     <booleanValue>true</booleanValue>
                 </value>
             </processMetadataValues>
+            <processMetadataValues>
+                <name>npsLeftLabel</name>
+                <value>
+                    <stringValue>{!q_1fc156c3_ab56_4aba_bbf9_6d167b2f5760_nllref_tt}</stringValue>
+                </value>
+            </processMetadataValues>
+            <processMetadataValues>
+                <name>npsRightLabel</name>
+                <value>
+                    <stringValue>{!q_1fc156c3_ab56_4aba_bbf9_6d167b2f5760_nrlref_tt}</stringValue>
+                </value>
+            </processMetadataValues>
             <name>q_1fc156c3_ab56_4aba_bbf9_6d167b2f5760</name>
             <dataType>Number</dataType>
             <extensionName>survey:runtimeNps</extensionName>
-            <fieldText>&lt;p&gt;&lt;span class=&quot;ql-cursor&quot;&gt;&lt;/span&gt;Seberapa besar kemungkinan Bapak/Ibu akan merekomendasikan layanan contact BRI ke teman, keluarga, dan pihak lain?&lt;/p&gt;&lt;p&gt;&lt;img src=&quot;https://bankbri--sitest.sandbox.file.force.com/file-asset-public/WhatsApp_Image_20240821_at_123951?oid=00DMR0000001s6P&amp;amp;v=1&quot; alt=&quot;WhatsApp Image 2024-08-21 at 12.39.51&quot;&gt;&lt;strong&gt;&lt;/strong&gt;&lt;/p&gt;</fieldText>
+            <fieldText>&lt;p&gt;Seberapa besar kemungkinan Bapak/Ibu akan merekomendasikan layanan &lt;span style=&quot;font-size: 13px;&quot;&gt;pengaduan nasabah BRI &lt;/span&gt;ke teman, keluarga, dan pihak lain?&lt;/p&gt;&lt;p&gt;&lt;img src=&quot;https://bankbri--sitest.sandbox.file.force.com/file-asset-public/WhatsApp_Image_20240821_at_123951?oid=00DMR0000001s6P&amp;amp;v=1&quot; alt=&quot;WhatsApp Image 2024-08-21 at 12.39.51&quot;&gt;&lt;/p&gt;</fieldText>
             <fieldType>ComponentInput</fieldType>
-            <isRequired>false</isRequired>
+            <isRequired>true</isRequired>
             <scale>0</scale>
         </fields>
         <fields>
@@ -196,7 +215,7 @@
             </processMetadataValues>
             <name>q_4fbe45bf_746a_486b_9bdf_aa7771d6228c</name>
             <dataType>String</dataType>
-            <fieldText>&lt;p&gt;&lt;span class=&quot;ql-cursor&quot;&gt;&lt;/span&gt;Mohon maaf atas ketidaknyamanannya, untuk memperbaiki layanan Contact Center BRI silahkan Bapak/Ibu untuk Mengisikan saran dan masukan untuk layanan kami kedepannya&lt;/p&gt;</fieldText>
+            <fieldText>&lt;p&gt;Mohon maaf atas ketidaknyamanannya, untuk memperbaiki layanan &lt;span style=&quot;font-size: 13px;&quot;&gt;pengaduan nasabah BRI&lt;/span&gt;&lt;strong style=&quot;font-size: 13px;&quot;&gt; &lt;/strong&gt;silahkan Bapak/Ibu untuk Mengisikan saran dan masukan untuk layanan kami kedepannya&lt;/p&gt;</fieldText>
             <fieldType>InputField</fieldType>
             <isRequired>false</isRequired>
             <visibilityRule>
@@ -240,6 +259,16 @@
     </screens>
     <startElementReference>pageNamesInOrder_Assignment</startElementReference>
     <status>Active</status>
+    <textTemplates>
+        <name>q_1fc156c3_ab56_4aba_bbf9_6d167b2f5760_nllref_tt</name>
+        <isViewedAsPlainText>false</isViewedAsPlainText>
+        <text>Not at all likely</text>
+    </textTemplates>
+    <textTemplates>
+        <name>q_1fc156c3_ab56_4aba_bbf9_6d167b2f5760_nrlref_tt</name>
+        <isViewedAsPlainText>false</isViewedAsPlainText>
+        <text>Extremely likely</text>
+    </textTemplates>
     <textTemplates>
         <name>thankYouDescriptionTextTemplate</name>
         <isViewedAsPlainText>false</isViewedAsPlainText>

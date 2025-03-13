@@ -2,7 +2,11 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Within_Target_SLA__c</fullName>
     <externalId>false</externalId>
-    <formula>IF( Net_SLA_Saat_Ini__c &lt;= SCC_Call_Type__r.SCC_Total_SLA__c,&apos;Sesuai SLA&apos;, &apos;Melebihi SLA&apos;)</formula>
+    <formula>IF(
+Net_SLA_Saat_Ini__c &lt;= Custom_Target_SLA__c,
+&apos;Sesuai SLA&apos;,
+&apos;Melebihi SLA&apos;
+)</formula>
     <label>Status Pencapaian SLA</label>
     <required>false</required>
     <trackHistory>false</trackHistory>

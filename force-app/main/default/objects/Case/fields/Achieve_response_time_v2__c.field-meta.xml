@@ -26,7 +26,7 @@
         AND(
             OR(
                 ISPICKVAL(Origin, &quot;Apple App Store&quot;),
-                ISPICKVAL(Origin, &quot;Play Store&quot;),
+                ISPICKVAL(Origin, &quot;Google Play Store&quot;),
                 ISPICKVAL(Origin, &quot;YouTube&quot;)
             ),
             Response_Time_Minutes_v2__c &gt; 0 &amp;&amp; Response_Time_Minutes_v2__c &lt;= 1440

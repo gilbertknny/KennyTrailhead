@@ -14,12 +14,14 @@
     2.1   10/10/2024   Rakeyan Nuramria                  [DONE] Add condition for show data if clcd in the JSON return
     2.1   14/10/2024   Rakeyan Nuramria                  Adjust show error
     2.1   28/11/2024   Rakeyan Nuramria                  Adjust showing alamat banking/cardlink & name to namaLengkap for cardlink
+    2.2   24/01/2025   Nabila Febri Viola                Adjust showing and saving provinsi
 **/
 
 import { LightningElement, wire, track, api } from 'lwc';
 import { refreshApex } from '@salesforce/apex';
 import getAccRecord from '@salesforce/apex/SCC_AccountInformationController.getAccountData'
 import updateAccountFields from '@salesforce/apex/SCC_AccountInformationController.updateAccountFields'
+import updateAccountFromDatahub from '@salesforce/apex/SCC_AccountInformationController.updateAccountFromDatahub'
 import makeCallout from '@salesforce/apex/SCC_CustomerProfileSearchbyPhone.initiateCalloutUsingMobileNumber';
 import getInformasiCustomer from '@salesforce/apex/SCC_Account_UI.getInformasiCustomer';
 
@@ -40,6 +42,7 @@ export default class LwcCustomerDetailPage extends LightningElement {
     @track namaNasabahInput = '';
     @track usiaInput = '';
     @track alamatInput = '';
+    @track provinsiInput = '';
     @track noHpInput = '';
     @track emailInput = '';
     @track facebookInput = '';
@@ -445,6 +448,7 @@ export default class LwcCustomerDetailPage extends LightningElement {
                 this.usiaInput = cpgData.demografi.umur || '';
                 // this.alamatInput = cpgData.demografi.alamatSesuaiID + ' ' + cpgData.demografi.alamatSesuaiID2 || '';
                 this.alamatInput = `${(cpgData.demografi.alamatSesuaiID || '').trim()}${cpgData.demografi.alamatSesuaiID2 ? ' ' + cpgData.demografi.alamatSesuaiID2.trim() : ''}`;
+                this.provinsiInput = `${(cpgData.demografi.propinsiSesuaiID || '').trim()}`;
                 this.noHpInput = cpgData.demografi.handphone || '';
                 this.emailInput = cpgData.demografi.email || '';
                 this.jenisNasabahInput = cpgData.demografi.nasabahPrioritas;
@@ -483,6 +487,12 @@ export default class LwcCustomerDetailPage extends LightningElement {
                 // this.errorMsg = 'Data tidak ditemukan untuk BRINETS dan CARDLINK';
                 this.handleSearchError('Data tidak ditemukan');
                 this.hasError = true;
+            } else {
+                await updateAccountFromDatahub({
+                    accountId: this.recordId,
+                    age: this.usiaInput,
+                    provinsi: this.provinsiInput
+                });
             }
 
             // } else if (!foundBrinetsData) {

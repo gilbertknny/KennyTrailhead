@@ -25,7 +25,8 @@ trigger WaitingDocument on Case_Waiting_Document__c (before update) {
                 checkdatetime=checkdatetime.adddays(1);
                 checkdate=checkdate.adddays(1);
             }
-             CWS.total_Duration__c=totaldaysbetween-weekenddays;
+            List<Holiday> holidays = [SELECT ActivityDate, IsRecurrence, RecurrenceType, RecurrenceDayOfWeekMask FROM Holiday WHERE IsRecurrence = False AND ActivityDate >= :CWS.startdate__c AND ActivityDate <= :CWS.enddate__c];
+            CWS.total_Duration__c=totaldaysbetween-weekenddays-holidays.size();
         }
     }
     

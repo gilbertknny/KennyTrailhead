@@ -8,6 +8,7 @@
     1.0   26/08/2024   Rakeyan Nuramria                  Initial Version
     2.0   28/08/2024   Rakeyan Nuramria                  Update to the newest UI v2
     2.1   14/10/2024   Rakeyan Nuramria                  Adjust UI show error
+    2.2   24/01/2025   Nabila Febri Viola                Adjust showing and saving provinsi
 -->
 
 <template>
@@ -70,6 +71,14 @@
                     label="Alamat"></lightning-textarea>
             </div>
             <!-- End New Alamat Section -->
+            
+            <!-- New Provinsi Section -->
+            <div
+                class="input-container-disabled slds-col slds-large-size_12-of-12 slds-medium-size_12-of-12 slds-size_12-of-12 slds-p-horizontal_small">
+                <lightning-input class="" name="provinsi" disabled value={provinsiInput}
+                    label="Provinsi"></lightning-input>
+            </div>
+            <!-- End New Provinsi Section -->
 
             <!-- New Nomor Handphone Section -->
             <div

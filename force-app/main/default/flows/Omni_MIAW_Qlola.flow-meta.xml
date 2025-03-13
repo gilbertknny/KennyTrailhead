@@ -81,9 +81,9 @@
             </value>
         </inputParameters>
         <nameSegment>routeWork</nameSegment>
-        <versionSegment>1</versionSegment>
     </actionCalls>
     <apiVersion>61.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <decisions>
         <name>Check_Email_is_Entered</name>
         <label>Check Email is Entered</label>
@@ -267,7 +267,7 @@
             <targetReference>Check_Email_is_Entered</targetReference>
         </connector>
     </start>
-    <status>Obsolete</status>
+    <status>Active</status>
     <variables>
         <name>recordId</name>
         <dataType>String</dataType>

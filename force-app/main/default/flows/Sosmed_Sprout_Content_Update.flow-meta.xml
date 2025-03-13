@@ -1,11 +1,74 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>61.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <decisions>
+        <name>Check_if_Date_Time_Answer_in_Case_is_Null</name>
+        <label>Check if Date/Time Answer in Case is Null</label>
+        <locationX>182</locationX>
+        <locationY>539</locationY>
+        <defaultConnectorLabel>Date/Time Answer is Not Null</defaultConnectorLabel>
+        <rules>
+            <name>Date_Time_Answer_is_Null</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>get_case.Date_Time_Answer__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Date_Time_Answer</targetReference>
+            </connector>
+            <label>Date/Time Answer is Null</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_Outbound_Inbound</name>
+        <label>Check Outbound/Inbound</label>
+        <locationX>1304</locationX>
+        <locationY>431</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Is_Outbound</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.SproutSocialApp__IsOutbound__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Check_if_Date_Time_Answer_in_Case_is_Null</targetReference>
+            </connector>
+            <label>Is Outbound</label>
+        </rules>
+        <rules>
+            <name>Is_Inbound</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.SproutSocialApp__IsOutbound__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Check_Sprout_Conten</targetReference>
+            </connector>
+            <label>Is Inbound</label>
+        </rules>
+    </decisions>
     <decisions>
         <name>Check_Sprout_Conten</name>
         <label>Check Sprout Content</label>
         <locationX>1370</locationX>
-        <locationY>431</locationY>
+        <locationY>539</locationY>
+        <defaultConnector>
+            <targetReference>Check_Sprout_Recipient</targetReference>
+        </defaultConnector>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>Null</name>
@@ -24,6 +87,13 @@
                     <booleanValue>false</booleanValue>
                 </rightValue>
             </conditions>
+            <conditions>
+                <leftValueReference>$Record.SproutSocialApp__IsOutbound__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
             <connector>
                 <targetReference>Update_Case_Message</targetReference>
             </connector>
@@ -34,8 +104,8 @@
         <description>Check Native Sprout Recipient</description>
         <name>Check_Sprout_Recipient</name>
         <label>Check Sprout Recipient</label>
-        <locationX>842</locationX>
-        <locationY>647</locationY>
+        <locationX>1370</locationX>
+        <locationY>947</locationY>
         <defaultConnector>
             <targetReference>Default_Sprout_Recipient</targetReference>
         </defaultConnector>
@@ -156,11 +226,11 @@
     <recordLookups>
         <name>get_case</name>
         <label>Get Case</label>
-        <locationX>1370</locationX>
+        <locationX>1304</locationX>
         <locationY>323</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Check_Sprout_Conten</targetReference>
+            <targetReference>Check_Outbound_Inbound</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -177,8 +247,8 @@
     <recordUpdates>
         <name>Default_Sprout_Recipient</name>
         <label>Default Sprout Recipient</label>
-        <locationX>1634</locationX>
-        <locationY>755</locationY>
+        <locationX>2162</locationX>
+        <locationY>1055</locationY>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Id</field>
@@ -198,8 +268,8 @@
     <recordUpdates>
         <name>Play_Store_BRI_Credit_Card_Mobile_Sprout_Recipient</name>
         <label>[Play Store] BRI Credit Card Mobile Sprout Recipient</label>
-        <locationX>578</locationX>
-        <locationY>755</locationY>
+        <locationX>1106</locationX>
+        <locationY>1055</locationY>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Id</field>
@@ -219,8 +289,8 @@
     <recordUpdates>
         <name>Play_Store_BRI_Info_Lelang_Sprout_Recipient</name>
         <label>[Play Store] BRI Info Lelang Sprout Recipient</label>
-        <locationX>314</locationX>
-        <locationY>755</locationY>
+        <locationX>842</locationX>
+        <locationY>1055</locationY>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Id</field>
@@ -240,8 +310,8 @@
     <recordUpdates>
         <name>Play_Store_BRImo_Sprout_Recipient</name>
         <label>[Play Store] BRImo Sprout Recipient</label>
-        <locationX>842</locationX>
-        <locationY>755</locationY>
+        <locationX>1370</locationX>
+        <locationY>1055</locationY>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Id</field>
@@ -261,8 +331,8 @@
     <recordUpdates>
         <name>Play_Store_BRIMOLA_Sprout_Recipient</name>
         <label>[Play Store] BRIMOLA Sprout Recipient</label>
-        <locationX>50</locationX>
-        <locationY>755</locationY>
+        <locationX>578</locationX>
+        <locationY>1055</locationY>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Id</field>
@@ -282,8 +352,8 @@
     <recordUpdates>
         <name>Play_Store_Ceria_Sprout_Recipient</name>
         <label>[Play Store] Ceria Sprout Recipient</label>
-        <locationX>1106</locationX>
-        <locationY>755</locationY>
+        <locationX>1634</locationX>
+        <locationY>1055</locationY>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Id</field>
@@ -303,8 +373,8 @@
     <recordUpdates>
         <name>Play_Store_QLola_IB_Token_Sprout_Recipient</name>
         <label>[Play Store] QLola IB Token Sprout Recipient</label>
-        <locationX>1370</locationX>
-        <locationY>755</locationY>
+        <locationX>1898</locationX>
+        <locationY>1055</locationY>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Id</field>
@@ -324,10 +394,10 @@
     <recordUpdates>
         <name>Update_Case_Message</name>
         <label>Update Case with Sprout Content</label>
-        <locationX>842</locationX>
-        <locationY>539</locationY>
+        <locationX>1238</locationX>
+        <locationY>647</locationY>
         <connector>
-            <targetReference>Check_Sprout_Recipient</targetReference>
+            <targetReference>Update_Case_with_Sprout_Social_Post_Lookup</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -343,6 +413,31 @@
                 <elementReference>$Record.SproutSocialApp__Content__c</elementReference>
             </value>
         </inputAssignments>
+        <object>Case</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Case_with_Sprout_Social_Post_Lookup</name>
+        <label>Update Case with Sprout Social Post Lookup</label>
+        <locationX>1238</locationX>
+        <locationY>755</locationY>
+        <connector>
+            <targetReference>Check_Sprout_Recipient</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.SproutSocialApp__ParentId__c</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>Sprout_Social_Post__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
         <inputAssignments>
             <field>Sprout_Social_Post__c</field>
             <value>
@@ -351,8 +446,29 @@
         </inputAssignments>
         <object>Case</object>
     </recordUpdates>
+    <recordUpdates>
+        <name>Update_Date_Time_Answer</name>
+        <label>Update Date/Time Answer</label>
+        <locationX>50</locationX>
+        <locationY>647</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.SproutSocialApp__ParentId__c</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Date_Time_Answer__c</field>
+            <value>
+                <elementReference>$Record.SproutSocialApp__Posted__c</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Case</object>
+    </recordUpdates>
     <start>
-        <locationX>1244</locationX>
+        <locationX>1178</locationX>
         <locationY>0</locationY>
         <connector>
             <targetReference>get_case</targetReference>

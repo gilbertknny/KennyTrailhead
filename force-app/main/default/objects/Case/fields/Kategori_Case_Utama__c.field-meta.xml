@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Kategori_Case_Utama__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF(
+OR(
+ISPICKVAL(SCC_Case_Category__c, &quot;Complaint - Transaction&quot;),
+ISPICKVAL(SCC_Case_Category__c, &quot;Complaint - Non-Transaction&quot;),
+ISPICKVAL(SCC_Case_Category__c, &quot;Fraud / Suspicious Transactions&quot;)
+),
+&quot;Complaint&quot;,
+IF(
+OR(
+ISPICKVAL(SCC_Case_Category__c, &quot;Platform &amp; Device Support&quot;),
+ISPICKVAL(SCC_Case_Category__c, &quot;Third Party Support&quot;)
+),
+&quot;Support&quot;,
+IF(
+OR(
+ISPICKVAL(SCC_Case_Category__c, &quot;Inquiry&quot;),
+ISPICKVAL(SCC_Case_Category__c, &quot;Products / Promotion Inquiry&quot;)
+),
+&quot;Inquiry&quot;,
+IF(
+OR(
+ISPICKVAL(SCC_Case_Category__c, &quot;Request&quot;),
+ISPICKVAL(SCC_Case_Category__c, &quot;Customer Feedback / Sentiment Monitoring&quot;)
+),
+&quot;Request&quot;,
+&quot;&quot;
+)
+)
+)
+)</formula>
+    <label>Kategori Case Utama</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

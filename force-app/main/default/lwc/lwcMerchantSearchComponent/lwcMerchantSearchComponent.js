@@ -10,6 +10,7 @@
     1.0   01/10/2024   Rakeyan Nuramria                  [FROM SIT] Add '000' to mid for search transaction
     1.0   23/10/2024   Rakeyan Nuramria                  Adjust logic to close transaction section when no input
     1.0   31/10/2024   Rakeyan Nuramria                  [FROM SIT] Adjust logic show detail to N/A if empty/null
+    1.1   26/02/2025   Nabila Febri Viola                Change row index from TID to MID for Detail Merchant
 
 **/
 
@@ -48,112 +49,45 @@ export default class LwcMerchantSearchComponent extends LightningElement {
                 kanwil: "Jakarta Pusat",
                 vendor_pemasang: "PT Mitra Pemasang",
                 tanggal_pasang: "2024-08-15",
-                data: {
-                  showSection: false,
-                  nama_merchant_edc: "Toko Serba Ada",
-                  nama_merchant_qris: "Toko Serba Ada (QRIS)",
-                  alamat_merchant: "Jl. Raya No. 100, Jakarta Selatan",
-                  regional_office_pengelola: "Kanwil Jakarta Pusat",
-                  vendor_pemasang: "PT Mitra Pemasang",
-                  nomor_telepon_merchant: "021-12345678",
-                  channel_merchant: "EDC & QRIS",
-                  jenis_usaha_merchant: "Retail",
-                  tanggal_update_data: "2024-09-11",
-                  status_pemasangan: "Aktif",
-                  nomor_rekening_penampungan: "1234567890123456",
-                  jenis_merchant: "Micro Merchant",
-                  kanwil: "Jakarta Pusat",
-                  tanggal_pasang: "2024-08-15",
-                  kode_unit_kerja: "JKT-001",
-                  kantor_wilayah: "Jakarta Pusat",
-                  nama_pic_unit_kerja: "Andi",
-                  pn_pic_unit_kerja: "1234567890",
-                  tanggal_dibuat: "2024-08-14",
-                  tanggal_modifikasi_terakhir: "2024-09-11",
-                  modifikasi_oleh: "Budi",
-                  data_promo: "Diskon 10% untuk semua produk",
-                  detail: "Toko ini menjual berbagai macam barang kebutuhan sehari-hari",
-                  status_ticket: "Open",
-                  user_pemrakarsa: "Uker Pusat",
-                  pic_merchant: "Nina",
-                  telpon: "021-98765432",
-                  email: "toko@serbaada.com",
-                  perangkat: "SN EDC: 0000000001, SN CLR: 1111111111, SN SIMCARD: 2222222222",
-                  detail_edc: "Debit & Kredit",
-                  tipe_merchant: "Offline",
-                  mdr_onus: "0.5%",
-                  mdr_offus: "1%",
-                  mdr_mastercard: "0.7%",
-                  mdr_debit_pl: "1.2%",
-                  mdr_debit_npg: "1.5%",
-                  mdr_unik: "-",
-                  mcc_master: "5813",
-                  mcc_visa: "5813",
-                  mcc_npg: "-",
-                  code_reffnum: "123456",
-                  no_batch: "789012",
-                  rc: "00",
-                  tipe: "Regular"
-                }
-              },
-            //   {
-            //     mid: "123456711",
-            //     nama_merchant_edc: "Toko Serba Ada 2",
-            //     nama_merchant_qris: "Toko Serba Ada (QRIS) 2",
-            //     alamat_merchant: "Jl. Raya No. 111, Jakarta Selatan",
-            //     tid: "987654311",
-            //     status_pemasangan: "Aktif",
-            //     kanwil: "Jakarta Pusat",
-            //     vendor_pemasang: "PT Mitra Pemasang",
-            //     tanggal_pasang: "2024-08-15",
-            //     data: {
-            //       showSection: false,
-            //       nama_merchant_edc: "Toko Serba Ada 2",
-            //       nama_merchant_qris: "Toko Serba Ada (QRIS) 2",
-            //       alamat_merchant: "Jl. Raya No. 111, Jakarta Selatan",
-            //       regional_office_pengelola: "Kanwil Jakarta Pusat",
-            //       vendor_pemasang: "PT Mitra Pemasang",
-            //       nomor_telepon_merchant: "021-12345678",
-            //       channel_merchant: "EDC & QRIS",
-            //       jenis_usaha_merchant: "Retail",
-            //       tanggal_update_data: "2024-09-11",
-            //       status_pemasangan: "Aktif",
-            //       nomor_rekening_penampungan: "1234567890123456",
-            //       jenis_merchant: "Micro Merchant",
-            //       kanwil: "Jakarta Pusat",
-            //       tanggal_pasang: "2024-08-15",
-            //       kode_unit_kerja: "JKT-001",
-            //       kantor_wilayah: "Jakarta Pusat",
-            //       nama_pic_unit_kerja: "Andi",
-            //       pn_pic_unit_kerja: "1234567890",
-            //       tanggal_dibuat: "2024-08-14",
-            //       tanggal_modifikasi_terakhir: "2024-09-11",
-            //       modifikasi_oleh: "Budi",
-            //       data_promo: "Diskon 10% untuk semua produk",
-            //       detail: "Toko ini menjual berbagai macam barang kebutuhan sehari-hari",
-            //       status_ticket: "Open",
-            //       user_pemrakarsa: "Uker Pusat",
-            //       pic_merchant: "Nina",
-            //       telpon: "021-98765432",
-            //       email: "toko@serbaada.com",
-            //       perangkat: "SN EDC: 0000000001, SN CLR: 1111111111, SN SIMCARD: 2222222222",
-            //       detail_edc: "Debit & Kredit",
-            //       tipe_merchant: "Offline",
-            //       mdr_onus: "0.5%",
-            //       mdr_offus: "1%",
-            //       mdr_mastercard: "0.7%",
-            //       mdr_debit_pl: "1.2%",
-            //       mdr_debit_npg: "1.5%",
-            //       mdr_unik: "-",
-            //       mcc_master: "5813",
-            //       mcc_visa: "5813",
-            //       mcc_npg: "-",
-            //       code_reffnum: "123456",
-            //       no_batch: "789012",
-            //       rc: "00",
-            //       tipe: "Regular"
-            //     }
-            //   }
+                showSection: false,
+                regional_office_pengelola: "Kanwil Jakarta Pusat",
+                nomor_telepon_merchant: "021-12345678",
+                channel_merchant: "EDC & QRIS",
+                jenis_usaha_merchant: "Retail",
+                tanggal_update_data: "2024-09-11",
+                nomor_rekening_penampungan: "1234567890123456",
+                jenis_merchant: "Micro Merchant",
+                kode_unit_kerja: "JKT-001",
+                kantor_wilayah: "Jakarta Pusat",
+                nama_pic_unit_kerja: "Andi",
+                pn_pic_unit_kerja: "1234567890",
+                tanggal_dibuat: "2024-08-14",
+                tanggal_modifikasi_terakhir: "2024-09-11",
+                modifikasi_oleh: "Budi",
+                data_promo: "Diskon 10% untuk semua produk",
+                detail: "Toko ini menjual berbagai macam barang kebutuhan sehari-hari",
+                status_ticket: "Open",
+                user_pemrakarsa: "Uker Pusat",
+                pic_merchant: "Nina",
+                telpon: "021-98765432",
+                email: "toko@serbaada.com",
+                perangkat: "SN EDC: 0000000001, SN CLR: 1111111111, SN SIMCARD: 2222222222",
+                detail_edc: "Debit & Kredit",
+                tipe_merchant: "Offline",
+                mdr_onus: "0.5%",
+                mdr_offus: "1%",
+                mdr_mastercard: "0.7%",
+                mdr_debit_pl: "1.2%",
+                mdr_debit_npg: "1.5%",
+                mdr_unik: "-",
+                mcc_master: "5813",
+                mcc_visa: "5813",
+                mcc_npg: "-",
+                code_reffnum: "123456",
+                no_batch: "789012",
+                rc: "00",
+                tipe: "Regular"
+              }
         ]
     }
 
@@ -303,23 +237,23 @@ export default class LwcMerchantSearchComponent extends LightningElement {
 
         console.log('showDetail clicked..');
     
-        // Get the TID from the button's data-id attribute
-        const tid = event.target.dataset.id;
+        // Get the MID from the button's data-id attribute
+        const mid = event.target.dataset.id;
         
         // Find the specific data item by MID
-        const selectedData = this.data.find(item => item.tid === tid);
+        const selectedData = this.data.find(item => item.mid === mid);
         
         if (selectedData) {
             // Set showSection for each data item
             this.data.forEach(data => {
-                data.showSection = data.tid === tid; // Show the selected section
+                data.showSection = data.mid === mid; // Show the selected section
             });
 
             // Process data: replace null or empty values with "N/A"
             this.currentDetailData = Object.fromEntries(
                 Object.entries(selectedData).map(([key, value]) => {
                     // return [key, (value === null || value === '' || value === 'NULL' || value === 'null') ? 'N/A' : value];
-                    return [key, (value === null || value === '') ? 'N/A' : value];
+                    return [key, (value === null || value === '' || value === undefined || value == 'null' || value == 'NULL') ? 'N/A' : value];
                 })
             );
             
@@ -336,9 +270,9 @@ export default class LwcMerchantSearchComponent extends LightningElement {
 
     handleCloseMerchantDetail(event){
         console.log('handleCloseDetail called..');
-        const tid = event.target.dataset.id;
+        const mid = event.target.dataset.id;
 
-        const selectedData = this.data.find(item => item.tid === tid);
+        const selectedData = this.data.find(item => item.mid === mid);
         if (selectedData) {
             console.log('if handleCloseDetail called..');
             selectedData.showSection = false; // Hide the detail section
@@ -353,8 +287,8 @@ export default class LwcMerchantSearchComponent extends LightningElement {
 
     handleSearch() {
         //for data from dummy
-        // this.showSearchResults=true;
-        // this.data = this.generateDummyData();
+        //this.showSearchResults=true;
+        //this.data = this.generateDummyData();
         //end for data from dummy
 
         this.fetchMerchantData();

@@ -3,7 +3,6 @@
     <fullName>sf_devops__In_Terminal_State__c</fullName>
     <deprecated>false</deprecated>
     <description>Indicates whether the AOR is in a terminal state (e.g. done)</description>
-    <externalId>false</externalId>
     <formula>NOT(ISPICKVAL(sf_devops__Status__c, &apos;In Progress&apos;))</formula>
     <label>In Terminal State</label>
     <trackTrending>false</trackTrending>

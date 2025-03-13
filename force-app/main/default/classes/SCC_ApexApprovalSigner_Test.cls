@@ -244,8 +244,8 @@ private class SCC_ApexApprovalSigner_Test {
     static void testGetSearchCases() {
 
         Test.startTest();
-        Map<String, Object> result = SCC_ApexApproval_Signer.getSearchCases(1, 10, '8812', 'CHMTT6129991212', '2024-03-03', 'Tidak Ada Nota');
-        Map<String, Object> result2 = SCC_ApexApproval_Signer.getSearchCases(1, 10, '8812', 'CHMTT6129991212', '2024-03-03', 'Ada Nota');
+        Map<String, Object> result = SCC_ApexApproval_Signer.getSearchCases(1, 10, '8812', 'CHMTT6129991212', '2024-03-03', 'Low', 'Tidak Ada Nota');
+        Map<String, Object> result2 = SCC_ApexApproval_Signer.getSearchCases(1, 10, '8812', 'CHMTT6129991212', '2024-03-03', 'Low', 'Ada Nota');
         Test.stopTest();
 
         List<Case> data = (List<Case>)result.get('data');

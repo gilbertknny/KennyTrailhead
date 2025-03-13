@@ -130,6 +130,7 @@
         var searchCalltype = component.get("v.searchCalltype");
         var searchNoTicket = component.get("v.searchNoTicket");
         var searchTanggalKomplain = component.get("v.searchTanggalKomplain");
+        var searchPriority = component.get("v.searchPriority");
         var searchNota = component.get("v.searchNota");
         
         if(new Date(searchTanggalKomplain) > new Date()){
@@ -147,6 +148,7 @@
                 "calltype": searchCalltype,
                 "noTicket": searchNoTicket,
                 "tanggalKomplain": searchTanggalKomplain, // Gunakan nilai yang telah dikonversi
+                "priority": searchPriority,
                 "cekNota": searchNota
             });
     
