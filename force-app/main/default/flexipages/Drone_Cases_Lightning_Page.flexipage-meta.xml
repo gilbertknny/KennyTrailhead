@@ -564,7 +564,7 @@
                 <componentName>force:relatedListSingleContainer</componentName>
                 <identifier>force_relatedListSingleContainer2</identifier>
                 <visibilityRule>
-                    <booleanFilter>(1 AND 4 AND 6) OR (3 AND 2 AND 6) OR (2 AND 4 AND 5)</booleanFilter>
+                    <booleanFilter>(1 AND 4 AND 6) OR (3 AND 2 AND 6) OR (2 AND 4 AND 5) OR 7</booleanFilter>
                     <criteria>
                         <leftValue>{!$Permission.CustomPermission.BO_Maker_NFT}</leftValue>
                         <operator>EQUAL</operator>
@@ -594,6 +594,11 @@
                         <leftValue>{!$Permission.CustomPermission.BO_Signer}</leftValue>
                         <operator>EQUAL</operator>
                         <rightValue>false</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!$User.Profile.Name}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>System Administrator</rightValue>
                     </criteria>
                 </visibilityRule>
             </componentInstance>

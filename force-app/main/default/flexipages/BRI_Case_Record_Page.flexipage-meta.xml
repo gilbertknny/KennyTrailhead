@@ -3308,6 +3308,13 @@
                 </fieldInstanceProperties>
                 <fieldItem>Record.EntitlementId</fieldItem>
                 <identifier>RecordEntitlementIdField</identifier>
+                <visibilityRule>
+                    <criteria>
+                        <leftValue>{!$User.Profile.Name}</leftValue>
+                        <operator>NE</operator>
+                        <rightValue>Branch Users</rightValue>
+                    </criteria>
+                </visibilityRule>
             </fieldInstance>
         </itemInstances>
         <name>Facet-c801db93-49c7-45bc-b025-e7fe1d817962</name>
