@@ -5,7 +5,7 @@
     <description>diaplay error message on case record when SCC_Sub_Description__c on SSC_Call_Type__c object related to case is not empty and on case SCC_Sub_Case__c filed is not selected and case status moved to escalated from new</description>
     <errorConditionFormula>ISPICKVAL(PRIORVALUE(Status), &quot;New&quot;) &amp;&amp;
 ISBLANK(SCC_Sub_Case__c) &amp;&amp; !ISBLANK( SCC_Call_Type__r.SCC_Sub_Description__c ) &amp;&amp;
-(AND(NOT($Permission.By_Pass_Validation_for_Migration), NOT( $Profile.Name = &apos;Salesforce API Only System Integrations&apos;),
+(AND(NOT($Permission.By_Pass_Validation_for_Migration), NOT($Profile.Name = &apos;System Administrator&apos;), NOT( $Profile.Name = &apos;Salesforce API Only System Integrations&apos;),
 OR(
 ISPICKVAL(Status, &quot;Escalated&quot;),
 ISPICKVAL(Status, &quot;Waiting Document&quot;),

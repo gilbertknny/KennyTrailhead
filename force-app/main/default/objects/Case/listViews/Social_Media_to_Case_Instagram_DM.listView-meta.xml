@@ -9,6 +9,7 @@
     <columns>CASES.PRIORITY</columns>
     <columns>CASES.CREATED_DATE_DATE_ONLY</columns>
     <columns>CORE.USERS.ALIAS</columns>
+    <columns>Sprout_Message_Type__c</columns>
     <filterScope>Queue</filterScope>
     <filters>
         <field>CASES.ORIGIN</field>
@@ -24,6 +25,11 @@
         <field>CASES.STATUS</field>
         <operation>equals</operation>
         <value>New,Working</value>
+    </filters>
+    <filters>
+        <field>Sprout_Message_Type__c</field>
+        <operation>notContain</operation>
+        <value>story_mention</value>
     </filters>
     <label>Social Media to Case - Instagram DM</label>
     <queue>Social_Media_to_Case</queue>

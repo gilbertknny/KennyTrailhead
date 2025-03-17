@@ -3,7 +3,7 @@
     <fullName>SCC_Escalate_Case_Resolution</fullName>
     <active>true</active>
     <description>( SCC_Call_Type__r.External_Id__c = &apos;8812&apos; || SCC_Call_Type__r.External_Id__c = &apos;8915&apos; || Sent_to_Drone__c = TRUE )</description>
-    <errorConditionFormula>NOT($Permission.By_Pass_Validation_for_Migration) &amp;&amp; $Profile.Name != &quot;Salesforce API Only System Integrations&quot; &amp;&amp; (TEXT(Status) = &apos;Escalated&apos; || TEXT(Status) = &apos; Waiting Document&apos; )
+    <errorConditionFormula>NOT($Permission.By_Pass_Validation_for_Migration) &amp;&amp; $Profile.Name != &quot;Salesforce API Only System Integrations&quot; &amp;&amp; (TEXT(Status) = &apos;Escalated&apos; || TEXT(Status) = &apos;Waiting Document&apos; )
 &amp;&amp;
 ( SCC_Call_Type__r.External_Id__c = &apos;8812&apos; || SCC_Call_Type__r.External_Id__c = &apos;8915&apos; || Sent_to_Drone__c = TRUE )
 &amp;&amp;

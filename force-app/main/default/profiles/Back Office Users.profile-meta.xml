@@ -1929,6 +1929,11 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
+        <field>Account.Kategori_Usia__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
         <field>Account.NumberOfEmployees</field>
         <readable>false</readable>
     </fieldPermissions>
@@ -1951,6 +1956,11 @@
         <editable>false</editable>
         <field>Account.Picture_URL__c</field>
         <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Account.Provinsi__c</field>
+        <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
@@ -2548,6 +2558,11 @@
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
+        <editable>false</editable>
+        <field>Case.Custom_Target_SLA__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
         <editable>true</editable>
         <field>Case.Date_Time_Answer__c</field>
         <readable>true</readable>
@@ -2653,6 +2668,11 @@
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
+        <editable>true</editable>
+        <field>Case.Gangguan_Massal__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
         <editable>false</editable>
         <field>Case.Gap_Terhadap_SLA__c</field>
         <readable>true</readable>
@@ -2665,6 +2685,11 @@
     <fieldPermissions>
         <editable>true</editable>
         <field>Case.Highlight_Customer__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Case.Holiday__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -2715,6 +2740,11 @@
     <fieldPermissions>
         <editable>true</editable>
         <field>Case.Kanwil__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Case.Kategori_Case_Utama__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -2955,6 +2985,16 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>Case.Reason</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Case.Region_Code__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Case.Region_Description__c</field>
         <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -3989,6 +4029,16 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
+        <field>Case.Status_BRIMO__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Case.Status_Pencapaian_SLA_v1__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
         <field>Case.Status_SLA__c</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -4118,8 +4168,18 @@
         <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
+        <editable>false</editable>
+        <field>Case.Uko_Divisi_Pembuat__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
         <editable>true</editable>
         <field>Case.Unit_Kerja_2__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Case.Unit_Kerja_Pelaksana_V2__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -4175,6 +4235,11 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>Case.flag_cicilan__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Case.push_notif_CIA_isNew__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -4235,6 +4300,11 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>Contact.Birthdate</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Contact.BuyerAttributes</field>
         <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -5623,9 +5693,9 @@
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
-        <editable>false</editable>
+        <editable>true</editable>
         <field>Knowledge__kav.bunga_flag__c</field>
-        <readable>false</readable>
+        <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
@@ -6109,6 +6179,16 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
+        <field>SCC_Endpoint_API__mdt.Token__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>SCC_Endpoint_API__mdt.Username_MMS__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
         <field>SCC_Endpoint_API__mdt.Username__c</field>
         <readable>false</readable>
     </fieldPermissions>
@@ -6149,7 +6229,32 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
+        <field>SCC_Endpoint_API__mdt.api_key__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>SCC_Endpoint_API__mdt.api_name__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>SCC_Endpoint_API__mdt.grant_type__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
         <field>SCC_Endpoint_API__mdt.profileLink__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>SCC_Endpoint_API__mdt.scope__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>SCC_Endpoint_API__mdt.x_api_key__c</field>
         <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -7009,6 +7114,41 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
+        <field>SSC_Call_Type__c.Jenis_Produk_LKPBU__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>SSC_Call_Type__c.Jenis_Produk__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>SSC_Call_Type__c.Kategori_Permasalahan_LKPBU__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>SSC_Call_Type__c.LBUT__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>SSC_Call_Type__c.LKBPU__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>SSC_Call_Type__c.Penyebab_Pengaduan_LBUT__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>SSC_Call_Type__c.Penyebab_Pengaduan_LKBPU__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
         <field>SSC_Call_Type__c.SCC_Additional_Details__c</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -7146,6 +7286,16 @@
         <editable>false</editable>
         <field>SSC_Call_Type__c.SSC_Product_L2__c</field>
         <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>SSC_Call_Type__c.Sandi_Jenis_Produk_LBUT__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>SSC_Call_Type__c.Sandi_Penyebab_Pengaduan_LBUT__c</field>
+        <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
@@ -7325,14 +7475,6 @@
         <useLightningRuntime>false</useLightningRuntime>
     </loginFlows>
     <loginIpRanges>
-        <endAddress>255.255.255.255</endAddress>
-        <startAddress>0.0.0.0</startAddress>
-    </loginIpRanges>
-    <loginIpRanges>
-        <endAddress>10.35.65.236</endAddress>
-        <startAddress>10.35.65.236</startAddress>
-    </loginIpRanges>
-    <loginIpRanges>
         <description>BRIDigitalSCC Warung Buncit</description>
         <endAddress>10.98.215.255</endAddress>
         <startAddress>10.98.215.0</startAddress>
@@ -7341,14 +7483,6 @@
         <description>Brilian</description>
         <endAddress>10.210.71.254</endAddress>
         <startAddress>10.210.68.1</startAddress>
-    </loginIpRanges>
-    <loginIpRanges>
-        <endAddress>10.211.205.95</endAddress>
-        <startAddress>10.211.205.95</startAddress>
-    </loginIpRanges>
-    <loginIpRanges>
-        <endAddress>10.211.205.195</endAddress>
-        <startAddress>10.211.205.195</startAddress>
     </loginIpRanges>
     <loginIpRanges>
         <description>BRIDigitalSCC Kebayoran</description>
@@ -7396,9 +7530,19 @@
         <startAddress>54.165.13.66</startAddress>
     </loginIpRanges>
     <loginIpRanges>
+        <description>BO 29 Jan</description>
+        <endAddress>100.112.103.255</endAddress>
+        <startAddress>100.112.103.0</startAddress>
+    </loginIpRanges>
+    <loginIpRanges>
         <description>Intranet BRI</description>
         <endAddress>100.113.46.255</endAddress>
         <startAddress>100.113.46.1</startAddress>
+    </loginIpRanges>
+    <loginIpRanges>
+        <description>Intranet LAN BRI</description>
+        <endAddress>103.63.96.22</endAddress>
+        <startAddress>103.63.96.22</startAddress>
     </loginIpRanges>
     <loginIpRanges>
         <description>IP Security</description>
@@ -7406,37 +7550,14 @@
         <startAddress>103.63.96.203</startAddress>
     </loginIpRanges>
     <loginIpRanges>
+        <description>Menara BRILIAN</description>
+        <endAddress>103.143.106.240</endAddress>
+        <startAddress>103.143.106.240</startAddress>
+    </loginIpRanges>
+    <loginIpRanges>
         <description>BRI Digital</description>
         <endAddress>139.0.8.95</endAddress>
         <startAddress>139.0.8.88</startAddress>
-    </loginIpRanges>
-    <loginIpRanges>
-        <endAddress>139.255.113.255</endAddress>
-        <startAddress>139.255.113.1</startAddress>
-    </loginIpRanges>
-    <loginIpRanges>
-        <endAddress>172.18.133.56</endAddress>
-        <startAddress>172.18.133.56</startAddress>
-    </loginIpRanges>
-    <loginIpRanges>
-        <endAddress>172.18.133.219</endAddress>
-        <startAddress>172.18.133.219</startAddress>
-    </loginIpRanges>
-    <loginIpRanges>
-        <endAddress>172.18.134.59</endAddress>
-        <startAddress>172.18.134.59</startAddress>
-    </loginIpRanges>
-    <loginIpRanges>
-        <endAddress>172.18.139.6</endAddress>
-        <startAddress>172.18.139.6</startAddress>
-    </loginIpRanges>
-    <loginIpRanges>
-        <endAddress>172.18.139.249</endAddress>
-        <startAddress>172.18.139.249</startAddress>
-    </loginIpRanges>
-    <loginIpRanges>
-        <endAddress>172.24.128.27</endAddress>
-        <startAddress>172.24.128.27</startAddress>
     </loginIpRanges>
     <objectPermissions>
         <allowCreate>false</allowCreate>
@@ -7534,6 +7655,15 @@
         <allowEdit>false</allowEdit>
         <allowRead>true</allowRead>
         <modifyAllRecords>false</modifyAllRecords>
+        <object>NPS_Survey__c</object>
+        <viewAllRecords>true</viewAllRecords>
+    </objectPermissions>
+    <objectPermissions>
+        <allowCreate>false</allowCreate>
+        <allowDelete>false</allowDelete>
+        <allowEdit>false</allowEdit>
+        <allowRead>true</allowRead>
+        <modifyAllRecords>false</modifyAllRecords>
         <object>SCC_Call_Type_Feature__c</object>
         <viewAllRecords>true</viewAllRecords>
     </objectPermissions>
@@ -7608,6 +7738,7 @@
     </recordTypeVisibilities>
     <recordTypeVisibilities>
         <default>true</default>
+        <personAccountDefault>true</personAccountDefault>
         <recordType>Case.BRI_Open_Case</recordType>
         <visible>true</visible>
     </recordTypeVisibilities>

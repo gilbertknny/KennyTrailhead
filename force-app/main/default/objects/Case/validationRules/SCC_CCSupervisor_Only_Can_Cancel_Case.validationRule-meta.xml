@@ -4,8 +4,9 @@
     <active>true</active>
     <description>This error message is dispayed when non CC supervisor users tries to cancel the case</description>
     <errorConditionFormula>AND(
-     ISCHANGED(Status), ISPICKVAL(Status, &quot;Cancelled&quot;),
-NOT($Permission.Change_owner_Custom_permission)
+     ISCHANGED(Status), ISPICKVAL(Status, &quot;Cancelled&quot;), 
+     NOT($Permission.Cancel_Case), 
+     NOT($Profile.Name == &apos;System Administrator&apos;)
 )</errorConditionFormula>
     <errorDisplayField>Status</errorDisplayField>
     <errorMessage>Hanya Supervisor yang dapat melakukan Cancel case.

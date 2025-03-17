@@ -23,7 +23,9 @@ NOT(ISCHANGED (Date_Time_Answer__c)),
 NOT(ISCHANGED ( Priority )),
 NOT(ISCHANGED ( OwnerId )),
 NOT(ISCHANGED ( Status)), 
-NOT(ISCHANGED (SCC_Attachment_Done_Date__c))
+NOT(ISCHANGED (SCC_Attachment_Done_Date__c)),
+NOT(ISCHANGED (Sprout_Recipient__c))
+
 )</errorConditionFormula>
     <errorMessage>You cannot update any fields on a closed case.</errorMessage>
 </ValidationRule>

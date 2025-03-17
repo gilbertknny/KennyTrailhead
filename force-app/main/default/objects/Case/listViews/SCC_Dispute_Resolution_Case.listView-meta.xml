@@ -14,8 +14,8 @@
     <columns>Returned_Case__c</columns>
     <columns>Dokumen_Nasabah_c__c</columns>
     <columns>SCC_Case_Owner__c</columns>
-    <columns>Within_Target_OLA__c</columns>
     <columns>Within_Target_SLA__c</columns>
+    <columns>Net_SLA_Saat_Ini__c</columns>
     <filterScope>Queue</filterScope>
     <filters>
         <field>CASES.STATUS</field>
@@ -24,5 +24,7 @@
     </filters>
     <label>SCC - Dispute Resolution</label>
     <queue>SCC_Dispute_Resolution</queue>
-    <sharedTo></sharedTo>
+    <sharedTo>
+        <group>SCC_Dispute_Resolution</group>
+    </sharedTo>
 </ListView>
