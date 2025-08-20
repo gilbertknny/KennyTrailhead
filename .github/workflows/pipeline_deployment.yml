@@ -1,0 +1,123 @@
+image: node:20
+
+pipelines:
+  branches:
+    release/sit:
+      - step:
+          name: "Deploy Component"
+          caches:
+            - node
+          script:
+            # Install required system dependencies
+            - apt-get update && apt-get install -y unzip curl openjdk-17-jdk
+
+            # Install Salesforce CLI
+            - npm install --global @salesforce/cli
+
+            # Show CLI version
+            - sf --version
+
+            # Use REST API for deployments
+            - sf config:set restDeploy=true --global
+
+            # Decode and secure the JWT private key
+            #- echo "$ASWT_SERVER_KEY" | base64 -d > server.key
+            #- chmod 600 server.key
+
+            # Authenticate to Salesforce SIT Instance  org
+            # - sf org login jwt \
+            #     --client-id 3MVG95mg0lk4batiaTN8Hpd9pFFAoXGBlP.VDXJ3XZSqSNAReGaxfoiuYr2ylVeb2bXDWtKVRWlt5NuZ8sAnm \
+            #     --jwt-key-file server.key \
+            #     --username kenny.gilbert@trailhead.com \
+            #     --instance-url https://login.salesforce.com \
+            #     --alias My_Trailhead \
+            #     --json > auth_result.json || (cat auth_result.json && exit 1)
+            - >
+              sf org login jwt
+              --client-id $CONSUMER_KEY
+              --jwt-key-file server.key
+              --username $USERNAME
+              --instance-url $URL_INSTANCE
+              --alias My_Trailhead
+              --json > auth_result.json || (cat auth_result.json && exit 1)
+
+            # Verify org connection
+            - sf org display --target-org My_Trailhead --json
+
+    #--------------------------------------------------------
+    #  - step:
+    #      name: "Step 2: Generate Delta Package"
+    #      caches:
+    #        - node
+    #      script:
+    #       - apt-get update && apt-get install -y curl unzip openjdk-17-jdk
+
+            # Install Salesforce CLI
+    #        - npm install --global @salesforce/cli
+            
+            # Check CLI availability
+    #        - sf --version
+            
+            # Install plugin for delta deployments
+            - echo "y" | sf plugins:install sfdx-git-delta
+
+            # Set default commit range if not defined
+            - export FROM_COMMIT=${FROM_COMMIT:-"HEAD~1"}
+            - echo "Calculating delta from $FROM_COMMIT"
+
+            # Install the sfdx-git-delta plugin
+            # - sfdx plugins:install sfdx-git-delta
+
+            # Calculate delta with sfdx command
+            #- export FROM_COMMIT=${FROM_COMMIT:-HEAD~1}
+            - sfdx sgd:source:delta --from "$FROM_COMMIT" --output . --ignore .gitignore
+          
+            # Show manifest
+            - if [ ! -f "package/package.xml" ]; then echo "No changes to deploy"; exit 0; fi
+            - echo "Generated package.xml:"
+            - cat package/package.xml
+
+            # Show Apex test classes
+            - echo "================ Apex Tests to be executed ================"
+            - export APEX_CLASSES=$(yq -p=xml -o=json . < package/package.xml | jq -r '.Package.types | [.] | flatten | map(select(.name == "ApexClass")) | .[] | .members | [.] | flatten | map(select((index("*") | not) and (test("Test|Tes")))) | unique | join(" ")')
+            - echo "$APEX_CLASSES"
+
+      #    artifacts:
+      #    - package/**
+      #--------------------------------------------------------
+      # - step:
+      #    name: "Step 3: Deploy to SIT Instance"
+      #    caches:
+      #      - node
+      #    script:
+            # Install Salesforce CLI
+      #      - npm install --global @salesforce/cli
+            
+            # Verifikasi bahwa package.xml tersedia
+      #      - echo "Verifying package contents before deploy:"
+      #      - ls -R package
+
+            # Tentukan ulang APEX_CLASSES agar tetap dikenali di step ini
+      #     - export APEX_CLASSES=$(yq -p=xml -o=json . < package/package.xml | jq -r '.Package.types | [.] | flatten | map(select(.name == "ApexClass")) | .[] | .members | [.] | flatten | map(select((index("*") | not) and (test("Test|Tes")))) | unique | join(" ")')
+      #      - echo "$APEX_CLASSES"
+
+            # Run actual deployment
+            # - sf project deploy start \
+            #     --manifest package/package.xml \
+            #     --target-org My_Trailhead \
+            #     --post-destructive-changes destructiveChanges/destructiveChanges.xml \
+            #     --test-level RunLocalTests \
+            #     --wait 40 \
+            #     --verbose
+            - |
+              if [ -z $APEX_CLASSES ]; then
+                echo "No Apex test classes found, doing check-only deploy."
+                sfdx project deploy start -c -x package/package.xml --wait 1200 -o My_Trailhead --verbose
+              else
+                echo "Apex test classes found: $APEX_CLASSES"
+                sfdx project deploy start -c -x package/package.xml --wait 1200 --verbose -g -l RunSpecifiedTests --tests $APEX_CLASSES -o My_Trailhead
+              fi
+
+definitions:
+  caches:
+    node: ~/.npm
