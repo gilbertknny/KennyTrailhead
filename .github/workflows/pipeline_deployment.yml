@@ -26,13 +26,11 @@ jobs:
 
       - name: Authenticate Salesforce
         run: |
-          echo "$ASWT_SERVER_KEY" | base64 -d > server.key
-          chmod 600 server.key
           sf org login jwt \
             --client-id ${{ secrets.CONSUMER_KEY }} \
             --jwt-key-file server.key \
-            --username ${{ secrets.USERNAME }} \
-            --instance-url ${{ secrets.URL_INSTANCE }} \
+            --username ${{ vars.USERNAME }} \
+            --instance-url ${{ vars.URL_INSTANCE }} \
             --alias My_Trailhead
 
       - name: Generate Delta Package
