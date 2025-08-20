@@ -36,7 +36,8 @@ jobs:
       - name: Generate Delta Package
         run: |
           export FROM_COMMIT=${{ github.event.before }}
-          sfdx sgd:source:delta --from "$FROM_COMMIT" --output . --ignore .gitignore
+          #sfdx sgd:source:delta --from "$FROM_COMMIT" --output . --ignore .gitignore
+          sfdx sgd:source:delta --from "$FROM_COMMIT" --to HEAD --output-dir . --ignore-file .gitignore
           cat package/package.xml || echo "No package.xml generated"
 
       - name: Deploy to Salesforce
