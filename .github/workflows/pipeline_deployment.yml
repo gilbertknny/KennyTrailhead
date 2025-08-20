@@ -12,6 +12,8 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # ambil semua history supaya FROM_COMMIT valid
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -24,8 +26,27 @@ jobs:
           npm install --global @salesforce/cli
           echo "y" | sf plugins:install sfdx-git-delta
 
+      - name: Prepare commit range
+        id: commits
+        run: |
+          FROM_COMMIT="${{ github.event.before }}"
+          TO_COMMIT="${{ github.sha }}"
+
+          # fallback kalau push pertama / before kosong
+          if [ -z "$FROM_COMMIT" ] || [ "$FROM_COMMIT" = "0000000000000000000000000000000000000000" ]; then
+            echo "⚠️ No previous commit found, using HEAD^ as FROM_COMMIT"
+            FROM_COMMIT=$(git rev-parse HEAD^ || echo "")
+          fi
+
+          echo "FROM_COMMIT=$FROM_COMMIT" >> $GITHUB_ENV
+          echo "TO_COMMIT=$TO_COMMIT" >> $GITHUB_ENV
+          echo "Using commit range: $FROM_COMMIT → $TO_COMMIT"
+
       - name: Authenticate Salesforce
         run: |
+          #echo "${{ secrets.SERVER_KEY }}" | base64 -d > server.key
+          #chmod 600 server.key
+
           sf org login jwt \
             --client-id ${{ secrets.CONSUMER_KEY }} \
             --jwt-key-file server.key \
@@ -35,24 +56,32 @@ jobs:
 
       - name: Generate Delta Package
         run: |
-          export FROM_COMMIT=${{ github.event.before }}
-          #sfdx sgd:source:delta --from "$FROM_COMMIT" --output . --ignore .gitignore
-          sfdx sgd:source:delta --from "$FROM_COMMIT" --to HEAD --output-dir . --ignore-file .gitignore
-          cat package/package.xml || echo "No package.xml generated"
+          if [ -z "$FROM_COMMIT" ]; then
+            echo "⚠️ FROM_COMMIT not set, skipping delta package"
+            exit 0
+          fi
+
+          sfdx sgd:source:delta \
+            --from "$FROM_COMMIT" \
+            --to "$TO_COMMIT" \
+            --output-dir . \
+            --ignore-file .gitignore
+
+          cat package/package.xml || echo "⚠️ No package.xml generated"
 
       - name: Deploy to Salesforce
         run: |
           if [ ! -f "package/package.xml" ]; then
-            echo "No changes to deploy"
+            echo "✅ No changes to deploy"
             exit 0
           fi
 
           APEX_CLASSES=$(yq -p=xml -o=json . < package/package.xml | jq -r '.Package.types | [.] | flatten | map(select(.name == "ApexClass")) | .[] | .members | [.] | flatten | map(select((index("*") | not) and (test("Test|Tes")))) | unique | join(" ")')
 
           if [ -z "$APEX_CLASSES" ]; then
-            echo "No Apex test classes found, deploying with check-only"
+            echo "⚡ No Apex test classes found, deploying with check-only"
             sf project deploy start -c -x package/package.xml --wait 40 --target-org My_Trailhead --verbose
           else
-            echo "Running tests: $APEX_CLASSES"
+            echo "⚡ Running tests: $APEX_CLASSES"
             sf project deploy start -c -x package/package.xml --wait 40 --target-org My_Trailhead --verbose -l RunSpecifiedTests --tests $APEX_CLASSES
           fi
