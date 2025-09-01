@@ -77,7 +77,8 @@ jobs:
           fi
 
           APEX_CLASSES=$(yq -p=xml -o=json . < package/package.xml | jq -r '.Package.types | [.] | flatten | map(select(.name == "ApexClass")) | .[] | .members | [.] | flatten | map(select((index("*") | not) and (test("Test|Tes")))) | unique | join(" ")')
-
+          echo "APEX_CLASSES"
+          
           if [ -z "$APEX_CLASSES" ]; then
             echo "⚡ No Apex test classes found, deploying with check-only"
             sf project deploy start -c -x package/package.xml --wait 40 --target-org My_Trailhead --verbose
