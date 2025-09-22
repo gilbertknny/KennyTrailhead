@@ -1,0 +1,38 @@
+.materials-container {
+    padding: 1rem;
+}
+
+.material-card {
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-radius: 8px;
+    border: 1px solid #e5e5e5;
+}
+
+.material-card:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+    border-color: #0176d3;
+}
+
+.material-card:active {
+    transform: translateY(0);
+}
+
+.search-input {
+    width: 100%;
+}
+
+.slds-illustration {
+    text-align: center;
+    padding: 2rem;
+}
+
+.slds-illustration__svg {
+    width: 200px;
+    height: 200px;
+}
+
+.slds-badge {
+    font-size: 0.75rem;
+}

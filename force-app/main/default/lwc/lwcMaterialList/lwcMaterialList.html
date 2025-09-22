@@ -1,0 +1,28 @@
+<!-- lwcMaterialList.html -->
+<template>
+    <lightning-card title={listTitle}>
+        <div class="slds-p-around_medium">
+            <template if:true={materials}>
+                <lightning-datatable
+                    key-field="Id"
+                    data={materials}
+                    columns={columns}
+                    onrowaction={handleRowAction}
+                    hide-checkbox-column
+                    default-sort-direction="desc"
+                    sorted-by={sortedBy}
+                    sorted-direction={sortedDirection}
+                    onsort={handleSort}>
+                </lightning-datatable>
+            </template>
+            <template if:true={error}>
+                <div class="slds-text-color_error">{error}</div>
+            </template>
+            <template if:true={isLoading}>
+                <div class="slds-align_absolute-center">
+                    <lightning-spinner alternative-text="Loading"></lightning-spinner>
+                </div>
+            </template>
+        </div>
+    </lightning-card>
+</template>
