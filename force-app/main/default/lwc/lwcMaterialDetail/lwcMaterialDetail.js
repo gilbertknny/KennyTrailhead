@@ -30,6 +30,9 @@ export default class LwcMaterialDetail extends LightningElement {
     @track material;
     @track files;
     @track error;
+    @track presenterName;
+    @track presenterTitle;
+    @track presenterEmail;
     
     fileColumns = FILE_COLUMNS;
 
@@ -38,11 +41,17 @@ export default class LwcMaterialDetail extends LightningElement {
         if (data) {
             this.material = data.material;
             this.files = data.files;
+            this.presenterName = data.presenterName;
+            this.presenterTitle = data.presenterTitle;
+            this.presenterEmail = data.presenterEmail;
             this.error = undefined;
         } else if (error) {
             this.error = error;
             this.material = undefined;
             this.files = undefined;
+            this.presenterName = undefined;
+            this.presenterTitle = undefined;
+            this.presenterEmail = undefined;
             console.error('Error loading material detail:', error);
         }
     }

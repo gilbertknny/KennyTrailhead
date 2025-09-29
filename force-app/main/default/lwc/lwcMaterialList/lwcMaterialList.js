@@ -5,8 +5,6 @@ import getMaterialsByModule from '@salesforce/apex/MaterialController.getMateria
 export default class LwcMaterialList extends LightningElement {
     @api moduleName;
     @track materials = [];
-    @track filteredMaterials = [];
-    @track searchTerm = '';
     @track isLoading = false;
     @track error;
 
@@ -14,8 +12,8 @@ export default class LwcMaterialList extends LightningElement {
         return `Materials for Module: ${this.moduleName || 'All Modules'}`;
     }
 
-    get hasNoResults() {
-        return !this.isLoading && this.filteredMaterials.length === 0;
+    get hasNoMaterials() {
+        return !this.isLoading && this.materials.length === 0;
     }
 
     @wire(getMaterialsByModule, { moduleName: '$moduleName' })
@@ -30,37 +28,16 @@ export default class LwcMaterialList extends LightningElement {
                 presenterName: item.presenterName,
                 Date__c: item.material.Date__c
             }));
-            this.filteredMaterials = [...this.materials];
             this.error = undefined;
         } else if (error) {
             this.error = error;
             this.materials = [];
-            this.filteredMaterials = [];
             console.error('Error loading materials:', error);
         }
     }
 
     connectedCallback() {
         this.isLoading = true;
-    }
-
-    handleSearchChange(event) {
-        this.searchTerm = event.target.value;
-        this.filterMaterials();
-    }
-
-    filterMaterials() {
-        if (!this.searchTerm) {
-            this.filteredMaterials = [...this.materials];
-            return;
-        }
-
-        const searchLower = this.searchTerm.toLowerCase();
-        this.filteredMaterials = this.materials.filter(material => 
-            material.Name.toLowerCase().includes(searchLower) ||
-            (material.Description__c && material.Description__c.toLowerCase().includes(searchLower)) ||
-            material.presenterName.toLowerCase().includes(searchLower)
-        );
     }
 
     handleViewDetail(event) {

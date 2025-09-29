@@ -2,20 +2,8 @@
 <template>
     <lightning-card title={listTitle}>
         <div class="slds-p-around_medium">
-            <!-- Search within module -->
-            <div class="module-search">
-                <lightning-input
-                    type="search"
-                    value={searchTerm}
-                    onchange={handleSearchChange}
-                    placeholder="Search within this module..."
-                    variant="label-hidden">
-                </lightning-input>
-            </div>
-
-            <!-- Materials Grid -->
             <div class="materials-grid">
-                <template for:each={filteredMaterials} for:item="material">
+                <template for:each={materials} for:item="material">
                     <div key={material.Id} class="material-card">
                         <div class="card-header">
                             <h3 class="material-title">{material.Name}</h3>
@@ -59,13 +47,10 @@
             </div>
 
             <!-- No Results Message -->
-            <template if:true={hasNoResults}>
+            <template if:true={hasNoMaterials}>
                 <div class="no-results">
                     <lightning-icon icon-name="utility:error" size="medium"></lightning-icon>
-                    <p>No materials found</p>
-                    <template if:true={searchTerm}>
-                        <p class="slds-text-color_weak">Try adjusting your search term</p>
-                    </template>
+                    <p>No materials found in this module</p>
                 </div>
             </template>
 
