@@ -1,3 +1,10 @@
+/**
+ * @description       : 
+ * @author            : ChangeMeIn@UserSettingsUnder.SFDoc
+ * @group             : 
+ * @last modified on  : 09-29-2025
+ * @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
+**/
 public with sharing class MaterialController {
     
     @AuraEnabled(cacheable=true)
@@ -54,14 +61,24 @@ public with sharing class MaterialController {
     }
     
     @AuraEnabled(cacheable=true)
-    public static List<Material__c> getMaterialsByModule(String moduleName) {
+    public static List<MaterialWrapper> getMaterialsByModule(String moduleName) {
         try {
-            return [
-                SELECT Id, Name, Module__c, Description__c, Presenter__c, Date__c, CreatedDate
+            List<MaterialWrapper> wrappedMaterials = new List<MaterialWrapper>();
+            
+            for (Material__c material : [
+                SELECT Id, Name, Module__c, Description__c, Presenter__c, 
+                       Presenter__r.Name, Date__c, CreatedDate
                 FROM Material__c 
                 WHERE Module__c = :moduleName 
                 ORDER BY Date__c DESC NULLS LAST, CreatedDate DESC
-            ];
+            ]) {
+                MaterialWrapper wrapper = new MaterialWrapper();
+                wrapper.material = material;
+                wrapper.presenterName = material.Presenter__r.Name;
+                wrappedMaterials.add(wrapper);
+            }
+            
+            return wrappedMaterials;
         } catch (Exception e) {
             throw new AuraHandledException('Error retrieving materials: ' + e.getMessage());
         }
@@ -74,7 +91,9 @@ public with sharing class MaterialController {
             
             // Query Material with null check
             List<Material__c> materials = [
-                SELECT Id, Name, Module__c, Description__c, Presenter__c, Date__c
+                SELECT Id, Name, Module__c, Description__c, Presenter__c, 
+                       Presenter__r.Name, Presenter__r.Title, Presenter__r.Email,
+                       Date__c
                 FROM Material__c 
                 WHERE Id = :recordId 
                 LIMIT 1
@@ -85,6 +104,9 @@ public with sharing class MaterialController {
             }
             
             wrapper.material = materials[0];
+            wrapper.presenterName = materials[0].Presenter__r.Name;
+            wrapper.presenterTitle = materials[0].Presenter__r.Title;
+            wrapper.presenterEmail = materials[0].Presenter__r.Email;
             
             // Query related Files with error handling
             List<MaterialDetailWrapper.FileWrapper> fileList = new List<MaterialDetailWrapper.FileWrapper>();
@@ -147,5 +169,10 @@ public with sharing class MaterialController {
             if (moduleName > compareToWrapper.moduleName) return 1;
             return -1;
         }
+    }
+    
+    public class MaterialWrapper {
+        @AuraEnabled public Material__c material { get; set; }
+        @AuraEnabled public String presenterName { get; set; }
     }
 }
