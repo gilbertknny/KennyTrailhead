@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PathAssistant xmlns="http://soap.sforce.com/2006/04/metadata">
+    <active>true</active>
+    <entityName>Opportunity</entityName>
+    <fieldName>StageName</fieldName>
+    <masterLabel>North American Sales Path</masterLabel>
+    <pathAssistantSteps>
+        <fieldNames>ExpectedRevenue</fieldNames>
+        <fieldNames>ForecastCategoryName</fieldNames>
+        <fieldNames>MainCompetitors__c</fieldNames>
+        <info>&lt;p&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;Check out this helpful Salesforce video, 3 Steps to Reduce Time to Close:&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;https://www.youtube.com/watch?v=6KgdZZ5wOzM&lt;/span&gt;&lt;/p&gt;</info>
+        <picklistValueName>Needs Analysis</picklistValueName>
+    </pathAssistantSteps>
+    <pathAssistantSteps>
+        <fieldNames>AccountId</fieldNames>
+        <fieldNames>ExpectedRevenue</fieldNames>
+        <fieldNames>LeadSource</fieldNames>
+        <fieldNames>NextStep</fieldNames>
+        <info>&lt;p&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;Learn how to make the most of Salesforce, and make your sales move more quickly and efficiently, by completing the trail Optimize Sales Features for Lightning Experience:&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;https://trailhead.salesforce.com/trails/sales_admin&lt;/span&gt;&lt;/p&gt;</info>
+        <picklistValueName>Prospecting</picklistValueName>
+    </pathAssistantSteps>
+    <pathAssistantSteps>
+        <fieldNames>CloseDate</fieldNames>
+        <fieldNames>Amount</fieldNames>
+        <info>&lt;p&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;Qualify the opportunity and confirm budget:&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;What problems are they trying to solve?&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;How does solving these problems help them?&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;What is their budget?&lt;/span&gt;&lt;/p&gt;</info>
+        <picklistValueName>Qualification</picklistValueName>
+    </pathAssistantSteps>
+    <recordTypeName>B2B_Opportunities</recordTypeName>
+</PathAssistant>

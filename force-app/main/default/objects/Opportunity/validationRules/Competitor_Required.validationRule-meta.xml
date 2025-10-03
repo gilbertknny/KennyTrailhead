@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Competitor_Required</fullName>
+    <active>false</active>
+    <errorConditionFormula>(ISPICKVAL( StageName , &quot;Proposal/Price Quote&quot;) ||
+ISPICKVAL( StageName , &quot;Negotiation/Review&quot;) ||
+ISPICKVAL( StageName , &quot;Closed Won&quot;) ||
+ISPICKVAL( StageName , &quot;Closed Lost&quot;))
+&amp;&amp;
+ISBLANK( TEXT(Competitor__c ))</errorConditionFormula>
+    <errorDisplayField>Competitor__c</errorDisplayField>
+    <errorMessage>Competitor field requires a value before advancing to this Opportunity stage</errorMessage>
+</ValidationRule>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AutoResponseRules xmlns="http://soap.sforce.com/2006/04/metadata">
+    <autoResponseRule>
+        <fullName>Cloudy Email Response Rule</fullName>
+        <active>true</active>
+        <ruleEntry>
+            <criteriaItems>
+                <field>Case.CloneSourceId</field>
+                <operation>equals</operation>
+                <value>Email</value>
+            </criteriaItems>
+            <criteriaItems>
+                <field>Case.Status</field>
+                <operation>equals</operation>
+                <value>New</value>
+            </criteriaItems>
+            <notifyCcRecipients>false</notifyCcRecipients>
+            <replyToEmail>kenny.gilbert@mii.co.id</replyToEmail>
+            <senderEmail>kenny.gilbert@mii.co.id</senderEmail>
+            <senderName>Ursa Major Cloudy Support Team</senderName>
+            <template>unfiled$public/Support_Cloudy_New_Email_From_Case</template>
+        </ruleEntry>
+    </autoResponseRule>
+    <autoResponseRule>
+        <fullName>Welcome to Support</fullName>
+        <active>false</active>
+        <ruleEntry>
+            <criteriaItems>
+                <field>Case.Origin</field>
+                <operation>equals</operation>
+                <value>Email</value>
+            </criteriaItems>
+            <notifyCcRecipients>false</notifyCcRecipients>
+            <senderEmail>gilbertknny.16@gmail.com</senderEmail>
+            <senderName>Kenny</senderName>
+            <template>unfiled$public/SupportCaseResponse</template>
+        </ruleEntry>
+    </autoResponseRule>
+</AutoResponseRules>

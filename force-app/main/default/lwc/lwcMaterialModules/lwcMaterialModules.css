@@ -1,0 +1,30 @@
+.modules-container {
+    padding: 1rem;
+}
+
+.module-card {
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.module-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    background-color: rgb(222, 222, 222);
+}
+
+.module-card:active {
+    transform: translateY(0);
+}
+
+.slds-illustration {
+    text-align: center;
+    padding: 2rem;
+}
+
+.slds-illustration__svg {
+    width: 200px;
+    height: 200px;
+}

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Queue xmlns="http://soap.sforce.com/2006/04/metadata">
+    <doesSendEmailToMembers>false</doesSendEmailToMembers>
+    <name>Basic Case Organizer</name>
+    <queueMembers>
+        <publicGroups>
+            <publicGroup>Basic_Support_Agents</publicGroup>
+            <publicGroup>Intermediate_Support_Agents</publicGroup>
+        </publicGroups>
+    </queueMembers>
+    <queueRoutingConfig>Basic_Cases</queueRoutingConfig>
+    <queueSobject>
+        <sobjectType>Case</sobjectType>
+    </queueSobject>
+</Queue>

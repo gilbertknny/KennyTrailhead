@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workflow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <alerts>
+        <fullName>Remaining_Case_near_overdue</fullName>
+        <description>Remaining Case near overdue</description>
+        <protected>false</protected>
+        <recipients>
+            <recipient>Advanced_Support_Agents</recipient>
+            <type>group</type>
+        </recipients>
+        <recipients>
+            <recipient>Basic_Support_Agents</recipient>
+            <type>group</type>
+        </recipients>
+        <senderType>CurrentUser</senderType>
+        <template>unfiled$public/Remaing_Due_Time_Resolution</template>
+    </alerts>
+    <alerts>
+        <fullName>X2_hour_warning_before_milestone_expires</fullName>
+        <description>2 hour warning before milestone expires</description>
+        <protected>false</protected>
+        <recipients>
+            <type>owner</type>
+        </recipients>
+        <senderType>CurrentUser</senderType>
+        <template>unfiled$public/SupportCaseResponse</template>
+    </alerts>
+    <alerts>
+        <fullName>email_when_45_minutes_are_left</fullName>
+        <description>email when 45 minutes are left</description>
+        <protected>false</protected>
+        <recipients>
+            <type>owner</type>
+        </recipients>
+        <senderType>CurrentUser</senderType>
+        <template>unfiled$public/Remaing_Due_Time_Resolution</template>
+    </alerts>
+    <fieldUpdates>
+        <fullName>ChangePriorityToHigh</fullName>
+        <field>Priority</field>
+        <literalValue>High</literalValue>
+        <name>Changes the case priority to high.</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <tasks>
+        <fullName>Contact_the_Customer</fullName>
+        <assignedToType>owner</assignedToType>
+        <dueDateOffset>1</dueDateOffset>
+        <notifyAssignee>false</notifyAssignee>
+        <offsetFromField>Case.ClosedDate</offsetFromField>
+        <priority>High</priority>
+        <protected>false</protected>
+        <status>Not Started</status>
+        <subject>Contact the Customer</subject>
+    </tasks>
+</Workflow>

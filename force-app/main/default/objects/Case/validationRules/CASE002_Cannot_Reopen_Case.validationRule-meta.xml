@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>CASE002_Cannot_Reopen_Case</fullName>
+    <active>false</active>
+    <description>llows users with the Bypass Case Validation Rules permission to bypass the validation rule.</description>
+    <errorConditionFormula>AND(
+  NOT(  $Permission.Bypass_Case_Validation_Rules  ),
+  NOT(ISBLANK(TEXT( PRIORVALUE(  Status ))))
+)</errorConditionFormula>
+    <errorDisplayField>Status</errorDisplayField>
+    <errorMessage>Cases that are closed cannot be reopened [CASE002]</errorMessage>
+</ValidationRule>

@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RecordType xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Residential_Opportunity</fullName>
+    <active>true</active>
+    <businessProcess>Residential Opportunities</businessProcess>
+    <description>For residential sales opportunities requiring that special Residential Sales touch</description>
+    <label>Residential Opportunity</label>
+    <picklistValues>
+        <picklist>Approval_Status__c</picklist>
+        <values>
+            <fullName>Approved</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Not Approved</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pending</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Close_Reason__c</picklist>
+        <values>
+            <fullName>Lost%3A Company Budget Constraints</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Lost%3A Competitor</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Lost%3A Other Reason</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Lost%3A Price</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Lost%3A Product Features</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Lost%3A Project Abandoned</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Won%3A Competitor</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Won%3A Other Reason</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Won%3A Price</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Won%3A Product Features</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Competitor__c</picklist>
+        <values>
+            <fullName>Lala</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Yeye</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>DB_Competitor__c</picklist>
+        <values>
+            <fullName>Competitor A</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Competitor B</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Competitor C</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>DeliveryInstallationStatus__c</picklist>
+        <values>
+            <fullName>Completed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>In progress</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Yet to begin</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>ForecastCategoryName</picklist>
+        <values>
+            <fullName>Best Case</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Closed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Commit</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Omitted</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pipeline</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>LeadSource</picklist>
+        <values>
+            <fullName>Other</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Partner Referral</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Phone Inquiry</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Purchased List</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Web</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Lost_Reason__c</picklist>
+        <values>
+            <fullName>Financial</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>No Decision</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Price</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Product Gap</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>SolarBot_Model__c</picklist>
+        <values>
+            <fullName>Explorer</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pioneer</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ranger</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Scout</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Type</picklist>
+        <values>
+            <fullName>Existing Customer - Downgrade</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Existing Customer - Replacement</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>New Customer</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+</RecordType>
