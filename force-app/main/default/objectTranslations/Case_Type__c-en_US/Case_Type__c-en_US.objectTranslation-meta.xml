@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>Case Type</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Case Types</value>
+    </caseValues>
+    <layouts>
+        <layout>Case Type Layout</layout>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+    <startsWith>Consonant</startsWith>
+    <validationRules>
+        <errorMessage><!-- Case Type Number tidak dapat diubah --></errorMessage>
+        <name>Case_Type_Name_Rule</name>
+    </validationRules>
+</CustomObjectTranslation>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EntitlementProcess xmlns="http://soap.sforce.com/2006/04/metadata">
+    <SObjectType>Case</SObjectType>
+    <active>true</active>
+    <description>Cloudy Support</description>
+    <entryStartDateField>Case.CreatedDate</entryStartDateField>
+    <exitCriteriaFilterItems>
+        <field>Case.IsClosed</field>
+        <operation>equals</operation>
+        <value>true</value>
+    </exitCriteriaFilterItems>
+    <milestones>
+        <milestoneCriteriaFilterItems>
+            <field>Case.Priority</field>
+            <operation>equals</operation>
+            <value>High</value>
+        </milestoneCriteriaFilterItems>
+        <milestoneName>Resolution Time</milestoneName>
+        <minutesToComplete>360</minutesToComplete>
+        <timeTriggers>
+            <actions>
+                <name>email_when_45_minutes_are_left</name>
+                <type>Alert</type>
+            </actions>
+            <timeLength>-45</timeLength>
+            <workflowTimeTriggerUnit>Minutes</workflowTimeTriggerUnit>
+        </timeTriggers>
+        <useCriteriaStartTime>false</useCriteriaStartTime>
+    </milestones>
+    <milestones>
+        <milestoneCriteriaFilterItems>
+            <field>Case.Priority</field>
+            <operation>equals</operation>
+            <value>Medium, Low</value>
+        </milestoneCriteriaFilterItems>
+        <milestoneName>Resolution Time</milestoneName>
+        <minutesToComplete>840</minutesToComplete>
+        <useCriteriaStartTime>false</useCriteriaStartTime>
+    </milestones>
+    <milestones>
+        <milestoneCriteriaFilterItems>
+            <field>Case.Priority</field>
+            <operation>equals</operation>
+            <value>High, Medium, Low</value>
+        </milestoneCriteriaFilterItems>
+        <milestoneName>Initial Response</milestoneName>
+        <minutesToComplete>20</minutesToComplete>
+        <timeTriggers>
+            <actions>
+                <name>Contact_the_Customer</name>
+                <type>Task</type>
+            </actions>
+            <timeLength>10</timeLength>
+            <workflowTimeTriggerUnit>Minutes</workflowTimeTriggerUnit>
+        </timeTriggers>
+        <useCriteriaStartTime>false</useCriteriaStartTime>
+    </milestones>
+</EntitlementProcess>

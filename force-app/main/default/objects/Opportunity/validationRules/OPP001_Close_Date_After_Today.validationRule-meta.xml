@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>OPP001_Close_Date_After_Today</fullName>
+    <active>false</active>
+    <description>The close date must be today or later for new opportunities or when the close date is changed.</description>
+    <errorConditionFormula>AND(
+  OR(
+    ISNEW(),
+    ISCHANGED(CloseDate)
+  ),
+  CloseDate&lt;TODAY()
+)</errorConditionFormula>
+    <errorDisplayField>CloseDate</errorDisplayField>
+    <errorMessage>The close date must be today or later [OPP001]</errorMessage>
+</ValidationRule>

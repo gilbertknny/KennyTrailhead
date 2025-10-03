@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SharingRules xmlns="http://soap.sforce.com/2006/04/metadata">
+    <sharingCriteriaRules>
+        <fullName>Share_Open_Positions_with_VPs</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>Share Open Positions with VPs</label>
+        <sharedTo>
+            <group>VPs</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>Status__c</field>
+            <operation>equals</operation>
+            <value>Open</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingOwnerRules>
+        <fullName>Share_Positions_Between_Recruiters</fullName>
+        <accessLevel>Edit</accessLevel>
+        <label>Share Positions Between Recruiters</label>
+        <sharedTo>
+            <role>Recruiter</role>
+        </sharedTo>
+        <sharedFrom>
+            <role>Recruiter</role>
+        </sharedFrom>
+    </sharingOwnerRules>
+</SharingRules>
