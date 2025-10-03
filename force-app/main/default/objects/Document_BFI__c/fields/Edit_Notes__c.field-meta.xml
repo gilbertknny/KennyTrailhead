@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Edit_Notes__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF(
+    ISBLANK(DMS_Doc_Id__c) ||  Document_Check_Sesuai__c == TRUE || ((RIGHT( Document_Group__c , LEN(&quot;Application.DocCheck.LO&quot;)) == &quot;Application.DocCheck.LO&quot; &amp;&amp;  (Loan__r.Application__r.Legal_Opini_Approval_Id__r.Is_Current_LAO__c == FALSE || BEGINS(Loan__r.Application__r.Legal_Opini_Approval_Id__r.Approval_Assigned__c,  $User.Id )))) ||  Loan__r.Loan_Status__c == &quot;Survey (Data Correction)&quot;,
+    &quot;&quot;,
+    HYPERLINK(
+        &quot;/lightning/action/quick/Document_BFI__c.Edit_Notes&quot; &amp;
+        &quot;?objectApiName&amp;context=RECORD_DETAIL&amp;recordId=&quot; &amp; CASESAFEID(Id) &amp;
+        &quot;&amp;backgroundContext=%2Flightning%2Fr%2FApplication__c%2F&quot; &amp; Loan__r.Application__c &amp;
+        &quot;%2Fview&amp;retUrl=&quot;,
+        &quot;Edit&quot;, 
+        &quot;_self&quot;
+    )
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Action</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

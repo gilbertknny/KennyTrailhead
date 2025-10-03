@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>62.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <name>Set_Value_for_D086_Content</name>
+        <label>Set Value for ROYA Content</label>
+        <locationX>176</locationX>
+        <locationY>458</locationY>
+        <assignmentItems>
+            <assignToReference>PDFContent.related_id__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>InputRecordID</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PDFContent.doc_name__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Ringkasan</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PDFContent.text_1__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Legal_Document.lokasi_legal_doc_general__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PDFContent.text_2__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>TodayDateTime</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PDFContent.text_3__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Application.Customer_Name__c</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Save_Data_to_PDF_Object</targetReference>
+        </connector>
+    </assignments>
+    <environments>Default</environments>
+    <formulas>
+        <name>TodayDateTime</name>
+        <dataType>String</dataType>
+        <expression>TEXT(DAY(TODAY())) &amp; &quot; &quot; &amp; 
+CASE(MONTH(TODAY()), 
+    1, &quot;Januari&quot;, 
+    2, &quot;Februari&quot;, 
+    3, &quot;Maret&quot;, 
+    4, &quot;April&quot;, 
+    5, &quot;Mei&quot;, 
+    6, &quot;Juni&quot;, 
+    7, &quot;Juli&quot;, 
+    8, &quot;Agustus&quot;, 
+    9, &quot;September&quot;, 
+    10, &quot;Oktober&quot;, 
+    11, &quot;November&quot;, 
+    12, &quot;Desember&quot;, 
+    &quot;&quot;) &amp; &quot; &quot; &amp; 
+TEXT(YEAR(TODAY()))</expression>
+    </formulas>
+    <interviewLabel>Ringkasan Get Data {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Ringkasan Get Data</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordCreates>
+        <name>Save_Data_to_PDF_Object</name>
+        <label>Save Data to PDF Object</label>
+        <locationX>176</locationX>
+        <locationY>566</locationY>
+        <inputReference>PDFContent</inputReference>
+    </recordCreates>
+    <recordLookups>
+        <name>Get_Application</name>
+        <label>Get Application Review</label>
+        <locationX>176</locationX>
+        <locationY>134</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Get_Guarantor</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>InputRecordID</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Application__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Guarantor</name>
+        <label>Get Guarantor</label>
+        <locationX>176</locationX>
+        <locationY>242</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Get_Legal_Document</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Survey__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Application.Survey__c</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Guarantor__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Legal_Document</name>
+        <label>Get Legal Document</label>
+        <locationX>176</locationX>
+        <locationY>350</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Set_Value_for_D086_Content</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>application_id__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>InputRecordID</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Legal_Document__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Get_Application</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <variables>
+        <name>InputRecordID</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>PDFContent</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>pdf_content__c</objectType>
+    </variables>
+    <variables>
+        <name>SavedRecordID</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+    </variables>
+</Flow>

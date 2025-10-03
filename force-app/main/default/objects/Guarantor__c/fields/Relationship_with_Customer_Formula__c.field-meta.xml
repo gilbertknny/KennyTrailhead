@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Relationship_with_Customer_Formula__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF(ISPICKVAL(Guarantor_Type__c, &quot;Personal Guarantor&quot;), &quot;Personal Guarantor&quot;, 
+   IF(ISPICKVAL(Guarantor_Type__c, &quot;Corporate Guarantor&quot;), &quot;Corporate Guarantor&quot;, 
+   &quot;Payment Guarantor&quot;))</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Relationship with Customer</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

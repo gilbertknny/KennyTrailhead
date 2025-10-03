@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workflow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <alerts>
+        <fullName>Notification_for_NST_Pricing</fullName>
+        <ccEmails>jimmy.tobing@bfi.co.id,</ccEmails>
+        <ccEmails>l-angga.yuhindra@bfi.co.id,</ccEmails>
+        <ccEmails>raditya.mayantara@bfi.co.id</ccEmails>
+        <description>Notification for NST Pricing</description>
+        <protected>false</protected>
+        <recipients>
+            <field>Approval_Assigned__c</field>
+            <type>userLookup</type>
+        </recipients>
+        <senderType>CurrentUser</senderType>
+        <template>unfiled$public/Approval_NST_Pricing_1747222122465</template>
+    </alerts>
+    <alerts>
+        <fullName>Notification_for_NST_Risk</fullName>
+        <ccEmails>jimmy.tobing@bfi.co.id,</ccEmails>
+        <ccEmails>l-angga.yuhindra@bfi.co.id,</ccEmails>
+        <ccEmails>raditya.mayantara@bfi.co.id</ccEmails>
+        <description>Notification for NST Risk</description>
+        <protected>false</protected>
+        <recipients>
+            <field>Approval_Assigned__c</field>
+            <type>userLookup</type>
+        </recipients>
+        <senderType>CurrentUser</senderType>
+        <template>unfiled$public/Approval_NST_Risk_1747707442134</template>
+    </alerts>
+    <alerts>
+        <fullName>Notify_PIC_Final_Appeal</fullName>
+        <ccEmails>jimmy.tobing@bfi.co.id, l-angga.yuhindra@bfi.co.id</ccEmails>
+        <description>Notify PIC Final Appeal</description>
+        <protected>false</protected>
+        <recipients>
+            <field>Approval_Assigned__c</field>
+            <type>userLookup</type>
+        </recipients>
+        <senderType>CurrentUser</senderType>
+        <template>unfiled$public/Notification_Email_to_PIC_Final_Appeal_1742785595642</template>
+    </alerts>
+    <fieldUpdates>
+        <fullName>Approval_Given</fullName>
+        <field>Approval_Given__c</field>
+        <formula>NOW()</formula>
+        <name>Approval Given</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Reset_CAA_Next</fullName>
+        <field>CAA_Next_Step__c</field>
+        <formula>-1</formula>
+        <name>Reset CAA Next</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Update_Approval_Given</fullName>
+        <description>Update Timestamp Approval</description>
+        <field>Approval_Given__c</field>
+        <formula>NOW()</formula>
+        <name>Update Approval Given</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Update_CAA_Next</fullName>
+        <field>CAA_Next_Step__c</field>
+        <formula>CAA_Next_Step__c + 1</formula>
+        <name>Update CAA Next</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Update_Result_Approve</fullName>
+        <field>Approval_Result__c</field>
+        <formula>&quot;Approve&quot;</formula>
+        <name>Update Result Approve</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Update_Result_Reject</fullName>
+        <field>Approval_Result__c</field>
+        <formula>&quot;Reject&quot;</formula>
+        <name>Update Result Reject</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Update_Result_Reset</fullName>
+        <field>Approval_Result__c</field>
+        <name>Update Result Reset</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Null</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+</Workflow>

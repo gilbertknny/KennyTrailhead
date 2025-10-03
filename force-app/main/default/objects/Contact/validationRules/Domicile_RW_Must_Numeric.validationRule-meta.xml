@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Domicile_RW_Must_Numeric</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND( Is_Domicile_Same_as_Legal_Address__c = FALSE, NOT(REGEX( Domicile_RW__c , &quot;^[0-9]*$$&quot;)))</errorConditionFormula>
+    <errorDisplayField>Domicile_RW__c</errorDisplayField>
+    <errorMessage>Alphabet and Special character are not allowed, for example / \ :*?&quot;&lt;&gt;|</errorMessage>
+</ValidationRule>

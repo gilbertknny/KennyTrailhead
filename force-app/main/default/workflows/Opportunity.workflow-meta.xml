@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workflow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fieldUpdates>
+        <fullName>Approve_BM</fullName>
+        <field>BM_Result__c</field>
+        <formula>&quot;Approve&quot;</formula>
+        <name>Approve BM</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Approve_KK1</fullName>
+        <field>Komite_Survey_1_Result__c</field>
+        <formula>&quot;Approve&quot;</formula>
+        <name>Approve Step 1</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Approve_KK2</fullName>
+        <field>Komite_Survey_2_Result__c</field>
+        <formula>&quot;Approve&quot;</formula>
+        <name>Approve Step 2</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>LockRecord</fullName>
+        <field>IsLocked__c</field>
+        <literalValue>1</literalValue>
+        <name>LockRecord</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>NeedResorting</fullName>
+        <field>IsNeedResortingKomiteSurvey__c</field>
+        <literalValue>1</literalValue>
+        <name>NeedResorting</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Now_BM_ApprovedDt</fullName>
+        <field>BM_ApprovedDt__c</field>
+        <formula>NOW()</formula>
+        <name>Now_BM_ApprovedDt</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>true</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Now_KK1_ApprovedDt</fullName>
+        <field>Komite_Kredit_1_ApprovedDt__c</field>
+        <formula>NOW()</formula>
+        <name>Now_KK1_ApprovedDt</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>true</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Now_KK2_ApprovedDt</fullName>
+        <field>Komite_Kredit_2_ApprovedDt__c</field>
+        <formula>NOW()</formula>
+        <name>Now_KK2_ApprovedDt</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>true</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Reject_BM</fullName>
+        <field>BM_Result__c</field>
+        <formula>&quot;Reject&quot;</formula>
+        <name>Reject BM</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Reject_KK1</fullName>
+        <field>Komite_Survey_1_Result__c</field>
+        <formula>&quot;Reject&quot;</formula>
+        <name>Reject Step 1</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Reject_KK2</fullName>
+        <field>Komite_Survey_2_Result__c</field>
+        <formula>&quot;Reject&quot;</formula>
+        <name>Reject Step 2</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Set_Approve_Final</fullName>
+        <field>Is_Approve_Final__c</field>
+        <literalValue>1</literalValue>
+        <name>Set Approve Final</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Set_Reco</fullName>
+        <field>isCaReco__c</field>
+        <literalValue>1</literalValue>
+        <name>Set Reco</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Set_Reject_Final</fullName>
+        <field>Is_Reject_Final__c</field>
+        <literalValue>1</literalValue>
+        <name>Set Reject Final</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Set_Reject_Not_Final</fullName>
+        <field>Is_Reject_NOT_Final__c</field>
+        <literalValue>1</literalValue>
+        <name>Set Reject Not Final</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Step_1</fullName>
+        <field>Komite_Survey_Step__c</field>
+        <formula>&quot;Step 1&quot;</formula>
+        <name>Step 1</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Step_2</fullName>
+        <field>Komite_Survey_Step__c</field>
+        <formula>&quot;Step 2&quot;</formula>
+        <name>Step 2</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Step_3</fullName>
+        <field>Komite_Survey_Step__c</field>
+        <formula>&quot;Step 3&quot;</formula>
+        <name>Step 3</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>UnlockRecord</fullName>
+        <field>IsLocked__c</field>
+        <literalValue>0</literalValue>
+        <name>UnlockRecord</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Unset_Reject_Final</fullName>
+        <field>Is_Reject_Final__c</field>
+        <literalValue>0</literalValue>
+        <name>Unset Reject Final</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+</Workflow>

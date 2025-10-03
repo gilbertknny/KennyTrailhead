@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Nomor_Object_Pajak_Is_Required</fullName>
+    <active>false</active>
+    <errorConditionFormula>IF( $User.Is_Debug_User__c = TRUE, FALSE, ISBLANK( Nomor_Objek_Pajak__c ))</errorConditionFormula>
+    <errorDisplayField>Nomor_Objek_Pajak__c</errorDisplayField>
+    <errorMessage>Completet this field</errorMessage>
+</ValidationRule>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PathAssistant xmlns="http://soap.sforce.com/2006/04/metadata">
+    <active>true</active>
+    <entityName>Opportunity</entityName>
+    <fieldName>StageName</fieldName>
+    <masterLabel>Opty PBF</masterLabel>
+    <pathAssistantSteps>
+        <fieldNames>Done_Insurance_Review__c</fieldNames>
+        <fieldNames>Done_Legal_Review__c</fieldNames>
+        <fieldNames>Done_Underwriting_Review__c</fieldNames>
+        <picklistValueName>Insurance, Legal, Underwriting Review</picklistValueName>
+    </pathAssistantSteps>
+    <pathAssistantSteps>
+        <fieldNames>Done_Komite_Kredit__c</fieldNames>
+        <fieldNames>Done_Collateral_Assessment__c</fieldNames>
+        <picklistValueName>Komite Kredit &amp; Collateral Assesment</picklistValueName>
+    </pathAssistantSteps>
+    <pathAssistantSteps>
+        <fieldNames>Done_Offering_Letter__c</fieldNames>
+        <fieldNames>Done_AKAD__c</fieldNames>
+        <fieldNames>Done_FKD__c</fieldNames>
+        <picklistValueName>Offering Letter, Akad, FKD Process</picklistValueName>
+    </pathAssistantSteps>
+    <pathAssistantSteps>
+        <fieldNames>Activity_Formula__c</fieldNames>
+        <picklistValueName>Submit Loan</picklistValueName>
+    </pathAssistantSteps>
+    <recordTypeName>PBF</recordTypeName>
+</PathAssistant>

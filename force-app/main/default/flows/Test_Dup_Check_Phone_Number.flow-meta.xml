@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Dup_Check_Phone_Number</name>
+        <label>Dup Check Phone Number</label>
+        <locationX>176</locationX>
+        <locationY>134</locationY>
+        <actionName>DupCheckPhoneNumber.DupCheckPhoneNumber</actionName>
+        <actionType>externalService</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>phone</name>
+            <value>
+                <stringValue>081375356302</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>process-id</name>
+            <value>
+                <stringValue>fbf6c90c-863f-47ca-a3c7-3ecadbfd2212</stringValue>
+            </value>
+        </inputParameters>
+        <nameSegment>DupCheckPhoneNumber.DupCheckPhoneNumber</nameSegment>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </actionCalls>
+    <apiVersion>61.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <environments>Default</environments>
+    <interviewLabel>[Test] Dup Check Phone Number {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>[Test] Dup Check Phone Number</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Dup_Check_Phone_Number</targetReference>
+        </connector>
+    </start>
+    <status>Draft</status>
+</Flow>

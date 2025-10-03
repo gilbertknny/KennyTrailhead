@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Customer_Type__c</fullName>
+    <label>Customer Type</label>
+    <required>true</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Personal</fullName>
+                <default>true</default>
+                <label>Personal</label>
+            </value>
+            <value>
+                <fullName>Company</fullName>
+                <default>false</default>
+                <label>Company</label>
+            </value>
+            <value>
+                <fullName>Badan Usaha Milik Negara</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Badan Usaha Milik Negara</label>
+            </value>
+            <value>
+                <fullName>CV</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>CV</label>
+            </value>
+            <value>
+                <fullName>Firma</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Firma</label>
+            </value>
+            <value>
+                <fullName>Koperasi</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Koperasi</label>
+            </value>
+            <value>
+                <fullName>NV</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>NV</label>
+            </value>
+            <value>
+                <fullName>Perseroan Terbatas</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Perseroan Terbatas</label>
+            </value>
+            <value>
+                <fullName>Perusahaan Dagang</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Perusahaan Dagang</label>
+            </value>
+            <value>
+                <fullName>Perusahaan Tbk</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Perusahaan Tbk</label>
+            </value>
+            <value>
+                <fullName>Yayasan</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Yayasan</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

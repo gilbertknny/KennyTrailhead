@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Domicile_City_Kabupaten__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <label>Domicile City/Kabupaten</label>
+    <lookupFilter>
+        <active>true</active>
+        <filterItems>
+            <field>$Source.Domicile_Province__c</field>
+            <operation>equals</operation>
+            <valueField>City_Master_Data__c.Province_Id__c</valueField>
+        </filterItems>
+        <isOptional>true</isOptional>
+    </lookupFilter>
+    <referenceTo>City_Master_Data__c</referenceTo>
+    <relationshipLabel>Contacts (Domicile City Kabupaten)</relationshipLabel>
+    <relationshipName>Contacts3</relationshipName>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Lookup</type>
+</CustomField>

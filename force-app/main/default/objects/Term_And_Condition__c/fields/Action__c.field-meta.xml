@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Action__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF( Is_TC_After__c == FALSE, HYPERLINK(&quot;/lightning/action/quick/Term_And_Condition__c.Edit_TC?objectApiName&amp;context=RECORD_DETAIL&amp;recordId=&quot;&amp; CASESAFEID(Id)&amp;&quot;&amp;backgroundContext=%2Flightning%2Fr%2FApplication__c%2F&quot;&amp;CASESAFEID(Application__c)&amp;&quot;%2Fview&quot;, &quot;Edit&quot; , &apos;_self&apos;), HYPERLINK(&quot;/lightning/action/quick/Term_And_Condition__c.Edit_TC_After?objectApiName&amp;context=RECORD_DETAIL&amp;recordId=&quot;&amp; CASESAFEID(Id)&amp;&quot;&amp;backgroundContext=%2Flightning%2Fr%2FApplication__c%2F&quot;&amp;CASESAFEID(Application__c)&amp;&quot;%2Fview&quot;, &quot;Edit&quot; , &apos;_self&apos;))</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Action</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

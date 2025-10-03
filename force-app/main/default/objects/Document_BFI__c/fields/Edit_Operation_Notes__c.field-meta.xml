@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Edit_Operation_Notes__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF(
+    (
+        ISBLANK( DMS_Doc_Id__c )|| 
+        !$Permission.Sec_Operation_DocCheck_CCO_Edit
+    ),
+    &quot;&quot;,
+    IF(
+        !Document_Check_Sesuai__c || 
+        $Permission.Sec_Operation_DocCheck_CCO_Edit || 
+        CONTAINS(Document_Group__c, &quot;FKD&quot;),
+        HYPERLINK(
+            &quot;/lightning/action/quick/Document_BFI__c.Edit_Notes&quot; &amp;
+            &quot;?objectApiName&amp;context=RECORD_DETAIL&amp;recordId=&quot; &amp; CASESAFEID(Id) &amp;
+            &quot;&amp;backgroundContext=%2Flightning%2Fr%2FOperation__c%2F&quot; &amp; Loan__r.Operation__c &amp; &quot;%2Fview&amp;retUrl=&quot;,
+            &quot;Edit&quot;,
+            &quot;_self&quot;
+        ),
+        &quot;&quot;
+    )
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Action</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

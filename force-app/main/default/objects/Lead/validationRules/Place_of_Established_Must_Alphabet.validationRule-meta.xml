@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Place_of_Established_Must_Alphabet</fullName>
+    <active>true</active>
+    <errorConditionFormula>OR(NOT(REGEX(  Place_of_Established__c , &quot;^[a-zA-Z ]*$&quot;)))</errorConditionFormula>
+    <errorDisplayField>Place_of_Established__c</errorDisplayField>
+    <errorMessage>Number and special character are not allowed, for example / \ :*?&quot;&lt;&gt;|</errorMessage>
+</ValidationRule>

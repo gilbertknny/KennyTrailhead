@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>soa_type__c</fullName>
+    <label>soa_type</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Agency</fullName>
+                <default>false</default>
+                <label>Agency</label>
+            </value>
+            <value>
+                <fullName>Direct Selling</fullName>
+                <default>false</default>
+                <label>Direct Selling</label>
+            </value>
+            <value>
+                <fullName>Tele RO</fullName>
+                <default>false</default>
+                <label>Tele RO</label>
+            </value>
+            <value>
+                <fullName>Tele Digital</fullName>
+                <default>false</default>
+                <label>Tele Digital</label>
+            </value>
+            <value>
+                <fullName>EGC</fullName>
+                <default>false</default>
+                <label>EGC</label>
+            </value>
+            <value>
+                <fullName>CGC</fullName>
+                <default>false</default>
+                <label>CGC</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

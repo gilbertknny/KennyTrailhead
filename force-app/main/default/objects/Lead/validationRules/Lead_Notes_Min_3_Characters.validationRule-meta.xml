@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Lead_Notes_Min_3_Characters</fullName>
+    <active>true</active>
+    <errorConditionFormula>IF(   OR(ISBLANK(Lead_Notes__c),Lead_Notes__c=&quot;&quot;, ISNULL(Lead_Notes__c) )  , FALSE,  LEN(Lead_Notes__c) &lt; 3 )</errorConditionFormula>
+    <errorDisplayField>Lead_Notes__c</errorDisplayField>
+    <errorMessage>Please enter at least 3 character</errorMessage>
+</ValidationRule>

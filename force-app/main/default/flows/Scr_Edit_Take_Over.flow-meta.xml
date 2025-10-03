@@ -1,0 +1,1767 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>62.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <choices>
+        <name>CashOption</name>
+        <choiceText>Cash</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Cash</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>ChoiceFalse</name>
+        <choiceText>No</choiceText>
+        <dataType>Boolean</dataType>
+        <value>
+            <booleanValue>false</booleanValue>
+        </value>
+    </choices>
+    <choices>
+        <name>ChoiceTrue</name>
+        <choiceText>Yes</choiceText>
+        <dataType>Boolean</dataType>
+        <value>
+            <booleanValue>true</booleanValue>
+        </value>
+    </choices>
+    <choices>
+        <name>FullFundingOption</name>
+        <choiceText>Full Funding</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Full Funding</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>funding_method_choices</name>
+        <choiceText>Full Funding&lt;p&gt;Split Funding&lt;/p&gt;</choiceText>
+        <dataType>String</dataType>
+    </choices>
+    <choices>
+        <name>SplitFundingOption</name>
+        <choiceText>Split Funding</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Split Funding</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>TransferOption</name>
+        <choiceText>Transfer</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Transfer</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>VirtualAccountOption</name>
+        <choiceText>Virtual Account</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Virtual Account</stringValue>
+        </value>
+    </choices>
+    <decisions>
+        <name>Is_Split_Funding</name>
+        <label>Is Split Funding</label>
+        <locationX>182</locationX>
+        <locationY>1430</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>YES</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Operation_Data.funding_method_selected__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Split Funding</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Operation_2</targetReference>
+            </connector>
+            <label>YES</label>
+        </rules>
+    </decisions>
+    <description>Add Bank Account Check</description>
+    <dynamicChoiceSets>
+        <name>Customer_Bank_Name_Options</name>
+        <dataType>String</dataType>
+        <displayField>Name</displayField>
+        <object>Master_Bank__c</object>
+        <valueField>code__c</valueField>
+    </dynamicChoiceSets>
+    <dynamicChoiceSets>
+        <name>DocumentTypeChoices</name>
+        <dataType>String</dataType>
+        <displayField>name__c</displayField>
+        <object>Document_Type__c</object>
+        <outputAssignments>
+            <assignToReference>SelectedDocumentType</assignToReference>
+            <field>name__c</field>
+        </outputAssignments>
+        <sortField>name__c</sortField>
+        <sortOrder>Asc</sortOrder>
+        <valueField>type__c</valueField>
+    </dynamicChoiceSets>
+    <dynamicChoiceSets>
+        <name>Picklist_Bank</name>
+        <dataType>String</dataType>
+        <displayField>Name</displayField>
+        <object>Master_Bank__c</object>
+        <valueField>Id</valueField>
+    </dynamicChoiceSets>
+    <environments>Default</environments>
+    <formulas>
+        <name>AngsuranPerTahun</name>
+        <dataType>Currency</dataType>
+        <expression>{!Get_Loan_Calculation_Result.installment__c}*12</expression>
+        <scale>0</scale>
+    </formulas>
+    <formulas>
+        <name>ConvertAgreementDate</name>
+        <dataType>Date</dataType>
+        <expression>DATE(
+    VALUE(LEFT({!Get_Agreement_ID_Fields.agreement_date__c}, 4)), 
+    VALUE(MID({!Get_Agreement_ID_Fields.agreement_date__c}, 6, 2)), 
+    VALUE(RIGHT({!Get_Agreement_ID_Fields.agreement_date__c}, 2))
+)</expression>
+    </formulas>
+    <formulas>
+        <name>ConvertEffectiveDate</name>
+        <dataType>Date</dataType>
+        <expression>DATE(
+    VALUE(LEFT({!Get_Agreement_ID_Fields.effective_date__c}, 4)), 
+    VALUE(MID({!Get_Agreement_ID_Fields.effective_date__c}, 6, 2)), 
+    VALUE(RIGHT({!Get_Agreement_ID_Fields.effective_date__c}, 2))
+)</expression>
+    </formulas>
+    <formulas>
+        <name>F559Url</name>
+        <dataType>String</dataType>
+        <expression>HYPERLINK({!Get_Operation_Data.f559_doc_url__c}, {!Get_Operation_Data.f559_doc_type__c}, &quot;_blank&quot;)</expression>
+    </formulas>
+    <formulas>
+        <name>fc1</name>
+        <dataType>String</dataType>
+        <expression>IF({!Get_Operation_Data.sf_angsuran_cb__c}, &quot;☑&quot;, &quot;☐&quot;)</expression>
+    </formulas>
+    <formulas>
+        <name>fc10</name>
+        <dataType>String</dataType>
+        <expression> IF({!Get_Operation_Data.sf_funding_cb__c}, &quot;☑&quot;, &quot;☐&quot;)</expression>
+    </formulas>
+    <formulas>
+        <name>fc2</name>
+        <dataType>String</dataType>
+        <expression>IF({!Get_Operation_Data.sf_biaya_notaris_cb__c}, &quot;☑&quot;, &quot;☐&quot;)</expression>
+    </formulas>
+    <formulas>
+        <name>fc3</name>
+        <dataType>String</dataType>
+        <expression>IF({!Get_Operation_Data.sf_pajak_cb__c}, &quot;☑&quot;, &quot;☐&quot;)</expression>
+    </formulas>
+    <formulas>
+        <name>fc4</name>
+        <dataType>String</dataType>
+        <expression>IF({!Get_Operation_Data.sf_change_due_date_cb__c}, &quot;☑&quot;, &quot;☐&quot;)</expression>
+    </formulas>
+    <formulas>
+        <name>fc5</name>
+        <dataType>String</dataType>
+        <expression>IF({!Get_Operation_Data.sf_take_over_cb__c}, &quot;☑&quot;, &quot;☐&quot;)</expression>
+    </formulas>
+    <formulas>
+        <name>fc6</name>
+        <dataType>String</dataType>
+        <expression>IF({!Get_Operation_Data.sf_imb_cb__c}, &quot;☑&quot;, &quot;☐&quot;)</expression>
+    </formulas>
+    <formulas>
+        <name>fc7</name>
+        <dataType>String</dataType>
+        <expression>IF({!Get_Operation_Data.sf_obligasi_cb__c}, &quot;☑&quot;, &quot;☐&quot;)</expression>
+    </formulas>
+    <formulas>
+        <name>fc8</name>
+        <dataType>String</dataType>
+        <expression>IF({!Get_Operation_Data.sf_ro_pot_funding_cb__c}, &quot;☑&quot;, &quot;☐&quot;)</expression>
+    </formulas>
+    <formulas>
+        <name>fc9</name>
+        <dataType>String</dataType>
+        <expression>IF({!Get_Operation_Data.sf_tdp_cb__c}, &quot;☑&quot;, &quot;☐&quot;)</expression>
+    </formulas>
+    <formulas>
+        <name>fh1</name>
+        <dataType>String</dataType>
+        <expression>IF({!Get_Operation_Data.sf_angsuran_holdap_cb__c}, &quot;☑&quot;, &quot;☐&quot;)</expression>
+    </formulas>
+    <formulas>
+        <name>fh10</name>
+        <dataType>String</dataType>
+        <expression>IF({!Get_Operation_Data.sf_funding_holdap_cb__c}, &quot;☑&quot;, &quot;☐&quot;)</expression>
+    </formulas>
+    <formulas>
+        <name>fh2</name>
+        <dataType>String</dataType>
+        <expression>IF({!Get_Operation_Data.sf_biaya_notaris_holdap_cb__c}, &quot;☑&quot;, &quot;☐&quot;)</expression>
+    </formulas>
+    <formulas>
+        <name>fh3</name>
+        <dataType>String</dataType>
+        <expression>IF({!Get_Operation_Data.sf_pajak_holdap_cb__c}, &quot;☑&quot;, &quot;☐&quot;)</expression>
+    </formulas>
+    <formulas>
+        <name>fh4</name>
+        <dataType>String</dataType>
+        <expression>IF({!Get_Operation_Data.sf_change_due_date_holdap_cb__c}, &quot;☑&quot;, &quot;☐&quot;)</expression>
+    </formulas>
+    <formulas>
+        <name>fh5</name>
+        <dataType>String</dataType>
+        <expression>IF({!Get_Operation_Data.sf_take_over_holdap_cb__c}, &quot;☑&quot;, &quot;☐&quot;)</expression>
+    </formulas>
+    <formulas>
+        <name>fh6</name>
+        <dataType>String</dataType>
+        <expression>IF({!Get_Operation_Data.sf_imb_holdap_cb__c}, &quot;☑&quot;, &quot;☐&quot;)</expression>
+    </formulas>
+    <formulas>
+        <name>fh7</name>
+        <dataType>String</dataType>
+        <expression>IF({!Get_Operation_Data.sf_obligasi_holdap_cb__c}, &quot;☑&quot;, &quot;☐&quot;)</expression>
+    </formulas>
+    <formulas>
+        <name>fh8</name>
+        <dataType>String</dataType>
+        <expression>IF({!Get_Operation_Data.sf_ro_pot_funding_holdap_cb__c}, &quot;☑&quot;, &quot;☐&quot;)</expression>
+    </formulas>
+    <formulas>
+        <name>fh9</name>
+        <dataType>String</dataType>
+        <expression>IF({!Get_Operation_Data.sf_tdp_holdap_cb__c}, &quot;☑&quot;, &quot;☐&quot;)</expression>
+    </formulas>
+    <formulas>
+        <name>FormatAdminFee</name>
+        <dataType>String</dataType>
+        <expression>IF(
+    LEN(TEXT({!Get_Loan_Calculation_Result.admin_fee__c})) &gt; 15,
+    LEFT(TEXT({!Get_Loan_Calculation_Result.admin_fee__c}), LEN(TEXT({!Get_Loan_Calculation_Result.admin_fee__c})) - 15) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!Get_Loan_Calculation_Result.admin_fee__c}), LEN(TEXT({!Get_Loan_Calculation_Result.admin_fee__c})) - 14, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!Get_Loan_Calculation_Result.admin_fee__c}), LEN(TEXT({!Get_Loan_Calculation_Result.admin_fee__c})) - 11, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!Get_Loan_Calculation_Result.admin_fee__c}), LEN(TEXT({!Get_Loan_Calculation_Result.admin_fee__c})) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!Get_Loan_Calculation_Result.admin_fee__c}), LEN(TEXT({!Get_Loan_Calculation_Result.admin_fee__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT({!Get_Loan_Calculation_Result.admin_fee__c}), 3),
+    IF(
+        LEN(TEXT({!Get_Loan_Calculation_Result.admin_fee__c})) &gt; 12,
+        LEFT(TEXT({!Get_Loan_Calculation_Result.admin_fee__c}), LEN(TEXT({!Get_Loan_Calculation_Result.admin_fee__c})) - 12) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!Get_Loan_Calculation_Result.admin_fee__c}), LEN(TEXT({!Get_Loan_Calculation_Result.admin_fee__c})) - 11, 3) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!Get_Loan_Calculation_Result.admin_fee__c}), LEN(TEXT({!Get_Loan_Calculation_Result.admin_fee__c})) - 8, 3) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!Get_Loan_Calculation_Result.admin_fee__c}), LEN(TEXT({!Get_Loan_Calculation_Result.admin_fee__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+        RIGHT(TEXT({!Get_Loan_Calculation_Result.admin_fee__c}), 3),
+        IF(
+            LEN(TEXT({!Get_Loan_Calculation_Result.admin_fee__c})) &gt; 9,
+            LEFT(TEXT({!Get_Loan_Calculation_Result.admin_fee__c}), LEN(TEXT({!Get_Loan_Calculation_Result.admin_fee__c})) - 9) &amp; &quot;.&quot; &amp;
+            MID(TEXT({!Get_Loan_Calculation_Result.admin_fee__c}), LEN(TEXT({!Get_Loan_Calculation_Result.admin_fee__c})) - 8, 3) &amp; &quot;.&quot; &amp;
+            MID(TEXT({!Get_Loan_Calculation_Result.admin_fee__c}), LEN(TEXT({!Get_Loan_Calculation_Result.admin_fee__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+            RIGHT(TEXT({!Get_Loan_Calculation_Result.admin_fee__c}), 3),
+            IF(
+                LEN(TEXT({!Get_Loan_Calculation_Result.admin_fee__c})) &gt; 6,
+                LEFT(TEXT({!Get_Loan_Calculation_Result.admin_fee__c}), LEN(TEXT({!Get_Loan_Calculation_Result.admin_fee__c})) - 6) &amp; &quot;.&quot; &amp;
+                MID(TEXT({!Get_Loan_Calculation_Result.admin_fee__c}), LEN(TEXT({!Get_Loan_Calculation_Result.admin_fee__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+                RIGHT(TEXT({!Get_Loan_Calculation_Result.admin_fee__c}), 3),
+                IF(
+                    LEN(TEXT({!Get_Loan_Calculation_Result.admin_fee__c})) &gt; 3,
+                    LEFT(TEXT({!Get_Loan_Calculation_Result.admin_fee__c}), LEN(TEXT({!Get_Loan_Calculation_Result.admin_fee__c})) - 3) &amp; &quot;.&quot; &amp;
+                    RIGHT(TEXT({!Get_Loan_Calculation_Result.admin_fee__c}), 3),
+                    TEXT({!Get_Loan_Calculation_Result.admin_fee__c})
+                )
+            )
+        )
+    )
+)</expression>
+    </formulas>
+    <formulas>
+        <name>FormatAngsuranPerBulan</name>
+        <dataType>String</dataType>
+        <expression>IF(
+    LEN(TEXT({!Get_Loan_Calculation_Result.rounded_up_installment__c})) &gt; 15,
+    LEFT(TEXT({!Get_Loan_Calculation_Result.rounded_up_installment__c}), LEN(TEXT({!Get_Loan_Calculation_Result.rounded_up_installment__c})) - 15) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!Get_Loan_Calculation_Result.rounded_up_installment__c}), LEN(TEXT({!Get_Loan_Calculation_Result.rounded_up_installment__c})) - 14, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!Get_Loan_Calculation_Result.rounded_up_installment__c}), LEN(TEXT({!Get_Loan_Calculation_Result.rounded_up_installment__c})) - 11, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!Get_Loan_Calculation_Result.rounded_up_installment__c}), LEN(TEXT({!Get_Loan_Calculation_Result.rounded_up_installment__c})) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!Get_Loan_Calculation_Result.rounded_up_installment__c}), LEN(TEXT({!Get_Loan_Calculation_Result.rounded_up_installment__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT({!Get_Loan_Calculation_Result.rounded_up_installment__c}), 3),
+    IF(
+        LEN(TEXT({!Get_Loan_Calculation_Result.rounded_up_installment__c})) &gt; 12,
+        LEFT(TEXT({!Get_Loan_Calculation_Result.rounded_up_installment__c}), LEN(TEXT({!Get_Loan_Calculation_Result.rounded_up_installment__c})) - 12) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!Get_Loan_Calculation_Result.rounded_up_installment__c}), LEN(TEXT({!Get_Loan_Calculation_Result.rounded_up_installment__c})) - 11, 3) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!Get_Loan_Calculation_Result.rounded_up_installment__c}), LEN(TEXT({!Get_Loan_Calculation_Result.rounded_up_installment__c})) - 8, 3) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!Get_Loan_Calculation_Result.rounded_up_installment__c}), LEN(TEXT({!Get_Loan_Calculation_Result.rounded_up_installment__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+        RIGHT(TEXT({!Get_Loan_Calculation_Result.rounded_up_installment__c}), 3),
+        IF(
+            LEN(TEXT({!Get_Loan_Calculation_Result.rounded_up_installment__c})) &gt; 9,
+            LEFT(TEXT({!Get_Loan_Calculation_Result.rounded_up_installment__c}), LEN(TEXT({!Get_Loan_Calculation_Result.rounded_up_installment__c})) - 9) &amp; &quot;.&quot; &amp;
+            MID(TEXT({!Get_Loan_Calculation_Result.rounded_up_installment__c}), LEN(TEXT({!Get_Loan_Calculation_Result.rounded_up_installment__c})) - 8, 3) &amp; &quot;.&quot; &amp;
+            MID(TEXT({!Get_Loan_Calculation_Result.rounded_up_installment__c}), LEN(TEXT({!Get_Loan_Calculation_Result.rounded_up_installment__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+            RIGHT(TEXT({!Get_Loan_Calculation_Result.rounded_up_installment__c}), 3),
+            IF(
+                LEN(TEXT({!Get_Loan_Calculation_Result.rounded_up_installment__c})) &gt; 6,
+                LEFT(TEXT({!Get_Loan_Calculation_Result.rounded_up_installment__c}), LEN(TEXT({!Get_Loan_Calculation_Result.rounded_up_installment__c})) - 6) &amp; &quot;.&quot; &amp;
+                MID(TEXT({!Get_Loan_Calculation_Result.rounded_up_installment__c}), LEN(TEXT({!Get_Loan_Calculation_Result.rounded_up_installment__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+                RIGHT(TEXT({!Get_Loan_Calculation_Result.rounded_up_installment__c}), 3),
+                IF(
+                    LEN(TEXT({!Get_Loan_Calculation_Result.rounded_up_installment__c})) &gt; 3,
+                    LEFT(TEXT({!Get_Loan_Calculation_Result.rounded_up_installment__c}), LEN(TEXT({!Get_Loan_Calculation_Result.rounded_up_installment__c})) - 3) &amp; &quot;.&quot; &amp;
+                    RIGHT(TEXT({!Get_Loan_Calculation_Result.rounded_up_installment__c}), 3),
+                    TEXT({!Get_Loan_Calculation_Result.rounded_up_installment__c})
+                )
+            )
+        )
+    )
+)</expression>
+    </formulas>
+    <formulas>
+        <name>FormatAsuransiJiwa</name>
+        <dataType>String</dataType>
+        <expression>
+IF(
+    LEN(TEXT({!Get_Loan_Calculation_Result.life_insurance_premium__c})) &gt; 15,
+    LEFT(TEXT({!Get_Loan_Calculation_Result.life_insurance_premium__c}), LEN(TEXT({!Get_Loan_Calculation_Result.life_insurance_premium__c})) - 15) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!Get_Loan_Calculation_Result.life_insurance_premium__c}), LEN(TEXT({!Get_Loan_Calculation_Result.life_insurance_premium__c})) - 14, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!Get_Loan_Calculation_Result.life_insurance_premium__c}), LEN(TEXT({!Get_Loan_Calculation_Result.life_insurance_premium__c})) - 11, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!Get_Loan_Calculation_Result.life_insurance_premium__c}), LEN(TEXT({!Get_Loan_Calculation_Result.life_insurance_premium__c})) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!Get_Loan_Calculation_Result.life_insurance_premium__c}), LEN(TEXT({!Get_Loan_Calculation_Result.life_insurance_premium__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT({!Get_Loan_Calculation_Result.life_insurance_premium__c}), 3),
+    IF(
+        LEN(TEXT({!Get_Loan_Calculation_Result.life_insurance_premium__c})) &gt; 12,
+        LEFT(TEXT({!Get_Loan_Calculation_Result.life_insurance_premium__c}), LEN(TEXT({!Get_Loan_Calculation_Result.life_insurance_premium__c})) - 12) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!Get_Loan_Calculation_Result.life_insurance_premium__c}), LEN(TEXT({!Get_Loan_Calculation_Result.life_insurance_premium__c})) - 11, 3) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!Get_Loan_Calculation_Result.life_insurance_premium__c}), LEN(TEXT({!Get_Loan_Calculation_Result.life_insurance_premium__c})) - 8, 3) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!Get_Loan_Calculation_Result.life_insurance_premium__c}), LEN(TEXT({!Get_Loan_Calculation_Result.life_insurance_premium__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+        RIGHT(TEXT({!Get_Loan_Calculation_Result.life_insurance_premium__c}), 3),
+        IF(
+            LEN(TEXT({!Get_Loan_Calculation_Result.life_insurance_premium__c})) &gt; 9,
+            LEFT(TEXT({!Get_Loan_Calculation_Result.life_insurance_premium__c}), LEN(TEXT({!Get_Loan_Calculation_Result.life_insurance_premium__c})) - 9) &amp; &quot;.&quot; &amp;
+            MID(TEXT({!Get_Loan_Calculation_Result.life_insurance_premium__c}), LEN(TEXT({!Get_Loan_Calculation_Result.life_insurance_premium__c})) - 8, 3) &amp; &quot;.&quot; &amp;
+            MID(TEXT({!Get_Loan_Calculation_Result.life_insurance_premium__c}), LEN(TEXT({!Get_Loan_Calculation_Result.life_insurance_premium__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+            RIGHT(TEXT({!Get_Loan_Calculation_Result.life_insurance_premium__c}), 3),
+            IF(
+                LEN(TEXT({!Get_Loan_Calculation_Result.life_insurance_premium__c})) &gt; 6,
+                LEFT(TEXT({!Get_Loan_Calculation_Result.life_insurance_premium__c}), LEN(TEXT({!Get_Loan_Calculation_Result.life_insurance_premium__c})) - 6) &amp; &quot;.&quot; &amp;
+                MID(TEXT({!Get_Loan_Calculation_Result.life_insurance_premium__c}), LEN(TEXT({!Get_Loan_Calculation_Result.life_insurance_premium__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+                RIGHT(TEXT({!Get_Loan_Calculation_Result.life_insurance_premium__c}), 3),
+                IF(
+                    LEN(TEXT({!Get_Loan_Calculation_Result.life_insurance_premium__c})) &gt; 3,
+                    LEFT(TEXT({!Get_Loan_Calculation_Result.life_insurance_premium__c}), LEN(TEXT({!Get_Loan_Calculation_Result.life_insurance_premium__c})) - 3) &amp; &quot;.&quot; &amp;
+                    RIGHT(TEXT({!Get_Loan_Calculation_Result.life_insurance_premium__c}), 3),
+                    TEXT({!Get_Loan_Calculation_Result.life_insurance_premium__c})
+                )
+            )
+        )
+    )
+)</expression>
+    </formulas>
+    <formulas>
+        <name>FormatAsuransiKebakaran</name>
+        <dataType>String</dataType>
+        <expression>IF(
+    LEN(TEXT({!Get_Loan_Calculation_Result.asset_insurance_premium__c})) &gt; 15,
+    LEFT(TEXT({!Get_Loan_Calculation_Result.asset_insurance_premium__c}), LEN(TEXT({!Get_Loan_Calculation_Result.asset_insurance_premium__c})) - 15) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!Get_Loan_Calculation_Result.asset_insurance_premium__c}), LEN(TEXT({!Get_Loan_Calculation_Result.asset_insurance_premium__c})) - 14, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!Get_Loan_Calculation_Result.asset_insurance_premium__c}), LEN(TEXT({!Get_Loan_Calculation_Result.asset_insurance_premium__c})) - 11, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!Get_Loan_Calculation_Result.asset_insurance_premium__c}), LEN(TEXT({!Get_Loan_Calculation_Result.asset_insurance_premium__c})) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!Get_Loan_Calculation_Result.asset_insurance_premium__c}), LEN(TEXT({!Get_Loan_Calculation_Result.asset_insurance_premium__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT({!Get_Loan_Calculation_Result.asset_insurance_premium__c}), 3),
+    IF(
+        LEN(TEXT({!Get_Loan_Calculation_Result.asset_insurance_premium__c})) &gt; 12,
+        LEFT(TEXT({!Get_Loan_Calculation_Result.asset_insurance_premium__c}), LEN(TEXT({!Get_Loan_Calculation_Result.asset_insurance_premium__c})) - 12) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!Get_Loan_Calculation_Result.asset_insurance_premium__c}), LEN(TEXT({!Get_Loan_Calculation_Result.asset_insurance_premium__c})) - 11, 3) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!Get_Loan_Calculation_Result.asset_insurance_premium__c}), LEN(TEXT({!Get_Loan_Calculation_Result.asset_insurance_premium__c})) - 8, 3) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!Get_Loan_Calculation_Result.asset_insurance_premium__c}), LEN(TEXT({!Get_Loan_Calculation_Result.asset_insurance_premium__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+        RIGHT(TEXT({!Get_Loan_Calculation_Result.asset_insurance_premium__c}), 3),
+        IF(
+            LEN(TEXT({!Get_Loan_Calculation_Result.asset_insurance_premium__c})) &gt; 9,
+            LEFT(TEXT({!Get_Loan_Calculation_Result.asset_insurance_premium__c}), LEN(TEXT({!Get_Loan_Calculation_Result.asset_insurance_premium__c})) - 9) &amp; &quot;.&quot; &amp;
+            MID(TEXT({!Get_Loan_Calculation_Result.asset_insurance_premium__c}), LEN(TEXT({!Get_Loan_Calculation_Result.asset_insurance_premium__c})) - 8, 3) &amp; &quot;.&quot; &amp;
+            MID(TEXT({!Get_Loan_Calculation_Result.asset_insurance_premium__c}), LEN(TEXT({!Get_Loan_Calculation_Result.asset_insurance_premium__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+            RIGHT(TEXT({!Get_Loan_Calculation_Result.asset_insurance_premium__c}), 3),
+            IF(
+                LEN(TEXT({!Get_Loan_Calculation_Result.asset_insurance_premium__c})) &gt; 6,
+                LEFT(TEXT({!Get_Loan_Calculation_Result.asset_insurance_premium__c}), LEN(TEXT({!Get_Loan_Calculation_Result.asset_insurance_premium__c})) - 6) &amp; &quot;.&quot; &amp;
+                MID(TEXT({!Get_Loan_Calculation_Result.asset_insurance_premium__c}), LEN(TEXT({!Get_Loan_Calculation_Result.asset_insurance_premium__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+                RIGHT(TEXT({!Get_Loan_Calculation_Result.asset_insurance_premium__c}), 3),
+                IF(
+                    LEN(TEXT({!Get_Loan_Calculation_Result.asset_insurance_premium__c})) &gt; 3,
+                    LEFT(TEXT({!Get_Loan_Calculation_Result.asset_insurance_premium__c}), LEN(TEXT({!Get_Loan_Calculation_Result.asset_insurance_premium__c})) - 3) &amp; &quot;.&quot; &amp;
+                    RIGHT(TEXT({!Get_Loan_Calculation_Result.asset_insurance_premium__c}), 3),
+                    TEXT({!Get_Loan_Calculation_Result.asset_insurance_premium__c})
+                )
+            )
+        )
+    )
+)</expression>
+    </formulas>
+    <formulas>
+        <name>FormatDP</name>
+        <dataType>String</dataType>
+        <expression>IF(
+    LEN(TEXT({!DP})) &gt; 15,
+    LEFT(TEXT({!DP}), LEN(TEXT({!DP})) - 15) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!DP}), LEN(TEXT({!DP})) - 14, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!DP}), LEN(TEXT({!DP})) - 11, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!DP}), LEN(TEXT({!DP})) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!DP}), LEN(TEXT({!DP})) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT({!DP}), 3),
+    IF(
+        LEN(TEXT({!DP})) &gt; 12,
+        LEFT(TEXT({!DP}), LEN(TEXT({!DP})) - 12) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!DP}), LEN(TEXT({!DP})) - 11, 3) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!DP}), LEN(TEXT({!DP})) - 8, 3) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!DP}), LEN(TEXT({!DP})) - 5, 3) &amp; &quot;.&quot; &amp;
+        RIGHT(TEXT({!DP}), 3),
+        IF(
+            LEN(TEXT({!DP})) &gt; 9,
+            LEFT(TEXT({!DP}), LEN(TEXT({!DP})) - 9) &amp; &quot;.&quot; &amp;
+            MID(TEXT({!DP}), LEN(TEXT({!DP})) - 8, 3) &amp; &quot;.&quot; &amp;
+            MID(TEXT({!DP}), LEN(TEXT({!DP})) - 5, 3) &amp; &quot;.&quot; &amp;
+            RIGHT(TEXT({!DP}), 3),
+            IF(
+                LEN(TEXT({!DP})) &gt; 6,
+                LEFT(TEXT({!DP}), LEN(TEXT({!DP})) - 6) &amp; &quot;.&quot; &amp;
+                MID(TEXT({!DP}), LEN(TEXT({!DP})) - 5, 3) &amp; &quot;.&quot; &amp;
+                RIGHT(TEXT({!DP}), 3),
+                IF(
+                    LEN(TEXT({!DP})) &gt; 3,
+                    LEFT(TEXT({!DP}), LEN(TEXT({!DP})) - 3) &amp; &quot;.&quot; &amp;
+                    RIGHT(TEXT({!DP}), 3),
+                    TEXT({!DP})
+                )
+            )
+        )
+    )
+)</expression>
+    </formulas>
+    <formulas>
+        <name>FormatHubunganDenganNamaDiSertifikat</name>
+        <dataType>String</dataType>
+        <expression>
+IF(ISBLANK({!Get_Operation_Data.Application__r.Loan_Information__r.Sertipikat_Atas_Nama__c}), &quot;-&quot;, {!Get_Operation_Data.Application__r.Loan_Information__r.Sertipikat_Atas_Nama__c})</expression>
+    </formulas>
+    <formulas>
+        <name>FormatNotaryFee</name>
+        <dataType>String</dataType>
+        <expression>IF(
+    LEN(TEXT({!Get_Loan_Calculation_Result.notary_fee__c})) &gt; 15,
+    LEFT(TEXT({!Get_Loan_Calculation_Result.notary_fee__c}), LEN(TEXT({!Get_Loan_Calculation_Result.notary_fee__c})) - 15) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!Get_Loan_Calculation_Result.notary_fee__c}), LEN(TEXT({!Get_Loan_Calculation_Result.notary_fee__c})) - 14, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!Get_Loan_Calculation_Result.notary_fee__c}), LEN(TEXT({!Get_Loan_Calculation_Result.notary_fee__c})) - 11, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!Get_Loan_Calculation_Result.notary_fee__c}), LEN(TEXT({!Get_Loan_Calculation_Result.notary_fee__c})) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!Get_Loan_Calculation_Result.notary_fee__c}), LEN(TEXT({!Get_Loan_Calculation_Result.notary_fee__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT({!Get_Loan_Calculation_Result.notary_fee__c}), 3),
+    IF(
+        LEN(TEXT({!Get_Loan_Calculation_Result.notary_fee__c})) &gt; 12,
+        LEFT(TEXT({!Get_Loan_Calculation_Result.notary_fee__c}), LEN(TEXT({!Get_Loan_Calculation_Result.notary_fee__c})) - 12) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!Get_Loan_Calculation_Result.notary_fee__c}), LEN(TEXT({!Get_Loan_Calculation_Result.notary_fee__c})) - 11, 3) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!Get_Loan_Calculation_Result.notary_fee__c}), LEN(TEXT({!Get_Loan_Calculation_Result.notary_fee__c})) - 8, 3) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!Get_Loan_Calculation_Result.notary_fee__c}), LEN(TEXT({!Get_Loan_Calculation_Result.notary_fee__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+        RIGHT(TEXT({!Get_Loan_Calculation_Result.notary_fee__c}), 3),
+        IF(
+            LEN(TEXT({!Get_Loan_Calculation_Result.notary_fee__c})) &gt; 9,
+            LEFT(TEXT({!Get_Loan_Calculation_Result.notary_fee__c}), LEN(TEXT({!Get_Loan_Calculation_Result.notary_fee__c})) - 9) &amp; &quot;.&quot; &amp;
+            MID(TEXT({!Get_Loan_Calculation_Result.notary_fee__c}), LEN(TEXT({!Get_Loan_Calculation_Result.notary_fee__c})) - 8, 3) &amp; &quot;.&quot; &amp;
+            MID(TEXT({!Get_Loan_Calculation_Result.notary_fee__c}), LEN(TEXT({!Get_Loan_Calculation_Result.notary_fee__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+            RIGHT(TEXT({!Get_Loan_Calculation_Result.notary_fee__c}), 3),
+            IF(
+                LEN(TEXT({!Get_Loan_Calculation_Result.notary_fee__c})) &gt; 6,
+                LEFT(TEXT({!Get_Loan_Calculation_Result.notary_fee__c}), LEN(TEXT({!Get_Loan_Calculation_Result.notary_fee__c})) - 6) &amp; &quot;.&quot; &amp;
+                MID(TEXT({!Get_Loan_Calculation_Result.notary_fee__c}), LEN(TEXT({!Get_Loan_Calculation_Result.notary_fee__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+                RIGHT(TEXT({!Get_Loan_Calculation_Result.notary_fee__c}), 3),
+                IF(
+                    LEN(TEXT({!Get_Loan_Calculation_Result.notary_fee__c})) &gt; 3,
+                    LEFT(TEXT({!Get_Loan_Calculation_Result.notary_fee__c}), LEN(TEXT({!Get_Loan_Calculation_Result.notary_fee__c})) - 3) &amp; &quot;.&quot; &amp;
+                    RIGHT(TEXT({!Get_Loan_Calculation_Result.notary_fee__c}), 3),
+                    TEXT({!Get_Loan_Calculation_Result.notary_fee__c})
+                )
+            )
+        )
+    )
+)</expression>
+    </formulas>
+    <formulas>
+        <name>FormatNTFPengajuan</name>
+        <dataType>String</dataType>
+        <expression>IF(
+    LEN(TEXT({!NTFPengajuan})) &gt; 15,
+    LEFT(TEXT({!NTFPengajuan}), LEN(TEXT({!NTFPengajuan})) - 15) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!NTFPengajuan}), LEN(TEXT({!NTFPengajuan})) - 14, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!NTFPengajuan}), LEN(TEXT({!NTFPengajuan})) - 11, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!NTFPengajuan}), LEN(TEXT({!NTFPengajuan})) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!NTFPengajuan}), LEN(TEXT({!NTFPengajuan})) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT({!NTFPengajuan}), 3),
+    IF(
+        LEN(TEXT({!NTFPengajuan})) &gt; 12,
+        LEFT(TEXT({!NTFPengajuan}), LEN(TEXT({!NTFPengajuan})) - 12) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!NTFPengajuan}), LEN(TEXT({!NTFPengajuan})) - 11, 3) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!NTFPengajuan}), LEN(TEXT({!NTFPengajuan})) - 8, 3) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!NTFPengajuan}), LEN(TEXT({!NTFPengajuan})) - 5, 3) &amp; &quot;.&quot; &amp;
+        RIGHT(TEXT({!NTFPengajuan}), 3),
+        IF(
+            LEN(TEXT({!NTFPengajuan})) &gt; 9,
+            LEFT(TEXT({!NTFPengajuan}), LEN(TEXT({!NTFPengajuan})) - 9) &amp; &quot;.&quot; &amp;
+            MID(TEXT({!NTFPengajuan}), LEN(TEXT({!NTFPengajuan})) - 8, 3) &amp; &quot;.&quot; &amp;
+            MID(TEXT({!NTFPengajuan}), LEN(TEXT({!NTFPengajuan})) - 5, 3) &amp; &quot;.&quot; &amp;
+            RIGHT(TEXT({!NTFPengajuan}), 3),
+            IF(
+                LEN(TEXT({!NTFPengajuan})) &gt; 6,
+                LEFT(TEXT({!NTFPengajuan}), LEN(TEXT({!NTFPengajuan})) - 6) &amp; &quot;.&quot; &amp;
+                MID(TEXT({!NTFPengajuan}), LEN(TEXT({!NTFPengajuan})) - 5, 3) &amp; &quot;.&quot; &amp;
+                RIGHT(TEXT({!NTFPengajuan}), 3),
+                IF(
+                    LEN(TEXT({!NTFPengajuan})) &gt; 3,
+                    LEFT(TEXT({!NTFPengajuan}), LEN(TEXT({!NTFPengajuan})) - 3) &amp; &quot;.&quot; &amp;
+                    RIGHT(TEXT({!NTFPengajuan}), 3),
+                    TEXT({!NTFPengajuan})
+                )
+            )
+        )
+    )
+)</expression>
+    </formulas>
+    <formulas>
+        <name>FormatPerkiraanHargaAsset</name>
+        <dataType>String</dataType>
+        <expression>IF(
+    LEN(TEXT({!MarketPriceEstimation})) &gt; 15,
+    LEFT(TEXT({!MarketPriceEstimation}), LEN(TEXT({!MarketPriceEstimation})) - 15) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!MarketPriceEstimation}), LEN(TEXT({!MarketPriceEstimation})) - 14, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!MarketPriceEstimation}), LEN(TEXT({!MarketPriceEstimation})) - 11, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!MarketPriceEstimation}), LEN(TEXT({!MarketPriceEstimation})) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!MarketPriceEstimation}), LEN(TEXT({!MarketPriceEstimation})) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT({!MarketPriceEstimation}), 3),
+    IF(
+        LEN(TEXT({!MarketPriceEstimation})) &gt; 12,
+        LEFT(TEXT({!MarketPriceEstimation}), LEN(TEXT({!MarketPriceEstimation})) - 12) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!MarketPriceEstimation}), LEN(TEXT({!MarketPriceEstimation})) - 11, 3) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!MarketPriceEstimation}), LEN(TEXT({!MarketPriceEstimation})) - 8, 3) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!MarketPriceEstimation}), LEN(TEXT({!MarketPriceEstimation})) - 5, 3) &amp; &quot;.&quot; &amp;
+        RIGHT(TEXT({!MarketPriceEstimation}), 3),
+        IF(
+            LEN(TEXT({!MarketPriceEstimation})) &gt; 9,
+            LEFT(TEXT({!MarketPriceEstimation}), LEN(TEXT({!MarketPriceEstimation})) - 9) &amp; &quot;.&quot; &amp;
+            MID(TEXT({!MarketPriceEstimation}), LEN(TEXT({!MarketPriceEstimation})) - 8, 3) &amp; &quot;.&quot; &amp;
+            MID(TEXT({!MarketPriceEstimation}), LEN(TEXT({!MarketPriceEstimation})) - 5, 3) &amp; &quot;.&quot; &amp;
+            RIGHT(TEXT({!MarketPriceEstimation}), 3),
+            IF(
+                LEN(TEXT({!MarketPriceEstimation})) &gt; 6,
+                LEFT(TEXT({!MarketPriceEstimation}), LEN(TEXT({!MarketPriceEstimation})) - 6) &amp; &quot;.&quot; &amp;
+                MID(TEXT({!MarketPriceEstimation}), LEN(TEXT({!MarketPriceEstimation})) - 5, 3) &amp; &quot;.&quot; &amp;
+                RIGHT(TEXT({!MarketPriceEstimation}), 3),
+                IF(
+                    LEN(TEXT({!MarketPriceEstimation})) &gt; 3,
+                    LEFT(TEXT({!MarketPriceEstimation}), LEN(TEXT({!MarketPriceEstimation})) - 3) &amp; &quot;.&quot; &amp;
+                    RIGHT(TEXT({!MarketPriceEstimation}), 3),
+                    TEXT({!MarketPriceEstimation})
+                )
+            )
+        )
+    )
+)</expression>
+    </formulas>
+    <formulas>
+        <name>FormatPremiSantunan</name>
+        <dataType>String</dataType>
+        <expression>IF(
+    LEN(TEXT({!Get_Loan_Calculation_Result.santunan_insurance_premium__c})) &gt; 15,
+    LEFT(TEXT({!Get_Loan_Calculation_Result.santunan_insurance_premium__c}), LEN(TEXT({!Get_Loan_Calculation_Result.santunan_insurance_premium__c})) - 15) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!Get_Loan_Calculation_Result.santunan_insurance_premium__c}), LEN(TEXT({!Get_Loan_Calculation_Result.santunan_insurance_premium__c})) - 14, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!Get_Loan_Calculation_Result.santunan_insurance_premium__c}), LEN(TEXT({!Get_Loan_Calculation_Result.santunan_insurance_premium__c})) - 11, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!Get_Loan_Calculation_Result.santunan_insurance_premium__c}), LEN(TEXT({!Get_Loan_Calculation_Result.santunan_insurance_premium__c})) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!Get_Loan_Calculation_Result.santunan_insurance_premium__c}), LEN(TEXT({!Get_Loan_Calculation_Result.santunan_insurance_premium__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT({!Get_Loan_Calculation_Result.santunan_insurance_premium__c}), 3),
+    IF(
+        LEN(TEXT({!Get_Loan_Calculation_Result.santunan_insurance_premium__c})) &gt; 12,
+        LEFT(TEXT({!Get_Loan_Calculation_Result.santunan_insurance_premium__c}), LEN(TEXT({!Get_Loan_Calculation_Result.santunan_insurance_premium__c})) - 12) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!Get_Loan_Calculation_Result.santunan_insurance_premium__c}), LEN(TEXT({!Get_Loan_Calculation_Result.santunan_insurance_premium__c})) - 11, 3) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!Get_Loan_Calculation_Result.santunan_insurance_premium__c}), LEN(TEXT({!Get_Loan_Calculation_Result.santunan_insurance_premium__c})) - 8, 3) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!Get_Loan_Calculation_Result.santunan_insurance_premium__c}), LEN(TEXT({!Get_Loan_Calculation_Result.santunan_insurance_premium__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+        RIGHT(TEXT({!Get_Loan_Calculation_Result.santunan_insurance_premium__c}), 3),
+        IF(
+            LEN(TEXT({!Get_Loan_Calculation_Result.santunan_insurance_premium__c})) &gt; 9,
+            LEFT(TEXT({!Get_Loan_Calculation_Result.santunan_insurance_premium__c}), LEN(TEXT({!Get_Loan_Calculation_Result.santunan_insurance_premium__c})) - 9) &amp; &quot;.&quot; &amp;
+            MID(TEXT({!Get_Loan_Calculation_Result.santunan_insurance_premium__c}), LEN(TEXT({!Get_Loan_Calculation_Result.santunan_insurance_premium__c})) - 8, 3) &amp; &quot;.&quot; &amp;
+            MID(TEXT({!Get_Loan_Calculation_Result.santunan_insurance_premium__c}), LEN(TEXT({!Get_Loan_Calculation_Result.santunan_insurance_premium__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+            RIGHT(TEXT({!Get_Loan_Calculation_Result.santunan_insurance_premium__c}), 3),
+            IF(
+                LEN(TEXT({!Get_Loan_Calculation_Result.santunan_insurance_premium__c})) &gt; 6,
+                LEFT(TEXT({!Get_Loan_Calculation_Result.santunan_insurance_premium__c}), LEN(TEXT({!Get_Loan_Calculation_Result.santunan_insurance_premium__c})) - 6) &amp; &quot;.&quot; &amp;
+                MID(TEXT({!Get_Loan_Calculation_Result.santunan_insurance_premium__c}), LEN(TEXT({!Get_Loan_Calculation_Result.santunan_insurance_premium__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+                RIGHT(TEXT({!Get_Loan_Calculation_Result.santunan_insurance_premium__c}), 3),
+                IF(
+                    LEN(TEXT({!Get_Loan_Calculation_Result.santunan_insurance_premium__c})) &gt; 3,
+                    LEFT(TEXT({!Get_Loan_Calculation_Result.santunan_insurance_premium__c}), LEN(TEXT({!Get_Loan_Calculation_Result.santunan_insurance_premium__c})) - 3) &amp; &quot;.&quot; &amp;
+                    RIGHT(TEXT({!Get_Loan_Calculation_Result.santunan_insurance_premium__c}), 3),
+                    TEXT({!Get_Loan_Calculation_Result.santunan_insurance_premium__c})
+                )
+            )
+        )
+    )
+)</expression>
+    </formulas>
+    <formulas>
+        <name>FormatProvisionFee</name>
+        <dataType>String</dataType>
+        <expression>IF(
+    LEN(TEXT({!Get_Loan_Calculation_Result.provision_fee__c})) &gt; 15,
+    LEFT(TEXT({!Get_Loan_Calculation_Result.provision_fee__c}), LEN(TEXT({!Get_Loan_Calculation_Result.provision_fee__c})) - 15) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!Get_Loan_Calculation_Result.provision_fee__c}), LEN(TEXT({!Get_Loan_Calculation_Result.provision_fee__c})) - 14, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!Get_Loan_Calculation_Result.provision_fee__c}), LEN(TEXT({!Get_Loan_Calculation_Result.provision_fee__c})) - 11, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!Get_Loan_Calculation_Result.provision_fee__c}), LEN(TEXT({!Get_Loan_Calculation_Result.provision_fee__c})) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!Get_Loan_Calculation_Result.provision_fee__c}), LEN(TEXT({!Get_Loan_Calculation_Result.provision_fee__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT({!Get_Loan_Calculation_Result.provision_fee__c}), 3),
+    IF(
+        LEN(TEXT({!Get_Loan_Calculation_Result.provision_fee__c})) &gt; 12,
+        LEFT(TEXT({!Get_Loan_Calculation_Result.provision_fee__c}), LEN(TEXT({!Get_Loan_Calculation_Result.provision_fee__c})) - 12) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!Get_Loan_Calculation_Result.provision_fee__c}), LEN(TEXT({!Get_Loan_Calculation_Result.provision_fee__c})) - 11, 3) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!Get_Loan_Calculation_Result.provision_fee__c}), LEN(TEXT({!Get_Loan_Calculation_Result.provision_fee__c})) - 8, 3) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!Get_Loan_Calculation_Result.provision_fee__c}), LEN(TEXT({!Get_Loan_Calculation_Result.provision_fee__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+        RIGHT(TEXT({!Get_Loan_Calculation_Result.provision_fee__c}), 3),
+        IF(
+            LEN(TEXT({!Get_Loan_Calculation_Result.provision_fee__c})) &gt; 9,
+            LEFT(TEXT({!Get_Loan_Calculation_Result.provision_fee__c}), LEN(TEXT({!Get_Loan_Calculation_Result.provision_fee__c})) - 9) &amp; &quot;.&quot; &amp;
+            MID(TEXT({!Get_Loan_Calculation_Result.provision_fee__c}), LEN(TEXT({!Get_Loan_Calculation_Result.provision_fee__c})) - 8, 3) &amp; &quot;.&quot; &amp;
+            MID(TEXT({!Get_Loan_Calculation_Result.provision_fee__c}), LEN(TEXT({!Get_Loan_Calculation_Result.provision_fee__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+            RIGHT(TEXT({!Get_Loan_Calculation_Result.provision_fee__c}), 3),
+            IF(
+                LEN(TEXT({!Get_Loan_Calculation_Result.provision_fee__c})) &gt; 6,
+                LEFT(TEXT({!Get_Loan_Calculation_Result.provision_fee__c}), LEN(TEXT({!Get_Loan_Calculation_Result.provision_fee__c})) - 6) &amp; &quot;.&quot; &amp;
+                MID(TEXT({!Get_Loan_Calculation_Result.provision_fee__c}), LEN(TEXT({!Get_Loan_Calculation_Result.provision_fee__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+                RIGHT(TEXT({!Get_Loan_Calculation_Result.provision_fee__c}), 3),
+                IF(
+                    LEN(TEXT({!Get_Loan_Calculation_Result.provision_fee__c})) &gt; 3,
+                    LEFT(TEXT({!Get_Loan_Calculation_Result.provision_fee__c}), LEN(TEXT({!Get_Loan_Calculation_Result.provision_fee__c})) - 3) &amp; &quot;.&quot; &amp;
+                    RIGHT(TEXT({!Get_Loan_Calculation_Result.provision_fee__c}), 3),
+                    TEXT({!Get_Loan_Calculation_Result.provision_fee__c})
+                )
+            )
+        )
+    )
+)</expression>
+    </formulas>
+    <formulas>
+        <description>26 Jun 2025
+Replace Get_Loan_Calculation_Result.total_down_payment_amount__c to Get_Operation_Data.Application__r.Survey__r.TDP_At_Coy__c</description>
+        <name>FormatTDP</name>
+        <dataType>String</dataType>
+        <expression>IF(
+    LEN(TEXT({!Get_Operation_Data.Application__r.Survey__r.TDP_At_Coy__c})) &gt; 15,
+    LEFT(TEXT({!Get_Operation_Data.Application__r.Survey__r.TDP_At_Coy__c}), LEN(TEXT({!Get_Operation_Data.Application__r.Survey__r.TDP_At_Coy__c})) - 15) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!Get_Operation_Data.Application__r.Survey__r.TDP_At_Coy__c}), LEN(TEXT({!Get_Operation_Data.Application__r.Survey__r.TDP_At_Coy__c})) - 14, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!Get_Operation_Data.Application__r.Survey__r.TDP_At_Coy__c}), LEN(TEXT({!Get_Operation_Data.Application__r.Survey__r.TDP_At_Coy__c})) - 11, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!Get_Operation_Data.Application__r.Survey__r.TDP_At_Coy__c}), LEN(TEXT({!Get_Operation_Data.Application__r.Survey__r.TDP_At_Coy__c})) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!Get_Operation_Data.Application__r.Survey__r.TDP_At_Coy__c}), LEN(TEXT({!Get_Operation_Data.Application__r.Survey__r.TDP_At_Coy__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT({!Get_Operation_Data.Application__r.Survey__r.TDP_At_Coy__c}), 3),
+    IF(
+        LEN(TEXT({!Get_Operation_Data.Application__r.Survey__r.TDP_At_Coy__c})) &gt; 12,
+        LEFT(TEXT({!Get_Operation_Data.Application__r.Survey__r.TDP_At_Coy__c}), LEN(TEXT({!Get_Operation_Data.Application__r.Survey__r.TDP_At_Coy__c})) - 12) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!Get_Operation_Data.Application__r.Survey__r.TDP_At_Coy__c}), LEN(TEXT({!Get_Operation_Data.Application__r.Survey__r.TDP_At_Coy__c})) - 11, 3) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!Get_Operation_Data.Application__r.Survey__r.TDP_At_Coy__c}), LEN(TEXT({!Get_Operation_Data.Application__r.Survey__r.TDP_At_Coy__c})) - 8, 3) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!Get_Operation_Data.Application__r.Survey__r.TDP_At_Coy__c}), LEN(TEXT({!Get_Operation_Data.Application__r.Survey__r.TDP_At_Coy__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+        RIGHT(TEXT({!Get_Operation_Data.Application__r.Survey__r.TDP_At_Coy__c}), 3),
+        IF(
+            LEN(TEXT({!Get_Operation_Data.Application__r.Survey__r.TDP_At_Coy__c})) &gt; 9,
+            LEFT(TEXT({!Get_Operation_Data.Application__r.Survey__r.TDP_At_Coy__c}), LEN(TEXT({!Get_Operation_Data.Application__r.Survey__r.TDP_At_Coy__c})) - 9) &amp; &quot;.&quot; &amp;
+            MID(TEXT({!Get_Operation_Data.Application__r.Survey__r.TDP_At_Coy__c}), LEN(TEXT({!Get_Operation_Data.Application__r.Survey__r.TDP_At_Coy__c})) - 8, 3) &amp; &quot;.&quot; &amp;
+            MID(TEXT({!Get_Operation_Data.Application__r.Survey__r.TDP_At_Coy__c}), LEN(TEXT({!Get_Operation_Data.Application__r.Survey__r.TDP_At_Coy__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+            RIGHT(TEXT({!Get_Operation_Data.Application__r.Survey__r.TDP_At_Coy__c}), 3),
+            IF(
+                LEN(TEXT({!Get_Operation_Data.Application__r.Survey__r.TDP_At_Coy__c})) &gt; 6,
+                LEFT(TEXT({!Get_Operation_Data.Application__r.Survey__r.TDP_At_Coy__c}), LEN(TEXT({!Get_Operation_Data.Application__r.Survey__r.TDP_At_Coy__c})) - 6) &amp; &quot;.&quot; &amp;
+                MID(TEXT({!Get_Operation_Data.Application__r.Survey__r.TDP_At_Coy__c}), LEN(TEXT({!Get_Operation_Data.Application__r.Survey__r.TDP_At_Coy__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+                RIGHT(TEXT({!Get_Operation_Data.Application__r.Survey__r.TDP_At_Coy__c}), 3),
+                IF(
+                    LEN(TEXT({!Get_Operation_Data.Application__r.Survey__r.TDP_At_Coy__c})) &gt; 3,
+                    LEFT(TEXT({!Get_Operation_Data.Application__r.Survey__r.TDP_At_Coy__c}), LEN(TEXT({!Get_Operation_Data.Application__r.Survey__r.TDP_At_Coy__c})) - 3) &amp; &quot;.&quot; &amp;
+                    RIGHT(TEXT({!Get_Operation_Data.Application__r.Survey__r.TDP_At_Coy__c}), 3),
+                    TEXT({!Get_Operation_Data.Application__r.Survey__r.TDP_At_Coy__c})
+                )
+            )
+        )
+    )
+)</expression>
+    </formulas>
+    <formulas>
+        <name>func_AgreementDate</name>
+        <dataType>String</dataType>
+        <expression>IF(
+    ISBLANK({!Get_Operation_Data.agreement_date__c}), 
+    &apos;&apos;, 
+    TEXT(DAY({!Get_Operation_Data.agreement_date__c})) &amp; &quot;/&quot; &amp; 
+    TEXT(MONTH({!Get_Operation_Data.agreement_date__c})) &amp; &quot;/&quot; &amp; 
+    TEXT(YEAR({!Get_Operation_Data.agreement_date__c}))
+)</expression>
+    </formulas>
+    <formulas>
+        <name>func_CheckBankAccountResult</name>
+        <dataType>String</dataType>
+        <expression>IF(
+   AND(
+      NOT(ISBLANK({!ValidateBankAccount.Results.OutputAccountNumber})),
+      NOT(ISBLANK({!ValidateBankAccount.Results.OutputAccountName}))
+   ),
+   {!ValidateBankAccount.Results.OutputAccountNumber} &amp; &quot; a.n. &quot; &amp; {!ValidateBankAccount.Results.OutputAccountName},
+   &quot;&quot;
+)</expression>
+    </formulas>
+    <formulas>
+        <name>func_EffectiveDate</name>
+        <dataType>String</dataType>
+        <expression>IF(
+    ISBLANK({!Get_Operation_Data.effective_date__c}), 
+    &apos;&apos;, 
+    TEXT(DAY({!Get_Operation_Data.effective_date__c})) &amp; &quot;/&quot; &amp; 
+    TEXT(MONTH({!Get_Operation_Data.effective_date__c})) &amp; &quot;/&quot; &amp; 
+    TEXT(YEAR({!Get_Operation_Data.effective_date__c}))
+)</expression>
+    </formulas>
+    <formulas>
+        <name>func_GoliveDate</name>
+        <dataType>String</dataType>
+        <expression>IF(
+    ISBLANK({!Get_Operation_Data.Golive_Date__c}), 
+    &apos;&apos;, 
+    TEXT(DAY({!Get_Operation_Data.Golive_Date__c})) &amp; &quot;/&quot; &amp; 
+    TEXT(MONTH({!Get_Operation_Data.Golive_Date__c})) &amp; &quot;/&quot; &amp; 
+    TEXT(YEAR({!Get_Operation_Data.Golive_Date__c}))
+)</expression>
+    </formulas>
+    <formulas>
+        <name>funcB_IsShown</name>
+        <dataType>Boolean</dataType>
+        <expression>TRUE</expression>
+    </formulas>
+    <formulas>
+        <name>funcS_AccruedInterest_message1</name>
+        <dataType>String</dataType>
+        <expression>&apos;&lt;div style=&quot;background-color: #fef1dc; color: #805000; padding: 8px 16px; font-family: sans-serif; font-size: 14px; display: flex; align-items: center;&quot;&gt;&lt;span style=&quot;margin: auto;&quot;&gt;⚠️ Nilai Accrued interest sebesar Rp.&apos;</expression>
+    </formulas>
+    <formulas>
+        <name>funcS_AccruedInterest_message2</name>
+        <dataType>String</dataType>
+        <expression>&apos;&lt;span style=&quot;background-color: #fef1dc;&quot;&gt;berdasarkan perhitungan &lt;/span&gt; &apos;</expression>
+    </formulas>
+    <formulas>
+        <name>funcS_AccruedInterest_message3</name>
+        <dataType>String</dataType>
+        <expression>&apos;&lt;span style=&quot;background-color: #fef1dc;&quot;&gt;yang akan dipotong pada cicilan bulan pertama. &lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&apos;</expression>
+    </formulas>
+    <formulas>
+        <name>funcS_FundingStructure_RowDP</name>
+        <dataType>String</dataType>
+        <expression>IF(TEXT({!Get_Operation_Data.Loan_Information__r.Product_Type__c}) == &quot;KPR&quot;, &apos;&lt;tr style=&quot;height: 21pt;&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;&lt;td style=&quot;padding: 2pt 2pt 2pt 2pt;&quot; rowspan=&quot;1&quot; colspan=&quot;1&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;&lt;p style=&quot;margin-top: 0pt; margin-bottom: 0pt;&quot; dir=&quot;ltr&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;&lt;span style=&quot;font-size: 10pt; font-family: Arial, sans-serif; color: rgb(68, 68, 68); background-color: rgb(255, 255, 255);&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;DP&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td style=&quot;padding: 2pt 2pt 2pt 2pt;&quot; rowspan=&quot;1&quot; colspan=&quot;1&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;&lt;p style=&quot;margin-top: 0pt; margin-bottom: 0pt;&quot; dir=&quot;ltr&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;&lt;span style=&quot;font-size: 10pt; font-family: Arial, sans-serif; color: rgb(68, 68, 68); background-color: rgb(255, 255, 255);&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;:&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td style=&quot;padding: 2pt 2pt 2pt 2pt;&quot; rowspan=&quot;1&quot; colspan=&quot;1&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;&lt;p style=&quot;margin-top: 0pt; margin-bottom: 0pt;&quot; dir=&quot;ltr&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;&lt;span style=&quot;font-size: 10pt; font-family: Roboto, sans-serif; color: rgb(68, 68, 68); background-color: rgb(255, 255, 255);&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;Rp.&apos; &amp; {!FormatDP} &amp; &apos;,-&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&apos; , &apos;&apos;)</expression>
+    </formulas>
+    <formulas>
+        <name>funcS_LinkEditAdditionalInfo</name>
+        <dataType>String</dataType>
+        <expression>&apos;&lt;a class=&quot;slds-button slds-button_brand&quot; target=&quot;_top&quot; href=&quot;/lightning/action/quick/Operation__c.Additional_Info?objectApiName&amp;context=RECORD_DETAIL&amp;recordId=&apos; &amp;CASESAFEID({!recordId})&amp; &apos;&amp;backgroundContext=%2Flightning%2Fr%2FOperation__c%2F&apos; &amp;CASESAFEID({!recordId})&amp; &apos;%2Fview&quot;&gt;Edit&lt;/a&gt;&apos;</expression>
+    </formulas>
+    <formulas>
+        <name>funcS_LinkEditFundingMethod</name>
+        <dataType>String</dataType>
+        <expression>&apos;&lt;a class=&quot;slds-button slds-button_brand&quot; target=&quot;_top&quot; href=&quot;/lightning/action/quick/Operation__c.Funding_Method?objectApiName&amp;context=RECORD_DETAIL&amp;recordId=&apos; &amp;CASESAFEID({!recordId})&amp; &apos;&amp;backgroundContext=%2Flightning%2Fr%2FOperation__c%2F&apos; &amp;CASESAFEID({!recordId})&amp; &apos;%2Fview&quot;&gt;Edit&lt;/a&gt;&apos;</expression>
+    </formulas>
+    <formulas>
+        <name>funcS_WarningMessage</name>
+        <dataType>String</dataType>
+        <expression>&apos;&lt;div style=&quot;background-color: #fef1dc; color: #805000; padding: 8px 16px; font-family: sans-serif; font-size: 14px; display: flex; align-items: center;&quot;&gt;&lt;span style=&quot;margin: auto;&quot;&gt;⚠️ Anda harus memilih funding method&lt;/span&gt;&lt;/div&gt;&apos;</expression>
+    </formulas>
+    <formulas>
+        <name>JudolResultInRed</name>
+        <dataType>String</dataType>
+        <expression>&quot;&quot;</expression>
+    </formulas>
+    <formulas>
+        <name>NormalizeRate</name>
+        <dataType>Number</dataType>
+        <expression>{!FlatRate}*100</expression>
+        <scale>2</scale>
+    </formulas>
+    <formulas>
+        <name>operation_fieldAccess</name>
+        <dataType>String</dataType>
+        <expression>IF({!operation_editAccess} == TRUE, &quot;None&quot;, &quot;Readonly&quot;)</expression>
+    </formulas>
+    <formulas>
+        <name>operation_readonlyAccess</name>
+        <dataType>Boolean</dataType>
+        <expression>NOT({!operation_editAccess})</expression>
+    </formulas>
+    <formulas>
+        <name>RemoveCommaFromJudolResult</name>
+        <dataType>String</dataType>
+        <expression>IF(LEFT({!FinalJudolResult}, 1) = &quot;,&quot;, RIGHT({!FinalJudolResult}, LEN({!FinalJudolResult}) - 1), {!FinalJudolResult})</expression>
+    </formulas>
+    <formulas>
+        <name>StoredJudolCheckInRed</name>
+        <dataType>String</dataType>
+        <expression>IF(
+  {!Get_Operation_Data.judol_and_agent_BFI_check_result__c} = &quot;&lt;span&gt;&amp;#8203;&lt;/span&gt;&quot;,
+  &quot;Tidak terindikasi Judol&quot;,
+  &quot;&lt;span style=&apos;color:red&apos;&gt;&quot; &amp; {!Get_Operation_Data.judol_and_agent_BFI_check_result__c} &amp; &quot;&lt;/span&gt;&quot;
+)</expression>
+    </formulas>
+    <formulas>
+        <name>StoredJudolCheckInRed_nored</name>
+        <dataType>String</dataType>
+        <expression>IF(
+  {!Get_Operation_Data.judol_and_agent_BFI_check_result__c} = &quot;&lt;span&gt;&amp;#8203;&lt;/span&gt;&quot;,
+  &quot;Tidak terindikasi Judol&quot;,
+{!Get_Operation_Data.judol_and_agent_BFI_check_result__c} 
+)</expression>
+    </formulas>
+    <interviewLabel>[Scr] Edit Take Over {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>[Scr] Edit Take Over</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>Flow</processType>
+    <recordLookups>
+        <name>Get_Agreement_Id_Creation</name>
+        <label>Get Agreement Id Creation</label>
+        <locationX>182</locationX>
+        <locationY>782</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>rst_URA</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Application__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Operation_Data.Application__c</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>agreement_id_creation__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Agreement_ID_Fields</name>
+        <label>Get Agreement ID Fields</label>
+        <locationX>182</locationX>
+        <locationY>242</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Get_NTF_Amount</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Application__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Opr1.Application__c</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>agreement_id_creation__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Loan_Calculation_Result</name>
+        <label>Get Loan Calculation Result</label>
+        <locationX>182</locationX>
+        <locationY>674</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Get_Agreement_Id_Creation</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>related_id__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Operation_Data.Application__c</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>API_Loan_Calculator_Non_KPR__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_NTF_Amount</name>
+        <label>Get NTF Amount</label>
+        <locationX>182</locationX>
+        <locationY>350</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Update_Operation</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>related_id__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Opr1.Application__c</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>API_Loan_Calculator_Non_KPR__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Operation_Data</name>
+        <label>Get Operation Data</label>
+        <locationX>182</locationX>
+        <locationY>566</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Get_Loan_Calculation_Result</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Operation__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Product_Offering</name>
+        <label>Get Product Offering</label>
+        <locationX>182</locationX>
+        <locationY>998</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>scr_Prior_To_DO_editor</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>text_package_id__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Operation_Data.Application__r.Survey__r.Product_Offering__c</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Product_Offering__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Opr1</name>
+        <label>Get Operation #1 To Get Agreement and Effective Date</label>
+        <locationX>182</locationX>
+        <locationY>134</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Get_Agreement_ID_Fields</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Operation__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>rst_URA</name>
+        <label>rst URA</label>
+        <locationX>182</locationX>
+        <locationY>890</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Get_Product_Offering</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>UserId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$User.Id</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>RecordId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <object>UserRecordAccess</object>
+        <outputAssignments>
+            <assignToReference>operation_editAccess</assignToReference>
+            <field>HasEditAccess</field>
+        </outputAssignments>
+        <outputAssignments>
+            <assignToReference>operation_recordId</assignToReference>
+            <field>RecordId</field>
+        </outputAssignments>
+    </recordLookups>
+    <recordUpdates>
+        <name>Update_Loan_Info</name>
+        <label>Update Loan Info</label>
+        <locationX>182</locationX>
+        <locationY>1322</locationY>
+        <connector>
+            <targetReference>Is_Split_Funding</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Operation_Data.Loan_Information__c</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>OSP_Take_Over__c</field>
+            <value>
+                <elementReference>nilai_take_over</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Opportunity</object>
+    </recordUpdates>
+    <recordUpdates>
+        <description>- Set Effective Date
+- Set Agreement Date
+- Set Beneficiary Related Fields</description>
+        <name>Update_Operation</name>
+        <label>Update Operation</label>
+        <locationX>182</locationX>
+        <locationY>458</locationY>
+        <connector>
+            <targetReference>Get_Operation_Data</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>agreement_date__c</field>
+            <value>
+                <elementReference>ConvertAgreementDate</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>customer_bank_account__c</field>
+            <value>
+                <elementReference>Get_Agreement_ID_Fields.beneficiary_bank_account__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>customer_bank_account_name__c</field>
+            <value>
+                <elementReference>Get_Agreement_ID_Fields.beneficiary_bank_account_name__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>customer_bank_name__c</field>
+            <value>
+                <elementReference>Get_Agreement_ID_Fields.beneficiary_bank_code__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>customer_bank_name_display__c</field>
+            <value>
+                <elementReference>Get_Agreement_ID_Fields.beneficiary_bank_name_display__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>effective_date__c</field>
+            <value>
+                <elementReference>ConvertEffectiveDate</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>full_ntf_amount__c</field>
+            <value>
+                <elementReference>Get_NTF_Amount.ntf_amount__c</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Operation__c</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Operation_1</name>
+        <label>Update Operation 1</label>
+        <locationX>182</locationX>
+        <locationY>1214</locationY>
+        <connector>
+            <targetReference>Update_Loan_Info</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Take_Over_Bank_Account_Name__c</field>
+            <value>
+                <elementReference>Take_Over_Bank_Account_Name</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Take_Over_Bank_Account_Number__c</field>
+            <value>
+                <elementReference>Take_Over_Bank_Account_Number</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Take_Over_Bank_Name__c</field>
+            <value>
+                <elementReference>Destination_Bank</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>take_over_payment_method__c</field>
+            <value>
+                <elementReference>payment_method_take_over_options</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Operation__c</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Operation_2</name>
+        <label>Update Operation 2</label>
+        <locationX>50</locationX>
+        <locationY>1538</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>sf_take_over_cb__c</field>
+            <value>
+                <elementReference>Take_Over2</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>sf_take_over_note__c</field>
+            <value>
+                <elementReference>catatan_take_over</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>sf_take_over_value__c</field>
+            <value>
+                <elementReference>nilai_take_over</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Operation__c</object>
+    </recordUpdates>
+    <screens>
+        <description>x</description>
+        <name>scr_Prior_To_DO_editor</name>
+        <label>scr_Prior To DO_editor</label>
+        <locationX>182</locationX>
+        <locationY>1106</locationY>
+        <actions>
+            <name>ValidateBankAccount</name>
+            <actionName>Validate_Bank_Account</actionName>
+            <actionType>flow</actionType>
+            <inputParameters>
+                <name>InputBankAccountNumber</name>
+                <value>
+                    <elementReference>Take_Over_Bank_Account_Number</elementReference>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>InputBankCode</name>
+                <value>
+                    <elementReference>df_MasterBank.firstRetrievedRecord.code__c</elementReference>
+                </value>
+            </inputParameters>
+            <label>Validate Bank Account</label>
+            <nameSegment>Validate_Bank_Account</nameSegment>
+        </actions>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <backButtonLabel>Cancel</backButtonLabel>
+        <connector>
+            <targetReference>Update_Operation_1</targetReference>
+        </connector>
+        <fields>
+            <name>df_MasterBank</name>
+            <dataTypeMappings>
+                <typeName>T</typeName>
+                <typeValue>Master_Bank__c</typeValue>
+            </dataTypeMappings>
+            <dataTypeMappings>
+                <typeName>S</typeName>
+                <typeValue>Master_Bank__c</typeValue>
+            </dataTypeMappings>
+            <extensionName>joshdaymentlabs:dataFetcher</extensionName>
+            <fieldType>ComponentInstance</fieldType>
+            <inputParameters>
+                <name>objectName1</name>
+                <value>
+                    <stringValue>Master_Bank__c</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>objectName2</name>
+                <value>
+                    <stringValue>Master_Bank__c</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>queryString</name>
+                <value>
+                    <elementReference>tpl_MasterBank</elementReference>
+                </value>
+            </inputParameters>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>true</isRequired>
+            <storeOutputAutomatically>true</storeOutputAutomatically>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <fields>
+            <name>Take_Over2</name>
+            <choiceReferences>ChoiceTrue</choiceReferences>
+            <choiceReferences>ChoiceFalse</choiceReferences>
+            <dataType>Boolean</dataType>
+            <defaultValue>
+                <elementReference>Get_Operation_Data.sf_take_over_cb__c</elementReference>
+            </defaultValue>
+            <fieldText>Take Over</fieldText>
+            <fieldType>DropdownBox</fieldType>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isDisabled>
+                <elementReference>operation_readonlyAccess</elementReference>
+            </isDisabled>
+            <isRequired>false</isRequired>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+            <visibilityRule>
+                <conditionLogic>and</conditionLogic>
+                <conditions>
+                    <leftValueReference>Get_Operation_Data.funding_method_selected__c</leftValueReference>
+                    <operator>EqualTo</operator>
+                    <rightValue>
+                        <stringValue>Split Funding</stringValue>
+                    </rightValue>
+                </conditions>
+            </visibilityRule>
+        </fields>
+        <fields>
+            <name>scr_Prior_To_DO_editor_Section1</name>
+            <fieldType>RegionContainer</fieldType>
+            <fields>
+                <name>scr_Prior_To_DO_editor_Section1_Column1</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>payment_method_take_over_options</name>
+                    <choiceReferences>CashOption</choiceReferences>
+                    <choiceReferences>TransferOption</choiceReferences>
+                    <choiceReferences>VirtualAccountOption</choiceReferences>
+                    <dataType>String</dataType>
+                    <defaultValue>
+                        <elementReference>Get_Operation_Data.take_over_payment_method__c</elementReference>
+                    </defaultValue>
+                    <fieldText>Metode Pembayaran Take Over</fieldText>
+                    <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isDisabled>
+                        <elementReference>operation_readonlyAccess</elementReference>
+                    </isDisabled>
+                    <isRequired>false</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>nilai_take_over</name>
+                    <dataType>Currency</dataType>
+                    <defaultValue>
+                        <elementReference>Get_Operation_Data.Loan_Information__r.OSP_Take_Over__c</elementReference>
+                    </defaultValue>
+                    <fieldText>Amount</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isDisabled>
+                        <elementReference>operation_readonlyAccess</elementReference>
+                    </isDisabled>
+                    <isRequired>false</isRequired>
+                    <scale>0</scale>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>Destination_Bank</name>
+                    <choiceReferences>Picklist_Bank</choiceReferences>
+                    <dataType>String</dataType>
+                    <defaultValue>
+                        <elementReference>Get_Operation_Data.Take_Over_Bank_Name__r.Id</elementReference>
+                    </defaultValue>
+                    <fieldText>Destination Bank</fieldText>
+                    <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                    <visibilityRule>
+                        <conditionLogic>and</conditionLogic>
+                        <conditions>
+                            <leftValueReference>payment_method_take_over_options</leftValueReference>
+                            <operator>EqualTo</operator>
+                            <rightValue>
+                                <elementReference>TransferOption</elementReference>
+                            </rightValue>
+                        </conditions>
+                    </visibilityRule>
+                </fields>
+                <fields>
+                    <name>Take_Over_Bank_Account_Number</name>
+                    <dataType>String</dataType>
+                    <defaultValue>
+                        <elementReference>Get_Operation_Data.Take_Over_Bank_Account_Number__c</elementReference>
+                    </defaultValue>
+                    <fieldText>Take Over Bank Account Number</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                    <visibilityRule>
+                        <conditionLogic>and</conditionLogic>
+                        <conditions>
+                            <leftValueReference>payment_method_take_over_options</leftValueReference>
+                            <operator>EqualTo</operator>
+                            <rightValue>
+                                <elementReference>TransferOption</elementReference>
+                            </rightValue>
+                        </conditions>
+                    </visibilityRule>
+                </fields>
+                <fields>
+                    <name>Take_Over_Bank_Account_Name</name>
+                    <dataType>String</dataType>
+                    <defaultValue>
+                        <elementReference>Get_Operation_Data.Take_Over_Bank_Account_Name__c</elementReference>
+                    </defaultValue>
+                    <fieldText>Take Over Bank Account Name</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                    <visibilityRule>
+                        <conditionLogic>and</conditionLogic>
+                        <conditions>
+                            <leftValueReference>payment_method_take_over_options</leftValueReference>
+                            <operator>EqualTo</operator>
+                            <rightValue>
+                                <elementReference>TransferOption</elementReference>
+                            </rightValue>
+                        </conditions>
+                    </visibilityRule>
+                </fields>
+                <fields>
+                    <name>Check_Bank_Account</name>
+                    <extensionName>flowruntime:actionButtonField</extensionName>
+                    <fieldType>ComponentInstance</fieldType>
+                    <inputParameters>
+                        <name>label</name>
+                        <value>
+                            <stringValue>Check Bank Account</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>isSuccess</name>
+                        <value>
+                            <elementReference>ValidateBankAccount.IsSuccess</elementReference>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>inProgress</name>
+                        <value>
+                            <elementReference>ValidateBankAccount.InProgress</elementReference>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>errorMessage</name>
+                        <value>
+                            <elementReference>ValidateBankAccount.ErrorMessage</elementReference>
+                        </value>
+                    </inputParameters>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <storeOutputAutomatically>true</storeOutputAutomatically>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                    <visibilityRule>
+                        <conditionLogic>and</conditionLogic>
+                        <conditions>
+                            <leftValueReference>payment_method_take_over_options</leftValueReference>
+                            <operator>EqualTo</operator>
+                            <rightValue>
+                                <elementReference>TransferOption</elementReference>
+                            </rightValue>
+                        </conditions>
+                    </visibilityRule>
+                </fields>
+                <fields>
+                    <name>disp_bank_account_check</name>
+                    <fieldText>&lt;p&gt;{!func_CheckBankAccountResult}&lt;/p&gt;</fieldText>
+                    <fieldType>DisplayText</fieldType>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                    <visibilityRule>
+                        <conditionLogic>and</conditionLogic>
+                        <conditions>
+                            <leftValueReference>payment_method_take_over_options</leftValueReference>
+                            <operator>EqualTo</operator>
+                            <rightValue>
+                                <elementReference>TransferOption</elementReference>
+                            </rightValue>
+                        </conditions>
+                    </visibilityRule>
+                </fields>
+                <fields>
+                    <name>catatan_take_over</name>
+                    <dataType>String</dataType>
+                    <defaultValue>
+                        <elementReference>Get_Operation_Data.sf_take_over_note__c</elementReference>
+                    </defaultValue>
+                    <fieldText>Catatan</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isDisabled>
+                        <elementReference>operation_readonlyAccess</elementReference>
+                    </isDisabled>
+                    <isRequired>false</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>12</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <isRequired>false</isRequired>
+            <regionContainerType>SectionWithoutHeader</regionContainerType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+            <visibilityRule>
+                <conditionLogic>and</conditionLogic>
+                <conditions>
+                    <leftValueReference>Take_Over2</leftValueReference>
+                    <operator>EqualTo</operator>
+                    <rightValue>
+                        <elementReference>ChoiceTrue</elementReference>
+                    </rightValue>
+                </conditions>
+            </visibilityRule>
+        </fields>
+        <nextOrFinishButtonLabel>Save</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>false</showHeader>
+        <triggers>
+            <eventName>flow__screenfieldclick</eventName>
+            <eventSource>Check_Bank_Account</eventSource>
+            <handlers>
+                <screenActionName>ValidateBankAccount</screenActionName>
+            </handlers>
+        </triggers>
+    </screens>
+    <start>
+        <locationX>56</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Opr1</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <textTemplates>
+        <name>tpl_FundingAmount</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>&lt;table style=&quot;border: none;&quot; class=&quot;ql-table-blob&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;&lt;colgroup lwc-4nfn2rc40ch=&quot;&quot;&gt;&lt;col width=&quot;255&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;&lt;col width=&quot;10&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;&lt;col width=&quot;337&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;&lt;/colgroup&gt;&lt;tbody lwc-4nfn2rc40ch=&quot;&quot;&gt;&lt;tr style=&quot;height: 21pt;&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;&lt;td style=&quot;padding: 2pt 2pt 2pt 2pt;&quot; rowspan=&quot;1&quot; colspan=&quot;1&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;&lt;p style=&quot;margin-top: 0pt; margin-bottom: 0pt;&quot; dir=&quot;ltr&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;&lt;span style=&quot;font-size: 10pt; font-family: Arial, sans-serif; color: rgb(68, 68, 68); background-color: rgb(255, 255, 255);&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;Funding Amount&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td style=&quot;padding: 2pt 2pt 2pt 2pt;&quot; rowspan=&quot;1&quot; colspan=&quot;1&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;&lt;p style=&quot;margin-top: 0pt; margin-bottom: 0pt;&quot; dir=&quot;ltr&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;&lt;span style=&quot;font-size: 10pt; font-family: Arial, sans-serif; color: rgb(68, 68, 68); background-color: rgb(255, 255, 255);&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;:&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td style=&quot;padding: 2pt 2pt 2pt 2pt;&quot; rowspan=&quot;1&quot; colspan=&quot;1&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;&lt;p style=&quot;margin-top: 0pt; margin-bottom: 0pt;&quot; dir=&quot;ltr&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;&lt;span style=&quot;font-size: 10pt; font-family: Roboto, sans-serif; color: rgb(68, 68, 68); background-color: rgb(255, 255, 255);&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;{!Get_Operation_Data.beneficiary_amount__c}&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;</text>
+    </textTemplates>
+    <textTemplates>
+        <name>tpl_FundingStructure</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>&lt;table style=&quot;border: none;&quot; class=&quot;ql-table-blob&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt; &lt;colgroup lwc-4nfn2rc40ch=&quot;&quot;&gt; &lt;col width=&quot;255&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt; &lt;col width=&quot;10&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt; &lt;col width=&quot;337&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt; &lt;/colgroup&gt; &lt;tbody lwc-4nfn2rc40ch=&quot;&quot;&gt; &lt;tr style=&quot;height: 21pt;&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt; &lt;td style=&quot;padding: 2pt 2pt 2pt 2pt;&quot; rowspan=&quot;1&quot; colspan=&quot;1&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt; &lt;p style=&quot;margin-top: 0pt; margin-bottom: 0pt;&quot; dir=&quot;ltr&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;&lt;span style=&quot;font-size: 10pt; font-family: Arial, sans-serif; color: rgb(68, 68, 68); background-color: rgb(255, 255, 255);&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;Product Name&lt;/span&gt;&lt;/p&gt; &lt;/td&gt; &lt;td style=&quot;padding: 2pt 2pt 2pt 2pt;&quot; rowspan=&quot;1&quot; colspan=&quot;1&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt; &lt;p style=&quot;margin-top: 0pt; margin-bottom: 0pt;&quot; dir=&quot;ltr&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;&lt;span style=&quot;font-size: 10pt; font-family: Arial, sans-serif; color: rgb(68, 68, 68); background-color: rgb(255, 255, 255);&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;:&lt;/span&gt;&lt;/p&gt; &lt;/td&gt; &lt;td style=&quot;padding: 2pt 2pt 2pt 2pt;&quot; rowspan=&quot;1&quot; colspan=&quot;1&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt; &lt;p style=&quot;margin-top: 0pt; margin-bottom: 0pt;&quot; dir=&quot;ltr&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;&lt;span style=&quot;font-size: 10pt; font-family: Roboto, sans-serif; color: rgb(68, 68, 68); background-color: rgb(255, 255, 255);&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;{!Get_Operation_Data.Loan_Information__r.Product_Type__c}&lt;/span&gt;&lt;/p&gt; &lt;/td&gt; &lt;/tr&gt; &lt;tr style=&quot;height: 21pt;&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt; &lt;td style=&quot;padding: 2pt 2pt 2pt 2pt;&quot; rowspan=&quot;1&quot; colspan=&quot;1&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt; &lt;p style=&quot;margin-top: 0pt; margin-bottom: 0pt;&quot; dir=&quot;ltr&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;&lt;span style=&quot;font-size: 10pt; font-family: Arial, sans-serif; color: rgb(68, 68, 68); background-color: rgb(255, 255, 255);&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;Product Offering&lt;/span&gt;&lt;/p&gt; &lt;/td&gt; &lt;td style=&quot;padding: 2pt 2pt 2pt 2pt;&quot; rowspan=&quot;1&quot; colspan=&quot;1&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt; &lt;p style=&quot;margin-top: 0pt; margin-bottom: 0pt;&quot; dir=&quot;ltr&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;&lt;span style=&quot;font-size: 10pt; font-family: Arial, sans-serif; color: rgb(68, 68, 68); background-color: rgb(255, 255, 255);&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;:&lt;/span&gt;&lt;/p&gt; &lt;/td&gt; &lt;td style=&quot;padding: 2pt 2pt 2pt 2pt;&quot; rowspan=&quot;1&quot; colspan=&quot;1&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt; &lt;p style=&quot;margin-top: 0pt; margin-bottom: 0pt;&quot; dir=&quot;ltr&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;&lt;span style=&quot;font-size: 10pt; font-family: Roboto, sans-serif; color: rgb(68, 68, 68); background-color: rgb(255, 255, 255);&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;{!Get_Product_Offering.Name}&lt;/span&gt;&lt;/p&gt; &lt;/td&gt; &lt;/tr&gt; &lt;tr style=&quot;height: 21pt;&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt; &lt;td style=&quot;padding: 2pt 2pt 2pt 2pt;&quot; rowspan=&quot;1&quot; colspan=&quot;1&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt; &lt;p style=&quot;margin-top: 0pt; margin-bottom: 0pt;&quot; dir=&quot;ltr&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;&lt;span style=&quot;font-size: 10pt; font-family: Arial, sans-serif; color: rgb(68, 68, 68); background-color: rgb(255, 255, 255);&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;Perkiraan Harga Aset&lt;/span&gt;&lt;/p&gt; &lt;/td&gt; &lt;td style=&quot;padding: 2pt 2pt 2pt 2pt;&quot; rowspan=&quot;1&quot; colspan=&quot;1&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt; &lt;p style=&quot;margin-top: 0pt; margin-bottom: 0pt;&quot; dir=&quot;ltr&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;&lt;span style=&quot;font-size: 10pt; font-family: Arial, sans-serif; color: rgb(68, 68, 68); background-color: rgb(255, 255, 255);&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;:&lt;/span&gt;&lt;/p&gt; &lt;/td&gt; &lt;td style=&quot;padding: 2pt 2pt 2pt 2pt;&quot; rowspan=&quot;1&quot; colspan=&quot;1&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt; &lt;p style=&quot;margin-top: 0pt; margin-bottom: 0pt;&quot; dir=&quot;ltr&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;&lt;span style=&quot;font-size: 10pt; font-family: Roboto, sans-serif; color: rgb(68, 68, 68); background-color: rgb(255, 255, 255);&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;Rp.{!FormatPerkiraanHargaAsset},-&lt;/span&gt;&lt;/p&gt; &lt;/td&gt; &lt;/tr&gt; &lt;tr style=&quot;height: 21pt;&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt; &lt;td style=&quot;padding: 2pt 2pt 2pt 2pt;&quot; rowspan=&quot;1&quot; colspan=&quot;1&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt; &lt;p style=&quot;margin-top: 0pt; margin-bottom: 0pt;&quot; dir=&quot;ltr&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;&lt;span style=&quot;font-size: 10pt; font-family: Arial, sans-serif; color: rgb(68, 68, 68); background-color: rgb(255, 255, 255);&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;NTF Amount&lt;/span&gt;&lt;/p&gt; &lt;/td&gt; &lt;td style=&quot;padding: 2pt 2pt 2pt 2pt;&quot; rowspan=&quot;1&quot; colspan=&quot;1&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt; &lt;p style=&quot;margin-top: 0pt; margin-bottom: 0pt;&quot; dir=&quot;ltr&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;&lt;span style=&quot;font-size: 10pt; font-family: Arial, sans-serif; color: rgb(68, 68, 68); background-color: rgb(255, 255, 255);&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;:&lt;/span&gt;&lt;/p&gt; &lt;/td&gt; &lt;td style=&quot;padding: 2pt 2pt 2pt 2pt;&quot; rowspan=&quot;1&quot; colspan=&quot;1&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt; &lt;p style=&quot;margin-top: 0pt; margin-bottom: 0pt;&quot; dir=&quot;ltr&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;&lt;span style=&quot;font-size: 10pt; font-family: Roboto, sans-serif; color: rgb(68, 68, 68); background-color: rgb(255, 255, 255);&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;Rp.{!FormatNTFPengajuan},-&lt;/span&gt;&lt;/p&gt; &lt;/td&gt; &lt;/tr&gt; {!funcS_FundingStructure_RowDP} &lt;tr style=&quot;height: 21pt;&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt; &lt;td style=&quot;padding: 2pt 2pt 2pt 2pt;&quot; rowspan=&quot;1&quot; colspan=&quot;1&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt; &lt;p style=&quot;margin-top: 0pt; margin-bottom: 0pt;&quot; dir=&quot;ltr&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;&lt;span style=&quot;font-size: 10pt; font-family: Arial, sans-serif; color: rgb(68, 68, 68); background-color: rgb(255, 255, 255);&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;Jangka Waktu Pembiayaan&lt;/span&gt;&lt;/p&gt; &lt;/td&gt; &lt;td style=&quot;padding: 2pt 2pt 2pt 2pt;&quot; rowspan=&quot;1&quot; colspan=&quot;1&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt; &lt;p style=&quot;margin-top: 0pt; margin-bottom: 0pt;&quot; dir=&quot;ltr&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;&lt;span style=&quot;font-size: 10pt; font-family: Arial, sans-serif; color: rgb(68, 68, 68); background-color: rgb(255, 255, 255);&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;:&lt;/span&gt;&lt;/p&gt; &lt;/td&gt; &lt;td style=&quot;background-color: #ffffff; padding: 2pt 2pt 2pt 2pt;&quot; rowspan=&quot;1&quot; colspan=&quot;1&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt; &lt;p style=&quot;margin-top: 0pt; margin-bottom: 0pt;&quot; dir=&quot;ltr&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;&lt;span style=&quot;font-size: 10pt; font-family: Roboto, sans-serif; color: rgb(68, 68, 68);&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt; {!Tenor} bulan&lt;/span&gt;&lt;/p&gt; &lt;/td&gt; &lt;/tr&gt; &lt;tr style=&quot;height: 21pt;&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt; &lt;td style=&quot;padding: 2pt 2pt 2pt 2pt;&quot; rowspan=&quot;1&quot; colspan=&quot;1&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt; &lt;p style=&quot;margin-top: 0pt; margin-bottom: 0pt;&quot; dir=&quot;ltr&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;&lt;span style=&quot;font-size: 10pt; font-family: Arial, sans-serif; color: rgb(68, 68, 68); background-color: rgb(255, 255, 255);&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;Bunga Flat / Tahun&lt;/span&gt;&lt;/p&gt; &lt;/td&gt; &lt;td style=&quot;padding: 2pt 2pt 2pt 2pt;&quot; rowspan=&quot;1&quot; colspan=&quot;1&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt; &lt;p style=&quot;margin-top: 0pt; margin-bottom: 0pt;&quot; dir=&quot;ltr&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;&lt;span style=&quot;font-size: 10pt; font-family: Arial, sans-serif; color: rgb(68, 68, 68); background-color: rgb(255, 255, 255);&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;:&lt;/span&gt;&lt;/p&gt; &lt;/td&gt; &lt;td style=&quot;background-color: #ffffff; padding: 2pt 2pt 2pt 2pt;&quot; rowspan=&quot;1&quot; colspan=&quot;1&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt; &lt;p style=&quot;margin-top: 0pt; margin-bottom: 0pt;&quot; dir=&quot;ltr&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;&lt;span style=&quot;font-size: 10pt; font-family: Roboto, sans-serif; color: rgb(68, 68, 68);&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;{!NormalizeRate} %&lt;/span&gt;&lt;/p&gt; &lt;/td&gt; &lt;/tr&gt; &lt;tr style=&quot;height: 21pt;&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt; &lt;td style=&quot;padding: 2pt 2pt 2pt 2pt;&quot; rowspan=&quot;1&quot; colspan=&quot;1&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt; &lt;p style=&quot;margin-top: 0pt; margin-bottom: 0pt;&quot; dir=&quot;ltr&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;&lt;span style=&quot;font-size: 10pt; font-family: Arial, sans-serif; color: rgb(68, 68, 68); background-color: rgb(255, 255, 255);&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;Angsuran / Bulan&lt;/span&gt;&lt;/p&gt; &lt;/td&gt; &lt;td style=&quot;padding: 2pt 2pt 2pt 2pt;&quot; rowspan=&quot;1&quot; colspan=&quot;1&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt; &lt;p style=&quot;margin-top: 0pt; margin-bottom: 0pt;&quot; dir=&quot;ltr&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;&lt;span style=&quot;font-size: 10pt; font-family: Arial, sans-serif; color: rgb(68, 68, 68); background-color: rgb(255, 255, 255);&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;:&lt;/span&gt;&lt;/p&gt; &lt;/td&gt; &lt;td style=&quot;padding: 2pt 2pt 2pt 2pt;&quot; rowspan=&quot;1&quot; colspan=&quot;1&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt; &lt;p style=&quot;margin-top: 0pt; margin-bottom: 0pt;&quot; dir=&quot;ltr&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;&lt;span style=&quot;font-size: 10pt; font-family: Roboto, sans-serif; color: rgb(68, 68, 68); background-color: rgb(255, 255, 255);&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;Rp.{!FormatAngsuranPerBulan},-&lt;/span&gt;&lt;/p&gt; &lt;/td&gt; &lt;/tr&gt; &lt;tr style=&quot;height: 21pt;&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt; &lt;td style=&quot;padding: 2pt 2pt 2pt 2pt;&quot; rowspan=&quot;1&quot; colspan=&quot;1&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt; &lt;p style=&quot;margin-top: 0pt; margin-bottom: 0pt;&quot; dir=&quot;ltr&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;&lt;span style=&quot;font-size: 10pt; font-family: Arial, sans-serif; color: rgb(68, 68, 68); background-color: rgb(255, 255, 255);&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;Administrasi&lt;/span&gt;&lt;/p&gt; &lt;/td&gt; &lt;td style=&quot;padding: 2pt 2pt 2pt 2pt;&quot; rowspan=&quot;1&quot; colspan=&quot;1&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt; &lt;p style=&quot;margin-top: 0pt; margin-bottom: 0pt;&quot; dir=&quot;ltr&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;&lt;span style=&quot;font-size: 10pt; font-family: Arial, sans-serif; color: rgb(68, 68, 68); background-color: rgb(255, 255, 255);&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;:&lt;/span&gt;&lt;/p&gt; &lt;/td&gt; &lt;td style=&quot;padding: 2pt 2pt 2pt 2pt;&quot; rowspan=&quot;1&quot; colspan=&quot;1&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt; &lt;p style=&quot;margin-top: 0pt; margin-bottom: 0pt;&quot; dir=&quot;ltr&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;&lt;span style=&quot;font-size: 10pt; font-family: Roboto, sans-serif; color: rgb(68, 68, 68); background-color: rgb(255, 255, 255);&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;Rp.{!FormatAdminFee},-&lt;/span&gt;&lt;/p&gt; &lt;/td&gt; &lt;/tr&gt; &lt;tr style=&quot;height: 21pt;&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt; &lt;td style=&quot;padding: 2pt 2pt 2pt 2pt;&quot; rowspan=&quot;1&quot; colspan=&quot;1&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt; &lt;p style=&quot;margin-top: 0pt; margin-bottom: 0pt;&quot; dir=&quot;ltr&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;&lt;span style=&quot;font-size: 10pt; font-family: Arial, sans-serif; color: rgb(68, 68, 68); background-color: rgb(255, 255, 255);&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;Provisi&lt;/span&gt;&lt;/p&gt; &lt;/td&gt; &lt;td style=&quot;padding: 2pt 2pt 2pt 2pt;&quot; rowspan=&quot;1&quot; colspan=&quot;1&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt; &lt;p style=&quot;margin-top: 0pt; margin-bottom: 0pt;&quot; dir=&quot;ltr&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;&lt;span style=&quot;font-size: 10pt; font-family: Arial, sans-serif; color: rgb(68, 68, 68); background-color: rgb(255, 255, 255);&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;:&lt;/span&gt;&lt;/p&gt; &lt;/td&gt; &lt;td style=&quot;padding: 2pt 2pt 2pt 2pt;&quot; rowspan=&quot;1&quot; colspan=&quot;1&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt; &lt;p style=&quot;margin-top: 0pt; margin-bottom: 0pt;&quot; dir=&quot;ltr&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;&lt;span style=&quot;font-size: 10pt; font-family: Roboto, sans-serif; color: rgb(68, 68, 68); background-color: rgb(255, 255, 255);&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;Rp.{!FormatProvisionFee},-&lt;/span&gt;&lt;/p&gt; &lt;/td&gt; &lt;/tr&gt; &lt;tr style=&quot;height: 21pt;&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt; &lt;td style=&quot;padding: 2pt 2pt 2pt 2pt;&quot; rowspan=&quot;1&quot; colspan=&quot;1&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt; &lt;p style=&quot;margin-top: 0pt; margin-bottom: 0pt;&quot; dir=&quot;ltr&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;&lt;span style=&quot;font-size: 10pt; font-family: Arial, sans-serif; color: rgb(68, 68, 68); background-color: rgb(255, 255, 255);&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;Premi Santunan&lt;/span&gt;&lt;/p&gt; &lt;/td&gt; &lt;td style=&quot;padding: 2pt 2pt 2pt 2pt;&quot; rowspan=&quot;1&quot; colspan=&quot;1&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt; &lt;p style=&quot;margin-top: 0pt; margin-bottom: 0pt;&quot; dir=&quot;ltr&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;&lt;span style=&quot;font-size: 10pt; font-family: Arial, sans-serif; color: rgb(68, 68, 68); background-color: rgb(255, 255, 255);&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;:&lt;/span&gt;&lt;/p&gt; &lt;/td&gt; &lt;td style=&quot;padding: 2pt 2pt 2pt 2pt;&quot; rowspan=&quot;1&quot; colspan=&quot;1&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt; &lt;p style=&quot;margin-top: 0pt; margin-bottom: 0pt;&quot; dir=&quot;ltr&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;&lt;span style=&quot;font-size: 10pt; font-family: Roboto, sans-serif; color: rgb(68, 68, 68); background-color: rgb(255, 255, 255);&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;Rp.{!FormatPremiSantunan},-&lt;/span&gt;&lt;/p&gt; &lt;/td&gt; &lt;/tr&gt; &lt;tr style=&quot;height: 21pt;&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt; &lt;td style=&quot;padding: 2pt 2pt 2pt 2pt;&quot; rowspan=&quot;1&quot; colspan=&quot;1&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt; &lt;p style=&quot;margin-top: 0pt; margin-bottom: 0pt;&quot; dir=&quot;ltr&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;&lt;span style=&quot;font-size: 10pt; font-family: Arial, sans-serif; color: rgb(68, 68, 68); background-color: rgb(255, 255, 255);&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;Asuransi Jiwa Kredit&lt;/span&gt;&lt;/p&gt; &lt;/td&gt; &lt;td style=&quot;padding: 2pt 2pt 2pt 2pt;&quot; rowspan=&quot;1&quot; colspan=&quot;1&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt; &lt;p style=&quot;margin-top: 0pt; margin-bottom: 0pt;&quot; dir=&quot;ltr&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;&lt;span style=&quot;font-size: 10pt; font-family: Arial, sans-serif; color: rgb(68, 68, 68); background-color: rgb(255, 255, 255);&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;:&lt;/span&gt;&lt;/p&gt; &lt;/td&gt; &lt;td style=&quot;padding: 2pt 2pt 2pt 2pt;&quot; rowspan=&quot;1&quot; colspan=&quot;1&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt; &lt;p style=&quot;margin-top: 0pt; margin-bottom: 0pt;&quot; dir=&quot;ltr&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;&lt;span style=&quot;font-size: 10pt; font-family: Roboto, sans-serif; color: rgb(68, 68, 68); background-color: rgb(255, 255, 255);&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;Rp.{!FormatAsuransiJiwa},-&lt;/span&gt;&lt;/p&gt; &lt;/td&gt; &lt;/tr&gt; &lt;tr style=&quot;height: 21pt;&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt; &lt;td style=&quot;padding: 2pt 2pt 2pt 2pt;&quot; rowspan=&quot;1&quot; colspan=&quot;1&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt; &lt;p style=&quot;margin-top: 0pt; margin-bottom: 0pt;&quot; dir=&quot;ltr&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;&lt;span style=&quot;font-size: 10pt; font-family: Arial, sans-serif; color: rgb(68, 68, 68); background-color: rgb(255, 255, 255);&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;Asuransi Kebakaran&lt;/span&gt;&lt;/p&gt; &lt;/td&gt; &lt;td style=&quot;padding: 2pt 2pt 2pt 2pt;&quot; rowspan=&quot;1&quot; colspan=&quot;1&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt; &lt;p style=&quot;margin-top: 0pt; margin-bottom: 0pt;&quot; dir=&quot;ltr&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;&lt;span style=&quot;font-size: 10pt; font-family: Arial, sans-serif; color: rgb(68, 68, 68); background-color: rgb(255, 255, 255);&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;:&lt;/span&gt;&lt;/p&gt; &lt;/td&gt; &lt;td style=&quot;padding: 2pt 2pt 2pt 2pt;&quot; rowspan=&quot;1&quot; colspan=&quot;1&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt; &lt;p style=&quot;margin-top: 0pt; margin-bottom: 0pt;&quot; dir=&quot;ltr&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;&lt;span style=&quot;font-size: 10pt; font-family: Roboto, sans-serif; color: rgb(68, 68, 68); background-color: rgb(255, 255, 255);&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;Rp.{!FormatAsuransiKebakaran},-&lt;/span&gt;&lt;/p&gt; &lt;/td&gt; &lt;/tr&gt; &lt;tr style=&quot;height: 21pt;&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt; &lt;td style=&quot;padding: 2pt 2pt 2pt 2pt;&quot; rowspan=&quot;1&quot; colspan=&quot;1&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt; &lt;p style=&quot;margin-top: 0pt; margin-bottom: 0pt;&quot; dir=&quot;ltr&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;&lt;span style=&quot;font-size: 10pt; font-family: Arial, sans-serif; color: rgb(68, 68, 68); background-color: rgb(255, 255, 255);&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;Perkiraan Biaya Notaris&lt;/span&gt;&lt;/p&gt; &lt;/td&gt; &lt;td style=&quot;padding: 2pt 2pt 2pt 2pt;&quot; rowspan=&quot;1&quot; colspan=&quot;1&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt; &lt;p style=&quot;margin-top: 0pt; margin-bottom: 0pt;&quot; dir=&quot;ltr&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;&lt;span style=&quot;font-size: 10pt; font-family: Arial, sans-serif; color: rgb(68, 68, 68); background-color: rgb(255, 255, 255);&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;:&lt;/span&gt;&lt;/p&gt; &lt;/td&gt; &lt;td style=&quot;padding: 2pt 2pt 2pt 2pt;&quot; rowspan=&quot;1&quot; colspan=&quot;1&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt; &lt;p style=&quot;margin-top: 0pt; margin-bottom: 0pt;&quot; dir=&quot;ltr&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;&lt;span style=&quot;font-size: 10pt; font-family: Roboto, sans-serif; color: rgb(68, 68, 68); background-color: rgb(255, 255, 255);&quot; lwc-4nfn2rc40ch=&quot;&quot;&gt;Rp.{!FormatNotaryFee},-&lt;/span&gt;&lt;/p&gt; &lt;/td&gt; &lt;/tr&gt; &lt;/tbody&gt;&lt;/table&gt;</text>
+    </textTemplates>
+    <textTemplates>
+        <name>tpl_MasterBank</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>select id,code__c, id__c, Name from Master_Bank__c where Name=&apos;{!Destination_Bank}&apos;</text>
+    </textTemplates>
+    <variables>
+        <name>BankAccountCheck</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>BankID</name>
+        <dataType>Number</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <scale>0</scale>
+    </variables>
+    <variables>
+        <name>CheckJudolResult</name>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>CorrectionBankName</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>CustomerBankName</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>DebugLog</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>DocId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>DocType</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>DocUrl</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <stringValue></stringValue>
+        </value>
+    </variables>
+    <variables>
+        <name>DP</name>
+        <dataType>Currency</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <scale>0</scale>
+    </variables>
+    <variables>
+        <name>FinalJudolResult</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>FlatRate</name>
+        <dataType>Number</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <scale>2</scale>
+    </variables>
+    <variables>
+        <name>JudolCheckResult</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>MarketPriceEstimation</name>
+        <dataType>Currency</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <scale>0</scale>
+    </variables>
+    <variables>
+        <name>NewFinalJudolResult</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>NTFPengajuan</name>
+        <dataType>Currency</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <scale>0</scale>
+    </variables>
+    <variables>
+        <name>Operation</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Operation__c</objectType>
+    </variables>
+    <variables>
+        <name>operation_editAccess</name>
+        <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>operation_recordId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>recordId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>SelectedDocumentType</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>Tenor</name>
+        <dataType>Number</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <scale>0</scale>
+    </variables>
+    <variables>
+        <name>ValidatedCustBankAccName</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

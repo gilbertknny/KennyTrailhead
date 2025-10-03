@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>UUID_V4_Generator</name>
+        <label>UUID V4 Generator</label>
+        <locationX>176</locationX>
+        <locationY>134</locationY>
+        <actionName>UUIDV4Generator</actionName>
+        <actionType>apex</actionType>
+        <faultConnector>
+            <targetReference>Set_Blank_UUID_When_Error</targetReference>
+        </faultConnector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>requests</name>
+            <value>
+                <elementReference>GeneratedUUID</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>UUIDV4Generator</nameSegment>
+        <offset>0</offset>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </actionCalls>
+    <apiVersion>62.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <name>Set_Blank_UUID_When_Error</name>
+        <label>Set Blank UUID When Error</label>
+        <locationX>440</locationX>
+        <locationY>242</locationY>
+        <assignmentItems>
+            <assignToReference>GeneratedUUID</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue></stringValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <environments>Default</environments>
+    <interviewLabel>UUID V4 Generator {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>UUID V4 Generator</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>UUID_V4_Generator</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <variables>
+        <name>GeneratedUUID</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+    </variables>
+</Flow>

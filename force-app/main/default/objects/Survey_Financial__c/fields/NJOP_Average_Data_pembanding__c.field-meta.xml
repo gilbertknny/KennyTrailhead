@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>NJOP_Average_Data_pembanding__c</fullName>
+    <formula>( NJOP_Estimasi_Harga_Pembanding_1__c +  NJOP_Estimasi_Harga_Pembanding_2__c +  NJOP_Estimasi_Harga_Pembanding_3__c )/3</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Average Data pembanding</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackTrending>false</trackTrending>
+    <type>Currency</type>
+</CustomField>

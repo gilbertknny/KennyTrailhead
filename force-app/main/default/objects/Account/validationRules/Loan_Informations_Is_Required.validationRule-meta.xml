@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Loan_Informations_Is_Required</fullName>
+    <active>false</active>
+    <errorConditionFormula>IF( $User.Is_Debug_User__c = TRUE,FALSE,AND( ISPICKVAL( Lead_Progress__c , &quot;Customer Consent&quot;), AND(ISBLANK( First_Loan_Information__c ) = TRUE)))</errorConditionFormula>
+    <errorMessage>Please complete loan information</errorMessage>
+</ValidationRule>

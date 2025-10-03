@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Total_Aset_Lancar_Formula__c</fullName>
+    <formula>Kas_Bank_atau_Setara_Kas__c +  Piutang_Usaha_Dagang__c + Piutang_Lain_Lain__c +  Persediaan__c +  Perlengkapan__c +  Biaya_dibayar_dimuka__c + Aset_Lancar_Lainnya__c</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Total Aset Lancar</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Currency</type>
+</CustomField>

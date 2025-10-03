@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Proporsi_Credit_Kepemilikan_Aset_Inc_BF__c</fullName>
+    <label>Proporsi Credit Kepemilikan Asset</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>0% Credit</fullName>
+                <default>false</default>
+                <label>0% Credit</label>
+            </value>
+            <value>
+                <fullName>&gt;0% sd 30% Credit</fullName>
+                <default>false</default>
+                <label>&gt;0% sd 30% Credit</label>
+            </value>
+            <value>
+                <fullName>&gt;30% sd 50% Credit</fullName>
+                <default>false</default>
+                <label>&gt;30% sd 50% Credit</label>
+            </value>
+            <value>
+                <fullName>&gt;50% sd 70% Credit</fullName>
+                <default>false</default>
+                <label>&gt;50% sd 70% Credit</label>
+            </value>
+            <value>
+                <fullName>&gt;70 sd 100% Credit</fullName>
+                <default>false</default>
+                <label>&gt;70 sd 100% Credit</label>
+            </value>
+            <value>
+                <fullName>&lt;30% Credit</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>&lt;30% Credit</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

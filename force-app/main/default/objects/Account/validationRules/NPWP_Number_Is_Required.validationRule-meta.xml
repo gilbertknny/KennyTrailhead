@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>NPWP_Number_Is_Required</fullName>
+    <active>false</active>
+    <description>Required for Company, optional for Personal applications</description>
+    <errorConditionFormula>AND(Customer_Type_Formula__c = &quot;Company&quot;,OR(ISBLANK(NPWP_Number__c), LEN(TRIM(NPWP_Number__c)) = 0))</errorConditionFormula>
+    <errorDisplayField>NPWP_Number__c</errorDisplayField>
+    <errorMessage>Complete this field</errorMessage>
+</ValidationRule>

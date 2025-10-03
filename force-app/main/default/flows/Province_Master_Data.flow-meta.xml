@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Province_Master_Data</name>
+        <label>Province Master Data</label>
+        <locationX>176</locationX>
+        <locationY>134</locationY>
+        <actionName>ProvinceMasterData.GetProvince</actionName>
+        <actionType>externalService</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>page</name>
+            <value>
+                <stringValue>1</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>limit</name>
+            <value>
+                <stringValue>1000</stringValue>
+            </value>
+        </inputParameters>
+        <nameSegment>ProvinceMasterData.GetProvince</nameSegment>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </actionCalls>
+    <apiVersion>61.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <environments>Default</environments>
+    <interviewLabel>Province Master Data {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Province Master Data</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Province_Master_Data</targetReference>
+        </connector>
+    </start>
+    <status>Draft</status>
+</Flow>

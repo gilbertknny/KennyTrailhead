@@ -1,0 +1,385 @@
+<template>
+    
+    <template lwc:if={showEditField}>
+        
+            <!-- Auto Number, Text -->
+            <lightning-input 
+                if:true={isTypeString} 
+                name={fieldName} 
+                label={fieldLabel} 
+                value={fieldValue} 
+                onchange={changeHandler_NotNull} 
+                class={jimCompoClass} 
+                required={fieldRequired}
+            ></lightning-input>
+
+            <!-- URL -->
+            <lightning-input
+                if:true={isTypeUrl} 
+                name={fieldName} 
+                label={fieldLabel} 
+                value={fieldValue} 
+                onchange={changeHandler_NotNull} 
+                class={jimCompoClass}
+                required={fieldRequired}
+            ></lightning-input>
+            
+            <!-- Boolean -->
+            <lightning-input
+                if:true={isTypeBoolean}
+                name={fieldName}
+                label={fieldLabel} 
+                checked={fieldValue}
+                onchange={changeHandler_NotNull}
+                class={jimCompoClass}
+                type="checkbox"
+            ></lightning-input>
+            
+            <!-- Currency -->
+            <lightning-input
+                if:true={isTypeCurrency}
+                name={fieldName}
+                label={fieldLabel} 
+                value={fieldValue}
+                onchange={changeHandler_NotNull}
+                class={jimCompoClass}
+                type="number"
+                formatter="currency"
+                step="1"
+                required={fieldRequired}
+            ></lightning-input>
+
+            <!-- Date -->
+            <lightning-input
+                if:true={isTypeDate}
+                name={fieldName} 
+                label={fieldLabel} 
+                value={fieldValue}
+                onchange={changeHandler_NotNull}
+                class={jimCompoClass}
+                type="date"
+            ></lightning-input> 
+
+            <!-- Datetime -->
+            <lightning-input
+                if:true={isTypeDateTime}
+                name={fieldName} 
+                label={fieldLabel} 
+                value={fieldValue}
+                onchange={changeHandler_NotNull}
+                class={jimCompoClass}
+                type="datetime"
+            ></lightning-input> 
+
+            <!-- Time  -->
+            <lightning-input 
+                if:true={isTypeTime} 
+                name={fieldName} 
+                label={fieldLabel} 
+                value={fieldValue} 
+                onchange={changeHandler_NotNull} 
+                class={jimCompoClass} 
+                type="time"
+            ></lightning-input>
+
+            <!-- Email -->
+            <lightning-input
+                if:true={isTypeEmail}
+                name={fieldName} 
+                label={fieldLabel} 
+                value={fieldValue}
+                onchange={changeHandler_NotNull}
+                class={jimCompoClass}
+                type="email"
+                pattern=".+@example.com"
+                placeholder="username@example.com"
+                maxlength="50"
+                minlength="5"
+                message-when-too-short="Your email address must be more 5 characters."
+            ></lightning-input>     
+
+            <!-- Location -->
+            <lightning-input-location
+                if:true={isTypeLocation}
+                name={fieldName} 
+                label={fieldLabel} 
+                latitude={latitude}
+                longitude={longitude}
+                onchange={changeHandler_NotNull}
+                class={jimCompoClass}
+                type="number"
+            ></lightning-input-location>
+
+            <!-- Int -->
+            <lightning-input
+                if:true={isTypeInt}
+                name={fieldName}
+                label={fieldLabel} 
+                value={fieldValue}
+                onchange={changeHandler_NotNull}
+                class={jimCompoClass}
+                type="number"
+                step="1"
+            ></lightning-input>
+
+            <!-- Double -->
+            <lightning-input
+                if:true={isTypeDouble}
+                name={fieldName}
+                label={fieldLabel} 
+                value={fieldValue}
+                onchange={changeHandler_NotNull}
+                class={jimCompoClass}
+                type="number"
+                step="1"
+            ></lightning-input>
+
+            <!-- Percent -->
+            <lightning-input
+                if:true={isTypePercent}
+                name={fieldName} 
+                label={fieldLabel} 
+                value={fieldValue}
+                onchange={changeHandler_NotNull}
+                class={jimCompoClass}
+                type="number"
+                formatter="percent"
+                step="0.01"
+            ></lightning-input>
+
+            <!-- Encrypted String -->
+            <lightning-input
+                if:true={isTypeEncryptedString}
+                name={fieldName} 
+                label={fieldLabel} 
+                value={fieldValue}
+                onchange={changeHandler_NotNull}
+                class={jimCompoClass}
+                type="password"
+            ></lightning-input> 
+
+            <!-- Phone-->
+            <lightning-input
+                if:true={isTypePhone}
+                name={fieldName} 
+                label={fieldLabel} 
+                value={fieldValue}
+                onchange={changeHandler_NotNull}
+                class={jimCompoClass}
+                type="tel"
+                pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+                placeholder="XXX-XXX-XXXX"
+                autocomplete="tel"
+            ></lightning-input> 
+
+            <!-- Picklist -->
+            <lightning-combobox
+                if:true={isTypePicklist}
+                name={fieldName}
+                label={fieldLabel} 
+                value={fieldValue}
+                placeholder={fieldPlaceholder}
+                options={picklistItems}
+                onchange={changeHandler_Picklist}
+                class={jimCompoClass}
+                required
+            ></lightning-combobox>
+
+        
+    </template>
+
+    <template lwc:else>
+        <div class="slds-grid slds-border_bottom">
+            <div class="slds-size_11-of-12 slds-p-left_xx-small slds-p-bottom_xx-small">
+                
+                <template if:true={showLabel}>
+                    <span class="slds-form-element__label">{fieldLabel}</span>
+                    <lightning-helptext
+                        if:true={showInlineHelpText}
+                        content={inlineHelpText}
+                    ></lightning-helptext>
+                </template>
+
+                <div class="slds-text-body_regular">
+
+                    <!-- Auto Number, Text -->
+                    <lightning-formatted-text
+                        if:true={isTypeString}
+                        class={computedFieldClass}
+                        value={fieldValue}
+                    ></lightning-formatted-text>
+
+                    <!-- Currency -->
+                    <lightning-formatted-text
+                        if:true={isTypeCurrency}
+                        class={computedFieldClass}
+                        value={displayValue}
+                    ></lightning-formatted-text>
+
+                    <!-- Boolean -->
+                    <lightning-input
+                        if:true={isTypeBoolean}
+                        name={fieldName}
+                        type="checkbox"
+                        class={computedFieldClass}
+                        disabled
+                        variant="label-hidden"
+                        checked={fieldValue}
+                        label={fieldLabel}
+                    ></lightning-input>
+
+                    
+
+                    <!-- TODO: Move to DateTime component -->
+                    <!-- Date -->
+                    <lightning-formatted-text
+                        if:true={isTypeDate}
+                        class={computedFieldClass}
+                        value={displayValue}
+                    ></lightning-formatted-text>
+
+                    <!-- DateTime -->
+                    <lightning-formatted-text
+                        if:true={isTypeDateTime}
+                        class={computedFieldClass}
+                        value={displayValue}
+                    ></lightning-formatted-text>
+
+                    <!-- Email -->
+                    <lightning-formatted-email
+                        if:true={isTypeEmail}
+                        class={computedFieldClass}
+                        value={fieldValue}
+                        hide-icon
+                    ></lightning-formatted-email>
+
+                    <!-- Location -->
+                    <lightning-formatted-location
+                        if:true={isTypeLocation}
+                        class={computedFieldClass}
+                        latitude={latitude}
+                        longitude={longitude}
+                    ></lightning-formatted-location>
+
+                    <!-- Int -->
+                    <lightning-formatted-number
+                        if:true={isTypeInt}
+                        class={computedFieldClass}
+                        format-style="decimal"
+                        value={fieldValue}
+                    ></lightning-formatted-number>
+
+                    <!-- Double -->
+                    <lightning-formatted-number
+                        if:true={isTypeDouble}
+                        class={computedFieldClass}
+                        format-style="decimal"
+                        value={fieldValue}
+                        minimum-fraction-digits={scale}
+                        maximum-fraction-digits={scale}
+                    ></lightning-formatted-number>
+
+                    <!-- Percent -->
+                    <lightning-formatted-number
+                        if:true={isTypePercent}
+                        class={fieldClass}
+                        format-style="percent"
+                        value={fieldValue}
+                        maximum-fraction-digits="2"
+                    ></lightning-formatted-number>
+
+                    <!-- Phone -->
+                    <!-- Verify formatting properties -->
+                    <lightning-formatted-phone
+                        if:true={isTypePhone}
+                        class={computedFieldClass}
+                        value={fieldValue}
+                    ></lightning-formatted-phone>
+
+                    <!-- Picklist -->
+                    <lightning-formatted-text
+                        if:true={isTypePicklist}
+                        class={computedFieldClass}
+                        value={displayValue}
+                    ></lightning-formatted-text>
+
+                    <!-- Multi-select Picklist -->
+                    <lightning-formatted-text
+                        if:true={isTypeMultiPicklist}
+                        class={computedFieldClass}
+                        value={displayValue}
+                    ></lightning-formatted-text>
+
+                    <!-- Text Area, Text Area Long -->
+                    <lightning-formatted-text
+                        if:true={isTypeTextArea}
+                        class={computedFieldClass}
+                        linkify="true"
+                        value={fieldValue}
+                    ></lightning-formatted-text>
+
+                    <!-- Rich Text Area -->
+                    <lightning-formatted-rich-text
+                        if:true={isTypeRichText}
+                        class={computedFieldClass}
+                        value={fieldValue}
+                    ></lightning-formatted-rich-text>
+
+                    <!-- Encrypted String -->
+                    <lightning-formatted-text
+                        if:true={isTypeEncryptedString}
+                        class={computedFieldClass}
+                        value={fieldValue}
+                    ></lightning-formatted-text>
+
+                    <!-- URL -->
+                    <lightning-formatted-url
+                        if:true={isTypeUrl}
+                        class={computedFieldClass}
+                        label={displayValue}
+                        value={fieldValue}
+                    ></lightning-formatted-url>
+
+                    <!-- Name -->
+                    <lightning-formatted-name
+                        if:true={isTypeName}
+                        class={computedFieldClass}
+                        salutation={displayValue.Salutation}
+                        first-name={displayValue.FirstName}
+                        last-name={displayValue.LastName}
+                        middle-name={displayValue.MiddleName}
+                        suffix={displayValue.Suffix}
+                        informal-name={displayValue.InformalName}
+                    >
+                    </lightning-formatted-name>
+
+                    <!-- Address -->
+                    <lightning-formatted-address
+                        if:true={isTypeAddress}
+                        class={computedFieldClass}
+                        street={displayValue.Street}
+                        city={displayValue.City}
+                        country={displayValue.Country}
+                        province={displayValue.State}
+                        postal-code={displayValue.PostalCode}
+                    >
+                    </lightning-formatted-address>
+                    <slot></slot>
+                </div>
+            </div>
+            <div class="slds-size_1-of-12 slds-align-bottom slds-text-align_right slds-p-bottom_x-small slds-p-right_xx-small">
+                <lightning-button-icon if:false={fieldReadOnly} icon-name="utility:edit" variant="bare" onclick={handleEdit} value={showEditField}> </lightning-button-icon>
+            </div>
+        </div>
+    </template>
+
+    <template lwc:if={isDebug}>
+        <div class="slds-box slds-m-top_x-small">
+            <span class="slds-form-element__label">{fieldName} = {fieldValue}</span><br/>
+            <span class="slds-form-element__label">Valid = {fieldValid}</span><br/>
+            <span class="slds-form-element__label">Edit Mode = {showEditField}</span>
+        </div>
+    </template>
+
+    
+</template>

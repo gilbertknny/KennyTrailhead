@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Phone2_Must_Be_Valid</fullName>
+    <active>true</active>
+    <errorConditionFormula>IF(OR(ISBLANK(Phone), ISNULL(Phone),Phone= &quot;&quot;),FALSE, NOT(REGEX(Phone, &quot;^(\\+?0)(?!0{2,})\\d*$&quot;)))</errorConditionFormula>
+    <errorDisplayField>Phone_2__c</errorDisplayField>
+    <errorMessage>Please input correct phone number</errorMessage>
+</ValidationRule>

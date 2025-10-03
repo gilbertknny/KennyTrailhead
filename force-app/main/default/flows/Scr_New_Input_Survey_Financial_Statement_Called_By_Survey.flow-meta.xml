@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>64.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <description>[Scr] New_Input_Survey_Financial_Statement - Called By Survey</description>
+    <environments>Default</environments>
+    <interviewLabel>Scr_New_Input_Survey_Financial_Statement - Called By Survey {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>[Scr] New_Input_Survey_Financial_Statement - Called By Survey</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>Flow</processType>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Scr_New_Input_Survey_Financial_Statement</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <subflows>
+        <description>[Scr] New Input Survey (Financial Statement)</description>
+        <name>Scr_New_Input_Survey_Financial_Statement</name>
+        <label>[Scr] New Input Survey (Financial Statement)</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <flowName>Scr_New_Input_Survey_Financial_Statement</flowName>
+        <inputAssignments>
+            <name>recordId_Survey</name>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </inputAssignments>
+    </subflows>
+    <variables>
+        <name>recordId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

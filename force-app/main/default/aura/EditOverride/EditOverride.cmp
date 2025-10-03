@@ -1,0 +1,11 @@
+<aura:component implements="lightning:actionOverride,force:hasRecordId,force:hasSObjectName">
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}"/>
+    <lightning:navigation aura:id="navigationService" />
+    
+    <aura:attribute name="obj" type="Object" />
+    <force:recordData aura:id="recordLoader"
+        recordId="{!v.recordId}"
+        fields="Name, Pop_Edit_Url__c"
+        targetFields="{!v.obj}"
+        recordUpdated="{!c.handleRecordUpdated}" />
+</aura:component>

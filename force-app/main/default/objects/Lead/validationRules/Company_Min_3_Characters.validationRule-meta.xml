@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Company_Min_3_Characters</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(NOT(ISPICKVAL(Customer_Type__c , &quot;Personal&quot;)),LEN( Company_Name__c ) &lt; 3
+)</errorConditionFormula>
+    <errorDisplayField>Company_Name__c</errorDisplayField>
+    <errorMessage>Please enter at least 3 character</errorMessage>
+</ValidationRule>

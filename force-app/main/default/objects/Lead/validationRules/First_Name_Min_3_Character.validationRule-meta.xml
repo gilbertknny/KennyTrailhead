@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>First_Name_Min_3_Character</fullName>
+    <active>true</active>
+    <errorConditionFormula>IF(ISBLANK( FirstName ), FALSE, LEN(FirstName) &lt; 3)</errorConditionFormula>
+    <errorDisplayField>FirstName</errorDisplayField>
+    <errorMessage>Please enter at least 3 character</errorMessage>
+</ValidationRule>

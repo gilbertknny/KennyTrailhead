@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>PRE_Maksimum_LTV_Max_60persen_Avg</fullName>
+    <active>false</active>
+    <errorConditionFormula>PRE_Maksimum_LTV__c &gt; (60/100 *  PRE_Average_Data_pembanding__c )</errorConditionFormula>
+    <errorDisplayField>PRE_Maksimum_LTV__c</errorDisplayField>
+    <errorMessage>Maksimum LTV melebihi batas ketentuan, silakan pilih tipe approval Appraisal.</errorMessage>
+</ValidationRule>

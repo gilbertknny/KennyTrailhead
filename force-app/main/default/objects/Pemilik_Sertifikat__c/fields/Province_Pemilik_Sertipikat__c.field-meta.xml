@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Province_Pemilik_Sertipikat__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <label>Province Pemilik Sertipikat</label>
+    <referenceTo>Province_Master_Data__c</referenceTo>
+    <relationshipLabel>Pemilik Sertifikats</relationshipLabel>
+    <relationshipName>Pemilik_Sertifikats</relationshipName>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

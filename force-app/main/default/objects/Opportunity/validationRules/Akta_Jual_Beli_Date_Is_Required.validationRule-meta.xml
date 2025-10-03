@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Akta_Jual_Beli_Date_Is_Required</fullName>
+    <active>false</active>
+    <errorConditionFormula>IF( $User.Is_Debug_User__c = TRUE, FALSE, ISBLANK( Akta_Jual_Beli_Date__c ))</errorConditionFormula>
+    <errorDisplayField>Akta_Jual_Beli_Date__c</errorDisplayField>
+    <errorMessage>Complete this field</errorMessage>
+</ValidationRule>

@@ -1,0 +1,417 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ExternalServiceRegistration xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label>CalculatorV3</label>
+    <namedCredentialReference>MasterDataNmCred</namedCredentialReference>
+    <operations>
+        <active>true</active>
+        <name>calculatorx20v3</name>
+    </operations>
+    <registrationProviderType>Custom</registrationProviderType>
+    <schema>{
+  &quot;openapi&quot;: &quot;3.0.1&quot;,
+  &quot;info&quot;: {
+    &quot;title&quot;: &quot;CalculatorV3&quot;,
+    &quot;description&quot;: &quot;&quot;
+  },
+  &quot;paths&quot;: {
+    &quot;/krakend-gateway/sf/calculation/v2/loan_calculator&quot;: {
+      &quot;post&quot;: {
+        &quot;description&quot;: &quot;Updated calculator&quot;,
+        &quot;operationId&quot;: &quot;Calculator V3&quot;,
+        &quot;requestBody&quot;: {
+          &quot;description&quot;: &quot;&quot;,
+          &quot;content&quot;: {
+            &quot;application/json&quot;: {
+              &quot;schema&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                  &quot;calculation&quot;: {
+                    &quot;type&quot;: &quot;object&quot;,
+                    &quot;properties&quot;: {
+                      &quot;customer_type&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                      },
+                      &quot;provision_fee&quot;: {
+                        &quot;type&quot;: &quot;number&quot;,
+                        &quot;format&quot;: &quot;double&quot;
+                      },
+                      &quot;provision_fee_type&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                      },
+                      &quot;tenor&quot;: {
+                        &quot;type&quot;: &quot;array&quot;,
+                        &quot;items&quot;: {
+                          &quot;type&quot;: &quot;integer&quot;,
+                          &quot;format&quot;: &quot;int64&quot;
+                        }
+                      },
+                      &quot;branch_id&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int64&quot;
+                      },
+                      &quot;product_id&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int64&quot;
+                      },
+                      &quot;loan_amount&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int64&quot;
+                      },
+                      &quot;package_id&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int64&quot;
+                      }
+                    }
+                  },
+                  &quot;insurance&quot;: {
+                    &quot;type&quot;: &quot;object&quot;,
+                    &quot;properties&quot;: {
+                      &quot;birth_date&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                      }
+                    }
+                  },
+                  &quot;additional&quot;: {
+                    &quot;type&quot;: &quot;object&quot;,
+                    &quot;properties&quot;: {
+                      &quot;is_custom_pricing&quot;: {
+                        &quot;type&quot;: &quot;boolean&quot;
+                      }
+                    }
+                  },
+                  &quot;amortization&quot;: {
+                    &quot;type&quot;: &quot;boolean&quot;
+                  },
+                  &quot;collateral&quot;: {
+                    &quot;type&quot;: &quot;object&quot;,
+                    &quot;properties&quot;: {
+                      &quot;asset_type_id&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                      },
+                      &quot;risk_occupation_code&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                      },
+                      &quot;category_id&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                      },
+                      &quot;is_new&quot;: {
+                        &quot;type&quot;: &quot;boolean&quot;
+                      },
+                      &quot;asset_code&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                      },
+                      &quot;building_value&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int64&quot;
+                      },
+                      &quot;otr&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int64&quot;
+                      },
+                      &quot;construction_class_code&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                      },
+                      &quot;owner_asset&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          &quot;required&quot;: true
+        },
+        &quot;responses&quot;: {
+          &quot;200&quot;: {
+            &quot;description&quot;: &quot;&quot;,
+            &quot;content&quot;: {
+              &quot;application/json&quot;: {
+                &quot;schema&quot;: {
+                  &quot;type&quot;: &quot;object&quot;,
+                  &quot;properties&quot;: {
+                    &quot;code&quot;: {
+                      &quot;type&quot;: &quot;integer&quot;,
+                      &quot;format&quot;: &quot;int64&quot;
+                    },
+                    &quot;data&quot;: {
+                      &quot;type&quot;: &quot;object&quot;,
+                      &quot;properties&quot;: {
+                        &quot;calculation&quot;: {
+                          &quot;type&quot;: &quot;array&quot;,
+                          &quot;items&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;is_potong_funding&quot;: {
+                                &quot;type&quot;: &quot;boolean&quot;
+                              },
+                              &quot;rsa_insurance_premium&quot;: {
+                                &quot;type&quot;: &quot;integer&quot;,
+                                &quot;format&quot;: &quot;int64&quot;
+                              },
+                              &quot;flat_rate&quot;: {
+                                &quot;type&quot;: &quot;number&quot;,
+                                &quot;format&quot;: &quot;double&quot;
+                              },
+                              &quot;provision_rate&quot;: {
+                                &quot;type&quot;: &quot;number&quot;,
+                                &quot;format&quot;: &quot;double&quot;
+                              },
+                              &quot;installment_scheme&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;total_admin_fee&quot;: {
+                                &quot;type&quot;: &quot;integer&quot;,
+                                &quot;format&quot;: &quot;int64&quot;
+                              },
+                              &quot;admin_fee_capitalization_type&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;life_insurance_calculation_id&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;funding_ratio&quot;: {
+                                &quot;type&quot;: &quot;number&quot;,
+                                &quot;format&quot;: &quot;double&quot;
+                              },
+                              &quot;asset_insurance_premium&quot;: {
+                                &quot;type&quot;: &quot;integer&quot;,
+                                &quot;format&quot;: &quot;int64&quot;
+                              },
+                              &quot;asset_insurance_calculation_id&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;effective_rate&quot;: {
+                                &quot;type&quot;: &quot;number&quot;,
+                                &quot;format&quot;: &quot;double&quot;
+                              },
+                              &quot;first_installment_type&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;incentive_amount&quot;: {
+                                &quot;type&quot;: &quot;integer&quot;,
+                                &quot;format&quot;: &quot;int64&quot;
+                              },
+                              &quot;adjusted_effective_rate&quot;: {
+                                &quot;type&quot;: &quot;number&quot;,
+                                &quot;format&quot;: &quot;double&quot;
+                              },
+                              &quot;provision_fee&quot;: {
+                                &quot;type&quot;: &quot;integer&quot;,
+                                &quot;format&quot;: &quot;int64&quot;
+                              },
+                              &quot;notary_fee&quot;: {
+                                &quot;type&quot;: &quot;integer&quot;,
+                                &quot;format&quot;: &quot;int64&quot;
+                              },
+                              &quot;pure_ntf_amount&quot;: {
+                                &quot;type&quot;: &quot;integer&quot;,
+                                &quot;format&quot;: &quot;int64&quot;
+                              },
+                              &quot;provision_fee_capitalization_type&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;notary_fee_capitalization_type&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;other_fee_capitalization_type&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;total_down_payment_amount&quot;: {
+                                &quot;type&quot;: &quot;integer&quot;,
+                                &quot;format&quot;: &quot;int64&quot;
+                              },
+                              &quot;credit_insurance_premium&quot;: {
+                                &quot;type&quot;: &quot;integer&quot;,
+                                &quot;format&quot;: &quot;int64&quot;
+                              },
+                              &quot;installment&quot;: {
+                                &quot;type&quot;: &quot;integer&quot;,
+                                &quot;format&quot;: &quot;int64&quot;
+                              },
+                              &quot;amortization_type&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;asset_insurance_coverage_type&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;life_insurance_premium&quot;: {
+                                &quot;type&quot;: &quot;integer&quot;,
+                                &quot;format&quot;: &quot;int64&quot;
+                              },
+                              &quot;initial_down_payment_amount&quot;: {
+                                &quot;type&quot;: &quot;integer&quot;,
+                                &quot;format&quot;: &quot;int64&quot;
+                              },
+                              &quot;admin_fee&quot;: {
+                                &quot;type&quot;: &quot;integer&quot;,
+                                &quot;format&quot;: &quot;int64&quot;
+                              },
+                              &quot;life_insurance_capitalization_type&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;area_price_list_id&quot;: {
+                                &quot;type&quot;: &quot;integer&quot;,
+                                &quot;format&quot;: &quot;int64&quot;
+                              },
+                              &quot;santunan_insurance_premium&quot;: {
+                                &quot;type&quot;: &quot;integer&quot;,
+                                &quot;format&quot;: &quot;int64&quot;
+                              },
+                              &quot;santunan_insurance_capitalization_type&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;capitalized_ntf_amount&quot;: {
+                                &quot;type&quot;: &quot;integer&quot;,
+                                &quot;format&quot;: &quot;int64&quot;
+                              },
+                              &quot;amortization&quot;: {
+                                &quot;type&quot;: &quot;array&quot;,
+                                &quot;items&quot;: {
+                                  &quot;type&quot;: &quot;object&quot;,
+                                  &quot;properties&quot;: {
+                                    &quot;principal&quot;: {
+                                      &quot;type&quot;: &quot;number&quot;,
+                                      &quot;format&quot;: &quot;double&quot;
+                                    },
+                                    &quot;sequence&quot;: {
+                                      &quot;type&quot;: &quot;integer&quot;,
+                                      &quot;format&quot;: &quot;int64&quot;
+                                    },
+                                    &quot;provision_fee&quot;: {
+                                      &quot;type&quot;: &quot;integer&quot;,
+                                      &quot;format&quot;: &quot;int64&quot;
+                                    },
+                                    &quot;admin_fee&quot;: {
+                                      &quot;type&quot;: &quot;integer&quot;,
+                                      &quot;format&quot;: &quot;int64&quot;
+                                    },
+                                    &quot;interest&quot;: {
+                                      &quot;type&quot;: &quot;number&quot;,
+                                      &quot;format&quot;: &quot;double&quot;
+                                    },
+                                    &quot;installment&quot;: {
+                                      &quot;type&quot;: &quot;integer&quot;,
+                                      &quot;format&quot;: &quot;int64&quot;
+                                    }
+                                  }
+                                }
+                              },
+                              &quot;santunan_insurance_calculation_id&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;calculation_type&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;total_reverse_down_payment&quot;: {
+                                &quot;type&quot;: &quot;integer&quot;,
+                                &quot;format&quot;: &quot;int64&quot;
+                              },
+                              &quot;tenor&quot;: {
+                                &quot;type&quot;: &quot;integer&quot;,
+                                &quot;format&quot;: &quot;int64&quot;
+                              },
+                              &quot;survey_fee_capitalization_type&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;total_repayment&quot;: {
+                                &quot;type&quot;: &quot;integer&quot;,
+                                &quot;format&quot;: &quot;int64&quot;
+                              },
+                              &quot;is_custom_pricing&quot;: {
+                                &quot;type&quot;: &quot;boolean&quot;
+                              },
+                              &quot;other_fee&quot;: {
+                                &quot;type&quot;: &quot;integer&quot;,
+                                &quot;format&quot;: &quot;int64&quot;
+                              },
+                              &quot;credit_insurance_calculation_id&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;fiducia_fee_capitalization_type&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;reverse_otr&quot;: {
+                                &quot;type&quot;: &quot;integer&quot;,
+                                &quot;format&quot;: &quot;int64&quot;
+                              },
+                              &quot;interest_type&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;ntf_amount&quot;: {
+                                &quot;type&quot;: &quot;integer&quot;,
+                                &quot;format&quot;: &quot;int64&quot;
+                              },
+                              &quot;package_group_id&quot;: {
+                                &quot;type&quot;: &quot;integer&quot;,
+                                &quot;format&quot;: &quot;int64&quot;
+                              },
+                              &quot;reverse_dp&quot;: {
+                                &quot;type&quot;: &quot;integer&quot;,
+                                &quot;format&quot;: &quot;int64&quot;
+                              },
+                              &quot;ltv_ratio&quot;: {
+                                &quot;type&quot;: &quot;number&quot;,
+                                &quot;format&quot;: &quot;double&quot;
+                              },
+                              &quot;fiducia_fee&quot;: {
+                                &quot;type&quot;: &quot;integer&quot;,
+                                &quot;format&quot;: &quot;int64&quot;
+                              },
+                              &quot;group_id&quot;: {
+                                &quot;type&quot;: &quot;integer&quot;,
+                                &quot;format&quot;: &quot;int64&quot;
+                              },
+                              &quot;rounded_up_installment&quot;: {
+                                &quot;type&quot;: &quot;integer&quot;,
+                                &quot;format&quot;: &quot;int64&quot;
+                              },
+                              &quot;survey_fee&quot;: {
+                                &quot;type&quot;: &quot;integer&quot;,
+                                &quot;format&quot;: &quot;int64&quot;
+                              },
+                              &quot;asset_insurance_capitalization_type&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;total_insurance_premium&quot;: {
+                                &quot;type&quot;: &quot;integer&quot;,
+                                &quot;format&quot;: &quot;int64&quot;
+                              },
+                              &quot;flat_rate_monthly&quot;: {
+                                &quot;type&quot;: &quot;number&quot;,
+                                &quot;format&quot;: &quot;double&quot;
+                              },
+                              &quot;rsa_insurance_calculation_id&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              }
+                            }
+                          }
+                        },
+                        &quot;loan_calculation_id&quot;: {
+                          &quot;type&quot;: &quot;string&quot;
+                        }
+                      }
+                    },
+                    &quot;meta&quot;: {
+                      &quot;type&quot;: &quot;object&quot;,
+                      &quot;properties&quot;: {
+                        &quot;elapsed_time&quot;: {
+                          &quot;type&quot;: &quot;string&quot;
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}</schema>
+    <schemaType>OpenApi3</schemaType>
+    <serviceBinding>{&quot;host&quot;:&quot;&quot;,&quot;basePath&quot;:&quot;/&quot;,&quot;allowedSchemes&quot;:[],&quot;requestMediaTypes&quot;:[],&quot;responseMediaTypes&quot;:[],&quot;compatibleMediaTypes&quot;:{},&quot;extensions&quot;:{}}</serviceBinding>
+    <status>Complete</status>
+    <systemVersion>5</systemVersion>
+</ExternalServiceRegistration>

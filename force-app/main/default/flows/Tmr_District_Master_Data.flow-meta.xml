@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>District_Master_Data</name>
+        <label>District Master Data</label>
+        <locationX>176</locationX>
+        <locationY>134</locationY>
+        <actionName>DistrictMasterData.GetDistrict</actionName>
+        <actionType>externalService</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>city_code</name>
+            <value>
+                <stringValue>32.10</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>page</name>
+            <value>
+                <stringValue>1</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>limit</name>
+            <value>
+                <stringValue>1000</stringValue>
+            </value>
+        </inputParameters>
+        <nameSegment>DistrictMasterData.GetDistrict</nameSegment>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </actionCalls>
+    <apiVersion>61.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <environments>Default</environments>
+    <interviewLabel>[Tmr] District Master Data {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>[Tmr] District Master Data</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>District_Master_Data</targetReference>
+        </connector>
+    </start>
+    <status>Draft</status>
+</Flow>

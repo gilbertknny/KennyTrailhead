@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Industry_Group__c</fullName>
+    <label>Industry Group</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>MULTIFINANCE</fullName>
+                <default>false</default>
+                <label>MULTIFINANCE</label>
+            </value>
+            <value>
+                <fullName>KOPERASI</fullName>
+                <default>false</default>
+                <label>KOPERASI</label>
+            </value>
+            <value>
+                <fullName>PERBANKAN</fullName>
+                <default>false</default>
+                <label>PERBANKAN</label>
+            </value>
+            <value>
+                <fullName>ASURANSI</fullName>
+                <default>false</default>
+                <label>ASURANSI</label>
+            </value>
+            <value>
+                <fullName>WIRASWASTA</fullName>
+                <default>false</default>
+                <label>WIRASWASTA</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

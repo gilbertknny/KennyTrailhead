@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>SP_Job_Address_Min_3_Characters</fullName>
+    <active>true</active>
+    <errorConditionFormula>IF(OR(ISBLANK(Spouse_Job_Address__c), ISNULL(Spouse_Job_Address__c), Spouse_Job_Address__c = &quot;&quot;), FALSE, LEN( Spouse_Job_Address__c ) &lt; 3) &amp;&amp; !IsVRBypassed__c</errorConditionFormula>
+    <errorDisplayField>Spouse_Job_Address__c</errorDisplayField>
+    <errorMessage>Please enter at least 3 characters</errorMessage>
+</ValidationRule>

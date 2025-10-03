@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Jumlah_Saham_Number_Must_10_Digits</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+NOT(ISBLANK(jumlah_saham__c)),
+NOT(REGEX(jumlah_saham__c, &quot;^\\d{1,10}$&quot;))
+)</errorConditionFormula>
+    <errorDisplayField>jumlah_saham__c</errorDisplayField>
+    <errorMessage>Maximum 10 digit number only.</errorMessage>
+</ValidationRule>

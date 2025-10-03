@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>NJOP_Maksimum_LTV_Max_500jt</fullName>
+    <active>false</active>
+    <errorConditionFormula>NJOP_Maksimum_LTV__c &gt; 500000000</errorConditionFormula>
+    <errorDisplayField>NJOP_Maksimum_LTV__c</errorDisplayField>
+    <errorMessage>Maksimum LTV melebihi batas ketentuan, silakan pilih tipe approval Appraisal.</errorMessage>
+</ValidationRule>

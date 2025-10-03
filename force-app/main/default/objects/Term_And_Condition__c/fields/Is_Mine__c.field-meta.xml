@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Is_Mine__c</fullName>
+    <formula>OR(
+  (CreatedById = $User.Id),
+  ($User.Is_Debug_User__c )
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Is Mine</label>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

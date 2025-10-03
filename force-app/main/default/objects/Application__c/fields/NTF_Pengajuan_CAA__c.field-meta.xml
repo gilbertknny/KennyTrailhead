@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>NTF_Pengajuan_CAA__c</fullName>
+    <description>untuk NTF di CAA</description>
+    <formula>IF( OR( ISNULL( Temp_NTF_Pengajuan__c ) , Temp_NTF_Pengajuan__c=0) , Loan_Information__r.NTF_Pengajuan__c, Temp_NTF_Pengajuan__c)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>NTF Pengajuan CAA</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Currency</type>
+</CustomField>

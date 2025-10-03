@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningMessageChannel xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Message Channel to pass a jim-compo</description>
+    <isExposed>true</isExposed>
+    <lightningMessageFields>
+        <description>This is the value of jim-compo that registered</description>
+        <fieldName>value</fieldName>
+    </lightningMessageFields>
+    <lightningMessageFields>
+        <description>This is the context of jim-compo that registered</description>
+        <fieldName>context</fieldName>
+    </lightningMessageFields>
+    <lightningMessageFields>
+        <description>This is the status of jim-compo that registered</description>
+        <fieldName>status</fieldName>
+    </lightningMessageFields>
+    <lightningMessageFields>
+        <description>This is the sender of the message</description>
+        <fieldName>sender</fieldName>
+    </lightningMessageFields>
+    <masterLabel>JimChannel</masterLabel>
+</LightningMessageChannel>

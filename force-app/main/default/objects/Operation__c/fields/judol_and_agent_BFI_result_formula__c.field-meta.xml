@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>judol_and_agent_BFI_result_formula__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF(
+OR(
+judol_and_agent_BFI_check_result__c = &quot;&lt;span&gt;&amp;#8203;&lt;/span&gt;&quot;,
+judol_and_agent_BFI_check_result__c = &quot;&quot;
+),
+&quot;Tidak terindikasi Judol&quot;,
+judol_and_agent_BFI_check_result__c
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Judol Check Result</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

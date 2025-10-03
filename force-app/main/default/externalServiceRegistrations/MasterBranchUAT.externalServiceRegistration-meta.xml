@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ExternalServiceRegistration xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label>MasterBranchUAT</label>
+    <namedCredentialReference>MasterDataNmCred</namedCredentialReference>
+    <operations>
+        <active>true</active>
+        <name>bravox2dbranch</name>
+    </operations>
+    <registrationProviderType>Custom</registrationProviderType>
+    <schema>{&quot;openapi&quot;:&quot;3.0.1&quot;,&quot;info&quot;:{&quot;title&quot;:&quot;MasterBranchUAT&quot;,&quot;description&quot;:&quot;&quot;},&quot;paths&quot;:{&quot;/krakend-gateway/sf/branch/v1/raw/bravo-branch&quot;:{&quot;get&quot;:{&quot;description&quot;:&quot;&quot;,&quot;operationId&quot;:&quot;bravo-branch&quot;,&quot;parameters&quot;:[{&quot;name&quot;:&quot;active_only&quot;,&quot;in&quot;:&quot;query&quot;,&quot;description&quot;:&quot;active_only=true&amp;product_ids=1&quot;,&quot;required&quot;:true,&quot;allowEmptyValue&quot;:false,&quot;schema&quot;:{&quot;type&quot;:&quot;boolean&quot;}},{&quot;name&quot;:&quot;product_ids&quot;,&quot;in&quot;:&quot;query&quot;,&quot;description&quot;:&quot;active_only=true&amp;product_ids=1&quot;,&quot;required&quot;:true,&quot;allowEmptyValue&quot;:false,&quot;schema&quot;:{&quot;type&quot;:&quot;integer&quot;,&quot;format&quot;:&quot;int32&quot;}}],&quot;responses&quot;:{&quot;2XX&quot;:{&quot;description&quot;:&quot;active_only=true&amp;product_ids=1&quot;,&quot;content&quot;:{&quot;application/json&quot;:{&quot;schema&quot;:{&quot;type&quot;:&quot;object&quot;,&quot;properties&quot;:{&quot;data&quot;:{&quot;type&quot;:&quot;array&quot;,&quot;items&quot;:{&quot;type&quot;:&quot;object&quot;,&quot;properties&quot;:{&quot;branch_id&quot;:{&quot;type&quot;:&quot;integer&quot;,&quot;format&quot;:&quot;int64&quot;},&quot;pos_id&quot;:{&quot;type&quot;:&quot;string&quot;},&quot;branch_name&quot;:{&quot;type&quot;:&quot;string&quot;},&quot;product_id&quot;:{&quot;type&quot;:&quot;integer&quot;,&quot;format&quot;:&quot;int64&quot;},&quot;active&quot;:{&quot;type&quot;:&quot;boolean&quot;},&quot;id&quot;:{&quot;type&quot;:&quot;integer&quot;,&quot;format&quot;:&quot;int64&quot;}}}}}}}}}}}}}}</schema>
+    <schemaType>OpenApi3</schemaType>
+    <serviceBinding>{&quot;host&quot;:&quot;&quot;,&quot;basePath&quot;:&quot;/&quot;,&quot;allowedSchemes&quot;:[],&quot;requestMediaTypes&quot;:[],&quot;responseMediaTypes&quot;:[],&quot;compatibleMediaTypes&quot;:{},&quot;extensions&quot;:{}}</serviceBinding>
+    <status>Complete</status>
+    <systemVersion>7</systemVersion>
+</ExternalServiceRegistration>

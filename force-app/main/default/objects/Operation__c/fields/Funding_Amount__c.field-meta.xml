@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Funding_Amount__c</fullName>
+    <formula>IF(
+    ISBLANK(funding_method_selected__c),
+    0,
+    IF(
+        OR(
+            Application__r.Survey__r.Product_Offering__c = &quot;1&quot;,
+            Application__r.Survey__r.Product_Offering__c = &quot;2&quot;,
+            Application__r.Survey__r.Product_Offering__c = &quot;3&quot;,
+            Application__r.Survey__r.Product_Offering__c = &quot;4&quot;,
+            Application__r.Survey__r.Product_Offering__c = &quot;5&quot;,
+            Application__r.Survey__r.Product_Offering__c = &quot;6&quot;,
+            Application__r.Survey__r.Product_Offering__c = &quot;7&quot;,
+            Application__r.Survey__r.Product_Offering__c = &quot;8&quot;,
+            Application__r.Survey__r.Product_Offering__c = &quot;9&quot;,
+            Application__r.Survey__r.Product_Offering__c = &quot;10&quot;,
+            Application__r.Survey__r.Product_Offering__c = &quot;11&quot;,
+            Application__r.Survey__r.Product_Offering__c = &quot;12&quot;,
+            Application__r.Survey__r.Product_Offering__c = &quot;13&quot;,
+            Application__r.Survey__r.Product_Offering__c = &quot;18&quot;
+        ),
+        full_ntf_amount__c - total_additional_beneficiary_amount__c - IF( effective_date__c &lt;  Golive_Date__c, 0, Accrued_Interest__c) ,
+        IF(
+            OR(
+                Application__r.Survey__r.Product_Offering__c = &quot;14&quot;,
+                Application__r.Survey__r.Product_Offering__c = &quot;15&quot;,
+                Application__r.Survey__r.Product_Offering__c = &quot;16&quot;,
+                Application__r.Survey__r.Product_Offering__c = &quot;17&quot;
+            ),
+            Loan_Information__r.NTF_Pengajuan__c,
+            IF(
+                AND(OR(
+                        Application__r.Survey__r.Product_Offering__c = &quot;19&quot;,
+                        Application__r.Survey__r.Product_Offering__c = &quot;20&quot;,
+                        Application__r.Survey__r.Product_Offering__c = &quot;21&quot;,
+                        Application__r.Survey__r.Product_Offering__c = &quot;22&quot;,
+                        Application__r.Survey__r.Product_Offering__c = &quot;23&quot;,
+                        Application__r.Survey__r.Product_Offering__c = &quot;24&quot;
+                ), Loan_Information__r.Survey__r.Perpanjangan_PRK__c == TRUE), 
+                Loan_Information__r.NTF_Pengajuan__c,
+                IF(
+                    OR(
+                        Application__r.Survey__r.Product_Offering__c = &quot;19&quot;,
+                        Application__r.Survey__r.Product_Offering__c = &quot;20&quot;,
+                        Application__r.Survey__r.Product_Offering__c = &quot;21&quot;,
+                        Application__r.Survey__r.Product_Offering__c = &quot;22&quot;,
+                        Application__r.Survey__r.Product_Offering__c = &quot;23&quot;,
+                        Application__r.Survey__r.Product_Offering__c = &quot;24&quot;
+                    ),
+                    full_ntf_amount__c - total_additional_beneficiary_amount__c,
+                    0
+                )
+            )
+        )
+    )
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Funding Amount</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Currency</type>
+</CustomField>

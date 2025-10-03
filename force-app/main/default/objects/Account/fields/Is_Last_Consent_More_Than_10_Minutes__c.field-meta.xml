@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Is_Last_Consent_More_Than_10_Minutes__c</fullName>
+    <formula>BLANKVALUE( Last_Consent_Sent_At__c , $System.OriginDateTime) &lt; NOW() - 0.0069444444</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Is Last Consent More Than 10 Minutes</label>
+    <trackHistory>false</trackHistory>
+    <type>Checkbox</type>
+</CustomField>

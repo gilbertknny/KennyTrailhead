@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Spouse_Economy_Sector__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <label>[Del] Economy Sector</label>
+    <referenceTo>Master_Economy_Sector__c</referenceTo>
+    <relationshipLabel>Customer Informations (Economy Sector)</relationshipLabel>
+    <relationshipName>Customer_Informations1</relationshipName>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Lookup</type>
+</CustomField>

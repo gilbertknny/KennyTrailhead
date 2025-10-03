@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Preview__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF(ISBLANK( DMS_Doc_Id__c ) == TRUE, &quot;&quot;, HYPERLINK(&quot;/lightning/action/quick/Document_BFI__c.Preview_Document?objectApiName&amp;context=RECORD_DETAIL&amp;recordId=&quot; &amp; CASESAFEID(Id) &amp; &quot;&amp;backgroundContext=%2Flightning%2Fr%2FApplication__c%2F&quot; &amp; &quot;&quot; &amp; &quot;%2Fview&amp;retUrl=&quot;, Lead__r.Lead_ID__c &amp; Loan__r.Account.Lead_ID__c &amp; &quot;_&quot; &amp; Document_Type_Lookup__r.type__c &amp; &quot;_&quot; &amp; TEXT( DATEVALUE(LastModifiedDate) ), &quot;_self&quot;))</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Link</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

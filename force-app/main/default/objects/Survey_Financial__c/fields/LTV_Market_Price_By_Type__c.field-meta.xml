@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>LTV_Market_Price_By_Type__c</fullName>
+    <description>Old: 
+IF(
+    TEXT(Tipe_Penilaian__c) = &quot;Pre Approval&quot;,
+    PRE_LTV__c * 100,
+    IF(
+        TEXT(Tipe_Penilaian__c) = &quot;Non Appraisal (NJOP)&quot;,
+        NJOP_LTV__c * 100,
+        KJPP_LTV__c * 100
+    )
+)</description>
+    <formula>LTV_of_asset_market_price__c</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>LTV Market Price By Type</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackTrending>false</trackTrending>
+    <type>Percent</type>
+</CustomField>

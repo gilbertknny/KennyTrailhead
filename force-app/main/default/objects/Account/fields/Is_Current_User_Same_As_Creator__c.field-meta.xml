@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Is_Current_User_Same_As_Creator__c</fullName>
+    <formula>OR(
+    IF(
+        ISBLANK(Federated_Fullname__c),
+        $User.Username = Owner.Username,
+        $User.FederationIdentifier = Federated_Owner__r.FederationIdentifier
+    ),
+    $User.Is_Debug_User__c = TRUE,
+    AND(
+        $User.FederationIdentifier = &quot;BRO999&quot;,
+        NOT(ISBLANK(Federated_Owner__c))
+    )
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Is Current User Same As Creator</label>
+    <trackHistory>false</trackHistory>
+    <type>Checkbox</type>
+</CustomField>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Place_of_Birth_Must_Alphabet</fullName>
+    <active>false</active>
+    <description>Optional</description>
+    <errorConditionFormula>IF(
+    ISBLANK(Place_of_Birth__c),
+    FALSE,NOT(REGEX(Place_of_Birth__c, &quot;^[a-zA-Z\\s]+$&quot;)))</errorConditionFormula>
+    <errorDisplayField>Place_of_Birth__c</errorDisplayField>
+    <errorMessage>Please input alphabet only.</errorMessage>
+</ValidationRule>

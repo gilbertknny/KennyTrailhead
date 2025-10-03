@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workflow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fieldUpdates>
+        <fullName>Actual_Approver</fullName>
+        <field>Approver__c</field>
+        <name>Actual Approver</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>LookupValue</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Actual_Approvers</fullName>
+        <description>actual approver</description>
+        <field>Actual_Approver__c</field>
+        <name>Actual Approver</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>LookupValue</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Approval_Date</fullName>
+        <description>approval date</description>
+        <field>Approval_Date__c</field>
+        <formula>NOW()</formula>
+        <name>Approval Date</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>true</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Approval_Notes</fullName>
+        <field>Approval_Notes__c</field>
+        <formula>Approval_Notes__c</formula>
+        <name>Approval Notes</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Rejection_Date</fullName>
+        <field>Approval_Date__c</field>
+        <formula>NOW()</formula>
+        <name>Rejection Date</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>true</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Set_Approval_Final</fullName>
+        <description>set approval final</description>
+        <field>Status_Approval__c</field>
+        <formula>&quot;Approved&quot;</formula>
+        <name>Set Approval Final</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>true</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Set_Rejection</fullName>
+        <description>set rejection</description>
+        <field>Status_Approval__c</field>
+        <formula>&quot;Rejected&quot;</formula>
+        <name>Set Rejection</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>true</reevaluateOnChange>
+    </fieldUpdates>
+</Workflow>

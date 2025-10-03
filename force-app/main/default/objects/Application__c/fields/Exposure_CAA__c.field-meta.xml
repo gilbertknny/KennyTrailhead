@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Exposure_CAA__c</fullName>
+    <formula>IF( OR( ISNULL(  Temp_Exposure__c ) , Temp_Exposure__c=0) , 
+   IF( OR( ISNULL( Survey__r.Exposure_Real__c ) , Survey__r.Exposure_Real__c=0) , 
+   Loan_Information__r.NTF_Pengajuan__c, 
+   Survey__r.Exposure_Real__c), 
+Temp_Exposure__c)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Exposure CAA</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Currency</type>
+</CustomField>

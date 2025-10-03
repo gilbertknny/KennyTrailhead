@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SamlSsoConfig xmlns="http://soap.sforce.com/2006/04/metadata">
+    <attributeName>SfLoginId</attributeName>
+    <identityLocation>Attribute</identityLocation>
+    <identityMapping>FederationId</identityMapping>
+    <issuer>https://microservices.prod.bravo.bfi.co.id/keycloak/realms/bravo</issuer>
+    <loginUrl>https://microservices.prod.bravo.bfi.co.id/keycloak/realms/bravo/protocol/saml</loginUrl>
+    <name>microservices_prod</name>
+    <oauthTokenEndpoint>https://ptbfifinance.my.salesforce.com/services/oauth2/token</oauthTokenEndpoint>
+    <redirectBinding>true</redirectBinding>
+    <requestSignatureMethod>1</requestSignatureMethod>
+    <requestSigningCertId>0P1Mg0000000DWj</requestSigningCertId>
+    <salesforceLoginUrl>https://ptbfifinance.my.salesforce.com</salesforceLoginUrl>
+    <samlEntityId>https://ptbfifinance.my.salesforce.com</samlEntityId>
+    <samlVersion>SAML2_0</samlVersion>
+    <singleLogoutBinding>RedirectBinding</singleLogoutBinding>
+    <singleLogoutUrl>https://microservices.prod.bravo.bfi.co.id/keycloak/realms/bravo/protocol/saml</singleLogoutUrl>
+    <useConfigRequestMethod>false</useConfigRequestMethod>
+    <useSameDigestAlgoForSigning>true</useSameDigestAlgoForSigning>
+    <userProvisioning>false</userProvisioning>
+    <validationCert>MIICmTCCAYECBgGI5jf2CjANBgkqhkiG9w0BAQsFADAQMQ4wDAYDVQQDDAVicmF2bzAeFw0yMzA2MjMwMzA1MDdaFw0zMzA2MjMwMzA2NDdaMBAxDjAMBgNVBAMMBWJyYXZvMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAjUDWWbv6day1z77q8vxuN1Tab6/gN1yDROATlFnKSu2pIuYayI99D2KXaPXfCmNhFglwcXFioNVRdMy/hdA888Freb36hDL+IOG+DtAEjI7KZx4zlGZSs2+js9fK8j7WlYg7/aVeOxceQbFQKnQIi1YX0SzOUmLAqam0a5M2/evAvel3Hgnjxzk3nnREdnHr+s4uffhGChm2DeRnNJoXGA6msVFSiMF2gXL8zvV6r847Yf0fyUAJtnbB76VImGYpZLkrqZXa93bAIzAIYWFCeM8jexcrwiuYaF4ttPCiSOOVX0ORj38E0/K9LGtUaWn35kOEZ14YFD79119Y2sqHRQIDAQABMA0GCSqGSIb3DQEBCwUAA4IBAQBedPqabkBaV3vbzXE0KpG+SRdp5iWqxnFl+Ewno8QCyfpopcfpMR8NJt9Hu/G0G7pAXW1h5wnD5sroaOx5pXpVIflz0uY2My+XQIQJoy6iej3N+d3hN5jBopEtOV6dm6Jb6EWzRuNf9LJmuqdnoJK+i1ccHeYOpQiByHOjlFLXwkcmodTksJiJxGRUZ2yUUhZGw0zedpP6MOY1E7Vw+nHjCTxUSIntx+VuggiHynuzn6b6AZvlngkbQTB+S+feyf3Xus4Lo6Flz3gLKvVKUin6kANhcw89mMkJPckKEQZ5B/TIqc3U2/2HPiwWmBbNoiU6RNQJOz8JKwgaPbVCiygL</validationCert>
+</SamlSsoConfig>

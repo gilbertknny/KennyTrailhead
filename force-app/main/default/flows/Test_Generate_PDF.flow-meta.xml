@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Generate_PDF</name>
+        <label>Generate PDF</label>
+        <locationX>176</locationX>
+        <locationY>134</locationY>
+        <actionName>spdf__MergeSimplePDFInvocable</actionName>
+        <actionType>apex</actionType>
+        <flowTransactionModel>Automatic</flowTransactionModel>
+        <inputParameters>
+            <name>recordId</name>
+            <value>
+                <stringValue>00kF3000006Tf68IAC</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>returnPDFContent</name>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>simplePdfName</name>
+            <value>
+                <stringValue>Calculator Result For Customer</stringValue>
+            </value>
+        </inputParameters>
+        <nameSegment>spdf__MergeSimplePDFInvocable</nameSegment>
+        <offset>0</offset>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </actionCalls>
+    <apiVersion>62.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <environments>Default</environments>
+    <interviewLabel>[Test] Generate PDF {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>[Test] Generate PDF</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>Flow</processType>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Generate_PDF</targetReference>
+        </connector>
+    </start>
+    <status>Draft</status>
+</Flow>

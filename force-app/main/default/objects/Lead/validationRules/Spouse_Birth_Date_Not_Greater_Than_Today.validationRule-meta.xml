@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Spouse_Birth_Date_Not_Greater_Than_Today</fullName>
+    <active>true</active>
+    <errorConditionFormula>Spouse_Date_of_Birth__c &gt;  TODAY()</errorConditionFormula>
+    <errorDisplayField>Spouse_Date_of_Birth__c</errorDisplayField>
+    <errorMessage>Spouse date of birth cannot be greater than today.</errorMessage>
+</ValidationRule>

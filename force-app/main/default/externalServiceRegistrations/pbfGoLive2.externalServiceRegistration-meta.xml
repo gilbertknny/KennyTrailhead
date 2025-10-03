@@ -1,0 +1,3433 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ExternalServiceRegistration xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Service untuk memanggil Go Live PBF di LMS Core</description>
+    <label>pbfGoLive2</label>
+    <namedCredentialReference>DummyDataNmCred</namedCredentialReference>
+    <operations>
+        <active>true</active>
+        <name>sendgolivedata</name>
+    </operations>
+    <registrationProviderType>Custom</registrationProviderType>
+    <schema>{
+  &quot;openapi&quot;: &quot;3.0.1&quot;,
+  &quot;info&quot;: {
+    &quot;title&quot;: &quot;pbfGoLive2&quot;,
+    &quot;description&quot;: &quot;Service untuk memanggil Go Live PBF di LMS Core&quot;
+  },
+  &quot;paths&quot;: {
+    &quot;/sendGoLiveData&quot;: {
+      &quot;post&quot;: {
+        &quot;description&quot;: &quot;Untuk mengirimkan Full Payload GoLive Data&quot;,
+        &quot;operationId&quot;: &quot;sendGoLiveData&quot;,
+        &quot;requestBody&quot;: {
+          &quot;description&quot;: &quot;Berikut defenisi payload yang perlu di kirimkan ke PBF Backend&quot;,
+          &quot;content&quot;: {
+            &quot;application/json&quot;: {
+              &quot;schema&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                  &quot;Account&quot;: {
+                    &quot;type&quot;: &quot;object&quot;,
+                    &quot;properties&quot;: {
+                      &quot;fields&quot;: {
+                        &quot;type&quot;: &quot;object&quot;,
+                        &quot;properties&quot;: {
+                          &quot;ShippingLatitude&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;NIB__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;BillingCity&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Company_Type_Picklist__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Is_Dupcheck__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;Company_Customer_Email__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Lead_Progress__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Name&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Industry&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Company_Type__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Date_of_Birth__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;date&quot;
+                          },
+                          &quot;TickerSymbol&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;BillingGeocodeAccuracy&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;AccountSource&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;BillingPostalCode&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Place_of_Birth__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Cancel_Reason__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Is_Blacklisted__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;Federated_Owner__c&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;Id&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Name&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              }
+                            }
+                          },
+                          &quot;Office_Location__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Last_Consent_Sent_At__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;date-time&quot;
+                          },
+                          &quot;Lokasi_Usaha__Longitude__s&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;Mobile_Phone_1__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;ID_Number__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Management_In_Charge__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Is_Canceled__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;ShippingGeocodeAccuracy&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Sic&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;ShippingStreet&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Year_of_Established__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;date-time&quot;
+                          },
+                          &quot;Negative_List__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;NPWP_Number__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Customer_Consent__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;ShippingPostalCode&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;ShippingState&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;SicDesc&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Status__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;AnnualRevenue&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;BillingState&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Jigsaw&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Site&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Lokasi_Usaha__Latitude__s&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;Ownership&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;External_Account_ID__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Customer_Status__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Description&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Rating&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Customer_Rating__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Website&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;BillingLatitude&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;NumberOfEmployees&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;OwnerId&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;Id&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Name&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              }
+                            }
+                          },
+                          &quot;BillingLongitude&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;Phone&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Lead_Note__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;RecordTypeId&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;Id&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Name&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              }
+                            }
+                          },
+                          &quot;ID_Verification__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;ShippingCountry&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;ShippingCity&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Primary_Contact__c&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;Id&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Name&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              }
+                            }
+                          },
+                          &quot;Place_of_Established__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;ParentId&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Industry_Type__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Reject_Reason__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;AccountNumber&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Type&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Customer_ID__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;BillingCountry&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;BillingStreet&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;First_Loan_Information__c&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;Id&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Name&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              }
+                            }
+                          },
+                          &quot;Mobile_Phone_2__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Fax&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;ShippingLongitude&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          }
+                        }
+                      },
+                      &quot;readonly_fields&quot;: {
+                        &quot;type&quot;: &quot;object&quot;,
+                        &quot;properties&quot;: {
+                          &quot;LastModifiedDate&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;date-time&quot;
+                          },
+                          &quot;Is_Current_User_Same_As_Creator__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;JigsawCompanyId&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;LastReferencedDate&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;date-time&quot;
+                          },
+                          &quot;Lead_ID__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;First_Loan_NTF_Pengajuan__c&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;Formatted_Phone1__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;BillingAddress&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Is_Last_Consent_More_Than_10_Minutes__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;Mobile_Phone_2_Formula__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;First_Loan_Product_Type__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;CreatedById&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;Id&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Name&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              }
+                            }
+                          },
+                          &quot;NTF_Pengajuan__c&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;PhotoUrl&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;MasterRecordId&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Company_Type_Formula__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;IsDeleted&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;Tier&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;LastViewedDate&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;date-time&quot;
+                          },
+                          &quot;Lokasi_Usaha__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Customer_Name_Formula__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;First_Loan_Activity__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Mobile_Phone_Formula__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;SystemModstamp&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;date-time&quot;
+                          },
+                          &quot;Input_By_Id__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Company_Customer_Email_Formula__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;First_Loan_Referral_Name__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;ShippingAddress&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;LastActivityDate&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;date-time&quot;
+                          },
+                          &quot;CreatedDate&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;date-time&quot;
+                          },
+                          &quot;Federated_Fullname__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Id&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;LastModifiedById&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;Id&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Name&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              }
+                            }
+                          },
+                          &quot;Input_By__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          }
+                        }
+                      }
+                    }
+                  },
+                  &quot;Opportunity&quot;: {
+                    &quot;type&quot;: &quot;object&quot;,
+                    &quot;properties&quot;: {
+                      &quot;fields&quot;: {
+                        &quot;type&quot;: &quot;object&quot;,
+                        &quot;properties&quot;: {
+                          &quot;Asset_City_Kabupaten__c&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;code__c&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Id&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Name&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              }
+                            }
+                          },
+                          &quot;Asset_Latitude_Longitude__Latitude__s&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;Survey__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Is_Approve_Final__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;CloseDate&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;date&quot;
+                          },
+                          &quot;Customer__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;CA_Notes__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;SOA_Type__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Budget_Confirmed__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;SPV_Result__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Done_Collateral_Assessment__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;NTF_Pengajuan__c&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;Komite_Survey_5_Assigned__c&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;Id&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Name&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              }
+                            }
+                          },
+                          &quot;Komite_Survey_Step__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Referral_Name__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Product_Type__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;BM_Assigned__c&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;Id&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Name&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              }
+                            }
+                          },
+                          &quot;Komite_Kredit_1_ApprovedDt__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;date-time&quot;
+                          },
+                          &quot;Referral_ID__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Is_Approve_NOT_Final__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;Approver_CA_Area__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Approver_LAO__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Komite_Survey_4_Assigned__c&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;Id&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Name&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              }
+                            }
+                          },
+                          &quot;ROI_Analysis_Completed__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;BM_Notes__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Cabang__c&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;Id&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Name&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              }
+                            }
+                          },
+                          &quot;BM_ApprovedBy__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;LAO_ApprovedBy__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;isCaReco__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;SPV_ApprovedBy__c&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;Id&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Name&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              }
+                            }
+                          },
+                          &quot;Description&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Komite_Kredit_2_ApprovedDt__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;date-time&quot;
+                          },
+                          &quot;Customer_Rating__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;LAO_ApprovedDt__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;date-time&quot;
+                          },
+                          &quot;Done_Underwriting_Review__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;CA_Result__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;SOA_ID__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Asset_RW__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Komite_Kredit_2_Notes__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;TotalOpportunityQuantity&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;BM_Notes2__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;OwnerId&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;Id&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Name&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              }
+                            }
+                          },
+                          &quot;Komite_Survey_1_Result__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;CampaignId&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;RecordTypeId&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;Id&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Name&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              }
+                            }
+                          },
+                          &quot;SyncedQuoteId&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Lembaga_LJKs__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Tenor__c&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;Activity_BRO__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Loss_Reason__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;SPV_Notes__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Status_Janji_Survey__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;LAO_Notes__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Done_AKAD__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;StageName&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;SPV_ApprovedDt__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;date-time&quot;
+                          },
+                          &quot;Activity_AO__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Amount&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;Probability&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;District_Master_Data__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Asset_RT__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Sertipikat_Type__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Akta_Jual_Beli_Date__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;date&quot;
+                          },
+                          &quot;Type&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;LAO_Result__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Approver_CA_Cabang__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;IsNeedResortingKomiteSurvey__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;Lead_Notes__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Is_Reject_Final__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;Is_Take_Over__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;AccountId&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;Id&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Name&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              }
+                            }
+                          },
+                          &quot;Tipe_Penilaian__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;IsLocked__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;Name&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;DP__c&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;Asset_Latitude_Longitude__Longitude__s&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;Asset_Address_is_same_as__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Cancel_Reason__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Federated_Owner__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Is_Canceled__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;Komite_Kredit_1_Notes__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;SPV_Notes2__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Done_Legal_Review__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;Approver_BM__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Sertipikat_Atas_Nama__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;CabangCd__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;CA_ApprovedBy__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;LeadSource&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Sertifikat_Number__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Discovery_Completed__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;Pricebook2Id&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Done_FKD__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;Asset_Status__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;ForecastCategoryName&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Done_Insurance_Review__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;NextStep&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Asset_Type__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Done_Offering_Letter__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;Asset_Provinces__c&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;code__c&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Id&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Name&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              }
+                            }
+                          },
+                          &quot;Asset_Location__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Komite_Kredit_2_ApprovedBy__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;LAO_Notes2__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Done_Komite_Kredit__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;Is_Reject_NOT_Final__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;Asset_Kelurahan__c&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;code__c&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Id&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Name&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              }
+                            }
+                          },
+                          &quot;Primary_Contact__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;SOA_Source__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Application__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;BM_ApprovedDt__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;date-time&quot;
+                          },
+                          &quot;Nomor_Objek_Pajak__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;KK1_Assigned__c&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;Id&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Name&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              }
+                            }
+                          },
+                          &quot;BM_Result__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Jadwal_Janji_Survey__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;date-time&quot;
+                          },
+                          &quot;ContractId&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;KK2_Assigned__c&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;Id&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Name&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              }
+                            }
+                          },
+                          &quot;CA_ApprovedDt__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;date-time&quot;
+                          },
+                          &quot;KK3_Assigned__c&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;Id&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Name&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              }
+                            }
+                          },
+                          &quot;Customer_ID__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Komite_Kredit_1_ApprovedBy__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;CA_Notes2__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Asset_Function__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Asset_Address__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Market_Price_Estimation__c&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;Komite_Survey_2_Result__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;IsPrivate&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;Asset_Kecamatan__c&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;code__c&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Id&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Name&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              }
+                            }
+                          }
+                        }
+                      },
+                      &quot;readonly_fields&quot;: {
+                        &quot;type&quot;: &quot;object&quot;,
+                        &quot;properties&quot;: {
+                          &quot;LastModifiedDate&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;date-time&quot;
+                          },
+                          &quot;LastCloseDateChangedHistoryId&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;HasOpportunityLineItem&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;FiscalYear&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;Asset_Kecamatan2__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;LastReferencedDate&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;date-time&quot;
+                          },
+                          &quot;ForecastCategory&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;IsClosed&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;ContactId&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;LastActivityInDays&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;Asset_City_Kabupaten2__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Asset_Zip_Code__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;HasOpenActivity&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;IqScore&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;Activity_Formula__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;LastAmountChangedHistoryId&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;ExpectedRevenue&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;CreatedById&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;Id&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Name&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              }
+                            }
+                          },
+                          &quot;AgeInDays&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;IsWon&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;Asset_Provinces2__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Asset_Latitude_Longitude__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;LastStageChangeInDays&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;IsPriorityRecord&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;PushCount&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;Asset_Kelurahan2__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;IsDeleted&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;FiscalQuarter&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;BM_Role__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Komite_Survey_1_Role__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;LastViewedDate&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;date-time&quot;
+                          },
+                          &quot;Fiscal&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;SystemModstamp&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;date-time&quot;
+                          },
+                          &quot;LastStageChangeDate&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;date-time&quot;
+                          },
+                          &quot;HasOverdueTask&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;LastActivityDate&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;date-time&quot;
+                          },
+                          &quot;CreatedDate&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;date-time&quot;
+                          },
+                          &quot;Federated_Fullname__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Komite_Survey_2_Role__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Id&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Owner_Fullname__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Exp_Value__c&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;LastModifiedById&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;Id&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Name&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              }
+                            }
+                          },
+                          &quot;Application_ID__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Input_By__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          }
+                        }
+                      }
+                    }
+                  },
+                  &quot;Operation__c&quot;: {
+                    &quot;type&quot;: &quot;object&quot;,
+                    &quot;properties&quot;: {
+                      &quot;fields&quot;: {
+                        &quot;type&quot;: &quot;object&quot;,
+                        &quot;properties&quot;: {
+                          &quot;sf_ro_pot_funding_holdap_cb__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;Tanda_Terima_Debitur__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;Note_TDP_SPB_Benar__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;f559_doc_url__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;effective_date__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;date-time&quot;
+                          },
+                          &quot;Note_Foto_Survey__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Persetujuan_Penunjukan_Notaris__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;sf_biaya_notaris_holdap_cb__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;is_document_signing__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;sf_funding_note__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;f559_doc_id__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;agreement_date__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;date-time&quot;
+                          },
+                          &quot;FKD_Legal__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;History_PBB__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;Note_Konfirmasi_Tanggal_Keluar_Sert__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Note_SPPT_dan_STTS__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Note_Bukti_Persetujuan_SPK_Debitur__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;sf_change_due_date_note__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Note_Hasil_Appraisal__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;sf_change_due_date_holdap_cb__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;TC_After_Detail__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Note_Hasil_Cek_SKPT__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Note_Premi_Santunan_Duka__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Legalisir_Buku_Nikah__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;Bukti_Persetujuan_SPK_Debitur__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;TDP_SPB_Benar__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;Note_Persetujuan_Penunjukan_Notaris__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Note_Tanda_Terima_Debitur__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Note_Bukti_Perolehan_Jaminan__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;sf_tdp_holdap_cb__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;sf_take_over_holdap_cb__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;take_over_payment_method__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;sf_angsuran_holdap_cb__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;Note_Konfirmasi_Pelunasan_Resmi__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;sf_tdp_cb__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;Note_Masa_Berlaku_Konf_Pelunasan__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;funding_method_selected__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Covernote_Notaris_dan_Invoice__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;Config_Operation_Tab__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Foto_Survey__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;correction_bank_account_name__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;TC_After__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;Premi_Santunan_Duka__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;Konfirmasi_Tanggal_Keluar_Sert__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;Note_Premi_dan_CN_Sesuai__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;OwnerId&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;Id&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Name&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              }
+                            }
+                          },
+                          &quot;sf_pajak_holdap_cb__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;sf_obligasi_note__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;sf_pajak_cb__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;Data_Pihak_ke_3__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;sf_angsuran_value__c&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;sf_tdp_note__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;sf_obligasi_value__c&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;sf_funding_holdap_cb__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;sf_biaya_notaris_cb__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;sf_imb_note__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Bukti_Perolehan_Jaminan__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;sf_take_over_cb__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;FKD_Marketing__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;sf_angsuran_note__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;sf_funding_value__c&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;Note_Legalisir_Buku_Nikah__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;sf_imb_value__c&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;sf_biaya_notaris_note__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;sf_take_over_value__c&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;sf_obligasi_holdap_cb__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;Resi_IMB__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;correction_bank_name__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;sf_imb_holdap_cb__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;Name&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Note_NPWP_Pemilik_Jaminan__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Note_TC_After__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;sf_change_due_date_value__c&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;KK_Scan_Barcode_Aktif__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;Rekomendasi__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Kesesuaian_Split_Funding__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;Hasil_Cek_SKPT__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;sf_take_over_note__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;judol_and_agent_BFI_check_result__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Masa_Berlaku_Konf_Pelunasan__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;sf_change_due_date_cb__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;bank_account_check_result__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;NPWP_Pemilik_Jaminan__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;sf_biaya_notaris_value__c&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;customer_bank_name__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Is_Legal_First_Attempt__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;sf_angsuran_cb__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;Note_Covernote_Notaris_dan_Invoice__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;sf_ro_pot_funding_cb__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;customer_bank_account_name__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Loan_Information__c&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;Id&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Name&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              }
+                            }
+                          },
+                          &quot;Agreement_ID__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Premi_dan_CN_Sesuai__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;TC_Before__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;sf_obligasi_cb__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;Note_TC_Before__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Note_Kesesuaian_Split_Funding__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;is_auto_golive__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;Note_Perbaikan_Luas_Tanah_PBB__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;sf_pajak_note__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;funding_note__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Note_Data_Pihak_ke_3__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Konfirmasi_Pelunasan_Resmi__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;sf_funding_cb__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;f559_doc_type__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Perbaikan_Luas_Tanah_PBB__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;sf_pajak_value__c&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;Application__c&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;Id&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Name&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              }
+                            }
+                          },
+                          &quot;SHM_Terupdate__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;sf_tdp_value__c&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;Hasil_Appraisal__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;Note_Dokumentasi_dan_Daftar_Hadir_Akad__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;sf_imb_cb__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;funding_method__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Note_Resi_IMB__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;sf_ro_pot_funding_note__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;SPPT_dan_STTS__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;correction_bank_account__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Dokumentasi_dan_Daftar_Hadir_Akad__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;sf_ro_pot_funding_value__c&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;Note_History_PBB__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Is_Marketing_First_Attempt__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;Note_KK_dengan_Scan_Barcode_Aktif__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;customer_bank_account__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Note_SHM_Terupdate__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          }
+                        }
+                      },
+                      &quot;readonly_fields&quot;: {
+                        &quot;type&quot;: &quot;object&quot;,
+                        &quot;properties&quot;: {
+                          &quot;LastModifiedDate&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;date-time&quot;
+                          },
+                          &quot;IsDeleted&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;LastViewedDate&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;date-time&quot;
+                          },
+                          &quot;LastReferencedDate&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;date-time&quot;
+                          },
+                          &quot;Customer_Name__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;SystemModstamp&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;date-time&quot;
+                          },
+                          &quot;CreatedById&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;Id&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Name&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              }
+                            }
+                          },
+                          &quot;beneficiary_amount__c&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;LastActivityDate&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;date-time&quot;
+                          },
+                          &quot;CreatedDate&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;date-time&quot;
+                          },
+                          &quot;Id&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;LastModifiedById&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;Id&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Name&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              }
+                            }
+                          },
+                          &quot;Application_ID__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          }
+                        }
+                      }
+                    }
+                  },
+                  &quot;Legal_Document__c&quot;: {
+                    &quot;type&quot;: &quot;object&quot;,
+                    &quot;properties&quot;: {
+                      &quot;fields&quot;: {
+                        &quot;type&quot;: &quot;object&quot;,
+                        &quot;properties&quot;: {
+                          &quot;norek_imb_2__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;nominal_bfi__c&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;loan_id__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;nominal_otr__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;lokasi_sertifikat_general__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;pembayaran_kepada_hutang__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;application_id__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;norek_bfi_2__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;kanca_sisa__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;lokasi_legal_doc_general__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;nomor_bukti_general__c&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;norek_bfi__c&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;Name&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;kanca_kk__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;kanca_hutang__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;norek_kontrak_2__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;kanca_hold__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;bank_hold__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;norek_imb__c&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;terbilang_ntf__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;atas_nama_hutang__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;nominal_imb__c&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;nominal_otr2__c&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;nominal_notaris__c&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;bank_sisa__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;kanca_imb__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;atas_nama_kontrak__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;nominal_ntf__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;norek_hutang_2__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;atas_nama_hold__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;nomor_kwitansi_general__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;norek_hutang__c&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;nominal_hold__c&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;norek_notaris__c&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;atas_nama_sisa__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;nik_penyedia_general__c&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;pembayaran_kepada_kk__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;kanca_notaris__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;nominal_ntf2__c&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;norek_hold__c&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;norek_sisa__c&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;nomor_bukti_general_2__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;bank_notaris__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;norek_kk__c&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;nominal_sisa__c&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;norek_hold_2__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;nominal_hutang__c&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;terbilang_otr__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;nomor_kontrak_general_2__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;norek_sisa_2__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;OwnerId&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;Id&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Name&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              }
+                            }
+                          },
+                          &quot;bank_imb__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;bank_kk__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;nik_penyedia_general_2__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;nominal_kk__c&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;kanca_bfi__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;nominal_kontrak__c&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;nomor_kontrak_general__c&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;bank_hutang__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;nama_penyedia_general__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;norek_notaris_2__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;norek_kontrak__c&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;tujuan_pembayaran__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;atas_nama_imb__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;atas_nama_notaris__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;atas_nama_kk__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;norek_kk_2__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;alamat_penyedia_general__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;bank_bfi__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;kanca_kontrak__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          }
+                        }
+                      },
+                      &quot;readonly_fields&quot;: {
+                        &quot;type&quot;: &quot;object&quot;,
+                        &quot;properties&quot;: {
+                          &quot;LastModifiedDate&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;date-time&quot;
+                          },
+                          &quot;IsDeleted&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;CreatedById&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;Id&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Name&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              }
+                            }
+                          },
+                          &quot;CreatedDate&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;date-time&quot;
+                          },
+                          &quot;Id&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;LastModifiedById&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;Id&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Name&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              }
+                            }
+                          },
+                          &quot;SystemModstamp&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;date-time&quot;
+                          }
+                        }
+                      }
+                    }
+                  },
+                  &quot;Application__c&quot;: {
+                    &quot;type&quot;: &quot;object&quot;,
+                    &quot;properties&quot;: {
+                      &quot;fields&quot;: {
+                        &quot;type&quot;: &quot;object&quot;,
+                        &quot;properties&quot;: {
+                          &quot;CAA_Next_Step__c&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;Jumlah_Rupiah_pemegang_saham_1__c&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;Offering_Letter_Status__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Appeal_Notes__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Survey__c&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;Id&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Name&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              }
+                            }
+                          },
+                          &quot;Catatan__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Total_Obligasi_Aktif__c&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;Approval_Notes__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Analisa_Jaminan_4__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Jumlah_Modal_Ditempatkan_Disetor__c&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;ErrorMsg__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Name&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Supervisor__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Sumber_kewenangan_direksi__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;No_Telp_Fax__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Jabatan_2__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Branch_Manager__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Analisa_Jaminan_1__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Dokumen_Akad_List__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Dokumen_Aktivasi_List__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Past_Due_Days__c&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;Nama_2__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Kesimpulan__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Appeal_By__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Conf_Akad_Editor__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Proporsi_Credit_Kepemilikan_Aset_Inc_BF__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Susunan_Direksi__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Cabang__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Keterangan_Izin_Lokasi__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Approval_Result__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Alamat__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;LTV_of_asset_liquidation__c&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;Informasi_Negative__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Detail_Penggunaan_Dana_Produktif__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Keterangan_susunan_pemegang_saham__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;jangka_waktu_jabatan_2__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Conf_Doc_Checklist_Editor__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Akta_modal_dasar__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Kewenangan_direksi__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Sumber_kewenangan_direksi_2__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Past_Due_Amount__c&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;Capacity_explanation__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Jumlah_saham_1__c&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;Terdapat_Informasi_Negative_Picklist__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Lead__c&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;Id&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Name&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              }
+                            }
+                          },
+                          &quot;Jabatan_1__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Email__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Maksud_dan_tujuan__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Analisa_Jaminan_2__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Nama_1__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Conf_Offering_Letter_Editor__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Conf_Legal_Opini_Editor__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Jumlah_modal_dasar__c&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;Loan_Information__c&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;Id&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Name&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              }
+                            }
+                          },
+                          &quot;Jangka_Waktu__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Approval_Date__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;date-time&quot;
+                          },
+                          &quot;Documents_List_Text__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Special_notes_for_Appaisal_KJPP__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Analisa_SIPP__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Nama_pemegang_saham_2__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Conf_FKD_Editor__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Hasil_Analisa__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Application_UUID__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Keterangan_NIB__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Approval_By__c&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;Id&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Name&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              }
+                            }
+                          },
+                          &quot;Conf_Legal_Doc_Editor__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;OwnerId&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;Id&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Name&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              }
+                            }
+                          },
+                          &quot;Nomor__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;jangka_waktu_jabatan_1__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Nomor_KK_Pasangan__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Keterangan_NPWP__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Nomor_Akta_Nikah_Jika_ada_pasangan__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Jumlah_saham_2__c&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;Worst_Collectability_Credit_by_Pefindo_d__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Keterangan_Perolehan_jaminan__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Detail_Penggunaan_Dana_Konsumtif__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Akta_Modal_Ditempatkan_Disetor__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Jumlah_Rupiah_pemegang_saham_2__c&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;Tanggal_surat_ukur__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;date-time&quot;
+                          },
+                          &quot;General_Catatan_Ringkasan_Kredit__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Analisa_Jaminan_3__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Nama_pemegang_saham_1__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Conf_History_NST_Editor__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Nomor_Legal_Opini__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;SPPKP__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Selisih_LB_antara_Fisik_dan_Bangunan__c&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;Conf_Details_Editor__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Keterangan_SPPKP__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Offering_Letter_Notes__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Hasil_Check_Akad__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Nomor_Surat_ukur__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Appeal_Date__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;date-time&quot;
+                          },
+                          &quot;Config_Application_Tab__c&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;Id&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Name&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              }
+                            }
+                          },
+                          &quot;Keterangan_Izin_Usaha_Berbasis_Risiko__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Nama_PIC__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          }
+                        }
+                      },
+                      &quot;readonly_fields&quot;: {
+                        &quot;type&quot;: &quot;object&quot;,
+                        &quot;properties&quot;: {
+                          &quot;LastModifiedDate&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;date-time&quot;
+                          },
+                          &quot;Sertipikat_Number__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Current_Datetime__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Marital_Status__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Conf_History_NST__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;Company_Address__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Nomor_IMB__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Config_Offering_Letter__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;Customer_Name__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Spouse_NPWP__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;CreatedById&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;Id&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Name&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              }
+                            }
+                          },
+                          &quot;Spouse_Tempat_Tanggal_Lahir__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;NTF_Pengajuan__c&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;Config_Doc_Checklist__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;Referral_Name__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Product_Type__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;LAO__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;IsDeleted&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;Is_Current_User_is_AO__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;ID_Number__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Spouse_ID_Number__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;LastViewedDate&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;date-time&quot;
+                          },
+                          &quot;Conf_FKD__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;Tempat_Tanggal_Lahir__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Sertipikat_Atas_Nama__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Conf_Legal_Opini__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;NPWP_Number__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;CreatedDate&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;date-time&quot;
+                          },
+                          &quot;Jumlah_Rupiah_Pemegang_Saham__c&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;Id&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Input_By__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Conf_Legal_Doc__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;Luas_Tanah__c&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;Jumlah_Saham__c&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;Customer_Status__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Legal_Address__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Married_Date__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;date&quot;
+                          },
+                          &quot;Activity__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;LastReferencedDate&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;date-time&quot;
+                          },
+                          &quot;Current_Date__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Conf_Details__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;Spouse_Name__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Conf_Akad__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;Nomor_Objek_Pajak__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Config_Akad_Editor__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;Luas_Bangunan__c&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;SystemModstamp&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;date-time&quot;
+                          },
+                          &quot;Sertipikat_Type__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;No_NIB__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Asset_Address__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;LastActivityDate&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;date-time&quot;
+                          },
+                          &quot;LastModifiedById&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;Id&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Name&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              }
+                            }
+                          },
+                          &quot;Application_ID__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          }
+                        }
+                      }
+                    }
+                  },
+                  &quot;Contact&quot;: {
+                    &quot;type&quot;: &quot;object&quot;,
+                    &quot;properties&quot;: {
+                      &quot;fields&quot;: {
+                        &quot;type&quot;: &quot;object&quot;,
+                        &quot;properties&quot;: {
+                          &quot;Religion__c&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;Id&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Name&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              }
+                            }
+                          },
+                          &quot;Domicile_RT_RW__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Marital_Status__c&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;Id&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Name&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              }
+                            }
+                          },
+                          &quot;Spouse_Nationality__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Domicile_Kelurahan__c&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;code__c&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Id&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Name&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              }
+                            }
+                          },
+                          &quot;HasOptedOutOfFax&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;Is_Created_By_System__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;Domicile_Kabupaten__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Profesi_Berbahaya__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Spouse_Profession__c&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;Id&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Name&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              }
+                            }
+                          },
+                          &quot;Department&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;OtherLongitude&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;ContactSource&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;OtherCity&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Spouse_Working_Status2__c&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;Id&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Name&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              }
+                            }
+                          },
+                          &quot;Place_of_Birth__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;attribute_id__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Domicile_Latitude_Longitude__Latitude__s&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;Job_Position__c&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;Id&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Name&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              }
+                            }
+                          },
+                          &quot;Spouse__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Spouse_Job_Address__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Spouse_Job_Position2__c&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;Id&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Name&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              }
+                            }
+                          },
+                          &quot;Spouse_Industry_Type_Lookup__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Is_Domicile_Same_as_Legal_Address__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;Domicile_Zip_Code__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;OtherGeocodeAccuracy&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Spouse_Industry_Type__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Domicile_City_Kabupaten__c&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;code__c&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Id&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Name&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              }
+                            }
+                          },
+                          &quot;Mobile_Phone_1__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;ID_Number__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;area_phone_1__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Spouse_ID_Number__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Spouse_Industry_Group_Text__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;MailingCity&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Mother_Maiden_Name__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;OtherStreet&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Spouse_Date_of_Birth__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;date&quot;
+                          },
+                          &quot;NPWP_Number__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;OtherLatitude&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;Spouse_Education__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Legal_Latitude_Longitude__Longitude__s&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;Spouse_Mobile_Phone_1__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Domicile_RW__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Spouse_Gender__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;City_Master_Data__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Jigsaw&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Spouse_Place_of_Birth__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;OtherPhone&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Legal_Kelurahan__c&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;code__c&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Id&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Name&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              }
+                            }
+                          },
+                          &quot;Description&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;DoNotCall&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;Legal_Kabupaten__c&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;code__c&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Id&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Name&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              }
+                            }
+                          },
+                          &quot;AssistantName&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Legal_RT_RW__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;MailingCountry&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Salutation&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;MailingState&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Spouse_Economy_Sector_New__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Education_Lookup__c&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;Id&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Name&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              }
+                            }
+                          },
+                          &quot;OwnerId&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;Id&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Name&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              }
+                            }
+                          },
+                          &quot;OtherCountry&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Spouse_Mobile_Phone_2__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Legal_RW__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Spouse_WNA_Country_Lookup__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Spouse_Name__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;EmailBouncedReason&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Industry_Group__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Notes__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Spouse_Education_Lookup__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Industry_Type__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;FirstName&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;OtherPostalCode&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Legal_Province__c&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;Id&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Name&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              }
+                            }
+                          },
+                          &quot;District_Master_Data__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Profession__c&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;Id&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Name&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              }
+                            }
+                          },
+                          &quot;HomePhone&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Spouse_Industry_Group__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Spouse_Profesi_Berbahaya__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Mobile_Phone_2__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Legal_RT__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Industry_Group_Text__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Domicile_Province__c&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;Id&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Name&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              }
+                            }
+                          },
+                          &quot;Marital_Status_Picklist__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Industry_Type_Lookup__c&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;Id&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Name&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              }
+                            }
+                          },
+                          &quot;Spouse_NPWP_Number__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Email&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;BuyerAttributes&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;AccountId&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;Id&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Name&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              }
+                            }
+                          },
+                          &quot;Spouse_WNA_Country__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Spouse_Job_Position__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;MobilePhone&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Length_of_Work__c&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;relationship__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Date_of_Birth__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;date&quot;
+                          },
+                          &quot;Legal_Zip_Code__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Divorce_Date__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;date-time&quot;
+                          },
+                          &quot;MailingLatitude&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;Legal_Latitude_Longitude__Latitude__s&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;Spouse_Working_Status__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Education__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Master_Economy_Sector__c&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;Id&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Name&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              }
+                            }
+                          },
+                          &quot;Job_Address__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Legal_Kecamatan__c&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;code__c&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Id&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Name&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              }
+                            }
+                          },
+                          &quot;Position__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Federated_Owner__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;HasOptedOutOfEmail&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;GenderIdentity&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Birthdate&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;date-time&quot;
+                          },
+                          &quot;DepartmentGroup&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Spouse_Email__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Spouse_Job_Level__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Is_Active__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;Spouse_Occupation__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;LeadSource&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;TitleType&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Master_Occupation__c&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;Id&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Name&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              }
+                            }
+                          },
+                          &quot;Spouse_Economy_Sector__c&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;Id&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Name&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              }
+                            }
+                          },
+                          &quot;LastName&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Pronouns&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;MailingStreet&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;AssistantPhone&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;EmailBouncedDate&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;date-time&quot;
+                          },
+                          &quot;ValidationBypassDateTime__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;date-time&quot;
+                          },
+                          &quot;Monthly_Income__c&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;Spouse_Length_of_Work__c&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;Married_Date__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;date&quot;
+                          },
+                          &quot;Legal_Address__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;ID_Type__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Economy_Sector_New__c&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;Id&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Name&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              }
+                            }
+                          },
+                          &quot;OtherState&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Job_Status__c&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;Id&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Name&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              }
+                            }
+                          },
+                          &quot;Domicile_Address__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Spouse_Profession_2__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Job_Level__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;MailingLongitude&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;Phone&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Domicile_RT__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;MailingPostalCode&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;MailingGeocodeAccuracy&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Relation__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Application__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Share__c&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;Spouse_Monthly_Income_Omset__c&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;Title&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;customer_cif_id__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Is_Owner__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;Domicile_Latitude_Longitude__Longitude__s&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;ReportsToId&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Fax&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Domicile_Kecamatan__c&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;code__c&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Id&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Name&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              }
+                            }
+                          },
+                          &quot;Spouse_Religion__c&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;Id&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Name&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              }
+                            }
+                          }
+                        }
+                      },
+                      &quot;readonly_fields&quot;: {
+                        &quot;type&quot;: &quot;object&quot;,
+                        &quot;properties&quot;: {
+                          &quot;LastModifiedDate&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;date-time&quot;
+                          },
+                          &quot;IsVRBypassed__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;LastReferencedDate&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;date-time&quot;
+                          },
+                          &quot;Date_of_Birth_Formula__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Is_Edited__c&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;Name&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Spouse_Mobile_Phone_1_Formula__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Mobile_Phone_2_Formula__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;CreatedById&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;Id&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Name&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              }
+                            }
+                          },
+                          &quot;LastCUUpdateDate&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;date-time&quot;
+                          },
+                          &quot;PhotoUrl&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;MasterRecordId&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Mobile_Phone_1_Formula__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;IsDeleted&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;Legal_Latitude_Longitude__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;IsEmailBounced&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;LastViewedDate&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;date-time&quot;
+                          },
+                          &quot;MailingAddress&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;LastCURequestDate&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;date-time&quot;
+                          },
+                          &quot;SystemModstamp&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;date-time&quot;
+                          },
+                          &quot;LastActivityDate&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;date-time&quot;
+                          },
+                          &quot;CreatedDate&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;date-time&quot;
+                          },
+                          &quot;Domicile_Latitude_Longitude__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;OtherAddress&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Federated_Fullname__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;Id&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;LastModifiedById&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;Id&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;Name&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              }
+                            }
+                          },
+                          &quot;Spouse_Mobile_Phone_2_Formula__c&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;JigsawContactId&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          &quot;required&quot;: true
+        },
+        &quot;responses&quot;: {
+          &quot;2XX&quot;: {
+            &quot;description&quot;: &quot;Bentuk response untuk 200 OK&quot;,
+            &quot;content&quot;: {
+              &quot;application/json&quot;: {
+                &quot;schema&quot;: {
+                  &quot;type&quot;: &quot;object&quot;,
+                  &quot;properties&quot;: {
+                    &quot;outputValues&quot;: {
+                      &quot;type&quot;: &quot;object&quot;,
+                      &quot;properties&quot;: {
+                        &quot;OpportunityId&quot;: {
+                          &quot;type&quot;: &quot;string&quot;
+                        },
+                        &quot;OperationId&quot;: {
+                          &quot;type&quot;: &quot;string&quot;
+                        },
+                        &quot;LegalDocumentId&quot;: {
+                          &quot;type&quot;: &quot;string&quot;
+                        },
+                        &quot;ContactId&quot;: {
+                          &quot;type&quot;: &quot;string&quot;
+                        },
+                        &quot;ApplicationId&quot;: {
+                          &quot;type&quot;: &quot;string&quot;
+                        }
+                      }
+                    },
+                    &quot;version&quot;: {
+                      &quot;type&quot;: &quot;integer&quot;,
+                      &quot;format&quot;: &quot;int64&quot;
+                    },
+                    &quot;errors&quot;: {
+                      &quot;type&quot;: &quot;array&quot;,
+                      &quot;items&quot;: {
+                        &quot;type&quot;: &quot;object&quot;,
+                        &quot;properties&quot;: {
+                          &quot;message&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;fields&quot;: {
+                            &quot;type&quot;: &quot;array&quot;,
+                            &quot;items&quot;: {
+                              &quot;type&quot;: &quot;string&quot;
+                            }
+                          },
+                          &quot;statusCode&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          }
+                        }
+                      }
+                    },
+                    &quot;isSuccess&quot;: {
+                      &quot;type&quot;: &quot;boolean&quot;
+                    }
+                  }
+                }
+              }
+            }
+          },
+          &quot;4XX&quot;: {
+            &quot;description&quot;: &quot;Bentuk response untuk 400&quot;,
+            &quot;content&quot;: {
+              &quot;application/json&quot;: {
+                &quot;schema&quot;: {
+                  &quot;type&quot;: &quot;object&quot;,
+                  &quot;properties&quot;: {
+                    &quot;outputValues&quot;: {
+                      &quot;type&quot;: &quot;object&quot;,
+                      &quot;properties&quot;: {
+                        &quot;OpportunityId&quot;: {
+                          &quot;type&quot;: &quot;string&quot;
+                        },
+                        &quot;OperationId&quot;: {
+                          &quot;type&quot;: &quot;string&quot;
+                        },
+                        &quot;LegalDocumentId&quot;: {
+                          &quot;type&quot;: &quot;string&quot;
+                        },
+                        &quot;ContactId&quot;: {
+                          &quot;type&quot;: &quot;string&quot;
+                        },
+                        &quot;ApplicationId&quot;: {
+                          &quot;type&quot;: &quot;string&quot;
+                        }
+                      }
+                    },
+                    &quot;version&quot;: {
+                      &quot;type&quot;: &quot;integer&quot;,
+                      &quot;format&quot;: &quot;int64&quot;
+                    },
+                    &quot;errors&quot;: {
+                      &quot;type&quot;: &quot;array&quot;,
+                      &quot;items&quot;: {
+                        &quot;type&quot;: &quot;object&quot;,
+                        &quot;properties&quot;: {
+                          &quot;message&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;fields&quot;: {
+                            &quot;type&quot;: &quot;array&quot;,
+                            &quot;items&quot;: {
+                              &quot;type&quot;: &quot;string&quot;
+                            }
+                          },
+                          &quot;statusCode&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          }
+                        }
+                      }
+                    },
+                    &quot;isSuccess&quot;: {
+                      &quot;type&quot;: &quot;boolean&quot;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}</schema>
+    <schemaType>OpenApi3</schemaType>
+    <serviceBinding>{&quot;host&quot;:&quot;&quot;,&quot;basePath&quot;:&quot;/&quot;,&quot;allowedSchemes&quot;:[],&quot;requestMediaTypes&quot;:[],&quot;responseMediaTypes&quot;:[],&quot;compatibleMediaTypes&quot;:{},&quot;extensions&quot;:{}}</serviceBinding>
+    <status>Complete</status>
+    <systemVersion>6</systemVersion>
+</ExternalServiceRegistration>

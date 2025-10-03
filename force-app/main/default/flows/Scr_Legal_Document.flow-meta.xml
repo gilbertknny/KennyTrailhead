@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>64.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <description>Generate Permision become OR({!Get_Legal_Document_Approval.Approval_Result__c} == &quot;Approved&quot;,{!Get_Application.Legal_Opini_Approval_Id__r.Is_Current_LAO__c} == True,
+BEGINS({!$UserRole.DeveloperName} , &quot;Legal&quot;))</description>
+    <environments>Default</environments>
+    <formulas>
+        <name>funcS_Action_Kwitansi</name>
+        <dataType>String</dataType>
+        <expression>IF(OR({!Get_Legal_Document_Approval.Approval_Result__c} == &quot;Approved&quot;,{!Get_Application.Legal_Opini_Approval_Id__r.Is_Current_LAO__c} == True,
+BEGINS({!$UserRole.DeveloperName} , &quot;Legal&quot;)), &apos;&lt;a class=&quot;slds-button slds-button_neutral&quot; target=&quot;_top&quot; href=&quot;/lightning/action/quick/Application__c.LD_Kwitansi?objectApiName&amp;context=RECORD_DETAIL&amp;recordId=&apos; &amp;CASESAFEID({!recordId}) &amp; &apos;&amp;backgroundContext=%2Flightning%2Fr%2FApplication__c%2F&apos; &amp;CASESAFEID({!recordId}) &amp; &apos;%2Fview&quot;&gt;Generate PDF&lt;/a&gt;&apos;, &apos;&apos;) &amp; IF({!$Permission.Sec_Application_Legal_Document_Edit} == FALSE, &apos;&apos;,&apos; &lt;a class=&quot;slds-button slds-button_neutral&quot; target=&quot;_top&quot; href=&quot;/lightning/action/quick/Application__c.Edit_Kwitansi?objectApiName&amp;context=RECORD_DETAIL&amp;recordId=&apos; &amp;CASESAFEID({!recordId})&amp; &apos;&amp;backgroundContext=%2Flightning%2Fr%2FApplication__c%2F&apos; &amp;CASESAFEID({!recordId})&amp; &apos;%2Fview&quot;&gt;Edit&lt;/a&gt;&apos;)</expression>
+    </formulas>
+    <formulas>
+        <name>funcS_Action_OtherDocument</name>
+        <dataType>String</dataType>
+        <expression>IF(OR({!Get_Legal_Document_Approval.Approval_Result__c} == &quot;Approved&quot;,{!Get_Application.Legal_Opini_Approval_Id__r.Is_Current_LAO__c} == True,
+BEGINS({!$UserRole.DeveloperName} , &quot;Legal&quot;)), &apos;&lt;a class=&quot;slds-button slds-button_neutral&quot; target=&quot;_top&quot; href=&quot;/lightning/action/quick/Application__c.LD_Other_Document?objectApiName&amp;context=RECORD_DETAIL&amp;recordId=&apos; &amp;CASESAFEID({!recordId})&amp; &apos;&amp;backgroundContext=%2Flightning%2Fr%2FApplication__c%2F&apos; &amp;CASESAFEID({!recordId})&amp; &apos;%2Fview&quot;&gt;Generate PDF&lt;/a&gt;&apos;, &apos;&apos;)</expression>
+    </formulas>
+    <formulas>
+        <name>funcS_Action_SuratPermohonanDebitur</name>
+        <dataType>String</dataType>
+        <expression>IF(OR({!Get_Legal_Document_Approval.Approval_Result__c} == &quot;Approved&quot;,{!Get_Application.Legal_Opini_Approval_Id__r.Is_Current_LAO__c} == True,
+BEGINS({!$UserRole.DeveloperName} , &quot;Legal&quot;)), &apos;&lt;a class=&quot;slds-button slds-button_neutral&quot; target=&quot;_top&quot; href=&quot;/lightning/action/quick/Application__c.LD_Surat_Permohonan_Debitur?objectApiName&amp;context=RECORD_DETAIL&amp;recordId=&apos; &amp;CASESAFEID({!recordId})&amp; &apos;&amp;backgroundContext=%2Flightning%2Fr%2FApplication__c%2F&apos; &amp;CASESAFEID({!recordId})&amp; &apos;%2Fview&quot;&gt;Generate PDF&lt;/a&gt;&apos;, &apos;&apos;) &amp; IF({!$Permission.Sec_Application_Legal_Document_Edit} == FALSE, &apos;&apos;,&apos; &lt;a class=&quot;slds-button slds-button_neutral&quot; target=&quot;_top&quot; href=&quot;/lightning/action/quick/Application__c.Edit_Surat_Permohonan_Debitur?objectApiName&amp;context=RECORD_DETAIL&amp;recordId=&apos; &amp;CASESAFEID({!recordId})&amp; &apos;&amp;backgroundContext=%2Flightning%2Fr%2FApplication__c%2F&apos; &amp;CASESAFEID({!recordId})&amp; &apos;%2Fview&quot;&gt;Edit&lt;/a&gt;&apos;)</expression>
+    </formulas>
+    <formulas>
+        <name>funcS_Action_SuratPernyataan</name>
+        <dataType>String</dataType>
+        <expression>IF(OR({!Get_Legal_Document_Approval.Approval_Result__c} == &quot;Approved&quot;,{!Get_Application.Legal_Opini_Approval_Id__r.Is_Current_LAO__c} == True,
+BEGINS({!$UserRole.DeveloperName} , &quot;Legal&quot;)), 
+    &apos;&lt;a class=&quot;slds-button slds-button_neutral&quot; target=&quot;_top&quot; href=&quot;/lightning/action/quick/Application__c.LD_Surat_Pernyataan?objectApiName&amp;context=RECORD_DETAIL&amp;recordId=&apos; 
+    &amp; CASESAFEID({!recordId}) 
+    &amp; &apos;&amp;backgroundContext=%2Flightning%2Fr%2FApplication__c%2F&apos; 
+    &amp; CASESAFEID({!recordId}) 
+    &amp; &apos;%2Fview&quot;&gt;Generate PDF&lt;/a&gt;&apos;, 
+    &apos;&apos;
+) 
+&amp; IF({!$Permission.Sec_Application_Legal_Document_Edit} == FALSE, &apos;&apos;,&apos; &lt;a class=&quot;slds-button slds-button_neutral&quot; target=&quot;_top&quot; href=&quot;/lightning/action/quick/Application__c.Edit_Surat_Pernyataan?objectApiName&amp;context=RECORD_DETAIL&amp;recordId=&apos; 
+&amp; CASESAFEID({!recordId}) 
+&amp; &apos;&amp;backgroundContext=%2Flightning%2Fr%2FApplication__c%2F&apos; 
+&amp; CASESAFEID({!recordId}) 
+&amp; &apos;%2Fview&quot;&gt;Edit&lt;/a&gt;&apos;)</expression>
+    </formulas>
+    <formulas>
+        <name>funcS_Action_SuratRoya</name>
+        <dataType>String</dataType>
+        <expression>IF(OR({!Get_Legal_Document_Approval.Approval_Result__c} == &quot;Approved&quot;,{!Get_Application.Legal_Opini_Approval_Id__r.Is_Current_LAO__c} == True,
+BEGINS({!$UserRole.DeveloperName} , &quot;Legal&quot;)), &apos;&lt;a class=&quot;slds-button slds-button_neutral&quot; target=&quot;_top&quot; href=&quot;/lightning/action/quick/Application__c.LD_Surat_Roya?objectApiName&amp;context=RECORD_DETAIL&amp;recordId=&apos; &amp;CASESAFEID({!recordId})&amp; &apos;&amp;backgroundContext=%2Flightning%2Fr%2FApplication__c%2F&apos; &amp;CASESAFEID({!recordId})&amp; &apos;%2Fview&quot;&gt;Generate PDF&lt;/a&gt;&apos;, &apos;&apos;) &amp; IF({!$Permission.Sec_Application_Legal_Document_Edit} == FALSE, &apos;&apos;,&apos; &lt;a class=&quot;slds-button slds-button_neutral&quot; target=&quot;_top&quot; href=&quot;/lightning/action/quick/Application__c.Edit_Surat_Roya?objectApiName&amp;context=RECORD_DETAIL&amp;recordId=&apos; &amp;CASESAFEID({!recordId})&amp; &apos;&amp;backgroundContext=%2Flightning%2Fr%2FApplication__c%2F&apos; &amp;CASESAFEID({!recordId})&amp; &apos;%2Fview&quot;&gt;Edit&lt;/a&gt;&apos;)</expression>
+    </formulas>
+    <formulas>
+        <name>slds_hr</name>
+        <dataType>String</dataType>
+        <expression>&apos;&lt;hr/&gt;&apos;</expression>
+    </formulas>
+    <interviewLabel>[Scr] Legal Document {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>[Scr] Legal Document</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>Flow</processType>
+    <recordLookups>
+        <name>Get_Application</name>
+        <label>Get Application</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Get_Legal_Document_Approval</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Application__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Legal_Document_Approval</name>
+        <label>Get Legal Document Approval</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>scr_LegalDocument</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Application__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Legal_Document_Approval__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <screens>
+        <name>scr_LegalDocument</name>
+        <label>scr_LegalDocument</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>true</allowPause>
+        <fields>
+            <name>dpl_ListDocument</name>
+            <fieldText>&lt;p&gt;{!tpl_LegalDocument}&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <showFooter>false</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Get_Application</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <textTemplates>
+        <name>tpl_LegalDocument</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>&lt;div style=&quot;display: flex; justify-content: space-between; width: 100%; align-items:center; &quot;&gt;&lt;div style=&quot;width: 50%; padding: 0;&quot;&gt;&lt;h2&gt;Dokumen Surat Pernyataan (SP)&lt;/h2&gt;&lt;/div&gt;&lt;div style=&quot;width: 50%; padding: 0; text-align: right;&quot;&gt;{!funcS_Action_SuratPernyataan}&lt;/div&gt;&lt;/div&gt;
+&lt;div style=&quot;display: flex; justify-content: space-between; width: 100%; align-items:center;&quot;&gt;&lt;div style=&quot;width: 50%; padding: 0;&quot;&gt;&lt;h2&gt;Dokumen Kwitansi D-098&lt;/h2&gt;&lt;/div&gt;&lt;div style=&quot;width: 50%; padding: 0; text-align: right;&quot;&gt;{!funcS_Action_Kwitansi}&lt;/div&gt;&lt;/div&gt;
+&lt;div style=&quot;display: flex; justify-content: space-between; width: 100%; align-items:center;&quot;&gt;&lt;div style=&quot;width: 70%; padding: 0; &quot;&gt;&lt;h2&gt;Surat Kuasa - Pengecekan Sertipikat - Pendaftaran HT - Permohonan SKPT - Roya&lt;/h2&gt;&lt;/div&gt;&lt;div style=&quot;width: 30%; padding: 0; text-align: right;&quot;&gt;{!funcS_Action_SuratRoya}&lt;/div&gt;&lt;/div&gt;
+&lt;div style=&quot;display: flex; justify-content: space-between; width: 100%; align-items:center;&quot;&gt;&lt;div style=&quot;width: 50%; padding: 0;&quot;&gt;&lt;h2&gt;Surat Permohonan Debitur&lt;/h2&gt;&lt;/div&gt;&lt;div style=&quot;width: 50%; padding: 0; text-align: right;&quot;&gt;{!funcS_Action_SuratPermohonanDebitur}&lt;/div&gt;&lt;/div&gt;
+&lt;div style=&quot;display: flex; justify-content: space-between; width: 100%; align-items:center;&quot;&gt;&lt;div style=&quot;width: 50%; padding: 0;&quot;&gt;&lt;h2&gt;Other Documents&lt;/h2&gt;&lt;/div&gt;&lt;div style=&quot;width: 50%; padding: 0; text-align: right;&quot;&gt;{!funcS_Action_OtherDocument}&lt;/div&gt;&lt;/div&gt;</text>
+    </textTemplates>
+    <variables>
+        <name>recordId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

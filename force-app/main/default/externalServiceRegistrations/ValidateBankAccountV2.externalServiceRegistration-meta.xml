@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ExternalServiceRegistration xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label>ValidateBankAccountV2</label>
+    <namedCredentialReference>MasterDataNmCred</namedCredentialReference>
+    <operations>
+        <active>true</active>
+        <name>validatex20bankx20account</name>
+    </operations>
+    <registrationProviderType>Custom</registrationProviderType>
+    <schema>{
+  &quot;openapi&quot;: &quot;3.0.1&quot;,
+  &quot;info&quot;: {
+    &quot;title&quot;: &quot;ValidateBankAccountV2&quot;,
+    &quot;description&quot;: &quot;&quot;
+  },
+  &quot;paths&quot;: {
+    &quot;/krakend-gateway/sf/payment-api/api/v1/account-number/validate&quot;: {
+      &quot;post&quot;: {
+        &quot;description&quot;: &quot;&quot;,
+        &quot;operationId&quot;: &quot;Validate Bank Account&quot;,
+        &quot;requestBody&quot;: {
+          &quot;description&quot;: &quot;&quot;,
+          &quot;content&quot;: {
+            &quot;application/json&quot;: {
+              &quot;schema&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                  &quot;menu_description&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;account_number&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;bank_id&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;user_name&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  }
+                }
+              }
+            }
+          },
+          &quot;required&quot;: true
+        },
+        &quot;responses&quot;: {
+          &quot;200&quot;: {
+            &quot;description&quot;: &quot;Successful response&quot;,
+            &quot;content&quot;: {
+              &quot;application/json&quot;: {
+                &quot;schema&quot;: {
+                  &quot;type&quot;: &quot;object&quot;,
+                  &quot;properties&quot;: {
+                    &quot;header&quot;: {
+                      &quot;type&quot;: &quot;object&quot;,
+                      &quot;properties&quot;: {
+                        &quot;errors&quot;: {
+                          &quot;type&quot;: &quot;array&quot;,
+                          &quot;items&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;reason&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;code&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;cause&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;message&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    &quot;data&quot;: {
+                      &quot;type&quot;: &quot;object&quot;,
+                      &quot;properties&quot;: {
+                        &quot;account_no&quot;: {
+                          &quot;type&quot;: &quot;string&quot;,
+                          &quot;example&quot;: &quot;333333333333&quot;
+                        },
+                        &quot;account_name&quot;: {
+                          &quot;type&quot;: &quot;string&quot;,
+                          &quot;example&quot;: &quot;ASHARI&quot;
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          &quot;400&quot;: {
+            &quot;description&quot;: &quot;Bad Request&quot;,
+            &quot;content&quot;: {
+              &quot;application/json&quot;: {
+                &quot;schema&quot;: {
+                  &quot;type&quot;: &quot;object&quot;,
+                  &quot;properties&quot;: {
+                    &quot;header&quot;: {
+                      &quot;type&quot;: &quot;object&quot;,
+                      &quot;properties&quot;: {
+                        &quot;errors&quot;: {
+                          &quot;type&quot;: &quot;array&quot;,
+                          &quot;items&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;reason&quot;: {
+                                &quot;type&quot;: &quot;string&quot;,
+                                &quot;example&quot;: &quot;&quot;
+                              },
+                              &quot;code&quot;: {
+                                &quot;type&quot;: &quot;string&quot;,
+                                &quot;example&quot;: &quot;PAY-019&quot;
+                              },
+                              &quot;cause&quot;: {
+                                &quot;type&quot;: &quot;string&quot;,
+                                &quot;example&quot;: &quot;Bank id [BDKSZ] is invalid&quot;
+                              },
+                              &quot;message&quot;: {
+                                &quot;type&quot;: &quot;string&quot;,
+                                &quot;example&quot;: &quot;Invalid Bank Id&quot;
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    &quot;data&quot;: {
+                      &quot;type&quot;: &quot;object&quot;,
+                      &quot;properties&quot;: {
+                        &quot;account_no&quot;: {
+                          &quot;type&quot;: &quot;string&quot;,
+                          &quot;example&quot;: &quot;&quot;
+                        },
+                        &quot;account_name&quot;: {
+                          &quot;type&quot;: &quot;string&quot;,
+                          &quot;example&quot;: &quot;&quot;
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}</schema>
+    <schemaType>OpenApi3</schemaType>
+    <serviceBinding>{&quot;host&quot;:&quot;&quot;,&quot;basePath&quot;:&quot;/&quot;,&quot;allowedSchemes&quot;:[],&quot;requestMediaTypes&quot;:[],&quot;responseMediaTypes&quot;:[],&quot;compatibleMediaTypes&quot;:{},&quot;extensions&quot;:{}}</serviceBinding>
+    <status>Complete</status>
+    <systemVersion>5</systemVersion>
+</ExternalServiceRegistration>

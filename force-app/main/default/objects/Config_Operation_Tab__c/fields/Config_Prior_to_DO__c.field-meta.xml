@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Config_Prior_to_DO__c</fullName>
+    <formula>IF( LEFT($UserRole.DeveloperName, 2) ==&quot;AO&quot; &amp;&amp; INCLUDES( Config_Prior_To_DO_Editor__c  ,&quot;AO&quot;),True,
+IF( LEFT($UserRole.DeveloperName, 2) ==&quot;CA&quot; &amp;&amp; INCLUDES( Config_Prior_To_DO_Editor__c  ,&quot;CA&quot;),True,
+IF( LEFT($UserRole.DeveloperName, 3) ==&quot;LAO&quot; &amp;&amp; INCLUDES( Config_Prior_To_DO_Editor__c  ,&quot;LAO&quot;),True,
+IF( $UserRole.DeveloperName ==&quot;Admin_Marketing_HO&quot; &amp;&amp; INCLUDES( Config_Prior_To_DO_Editor__c  ,&quot;Marketing AO&quot;),True,
+IF( LEFT($UserRole.DeveloperName, 2) ==&quot;Spv_AO&quot; &amp;&amp; INCLUDES( Config_Prior_To_DO_Editor__c  ,&quot;Spv AO&quot;),True,
+IF( CONTAINS($UserRole.DeveloperName, &quot;Branch_Manager&quot;) &amp;&amp; INCLUDES(Config_Prior_To_DO_Editor__c , &quot;Branch PBF Manager&quot;), True,
+IF( CONTAINS($UserRole.DeveloperName, &quot;Factory&quot;) &amp;&amp; INCLUDES(Config_Prior_To_DO_Editor__c , &quot;PBF CA Factory Head&quot;), True,
+IF( CONTAINS($UserRole.DeveloperName, &quot;AM&quot;) &amp;&amp; INCLUDES(Config_Prior_To_DO_Editor__c , &quot;AM Business PBF / AM Business / AM Business Non NDF&quot;), True,
+IF( CONTAINS($UserRole.DeveloperName, &quot;Sales&quot;) &amp;&amp; INCLUDES(Config_Prior_To_DO_Editor__c , &quot;PBF Sales Head&quot;), True,
+IF( CONTAINS($UserRole.DeveloperName, &quot;PBF_Credit_Underwriting&quot;) &amp;&amp; INCLUDES(Config_Prior_To_DO_Editor__c , &quot;PBF Credit Underwriting&quot;), True,
+IF( CONTAINS($UserRole.DeveloperName, &quot;PBF_Credit_Head&quot;) &amp;&amp; INCLUDES(Config_Prior_To_DO_Editor__c , &quot;PBF Credit Head&quot;), True,
+IF( CONTAINS($UserRole.DeveloperName, &quot;Risk_Credit_Non_NDF_Head&quot;) &amp;&amp; INCLUDES(Config_Prior_To_DO_Editor__c , &quot;Risk Credit Non NDF Head&quot;), True,
+IF( CONTAINS($UserRole.DeveloperName, &quot;PBF_Head&quot;) &amp;&amp; INCLUDES(Config_Prior_To_DO_Editor__c , &quot;PBF Head&quot;), True,
+IF( CONTAINS($UserRole.DeveloperName, &quot;Chief_Marketing&quot;) &amp;&amp; INCLUDES(Config_Prior_To_DO_Editor__c , &quot;Vice President Director / Marketing Deputy Director&quot;), True,
+IF( CONTAINS($UserRole.DeveloperName, &quot;Corporate_Credit_Underwriting&quot;) &amp;&amp; INCLUDES(Config_Prior_To_DO_Editor__c , &quot;Corporate Credit Underwriting&quot;), True,
+IF( CONTAINS($UserRole.DeveloperName, &quot;Corporate_Credit_Head&quot;) &amp;&amp; INCLUDES(Config_Prior_To_DO_Editor__c , &quot;Corporate Credit Head&quot;), True,
+IF( CONTAINS($UserRole.DeveloperName, &quot;Consumer_Corporate_Credit_OPR_Head&quot;) &amp;&amp; INCLUDES(Config_Prior_To_DO_Editor__c , &quot;Consumer &amp; Corporate Credit Operation Head&quot;), True,
+IF( CONTAINS($UserRole.DeveloperName, &quot;Credit_Operation_Head&quot;) &amp;&amp; INCLUDES(Config_Prior_To_DO_Editor__c , &quot;Credit Operation Head&quot;), True,
+IF( CONTAINS($UserRole.DeveloperName, &quot;Chief_Operation_Officer&quot;) &amp;&amp; INCLUDES(Config_Prior_To_DO_Editor__c , &quot;Chief Operation Officer&quot;), True,
+IF( CONTAINS($UserRole.DeveloperName, &quot;Chief_Risk_Management&quot;) &amp;&amp; INCLUDES(Config_Prior_To_DO_Editor__c , &quot;Chief Risk Management &amp; Transformation Officer/ Risk Management Head&quot;), True,
+IF( CONTAINS($UserRole.DeveloperName, &quot;CEO_Vice_President&quot;) &amp;&amp; INCLUDES(Config_Prior_To_DO_Editor__c , &quot;Chief Excecutive Officer + Vice President Director&quot;), True,
+IF( CONTAINS($UserRole.DeveloperName, &quot;BOD_Komisaris&quot;) &amp;&amp; INCLUDES(Config_Prior_To_DO_Editor__c , &quot;BOD + Komisaris&quot;), True,
+IF( CONTAINS($UserRole.DeveloperName, &quot;CCO&quot;) &amp;&amp; INCLUDES(Config_Prior_To_DO_Editor__c , &quot;CCO&quot;), True,
+IF( CONTAINS($UserRole.DeveloperName, &quot;Legal_Litigation_Head&quot;) &amp;&amp; INCLUDES(Config_Prior_To_DO_Editor__c , &quot;Legal &amp; Litigation Head&quot;), True,
+IF( CONTAINS($UserRole.DeveloperName, &quot;Legal_PBF_Head&quot;) &amp;&amp; INCLUDES(Config_Prior_To_DO_Editor__c , &quot;Legal PBF Head&quot;), True,
+IF( CONTAINS($UserRole.DeveloperName, &quot;Legal_Head&quot;) &amp;&amp; INCLUDES(Config_Prior_To_DO_Editor__c , &quot;Legal Head&quot;), True,
+False))))))))))))))))))))))))))</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Config Prior to DO</label>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

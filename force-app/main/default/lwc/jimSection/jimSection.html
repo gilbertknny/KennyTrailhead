@@ -1,0 +1,17 @@
+<template>
+    <div class="slds-section slds-is-open">
+        <h3 class="slds-section__title">
+            <div class="slds-section__title-action" onclick={clickHandler}>
+                <lightning-button-icon icon-name={iconName} variant="bare" class="slds-m-right_x-small"></lightning-button-icon>
+                <span class="slds-truncate" title={title}>{title}</span>
+            </div>
+        </h3>
+        <div class="slds-section__content" id={key}>
+            <div class="slds-m-around_small">
+                <slot>
+                    <div class="slds-box"> Section Content </div>
+                </slot>
+            </div>
+        </div>
+    </div>
+</template>

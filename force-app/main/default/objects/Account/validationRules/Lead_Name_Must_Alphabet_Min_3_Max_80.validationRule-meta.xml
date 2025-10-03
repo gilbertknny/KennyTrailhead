@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Lead_Name_Must_Alphabet_Min_3_Max_80</fullName>
+    <active>false</active>
+    <errorConditionFormula>NOT(REGEX(Name, &quot;^[a-zA-Z\\s]{3,80}$&quot;))</errorConditionFormula>
+    <errorDisplayField>Company_Type_Picklist__c</errorDisplayField>
+    <errorMessage>Please input 3-80 character, alphabet only.</errorMessage>
+</ValidationRule>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Loan_Information__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <label>Loan Information</label>
+    <referenceTo>Opportunity</referenceTo>
+    <relationshipLabel>API Loan Calculator Non KPR</relationshipLabel>
+    <relationshipName>API_Loan_Calculator_Non_KPR</relationshipName>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

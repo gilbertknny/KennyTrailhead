@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Total_Aset_Tidak_Lancar_Formula__c</fullName>
+    <formula>Tanah__c + Gedung__c + Akumulasi_Penyusutan_Gedung__c + Kendaraan__c + Akumulasi_Penyusutan_Kendaraan__c + Peralatan_dan_Machine__c + Akumulasi_Penyusutan_Peralatan_Mesin__c +  Asset_Tidak_Lancar_Lainnya__c</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Total Aset Tidak Lancar</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Currency</type>
+</CustomField>

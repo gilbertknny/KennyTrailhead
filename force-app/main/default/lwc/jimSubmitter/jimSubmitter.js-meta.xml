@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>62.0</apiVersion>
+    <isExposed>true</isExposed>
+    <targets>
+        <target>lightning__AppPage</target>
+        <target>lightning__HomePage</target>
+        <target>lightning__RecordPage</target>
+        <target>lightning__FlowScreen</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__AppPage">
+            <property type="String" name="objectName" label="01.Object API" />
+            <property type="String" name="objectRecordId" label="02.Record Id" placeholder="recordId" />
+            <property type="Boolean" name="buttonCentered" label="03.Button Centered" default="false"/>
+            <property type="Boolean" name="isDebug" label="12.Debug Mode"  />
+            
+            <event name="itemselected" label="Item Selected" description="This event fires when an item is selected.">
+                <schema>
+                {
+                    "type": "object",
+                    "properties": {
+                        "recordId": {
+                            "type": "string",
+                            "title": "Record ID",
+                            "description": "Enter an 18-digit record ID."
+                        },
+                        "apiName": {
+                            "type": "string"
+                        }
+                    }
+                }
+                </schema>
+            </event>
+            <supportedFormFactors>
+                <supportedFormFactor type="Large" />
+                <supportedFormFactor type="Small" />
+            </supportedFormFactors>
+        </targetConfig>
+        <targetConfig targets="lightning__RecordPage, lightning__FlowScreen, lightning__HomePage">
+            <property type="String" name="objectName" label="01.Object API" />
+            <property type="String" name="objectRecordId" label="02.Record Id" placeholder="recordId" />
+            <property type="Boolean" name="buttonCentered" label="03.Button Centered" default="false"/>
+            <property type="Boolean" name="isDebug" label="12.Debug Mode"  />
+
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

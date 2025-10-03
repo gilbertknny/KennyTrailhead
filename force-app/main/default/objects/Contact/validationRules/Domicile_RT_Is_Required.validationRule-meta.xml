@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Domicile_RT_Is_Required</fullName>
+    <active>false</active>
+    <errorConditionFormula>IF( $User.Is_Debug_User__c = TRUE, FALSE,  AND( Is_Domicile_Same_as_Legal_Address__c = FALSE, ISBLANK( Domicile_RT__c )))</errorConditionFormula>
+    <errorDisplayField>Domicile_RT__c</errorDisplayField>
+    <errorMessage>Complete this field</errorMessage>
+</ValidationRule>

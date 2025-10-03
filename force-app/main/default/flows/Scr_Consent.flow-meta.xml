@@ -1,0 +1,793 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>61.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <name>Add_Recipient_Id</name>
+        <label>Add Recipient Id</label>
+        <locationX>462</locationX>
+        <locationY>1190</locationY>
+        <assignmentItems>
+            <assignToReference>recipientIds</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>CurAcco.Owner.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Send_Push_Notification</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>set_Setuju</name>
+        <label>set Setuju</label>
+        <locationX>176</locationX>
+        <locationY>1982</locationY>
+        <assignmentItems>
+            <assignToReference>CurAcco.Customer_Consent__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>CurAcco.Customer_Consent__c</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Copy_1_of_Thank_You</targetReference>
+        </connector>
+    </assignments>
+    <choices>
+        <name>None</name>
+        <choiceText>None</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>None</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>Setuju</name>
+        <choiceText>Setuju</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Setuju</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>Tidak_Setuju</name>
+        <choiceText>Tidak Setuju</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Tidak Setuju</stringValue>
+        </value>
+    </choices>
+    <decisions>
+        <name>Cek_IsLocked</name>
+        <label>Cek IsLocked</label>
+        <locationX>176</locationX>
+        <locationY>242</locationY>
+        <defaultConnector>
+            <targetReference>Customer_Consent</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Not Locked</defaultConnectorLabel>
+        <rules>
+            <name>Locked</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>CurAcco.IsLocked__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Save_DB_Setuju2</targetReference>
+            </connector>
+            <label>Locked</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Cek_IsLocked2</name>
+        <label>Cek IsLocked</label>
+        <locationX>374</locationX>
+        <locationY>566</locationY>
+        <defaultConnector>
+            <targetReference>Cek_Jawaban</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Not Locked</defaultConnectorLabel>
+        <rules>
+            <name>Locked2</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>CurAcco2.IsLocked__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Save_DB_Setuju2</targetReference>
+            </connector>
+            <label>Locked</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Cek_Jawaban</name>
+        <label>Cek Jawaban</label>
+        <locationX>594</locationX>
+        <locationY>674</locationY>
+        <defaultConnectorLabel>None</defaultConnectorLabel>
+        <rules>
+            <name>Setuju1</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>cboConsent</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <elementReference>Setuju</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Save_DB_Setuju</targetReference>
+            </connector>
+            <label>Setuju</label>
+        </rules>
+        <rules>
+            <name>Tidak_Setuju1</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>cboConsent</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <elementReference>Tidak_Setuju</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Save_DB_Tolak</targetReference>
+            </connector>
+            <label>Tidak Setuju</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Is_Lead_By_Non_BRO</name>
+        <label>Is Lead By Non BRO</label>
+        <locationX>594</locationX>
+        <locationY>1082</locationY>
+        <defaultConnector>
+            <targetReference>Thank_You</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No, By BRO</defaultConnectorLabel>
+        <rules>
+            <name>Yes</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>CurAcco.Federated_Owner__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Add_Recipient_Id</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <description>Alamat domisili ganti Alamat KTP dan value mengikuti legal address</description>
+    <environments>Default</environments>
+    <formulas>
+        <name>funcS_Spouse_DateofBirth</name>
+        <dataType>String</dataType>
+        <expression>TEXT(
+  DAY({!CurAcco.Primary_Contact__r.Spouse_Date_of_Birth__c})
+) &amp; &quot; &quot; &amp;
+CASE(
+  MONTH({!CurAcco.Primary_Contact__r.Spouse_Date_of_Birth__c}),
+  1, &quot;Jan&quot;, 2, &quot;Feb&quot;, 3, &quot;Mar&quot;, 4, &quot;Apr&quot;, 5, &quot;May&quot;, 6, &quot;Jun&quot;,
+  7, &quot;Jul&quot;, 8, &quot;Aug&quot;, 9, &quot;Sep&quot;, 10, &quot;Oct&quot;, 11, &quot;Nov&quot;, 12, &quot;Dec&quot;, &quot;&quot;
+) &amp; &quot; &quot; &amp;
+TEXT(YEAR({!CurAcco.Primary_Contact__r.Spouse_Date_of_Birth__c}))</expression>
+    </formulas>
+    <formulas>
+        <name>NotificationBody</name>
+        <dataType>String</dataType>
+        <expression>&quot;Customer &quot; &amp; {!CurAcco.Name} &amp; &quot; dengan consent &quot; &amp; {!cboConsent} &amp; &quot;. Terima kasih.&quot;</expression>
+    </formulas>
+    <interviewLabel>[Scr] Consent {!$Flow.CurrentDateTime}</interviewLabel>
+    <isAdditionalPermissionRequiredToRun>true</isAdditionalPermissionRequiredToRun>
+    <label>[Scr] Consent</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>Flow</processType>
+    <recordLookups>
+        <name>CurAcco</name>
+        <label>CurAcco</label>
+        <locationX>176</locationX>
+        <locationY>134</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Cek_IsLocked</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Account</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>CurAcco2</name>
+        <label>CurAcco</label>
+        <locationX>374</locationX>
+        <locationY>458</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Cek_IsLocked2</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Account</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordUpdates>
+        <name>Save_DB_Setuju</name>
+        <label>Save DB Setuju</label>
+        <locationX>330</locationX>
+        <locationY>782</locationY>
+        <connector>
+            <targetReference>Update_Lead_Progress</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Customer_Consent__c</field>
+            <value>
+                <stringValue>Setuju</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>IsLocked__c</field>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputAssignments>
+        <object>Account</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Save_DB_Setuju2</name>
+        <label>Save DB Setuju</label>
+        <locationX>176</locationX>
+        <locationY>1874</locationY>
+        <connector>
+            <targetReference>set_Setuju</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Customer_Consent__c</field>
+            <value>
+                <elementReference>CurAcco.Customer_Consent__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>IsLocked__c</field>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputAssignments>
+        <object>Account</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Save_DB_Tolak</name>
+        <label>Save DB Tolak</label>
+        <locationX>594</locationX>
+        <locationY>782</locationY>
+        <connector>
+            <targetReference>Is_Lead_By_Non_BRO</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Cancel_Reason__c</field>
+            <value>
+                <stringValue>Data Leads Anda sudah cancel karena debitur tidak menyetujui untuk melanjutkan proses. Silakan buat data Leads baru.</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Customer_Consent__c</field>
+            <value>
+                <stringValue>Tidak Setuju</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>IsLocked__c</field>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Is_Canceled__c</field>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Status__c</field>
+            <value>
+                <stringValue>Canceled</stringValue>
+            </value>
+        </inputAssignments>
+        <object>Account</object>
+    </recordUpdates>
+    <runInMode>SystemModeWithoutSharing</runInMode>
+    <screens>
+        <name>Copy_1_of_Thank_You</name>
+        <label>Copy 1 of Thank You</label>
+        <locationX>176</locationX>
+        <locationY>2090</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>Copy_1_of_lblThankYou</name>
+            <fieldText>&lt;p&gt;&lt;strong&gt;Name : &lt;/strong&gt;{!CurAcco.Name}&lt;/p&gt;&lt;p&gt;&lt;strong&gt;AO/BRO : &lt;/strong&gt;{!CurAcco.Input_By__c}&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Jawaban : &lt;/strong&gt;{!CurAcco.Customer_Consent__c}&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;Terima kasih.&lt;/p&gt;&lt;p&gt;Jawaban anda telah kami simpan ke dalam sistem.&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;Salam,&lt;/p&gt;&lt;p&gt;PT.BFI Finance Indonesia&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <nextOrFinishButtonLabel>Submit</nextOrFinishButtonLabel>
+        <showFooter>false</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+    <screens>
+        <name>Customer_Consent</name>
+        <label>Customer Consent</label>
+        <locationX>374</locationX>
+        <locationY>350</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>CurAcco2</targetReference>
+        </connector>
+        <fields>
+            <name>lblInfo_Personal</name>
+            <fieldText>&lt;p&gt;{!tpl_CustomerInfo_Personal}&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+            <visibilityRule>
+                <conditionLogic>and</conditionLogic>
+                <conditions>
+                    <leftValueReference>CurAcco.RecordType.DeveloperName</leftValueReference>
+                    <operator>EqualTo</operator>
+                    <rightValue>
+                        <stringValue>Personal</stringValue>
+                    </rightValue>
+                </conditions>
+                <conditions>
+                    <leftValueReference>CurAcco.Primary_Contact__r.Marital_Status__r.Name</leftValueReference>
+                    <operator>NotEqualTo</operator>
+                    <rightValue>
+                        <stringValue>Married</stringValue>
+                    </rightValue>
+                </conditions>
+            </visibilityRule>
+        </fields>
+        <fields>
+            <name>lblInfo_Personal_Married</name>
+            <fieldText>&lt;p&gt;{!tpl_CustomerInfo_Personal_Married}&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+            <visibilityRule>
+                <conditionLogic>and</conditionLogic>
+                <conditions>
+                    <leftValueReference>CurAcco.RecordType.DeveloperName</leftValueReference>
+                    <operator>EqualTo</operator>
+                    <rightValue>
+                        <stringValue>Personal</stringValue>
+                    </rightValue>
+                </conditions>
+                <conditions>
+                    <leftValueReference>CurAcco.Primary_Contact__r.Marital_Status__r.Name</leftValueReference>
+                    <operator>EqualTo</operator>
+                    <rightValue>
+                        <stringValue>Married</stringValue>
+                    </rightValue>
+                </conditions>
+            </visibilityRule>
+        </fields>
+        <fields>
+            <name>lblInfo_Company</name>
+            <fieldText>&lt;p&gt;{!tpl_CustomerInfo_Company}&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+            <visibilityRule>
+                <conditionLogic>and</conditionLogic>
+                <conditions>
+                    <leftValueReference>CurAcco.RecordType.DeveloperName</leftValueReference>
+                    <operator>EqualTo</operator>
+                    <rightValue>
+                        <stringValue>Company</stringValue>
+                    </rightValue>
+                </conditions>
+            </visibilityRule>
+        </fields>
+        <fields>
+            <name>dpl_TnC</name>
+            <fieldText>&lt;p&gt;&lt;span style=&quot;color: rgb(0, 0, 0);&quot;&gt;Sehubungan dengan data-data yang Saya berikan tersebut di atas, dengan ini Saya selaku Pemohon menyatakan sebagai berikut:&amp;nbsp;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;ol&gt;&lt;li&gt;&lt;span style=&quot;color: rgb(0, 0, 0);&quot;&gt;Data-data tersebut di atas Saya berikan dengan sebenar-benarnya. Bahwa Saya beserta pasangan dan pihak yang berkaitan dengan permohonan fasilitas pembiayaan Saya tersebut, dengan ini memberikan persetujuan kepada PT BFI Finance Indonesia Tbk dan/ atau kepada pihak yang ditunjuk oleh PT BFI Finance Indonesia Tbk untuk:&lt;/span&gt;&lt;ol&gt;&lt;li&gt;&lt;span style=&quot;color: rgb(0, 0, 0);&quot;&gt;melakukan analisa, pengecekan, verifikasi, dan/ atau validasi terhadap data-data Saya tersebut untuk keperluan yang berhubungan dengan permohonan fasilitas pembiayaan Saya tersebut.&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);&quot;&gt;melakukan penginputan data-data Saya ke dalam Sistem Layanan Informasi Keuangan (SLIK) yang dikelola oleh Otoritas Jasa Keuangan Republik Indonesia dan/ atau memberikan data-data Saya kepada pihak lain yang ditentukan dalam peraturan perundang-undangan.&lt;/span&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/li&gt;&lt;li&gt;&lt;span style=&quot;color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);&quot;&gt;Untuk mendukung permohonan Saya ini, Saya bersedia memberikan fotocopy dokumen yang diperlukan oleh PT BFI Finance Indonesia Tbk, dan menjamin kesesuaian dokumen fotocopy tersebut dengan dokumen asli yang akan ditunjukkan kepada PT BFI Finance Indonesia Tbk.&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;span style=&quot;color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);&quot;&gt;Apabila permohonan ini disetujui, Saya bersedia menanda-tangani Perjanjian Pembiayaan beserta lampirannya, serta memenuhi syarat-syarat sebagaimana ditentukan oleh PT BFI Finance Indonesia Tbk.&lt;/span&gt;&lt;/li&gt;&lt;/ol&gt;&lt;p&gt;&lt;span style=&quot;color: rgb(0, 0, 0);&quot;&gt;CATATAN:&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;span style=&quot;color: rgb(0, 0, 0);&quot;&gt;Formulir ini diberikan sebagai salah satu syarat permohonan fasilitas pembiayaan, dan bukan merupakan suatu persetujuan fasilitas pembiayaan dari PT BFI Finance Indonesia Tbk.&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;span style=&quot;color: rgb(0, 0, 0);&quot;&gt;PT BFI Finance Indonesia Tbk akan memproses permohonan Bapak/ Ibu sesuai ketentuan yang ditetapkan oleh PT BFI Finance Indonesia Tbk.&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;span style=&quot;color: rgb(0, 0, 0);&quot;&gt;Pemohon wajib menyerahkan asli dokumen fasilitas pembiayaan (contoh: sertipikat dll) secara langsung ke kantor cabang PT BFI Finance Indonesia Tbk.&lt;/span&gt;&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <fields>
+            <name>cboConsent</name>
+            <choiceReferences>Setuju</choiceReferences>
+            <choiceReferences>Tidak_Setuju</choiceReferences>
+            <dataType>String</dataType>
+            <defaultValue>
+                <elementReference>None</elementReference>
+            </defaultValue>
+            <fieldText>Consent</fieldText>
+            <fieldType>DropdownBox</fieldType>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>true</isRequired>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <nextOrFinishButtonLabel>Submit</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+    <screens>
+        <name>Thank_You</name>
+        <label>Thank You</label>
+        <locationX>594</locationX>
+        <locationY>1490</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>lblThankYou</name>
+            <fieldText>&lt;p&gt;&lt;strong&gt;Name : &lt;/strong&gt;{!CurAcco.Name}&lt;/p&gt;&lt;p&gt;&lt;strong&gt;AO/BRO : &lt;/strong&gt;{!CurAcco.Input_By__c}&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Jawaban : &lt;/strong&gt;{!cboConsent}&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;Terima kasih.&lt;/p&gt;&lt;p&gt;Jawaban anda telah kami simpan ke dalam sistem.&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;Salam,&lt;/p&gt;&lt;p&gt;PT.BFI Finance Indonesia&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <nextOrFinishButtonLabel>Submit</nextOrFinishButtonLabel>
+        <showFooter>false</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>CurAcco</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <subflows>
+        <name>Send_Push_Notification</name>
+        <label>Send Push Notification</label>
+        <locationX>462</locationX>
+        <locationY>1298</locationY>
+        <connector>
+            <targetReference>Thank_You</targetReference>
+        </connector>
+        <flowName>Gen_Send_Push_Notification</flowName>
+        <inputAssignments>
+            <name>NotificationBody</name>
+            <value>
+                <elementReference>NotificationBody</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>NotificationTitle</name>
+            <value>
+                <stringValue>Customer Consent</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>RecipientIds</name>
+            <value>
+                <elementReference>recipientIds</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>TargetId</name>
+            <value>
+                <elementReference>CurAcco.Id</elementReference>
+            </value>
+        </inputAssignments>
+    </subflows>
+    <subflows>
+        <name>Update_Lead_Progress</name>
+        <label>Update Lead Progress</label>
+        <locationX>330</locationX>
+        <locationY>890</locationY>
+        <connector>
+            <targetReference>Is_Lead_By_Non_BRO</targetReference>
+        </connector>
+        <flowName>Gen_Update_Lead_Progress</flowName>
+        <inputAssignments>
+            <name>recordId_Acco</name>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </inputAssignments>
+    </subflows>
+    <textTemplates>
+        <name>tpl_CustomerInfo_Company</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>&lt;table cellspacing=&quot;0&quot; cellpadding=&quot;3&quot;&gt;
+    &lt;tr&gt;
+      &lt;th  style=&quot;padding: 0&quot;&gt;Nama Lengkap&lt;/th&gt;
+      &lt;td style=&quot;padding: 0 5px 0 20px&quot;&gt;:&lt;/td&gt;
+      &lt;td style=&quot;padding: 0&quot;&gt;{!CurAcco.Name}&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th style=&quot;padding: 0&quot;&gt;Nomor Identitas&lt;/th&gt;
+      &lt;td style=&quot;padding: 0 5px 0 20px&quot;&gt;:&lt;/td&gt;
+      &lt;td style=&quot;padding: 0&quot;&gt;{!CurAcco.NPWP_Number__c}&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th style=&quot;padding: 0&quot;&gt;Alamat Company&lt;/th&gt;
+      &lt;td style=&quot;padding: 0 5px 0 20px&quot;&gt;:&lt;/td&gt;
+      &lt;td style=&quot;padding: 0&quot;&gt;{!CurAcco.Primary_Contact__r.Domicile_Address__c}&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th style=&quot;padding: 0&quot;&gt;Kelurahan&lt;/th&gt;
+      &lt;td style=&quot;padding: 0 5px 0 20px&quot;&gt;:&lt;/td&gt;
+      &lt;td style=&quot;padding: 0&quot;&gt;{!CurAcco.Primary_Contact__r.Domicile_Kelurahan__r.Name}&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th style=&quot;padding: 0&quot;&gt;Kabupaten/Kota&lt;/th&gt;
+      &lt;td style=&quot;padding: 0 5px 0 20px&quot;&gt;:&lt;/td&gt;
+      &lt;td style=&quot;padding: 0&quot;&gt;{!CurAcco.Primary_Contact__r.Domicile_City_Kabupaten__r.Name}&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th style=&quot;padding: 0&quot;&gt;Management in Charge&lt;/th&gt;
+      &lt;td style=&quot;padding: 0 5px 0 20px&quot;&gt;:&lt;/td&gt;
+      &lt;td style=&quot;padding: 0&quot;&gt;{!CurAcco.Management_In_Charge__c}&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th style=&quot;padding: 0&quot;&gt;Nomor HP&lt;/th&gt;
+      &lt;td style=&quot;padding: 0 5px 0 20px&quot;&gt;:&lt;/td&gt;
+      &lt;td style=&quot;padding: 0&quot;&gt;{!CurAcco.Mobile_Phone_1__c}&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th style=&quot;padding: 0&quot;&gt;Alamat Email&lt;/th&gt;
+      &lt;td style=&quot;padding: 0 5px 0 20px&quot;&gt;:&lt;/td&gt;
+      &lt;td style=&quot;padding: 0&quot;&gt;{!CurAcco.Company_Customer_Email__c}&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/table&gt;</text>
+    </textTemplates>
+    <textTemplates>
+        <name>tpl_CustomerInfo_Personal</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>&lt;table cellspacing=&quot;0&quot; cellpadding=&quot;3&quot;&gt;
+    &lt;tr&gt;
+      &lt;th style=&quot;padding: 0&quot;&gt;Nama Lengkap&lt;/th&gt;
+      &lt;td style=&quot;padding: 0 5px 0 20px&quot;&gt;:&lt;/td&gt;
+      &lt;td style=&quot;padding: 0&quot;&gt;{!CurAcco.Name}&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th style=&quot;padding: 0&quot;&gt;Nomor Identitas&lt;/th&gt;
+      &lt;td style=&quot;padding: 0 5px 0 20px&quot;&gt;:&lt;/td&gt;
+      &lt;td style=&quot;padding: 0&quot;&gt;{!CurAcco.ID_Number__c}&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th style=&quot;padding: 0&quot;&gt;Tempat dan Tanggal Lahir&lt;/th&gt;
+      &lt;td style=&quot;padding: 0 5px 0 20px&quot;&gt;:&lt;/td&gt;
+      &lt;td style=&quot;padding: 0&quot;&gt;{!CurAcco.Primary_Contact__r.Tempat_Tanggal_Lahir__c}&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th style=&quot;padding: 0&quot;&gt;Alamat KTP&lt;/th&gt;
+      &lt;td style=&quot;padding: 0 5px 0 20px&quot;&gt;:&lt;/td&gt;
+      &lt;td style=&quot;padding: 0&quot;&gt;{!CurAcco.Primary_Contact__r.Legal_Address__c}&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th style=&quot;padding: 0&quot;&gt;Kelurahan&lt;/th&gt;
+      &lt;td style=&quot;padding: 0 5px 0 20px&quot;&gt;:&lt;/td&gt;
+      &lt;td style=&quot;padding: 0&quot;&gt;{!CurAcco.Primary_Contact__r.Legal_Kelurahan__r.Name}&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th style=&quot;padding: 0&quot;&gt;Kabupaten/Kota&lt;/th&gt;
+      &lt;td style=&quot;padding: 0 5px 0 20px&quot;&gt;:&lt;/td&gt;
+      &lt;td style=&quot;padding: 0&quot;&gt;{!CurAcco.Primary_Contact__r.Legal_Kabupaten__r.Name}&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th style=&quot;padding: 0&quot;&gt;Nomor HP&lt;/th&gt;
+      &lt;td style=&quot;padding: 0 5px 0 20px&quot;&gt;:&lt;/td&gt;
+      &lt;td style=&quot;padding: 0&quot;&gt;{!CurAcco.Mobile_Phone_1__c}&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th style=&quot;padding: 0&quot;&gt;Alamat Email&lt;/th&gt;
+      &lt;td style=&quot;padding: 0 5px 0 20px&quot;&gt;:&lt;/td&gt;
+      &lt;td style=&quot;padding: 0&quot;&gt;{!CurAcco.Primary_Contact__r.Email}&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th style=&quot;padding: 0&quot;&gt;Status Pernikahan&lt;/th&gt;
+      &lt;td style=&quot;padding: 0 5px 0 20px&quot;&gt;:&lt;/td&gt;
+      &lt;td style=&quot;padding: 0&quot;&gt;{!CurAcco.Primary_Contact__r.Marital_Status__r.Name}&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/table&gt;</text>
+    </textTemplates>
+    <textTemplates>
+        <name>tpl_CustomerInfo_Personal_Married</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>&lt;table cellspacing=&quot;0&quot; cellpadding=&quot;3&quot;&gt;
+    &lt;tr&gt;
+      &lt;th style=&quot;padding: 0&quot;&gt;Nama Lengkap&lt;/th&gt;
+      &lt;td style=&quot;padding: 0 5px 0 20px&quot;&gt;:&lt;/td&gt;
+      &lt;td style=&quot;padding: 0&quot;&gt;{!CurAcco.Name}&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th style=&quot;padding: 0&quot;&gt;Nomor Identitas&lt;/th&gt;
+      &lt;td style=&quot;padding: 0 5px 0 20px&quot;&gt;:&lt;/td&gt;
+      &lt;td style=&quot;padding: 0&quot;&gt;{!CurAcco.ID_Number__c}&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th style=&quot;padding: 0&quot;&gt;Tempat dan Tanggal Lahir&lt;/th&gt;
+      &lt;td style=&quot;padding: 0 5px 0 20px&quot;&gt;:&lt;/td&gt;
+      &lt;td style=&quot;padding: 0&quot;&gt;{!CurAcco.Primary_Contact__r.Tempat_Tanggal_Lahir__c}&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th style=&quot;padding: 0&quot;&gt;Alamat KTP&lt;/th&gt;
+      &lt;td style=&quot;padding: 0 5px 0 20px&quot;&gt;:&lt;/td&gt;
+      &lt;td style=&quot;padding: 0&quot;&gt;{!CurAcco.Primary_Contact__r.Legal_Address__c}&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th style=&quot;padding: 0&quot;&gt;Kelurahan&lt;/th&gt;
+      &lt;td style=&quot;padding: 0 5px 0 20px&quot;&gt;:&lt;/td&gt;
+      &lt;td style=&quot;padding: 0&quot;&gt;{!CurAcco.Primary_Contact__r.Legal_Kelurahan__r.Name}&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th style=&quot;padding: 0&quot;&gt;Kabupaten/Kota&lt;/th&gt;
+      &lt;td style=&quot;padding: 0 5px 0 20px&quot;&gt;:&lt;/td&gt;
+      &lt;td style=&quot;padding: 0&quot;&gt;{!CurAcco.Primary_Contact__r.Legal_Kabupaten__r.Name}&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th style=&quot;padding: 0&quot;&gt;Nomor HP&lt;/th&gt;
+      &lt;td style=&quot;padding: 0 5px 0 20px&quot;&gt;:&lt;/td&gt;
+      &lt;td style=&quot;padding: 0&quot;&gt;{!CurAcco.Mobile_Phone_1__c}&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th style=&quot;padding: 0&quot;&gt;Alamat Email&lt;/th&gt;
+      &lt;td style=&quot;padding: 0 5px 0 20px&quot;&gt;:&lt;/td&gt;
+      &lt;td style=&quot;padding: 0&quot;&gt;{!CurAcco.Primary_Contact__r.Email}&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th style=&quot;padding: 0&quot;&gt;Status Pernikahan&lt;/th&gt;
+      &lt;td style=&quot;padding: 0 5px 0 20px&quot;&gt;:&lt;/td&gt;
+      &lt;td style=&quot;padding: 0&quot;&gt;{!CurAcco.Primary_Contact__r.Marital_Status__r.Name}&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th style=&quot;padding: 0&quot;&gt;Spouse Name&lt;/th&gt;
+      &lt;td style=&quot;padding: 0 5px 0 20px&quot;&gt;:&lt;/td&gt;
+      &lt;td style=&quot;padding: 0&quot;&gt;{!CurAcco.Primary_Contact__r.Spouse_Name__c}&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th style=&quot;padding: 0&quot;&gt;ID Number&lt;/th&gt;
+      &lt;td style=&quot;padding: 0 5px 0 20px&quot;&gt;:&lt;/td&gt;
+      &lt;td style=&quot;padding: 0&quot;&gt;{!CurAcco.Primary_Contact__r.Spouse_ID_Number__c}&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th style=&quot;padding: 0&quot;&gt;Tempat dan Tanggal Lahir Pasangan&lt;/th&gt;
+      &lt;td style=&quot;padding: 0 5px 0 20px&quot;&gt;:&lt;/td&gt;
+      &lt;td style=&quot;padding: 0&quot;&gt;{!CurAcco.Primary_Contact__r.Spouse_Place_of_Birth__c}, {!funcS_Spouse_DateofBirth}&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th style=&quot;padding: 0&quot;&gt;Alamat Pasangan&lt;/th&gt;
+      &lt;td style=&quot;padding: 0 5px 0 20px&quot;&gt;:&lt;/td&gt;
+      &lt;td style=&quot;padding: 0&quot;&gt;{!CurAcco.Primary_Contact__r.Domicile_Address__c}&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th style=&quot;padding: 0&quot;&gt;Nomor HP Pasangan&lt;/th&gt;
+      &lt;td style=&quot;padding: 0 5px 0 20px&quot;&gt;:&lt;/td&gt;
+      &lt;td style=&quot;padding: 0&quot;&gt;{!CurAcco.Primary_Contact__r.Spouse_Mobile_Phone_1__c}&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/table&gt;</text>
+    </textTemplates>
+    <variables>
+        <name>recipientIds</name>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>recordId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Asset_Address_Min_3_Characters</fullName>
+    <active>true</active>
+    <description>Validasi asset address</description>
+    <errorConditionFormula>IF(OR(ISBLANK(Asset_Address__c), ISNULL(Asset_Address__c),Asset_Address__c = &quot;&quot;),FALSE, LEN(Asset_Address__c) &lt; 3)</errorConditionFormula>
+    <errorDisplayField>Asset_Address__c</errorDisplayField>
+    <errorMessage>Please enter at least 3 character</errorMessage>
+</ValidationRule>
