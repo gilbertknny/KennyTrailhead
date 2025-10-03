@@ -1,0 +1,101 @@
+name: Deploy to Salesforce
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # ambil semua history supaya FROM_COMMIT valid
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update && sudo apt-get install -y unzip curl openjdk-17-jdk
+          npm install --global @salesforce/cli
+          echo "y" | sf plugins:install sfdx-git-delta
+
+      - name: Prepare commit range
+        id: commits
+        run: |
+          FROM_COMMIT="${{ github.event.before }}"
+          TO_COMMIT="${{ github.sha }}"
+
+          if [ -z "$FROM_COMMIT" ] || [ "$FROM_COMMIT" = "0000000000000000000000000000000000000000" ]; then
+            echo "⚠️ No previous commit found, using HEAD^ as FROM_COMMIT"
+            FROM_COMMIT=$(git rev-parse HEAD^ || echo "")
+          fi
+
+          echo "FROM_COMMIT=$FROM_COMMIT" >> $GITHUB_ENV
+          echo "TO_COMMIT=$TO_COMMIT" >> $GITHUB_ENV
+          echo "Using commit range: $FROM_COMMIT → $TO_COMMIT"
+
+      - name: Authenticate Salesforce
+        run: |
+          sf org login jwt \
+            --client-id ${{ secrets.CONSUMER_KEY }} \
+            --jwt-key-file server.key \
+            --username ${{ vars.USERNAME }} \
+            --instance-url ${{ vars.URL_INSTANCE }} \
+            --alias My_Trailhead
+
+      - name: Generate Delta Package
+        run: |
+          if [ -z "$FROM_COMMIT" ]; then
+            echo "⚠️ FROM_COMMIT not set, skipping delta package"
+            exit 0
+          fi
+
+          sfdx sgd:source:delta \
+            --from "$FROM_COMMIT" \
+            --to "$TO_COMMIT" \
+            --output-dir . \
+            --ignore-file .gitignore
+
+          cat package/package.xml || echo "⚠️ No package.xml generated"
+
+      - name: Validate Deployment (Dry Run)
+        run: |
+          if [ ! -f "package/package.xml" ]; then
+            echo "✅ No changes to validate"
+            exit 0
+          fi
+
+          APEX_CLASSES=$(yq -p=xml -o=json . < package/package.xml | jq -r '.Package.types | [.] | flatten | map(select(.name == "ApexClass")) | .[] | .members | [.] | flatten | map(select((index("*") | not) and (test("Test|Tes")))) | unique | join(" ")')
+
+          if [ -z "$APEX_CLASSES" ]; then
+            echo "⚡ Dry-run validation (no tests)"
+            sf project deploy start --dry-run -x package/package.xml --wait 40 --target-org My_Trailhead --verbose
+          else
+            echo "⚡ Dry-run validation with tests: $APEX_CLASSES"
+            sf project deploy start --dry-run -x package/package.xml --wait 40 --target-org My_Trailhead --verbose -l RunSpecifiedTests --tests $APEX_CLASSES
+          fi
+
+      - name: Deploy to Salesforce
+        if: success()
+        run: |
+          if [ ! -f "package/package.xml" ]; then
+            echo "✅ No changes to deploy"
+            exit 0
+          fi
+
+          APEX_CLASSES=$(yq -p=xml -o=json . < package/package.xml | jq -r '.Package.types | [.] | flatten | map(select(.name == "ApexClass")) | .[] | .members | [.] | flatten | map(select((index("*") | not) and (test("Test|Tes")))) | unique | join(" ")')
+
+          if [ -z "$APEX_CLASSES" ]; then
+            echo "⚡ Real deployment (no tests)"
+            sf project deploy start -x package/package.xml --wait 40 --target-org My_Trailhead --verbose
+          else
+            echo "⚡ Real deployment with tests: $APEX_CLASSES"
+            sf project deploy start -x package/package.xml --wait 40 --target-org My_Trailhead --verbose -l RunSpecifiedTests --tests $APEX_CLASSES
+          fi
