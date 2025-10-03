@@ -32,7 +32,6 @@ jobs:
           FROM_COMMIT="${{ github.event.before }}"
           TO_COMMIT="${{ github.sha }}"
 
-          # fallback kalau push pertama / before kosong
           if [ -z "$FROM_COMMIT" ] || [ "$FROM_COMMIT" = "0000000000000000000000000000000000000000" ]; then
             echo "⚠️ No previous commit found, using HEAD^ as FROM_COMMIT"
             FROM_COMMIT=$(git rev-parse HEAD^ || echo "")
@@ -44,9 +43,6 @@ jobs:
 
       - name: Authenticate Salesforce
         run: |
-          #echo "${{ secrets.SERVER_KEY }}" | base64 -d > server.key
-          #chmod 600 server.key
-
           sf org login jwt \
             --client-id ${{ secrets.CONSUMER_KEY }} \
             --jwt-key-file server.key \
@@ -69,7 +65,25 @@ jobs:
 
           cat package/package.xml || echo "⚠️ No package.xml generated"
 
+      - name: Validate Deployment (Dry Run)
+        run: |
+          if [ ! -f "package/package.xml" ]; then
+            echo "✅ No changes to validate"
+            exit 0
+          fi
+
+          APEX_CLASSES=$(yq -p=xml -o=json . < package/package.xml | jq -r '.Package.types | [.] | flatten | map(select(.name == "ApexClass")) | .[] | .members | [.] | flatten | map(select((index("*") | not) and (test("Test|Tes")))) | unique | join(" ")')
+
+          if [ -z "$APEX_CLASSES" ]; then
+            echo "⚡ Dry-run validation (no tests)"
+            sf project deploy start --dry-run -x package/package.xml --wait 40 --target-org My_Trailhead --verbose
+          else
+            echo "⚡ Dry-run validation with tests: $APEX_CLASSES"
+            sf project deploy start --dry-run -x package/package.xml --wait 40 --target-org My_Trailhead --verbose -l RunSpecifiedTests --tests $APEX_CLASSES
+          fi
+
       - name: Deploy to Salesforce
+        if: success()
         run: |
           if [ ! -f "package/package.xml" ]; then
             echo "✅ No changes to deploy"
@@ -77,12 +91,11 @@ jobs:
           fi
 
           APEX_CLASSES=$(yq -p=xml -o=json . < package/package.xml | jq -r '.Package.types | [.] | flatten | map(select(.name == "ApexClass")) | .[] | .members | [.] | flatten | map(select((index("*") | not) and (test("Test|Tes")))) | unique | join(" ")')
-          echo "APEX_CLASSES"
-          
+
           if [ -z "$APEX_CLASSES" ]; then
-            echo "⚡ No Apex test classes found, deploying with check-only"
-            sf project deploy start -c -x package/package.xml --wait 40 --target-org My_Trailhead --verbose
+            echo "⚡ Real deployment (no tests)"
+            sf project deploy start -x package/package.xml --wait 40 --target-org My_Trailhead --verbose
           else
-            echo "⚡ Running tests: $APEX_CLASSES"
-            sf project deploy start -c -x package/package.xml --wait 40 --target-org My_Trailhead --verbose -l RunSpecifiedTests --tests $APEX_CLASSES
+            echo "⚡ Real deployment with tests: $APEX_CLASSES"
+            sf project deploy start -x package/package.xml --wait 40 --target-org My_Trailhead --verbose -l RunSpecifiedTests --tests $APEX_CLASSES
           fi
