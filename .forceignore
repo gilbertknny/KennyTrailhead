@@ -1,12 +1,139 @@
-# List files or directories below to ignore them when running force:source:push, force:source:pull, and force:source:status
-# More information: https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_exclude_source.htm
-#
+# ========================================
+# USER & SECURITY (environment-specific)
+# ========================================
+force-app/main/default/users/*
+force-app/main/default/groups/*
+force-app/main/default/queues/*
+force-app/main/default/delegateGroups/*
+**/User*.xml
+**/Group*.xml
+**/Queue*.xml
+**/DelegateGroup*.xml
+force-app/main/default/classes/LightningLoginFormController
+force-app/main/default/classes/LightningForgotPasswordController
+force-app/main/default/classes/LightningSelfRegisterController
+force-app/main/default/classes/ObjectNameFromIdInvocable
+force-app/main/default/classes/contactsListAction
+# ========================================
+# PROFILES & SESSION
+# (keep Profile, skip policies & session)
+# ========================================
+**/ProfilePasswordPolicy*.xml
+**/ProfileSessionSetting*.xml
 
-package.xml
+# ========================================
+# MANAGED PACKAGE METADATA
+# (read-only, tidak bisa di-deploy)
+# ========================================
+force-app/main/default/installedPackages/*
+**/InstalledPackage*.xml
+**/sf_devops__*
+**/spdf__*
+**/CodeBuilder__*
+**/NamespaceRegistry*
 
-# LWC configuration files
-**/jsconfig.json
-**/.eslintrc.json
+# ========================================
+# SETTINGS (environment-specific)
+# ========================================
+force-app/main/default/settings/*
+**/Settings*.xml
+**/CleanDataService*.xml
+**/OrgSnapshot*.xml
+**/OrgMetricScan*.xml
+**/SamlSsoConfig*.xml
+**/AuthProvider*.xml
+**/ExternalCredential*.xml
+**/ExternalClientApplication*.xml
+**/ExtlClntApp*.xml
+**/OauthCustomScope*.xml
+**/MyDomainDiscoverableLogin*.xml
+**/EmployeeUser*.xml
+**/CustomerDataPlatform*.xml
+**/Analytics*.xml
+**/Campaign.settings
+**/CampaignSettings*.xml
+**/Pardot*.xml
+**/PlatformEncryption*.xml
+**/EmailAdministration*.xml
+**/Territory2*.xml
 
-# LWC Jest
-**/__tests__/**
+# ========================================
+# REPORTS & DASHBOARDS (optional)
+# ========================================
+force-app/main/default/reports/*
+force-app/main/default/dashboards/*
+**/Report*.xml
+**/Dashboard*.xml
+
+# ========================================
+# TRANSLATIONS (optional, kalau tidak pakai multi-language)
+# ========================================
+force-app/main/default/translations/*
+force-app/main/default/objectTranslations/*
+**/CustomObjectTranslation/*
+**/Translations*.xml
+**/GlobalValueSetTranslation*.xml
+**/StandardValueSetTranslation*.xml
+**/CustomObjectTranslation/API_Jenis_kelas_Konstruksi__c*.xml
+**/CustomObjectTranslation/Master_Economy_Sector__c*.xml
+
+# ========================================
+# CONTENT & ASSETS
+# ========================================
+force-app/main/default/contentassets/*
+force-app/main/default/managedContentTypes/cms_document*.xml
+force-app/main/default/managedContentTypes/cms_image*.xml
+force-app/main/default/managedContentTypes/news*.xml
+**/ContentAsset*.xml
+**/CMSConnectSource*.xml
+**/CommunityTemplateDefinition*.xml
+**/CommunityThemeDefinition*.xml
+
+# ========================================
+# MISC / LOW VALUE
+# ========================================
+**/ActionLinkGroupTemplate*.xml
+**/EmailServicesFunction*.xml
+**/ApprovalProcess*.xml
+**/EscalationRules*.xml
+**/AssignmentRules*.xml
+**/AutoResponseRules*.xml
+**/MatchingRules*.xml
+**/DuplicateRule*.xml
+**/ModerationRule*.xml
+
+# ========================================
+# INTERNAL OBJECTS (DevHub / ScratchOrg)
+# ========================================
+**/ActiveScratchOrg*.xml
+**/ScratchOrgInfo*.xml
+
+# ========================================
+# TASK list views dengan deprecated field
+# ========================================
+force-app/main/default/objects/Task/listViews/OverdueTasks.listView-meta.xml
+force-app/main/default/objects/Task/listViews/UnscheduledTasks.listView-meta.xml
+
+# ========================================
+# LEARNING standard object noise
+# ========================================
+**/LearningItem*.xml
+**/LearningAssignment*.xml
+**/LearningLinkProgress*.xml
+
+# ========================================
+# COMMUNITY QuickActions invalid
+# ========================================
+**/GuestCommunityCase*.xml
+**/NewCommunityCase*.xml
+
+# ========================================
+# DEPRECATED RELATED LIST
+# ========================================
+force-app/main/default/objects/Campaign/layouts/Campaign-Campaign Layout.layout-meta.xml
+force-app/main/default/objects/Case/layouts/Case-Case Layout.layout-meta.xml
+
+# ========================================
+# EMAIL TO SALESFORCE
+# ========================================
+**/EmailToSalesforce*.xml
