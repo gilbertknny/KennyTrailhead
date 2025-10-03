@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>NJOP_Warn_80percent__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF( OR(NJOP_LTV__c*100 &gt; 80/100,  Opportunity__r.NTF_Pengajuan__c &gt; 500000000), &quot;LTV-Over&quot;, &quot;&quot;)</formula>
+    <label>[NJOP] warn80</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

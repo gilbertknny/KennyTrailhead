@@ -1,0 +1,97 @@
+<apex:page controller="LoanAmortizationController" renderAs="pdf" applyHtmlTag="false" applyBodyTag="false" showHeader="false" sidebar="false" docType="html-5.0">
+<html lang="en" style="overflow-y: hidden;">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>D097</title>
+    <style>
+    /* Table styling */
+    .data-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 12px;
+        page-break-inside: avoid;
+    }
+    </style>
+</head>
+<body style="height: auto; min-height: auto;">
+    <div style="text-align: center; font-size:12pt"><b>LAMPIRAN</b></div>
+    <div style="text-align: center; font-size:12pt; text-decoration:underline;"><b>DAFTAR DAN JADWAL PEMBAYARAN (AMORTISASI)</b></div>
+
+    <div style="display: flex; justify-content: center; align-items: center; flex-direction: column; text-align: center; font-family: Arial, sans-serif; font-size: 10pt; margin-top: 10px;">
+        <div style="margin-top:15px;">
+        <table style="width: 100%;">
+            <tbody>
+                <tr>
+                    <td style="width:25%">&nbsp;Customer Name :&nbsp;</td>
+                    <td style="width:25%">{!customerName}</td>
+                    <td style="width:25%">&nbsp;Agreement No :&nbsp;</td>
+                    <td style="width:25%">{!agreementNo}</td>
+                </tr>
+            </tbody>
+        </table>
+           
+            
+        </div>
+        <div style="margin-top: 20px;">&nbsp;</div>
+        <table class="data-table" style="border-collapse: collapse; font-family: Arial, sans-serif; font-size: 14px; text-align: center; margin: auto; width: 100%;">
+            <thead>
+                <tr>
+                    <th style="width: 5%; background-color: #f5f5fc; padding: 5px; border: 1px solid #ddd; white-space: nowrap;">NO</th>
+                    <th style="width: 15%; background-color: #f5f5fc; padding: 5px 10px; border: 1px solid #ddd; white-space: nowrap;">AMOUNT</th>
+                    <th style="width: 19%; background-color: #f5f5fc; padding: 5px 10px; border: 1px solid #ddd; white-space: nowrap;">PRINCIPAL</th>
+                    <th style="width: 19%; background-color: #f5f5fc; padding: 5px 10px; border: 1px solid #ddd; white-space: nowrap;">INTEREST</th>
+                    <th style="width: 23%; background-color: #f5f5fc; padding: 5px 10px; border: 1px solid #ddd; white-space: nowrap;">OS PRINCIPAL</th>
+                    <th style="width: 19%; background-color: #f5f5fc; padding: 5px 10px; border: 1px solid #ddd; white-space: nowrap;">OS INTEREST</th>
+                </tr>
+            </thead>
+            <tbody>
+                <apex:repeat value="{!amortizationWithOS}" var="var">
+                    <tr style="vertical-align: middle; background-color: {!IF(MOD(var.amortRecord.sequence__c, 2) == 1, '#f9f9ff', 'transparent')};">
+                        <td style="padding: 5px; border: 1px solid #ddd;">{!var.amortRecord.sequence__c}</td>
+                        <td style="padding: 5px; border: 1px solid #ddd;">Rp&nbsp;<apex:outputField value="{!var.amortRecord.installment__c}"/></td>
+                        <td style="padding: 5px; border: 1px solid #ddd;">Rp&nbsp;<apex:outputField value="{!var.amortRecord.principal__c}"/></td>
+                        <td style="padding: 5px; border: 1px solid #ddd;">Rp&nbsp;<apex:outputField value="{!var.amortRecord.interest__c}"/></td>
+                        <td style="padding: 5px; border: 1px solid #ddd;">Rp&nbsp;<apex:outputText value="{0, number, ###,###,##0.00}"><apex:param value="{!var.os_principal}" /></apex:outputText></td>
+                        <td style="padding: 5px; border: 1px solid #ddd;">Rp&nbsp;<apex:outputText value="{0, number, ###,###,##0.00}"><apex:param value="{!var.os_interest}" /></apex:outputText></td>
+                    </tr>
+                </apex:repeat>
+                    <tr style="vertical-align: middle">
+                        <td style="padding: 5px; border: 1px solid #ddd;"></td>
+                        <td style="padding: 5px; border: 1px solid #ddd;"><b>Rp&nbsp;<apex:outputText value="{0, number, ###,###,##0.00}"><apex:param value="{!totalInstallment}" /></apex:outputText></b></td>
+                        <td style="padding: 5px; border: 1px solid #ddd;"><b>Rp&nbsp;<apex:outputText value="{0, number, ###,###,##0.00}"><apex:param value="{!totalPrincipal}" /></apex:outputText></b></td>
+                        <td style="padding: 5px; border: 1px solid #ddd;"><b>Rp&nbsp;<apex:outputText value="{0, number, ###,###,##0.00}"><apex:param value="{!totalInterest}" /></apex:outputText></b></td>
+                        <td style="padding: 5px; border: 1px solid #ddd;"></td>
+                        <td style="padding: 5px; border: 1px solid #ddd;"></td>
+                    </tr>
+            </tbody>
+        </table>
+<div style="margin-top: 20px;">&nbsp;</div>
+        <table style="border-collapse: collapse; font-family: Arial, sans-serif; font-size: 14px; text-align: right; margin: auto; width: 100%;">
+            <tbody>
+                <tr>
+                    <td align="left" style="width:40%;">
+                        <div style="margin-top:135px;">&nbsp;</div>
+                        <div style="text-align: left;padding-left: 50px;">
+                            <p style="margin: 0; font-weight: bold; text-transform: uppercase;">{!customerName}</p>
+                            <p style="margin: 0;">Debitur</p>
+                        </div>
+                    </td>
+                    <td style="width:20%;">&nbsp;</td>
+                    <td align="left" style="width:40%;">
+                        <div style="margin-bottom: 100px;">
+                            <p style="margin: 0;">Tanggal, ____,______________</p>
+                            <p style="margin: 0; font-weight: bold;">PT. BFI FINANCE INDONESIA, Tbk.</p>
+                        </div>
+                        <div style="margin-top:50px;">&nbsp;</div>
+                        <div style="">
+                            <p style="margin: 0; font-weight: bold; text-transform: uppercase;">{!branchManager}</p>
+                            <p style="margin: 0;">Branch Manager</p>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
+</apex:page>

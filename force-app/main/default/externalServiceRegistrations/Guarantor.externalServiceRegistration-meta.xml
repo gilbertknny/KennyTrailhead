@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ExternalServiceRegistration xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label>Guarantor</label>
+    <namedCredentialReference>MasterDataNmCred</namedCredentialReference>
+    <operations>
+        <active>true</active>
+        <name>guarantor</name>
+    </operations>
+    <registrationProviderType>Custom</registrationProviderType>
+    <schema>{
+  &quot;openapi&quot;: &quot;3.0.1&quot;,
+  &quot;info&quot;: {
+    &quot;title&quot;: &quot;Guarantor&quot;,
+    &quot;description&quot;: &quot;&quot;
+  },
+  &quot;paths&quot;: {
+    &quot;/krakend-gateway/sf/customer/v1/cif/guarantor&quot;: {
+      &quot;post&quot;: {
+        &quot;description&quot;: &quot;&quot;,
+        &quot;operationId&quot;: &quot;Guarantor&quot;,
+        &quot;requestBody&quot;: {
+          &quot;description&quot;: &quot;&quot;,
+          &quot;content&quot;: {
+            &quot;application/json&quot;: {
+              &quot;schema&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                  &quot;customer_type&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;id_number&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;marital_status_code&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;occupation&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;company&quot;: {
+                    &quot;type&quot;: &quot;object&quot;,
+                    &quot;properties&quot;: {
+                      &quot;company_type&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                      },
+                      &quot;year_of_established&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int64&quot;
+                      }
+                    }
+                  },
+                  &quot;address&quot;: {
+                    &quot;type&quot;: &quot;array&quot;,
+                    &quot;items&quot;: {
+                      &quot;type&quot;: &quot;object&quot;,
+                      &quot;properties&quot;: {
+                        &quot;rt&quot;: {
+                          &quot;type&quot;: &quot;string&quot;
+                        },
+                        &quot;address&quot;: {
+                          &quot;type&quot;: &quot;string&quot;
+                        },
+                        &quot;address_type&quot;: {
+                          &quot;type&quot;: &quot;string&quot;
+                        },
+                        &quot;lng&quot;: {
+                          &quot;type&quot;: &quot;number&quot;,
+                          &quot;format&quot;: &quot;double&quot;
+                        },
+                        &quot;city&quot;: {
+                          &quot;type&quot;: &quot;string&quot;
+                        },
+                        &quot;rw&quot;: {
+                          &quot;type&quot;: &quot;string&quot;
+                        },
+                        &quot;zip_code&quot;: {
+                          &quot;type&quot;: &quot;string&quot;
+                        },
+                        &quot;address_detail&quot;: {
+                          &quot;type&quot;: &quot;string&quot;
+                        },
+                        &quot;subdistrict_id&quot;: {
+                          &quot;type&quot;: &quot;string&quot;
+                        },
+                        &quot;province&quot;: {
+                          &quot;type&quot;: &quot;string&quot;
+                        },
+                        &quot;province_id&quot;: {
+                          &quot;type&quot;: &quot;string&quot;
+                        },
+                        &quot;subdistrict&quot;: {
+                          &quot;type&quot;: &quot;string&quot;
+                        },
+                        &quot;district&quot;: {
+                          &quot;type&quot;: &quot;string&quot;
+                        },
+                        &quot;district_id&quot;: {
+                          &quot;type&quot;: &quot;string&quot;
+                        },
+                        &quot;address_phone&quot;: {
+                          &quot;type&quot;: &quot;string&quot;
+                        },
+                        &quot;lat&quot;: {
+                          &quot;type&quot;: &quot;number&quot;,
+                          &quot;format&quot;: &quot;double&quot;
+                        },
+                        &quot;city_id&quot;: {
+                          &quot;type&quot;: &quot;string&quot;
+                        }
+                      }
+                    }
+                  },
+                  &quot;gender&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;birth_date&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;npwp&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;industry_type_code&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;monthly_income&quot;: {
+                    &quot;type&quot;: &quot;integer&quot;,
+                    &quot;format&quot;: &quot;int64&quot;
+                  },
+                  &quot;industry_type_id&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;nationality&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;mobile_phone&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;marital_status_id&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;company_name&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;occupation_code&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;name&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;occupation_id&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;id_type&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;legal_name&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;npwp_type&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  }
+                }
+              }
+            }
+          },
+          &quot;required&quot;: true
+        },
+        &quot;responses&quot;: {
+          &quot;2XX&quot;: {
+            &quot;description&quot;: &quot;&quot;,
+            &quot;content&quot;: {
+              &quot;application/json&quot;: {
+                &quot;schema&quot;: {
+                  &quot;type&quot;: &quot;object&quot;,
+                  &quot;properties&quot;: {
+                    &quot;cif_id&quot;: {
+                      &quot;type&quot;: &quot;string&quot;
+                    }
+                  }
+                }
+              }
+            }
+          },
+          &quot;4XX&quot;: {
+            &quot;description&quot;: &quot;Error Response&quot;,
+            &quot;content&quot;: {
+              &quot;application/json&quot;: {
+                &quot;schema&quot;: {
+                  &quot;type&quot;: &quot;object&quot;,
+                  &quot;properties&quot;: {
+                    &quot;error&quot;: {
+                      &quot;type&quot;: &quot;object&quot;,
+                      &quot;properties&quot;: {
+                        &quot;message&quot;: {
+                          &quot;type&quot;: &quot;string&quot;
+                        },
+                        &quot;attributes&quot;: {
+                          &quot;type&quot;: &quot;array&quot;,
+                          &quot;items&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;key&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;message&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              }
+                            }
+                          }
+                        },
+                        &quot;error_code&quot;: {
+                          &quot;type&quot;: &quot;string&quot;
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}</schema>
+    <schemaType>OpenApi3</schemaType>
+    <serviceBinding>{&quot;host&quot;:&quot;&quot;,&quot;basePath&quot;:&quot;/&quot;,&quot;allowedSchemes&quot;:[],&quot;requestMediaTypes&quot;:[],&quot;responseMediaTypes&quot;:[],&quot;compatibleMediaTypes&quot;:{},&quot;extensions&quot;:{}}</serviceBinding>
+    <status>Complete</status>
+    <systemVersion>5</systemVersion>
+</ExternalServiceRegistration>

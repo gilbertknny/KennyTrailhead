@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Asset_Longitude_Is_Required</fullName>
+    <active>false</active>
+    <errorConditionFormula>IF( $User.Is_Debug_User__c = TRUE, FALSE, AND(ISPICKVAL( Asset_Address_is_same_as__c , &quot;&quot;),OR(ISBLANK( Asset_Latitude_Longitude__Longitude__s ),  Asset_Latitude_Longitude__Longitude__s = 0)))</errorConditionFormula>
+    <errorDisplayField>Asset_Latitude_Longitude__Longitude__s</errorDisplayField>
+    <errorMessage>Complete this field</errorMessage>
+</ValidationRule>

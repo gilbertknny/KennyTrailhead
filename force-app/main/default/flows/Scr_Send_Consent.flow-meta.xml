@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>62.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <name>Set_Last_Consent_Sent_At</name>
+        <label>Set Last Consent Sent At</label>
+        <locationX>176</locationX>
+        <locationY>350</locationY>
+        <assignmentItems>
+            <assignToReference>recordId.Last_Consent_Sent_At__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.CurrentDateTime</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Update_Last_Consent_Sent_At</targetReference>
+        </connector>
+    </assignments>
+    <environments>Default</environments>
+    <formulas>
+        <name>Generate_Site_URL</name>
+        <dataType>String</dataType>
+        <expression>CASE({!$Organization.Id}, 
+  &quot;00DMS000000vdfl&quot;, &quot;https://ptbfifinance--qa1.sandbox.my.site.com/s/global-search/&quot;&amp;{!recordId.Id}, 
+  &quot;00DMS000000vlOn&quot;, &quot;https://ptbfifinance--qa.sandbox.my.site.com/s/global-search/&quot;&amp;{!recordId.Id}, 
+  &quot;00DMR000000Udbp&quot;, &quot;https://ptbfifinance--uat3.sandbox.my.site.com/s/global-search/&quot;&amp;{!recordId.Id}, 
+  &quot;https://ptbfifinance--usr.sandbox.my.site.com/s/global-search/&quot;&amp;{!recordId.Id}
+)</expression>
+    </formulas>
+    <interviewLabel>[Scr] Send Consent {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>[Scr] Send Consent</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>Flow</processType>
+    <recordUpdates>
+        <name>Update_Last_Consent_Sent_At</name>
+        <label>Update Last Consent Sent At</label>
+        <locationX>176</locationX>
+        <locationY>458</locationY>
+        <connector>
+            <targetReference>Update_Lead_Progress</targetReference>
+        </connector>
+        <inputReference>recordId</inputReference>
+    </recordUpdates>
+    <screens>
+        <name>Send_Consent_Confirmation</name>
+        <label>Send Consent Confirmation</label>
+        <locationX>176</locationX>
+        <locationY>134</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>Send_WA_Consent</targetReference>
+        </connector>
+        <fields>
+            <name>header</name>
+            <fieldText>&lt;p&gt;Apakah Anda yakin ingin melanjutkan proses ini dan mengirim data ke debitur? &lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;Pastikan informasi yang Anda input benar dan sesuai.&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <nextOrFinishButtonLabel>Send</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Send_Consent_Confirmation</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <subflows>
+        <name>Send_WA_Consent</name>
+        <label>Send WA Consent</label>
+        <locationX>176</locationX>
+        <locationY>242</locationY>
+        <connector>
+            <targetReference>Set_Last_Consent_Sent_At</targetReference>
+        </connector>
+        <flowName>Test_Send_WA_Consent</flowName>
+        <inputAssignments>
+            <name>Target</name>
+            <value>
+                <elementReference>recordId.Formatted_Phone1__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>Template</name>
+            <value>
+                <stringValue>sf-pbf-testing_wa</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>Var1</name>
+            <value>
+                <elementReference>Generate_Site_URL</elementReference>
+            </value>
+        </inputAssignments>
+    </subflows>
+    <subflows>
+        <name>Update_Lead_Progress</name>
+        <label>Update Lead Progress</label>
+        <locationX>176</locationX>
+        <locationY>566</locationY>
+        <flowName>Gen_Update_Lead_Progress</flowName>
+        <inputAssignments>
+            <name>recordId_Acco</name>
+            <value>
+                <elementReference>recordId.Id</elementReference>
+            </value>
+        </inputAssignments>
+    </subflows>
+    <variables>
+        <name>recordId</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Account</objectType>
+    </variables>
+</Flow>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Location_Type__c</fullName>
+    <label>Location Type</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Lokasi Asset Jaminan</fullName>
+                <default>false</default>
+                <label>Lokasi Asset Jaminan</label>
+            </value>
+            <value>
+                <fullName>Lokasi Usaha</fullName>
+                <default>false</default>
+                <label>Lokasi Usaha</label>
+            </value>
+            <value>
+                <fullName>Tempat lain (Isi manual)</fullName>
+                <default>false</default>
+                <label>Tempat lain (Isi manual)</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

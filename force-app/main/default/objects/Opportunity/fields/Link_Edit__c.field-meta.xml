@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Link_Edit__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF( Is_From_LMS__c == TRUE ||  $Permission.Opportunity_Edit_Loan == FALSE ||  ISPICKVAL(Account.Customer_Consent__c, &quot;Setuju&quot;) ||  ISPICKVAL(Account.Status__c, &quot;Canceled&quot;) ||  IsLocked__c == TRUE, &quot;&quot;, HYPERLINK(&quot;/lightning/action/quick/Opportunity.Pop_Edit_Loan?objectApiName&amp;context=RECORD_DETAIL&amp;recordId=&quot;&amp; CASESAFEID(Id)&amp;&quot;&amp;backgroundContext=%2Flightning%2Fr%2FAccount%2F&quot;&amp;CASESAFEID(AccountId)&amp;&quot;%2Fview&quot;, &quot;Ubah&quot;  , &apos;_self&apos;))</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Action</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

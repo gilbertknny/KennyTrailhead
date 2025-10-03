@@ -1,0 +1,433 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ExternalServiceRegistration xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Add Grace Period and Grace Period Type</description>
+    <label>AgreementIDV4</label>
+    <namedCredentialReference>MasterDataNmCred</namedCredentialReference>
+    <operations>
+        <active>true</active>
+        <name>agreementx20idx20v4</name>
+    </operations>
+    <registrationProviderType>Custom</registrationProviderType>
+    <schema>{
+  &quot;openapi&quot;: &quot;3.0.1&quot;,
+  &quot;info&quot;: {
+    &quot;title&quot;: &quot;AgreementIDV4&quot;,
+    &quot;description&quot;: &quot;&quot;
+  },
+  &quot;paths&quot;: {
+    &quot;/krakend-gateway/sf/agreement/v2/agreement&quot;: {
+      &quot;post&quot;: {
+        &quot;description&quot;: &quot;&quot;,
+        &quot;operationId&quot;: &quot;Agreement ID V4&quot;,
+        &quot;parameters&quot;: [{
+          &quot;name&quot;: &quot;X-Idempotency-Key&quot;,
+          &quot;in&quot;: &quot;header&quot;,
+          &quot;required&quot;: true,
+          &quot;schema&quot;: {
+            &quot;type&quot;: &quot;string&quot;
+          }
+        }],
+        &quot;requestBody&quot;: {
+          &quot;description&quot;: &quot;&quot;,
+          &quot;content&quot;: {
+            &quot;application/json&quot;: {
+              &quot;schema&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                  &quot;installment_calculation&quot;: {
+                    &quot;type&quot;: &quot;object&quot;,
+                    &quot;properties&quot;: {
+                      &quot;grace_period&quot;: {
+                        &quot;type&quot;: &quot;object&quot;,
+                        &quot;properties&quot;: {
+                          &quot;type&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;number_of_installments&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;
+                          }
+                        }
+                      }
+                    }
+                  },
+                  &quot;otr_price&quot;: {
+                    &quot;type&quot;: &quot;integer&quot;,
+                    &quot;format&quot;: &quot;int64&quot;
+                  },
+                  &quot;provision_fee_type&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;fees&quot;: {
+                    &quot;type&quot;: &quot;array&quot;,
+                    &quot;items&quot;: {
+                      &quot;type&quot;: &quot;object&quot;,
+                      &quot;properties&quot;: {
+                        &quot;amount&quot;: {
+                          &quot;type&quot;: &quot;integer&quot;,
+                          &quot;format&quot;: &quot;int64&quot;
+                        },
+                        &quot;fee_charge_mode_id&quot;: {
+                          &quot;type&quot;: &quot;string&quot;
+                        },
+                        &quot;fee_type_id&quot;: {
+                          &quot;type&quot;: &quot;string&quot;
+                        }
+                      }
+                    }
+                  },
+                  &quot;channel&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;installment_scheme&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;confins_beneficiary_id&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;package_id&quot;: {
+                    &quot;type&quot;: &quot;integer&quot;,
+                    &quot;format&quot;: &quot;int64&quot;
+                  },
+                  &quot;step_up_down_type&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;disbursement_date&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;beneficiary_account_name&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;soa_id&quot;: {
+                    &quot;type&quot;: &quot;integer&quot;,
+                    &quot;format&quot;: &quot;int64&quot;
+                  },
+                  &quot;life_insurance_calculation_id&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;installments&quot;: {
+                    &quot;type&quot;: &quot;array&quot;,
+                    &quot;items&quot;: {
+                      &quot;type&quot;: &quot;object&quot;,
+                      &quot;properties&quot;: {
+                        &quot;amount&quot;: {
+                          &quot;type&quot;: &quot;integer&quot;,
+                          &quot;format&quot;: &quot;int64&quot;
+                        },
+                        &quot;provision_fee_amount&quot;: {
+                          &quot;type&quot;: &quot;integer&quot;,
+                          &quot;format&quot;: &quot;int64&quot;
+                        },
+                        &quot;principal_amount&quot;: {
+                          &quot;type&quot;: &quot;number&quot;,
+                          &quot;format&quot;: &quot;double&quot;
+                        },
+                        &quot;seq_num&quot;: {
+                          &quot;type&quot;: &quot;integer&quot;,
+                          &quot;format&quot;: &quot;int64&quot;
+                        },
+                        &quot;interest_amount&quot;: {
+                          &quot;type&quot;: &quot;number&quot;,
+                          &quot;format&quot;: &quot;double&quot;
+                        },
+                        &quot;admin_fee_amount&quot;: {
+                          &quot;type&quot;: &quot;integer&quot;,
+                          &quot;format&quot;: &quot;int64&quot;
+                        }
+                      }
+                    }
+                  },
+                  &quot;down_payment_amount&quot;: {
+                    &quot;type&quot;: &quot;integer&quot;,
+                    &quot;format&quot;: &quot;int64&quot;
+                  },
+                  &quot;product_id&quot;: {
+                    &quot;type&quot;: &quot;integer&quot;,
+                    &quot;format&quot;: &quot;int64&quot;
+                  },
+                  &quot;agreement_date&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;activity_id&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;effective_date&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;first_installment&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;asset_insurance_calculation_id&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;effective_rate&quot;: {
+                    &quot;type&quot;: &quot;number&quot;,
+                    &quot;format&quot;: &quot;double&quot;
+                  },
+                  &quot;assignment_survey_id&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;adjusted_effective_rate&quot;: {
+                    &quot;type&quot;: &quot;number&quot;,
+                    &quot;format&quot;: &quot;double&quot;
+                  },
+                  &quot;workflow&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;cum_tenor&quot;: {
+                    &quot;type&quot;: &quot;integer&quot;,
+                    &quot;format&quot;: &quot;int64&quot;
+                  },
+                  &quot;application_id&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;application_source&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;supplier_rate&quot;: {
+                    &quot;type&quot;: &quot;number&quot;,
+                    &quot;format&quot;: &quot;double&quot;
+                  },
+                  &quot;admin_fee_type&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;survey_date&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;installment_allocation_type&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;customer_type&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;golive_date&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;capitalized_ntf_amount&quot;: {
+                    &quot;type&quot;: &quot;integer&quot;,
+                    &quot;format&quot;: &quot;int64&quot;
+                  },
+                  &quot;santunan_insurance_calculation_id&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;is_auto_golive&quot;: {
+                    &quot;type&quot;: &quot;boolean&quot;
+                  },
+                  &quot;tenor&quot;: {
+                    &quot;type&quot;: &quot;integer&quot;,
+                    &quot;format&quot;: &quot;int64&quot;
+                  },
+                  &quot;beneficiary_account_bank_branch&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;late_charge_method&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;branch_id&quot;: {
+                    &quot;type&quot;: &quot;integer&quot;,
+                    &quot;format&quot;: &quot;int64&quot;
+                  },
+                  &quot;fiducia_fee_type&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;supplier_name&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;credit_insurance_calculation_id&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;interest_type&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;ntf_amount&quot;: {
+                    &quot;type&quot;: &quot;integer&quot;,
+                    &quot;format&quot;: &quot;int64&quot;
+                  },
+                  &quot;application_id_potong_funding&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;is_potong_funding&quot;: {
+                    &quot;type&quot;: &quot;integer&quot;,
+                    &quot;format&quot;: &quot;int64&quot;
+                  },
+                  &quot;customer_cif_id&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;guarantors&quot;: {
+                    &quot;type&quot;: &quot;array&quot;,
+                    &quot;items&quot;: {
+                      &quot;type&quot;: &quot;object&quot;,
+                      &quot;properties&quot;: {
+                        &quot;guarantor_cif_id&quot;: {
+                          &quot;type&quot;: &quot;string&quot;
+                        },
+                        &quot;relationship_code&quot;: {
+                          &quot;type&quot;: &quot;string&quot;,
+                          &quot;example&quot;: &quot;FA&quot;
+                        }
+                      },
+                      &quot;required&quot;: [&quot;guarantor_cif_id&quot;, &quot;relationship_code&quot;]
+                    }
+                  },
+                  &quot;financing_type_code&quot;: {
+                    &quot;type&quot;: &quot;integer&quot;,
+                    &quot;format&quot;: &quot;int64&quot;
+                  },
+                  &quot;financing_type_id&quot;: {
+                    &quot;type&quot;: &quot;integer&quot;,
+                    &quot;format&quot;: &quot;int64&quot;
+                  },
+                  &quot;beneficiary_account_num&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;funding_amount&quot;: {
+                    &quot;type&quot;: &quot;integer&quot;,
+                    &quot;format&quot;: &quot;int64&quot;
+                  },
+                  &quot;beneficiary_amount&quot;: {
+                    &quot;type&quot;: &quot;integer&quot;,
+                    &quot;format&quot;: &quot;int64&quot;
+                  },
+                  &quot;surveyor_id&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;beneficiary_account_bank_id&quot;: {
+                    &quot;type&quot;: &quot;integer&quot;,
+                    &quot;format&quot;: &quot;int64&quot;
+                  },
+                  &quot;tenor_unit&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;notary_fee_type&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;referral_id&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;marketing_id&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;rsa_insurance_calculation_id&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;credit_type&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;financial_company_id&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;collaterals&quot;: {
+                    &quot;type&quot;: &quot;array&quot;,
+                    &quot;items&quot;: {
+                      &quot;type&quot;: &quot;object&quot;,
+                      &quot;properties&quot;: {
+                        &quot;otr_price&quot;: {
+                          &quot;type&quot;: &quot;integer&quot;,
+                          &quot;format&quot;: &quot;int64&quot;
+                        },
+                        &quot;down_payment_amount&quot;: {
+                          &quot;type&quot;: &quot;integer&quot;,
+                          &quot;format&quot;: &quot;int64&quot;
+                        },
+                        &quot;asset_type_id&quot;: {
+                          &quot;type&quot;: &quot;string&quot;
+                        },
+                        &quot;asset_code&quot;: {
+                          &quot;type&quot;: &quot;string&quot;
+                        },
+                        &quot;used_new&quot;: {
+                          &quot;type&quot;: &quot;string&quot;
+                        },
+                        &quot;current_price&quot;: {
+                          &quot;type&quot;: &quot;integer&quot;,
+                          &quot;format&quot;: &quot;int64&quot;
+                        },
+                        &quot;ntf_amount&quot;: {
+                          &quot;type&quot;: &quot;integer&quot;,
+                          &quot;format&quot;: &quot;int64&quot;
+                        },
+                        &quot;fiducia_fee&quot;: {
+                          &quot;type&quot;: &quot;integer&quot;,
+                          &quot;format&quot;: &quot;int64&quot;
+                        },
+                        &quot;notary_fiducia_fee&quot;: {
+                          &quot;type&quot;: &quot;integer&quot;,
+                          &quot;format&quot;: &quot;int64&quot;
+                        },
+                        &quot;asset_usage&quot;: {
+                          &quot;type&quot;: &quot;string&quot;
+                        },
+                        &quot;documents&quot;: {
+                          &quot;type&quot;: &quot;array&quot;,
+                          &quot;items&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;reference&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;filename&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;reference_id&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;document_type&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              }
+                            }
+                          }
+                        },
+                        &quot;attributes&quot;: {
+                          &quot;type&quot;: &quot;array&quot;,
+                          &quot;items&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;attribute_id&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;attribute_content&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          &quot;required&quot;: true
+        },
+        &quot;responses&quot;: {
+          &quot;201&quot;: {
+            &quot;description&quot;: &quot;&quot;,
+            &quot;content&quot;: {
+              &quot;application/json&quot;: {
+                &quot;schema&quot;: {
+                  &quot;type&quot;: &quot;object&quot;,
+                  &quot;properties&quot;: {
+                    &quot;agreement_id&quot;: {
+                      &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;agreement_number&quot;: {
+                      &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;application_id&quot;: {
+                      &quot;type&quot;: &quot;string&quot;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}</schema>
+    <schemaType>OpenApi3</schemaType>
+    <serviceBinding>{&quot;host&quot;:&quot;&quot;,&quot;basePath&quot;:&quot;/&quot;,&quot;allowedSchemes&quot;:[],&quot;requestMediaTypes&quot;:[],&quot;responseMediaTypes&quot;:[],&quot;compatibleMediaTypes&quot;:{},&quot;extensions&quot;:{}}</serviceBinding>
+    <status>Complete</status>
+    <systemVersion>5</systemVersion>
+</ExternalServiceRegistration>

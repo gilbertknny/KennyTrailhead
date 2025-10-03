@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ExternalServiceRegistration xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Get Pefindo Report PDF
+Update</description>
+    <label>GetPefindoReportPDF</label>
+    <namedCredentialReference>MasterDataNmCred</namedCredentialReference>
+    <operations>
+        <active>true</active>
+        <name>gerx20pefindox20reportx20pdf</name>
+    </operations>
+    <registrationProviderType>SchemaInferred</registrationProviderType>
+    <schema>{&quot;openapi&quot;:&quot;3.0.1&quot;,&quot;info&quot;:{&quot;title&quot;:&quot;GetPefindoReportPDF&quot;,&quot;description&quot;:&quot;Get Pefindo Report PDF&quot;},&quot;paths&quot;:{&quot;/krakend-gateway/sf/cnv/v1/inquiry/{process_id}/detail/{process_entity_id}/pefindo-pdf&quot;:{&quot;get&quot;:{&quot;description&quot;:&quot;&quot;,&quot;operationId&quot;:&quot;Ger Pefindo Report PDF&quot;,&quot;parameters&quot;:[{&quot;name&quot;:&quot;process_id&quot;,&quot;in&quot;:&quot;path&quot;,&quot;description&quot;:&quot;&quot;,&quot;required&quot;:true,&quot;allowEmptyValue&quot;:false,&quot;schema&quot;:{&quot;type&quot;:&quot;string&quot;}},{&quot;name&quot;:&quot;process_entity_id&quot;,&quot;in&quot;:&quot;path&quot;,&quot;description&quot;:&quot;&quot;,&quot;required&quot;:true,&quot;allowEmptyValue&quot;:false,&quot;schema&quot;:{&quot;type&quot;:&quot;string&quot;}},{&quot;name&quot;:&quot;page&quot;,&quot;in&quot;:&quot;query&quot;,&quot;description&quot;:&quot;&quot;,&quot;required&quot;:true,&quot;allowEmptyValue&quot;:false,&quot;schema&quot;:{&quot;type&quot;:&quot;integer&quot;,&quot;format&quot;:&quot;int32&quot;}},{&quot;name&quot;:&quot;page_size&quot;,&quot;in&quot;:&quot;query&quot;,&quot;description&quot;:&quot;&quot;,&quot;required&quot;:true,&quot;allowEmptyValue&quot;:false,&quot;schema&quot;:{&quot;type&quot;:&quot;integer&quot;,&quot;format&quot;:&quot;int32&quot;}}],&quot;responses&quot;:{&quot;2XX&quot;:{&quot;description&quot;:&quot;Ger Pefindo Report PDF Schema&quot;,&quot;content&quot;:{&quot;application/json&quot;:{&quot;schema&quot;:{&quot;type&quot;:&quot;object&quot;,&quot;properties&quot;:{&quot;code&quot;:{&quot;type&quot;:&quot;integer&quot;,&quot;format&quot;:&quot;int64&quot;},&quot;pagination&quot;:{&quot;type&quot;:&quot;object&quot;,&quot;properties&quot;:{&quot;last&quot;:{&quot;type&quot;:&quot;boolean&quot;},&quot;total_data&quot;:{&quot;type&quot;:&quot;integer&quot;,&quot;format&quot;:&quot;int64&quot;},&quot;page&quot;:{&quot;type&quot;:&quot;integer&quot;,&quot;format&quot;:&quot;int64&quot;},&quot;total_pages&quot;:{&quot;type&quot;:&quot;integer&quot;,&quot;format&quot;:&quot;int64&quot;},&quot;page_size&quot;:{&quot;type&quot;:&quot;integer&quot;,&quot;format&quot;:&quot;int64&quot;}}},&quot;data&quot;:{&quot;type&quot;:&quot;array&quot;,&quot;items&quot;:{&quot;type&quot;:&quot;object&quot;,&quot;properties&quot;:{&quot;title&quot;:{&quot;type&quot;:&quot;string&quot;},&quot;document_url&quot;:{&quot;type&quot;:&quot;string&quot;}}}},&quot;message&quot;:{&quot;type&quot;:&quot;string&quot;}}}}}}}}}}}</schema>
+    <schemaType>OpenApi3</schemaType>
+    <serviceBinding>{&quot;host&quot;:&quot;&quot;,&quot;basePath&quot;:&quot;/&quot;,&quot;allowedSchemes&quot;:[],&quot;requestMediaTypes&quot;:[],&quot;responseMediaTypes&quot;:[],&quot;compatibleMediaTypes&quot;:{},&quot;extensions&quot;:{}}</serviceBinding>
+    <status>Complete</status>
+    <systemVersion>7</systemVersion>
+</ExternalServiceRegistration>

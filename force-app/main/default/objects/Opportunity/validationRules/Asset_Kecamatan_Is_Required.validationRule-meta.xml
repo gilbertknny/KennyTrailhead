@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Asset_Kecamatan_Is_Required</fullName>
+    <active>false</active>
+    <errorConditionFormula>IF( $User.Is_Debug_User__c = TRUE, FALSE, AND(ISPICKVAL( Asset_Address_is_same_as__c , &quot;&quot;),ISBLANK( Asset_Kecamatan__c )))</errorConditionFormula>
+    <errorDisplayField>Asset_Kecamatan__c</errorDisplayField>
+    <errorMessage>Complete this field</errorMessage>
+</ValidationRule>

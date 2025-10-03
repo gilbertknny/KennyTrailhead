@@ -1,0 +1,2581 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <apiVersion>62.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <name>Add_Industry_Group_to_List</name>
+        <label>Add Industry Group to List</label>
+        <locationX>440</locationX>
+        <locationY>1106</locationY>
+        <assignmentItems>
+            <assignToReference>var_DistinctIndustryGroup</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>Get_Distinct_Industry_Group</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>var_DistinctIndustryGroup_Text</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>Get_Distinct_Industry_Group.attributes_industry_group_description__c</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Get_Distinct_Industry_Group</targetReference>
+        </connector>
+    </assignments>
+    <decisions>
+        <name>Is_Group_Already_Exist</name>
+        <label>Is Group Already Exist?</label>
+        <locationX>352</locationX>
+        <locationY>998</locationY>
+        <defaultConnector>
+            <targetReference>Add_Industry_Group_to_List</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Yes_Exist</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>var_DistinctIndustryGroup_Text</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <elementReference>Get_Distinct_Industry_Group.attributes_industry_group_description__c</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Distinct_Industry_Group</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <dynamicChoiceSets>
+        <name>Picklist_EconomySector</name>
+        <dataType>String</dataType>
+        <displayField>Name</displayField>
+        <object>Master_Economy_Sector__c</object>
+        <valueField>Id</valueField>
+    </dynamicChoiceSets>
+    <dynamicChoiceSets>
+        <name>Picklist_EconomySectorNew</name>
+        <dataType>String</dataType>
+        <displayField>name__c</displayField>
+        <object>API_Economy_Sector__c</object>
+        <sortField>name__c</sortField>
+        <sortOrder>Asc</sortOrder>
+        <valueField>id_formula__c</valueField>
+    </dynamicChoiceSets>
+    <dynamicChoiceSets>
+        <name>Picklist_GajiReflekRekening</name>
+        <dataType>Picklist</dataType>
+        <displayField xsi:nil="true"/>
+        <object xsi:nil="true"/>
+        <picklistField>Transaksi_Usaha_Gaji_Reflek_Rekening__c</picklistField>
+        <picklistObject>Survey__c</picklistObject>
+    </dynamicChoiceSets>
+    <dynamicChoiceSets>
+        <name>Picklist_IndustryGroup</name>
+        <dataType>Picklist</dataType>
+        <displayField xsi:nil="true"/>
+        <object xsi:nil="true"/>
+        <picklistField>Industry_Group__c</picklistField>
+        <picklistObject>Contact</picklistObject>
+    </dynamicChoiceSets>
+    <dynamicChoiceSets>
+        <name>Picklist_IndustryGroupDef</name>
+        <collectionReference>var_DistinctIndustryGroup</collectionReference>
+        <dataType>String</dataType>
+        <displayField>attributes_industry_group_description__c</displayField>
+        <object>API_Industry_Group_and_Type__c</object>
+        <valueField>attributes_industry_group_description__c</valueField>
+    </dynamicChoiceSets>
+    <dynamicChoiceSets>
+        <name>Picklist_IndustryGroupNew</name>
+        <collectionReference>df_Industry_Group.retrievedRecords</collectionReference>
+        <dataType>String</dataType>
+        <displayField>attributes_industry_group_description__c</displayField>
+        <object>API_Industry_Group_and_Type__c</object>
+        <valueField>attributes_industry_group_description__c</valueField>
+    </dynamicChoiceSets>
+    <dynamicChoiceSets>
+        <name>Picklist_IndustryType</name>
+        <dataType>Picklist</dataType>
+        <displayField xsi:nil="true"/>
+        <object xsi:nil="true"/>
+        <picklistField>Industry_Type__c</picklistField>
+        <picklistObject>Contact</picklistObject>
+    </dynamicChoiceSets>
+    <dynamicChoiceSets>
+        <name>Picklist_IndustryTypeDef</name>
+        <dataType>String</dataType>
+        <displayField>name__c</displayField>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>parent_id_formula__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Customer_Information.Economy_Sector_New__r.id_formula__c</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>attributes_industry_group_description__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Customer_Information.Industry_Group_Text__c</elementReference>
+            </value>
+        </filters>
+        <object>API_Industry_Group_and_Type__c</object>
+        <sortField>Name</sortField>
+        <sortOrder>Asc</sortOrder>
+        <valueField>Id</valueField>
+    </dynamicChoiceSets>
+    <dynamicChoiceSets>
+        <name>Picklist_IndustryTypeNew</name>
+        <collectionReference>df_Industry_Type.retrievedRecords</collectionReference>
+        <dataType>String</dataType>
+        <displayField>name__c</displayField>
+        <object>API_Industry_Group_and_Type__c</object>
+        <valueField>Id</valueField>
+    </dynamicChoiceSets>
+    <dynamicChoiceSets>
+        <name>Picklist_KepemilikanAssetLainnya</name>
+        <dataType>Multipicklist</dataType>
+        <displayField xsi:nil="true"/>
+        <object xsi:nil="true"/>
+        <picklistField>Kepemilikan_Asset_Lainnya__c</picklistField>
+        <picklistObject>Survey__c</picklistObject>
+    </dynamicChoiceSets>
+    <dynamicChoiceSets>
+        <name>Picklist_PersonalIncome</name>
+        <dataType>Picklist</dataType>
+        <displayField xsi:nil="true"/>
+        <object xsi:nil="true"/>
+        <picklistField>Personal_Income__c</picklistField>
+        <picklistObject>Survey__c</picklistObject>
+    </dynamicChoiceSets>
+    <dynamicChoiceSets>
+        <name>Picklist_Profession</name>
+        <dataType>String</dataType>
+        <displayField>Name</displayField>
+        <object>Master_Occupation__c</object>
+        <valueField>Id</valueField>
+    </dynamicChoiceSets>
+    <dynamicChoiceSets>
+        <name>Picklist_SumberNilaiHakTanggungan</name>
+        <dataType>Picklist</dataType>
+        <displayField xsi:nil="true"/>
+        <object xsi:nil="true"/>
+        <picklistField>Sumber_Nilai_Hak_Tanggungan__c</picklistField>
+        <picklistObject>Survey__c</picklistObject>
+    </dynamicChoiceSets>
+    <environments>Default</environments>
+    <formulas>
+        <name>formula_AccountPayableRatio</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.Account_Payable_Ratio__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_AccountReceivableRatio</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.Account_Receivable_Ratio__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_AsettoDebtRatio</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.Aset_to_Debt_Ratio__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_AverageDayNetProfitMargin</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.Average_Day_Net_Profit_Margin__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_AverageDaySales</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.Average_Day_Sales__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_BebanLainLain</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.Beban_Lain_Lain__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_BebanOperasional</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.Beban_Operasional__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_BebanPajak</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.Beban_Pajak__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_CashRatio</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.Cash_Ratio__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_CurrentRatio</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.Current_Ratio__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_DaysAPR</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.Days_APR__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_DaysARR</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.Days_ARR__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_DebttoEquityRatio</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.Debt_to_Equity_Ratio__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_DebttoTotalAsset</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.Debt_to_Total_Asset__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_DetailPenggunaanDana</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!recordId.Detail_Penggunaan_Dana_Konsumtif__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_DetailPenggunaanDanaProduktf</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!recordId.Detail_Penggunaan_Dana_Produktif__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_DIR</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.DIR__c} * 100) + &quot;%&quot;</expression>
+    </formulas>
+    <formulas>
+        <name>formula_DSC</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.DSC__c} * 100) + &quot;%&quot;</expression>
+    </formulas>
+    <formulas>
+        <name>formula_DSR</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.DSR__c} * 100) + &quot;%&quot;</expression>
+    </formulas>
+    <formulas>
+        <name>formula_EmploymentSince</name>
+        <dataType>String</dataType>
+        <expression>TEXT(
+  DAY(({!Get_Curr_Survey.Employment_Business_Since__c}))
+) &amp; &quot; &quot; &amp;
+CASE(
+  MONTH(({!Get_Curr_Survey.Employment_Business_Since__c})),
+  1, &quot;Jan&quot;, 2, &quot;Feb&quot;, 3, &quot;Mar&quot;, 4, &quot;Apr&quot;, 5, &quot;May&quot;, 6, &quot;Jun&quot;,
+  7, &quot;Jul&quot;, 8, &quot;Aug&quot;, 9, &quot;Sep&quot;, 10, &quot;Oct&quot;, 11, &quot;Nov&quot;, 12, &quot;Dec&quot;, &quot;&quot;
+) &amp; &quot; &quot; &amp;
+TEXT(YEAR(({!Get_Curr_Survey.Employment_Business_Since__c})))</expression>
+    </formulas>
+    <formulas>
+        <name>formula_GajiReflekRekening</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.Transaksi_Usaha_Gaji_Reflek_Rekening__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_GrossMargin</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.Gross_Margin__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_HPP</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.HPP__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_IndustryGroup</name>
+        <dataType>String</dataType>
+        <expression>{!Get_Customer_Information.Industry_Group_Text__c}</expression>
+    </formulas>
+    <formulas>
+        <name>formula_IndustryType</name>
+        <dataType>String</dataType>
+        <expression>{!Get_Customer_Information.Industry_Type_Lookup__r.name__c}</expression>
+    </formulas>
+    <formulas>
+        <name>formula_InventoryTurnover</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.Inventory_Turnover__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_kepemilikanAssetLainnya</name>
+        <dataType>String</dataType>
+        <expression>IF ( INCLUDES ( {!Get_Curr_Survey.Kepemilikan_Asset_Lainnya__c} , &quot;Rumah&quot; ), &quot;Rumah; &quot;,&quot;&quot;) &amp;
+IF ( INCLUDES ( {!Get_Curr_Survey.Kepemilikan_Asset_Lainnya__c} , &quot;Ruko/Kios&quot; ), &quot;Ruko/Kios; &quot;,&quot;&quot; ) &amp;
+IF ( INCLUDES ( {!Get_Curr_Survey.Kepemilikan_Asset_Lainnya__c} , &quot;Apartemen&quot; ), &quot;Apartemen; &quot;,&quot;&quot; ) &amp;
+IF ( INCLUDES ( {!Get_Curr_Survey.Kepemilikan_Asset_Lainnya__c} , &quot;Kendaraan Pribadi&quot; ), &quot;Kendaraan Pribadi; &quot;,&quot;&quot;) &amp;
+IF ( INCLUDES ( {!Get_Curr_Survey.Kepemilikan_Asset_Lainnya__c} , &quot;Kendaraan Operasional&quot; ), &quot;Kendaraan Operasional; &quot;,&quot;&quot; ) &amp;
+IF ( INCLUDES ( {!Get_Curr_Survey.Kepemilikan_Asset_Lainnya__c} , &quot;Mesin Produksi&quot; ), &quot;Mesin Produksi; &quot;,&quot;&quot; ) &amp;
+IF ( INCLUDES ( {!Get_Curr_Survey.Kepemilikan_Asset_Lainnya__c} , &quot;Gudang&quot; ), &quot;Gudang; &quot;,&quot;&quot; ) &amp;
+IF ( INCLUDES ( {!Get_Curr_Survey.Kepemilikan_Asset_Lainnya__c} , &quot;Tanah&quot; ), &quot;Tanah; &quot;,&quot;&quot; ) &amp;
+IF ( INCLUDES ( {!Get_Curr_Survey.Kepemilikan_Asset_Lainnya__c} , &quot;Aset Lainnya&quot; ), &quot;Aset Lainnya; &quot;,&quot;&quot; )</expression>
+    </formulas>
+    <formulas>
+        <name>formula_LabaKotor</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.Laba_Kotor__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_LabaOperasional</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.Laba_Operasional__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_LabaRugisebelumPajak</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.Laba_Rugi_sebelum_Pajak__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_LabaRugisetelahPajak</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.Laba_Rugi_setelah_Pajak__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_LivingCost</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.Living_Cost__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_LTVOfAssetLiquidation</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!recordId.LTV_of_asset_liquidation__c}) &amp; &quot;%&quot;</expression>
+    </formulas>
+    <formulas>
+        <name>formula_LTVofAssetMarketPrice</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.LTV_of_asset_market_price__c}) &amp; &quot;%&quot;</expression>
+    </formulas>
+    <formulas>
+        <name>formula_NetIncome</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.Net_Income_Per_Bulan__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_NetProfitMargin</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.Net_Profit_Margin__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_NetWorkingCapitalTurnover</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.Net_Working_Capital_Turnover__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_OperatingProfitMargin</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.Operating_Profit_Margin__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_PastDueAmount</name>
+        <dataType>String</dataType>
+        <expression>&quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!recordId.Past_Due_Amount__c}, 0))) &gt; 12, TEXT(ROUND({!recordId.Past_Due_Amount__c}, 0)),
+IF(LEN(TEXT(ROUND({!recordId.Past_Due_Amount__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!recordId.Past_Due_Amount__c}, 0)), LEN(TEXT(ROUND({!recordId.Past_Due_Amount__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!recordId.Past_Due_Amount__c}, 0)), LEN(TEXT(ROUND({!recordId.Past_Due_Amount__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!recordId.Past_Due_Amount__c}, 0)), LEN(TEXT(ROUND({!recordId.Past_Due_Amount__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!recordId.Past_Due_Amount__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!recordId.Past_Due_Amount__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!recordId.Past_Due_Amount__c}, 0)), LEN(TEXT(ROUND({!recordId.Past_Due_Amount__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!recordId.Past_Due_Amount__c}, 0)), LEN(TEXT(ROUND({!recordId.Past_Due_Amount__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!recordId.Past_Due_Amount__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!recordId.Past_Due_Amount__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!recordId.Past_Due_Amount__c}, 0)), LEN(TEXT(ROUND({!recordId.Past_Due_Amount__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!recordId.Past_Due_Amount__c}, 0)), 3),
+TEXT(ROUND({!recordId.Past_Due_Amount__c}, 0))
+))))</expression>
+    </formulas>
+    <formulas>
+        <name>formula_PastDueDays</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!recordId.Past_Due_Days__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_PefindoTotalObligasi</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Account.Pefindo_Total_OSP__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_PendapatanLainLain</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.Pendapatan_Lain_Lain__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_PendapatanPenjualan</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.Pendapatan_Penjualan__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_PersonalIncome</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!recordId.Survey__r.Personal_Income__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_ProporsiKredit</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!recordId.Proporsi_Credit_Kepemilikan_Aset_Inc_BF__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_QuickRatioAcidTesRatio</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.Quick_Ratio_Acid_Tes_Ratio__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_ReturnonEquity</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.Return_on_Equity__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_ReturnonInvestment</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.Return_on_Investment__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_SelisihLB</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!recordId.Selisih_LB_antara_Fisik_dan_Bangunan__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_SurplusDeficitIncome</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.Surplus_Deficit_Income__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_TerdapatInfoNegative</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!recordId.Terdapat_Informasi_Negative_Picklist__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_TotalAngsuranExisting</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.Total_Angsuran_Existing__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_TotalAngsuranPengajuan</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.Total_Angsuran_Pengajuan__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_TotalNetIncome</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.Total_Net_Income__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_TotalObligasiAktif</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!recordId.Total_Obligasi_Aktif__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_TujuanPembiayaan</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.Tujuan_Pembiayaan__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_WorkingCapitalTurnOver</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.Working_Capital_Turn_Over__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_WorstCollectability</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!recordId.Worst_Collectability_Credit_by_Pefindo_d__c})</expression>
+    </formulas>
+    <formulas>
+        <name>func_AkumulasiPenyusutanGedung_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Akumulasi_Penyusutan_Gedung__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Gedung__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Gedung__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Gedung__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Gedung__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Gedung__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Gedung__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Gedung__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Gedung__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Gedung__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Gedung__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Gedung__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Gedung__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Gedung__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Gedung__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Gedung__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Gedung__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Gedung__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Gedung__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Gedung__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Gedung__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Gedung__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_AkumulasiPenyusutanKendaraan_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Akumulasi_Penyusutan_Kendaraan__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Kendaraan__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Kendaraan__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Kendaraan__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Kendaraan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Kendaraan__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Kendaraan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Kendaraan__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Kendaraan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Kendaraan__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Kendaraan__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Kendaraan__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Kendaraan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Kendaraan__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Kendaraan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Kendaraan__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Kendaraan__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Kendaraan__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Kendaraan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Kendaraan__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Kendaraan__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Kendaraan__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_AkumulasiPenyusutanPeralatanMesin_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Akumulasi_Penyusutan_Peralatan_Mesin__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Peralatan_Mesin__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Peralatan_Mesin__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Peralatan_Mesin__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Peralatan_Mesin__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Peralatan_Mesin__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Peralatan_Mesin__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Peralatan_Mesin__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Peralatan_Mesin__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Peralatan_Mesin__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Peralatan_Mesin__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Peralatan_Mesin__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Peralatan_Mesin__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Peralatan_Mesin__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Peralatan_Mesin__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Peralatan_Mesin__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Peralatan_Mesin__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Peralatan_Mesin__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Peralatan_Mesin__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Peralatan_Mesin__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Peralatan_Mesin__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Peralatan_Mesin__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_AsetLancarLainnya_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Aset_Lancar_Lainnya__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Aset_Lancar_Lainnya__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Aset_Lancar_Lainnya__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Aset_Lancar_Lainnya__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Aset_Lancar_Lainnya__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Aset_Lancar_Lainnya__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Aset_Lancar_Lainnya__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Aset_Lancar_Lainnya__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Aset_Lancar_Lainnya__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Aset_Lancar_Lainnya__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Aset_Lancar_Lainnya__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Aset_Lancar_Lainnya__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Aset_Lancar_Lainnya__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Aset_Lancar_Lainnya__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Aset_Lancar_Lainnya__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Aset_Lancar_Lainnya__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Aset_Lancar_Lainnya__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Aset_Lancar_Lainnya__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Aset_Lancar_Lainnya__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Aset_Lancar_Lainnya__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Aset_Lancar_Lainnya__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Aset_Lancar_Lainnya__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_AssetTidakLancarLainnya_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Asset_Tidak_Lancar_Lainnya__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Asset_Tidak_Lancar_Lainnya__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Asset_Tidak_Lancar_Lainnya__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Asset_Tidak_Lancar_Lainnya__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Asset_Tidak_Lancar_Lainnya__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Asset_Tidak_Lancar_Lainnya__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Asset_Tidak_Lancar_Lainnya__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Asset_Tidak_Lancar_Lainnya__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Asset_Tidak_Lancar_Lainnya__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Asset_Tidak_Lancar_Lainnya__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Asset_Tidak_Lancar_Lainnya__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Asset_Tidak_Lancar_Lainnya__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Asset_Tidak_Lancar_Lainnya__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Asset_Tidak_Lancar_Lainnya__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Asset_Tidak_Lancar_Lainnya__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Asset_Tidak_Lancar_Lainnya__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Asset_Tidak_Lancar_Lainnya__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Asset_Tidak_Lancar_Lainnya__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Asset_Tidak_Lancar_Lainnya__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Asset_Tidak_Lancar_Lainnya__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Asset_Tidak_Lancar_Lainnya__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Asset_Tidak_Lancar_Lainnya__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_BebanLainLain_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Beban_Lain_Lain__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Beban_Lain_Lain__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Beban_Lain_Lain__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Beban_Lain_Lain__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Beban_Lain_Lain__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Beban_Lain_Lain__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Beban_Lain_Lain__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Beban_Lain_Lain__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Beban_Lain_Lain__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Beban_Lain_Lain__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Beban_Lain_Lain__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Beban_Lain_Lain__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Beban_Lain_Lain__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Beban_Lain_Lain__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Beban_Lain_Lain__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Beban_Lain_Lain__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Beban_Lain_Lain__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Beban_Lain_Lain__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Beban_Lain_Lain__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Beban_Lain_Lain__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Beban_Lain_Lain__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Beban_Lain_Lain__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_BebanOperasional_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Beban_Operasional__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Beban_Operasional__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Beban_Operasional__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Beban_Operasional__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Beban_Operasional__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Beban_Operasional__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Beban_Operasional__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Beban_Operasional__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Beban_Operasional__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Beban_Operasional__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Beban_Operasional__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Beban_Operasional__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Beban_Operasional__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Beban_Operasional__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Beban_Operasional__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Beban_Operasional__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Beban_Operasional__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Beban_Operasional__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Beban_Operasional__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Beban_Operasional__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Beban_Operasional__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Beban_Operasional__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_BebanPajak_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Beban_Pajak__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Beban_Pajak__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Beban_Pajak__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Beban_Pajak__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Beban_Pajak__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Beban_Pajak__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Beban_Pajak__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Beban_Pajak__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Beban_Pajak__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Beban_Pajak__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Beban_Pajak__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Beban_Pajak__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Beban_Pajak__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Beban_Pajak__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Beban_Pajak__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Beban_Pajak__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Beban_Pajak__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Beban_Pajak__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Beban_Pajak__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Beban_Pajak__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Beban_Pajak__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Beban_Pajak__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_Biayadibayardimuka_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Biaya_dibayar_dimuka__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Biaya_dibayar_dimuka__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Biaya_dibayar_dimuka__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Biaya_dibayar_dimuka__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Biaya_dibayar_dimuka__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Biaya_dibayar_dimuka__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Biaya_dibayar_dimuka__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Biaya_dibayar_dimuka__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Biaya_dibayar_dimuka__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Biaya_dibayar_dimuka__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Biaya_dibayar_dimuka__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Biaya_dibayar_dimuka__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Biaya_dibayar_dimuka__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Biaya_dibayar_dimuka__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Biaya_dibayar_dimuka__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Biaya_dibayar_dimuka__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Biaya_dibayar_dimuka__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Biaya_dibayar_dimuka__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Biaya_dibayar_dimuka__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Biaya_dibayar_dimuka__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Biaya_dibayar_dimuka__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Biaya_dibayar_dimuka__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_Biayayangmasihharusdibayar_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Biaya_yang_masih_harus_dibayar__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Biaya_yang_masih_harus_dibayar__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Biaya_yang_masih_harus_dibayar__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Biaya_yang_masih_harus_dibayar__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Biaya_yang_masih_harus_dibayar__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Biaya_yang_masih_harus_dibayar__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Biaya_yang_masih_harus_dibayar__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Biaya_yang_masih_harus_dibayar__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Biaya_yang_masih_harus_dibayar__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Biaya_yang_masih_harus_dibayar__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Biaya_yang_masih_harus_dibayar__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Biaya_yang_masih_harus_dibayar__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Biaya_yang_masih_harus_dibayar__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Biaya_yang_masih_harus_dibayar__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Biaya_yang_masih_harus_dibayar__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Biaya_yang_masih_harus_dibayar__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Biaya_yang_masih_harus_dibayar__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Biaya_yang_masih_harus_dibayar__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Biaya_yang_masih_harus_dibayar__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Biaya_yang_masih_harus_dibayar__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Biaya_yang_masih_harus_dibayar__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Biaya_yang_masih_harus_dibayar__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_Gedung_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Gedung__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Gedung__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Gedung__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Gedung__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Gedung__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Gedung__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Gedung__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Gedung__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Gedung__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Gedung__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Gedung__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Gedung__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Gedung__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Gedung__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Gedung__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Gedung__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Gedung__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Gedung__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Gedung__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Gedung__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Gedung__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Gedung__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_HPP_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.HPP__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.HPP__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.HPP__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.HPP__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.HPP__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.HPP__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.HPP__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.HPP__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.HPP__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.HPP__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.HPP__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.HPP__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.HPP__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.HPP__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.HPP__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.HPP__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.HPP__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.HPP__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.HPP__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.HPP__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.HPP__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.HPP__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_HutangBankJangkaPanjang_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Hutang_Bank_Jangka_Panjang__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Panjang__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Panjang__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Panjang__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Panjang__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Panjang__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Panjang__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Panjang__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Panjang__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Panjang__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Panjang__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Panjang__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Panjang__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Panjang__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Panjang__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Panjang__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Panjang__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Panjang__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Panjang__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Panjang__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Panjang__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Panjang__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_HutangBankJangkaPendek_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Hutang_Bank_Jangka_Pendek__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Pendek__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Pendek__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Pendek__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Pendek__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Pendek__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Pendek__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Pendek__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Pendek__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Pendek__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Pendek__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Pendek__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Pendek__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Pendek__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Pendek__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Pendek__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Pendek__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Pendek__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Pendek__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Pendek__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Pendek__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Pendek__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_HutangDagangUsaha_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Hutang_Dagang_Usaha__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Dagang_Usaha__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Hutang_Dagang_Usaha__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Dagang_Usaha__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Hutang_Dagang_Usaha__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Dagang_Usaha__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Hutang_Dagang_Usaha__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Dagang_Usaha__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Hutang_Dagang_Usaha__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Dagang_Usaha__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Hutang_Dagang_Usaha__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Dagang_Usaha__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Hutang_Dagang_Usaha__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Dagang_Usaha__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Hutang_Dagang_Usaha__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Dagang_Usaha__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Hutang_Dagang_Usaha__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Dagang_Usaha__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Hutang_Dagang_Usaha__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Dagang_Usaha__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Hutang_Dagang_Usaha__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Hutang_Dagang_Usaha__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_HutangGaji_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Hutang_Gaji__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Gaji__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Hutang_Gaji__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Gaji__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Hutang_Gaji__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Gaji__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Hutang_Gaji__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Gaji__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Hutang_Gaji__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Gaji__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Hutang_Gaji__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Gaji__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Hutang_Gaji__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Gaji__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Hutang_Gaji__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Gaji__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Hutang_Gaji__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Gaji__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Hutang_Gaji__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Gaji__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Hutang_Gaji__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Hutang_Gaji__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_HutangJangkapendeklainnya_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Hutang_Jangka_pendek_lainnya__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Jangka_pendek_lainnya__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Hutang_Jangka_pendek_lainnya__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Jangka_pendek_lainnya__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Hutang_Jangka_pendek_lainnya__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Jangka_pendek_lainnya__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Hutang_Jangka_pendek_lainnya__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Jangka_pendek_lainnya__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Hutang_Jangka_pendek_lainnya__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Jangka_pendek_lainnya__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Hutang_Jangka_pendek_lainnya__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Jangka_pendek_lainnya__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Hutang_Jangka_pendek_lainnya__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Jangka_pendek_lainnya__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Hutang_Jangka_pendek_lainnya__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Jangka_pendek_lainnya__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Hutang_Jangka_pendek_lainnya__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Jangka_pendek_lainnya__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Hutang_Jangka_pendek_lainnya__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Jangka_pendek_lainnya__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Hutang_Jangka_pendek_lainnya__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Hutang_Jangka_pendek_lainnya__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_HutangPajak_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Hutang_Pajak__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Pajak__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Hutang_Pajak__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Pajak__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Hutang_Pajak__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Pajak__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Hutang_Pajak__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Pajak__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Hutang_Pajak__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Pajak__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Hutang_Pajak__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Pajak__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Hutang_Pajak__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Pajak__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Hutang_Pajak__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Pajak__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Hutang_Pajak__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Pajak__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Hutang_Pajak__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Pajak__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Hutang_Pajak__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Hutang_Pajak__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_KasBankatauSetaraKas_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Kas_Bank_atau_Setara_Kas__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Kas_Bank_atau_Setara_Kas__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Kas_Bank_atau_Setara_Kas__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Kas_Bank_atau_Setara_Kas__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Kas_Bank_atau_Setara_Kas__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Kas_Bank_atau_Setara_Kas__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Kas_Bank_atau_Setara_Kas__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Kas_Bank_atau_Setara_Kas__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Kas_Bank_atau_Setara_Kas__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Kas_Bank_atau_Setara_Kas__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Kas_Bank_atau_Setara_Kas__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Kas_Bank_atau_Setara_Kas__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Kas_Bank_atau_Setara_Kas__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Kas_Bank_atau_Setara_Kas__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Kas_Bank_atau_Setara_Kas__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Kas_Bank_atau_Setara_Kas__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Kas_Bank_atau_Setara_Kas__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Kas_Bank_atau_Setara_Kas__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Kas_Bank_atau_Setara_Kas__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Kas_Bank_atau_Setara_Kas__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Kas_Bank_atau_Setara_Kas__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Kas_Bank_atau_Setara_Kas__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_Kendaraan_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Kendaraan__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Kendaraan__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Kendaraan__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Kendaraan__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Kendaraan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Kendaraan__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Kendaraan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Kendaraan__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Kendaraan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Kendaraan__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Kendaraan__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Kendaraan__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Kendaraan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Kendaraan__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Kendaraan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Kendaraan__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Kendaraan__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Kendaraan__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Kendaraan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Kendaraan__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Kendaraan__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Kendaraan__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_LabaDitahan_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Laba_Ditahan__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Ditahan__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Laba_Ditahan__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Ditahan__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Laba_Ditahan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Ditahan__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Laba_Ditahan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Ditahan__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Laba_Ditahan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Ditahan__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Laba_Ditahan__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Ditahan__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Laba_Ditahan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Ditahan__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Laba_Ditahan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Ditahan__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Laba_Ditahan__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Ditahan__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Laba_Ditahan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Ditahan__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Laba_Ditahan__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Laba_Ditahan__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_LabaKotor_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Laba_Kotor__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Kotor__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Laba_Kotor__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Kotor__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Laba_Kotor__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Kotor__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Laba_Kotor__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Kotor__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Laba_Kotor__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Kotor__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Laba_Kotor__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Kotor__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Laba_Kotor__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Kotor__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Laba_Kotor__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Kotor__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Laba_Kotor__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Kotor__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Laba_Kotor__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Kotor__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Laba_Kotor__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Laba_Kotor__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_LabaOperasional_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Laba_Operasional__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Operasional__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Laba_Operasional__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Operasional__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Laba_Operasional__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Operasional__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Laba_Operasional__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Operasional__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Laba_Operasional__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Operasional__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Laba_Operasional__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Operasional__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Laba_Operasional__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Operasional__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Laba_Operasional__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Operasional__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Laba_Operasional__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Operasional__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Laba_Operasional__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Operasional__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Laba_Operasional__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Laba_Operasional__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_LabaRugisebelumPajak_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Laba_Rugi_sebelum_Pajak__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_sebelum_Pajak__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_sebelum_Pajak__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_sebelum_Pajak__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_sebelum_Pajak__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_sebelum_Pajak__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_sebelum_Pajak__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_sebelum_Pajak__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_sebelum_Pajak__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_sebelum_Pajak__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_sebelum_Pajak__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_sebelum_Pajak__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_sebelum_Pajak__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_sebelum_Pajak__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_sebelum_Pajak__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_sebelum_Pajak__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_sebelum_Pajak__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_sebelum_Pajak__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_sebelum_Pajak__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_sebelum_Pajak__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_sebelum_Pajak__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_sebelum_Pajak__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_LabaRugisetelahPajak_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Laba_Rugi_setelah_Pajak__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_setelah_Pajak__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_setelah_Pajak__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_setelah_Pajak__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_setelah_Pajak__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_setelah_Pajak__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_setelah_Pajak__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_setelah_Pajak__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_setelah_Pajak__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_setelah_Pajak__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_setelah_Pajak__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_setelah_Pajak__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_setelah_Pajak__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_setelah_Pajak__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_setelah_Pajak__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_setelah_Pajak__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_setelah_Pajak__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_setelah_Pajak__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_setelah_Pajak__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_setelah_Pajak__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_setelah_Pajak__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_setelah_Pajak__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_LabaTahunBerjalan_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Laba_Tahun_Berjalan__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Tahun_Berjalan__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Laba_Tahun_Berjalan__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Tahun_Berjalan__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Laba_Tahun_Berjalan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Tahun_Berjalan__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Laba_Tahun_Berjalan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Tahun_Berjalan__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Laba_Tahun_Berjalan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Tahun_Berjalan__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Laba_Tahun_Berjalan__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Tahun_Berjalan__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Laba_Tahun_Berjalan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Tahun_Berjalan__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Laba_Tahun_Berjalan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Tahun_Berjalan__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Laba_Tahun_Berjalan__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Tahun_Berjalan__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Laba_Tahun_Berjalan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Tahun_Berjalan__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Laba_Tahun_Berjalan__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Laba_Tahun_Berjalan__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_MaksimumLTV</name>
+        <dataType>Currency</dataType>
+        <expression>IF(TEXT({!Get_Curr_Survey.Tipe_Penilaian__c}) == &quot;Pre Approval&quot;, {!Get_Curr_Survey.PRE_Maksimum_LTV__c},
+IF(TEXT({!Get_Curr_Survey.Tipe_Penilaian__c}) == &quot;Non Appraisal (NJOP)&quot;, {!Get_Curr_Survey.NJOP_Maksimum_LTV__c}, 
+IF(TEXT({!Get_Curr_Survey.Tipe_Penilaian__c}) == &quot;Appraisal (KJPP)&quot;, {!Get_Curr_Survey.KJPP_Maksimum_LTV__c}, {!Get_Curr_Survey.Maksimum_LTV__c}
+)))</expression>
+        <scale>2</scale>
+    </formulas>
+    <formulas>
+        <name>func_Modaldisetor_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Modal_disetor__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Modal_disetor__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Modal_disetor__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Modal_disetor__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Modal_disetor__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Modal_disetor__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Modal_disetor__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Modal_disetor__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Modal_disetor__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Modal_disetor__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Modal_disetor__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Modal_disetor__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Modal_disetor__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Modal_disetor__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Modal_disetor__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Modal_disetor__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Modal_disetor__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Modal_disetor__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Modal_disetor__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Modal_disetor__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Modal_disetor__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Modal_disetor__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_PendapatanLainLain_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Pendapatan_Lain_Lain__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Lain_Lain__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Lain_Lain__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Lain_Lain__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Lain_Lain__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Lain_Lain__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Lain_Lain__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Lain_Lain__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Lain_Lain__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Lain_Lain__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Lain_Lain__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Lain_Lain__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Lain_Lain__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Lain_Lain__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Lain_Lain__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Lain_Lain__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Lain_Lain__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Lain_Lain__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Lain_Lain__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Lain_Lain__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Lain_Lain__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Lain_Lain__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_PendapatanPenjualan_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Pendapatan_Penjualan__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Penjualan__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Penjualan__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Penjualan__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Penjualan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Penjualan__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Penjualan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Penjualan__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Penjualan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Penjualan__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Penjualan__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Penjualan__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Penjualan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Penjualan__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Penjualan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Penjualan__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Penjualan__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Penjualan__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Penjualan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Penjualan__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Penjualan__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Penjualan__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_PeralatandanMachine_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Peralatan_dan_Machine__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Peralatan_dan_Machine__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Peralatan_dan_Machine__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Peralatan_dan_Machine__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Peralatan_dan_Machine__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Peralatan_dan_Machine__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Peralatan_dan_Machine__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Peralatan_dan_Machine__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Peralatan_dan_Machine__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Peralatan_dan_Machine__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Peralatan_dan_Machine__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Peralatan_dan_Machine__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Peralatan_dan_Machine__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Peralatan_dan_Machine__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Peralatan_dan_Machine__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Peralatan_dan_Machine__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Peralatan_dan_Machine__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Peralatan_dan_Machine__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Peralatan_dan_Machine__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Peralatan_dan_Machine__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Peralatan_dan_Machine__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Peralatan_dan_Machine__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_Perlengkapan_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Perlengkapan__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Perlengkapan__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Perlengkapan__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Perlengkapan__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Perlengkapan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Perlengkapan__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Perlengkapan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Perlengkapan__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Perlengkapan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Perlengkapan__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Perlengkapan__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Perlengkapan__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Perlengkapan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Perlengkapan__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Perlengkapan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Perlengkapan__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Perlengkapan__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Perlengkapan__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Perlengkapan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Perlengkapan__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Perlengkapan__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Perlengkapan__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_Persediaan_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Persediaan__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Persediaan__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Persediaan__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Persediaan__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Persediaan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Persediaan__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Persediaan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Persediaan__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Persediaan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Persediaan__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Persediaan__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Persediaan__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Persediaan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Persediaan__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Persediaan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Persediaan__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Persediaan__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Persediaan__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Persediaan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Persediaan__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Persediaan__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Persediaan__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_PiutangLainLain_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Piutang_Lain_Lain__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Piutang_Lain_Lain__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Piutang_Lain_Lain__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Piutang_Lain_Lain__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Piutang_Lain_Lain__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Piutang_Lain_Lain__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Piutang_Lain_Lain__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Piutang_Lain_Lain__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Piutang_Lain_Lain__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Piutang_Lain_Lain__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Piutang_Lain_Lain__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Piutang_Lain_Lain__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Piutang_Lain_Lain__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Piutang_Lain_Lain__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Piutang_Lain_Lain__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Piutang_Lain_Lain__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Piutang_Lain_Lain__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Piutang_Lain_Lain__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Piutang_Lain_Lain__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Piutang_Lain_Lain__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Piutang_Lain_Lain__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Piutang_Lain_Lain__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_PiutangUsahaDagang_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Piutang_Usaha_Dagang__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Piutang_Usaha_Dagang__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Piutang_Usaha_Dagang__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Piutang_Usaha_Dagang__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Piutang_Usaha_Dagang__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Piutang_Usaha_Dagang__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Piutang_Usaha_Dagang__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Piutang_Usaha_Dagang__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Piutang_Usaha_Dagang__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Piutang_Usaha_Dagang__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Piutang_Usaha_Dagang__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Piutang_Usaha_Dagang__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Piutang_Usaha_Dagang__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Piutang_Usaha_Dagang__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Piutang_Usaha_Dagang__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Piutang_Usaha_Dagang__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Piutang_Usaha_Dagang__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Piutang_Usaha_Dagang__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Piutang_Usaha_Dagang__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Piutang_Usaha_Dagang__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Piutang_Usaha_Dagang__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Piutang_Usaha_Dagang__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_Tanah_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Tanah__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Tanah__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Tanah__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Tanah__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Tanah__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Tanah__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Tanah__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Tanah__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Tanah__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Tanah__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Tanah__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Tanah__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Tanah__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Tanah__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Tanah__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Tanah__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Tanah__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Tanah__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Tanah__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Tanah__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Tanah__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Tanah__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_TotalAsetLancar_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Total_Aset_Lancar__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Lancar__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Lancar__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Lancar__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Lancar__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Lancar__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Lancar__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Lancar__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Lancar__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Lancar__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Lancar__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Lancar__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Lancar__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Lancar__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Lancar__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Lancar__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Lancar__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Lancar__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Lancar__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Lancar__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Lancar__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Lancar__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_TotalAsetTidakLancar_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Total_Aset_Tidak_Lancar__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Tidak_Lancar__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Tidak_Lancar__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Tidak_Lancar__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Tidak_Lancar__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Tidak_Lancar__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Tidak_Lancar__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Tidak_Lancar__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Tidak_Lancar__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Tidak_Lancar__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Tidak_Lancar__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Tidak_Lancar__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Tidak_Lancar__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Tidak_Lancar__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Tidak_Lancar__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Tidak_Lancar__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Tidak_Lancar__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Tidak_Lancar__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Tidak_Lancar__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Tidak_Lancar__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Tidak_Lancar__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Tidak_Lancar__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_TotalAsset_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Total_Asset__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Asset__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Total_Asset__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Asset__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Total_Asset__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Asset__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Total_Asset__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Asset__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Total_Asset__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Asset__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Total_Asset__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Asset__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Total_Asset__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Asset__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Total_Asset__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Asset__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Total_Asset__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Asset__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Total_Asset__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Asset__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Total_Asset__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Total_Asset__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_TotalHutangdanModal_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Total_Hutang_dan_Modal__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_dan_Modal__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_dan_Modal__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_dan_Modal__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_dan_Modal__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_dan_Modal__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_dan_Modal__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_dan_Modal__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_dan_Modal__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_dan_Modal__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_dan_Modal__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_dan_Modal__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_dan_Modal__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_dan_Modal__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_dan_Modal__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_dan_Modal__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_dan_Modal__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_dan_Modal__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_dan_Modal__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_dan_Modal__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_dan_Modal__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_dan_Modal__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_TotalHutangJangkaPanjang_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Total_Hutang_Jangka_Panjang__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Panjang__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Panjang__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Panjang__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Panjang__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Panjang__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Panjang__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Panjang__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Panjang__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Panjang__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Panjang__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Panjang__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Panjang__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Panjang__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Panjang__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Panjang__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Panjang__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Panjang__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Panjang__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Panjang__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Panjang__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Panjang__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_TotalHutangJangkaPendek_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Total_Hutang_Jangka_Pendek__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Pendek__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Pendek__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Pendek__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Pendek__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Pendek__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Pendek__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Pendek__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Pendek__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Pendek__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Pendek__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Pendek__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Pendek__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Pendek__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Pendek__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Pendek__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Pendek__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Pendek__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Pendek__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Pendek__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Pendek__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Pendek__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_TotalModal_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Total_Modal__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Modal__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Total_Modal__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Modal__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Total_Modal__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Modal__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Total_Modal__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Modal__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Total_Modal__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Modal__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Total_Modal__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Modal__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Total_Modal__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Modal__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Total_Modal__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Modal__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Total_Modal__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Modal__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Total_Modal__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Modal__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Total_Modal__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Total_Modal__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>funcS_GetIndustryGroup</name>
+        <dataType>String</dataType>
+        <expression>{!editor_Industry_GroupDef.selectedChoiceValues}&amp;{!editor_Industry_Group2.selectedChoiceValues}</expression>
+    </formulas>
+    <formulas>
+        <name>funcS_GetIndustryType</name>
+        <dataType>String</dataType>
+        <expression>{!editor_Industry_Type2.selectedChoiceValues}&amp;{!editor_Industry_TypeDef.selectedChoiceValues}</expression>
+    </formulas>
+    <formulas>
+        <name>spaceFormula</name>
+        <dataType>String</dataType>
+        <expression>&apos;&lt;br&gt;&apos;</expression>
+    </formulas>
+    <formulas>
+        <name>var_CreditReview_FieldAccess</name>
+        <dataType>String</dataType>
+        <expression>IF({!$Permission.Sec_Application_Credit_Review_Edits} == TRUE &amp;&amp; {!application_EditAccess} == TRUE &amp;&amp; (BEGINS({!Get_AppCAA.Assigned_User__c}, {!$User.Id}) ) , &quot;None&quot;, &quot;Readonly&quot;)</expression>
+    </formulas>
+    <interviewLabel>[Scr] Credit - Capacity {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>[Scr] Credit - Capacity</label>
+    <loops>
+        <name>Get_Distinct_Industry_Group</name>
+        <label>Get Distinct Industry Group</label>
+        <locationX>176</locationX>
+        <locationY>890</locationY>
+        <collectionReference>Get_API_Industry_Group_And_Type</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Is_Group_Already_Exist</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>Get_AppCAA</targetReference>
+        </noMoreValuesConnector>
+    </loops>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>Flow</processType>
+    <recordLookups>
+        <name>Get_Account</name>
+        <label>Get Account</label>
+        <locationX>176</locationX>
+        <locationY>350</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>rst_URA_Application</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Customer_Information.AccountId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Account</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_API_Industry_Group_And_Type</name>
+        <label>Get API Industry Group And Type</label>
+        <locationX>176</locationX>
+        <locationY>782</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Get_Distinct_Industry_Group</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>parent_id_formula__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Customer_Information.Economy_Sector_New__r.id_formula__c</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>API_Industry_Group_and_Type__c</object>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>attributes_industry_group_description__c</queriedFields>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_AppCAA</name>
+        <label>Get AppCAA</label>
+        <locationX>176</locationX>
+        <locationY>1382</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>X1P5C_Screen</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Application__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId.Id</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>Level__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId.CAA_Step__c</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Application_CAA__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Curr_Survey</name>
+        <label>Get Survey</label>
+        <locationX>176</locationX>
+        <locationY>134</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Get_Customer_Information</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId.Survey__c</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Survey__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Customer_Information</name>
+        <label>Get Customer Information</label>
+        <locationX>176</locationX>
+        <locationY>242</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Get_Account</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId.Loan_Information__r.Account.Primary_Contact__c</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Contact</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Economy_Sector</name>
+        <label>Get Economy Sector</label>
+        <locationX>176</locationX>
+        <locationY>1706</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Update_Survey</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>id_formula__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>editor_Economy_Sector.selectedChoiceValues</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>API_Economy_Sector__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_PI</name>
+        <label>Get PI</label>
+        <locationX>176</locationX>
+        <locationY>566</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Get_PIW</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>TargetObjectId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId.Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>ProcessInstance</object>
+        <sortField>CreatedDate</sortField>
+        <sortOrder>Desc</sortOrder>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_PIW</name>
+        <label>Get PIW</label>
+        <locationX>176</locationX>
+        <locationY>674</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Get_API_Industry_Group_And_Type</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>ProcessInstanceId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_PI.Id</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>IsDeleted</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>ProcessInstanceWorkitem</object>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>ActorId</queriedFields>
+        <sortField>CreatedDate</sortField>
+        <sortOrder>Desc</sortOrder>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>rst_URA_Application</name>
+        <label>rst URA (Application)</label>
+        <locationX>176</locationX>
+        <locationY>458</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Get_PI</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>UserId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$User.Id</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>RecordId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId.Id</elementReference>
+            </value>
+        </filters>
+        <object>UserRecordAccess</object>
+        <outputAssignments>
+            <assignToReference>application_EditAccess</assignToReference>
+            <field>HasEditAccess</field>
+        </outputAssignments>
+        <outputAssignments>
+            <assignToReference>application_recordId</assignToReference>
+            <field>RecordId</field>
+        </outputAssignments>
+    </recordLookups>
+    <recordUpdates>
+        <name>Update_Contact</name>
+        <label>Update Contact</label>
+        <locationX>176</locationX>
+        <locationY>1922</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Customer_Information.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Economy_Sector_New__c</field>
+            <value>
+                <elementReference>Get_Economy_Sector.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Industry_Group_Text__c</field>
+            <value>
+                <elementReference>funcS_GetIndustryGroup</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Industry_Type_Lookup__c</field>
+            <value>
+                <elementReference>funcS_GetIndustryType</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Job_Address__c</field>
+            <value>
+                <elementReference>editor_Job_Address</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Profession__c</field>
+            <value>
+                <elementReference>editor_Profession.selectedChoiceValues</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Contact</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Survey</name>
+        <label>Update Survey</label>
+        <locationX>176</locationX>
+        <locationY>1814</locationY>
+        <connector>
+            <targetReference>Update_Contact</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Curr_Survey.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Company_Name__c</field>
+            <value>
+                <elementReference>editor_Company_Name</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Employment_Business_Since__c</field>
+            <value>
+                <elementReference>editor_Employment_Business_Since</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Transaksi_Usaha_Gaji_Reflek_Rekening__c</field>
+            <value>
+                <elementReference>editor_Transaksi_Usaha_Gaji_Reflek_Rekening</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Survey__c</object>
+    </recordUpdates>
+    <runInMode>DefaultMode</runInMode>
+    <screens>
+        <name>X1P5C_Editor</name>
+        <label>1P5C Editor</label>
+        <locationX>176</locationX>
+        <locationY>1598</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <backButtonLabel>Cancel</backButtonLabel>
+        <connector>
+            <targetReference>Get_Economy_Sector</targetReference>
+        </connector>
+        <fields>
+            <name>editor_Capacity</name>
+            <fieldText>Capacity</fieldText>
+            <fieldType>RegionContainer</fieldType>
+            <fields>
+                <name>editor_Capacity_Column1</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>editor_Profession</name>
+                    <choiceReferences>Picklist_Profession</choiceReferences>
+                    <defaultValue>
+                        <elementReference>Get_Customer_Information.Profession__c</elementReference>
+                    </defaultValue>
+                    <extensionName>flowruntime:choiceLookup</extensionName>
+                    <fieldText>Profession</fieldText>
+                    <fieldType>ComponentChoice</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <storeOutputAutomatically>true</storeOutputAutomatically>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>editor_Company_Name</name>
+                    <dataType>String</dataType>
+                    <defaultValue>
+                        <elementReference>Get_Curr_Survey.Company_Name__c</elementReference>
+                    </defaultValue>
+                    <fieldText>Company Name</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>editor_Job_Address</name>
+                    <dataType>String</dataType>
+                    <defaultValue>
+                        <elementReference>Get_Customer_Information.Job_Address__c</elementReference>
+                    </defaultValue>
+                    <fieldText>Job Address</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>editor_Economy_Sector</name>
+                    <choiceReferences>Picklist_EconomySectorNew</choiceReferences>
+                    <defaultValue>
+                        <elementReference>Get_Customer_Information.Economy_Sector_New__r.id_formula__c</elementReference>
+                    </defaultValue>
+                    <extensionName>flowruntime:choiceLookup</extensionName>
+                    <fieldText>Economy Sector</fieldText>
+                    <fieldType>ComponentChoice</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <storeOutputAutomatically>true</storeOutputAutomatically>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>df_Industry_Group</name>
+                    <dataTypeMappings>
+                        <typeName>T</typeName>
+                        <typeValue>API_Industry_Group_and_Type__c</typeValue>
+                    </dataTypeMappings>
+                    <dataTypeMappings>
+                        <typeName>S</typeName>
+                        <typeValue>Account</typeValue>
+                    </dataTypeMappings>
+                    <extensionName>joshdaymentlabs:dataFetcher</extensionName>
+                    <fieldType>ComponentInstance</fieldType>
+                    <inputParameters>
+                        <name>objectName1</name>
+                        <value>
+                            <stringValue>API_Industry_Group_and_Type__c</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>queryString</name>
+                        <value>
+                            <elementReference>tpl_IndustryGroup</elementReference>
+                        </value>
+                    </inputParameters>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <storeOutputAutomatically>true</storeOutputAutomatically>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>editor_Industry_GroupDef</name>
+                    <choiceReferences>Picklist_IndustryGroupDef</choiceReferences>
+                    <defaultValue>
+                        <elementReference>Get_Customer_Information.Industry_Group_Text__c</elementReference>
+                    </defaultValue>
+                    <extensionName>flowruntime:choiceLookup</extensionName>
+                    <fieldText>Industry Group</fieldText>
+                    <fieldType>ComponentChoice</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <storeOutputAutomatically>true</storeOutputAutomatically>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                    <visibilityRule>
+                        <conditionLogic>and</conditionLogic>
+                        <conditions>
+                            <leftValueReference>Get_Customer_Information.Economy_Sector_New__c</leftValueReference>
+                            <operator>NotEqualTo</operator>
+                        </conditions>
+                        <conditions>
+                            <leftValueReference>Get_Customer_Information.Economy_Sector_New__r.id_formula__c</leftValueReference>
+                            <operator>EqualTo</operator>
+                            <rightValue>
+                                <elementReference>editor_Economy_Sector.selectedChoiceValues</elementReference>
+                            </rightValue>
+                        </conditions>
+                    </visibilityRule>
+                </fields>
+                <fields>
+                    <name>editor_Industry_Group2</name>
+                    <choiceReferences>Picklist_IndustryGroupNew</choiceReferences>
+                    <defaultValue>
+                        <elementReference>Get_Customer_Information.Industry_Group_Text__c</elementReference>
+                    </defaultValue>
+                    <extensionName>flowruntime:choiceLookup</extensionName>
+                    <fieldText>Industry Group</fieldText>
+                    <fieldType>ComponentChoice</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <storeOutputAutomatically>true</storeOutputAutomatically>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                    <visibilityRule>
+                        <conditionLogic>or</conditionLogic>
+                        <conditions>
+                            <leftValueReference>Get_Customer_Information.Economy_Sector_New__c</leftValueReference>
+                            <operator>EqualTo</operator>
+                        </conditions>
+                        <conditions>
+                            <leftValueReference>Get_Customer_Information.Economy_Sector_New__r.id_formula__c</leftValueReference>
+                            <operator>NotEqualTo</operator>
+                            <rightValue>
+                                <elementReference>editor_Economy_Sector.selectedChoiceValues</elementReference>
+                            </rightValue>
+                        </conditions>
+                    </visibilityRule>
+                </fields>
+                <fields>
+                    <name>df_Industry_Type</name>
+                    <dataTypeMappings>
+                        <typeName>T</typeName>
+                        <typeValue>API_Industry_Group_and_Type__c</typeValue>
+                    </dataTypeMappings>
+                    <dataTypeMappings>
+                        <typeName>S</typeName>
+                        <typeValue>Account</typeValue>
+                    </dataTypeMappings>
+                    <extensionName>joshdaymentlabs:dataFetcher</extensionName>
+                    <fieldType>ComponentInstance</fieldType>
+                    <inputParameters>
+                        <name>objectName1</name>
+                        <value>
+                            <stringValue>API_Industry_Group_and_Type__c</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>queryString</name>
+                        <value>
+                            <elementReference>tpl_IndustryType</elementReference>
+                        </value>
+                    </inputParameters>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <storeOutputAutomatically>true</storeOutputAutomatically>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>editor_Industry_TypeDef</name>
+                    <choiceReferences>Picklist_IndustryTypeDef</choiceReferences>
+                    <defaultValue>
+                        <elementReference>Get_Customer_Information.Industry_Type_Lookup__c</elementReference>
+                    </defaultValue>
+                    <extensionName>flowruntime:choiceLookup</extensionName>
+                    <fieldText>Industry Type</fieldText>
+                    <fieldType>ComponentChoice</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <storeOutputAutomatically>true</storeOutputAutomatically>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                    <visibilityRule>
+                        <conditionLogic>and</conditionLogic>
+                        <conditions>
+                            <leftValueReference>Get_Customer_Information.Industry_Group_Text__c</leftValueReference>
+                            <operator>NotEqualTo</operator>
+                        </conditions>
+                        <conditions>
+                            <leftValueReference>Get_Customer_Information.Industry_Group_Text__c</leftValueReference>
+                            <operator>EqualTo</operator>
+                            <rightValue>
+                                <elementReference>editor_Industry_GroupDef.selectedChoiceValues</elementReference>
+                            </rightValue>
+                        </conditions>
+                    </visibilityRule>
+                </fields>
+                <fields>
+                    <name>editor_Industry_Type2</name>
+                    <choiceReferences>Picklist_IndustryTypeNew</choiceReferences>
+                    <defaultValue>
+                        <elementReference>Get_Customer_Information.Industry_Type_Lookup__c</elementReference>
+                    </defaultValue>
+                    <extensionName>flowruntime:choiceLookup</extensionName>
+                    <fieldText>Industry Type</fieldText>
+                    <fieldType>ComponentChoice</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <storeOutputAutomatically>true</storeOutputAutomatically>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                    <visibilityRule>
+                        <conditionLogic>or</conditionLogic>
+                        <conditions>
+                            <leftValueReference>Get_Customer_Information.Industry_Group_Text__c</leftValueReference>
+                            <operator>EqualTo</operator>
+                        </conditions>
+                        <conditions>
+                            <leftValueReference>Get_Customer_Information.Industry_Group_Text__c</leftValueReference>
+                            <operator>NotEqualTo</operator>
+                            <rightValue>
+                                <elementReference>editor_Industry_GroupDef.selectedChoiceValues</elementReference>
+                            </rightValue>
+                        </conditions>
+                    </visibilityRule>
+                </fields>
+                <fields>
+                    <name>editor_Employment_Business_Since</name>
+                    <dataType>Date</dataType>
+                    <defaultValue>
+                        <elementReference>Get_Curr_Survey.Employment_Business_Since__c</elementReference>
+                    </defaultValue>
+                    <fieldText>Employment / Business Since</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>editor_Transaksi_Usaha_Gaji_Reflek_Rekening</name>
+                    <choiceReferences>Picklist_GajiReflekRekening</choiceReferences>
+                    <dataType>String</dataType>
+                    <defaultValue>
+                        <elementReference>Get_Curr_Survey.Transaksi_Usaha_Gaji_Reflek_Rekening__c</elementReference>
+                    </defaultValue>
+                    <fieldText>Transaksi Usaha/Gaji Reflek Rekening</fieldText>
+                    <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>12</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <isRequired>false</isRequired>
+            <regionContainerType>SectionWithHeader</regionContainerType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <nextOrFinishButtonLabel>Save</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+    <screens>
+        <name>X1P5C_Screen</name>
+        <label>1P5C Screen</label>
+        <locationX>176</locationX>
+        <locationY>1490</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>true</allowPause>
+        <connector>
+            <targetReference>X1P5C_Editor</targetReference>
+        </connector>
+        <fields>
+            <name>Capacity</name>
+            <fieldText>Capacity</fieldText>
+            <fieldType>RegionContainer</fieldType>
+            <fields>
+                <name>Capacity_Column1</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>Profession</name>
+                    <extensionName>c:jimCompo</extensionName>
+                    <fieldType>ComponentInstance</fieldType>
+                    <inputParameters>
+                        <name>objectName</name>
+                        <value>
+                            <stringValue>Contact</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>fieldName</name>
+                        <value>
+                            <stringValue>Profession__c</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>fieldLabel</name>
+                        <value>
+                            <stringValue>Profession</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>fieldValue</name>
+                        <value>
+                            <elementReference>Get_Customer_Information.Profession__r.Name</elementReference>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>fieldAttr</name>
+                        <value>
+                            <elementReference>var_CreditReview_FieldAccess</elementReference>
+                        </value>
+                    </inputParameters>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <storeOutputAutomatically>true</storeOutputAutomatically>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>Company_Name</name>
+                    <extensionName>c:jimCompo</extensionName>
+                    <fieldType>ComponentInstance</fieldType>
+                    <inputParameters>
+                        <name>objectName</name>
+                        <value>
+                            <stringValue>Survey__c</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>fieldName</name>
+                        <value>
+                            <stringValue>Company_Name__c</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>fieldValue</name>
+                        <value>
+                            <elementReference>recordId.Survey__r.Company_Name__c</elementReference>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>fieldLabel</name>
+                        <value>
+                            <stringValue>Company Name</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>fieldAttr</name>
+                        <value>
+                            <elementReference>var_CreditReview_FieldAccess</elementReference>
+                        </value>
+                    </inputParameters>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <storeOutputAutomatically>true</storeOutputAutomatically>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>view_JobAddress</name>
+                    <extensionName>c:jimCompo</extensionName>
+                    <fieldType>ComponentInstance</fieldType>
+                    <inputParameters>
+                        <name>fieldValue</name>
+                        <value>
+                            <elementReference>Get_Customer_Information.Job_Address__c</elementReference>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>fieldLabel</name>
+                        <value>
+                            <stringValue>Job Address</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>fieldAttr</name>
+                        <value>
+                            <elementReference>var_CreditReview_FieldAccess</elementReference>
+                        </value>
+                    </inputParameters>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <storeOutputAutomatically>true</storeOutputAutomatically>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>Economy_Sector</name>
+                    <extensionName>c:jimCompo</extensionName>
+                    <fieldType>ComponentInstance</fieldType>
+                    <inputParameters>
+                        <name>objectName</name>
+                        <value>
+                            <stringValue>Contact</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>fieldName</name>
+                        <value>
+                            <stringValue>Economy_Sector__c</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>fieldLabel</name>
+                        <value>
+                            <stringValue>Economy Sector</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>fieldValue</name>
+                        <value>
+                            <elementReference>Get_Customer_Information.Economy_Sector_New__r.name__c</elementReference>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>fieldAttr</name>
+                        <value>
+                            <elementReference>var_CreditReview_FieldAccess</elementReference>
+                        </value>
+                    </inputParameters>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <storeOutputAutomatically>true</storeOutputAutomatically>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>Industry_Group</name>
+                    <extensionName>c:jimCompo</extensionName>
+                    <fieldType>ComponentInstance</fieldType>
+                    <inputParameters>
+                        <name>objectName</name>
+                        <value>
+                            <stringValue>Contact</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>fieldName</name>
+                        <value>
+                            <stringValue>Industry_Group__c</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>fieldLabel</name>
+                        <value>
+                            <stringValue>Industry Group</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>fieldValue</name>
+                        <value>
+                            <elementReference>formula_IndustryGroup</elementReference>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>fieldAttr</name>
+                        <value>
+                            <elementReference>var_CreditReview_FieldAccess</elementReference>
+                        </value>
+                    </inputParameters>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <storeOutputAutomatically>true</storeOutputAutomatically>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>Industry_Type</name>
+                    <extensionName>c:jimCompo</extensionName>
+                    <fieldType>ComponentInstance</fieldType>
+                    <inputParameters>
+                        <name>objectName</name>
+                        <value>
+                            <stringValue>Contact</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>fieldName</name>
+                        <value>
+                            <stringValue>Industry_Type__c</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>fieldLabel</name>
+                        <value>
+                            <stringValue>Industry Type</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>fieldValue</name>
+                        <value>
+                            <elementReference>formula_IndustryType</elementReference>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>fieldAttr</name>
+                        <value>
+                            <elementReference>var_CreditReview_FieldAccess</elementReference>
+                        </value>
+                    </inputParameters>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <storeOutputAutomatically>true</storeOutputAutomatically>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>Employment_Business_Since</name>
+                    <extensionName>c:jimCompo</extensionName>
+                    <fieldType>ComponentInstance</fieldType>
+                    <inputParameters>
+                        <name>objectName</name>
+                        <value>
+                            <stringValue>Survey__c</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>fieldName</name>
+                        <value>
+                            <stringValue>Employment_Business_Since__c</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>fieldLabel</name>
+                        <value>
+                            <stringValue>Employment / Business Since</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>fieldValue</name>
+                        <value>
+                            <elementReference>formula_EmploymentSince</elementReference>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>compoType</name>
+                        <value>
+                            <stringValue>String</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>fieldAttr</name>
+                        <value>
+                            <elementReference>var_CreditReview_FieldAccess</elementReference>
+                        </value>
+                    </inputParameters>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <storeOutputAutomatically>true</storeOutputAutomatically>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>Gaji_Reflek_Rekening</name>
+                    <extensionName>c:jimCompo</extensionName>
+                    <fieldType>ComponentInstance</fieldType>
+                    <inputParameters>
+                        <name>objectName</name>
+                        <value>
+                            <stringValue>Survey__c</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>fieldName</name>
+                        <value>
+                            <stringValue>Transaksi_Usaha_Gaji_Reflek_Rekening__c</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>fieldLabel</name>
+                        <value>
+                            <stringValue>Transaksi Usaha/ Gaji Reflek Rekening</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>fieldValue</name>
+                        <value>
+                            <elementReference>formula_GajiReflekRekening</elementReference>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>fieldAttr</name>
+                        <value>
+                            <elementReference>var_CreditReview_FieldAccess</elementReference>
+                        </value>
+                    </inputParameters>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <storeOutputAutomatically>true</storeOutputAutomatically>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>12</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <isRequired>false</isRequired>
+            <regionContainerType>SectionWithHeader</regionContainerType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <showFooter>false</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Get_Curr_Survey</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <textTemplates>
+        <name>tpl_IndustryGroup</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>Select attributes_industry_group_description__c, count(parent_id_formula__c) from API_Industry_Group_and_Type__c where parent_id_formula__c = &apos;{!editor_Economy_Sector.selectedChoiceValues}&apos; group by attributes_industry_group_description__c</text>
+    </textTemplates>
+    <textTemplates>
+        <name>tpl_IndustryType</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>Select Id, Name, name__c from API_Industry_Group_and_Type__c where attributes_industry_group_description__c = &apos;{!funcS_GetIndustryGroup}&apos;</text>
+    </textTemplates>
+    <variables>
+        <name>application_EditAccess</name>
+        <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>application_recordId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>formula_DIR_value</name>
+        <dataType>Number</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <scale>0</scale>
+    </variables>
+    <variables>
+        <name>formula_DSC_value</name>
+        <dataType>Number</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <scale>0</scale>
+    </variables>
+    <variables>
+        <name>formula_DSR_value</name>
+        <dataType>Number</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <scale>0</scale>
+    </variables>
+    <variables>
+        <name>formula_SurplusDeficitIncome_value</name>
+        <dataType>Number</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <scale>0</scale>
+    </variables>
+    <variables>
+        <name>recordId</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Application__c</objectType>
+    </variables>
+    <variables>
+        <name>var_CustomerInformation</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Contact</objectType>
+    </variables>
+    <variables>
+        <name>var_DistinctIndustryGroup</name>
+        <dataType>SObject</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>API_Industry_Group_and_Type__c</objectType>
+    </variables>
+    <variables>
+        <name>var_DistinctIndustryGroup_Text</name>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>var_ScreenType</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

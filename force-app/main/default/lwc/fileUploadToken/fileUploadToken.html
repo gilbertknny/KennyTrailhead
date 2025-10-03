@@ -1,0 +1,28 @@
+<template>
+    <lightning-card title={title} icon-name="utility:upload">
+        <div class="slds-p-around_medium">
+            <!-- File input and Upload button in a row -->
+            
+            <table>
+                <tr>
+                    <td style="width:260px;">
+                        <!-- File input -->
+                        <lightning-input type="file" label="Choose a file" accept={allowedFileTypes} onchange={handleFileChange}></lightning-input>
+                    </td>
+                    <td style="padding-top: 25px;">
+                        <!-- Upload button -->
+                        <lightning-button label="Submit" onclick={handleUploadFile} variant="brand"></lightning-button>
+                    </td>
+                </tr>
+            </table>    
+
+            <!-- Display the file name under the file input -->
+            <template if:true={file}>
+                <div class="slds-m-top_small slds-p-left_medium">
+                    <p><strong>File selected:</strong> {file.name}</p>
+                </div>
+            </template>
+
+        </div>
+    </lightning-card>
+</template>

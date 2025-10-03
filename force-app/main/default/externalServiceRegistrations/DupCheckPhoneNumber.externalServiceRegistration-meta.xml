@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ExternalServiceRegistration xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label>DupCheckPhoneNumber</label>
+    <namedCredentialReference>MasterDataNmCred</namedCredentialReference>
+    <operations>
+        <active>true</active>
+        <name>dupcheckphonenumber</name>
+    </operations>
+    <registrationProviderType>Custom</registrationProviderType>
+    <schema>{
+  &quot;openapi&quot;: &quot;3.0.1&quot;,
+  &quot;info&quot;: {
+    &quot;title&quot;: &quot;Phone Number Duplication Checking&quot;,
+    &quot;description&quot;: &quot;&quot;
+  },
+  &quot;paths&quot;: {
+    &quot;/krakend-gateway/sf/kyc-proxy/v1/phone-verification/dupcheck&quot;: {
+      &quot;get&quot;: {
+        &quot;description&quot;: &quot;Phone Number Duplication Checking&quot;,
+        &quot;operationId&quot;: &quot;DupCheckPhoneNumber&quot;,
+        &quot;parameters&quot;: [
+        {
+          &quot;name&quot;: &quot;phone&quot;,
+          &quot;in&quot;: &quot;query&quot;,
+          &quot;description&quot;: &quot;&quot;,
+          &quot;required&quot;: true,
+          &quot;allowEmptyValue&quot;: false,
+          &quot;schema&quot;: {
+            &quot;type&quot;: &quot;string&quot;
+          }
+        },
+        {
+          &quot;name&quot;: &quot;process-id&quot;,
+          &quot;in&quot;: &quot;query&quot;,
+          &quot;description&quot;: &quot;&quot;,
+          &quot;required&quot;: true,
+          &quot;allowEmptyValue&quot;: false,
+          &quot;schema&quot;: {
+            &quot;type&quot;: &quot;string&quot;
+          }
+        }
+      ],
+        
+        &quot;responses&quot;: {
+          &quot;200&quot;: {
+            &quot;description&quot;: &quot;Successful response&quot;,
+            &quot;content&quot;: {
+              &quot;application/json&quot;: {
+                &quot;schema&quot;: {
+                  &quot;type&quot;: &quot;object&quot;,
+                  &quot;properties&quot;: {
+                    &quot;code&quot;: {
+                      &quot;type&quot;: &quot;integer&quot;,
+                      &quot;example&quot;: 0
+                    },
+                    &quot;message&quot;: {
+                      &quot;type&quot;: &quot;string&quot;,
+                      &quot;example&quot;: &quot;ok&quot;
+                    },
+                    &quot;process_id&quot;: {
+                      &quot;type&quot;: &quot;string&quot;,
+                      &quot;example&quot;: &quot;1714868e-871d-4f15-91a2-2643577daffd&quot;
+                    },
+                    &quot;data&quot;: {
+                      &quot;type&quot;: &quot;object&quot;,
+                      &quot;properties&quot;: {
+                        &quot;score&quot;: {
+                          &quot;type&quot;: &quot;integer&quot;,
+                          &quot;example&quot;: 0
+                        },
+                        &quot;rules_applieds&quot;: {
+                          &quot;type&quot;: &quot;array&quot;,
+                          &quot;items&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;score&quot;: {
+                                &quot;type&quot;: &quot;integer&quot;,
+                                &quot;example&quot;: 0
+                              },
+                              &quot;rule&quot;: {
+                                &quot;type&quot;: &quot;string&quot;,
+                                &quot;example&quot;: &quot;COUNT&quot;
+                              },
+                              &quot;description&quot;: {
+                                &quot;type&quot;: &quot;string&quot;,
+                                &quot;example&quot;: &quot;No duplicate employee detected&quot;
+                              },
+                              &quot;source&quot;: {
+                                &quot;type&quot;: &quot;string&quot;,
+                                &quot;example&quot;: &quot;BFIEMPLOYEE&quot;
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          &quot;400&quot;: {
+            &quot;description&quot;: &quot;Bad Request&quot;,
+            &quot;content&quot;: {
+              &quot;application/json&quot;: {
+                &quot;schema&quot;: {
+                  &quot;type&quot;: &quot;object&quot;,
+                  &quot;properties&quot;: {
+                    &quot;code&quot;: {
+                      &quot;type&quot;: &quot;integer&quot;,
+                      &quot;example&quot;: 400
+                    },
+                    &quot;message&quot;: {
+                      &quot;type&quot;: &quot;string&quot;,
+                      &quot;example&quot;: &quot;Invalid input parameters&quot;
+                    }
+                  }
+                }
+              }
+            }
+          },
+          &quot;401&quot;: {
+            &quot;description&quot;: &quot;Unauthorized&quot;,
+            &quot;content&quot;: {
+              &quot;application/json&quot;: {
+                &quot;schema&quot;: {
+                  &quot;type&quot;: &quot;object&quot;,
+                  &quot;properties&quot;: {
+                    &quot;code&quot;: {
+                      &quot;type&quot;: &quot;integer&quot;,
+                      &quot;example&quot;: 401
+                    },
+                    &quot;message&quot;: {
+                      &quot;type&quot;: &quot;string&quot;,
+                      &quot;example&quot;: &quot;Authentication failed&quot;
+                    }
+                  }
+                }
+              }
+            }
+          },
+          &quot;403&quot;: {
+            &quot;description&quot;: &quot;Forbidden&quot;,
+            &quot;content&quot;: {
+              &quot;application/json&quot;: {
+                &quot;schema&quot;: {
+                  &quot;type&quot;: &quot;object&quot;,
+                  &quot;properties&quot;: {
+                    &quot;code&quot;: {
+                      &quot;type&quot;: &quot;integer&quot;,
+                      &quot;example&quot;: 403
+                    },
+                    &quot;message&quot;: {
+                      &quot;type&quot;: &quot;string&quot;,
+                      &quot;example&quot;: &quot;Access denied&quot;
+                    }
+                  }
+                }
+              }
+            }
+          },
+          &quot;404&quot;: {
+            &quot;description&quot;: &quot;Not Found&quot;,
+            &quot;content&quot;: {
+              &quot;application/json&quot;: {
+                &quot;schema&quot;: {
+                  &quot;type&quot;: &quot;object&quot;,
+                  &quot;properties&quot;: {
+                    &quot;code&quot;: {
+                      &quot;type&quot;: &quot;integer&quot;,
+                      &quot;example&quot;: 404
+                    },
+                    &quot;message&quot;: {
+                      &quot;type&quot;: &quot;string&quot;,
+                      &quot;example&quot;: &quot;Resource not found&quot;
+                    }
+                  }
+                }
+              }
+            }
+          },
+          &quot;500&quot;: {
+            &quot;description&quot;: &quot;Internal Server Error&quot;,
+            &quot;content&quot;: {
+              &quot;application/json&quot;: {
+                &quot;schema&quot;: {
+                  &quot;type&quot;: &quot;object&quot;,
+                  &quot;properties&quot;: {
+                    &quot;code&quot;: {
+                      &quot;type&quot;: &quot;integer&quot;,
+                      &quot;example&quot;: 500
+                    },
+                    &quot;message&quot;: {
+                      &quot;type&quot;: &quot;string&quot;,
+                      &quot;example&quot;: &quot;Internal server error occurred&quot;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+
+
+      }
+    }
+  }
+}</schema>
+    <schemaType>OpenApi3</schemaType>
+    <schemaUploadFileExtension>json</schemaUploadFileExtension>
+    <schemaUploadFileName>dupcheck-phone-number-schema</schemaUploadFileName>
+    <serviceBinding>{&quot;host&quot;:&quot;&quot;,&quot;basePath&quot;:&quot;/&quot;,&quot;allowedSchemes&quot;:[],&quot;requestMediaTypes&quot;:[],&quot;responseMediaTypes&quot;:[],&quot;compatibleMediaTypes&quot;:{},&quot;extensions&quot;:{}}</serviceBinding>
+    <status>Complete</status>
+    <systemVersion>5</systemVersion>
+</ExternalServiceRegistration>

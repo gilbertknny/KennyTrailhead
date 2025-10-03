@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Get_Product_Package_Action</name>
+        <label>Get Product Package Action</label>
+        <locationX>176</locationX>
+        <locationY>134</locationY>
+        <actionName>GetProductPackage.Get Product Package</actionName>
+        <actionType>externalService</actionType>
+        <connector>
+            <targetReference>Is_API_Return_OK</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>product_id</name>
+            <value>
+                <numberValue>3.0</numberValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>code</name>
+            <value>
+                <stringValue>PACKAGE</stringValue>
+            </value>
+        </inputParameters>
+        <nameSegment>GetProductPackage.Get Product Package</nameSegment>
+        <offset>0</offset>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </actionCalls>
+    <apiVersion>62.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <name>Set_var_ProductOffering</name>
+        <label>Set var_ProductOffering</label>
+        <locationX>396</locationX>
+        <locationY>566</locationY>
+        <assignmentItems>
+            <assignToReference>var_ProductOffering.package_id__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Product_Package_Value.packagex5fid</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>var_ProductOffering.product_id__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Product_Package_Value.productx5fid</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>var_ProductOffering.Name</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Product_Package_Value.packagex5fname</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>var_ProductOffering.Product_Type__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>formula_ProductType</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>var_ProductOfferings</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>var_ProductOffering</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Product_Package_Value</targetReference>
+        </connector>
+    </assignments>
+    <decisions>
+        <name>Is_API_Return_OK</name>
+        <label>Is API Return OK</label>
+        <locationX>176</locationX>
+        <locationY>242</locationY>
+        <defaultConnector>
+            <targetReference>Upsert_Product_Offering</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Yes</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Product_Package_Action.responseCode</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <numberValue>200.0</numberValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Product_Package</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <description>Flow Run as User or System Context (Default)</description>
+    <environments>Default</environments>
+    <formulas>
+        <name>formula_ProductType</name>
+        <dataType>String</dataType>
+        <expression>IF(({!Product_Package_Value.packagex5fid} &gt;= 1 &amp;&amp; {!Product_Package_Value.packagex5fid} &lt; 14) || {!Product_Package_Value.packagex5fid} == 18, &quot;Refinancing&quot;, 
+IF(({!Product_Package_Value.packagex5fid} &gt;= 14 &amp;&amp; {!Product_Package_Value.packagex5fid} &lt; 18), &quot;KPR&quot;, 
+IF(({!Product_Package_Value.packagex5fid} &gt;= 19 &amp;&amp; {!Product_Package_Value.packagex5fid} &lt;= 24), &quot;Flexi-Biz&quot;, &quot;Flexi-In&quot;
+)))</expression>
+    </formulas>
+    <interviewLabel>Sync Product Offering {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>[Sync] Master Product Offering</label>
+    <loops>
+        <name>Product_Package</name>
+        <label>Product Package</label>
+        <locationX>132</locationX>
+        <locationY>350</locationY>
+        <collectionReference>Get_Product_Package_Action.2XX</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Product_Package_Value</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>Upsert_Product_Offering</targetReference>
+        </noMoreValuesConnector>
+    </loops>
+    <loops>
+        <name>Product_Package_Value</name>
+        <label>Product Package Value</label>
+        <locationX>308</locationX>
+        <locationY>458</locationY>
+        <collectionReference>Product_Package.value</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Set_var_ProductOffering</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>Product_Package</targetReference>
+        </noMoreValuesConnector>
+    </loops>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordCreates>
+        <name>Upsert_Product_Offering</name>
+        <label>Upsert Product Offering</label>
+        <locationX>176</locationX>
+        <locationY>926</locationY>
+        <inputReference>var_ProductOfferings</inputReference>
+    </recordCreates>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Get_Product_Package_Action</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <variables>
+        <name>var_ProductOffering</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Product_Offering__c</objectType>
+    </variables>
+    <variables>
+        <name>var_ProductOfferings</name>
+        <dataType>SObject</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Product_Offering__c</objectType>
+    </variables>
+</Flow>

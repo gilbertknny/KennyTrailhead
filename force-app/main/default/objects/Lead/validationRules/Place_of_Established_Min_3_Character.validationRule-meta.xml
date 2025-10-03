@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Place_of_Established_Min_3_Character</fullName>
+    <active>true</active>
+    <errorConditionFormula>IF(ISBLANK(  Place_of_Established__c ), FALSE, LEN(Place_of_Established__c ) &lt; 3)</errorConditionFormula>
+    <errorDisplayField>Place_of_Established__c</errorDisplayField>
+    <errorMessage>Please enter at least 3 character</errorMessage>
+</ValidationRule>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>61.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <environments>Default</environments>
+    <interviewLabel>[Sch] Sync Master Data Status Pekerjaan {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>[Sch] Sync Master Data Status Pekerjaan</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Sync_Master_Data_Status_Pekerjaan</targetReference>
+        </connector>
+        <object>Master_Status_Pekerjaan__c</object>
+        <schedule>
+            <frequency>Daily</frequency>
+            <startDate>2024-09-25</startDate>
+            <startTime>01:00:00.000Z</startTime>
+        </schedule>
+        <triggerType>Scheduled</triggerType>
+    </start>
+    <status>Active</status>
+    <subflows>
+        <name>Sync_Master_Data_Status_Pekerjaan</name>
+        <label>Sync Master Data Status Pekerjaan</label>
+        <locationX>176</locationX>
+        <locationY>252</locationY>
+        <flowName>Sync_Master_Data_Status_Pekerjaan</flowName>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </subflows>
+</Flow>

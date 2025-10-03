@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Domicile_Address_Min_3_Characters</fullName>
+    <active>true</active>
+    <errorConditionFormula>NOT( Is_Domicile_Same_as_Legal_Address__c ) &amp;&amp;
+LEN( Domicile_Address__c ) &gt; 0 &amp;&amp;
+LEN(Domicile_Address__c ) &lt; 3</errorConditionFormula>
+    <errorDisplayField>Domicile_Address__c</errorDisplayField>
+    <errorMessage>Please enter at least 3 character</errorMessage>
+</ValidationRule>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>62.0</apiVersion>
+    <isExposed>true</isExposed>
+    <targets>
+        <target>lightning__AppPage</target>
+        <target>lightning__HomePage</target>
+        <target>lightning__RecordPage</target>
+        <target>lightning__FlowScreen</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__RecordPage,lightning__AppPage, lightning__HomePage">
+            <property type="String" name="objectName" label="01.Object API" />
+            <property type="String" name="fieldName" label="02.Name" />
+            <property type="String" name="compoType" label="03.Type" datasource="String,Boolean,Currency,Date,Datetime,Email,Location,Int,Double,Percent,Phone,Picklist,MultiPicklist,TextArea,Richtext,EncriptedString,Url,Name,Address,Reference"  default="String" />
+            <property type="String" name="fieldValue" label="04.Value"  />
+            <property type="String" name="fieldAttr" label="05.UI Behavior" datasource="None,Required,Readonly"  default="None" />
+            <property type="String" name="fieldLabel" label="06.Field Label" placeholder="Name"  />
+            <property type="String" name="fieldPlaceholder" label="07.Placeholder" placeholder="Name"  />
+            <property type="String" name="optionsPicklist" label="08.options (Picklist Only)" description='[{"label":"Kristen Protestant","value":"Kristen"},{"label":"Hindu","value":"Hindu"},{"label":"Islam","value":"Islam"}]' />
+            <property type="Boolean" name="showLabel" label="09.Show Label" default="true" />
+            <property type="Boolean" name="showInlineHelpText" label="10.Show Help" default="false" />
+            <property type="String" name="inlineHelpText" label="11.Help Text" />
+            <property type="Boolean" name="isDebug" label="12.Debug Mode"  />
+            <property type="Boolean" name="showEditField" label="99.Edit Mode" />
+            
+            <supportedFormFactors>
+                <supportedFormFactor type="Large" />
+                <supportedFormFactor type="Small" />
+            </supportedFormFactors>
+        </targetConfig>
+        
+        <targetConfig targets="lightning__FlowScreen">
+            <property type="String" name="objectName" label="01.Object API" />
+            <property type="String" name="fieldName" label="02.Name" />
+            <property type="String" name="compoType" label="03.Type" description="String,Boolean,Currency,Date,Datetime,Email,Location,Int,Double,Percent,Phone,Picklist,MultiPicklist,TextArea,Richtext,EncriptedString,Url,Name,Address,Reference"  default="String" />
+            <property type="String" name="fieldValue" label="04.Value"  />
+            <property type="String" name="fieldAttr" label="05.UI Behavior" description="None,Required,Readonly"  default="None" />
+            <property type="String" name="fieldLabel" label="06.Field Label" placeholder="Name"  />
+            <property type="String" name="fieldPlaceholder" label="07.Placeholder" placeholder="Name"  />
+            <property type="String" name="optionsPicklist" label="08.options (Picklist Only)" description='[{"label":"Kristen Protestant","value":"Kristen"},{"label":"Hindu","value":"Hindu"},{"label":"Islam","value":"Islam"}]' />
+            <property type="Boolean" name="showLabel" label="09.Show Label" default="true" />
+            <property type="Boolean" name="showInlineHelpText" label="10.Show Help" default="false" />
+            <property type="String" name="inlineHelpText" label="11.Help Text" />
+            <property type="Boolean" name="isDebug" label="12.Debug Mode"  />
+            <property type="Boolean" name="showEditField" label="14.Edit Mode" default="false" />
+        </targetConfig>
+
+    </targetConfigs>
+</LightningComponentBundle>

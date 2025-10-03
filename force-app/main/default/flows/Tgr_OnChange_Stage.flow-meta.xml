@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>61.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <decisions>
+        <name>Cek_Stage</name>
+        <label>Cek Stage</label>
+        <locationX>182</locationX>
+        <locationY>287</locationY>
+        <defaultConnectorLabel>Submit loan</defaultConnectorLabel>
+        <rules>
+            <name>Komite_Kredit_Collateral_Assesment</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.StageName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Komite Kredit &amp; Collateral Assesment</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Cek_siapa_saja_yang_cuti</targetReference>
+            </connector>
+            <label>Komite Kredit &amp; Collateral Assesment</label>
+        </rules>
+    </decisions>
+    <environments>Default</environments>
+    <interviewLabel>[Tgr] OnChange Stage {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>[Tgr] OnChange Stage</label>
+    <orchestratedStages>
+        <name>Cek_siapa_saja_yang_cuti</name>
+        <label>Cek siapa saja yang cuti</label>
+        <locationX>50</locationX>
+        <locationY>395</locationY>
+        <connector>
+            <targetReference>Kirim_Ke_Tim_Komite_Kredit</targetReference>
+        </connector>
+        <exitConditionLogic>and</exitConditionLogic>
+    </orchestratedStages>
+    <orchestratedStages>
+        <name>Kirim_Ke_Tim_Komite_Kredit</name>
+        <label>Kirim Ke Tim Komite Kredit</label>
+        <locationX>50</locationX>
+        <locationY>503</locationY>
+        <exitConditionLogic>and</exitConditionLogic>
+        <stageSteps>
+            <name>Minta_Rekomendasi_CA_Cabang</name>
+            <actionName>Apr_Opty_Ask_Reco</actionName>
+            <actionType>stepBackground</actionType>
+            <canAssigneeEdit>false</canAssigneeEdit>
+            <debugSimulateStep>false</debugSimulateStep>
+            <entryConditionLogic>and</entryConditionLogic>
+            <exitConditionLogic>and</exitConditionLogic>
+            <inputParameters>
+                <name>prmR_Opty</name>
+                <value>
+                    <elementReference>$Record</elementReference>
+                </value>
+            </inputParameters>
+            <label>Minta Rekomendasi CA Cabang</label>
+            <requiresAsyncProcessing>false</requiresAsyncProcessing>
+            <runAsUser>false</runAsUser>
+            <shouldLock>false</shouldLock>
+            <stepSubtype>BackgroundStep</stepSubtype>
+        </stageSteps>
+        <stageSteps>
+            <name>Sharing_Ke_Tim_Komite_Kredit</name>
+            <actionName>Generic_Multi_Rekans_To_One_Oppo</actionName>
+            <actionType>stepBackground</actionType>
+            <canAssigneeEdit>false</canAssigneeEdit>
+            <debugSimulateStep>false</debugSimulateStep>
+            <entryConditionLogic>and</entryConditionLogic>
+            <exitConditionLogic>and</exitConditionLogic>
+            <inputParameters>
+                <name>prmR_Opty</name>
+                <value>
+                    <elementReference>$Record</elementReference>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>prmS_rekanIds_concat</name>
+                <value>
+                    <stringValue>005F9000009dpPfIAI,005F9000009dmL1IAI, 005F9000009dozmIAA</stringValue>
+                </value>
+            </inputParameters>
+            <label>Sharing Ke Tim Komite Kredit</label>
+            <requiresAsyncProcessing>false</requiresAsyncProcessing>
+            <runAsUser>false</runAsUser>
+            <shouldLock>false</shouldLock>
+            <stepSubtype>BackgroundStep</stepSubtype>
+        </stageSteps>
+    </orchestratedStages>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>Orchestrator</processType>
+    <start>
+        <locationX>56</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Cek_Stage</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>StageName</field>
+            <operator>IsChanged</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Cabang__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <object>Opportunity</object>
+        <recordTriggerType>Update</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Draft</status>
+</Flow>

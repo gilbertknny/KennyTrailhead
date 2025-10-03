@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Guarantor_Type__c</fullName>
+    <label>Guarantor Type</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Personal Guarantor</fullName>
+                <default>false</default>
+                <label>Personal Guarantor</label>
+            </value>
+            <value>
+                <fullName>Corporate Guarantor</fullName>
+                <default>false</default>
+                <label>Corporate Guarantor</label>
+            </value>
+            <value>
+                <fullName>Payment Guarantor</fullName>
+                <default>false</default>
+                <label>Payment Guarantor</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

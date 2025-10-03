@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Asset_City_Kabupatens__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <label>Asset City/Kabupaten</label>
+    <lookupFilter>
+        <active>true</active>
+        <filterItems>
+            <field>$Source.Asset_Provinces__c</field>
+            <operation>equals</operation>
+            <valueField>City_Master_Data__c.Province_Id__c</valueField>
+        </filterItems>
+        <isOptional>false</isOptional>
+    </lookupFilter>
+    <referenceTo>City_Master_Data__c</referenceTo>
+    <relationshipLabel>Leads (Asset City/Kabupaten)</relationshipLabel>
+    <relationshipName>Leads_Asset_City_Kabupaten</relationshipName>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <type>Lookup</type>
+</CustomField>

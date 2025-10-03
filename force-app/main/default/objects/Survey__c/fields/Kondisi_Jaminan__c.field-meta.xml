@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Kondisi_Jaminan__c</fullName>
+    <label>Kondisi Jaminan</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Kondisi Permanen</fullName>
+                <default>false</default>
+                <label>Kondisi Permanen</label>
+            </value>
+            <value>
+                <fullName>Kondisi Non Permanen</fullName>
+                <default>false</default>
+                <label>Kondisi Non Permanen</label>
+            </value>
+            <value>
+                <fullName>Kondisi Rusak</fullName>
+                <default>false</default>
+                <label>Kondisi Rusak</label>
+            </value>
+            <value>
+                <fullName>Kondisi Dalam Renovasi</fullName>
+                <default>false</default>
+                <label>Kondisi Dalam Renovasi</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

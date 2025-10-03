@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LeadConvertSettings xmlns="http://soap.sforce.com/2006/04/metadata">
+    <allowOwnerChange>true</allowOwnerChange>
+    <objectMapping>
+        <inputObject>Lead</inputObject>
+        <mappingFields>
+            <inputField>SOA_Source__c</inputField>
+            <outputField>SOA_Source__c</outputField>
+        </mappingFields>
+        <mappingFields>
+            <inputField>SOA_Type__c</inputField>
+            <outputField>SOA_Type__c</outputField>
+        </mappingFields>
+        <outputObject>Opportunity</outputObject>
+    </objectMapping>
+    <opportunityCreationOptions>VisibleOptional</opportunityCreationOptions>
+</LeadConvertSettings>

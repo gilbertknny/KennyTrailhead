@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>62.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <name>Set_NSTs</name>
+        <label>Set NSTs</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>Loop_NSTs.Name</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>funcS_UpdatedNstName</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>varC_NSTs</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>Loop_NSTs</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_NSTs</targetReference>
+        </connector>
+    </assignments>
+    <environments>Default</environments>
+    <formulas>
+        <name>funcS_UpdatedNstName</name>
+        <dataType>String</dataType>
+        <expression>SUBSTITUTE({!Loop_NSTs.Name}, &quot;â¤&quot;, &quot;≤&quot;)</expression>
+    </formulas>
+    <interviewLabel>[Test] Update NSTs {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>[Test] Update NSTs</label>
+    <loops>
+        <name>Loop_NSTs</name>
+        <label>Loop NSTs</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <collectionReference>Get_All_NST_with_Unknown_Symbol</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Set_NSTs</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>Update_NST</targetReference>
+        </noMoreValuesConnector>
+    </loops>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <name>Get_All_NST_with_Unknown_Symbol</name>
+        <label>Get All NST with Unknown Symbol</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Loop_NSTs</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Name</field>
+            <operator>Contains</operator>
+            <value>
+                <stringValue>â¤</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>NST__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordUpdates>
+        <description>Perlu untuk di bawa ke PROD</description>
+        <name>Update_NST</name>
+        <label>Update NST</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <inputReference>varC_NSTs</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Get_All_NST_with_Unknown_Symbol</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <variables>
+        <name>varC_NSTs</name>
+        <dataType>SObject</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>NST__c</objectType>
+    </variables>
+</Flow>

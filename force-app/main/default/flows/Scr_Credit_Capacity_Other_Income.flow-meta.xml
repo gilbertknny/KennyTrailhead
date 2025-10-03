@@ -1,0 +1,1787 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <apiVersion>62.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <dynamicChoiceSets>
+        <name>Picklist_EconomySector</name>
+        <dataType>String</dataType>
+        <displayField>Name</displayField>
+        <object>Master_Economy_Sector__c</object>
+        <valueField>Id</valueField>
+    </dynamicChoiceSets>
+    <dynamicChoiceSets>
+        <name>Picklist_IndustryGroup</name>
+        <dataType>Picklist</dataType>
+        <displayField xsi:nil="true"/>
+        <object xsi:nil="true"/>
+        <picklistField>Industry_Group__c</picklistField>
+        <picklistObject>Contact</picklistObject>
+    </dynamicChoiceSets>
+    <dynamicChoiceSets>
+        <name>Picklist_IndustryType</name>
+        <dataType>Picklist</dataType>
+        <displayField xsi:nil="true"/>
+        <object xsi:nil="true"/>
+        <picklistField>Industry_Type__c</picklistField>
+        <picklistObject>Contact</picklistObject>
+    </dynamicChoiceSets>
+    <dynamicChoiceSets>
+        <name>Picklist_KepemilikanAssetLainnya</name>
+        <dataType>Multipicklist</dataType>
+        <displayField xsi:nil="true"/>
+        <object xsi:nil="true"/>
+        <picklistField>Kepemilikan_Asset_Lainnya__c</picklistField>
+        <picklistObject>Survey__c</picklistObject>
+    </dynamicChoiceSets>
+    <dynamicChoiceSets>
+        <name>Picklist_OtheBusiness</name>
+        <dataType>Picklist</dataType>
+        <displayField xsi:nil="true"/>
+        <object xsi:nil="true"/>
+        <picklistField>Other_Business__c</picklistField>
+        <picklistObject>Survey__c</picklistObject>
+    </dynamicChoiceSets>
+    <dynamicChoiceSets>
+        <name>Picklist_OtherBusiness_New</name>
+        <dataType>Picklist</dataType>
+        <displayField xsi:nil="true"/>
+        <object xsi:nil="true"/>
+        <picklistField>Other_Business__c</picklistField>
+        <picklistObject>Application__c</picklistObject>
+    </dynamicChoiceSets>
+    <dynamicChoiceSets>
+        <name>Picklist_Profession</name>
+        <dataType>String</dataType>
+        <displayField>Name</displayField>
+        <object>Master_Occupation__c</object>
+        <valueField>Id</valueField>
+    </dynamicChoiceSets>
+    <dynamicChoiceSets>
+        <name>Picklist_SumberNilaiHakTanggungan</name>
+        <dataType>Picklist</dataType>
+        <displayField xsi:nil="true"/>
+        <object xsi:nil="true"/>
+        <picklistField>Sumber_Nilai_Hak_Tanggungan__c</picklistField>
+        <picklistObject>Survey__c</picklistObject>
+    </dynamicChoiceSets>
+    <environments>Default</environments>
+    <formulas>
+        <name>formula_AccountPayableRatio</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.Account_Payable_Ratio__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_AccountReceivableRatio</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.Account_Receivable_Ratio__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_AsettoDebtRatio</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.Aset_to_Debt_Ratio__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_AverageDayNetProfitMargin</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.Average_Day_Net_Profit_Margin__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_AverageDaySales</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.Average_Day_Sales__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_BebanLainLain</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.Beban_Lain_Lain__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_BebanOperasional</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.Beban_Operasional__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_BebanPajak</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.Beban_Pajak__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_CashRatio</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.Cash_Ratio__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_CurrentRatio</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.Current_Ratio__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_DaysAPR</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.Days_APR__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_DaysARR</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.Days_ARR__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_DebttoEquityRatio</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.Debt_to_Equity_Ratio__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_DebttoTotalAsset</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.Debt_to_Total_Asset__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_DetailPenggunaanDana</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!recordId.Detail_Penggunaan_Dana_Konsumtif__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_DetailPenggunaanDanaProduktf</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!recordId.Detail_Penggunaan_Dana_Produktif__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_DIR</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.DIR__c} * 100) + &quot;%&quot;</expression>
+    </formulas>
+    <formulas>
+        <name>formula_DSC</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.DSC__c} * 100) + &quot;%&quot;</expression>
+    </formulas>
+    <formulas>
+        <name>formula_DSR</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.DSR__c} * 100) + &quot;%&quot;</expression>
+    </formulas>
+    <formulas>
+        <name>formula_EmploymentSince</name>
+        <dataType>String</dataType>
+        <expression>IF(ISBLANK({!Get_Curr_Survey.Employment_Business_Since__c}), &apos;&apos;, TEXT(DAY({!Get_Curr_Survey.Employment_Business_Since__c})) &amp; &quot;/&quot; &amp; 
+TEXT(MONTH({!Get_Curr_Survey.Employment_Business_Since__c})) &amp; &quot;/&quot; &amp; 
+TEXT(YEAR({!Get_Curr_Survey.Employment_Business_Since__c})))</expression>
+    </formulas>
+    <formulas>
+        <name>formula_GajiReflekRekening</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.Transaksi_Usaha_Gaji_Reflek_Rekening__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_GrossMargin</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.Gross_Margin__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_HPP</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.HPP__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_IndustryGroup</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Customer_Information.Industry_Group__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_IndustryType</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Customer_Information.Industry_Type__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_InventoryTurnover</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.Inventory_Turnover__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_kepemilikanAssetLainnya</name>
+        <dataType>String</dataType>
+        <expression>IF ( INCLUDES ( {!Get_Curr_Survey.Kepemilikan_Asset_Lainnya__c} , &quot;Rumah&quot; ), &quot;Rumah; &quot;,&quot;&quot;) &amp;
+IF ( INCLUDES ( {!Get_Curr_Survey.Kepemilikan_Asset_Lainnya__c} , &quot;Ruko/Kios&quot; ), &quot;Ruko/Kios; &quot;,&quot;&quot; ) &amp;
+IF ( INCLUDES ( {!Get_Curr_Survey.Kepemilikan_Asset_Lainnya__c} , &quot;Apartemen&quot; ), &quot;Apartemen; &quot;,&quot;&quot; ) &amp;
+IF ( INCLUDES ( {!Get_Curr_Survey.Kepemilikan_Asset_Lainnya__c} , &quot;Kendaraan Pribadi&quot; ), &quot;Kendaraan Pribadi; &quot;,&quot;&quot;) &amp;
+IF ( INCLUDES ( {!Get_Curr_Survey.Kepemilikan_Asset_Lainnya__c} , &quot;Kendaraan Operasional&quot; ), &quot;Kendaraan Operasional; &quot;,&quot;&quot; ) &amp;
+IF ( INCLUDES ( {!Get_Curr_Survey.Kepemilikan_Asset_Lainnya__c} , &quot;Mesin Produksi&quot; ), &quot;Mesin Produksi; &quot;,&quot;&quot; ) &amp;
+IF ( INCLUDES ( {!Get_Curr_Survey.Kepemilikan_Asset_Lainnya__c} , &quot;Gudang&quot; ), &quot;Gudang; &quot;,&quot;&quot; ) &amp;
+IF ( INCLUDES ( {!Get_Curr_Survey.Kepemilikan_Asset_Lainnya__c} , &quot;Tanah&quot; ), &quot;Tanah; &quot;,&quot;&quot; ) &amp;
+IF ( INCLUDES ( {!Get_Curr_Survey.Kepemilikan_Asset_Lainnya__c} , &quot;Aset Lainnya&quot; ), &quot;Aset Lainnya; &quot;,&quot;&quot; )</expression>
+    </formulas>
+    <formulas>
+        <name>formula_LabaKotor</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.Laba_Kotor__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_LabaOperasional</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.Laba_Operasional__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_LabaRugisebelumPajak</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.Laba_Rugi_sebelum_Pajak__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_LabaRugisetelahPajak</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.Laba_Rugi_setelah_Pajak__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_LivingCost</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.Living_Cost__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_LTVOfAssetLiquidation</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!recordId.LTV_of_asset_liquidation__c}) &amp; &quot;%&quot;</expression>
+    </formulas>
+    <formulas>
+        <name>formula_LTVofAssetMarketPrice</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.LTV_of_asset_market_price__c}) &amp; &quot;%&quot;</expression>
+    </formulas>
+    <formulas>
+        <name>formula_NetIncome</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.Net_Income_Per_Bulan__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_NetProfitMargin</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.Net_Profit_Margin__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_NetWorkingCapitalTurnover</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.Net_Working_Capital_Turnover__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_OperatingProfitMargin</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.Operating_Profit_Margin__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_PastDueAmount</name>
+        <dataType>String</dataType>
+        <expression>&quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!recordId.Past_Due_Amount__c}, 0))) &gt; 12, TEXT(ROUND({!recordId.Past_Due_Amount__c}, 0)),
+IF(LEN(TEXT(ROUND({!recordId.Past_Due_Amount__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!recordId.Past_Due_Amount__c}, 0)), LEN(TEXT(ROUND({!recordId.Past_Due_Amount__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!recordId.Past_Due_Amount__c}, 0)), LEN(TEXT(ROUND({!recordId.Past_Due_Amount__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!recordId.Past_Due_Amount__c}, 0)), LEN(TEXT(ROUND({!recordId.Past_Due_Amount__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!recordId.Past_Due_Amount__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!recordId.Past_Due_Amount__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!recordId.Past_Due_Amount__c}, 0)), LEN(TEXT(ROUND({!recordId.Past_Due_Amount__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!recordId.Past_Due_Amount__c}, 0)), LEN(TEXT(ROUND({!recordId.Past_Due_Amount__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!recordId.Past_Due_Amount__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!recordId.Past_Due_Amount__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!recordId.Past_Due_Amount__c}, 0)), LEN(TEXT(ROUND({!recordId.Past_Due_Amount__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!recordId.Past_Due_Amount__c}, 0)), 3),
+TEXT(ROUND({!recordId.Past_Due_Amount__c}, 0))
+))))</expression>
+    </formulas>
+    <formulas>
+        <name>formula_PastDueDays</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!recordId.Past_Due_Days__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_PefindoTotalObligasi</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Account.Pefindo_Total_OSP__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_PendapatanLainLain</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.Pendapatan_Lain_Lain__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_PendapatanPenjualan</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.Pendapatan_Penjualan__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_PersonalIncome</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!recordId.Survey__r.Personal_Income__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_ProporsiKredit</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!recordId.Proporsi_Credit_Kepemilikan_Aset_Inc_BF__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_QuickRatioAcidTesRatio</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.Quick_Ratio_Acid_Tes_Ratio__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_ReturnonEquity</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.Return_on_Equity__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_ReturnonInvestment</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.Return_on_Investment__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_SelisihLB</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!recordId.Selisih_LB_antara_Fisik_dan_Bangunan__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_SurplusDeficitIncome</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.Surplus_Deficit_Income__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_TerdapatInfoNegative</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!recordId.Terdapat_Informasi_Negative_Picklist__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_TotalAngsuranExisting</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.Total_Angsuran_Existing__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_TotalAngsuranPengajuan</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.Total_Angsuran_Pengajuan__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_TotalNetIncome</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.Total_Net_Income__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_TotalObligasiAktif</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!recordId.Total_Obligasi_Aktif__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_TujuanPembiayaan</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.Tujuan_Pembiayaan__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_WorkingCapitalTurnOver</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Get_Curr_Survey.Working_Capital_Turn_Over__c})</expression>
+    </formulas>
+    <formulas>
+        <name>formula_WorstCollectability</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!recordId.Worst_Collectability_Credit_by_Pefindo_d__c})</expression>
+    </formulas>
+    <formulas>
+        <name>func_AkumulasiPenyusutanGedung_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Akumulasi_Penyusutan_Gedung__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Gedung__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Gedung__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Gedung__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Gedung__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Gedung__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Gedung__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Gedung__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Gedung__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Gedung__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Gedung__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Gedung__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Gedung__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Gedung__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Gedung__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Gedung__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Gedung__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Gedung__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Gedung__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Gedung__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Gedung__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Gedung__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_AkumulasiPenyusutanKendaraan_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Akumulasi_Penyusutan_Kendaraan__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Kendaraan__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Kendaraan__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Kendaraan__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Kendaraan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Kendaraan__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Kendaraan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Kendaraan__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Kendaraan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Kendaraan__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Kendaraan__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Kendaraan__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Kendaraan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Kendaraan__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Kendaraan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Kendaraan__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Kendaraan__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Kendaraan__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Kendaraan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Kendaraan__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Kendaraan__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Kendaraan__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_AkumulasiPenyusutanPeralatanMesin_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Akumulasi_Penyusutan_Peralatan_Mesin__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Peralatan_Mesin__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Peralatan_Mesin__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Peralatan_Mesin__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Peralatan_Mesin__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Peralatan_Mesin__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Peralatan_Mesin__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Peralatan_Mesin__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Peralatan_Mesin__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Peralatan_Mesin__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Peralatan_Mesin__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Peralatan_Mesin__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Peralatan_Mesin__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Peralatan_Mesin__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Peralatan_Mesin__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Peralatan_Mesin__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Peralatan_Mesin__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Peralatan_Mesin__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Peralatan_Mesin__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Peralatan_Mesin__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Peralatan_Mesin__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Akumulasi_Penyusutan_Peralatan_Mesin__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_AsetLancarLainnya_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Aset_Lancar_Lainnya__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Aset_Lancar_Lainnya__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Aset_Lancar_Lainnya__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Aset_Lancar_Lainnya__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Aset_Lancar_Lainnya__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Aset_Lancar_Lainnya__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Aset_Lancar_Lainnya__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Aset_Lancar_Lainnya__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Aset_Lancar_Lainnya__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Aset_Lancar_Lainnya__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Aset_Lancar_Lainnya__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Aset_Lancar_Lainnya__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Aset_Lancar_Lainnya__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Aset_Lancar_Lainnya__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Aset_Lancar_Lainnya__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Aset_Lancar_Lainnya__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Aset_Lancar_Lainnya__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Aset_Lancar_Lainnya__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Aset_Lancar_Lainnya__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Aset_Lancar_Lainnya__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Aset_Lancar_Lainnya__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Aset_Lancar_Lainnya__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_AssetTidakLancarLainnya_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Asset_Tidak_Lancar_Lainnya__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Asset_Tidak_Lancar_Lainnya__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Asset_Tidak_Lancar_Lainnya__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Asset_Tidak_Lancar_Lainnya__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Asset_Tidak_Lancar_Lainnya__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Asset_Tidak_Lancar_Lainnya__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Asset_Tidak_Lancar_Lainnya__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Asset_Tidak_Lancar_Lainnya__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Asset_Tidak_Lancar_Lainnya__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Asset_Tidak_Lancar_Lainnya__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Asset_Tidak_Lancar_Lainnya__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Asset_Tidak_Lancar_Lainnya__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Asset_Tidak_Lancar_Lainnya__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Asset_Tidak_Lancar_Lainnya__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Asset_Tidak_Lancar_Lainnya__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Asset_Tidak_Lancar_Lainnya__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Asset_Tidak_Lancar_Lainnya__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Asset_Tidak_Lancar_Lainnya__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Asset_Tidak_Lancar_Lainnya__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Asset_Tidak_Lancar_Lainnya__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Asset_Tidak_Lancar_Lainnya__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Asset_Tidak_Lancar_Lainnya__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_BebanLainLain_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Beban_Lain_Lain__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Beban_Lain_Lain__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Beban_Lain_Lain__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Beban_Lain_Lain__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Beban_Lain_Lain__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Beban_Lain_Lain__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Beban_Lain_Lain__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Beban_Lain_Lain__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Beban_Lain_Lain__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Beban_Lain_Lain__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Beban_Lain_Lain__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Beban_Lain_Lain__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Beban_Lain_Lain__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Beban_Lain_Lain__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Beban_Lain_Lain__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Beban_Lain_Lain__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Beban_Lain_Lain__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Beban_Lain_Lain__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Beban_Lain_Lain__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Beban_Lain_Lain__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Beban_Lain_Lain__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Beban_Lain_Lain__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_BebanOperasional_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Beban_Operasional__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Beban_Operasional__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Beban_Operasional__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Beban_Operasional__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Beban_Operasional__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Beban_Operasional__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Beban_Operasional__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Beban_Operasional__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Beban_Operasional__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Beban_Operasional__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Beban_Operasional__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Beban_Operasional__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Beban_Operasional__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Beban_Operasional__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Beban_Operasional__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Beban_Operasional__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Beban_Operasional__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Beban_Operasional__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Beban_Operasional__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Beban_Operasional__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Beban_Operasional__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Beban_Operasional__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_BebanPajak_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Beban_Pajak__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Beban_Pajak__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Beban_Pajak__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Beban_Pajak__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Beban_Pajak__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Beban_Pajak__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Beban_Pajak__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Beban_Pajak__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Beban_Pajak__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Beban_Pajak__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Beban_Pajak__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Beban_Pajak__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Beban_Pajak__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Beban_Pajak__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Beban_Pajak__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Beban_Pajak__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Beban_Pajak__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Beban_Pajak__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Beban_Pajak__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Beban_Pajak__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Beban_Pajak__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Beban_Pajak__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_Biayadibayardimuka_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Biaya_dibayar_dimuka__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Biaya_dibayar_dimuka__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Biaya_dibayar_dimuka__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Biaya_dibayar_dimuka__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Biaya_dibayar_dimuka__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Biaya_dibayar_dimuka__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Biaya_dibayar_dimuka__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Biaya_dibayar_dimuka__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Biaya_dibayar_dimuka__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Biaya_dibayar_dimuka__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Biaya_dibayar_dimuka__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Biaya_dibayar_dimuka__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Biaya_dibayar_dimuka__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Biaya_dibayar_dimuka__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Biaya_dibayar_dimuka__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Biaya_dibayar_dimuka__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Biaya_dibayar_dimuka__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Biaya_dibayar_dimuka__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Biaya_dibayar_dimuka__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Biaya_dibayar_dimuka__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Biaya_dibayar_dimuka__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Biaya_dibayar_dimuka__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_Biayayangmasihharusdibayar_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Biaya_yang_masih_harus_dibayar__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Biaya_yang_masih_harus_dibayar__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Biaya_yang_masih_harus_dibayar__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Biaya_yang_masih_harus_dibayar__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Biaya_yang_masih_harus_dibayar__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Biaya_yang_masih_harus_dibayar__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Biaya_yang_masih_harus_dibayar__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Biaya_yang_masih_harus_dibayar__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Biaya_yang_masih_harus_dibayar__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Biaya_yang_masih_harus_dibayar__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Biaya_yang_masih_harus_dibayar__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Biaya_yang_masih_harus_dibayar__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Biaya_yang_masih_harus_dibayar__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Biaya_yang_masih_harus_dibayar__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Biaya_yang_masih_harus_dibayar__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Biaya_yang_masih_harus_dibayar__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Biaya_yang_masih_harus_dibayar__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Biaya_yang_masih_harus_dibayar__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Biaya_yang_masih_harus_dibayar__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Biaya_yang_masih_harus_dibayar__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Biaya_yang_masih_harus_dibayar__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Biaya_yang_masih_harus_dibayar__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_Gedung_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Gedung__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Gedung__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Gedung__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Gedung__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Gedung__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Gedung__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Gedung__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Gedung__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Gedung__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Gedung__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Gedung__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Gedung__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Gedung__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Gedung__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Gedung__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Gedung__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Gedung__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Gedung__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Gedung__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Gedung__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Gedung__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Gedung__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_HPP_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.HPP__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.HPP__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.HPP__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.HPP__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.HPP__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.HPP__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.HPP__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.HPP__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.HPP__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.HPP__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.HPP__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.HPP__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.HPP__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.HPP__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.HPP__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.HPP__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.HPP__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.HPP__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.HPP__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.HPP__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.HPP__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.HPP__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_HutangBankJangkaPanjang_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Hutang_Bank_Jangka_Panjang__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Panjang__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Panjang__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Panjang__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Panjang__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Panjang__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Panjang__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Panjang__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Panjang__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Panjang__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Panjang__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Panjang__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Panjang__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Panjang__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Panjang__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Panjang__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Panjang__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Panjang__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Panjang__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Panjang__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Panjang__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Panjang__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_HutangBankJangkaPendek_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Hutang_Bank_Jangka_Pendek__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Pendek__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Pendek__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Pendek__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Pendek__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Pendek__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Pendek__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Pendek__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Pendek__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Pendek__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Pendek__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Pendek__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Pendek__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Pendek__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Pendek__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Pendek__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Pendek__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Pendek__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Pendek__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Pendek__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Pendek__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Hutang_Bank_Jangka_Pendek__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_HutangDagangUsaha_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Hutang_Dagang_Usaha__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Dagang_Usaha__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Hutang_Dagang_Usaha__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Dagang_Usaha__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Hutang_Dagang_Usaha__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Dagang_Usaha__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Hutang_Dagang_Usaha__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Dagang_Usaha__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Hutang_Dagang_Usaha__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Dagang_Usaha__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Hutang_Dagang_Usaha__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Dagang_Usaha__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Hutang_Dagang_Usaha__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Dagang_Usaha__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Hutang_Dagang_Usaha__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Dagang_Usaha__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Hutang_Dagang_Usaha__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Dagang_Usaha__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Hutang_Dagang_Usaha__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Dagang_Usaha__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Hutang_Dagang_Usaha__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Hutang_Dagang_Usaha__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_HutangGaji_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Hutang_Gaji__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Gaji__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Hutang_Gaji__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Gaji__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Hutang_Gaji__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Gaji__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Hutang_Gaji__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Gaji__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Hutang_Gaji__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Gaji__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Hutang_Gaji__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Gaji__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Hutang_Gaji__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Gaji__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Hutang_Gaji__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Gaji__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Hutang_Gaji__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Gaji__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Hutang_Gaji__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Gaji__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Hutang_Gaji__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Hutang_Gaji__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_HutangJangkapendeklainnya_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Hutang_Jangka_pendek_lainnya__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Jangka_pendek_lainnya__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Hutang_Jangka_pendek_lainnya__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Jangka_pendek_lainnya__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Hutang_Jangka_pendek_lainnya__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Jangka_pendek_lainnya__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Hutang_Jangka_pendek_lainnya__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Jangka_pendek_lainnya__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Hutang_Jangka_pendek_lainnya__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Jangka_pendek_lainnya__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Hutang_Jangka_pendek_lainnya__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Jangka_pendek_lainnya__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Hutang_Jangka_pendek_lainnya__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Jangka_pendek_lainnya__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Hutang_Jangka_pendek_lainnya__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Jangka_pendek_lainnya__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Hutang_Jangka_pendek_lainnya__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Jangka_pendek_lainnya__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Hutang_Jangka_pendek_lainnya__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Jangka_pendek_lainnya__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Hutang_Jangka_pendek_lainnya__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Hutang_Jangka_pendek_lainnya__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_HutangPajak_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Hutang_Pajak__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Pajak__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Hutang_Pajak__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Pajak__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Hutang_Pajak__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Pajak__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Hutang_Pajak__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Pajak__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Hutang_Pajak__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Pajak__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Hutang_Pajak__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Pajak__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Hutang_Pajak__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Pajak__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Hutang_Pajak__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Pajak__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Hutang_Pajak__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Pajak__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Hutang_Pajak__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Hutang_Pajak__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Hutang_Pajak__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Hutang_Pajak__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_KasBankatauSetaraKas_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Kas_Bank_atau_Setara_Kas__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Kas_Bank_atau_Setara_Kas__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Kas_Bank_atau_Setara_Kas__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Kas_Bank_atau_Setara_Kas__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Kas_Bank_atau_Setara_Kas__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Kas_Bank_atau_Setara_Kas__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Kas_Bank_atau_Setara_Kas__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Kas_Bank_atau_Setara_Kas__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Kas_Bank_atau_Setara_Kas__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Kas_Bank_atau_Setara_Kas__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Kas_Bank_atau_Setara_Kas__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Kas_Bank_atau_Setara_Kas__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Kas_Bank_atau_Setara_Kas__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Kas_Bank_atau_Setara_Kas__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Kas_Bank_atau_Setara_Kas__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Kas_Bank_atau_Setara_Kas__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Kas_Bank_atau_Setara_Kas__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Kas_Bank_atau_Setara_Kas__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Kas_Bank_atau_Setara_Kas__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Kas_Bank_atau_Setara_Kas__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Kas_Bank_atau_Setara_Kas__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Kas_Bank_atau_Setara_Kas__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_Kendaraan_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Kendaraan__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Kendaraan__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Kendaraan__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Kendaraan__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Kendaraan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Kendaraan__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Kendaraan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Kendaraan__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Kendaraan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Kendaraan__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Kendaraan__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Kendaraan__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Kendaraan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Kendaraan__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Kendaraan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Kendaraan__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Kendaraan__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Kendaraan__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Kendaraan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Kendaraan__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Kendaraan__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Kendaraan__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_LabaDitahan_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Laba_Ditahan__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Ditahan__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Laba_Ditahan__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Ditahan__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Laba_Ditahan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Ditahan__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Laba_Ditahan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Ditahan__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Laba_Ditahan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Ditahan__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Laba_Ditahan__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Ditahan__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Laba_Ditahan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Ditahan__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Laba_Ditahan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Ditahan__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Laba_Ditahan__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Ditahan__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Laba_Ditahan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Ditahan__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Laba_Ditahan__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Laba_Ditahan__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_LabaKotor_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Laba_Kotor__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Kotor__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Laba_Kotor__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Kotor__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Laba_Kotor__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Kotor__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Laba_Kotor__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Kotor__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Laba_Kotor__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Kotor__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Laba_Kotor__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Kotor__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Laba_Kotor__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Kotor__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Laba_Kotor__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Kotor__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Laba_Kotor__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Kotor__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Laba_Kotor__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Kotor__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Laba_Kotor__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Laba_Kotor__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_LabaOperasional_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Laba_Operasional__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Operasional__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Laba_Operasional__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Operasional__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Laba_Operasional__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Operasional__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Laba_Operasional__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Operasional__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Laba_Operasional__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Operasional__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Laba_Operasional__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Operasional__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Laba_Operasional__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Operasional__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Laba_Operasional__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Operasional__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Laba_Operasional__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Operasional__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Laba_Operasional__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Operasional__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Laba_Operasional__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Laba_Operasional__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_LabaRugisebelumPajak_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Laba_Rugi_sebelum_Pajak__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_sebelum_Pajak__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_sebelum_Pajak__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_sebelum_Pajak__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_sebelum_Pajak__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_sebelum_Pajak__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_sebelum_Pajak__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_sebelum_Pajak__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_sebelum_Pajak__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_sebelum_Pajak__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_sebelum_Pajak__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_sebelum_Pajak__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_sebelum_Pajak__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_sebelum_Pajak__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_sebelum_Pajak__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_sebelum_Pajak__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_sebelum_Pajak__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_sebelum_Pajak__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_sebelum_Pajak__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_sebelum_Pajak__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_sebelum_Pajak__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_sebelum_Pajak__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_LabaRugisetelahPajak_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Laba_Rugi_setelah_Pajak__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_setelah_Pajak__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_setelah_Pajak__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_setelah_Pajak__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_setelah_Pajak__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_setelah_Pajak__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_setelah_Pajak__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_setelah_Pajak__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_setelah_Pajak__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_setelah_Pajak__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_setelah_Pajak__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_setelah_Pajak__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_setelah_Pajak__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_setelah_Pajak__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_setelah_Pajak__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_setelah_Pajak__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_setelah_Pajak__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_setelah_Pajak__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_setelah_Pajak__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_setelah_Pajak__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_setelah_Pajak__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Laba_Rugi_setelah_Pajak__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_LabaTahunBerjalan_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Laba_Tahun_Berjalan__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Tahun_Berjalan__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Laba_Tahun_Berjalan__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Tahun_Berjalan__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Laba_Tahun_Berjalan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Tahun_Berjalan__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Laba_Tahun_Berjalan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Tahun_Berjalan__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Laba_Tahun_Berjalan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Tahun_Berjalan__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Laba_Tahun_Berjalan__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Tahun_Berjalan__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Laba_Tahun_Berjalan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Tahun_Berjalan__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Laba_Tahun_Berjalan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Tahun_Berjalan__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Laba_Tahun_Berjalan__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Tahun_Berjalan__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Laba_Tahun_Berjalan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Laba_Tahun_Berjalan__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Laba_Tahun_Berjalan__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Laba_Tahun_Berjalan__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_MaksimumLTV</name>
+        <dataType>Currency</dataType>
+        <expression>IF(TEXT({!Get_Curr_Survey.Tipe_Penilaian__c}) == &quot;Pre Approval&quot;, {!Get_Curr_Survey.PRE_Maksimum_LTV__c},
+IF(TEXT({!Get_Curr_Survey.Tipe_Penilaian__c}) == &quot;Non Appraisal (NJOP)&quot;, {!Get_Curr_Survey.NJOP_Maksimum_LTV__c}, 
+IF(TEXT({!Get_Curr_Survey.Tipe_Penilaian__c}) == &quot;Appraisal (KJPP)&quot;, {!Get_Curr_Survey.KJPP_Maksimum_LTV__c}, {!Get_Curr_Survey.Maksimum_LTV__c}
+)))</expression>
+        <scale>2</scale>
+    </formulas>
+    <formulas>
+        <name>func_Modaldisetor_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Modal_disetor__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Modal_disetor__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Modal_disetor__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Modal_disetor__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Modal_disetor__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Modal_disetor__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Modal_disetor__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Modal_disetor__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Modal_disetor__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Modal_disetor__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Modal_disetor__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Modal_disetor__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Modal_disetor__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Modal_disetor__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Modal_disetor__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Modal_disetor__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Modal_disetor__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Modal_disetor__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Modal_disetor__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Modal_disetor__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Modal_disetor__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Modal_disetor__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_PendapatanLainLain_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Pendapatan_Lain_Lain__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Lain_Lain__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Lain_Lain__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Lain_Lain__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Lain_Lain__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Lain_Lain__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Lain_Lain__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Lain_Lain__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Lain_Lain__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Lain_Lain__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Lain_Lain__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Lain_Lain__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Lain_Lain__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Lain_Lain__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Lain_Lain__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Lain_Lain__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Lain_Lain__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Lain_Lain__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Lain_Lain__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Lain_Lain__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Lain_Lain__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Lain_Lain__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_PendapatanPenjualan_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Pendapatan_Penjualan__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Penjualan__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Penjualan__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Penjualan__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Penjualan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Penjualan__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Penjualan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Penjualan__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Penjualan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Penjualan__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Penjualan__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Penjualan__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Penjualan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Penjualan__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Penjualan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Penjualan__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Penjualan__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Penjualan__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Penjualan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Penjualan__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Penjualan__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Pendapatan_Penjualan__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_PeralatandanMachine_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Peralatan_dan_Machine__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Peralatan_dan_Machine__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Peralatan_dan_Machine__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Peralatan_dan_Machine__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Peralatan_dan_Machine__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Peralatan_dan_Machine__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Peralatan_dan_Machine__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Peralatan_dan_Machine__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Peralatan_dan_Machine__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Peralatan_dan_Machine__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Peralatan_dan_Machine__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Peralatan_dan_Machine__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Peralatan_dan_Machine__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Peralatan_dan_Machine__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Peralatan_dan_Machine__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Peralatan_dan_Machine__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Peralatan_dan_Machine__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Peralatan_dan_Machine__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Peralatan_dan_Machine__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Peralatan_dan_Machine__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Peralatan_dan_Machine__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Peralatan_dan_Machine__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_Perlengkapan_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Perlengkapan__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Perlengkapan__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Perlengkapan__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Perlengkapan__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Perlengkapan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Perlengkapan__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Perlengkapan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Perlengkapan__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Perlengkapan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Perlengkapan__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Perlengkapan__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Perlengkapan__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Perlengkapan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Perlengkapan__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Perlengkapan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Perlengkapan__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Perlengkapan__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Perlengkapan__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Perlengkapan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Perlengkapan__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Perlengkapan__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Perlengkapan__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_Persediaan_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Persediaan__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Persediaan__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Persediaan__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Persediaan__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Persediaan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Persediaan__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Persediaan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Persediaan__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Persediaan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Persediaan__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Persediaan__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Persediaan__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Persediaan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Persediaan__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Persediaan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Persediaan__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Persediaan__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Persediaan__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Persediaan__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Persediaan__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Persediaan__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Persediaan__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_PiutangLainLain_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Piutang_Lain_Lain__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Piutang_Lain_Lain__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Piutang_Lain_Lain__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Piutang_Lain_Lain__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Piutang_Lain_Lain__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Piutang_Lain_Lain__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Piutang_Lain_Lain__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Piutang_Lain_Lain__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Piutang_Lain_Lain__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Piutang_Lain_Lain__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Piutang_Lain_Lain__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Piutang_Lain_Lain__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Piutang_Lain_Lain__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Piutang_Lain_Lain__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Piutang_Lain_Lain__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Piutang_Lain_Lain__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Piutang_Lain_Lain__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Piutang_Lain_Lain__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Piutang_Lain_Lain__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Piutang_Lain_Lain__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Piutang_Lain_Lain__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Piutang_Lain_Lain__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_PiutangUsahaDagang_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Piutang_Usaha_Dagang__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Piutang_Usaha_Dagang__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Piutang_Usaha_Dagang__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Piutang_Usaha_Dagang__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Piutang_Usaha_Dagang__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Piutang_Usaha_Dagang__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Piutang_Usaha_Dagang__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Piutang_Usaha_Dagang__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Piutang_Usaha_Dagang__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Piutang_Usaha_Dagang__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Piutang_Usaha_Dagang__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Piutang_Usaha_Dagang__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Piutang_Usaha_Dagang__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Piutang_Usaha_Dagang__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Piutang_Usaha_Dagang__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Piutang_Usaha_Dagang__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Piutang_Usaha_Dagang__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Piutang_Usaha_Dagang__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Piutang_Usaha_Dagang__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Piutang_Usaha_Dagang__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Piutang_Usaha_Dagang__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Piutang_Usaha_Dagang__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_Tanah_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Tanah__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Tanah__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Tanah__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Tanah__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Tanah__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Tanah__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Tanah__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Tanah__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Tanah__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Tanah__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Tanah__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Tanah__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Tanah__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Tanah__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Tanah__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Tanah__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Tanah__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Tanah__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Tanah__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Tanah__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Tanah__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Tanah__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_TotalAsetLancar_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Total_Aset_Lancar__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Lancar__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Lancar__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Lancar__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Lancar__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Lancar__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Lancar__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Lancar__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Lancar__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Lancar__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Lancar__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Lancar__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Lancar__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Lancar__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Lancar__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Lancar__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Lancar__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Lancar__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Lancar__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Lancar__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Lancar__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Lancar__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_TotalAsetTidakLancar_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Total_Aset_Tidak_Lancar__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Tidak_Lancar__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Tidak_Lancar__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Tidak_Lancar__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Tidak_Lancar__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Tidak_Lancar__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Tidak_Lancar__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Tidak_Lancar__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Tidak_Lancar__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Tidak_Lancar__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Tidak_Lancar__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Tidak_Lancar__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Tidak_Lancar__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Tidak_Lancar__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Tidak_Lancar__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Tidak_Lancar__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Tidak_Lancar__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Tidak_Lancar__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Tidak_Lancar__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Tidak_Lancar__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Tidak_Lancar__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Total_Aset_Tidak_Lancar__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_TotalAsset_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Total_Asset__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Asset__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Total_Asset__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Asset__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Total_Asset__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Asset__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Total_Asset__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Asset__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Total_Asset__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Asset__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Total_Asset__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Asset__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Total_Asset__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Asset__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Total_Asset__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Asset__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Total_Asset__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Asset__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Total_Asset__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Asset__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Total_Asset__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Total_Asset__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_TotalHutangdanModal_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Total_Hutang_dan_Modal__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_dan_Modal__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_dan_Modal__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_dan_Modal__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_dan_Modal__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_dan_Modal__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_dan_Modal__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_dan_Modal__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_dan_Modal__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_dan_Modal__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_dan_Modal__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_dan_Modal__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_dan_Modal__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_dan_Modal__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_dan_Modal__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_dan_Modal__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_dan_Modal__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_dan_Modal__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_dan_Modal__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_dan_Modal__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_dan_Modal__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_dan_Modal__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_TotalHutangJangkaPanjang_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Total_Hutang_Jangka_Panjang__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Panjang__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Panjang__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Panjang__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Panjang__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Panjang__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Panjang__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Panjang__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Panjang__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Panjang__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Panjang__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Panjang__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Panjang__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Panjang__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Panjang__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Panjang__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Panjang__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Panjang__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Panjang__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Panjang__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Panjang__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Panjang__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_TotalHutangJangkaPendek_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Total_Hutang_Jangka_Pendek__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Pendek__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Pendek__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Pendek__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Pendek__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Pendek__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Pendek__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Pendek__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Pendek__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Pendek__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Pendek__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Pendek__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Pendek__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Pendek__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Pendek__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Pendek__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Pendek__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Pendek__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Pendek__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Pendek__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Pendek__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Total_Hutang_Jangka_Pendek__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>func_TotalModal_Text</name>
+        <dataType>String</dataType>
+        <expression>IF(ISNULL({!Get_Curr_Survey.Total_Modal__c}) == TRUE, &quot;&quot;, &quot;Rp &quot; &amp;
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Modal__c}, 0))) &gt; 12, TEXT(ROUND({!Get_Curr_Survey.Total_Modal__c}, 0)),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Modal__c}, 0))) &gt; 9,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Total_Modal__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Modal__c}, 0))) - 9) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Total_Modal__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Modal__c}, 0))) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Total_Modal__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Modal__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Total_Modal__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Modal__c}, 0))) &gt; 6,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Total_Modal__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Modal__c}, 0))) - 6) &amp; &quot;.&quot; &amp;
+    MID(TEXT(ROUND({!Get_Curr_Survey.Total_Modal__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Modal__c}, 0))) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Total_Modal__c}, 0)), 3),
+IF(LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Modal__c}, 0))) &gt; 3,
+    LEFT(TEXT(ROUND({!Get_Curr_Survey.Total_Modal__c}, 0)), LEN(TEXT(ROUND({!Get_Curr_Survey.Total_Modal__c}, 0))) - 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT(ROUND({!Get_Curr_Survey.Total_Modal__c}, 0)), 3),
+TEXT(ROUND({!Get_Curr_Survey.Total_Modal__c}, 0))
+)))))</expression>
+    </formulas>
+    <formulas>
+        <name>Not_Is_Changed</name>
+        <dataType>Boolean</dataType>
+        <expression>NOT({!Get_Account.Is_Changed__c})</expression>
+    </formulas>
+    <formulas>
+        <name>spaceFormula</name>
+        <dataType>String</dataType>
+        <expression>&apos;&lt;br&gt;&apos;</expression>
+    </formulas>
+    <formulas>
+        <name>var_CreditReview_FieldAccess</name>
+        <dataType>String</dataType>
+        <expression>IF({!$Permission.Sec_Application_Credit_Review_Edits} == TRUE &amp;&amp; {!application_EditAccess} == TRUE &amp;&amp; (BEGINS({!Get_AppCAA.Assigned_User__c}, {!$User.Id}) ) , &quot;None&quot;, &quot;Readonly&quot;)</expression>
+    </formulas>
+    <interviewLabel>[Scr] Credit - Capacity Other Income {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>[Scr] Credit - Capacity Other Income</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>Flow</processType>
+    <recordLookups>
+        <name>Get_Account</name>
+        <label>Get Account</label>
+        <locationX>176</locationX>
+        <locationY>350</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>rst_URA_Application</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Customer_Information.AccountId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Account</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_AppCAA</name>
+        <label>Get AppCAA</label>
+        <locationX>176</locationX>
+        <locationY>782</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>X1P5C_Screen</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Application__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId.Id</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>Level__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId.CAA_Step__c</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Application_CAA__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Curr_Survey</name>
+        <label>Get Survey</label>
+        <locationX>176</locationX>
+        <locationY>134</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Get_Customer_Information</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId.Survey__c</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Survey__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Customer_Information</name>
+        <label>Get Customer Information</label>
+        <locationX>176</locationX>
+        <locationY>242</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Get_Account</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId.Loan_Information__r.Account.Primary_Contact__c</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Contact</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_PI</name>
+        <label>Get PI</label>
+        <locationX>176</locationX>
+        <locationY>566</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Get_PIW</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>TargetObjectId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId.Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>ProcessInstance</object>
+        <sortField>CreatedDate</sortField>
+        <sortOrder>Desc</sortOrder>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_PIW</name>
+        <label>Get PIW</label>
+        <locationX>176</locationX>
+        <locationY>674</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Get_AppCAA</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>ProcessInstanceId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_PI.Id</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>IsDeleted</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>ProcessInstanceWorkitem</object>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>ActorId</queriedFields>
+        <sortField>CreatedDate</sortField>
+        <sortOrder>Desc</sortOrder>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>rst_URA_Application</name>
+        <label>rst URA (Application)</label>
+        <locationX>176</locationX>
+        <locationY>458</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Get_PI</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>UserId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$User.Id</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>RecordId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId.Id</elementReference>
+            </value>
+        </filters>
+        <object>UserRecordAccess</object>
+        <outputAssignments>
+            <assignToReference>application_EditAccess</assignToReference>
+            <field>HasEditAccess</field>
+        </outputAssignments>
+        <outputAssignments>
+            <assignToReference>application_recordId</assignToReference>
+            <field>RecordId</field>
+        </outputAssignments>
+    </recordLookups>
+    <recordUpdates>
+        <name>Update_Application</name>
+        <label>Update Application</label>
+        <locationX>176</locationX>
+        <locationY>1106</locationY>
+        <connector>
+            <targetReference>Update_Lead_Is_Changed</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>application_recordId</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Monthly_Income_Other__c</field>
+            <value>
+                <elementReference>editor_Monthly_Income</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Other_Business__c</field>
+            <value>
+                <elementReference>editor_Other_Business</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Application__c</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Lead_Is_Changed</name>
+        <label>Update Lead Is Changed</label>
+        <locationX>176</locationX>
+        <locationY>1214</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Account.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Is_Changed__c</field>
+            <value>
+                <elementReference>Not_Is_Changed</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Account</object>
+    </recordUpdates>
+    <runInMode>DefaultMode</runInMode>
+    <screens>
+        <name>X1P5C_Editor</name>
+        <label>1P5C Editor</label>
+        <locationX>176</locationX>
+        <locationY>998</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <backButtonLabel>Cancel</backButtonLabel>
+        <connector>
+            <targetReference>Update_Application</targetReference>
+        </connector>
+        <fields>
+            <name>Capacity_Other_Income</name>
+            <fieldText>Capacity Other Income</fieldText>
+            <fieldType>RegionContainer</fieldType>
+            <fields>
+                <name>Capacity_Other_Income_Column1</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>editor_Other_Business</name>
+                    <choiceReferences>Picklist_OtherBusiness_New</choiceReferences>
+                    <dataType>String</dataType>
+                    <defaultValue>
+                        <elementReference>recordId.Other_Business__c</elementReference>
+                    </defaultValue>
+                    <fieldText>Other Business</fieldText>
+                    <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>editor_Monthly_Income</name>
+                    <dataType>Currency</dataType>
+                    <defaultValue>
+                        <elementReference>recordId.Monthly_Income_Other__c</elementReference>
+                    </defaultValue>
+                    <fieldText>Monthly Income</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <scale>0</scale>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                    <visibilityRule>
+                        <conditionLogic>and</conditionLogic>
+                        <conditions>
+                            <leftValueReference>editor_Other_Business</leftValueReference>
+                            <operator>EqualTo</operator>
+                            <rightValue>
+                                <stringValue>Ada</stringValue>
+                            </rightValue>
+                        </conditions>
+                    </visibilityRule>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>12</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <isRequired>false</isRequired>
+            <regionContainerType>SectionWithHeader</regionContainerType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <nextOrFinishButtonLabel>Save</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+    <screens>
+        <name>X1P5C_Screen</name>
+        <label>1P5C Screen</label>
+        <locationX>176</locationX>
+        <locationY>890</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>true</allowPause>
+        <connector>
+            <targetReference>X1P5C_Editor</targetReference>
+        </connector>
+        <fields>
+            <name>Capacity_Other_Income2</name>
+            <fieldText>Capacity Other Income</fieldText>
+            <fieldType>RegionContainer</fieldType>
+            <fields>
+                <name>Capacity_Other_Income2_Column1</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>view_Other_Business</name>
+                    <extensionName>c:jimCompo</extensionName>
+                    <fieldType>ComponentInstance</fieldType>
+                    <inputParameters>
+                        <name>fieldLabel</name>
+                        <value>
+                            <stringValue>Other Business</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>fieldValue</name>
+                        <value>
+                            <elementReference>recordId.Other_Business__c</elementReference>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>fieldAttr</name>
+                        <value>
+                            <elementReference>var_CreditReview_FieldAccess</elementReference>
+                        </value>
+                    </inputParameters>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <storeOutputAutomatically>true</storeOutputAutomatically>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <fields>
+                    <name>view_Monthly_Income</name>
+                    <extensionName>c:jimCompo</extensionName>
+                    <fieldType>ComponentInstance</fieldType>
+                    <inputParameters>
+                        <name>fieldLabel</name>
+                        <value>
+                            <stringValue>Monthly Income</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>fieldAttr</name>
+                        <value>
+                            <elementReference>var_CreditReview_FieldAccess</elementReference>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>fieldValue</name>
+                        <value>
+                            <stringValue>Rp {!recordId.Monthly_Income_Other__c}</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <storeOutputAutomatically>true</storeOutputAutomatically>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                    <visibilityRule>
+                        <conditionLogic>and</conditionLogic>
+                        <conditions>
+                            <leftValueReference>recordId.Other_Business__c</leftValueReference>
+                            <operator>EqualTo</operator>
+                            <rightValue>
+                                <stringValue>Ada</stringValue>
+                            </rightValue>
+                        </conditions>
+                    </visibilityRule>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>12</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <isRequired>false</isRequired>
+            <regionContainerType>SectionWithHeader</regionContainerType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <showFooter>false</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Get_Curr_Survey</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <variables>
+        <name>application_EditAccess</name>
+        <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>application_recordId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>formula_DIR_value</name>
+        <dataType>Number</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <scale>0</scale>
+    </variables>
+    <variables>
+        <name>formula_DSC_value</name>
+        <dataType>Number</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <scale>0</scale>
+    </variables>
+    <variables>
+        <name>formula_DSR_value</name>
+        <dataType>Number</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <scale>0</scale>
+    </variables>
+    <variables>
+        <name>formula_SurplusDeficitIncome_value</name>
+        <dataType>Number</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <scale>0</scale>
+    </variables>
+    <variables>
+        <name>recordId</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Application__c</objectType>
+    </variables>
+    <variables>
+        <name>var_CustomerInformation</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Contact</objectType>
+    </variables>
+    <variables>
+        <name>var_ScreenType</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

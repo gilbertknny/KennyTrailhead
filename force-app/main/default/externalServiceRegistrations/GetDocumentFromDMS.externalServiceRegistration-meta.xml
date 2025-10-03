@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ExternalServiceRegistration xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Get document link from DMS</description>
+    <label>GetDocumentFromDMS</label>
+    <namedCredentialReference>MasterDataNmCred</namedCredentialReference>
+    <operations>
+        <active>true</active>
+        <name>getx20documentx20fromx20dms</name>
+    </operations>
+    <registrationProviderType>SchemaInferred</registrationProviderType>
+    <schema>{&quot;openapi&quot;:&quot;3.0.1&quot;,&quot;info&quot;:{&quot;title&quot;:&quot;GetDocumentFromDMS&quot;,&quot;description&quot;:&quot;Get document link from DMS &quot;},&quot;paths&quot;:{&quot;/krakend-gateway/sf/document/v1/document&quot;:{&quot;get&quot;:{&quot;description&quot;:&quot;&quot;,&quot;operationId&quot;:&quot;Get Document From DMS&quot;,&quot;parameters&quot;:[{&quot;name&quot;:&quot;document_id&quot;,&quot;in&quot;:&quot;query&quot;,&quot;description&quot;:&quot;Document ID &quot;,&quot;required&quot;:true,&quot;allowEmptyValue&quot;:false,&quot;schema&quot;:{&quot;type&quot;:&quot;string&quot;}}],&quot;responses&quot;:{&quot;2XX&quot;:{&quot;description&quot;:&quot;&quot;,&quot;content&quot;:{&quot;application/json&quot;:{&quot;schema&quot;:{&quot;type&quot;:&quot;array&quot;,&quot;items&quot;:{&quot;type&quot;:&quot;object&quot;,&quot;properties&quot;:{&quot;ref_id&quot;:{&quot;type&quot;:&quot;string&quot;},&quot;metadata&quot;:{&quot;type&quot;:&quot;object&quot;},&quot;scan_status&quot;:{&quot;type&quot;:&quot;string&quot;},&quot;source_system&quot;:{&quot;type&quot;:&quot;string&quot;},&quot;created_at&quot;:{&quot;type&quot;:&quot;string&quot;,&quot;format&quot;:&quot;date-time&quot;},&quot;old_document_ids&quot;:{&quot;type&quot;:&quot;array&quot;,&quot;items&quot;:{&quot;type&quot;:&quot;string&quot;}},&quot;document_id&quot;:{&quot;type&quot;:&quot;string&quot;},&quot;version&quot;:{&quot;type&quot;:&quot;integer&quot;,&quot;format&quot;:&quot;int64&quot;},&quot;filename&quot;:{&quot;type&quot;:&quot;string&quot;},&quot;size&quot;:{&quot;type&quot;:&quot;integer&quot;,&quot;format&quot;:&quot;int64&quot;},&quot;updated_at&quot;:{&quot;type&quot;:&quot;string&quot;,&quot;format&quot;:&quot;date-time&quot;},&quot;document_sequence&quot;:{&quot;type&quot;:&quot;integer&quot;,&quot;format&quot;:&quot;int64&quot;},&quot;id_type&quot;:{&quot;type&quot;:&quot;string&quot;},&quot;document_url&quot;:{&quot;type&quot;:&quot;string&quot;},&quot;hash&quot;:{&quot;type&quot;:&quot;string&quot;},&quot;document_type&quot;:{&quot;type&quot;:&quot;string&quot;},&quot;status&quot;:{&quot;type&quot;:&quot;string&quot;}}}}}}}}}}}}</schema>
+    <schemaType>OpenApi3</schemaType>
+    <serviceBinding>{&quot;host&quot;:&quot;&quot;,&quot;basePath&quot;:&quot;/&quot;,&quot;allowedSchemes&quot;:[],&quot;requestMediaTypes&quot;:[],&quot;responseMediaTypes&quot;:[],&quot;compatibleMediaTypes&quot;:{},&quot;extensions&quot;:{}}</serviceBinding>
+    <status>Complete</status>
+    <systemVersion>5</systemVersion>
+</ExternalServiceRegistration>

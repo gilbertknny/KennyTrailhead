@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SamlSsoConfig xmlns="http://soap.sforce.com/2006/04/metadata">
+    <attributeName>SfLoginId</attributeName>
+    <identityLocation>Attribute</identityLocation>
+    <identityMapping>FederationId</identityMapping>
+    <issuer>https://microservices.sit.bravo.bfi.co.id/keycloak/realms/Bravo</issuer>
+    <loginUrl>https://microservices.sit.bravo.bfi.co.id/keycloak/realms/Bravo/protocol/saml</loginUrl>
+    <name>microservices_sit</name>
+    <oauthTokenEndpoint>https://ptbfifinance.my.salesforce.com/services/oauth2/token</oauthTokenEndpoint>
+    <redirectBinding>true</redirectBinding>
+    <requestSignatureMethod>1</requestSignatureMethod>
+    <requestSigningCertId>0P1Mg0000000DWj</requestSigningCertId>
+    <salesforceLoginUrl>https://ptbfifinance.my.salesforce.com</salesforceLoginUrl>
+    <samlEntityId>https://ptbfifinance.my.salesforce.com</samlEntityId>
+    <samlVersion>SAML2_0</samlVersion>
+    <singleLogoutBinding>RedirectBinding</singleLogoutBinding>
+    <singleLogoutUrl>https://microservices.sit.bravo.bfi.co.id/keycloak/realms/Bravo/protocol/saml</singleLogoutUrl>
+    <useConfigRequestMethod>false</useConfigRequestMethod>
+    <useSameDigestAlgoForSigning>true</useSameDigestAlgoForSigning>
+    <userProvisioning>false</userProvisioning>
+    <validationCert>MIICmTCCAYECBgGGJb85WzANBgkqhkiG9w0BAQsFADAQMQ4wDAYDVQQDDAVCcmF2bzAeFw0yMzAyMDYwODAwMzRaFw0zMzAyMDYwODAyMTRaMBAxDjAMBgNVBAMMBUJyYXZvMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqJ48fEas1th77IjAa5Q0PcN44SYiNxk673Io47vkMU9nbSthwEn9GjBk8LCY0D8BTRyQ6Jv/jLANOyK7VIMmulJKTVqKErsS1dbzrdUkX3/ndhfv4gnZKHWzFEIHQnHNZh1SNQJR/X//9K5VuMZ9wsZJUhF/CcavwNBxaYZ1D08oh664jgEKNo/s9KpX7irA6Wz+VFghfpSxsGBKBdT1e13LHYX2FnhV5lbsAfw4wg7ojGbQbw0Y1MPFHSCQIPD0XPPow0+fUJhxYZF0x553tLs2WP1Riw7szZ/9eBeAEasY1xP3s7EgX/mAqP7l+ogMkY5YIMoYP8UZsOm1aLitIwIDAQABMA0GCSqGSIb3DQEBCwUAA4IBAQBkurGPexW0ekkhUKHu0rmjyyI1xhq3vu3VRJzd02PB8Ebf5iGUJqMMm9vGwdHkVCwEU10rpS+d5zRn5qowZhKFLvd9W4N0yUqsXnsFl2GKMWt9LwqFiHlBiygWrMTIHmBZUEKx9+9LtV7NHR/Z+eIVcHKMGnu9OTb6Y/P6eIhRkgnn5Ej3IMNK5aSgXh7N1vFEVTgKYuxfYJKkQvbmI0WkN8EPSIH/QdV3HuS1dcMVaMn74lkbePeJi4rw7N9Iz3NrJRbGu5zNGchwHtilkwyxaxBs6TwlIOdp4/5MHWGvd4pMG+V8cFeRZ/jKNCmCxMOz330jKWK/oI5teVAziNsr</validationCert>
+</SamlSsoConfig>

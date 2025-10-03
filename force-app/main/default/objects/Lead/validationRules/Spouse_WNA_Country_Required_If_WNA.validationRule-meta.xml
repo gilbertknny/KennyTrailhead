@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Spouse_WNA_Country_Required_If_WNA</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND( ISPICKVAL( Spouse_Nationality__c , &quot;WNA&quot;) , ISPICKVAL( Spouse_WNA_Country__c , &quot;&quot;)  )</errorConditionFormula>
+    <errorDisplayField>Spouse_WNA_Country__c</errorDisplayField>
+    <errorMessage>Complete this field.</errorMessage>
+</ValidationRule>

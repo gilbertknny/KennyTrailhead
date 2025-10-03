@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>City_Kabupaten_Pemilik_Sertipikat__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <label>City / Kabupaten Pemilik Sertipikat</label>
+    <referenceTo>City_Master_Data__c</referenceTo>
+    <relationshipLabel>Pemilik Sertifikats</relationshipLabel>
+    <relationshipName>Pemilik_Sertifikats</relationshipName>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

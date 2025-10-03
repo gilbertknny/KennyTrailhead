@@ -1,0 +1,59 @@
+<template>
+    <lightning-record-edit-form
+        object-api-name={objectName}
+        record-id={objectRecordId}
+        onsubmit={handleSubmit}
+        onsuccess={handleSuccess}
+        onerror={handleError}
+        onload={handleLoad}
+        oncancel={handleCancel}
+    >
+        <template lwc:if={isDebug}>
+            <div class="slds-box">
+                <ul class="slds-m-around_medium">
+                    <template for:each={compos} for:item="compo">
+                    <li key={compo.fieldName}>
+                        <span class="slds-form-element__label">{compo.fieldName} : {compo.value}</span>
+                    </li>
+                    </template>
+                </ul>    
+            </div>
+        </template>
+
+        <template lwc:if={error}>
+            <div class="slds-notify_container slds-is-relative">
+                <div class="slds-notify slds-notify_toast slds-theme_error" role="status">
+                    <span class="slds-assistive-text">error</span>
+                    <span class="slds-icon_container slds-icon-utility-error slds-m-right_small slds-no-flex slds-align-top" title="Description of icon when needed">
+                        <lightning-icon icon-name="utility:error" variant="inverse" alternative-text="Error!" title="Error"></lightning-icon>
+                    </span>
+                    <div class="slds-notify__content">
+                        <h2 class="slds-text-heading_small">{error.detail}</h2>
+                        <p>{error.message}</p>
+                    </div>
+                    <div class="slds-notify__close">
+                        <lightning-button-icon icon-name="utility:close" variant="bare-inverse" alternative-text="Error!"  title="Error" onclick={errorCloseHandler}></lightning-button-icon>
+                    </div>
+                </div>
+              </div>
+        </template>
+
+        <template lwc:if={btnIsHidden}>
+            <!-- Nothing -->
+        </template>
+        <template lwc:else>
+            <div class={jimButtonClass}>
+                <div class="slds-col">
+                    <lightning-button type="button" label={btnResetLabel} variant="neutral" disabled={btnSaveDisabled} onclick={resetHandler} class="slds-m-right_small"></lightning-button>
+                </div>
+                <div class="slds-col">
+                    <lightning-button type="submit" label={btnSaveLabel} variant="brand" disabled={btnSaveDisabled} ></lightning-button>
+                </div>
+            </div>
+        </template>
+        
+    </lightning-record-edit-form>
+
+    
+    
+</template>

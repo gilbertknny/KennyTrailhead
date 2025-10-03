@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>SP_Name_Only_Alphabet</fullName>
+    <active>true</active>
+    <description>Spouse name only alphabet</description>
+    <errorConditionFormula>IF( $User.Is_Debug_User__c = TRUE, FALSE, OR(NOT(REGEX( Spouse_Name__c, &quot;^[a-zA-Z ]*$&quot;)))) &amp;&amp; !IsVRBypassed__c</errorConditionFormula>
+    <errorDisplayField>Spouse_Name__c</errorDisplayField>
+    <errorMessage>Spouse name should be alphabet only</errorMessage>
+</ValidationRule>

@@ -1,0 +1,1430 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>62.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <name>Set_Value_for_D025B_Content</name>
+        <label>Set Value for D025B Content</label>
+        <locationX>176</locationX>
+        <locationY>1322</locationY>
+        <assignmentItems>
+            <assignToReference>PDFContent.related_id__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>InputRecordID</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PDFContent.doc_name__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>D025B</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PDFContent.text_1__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>LD.nama_penyedia_general__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PDFContent.text_2__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>LD.alamat_penyedia_general__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PDFContent.text_3__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>LD.nik_penyedia_general_2__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PDFContent.text_4__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>LD.nomor_bukti_general_2__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PDFContent.text_5__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Application.Customer_Name__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PDFContent.text_6__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>FormatReverseOtr</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PDFContent.text_7__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>FormatTDP</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PDFContent.text_8__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>FormatFrm8</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PDFContent.text_9__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>FormatFrm9</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PDFContent.text_10__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>FormatFrm10</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PDFContent.text_11__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>FormatProvisionFee</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PDFContent.text_12__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>FormatAssetInsurance</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PDFContent.text_13__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>FormatLifeInsurance</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PDFContent.text_14__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>FormatNominalNotaris</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PDFContent.text_15__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>FormatNominalBFI</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PDFContent.text_16__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Bank_Name_BFI.Name</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PDFContent.text_17__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>LD.kanca_bfi__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PDFContent.text_18__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>LD.norek_bfi_2__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PDFContent.text_19__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>FormatNominalNotaris</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PDFContent.text_20__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Bank_Name_Notaris.Name</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PDFContent.text_21__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>LD.kanca_notaris__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PDFContent.text_22__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>LD.norek_notaris_2__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PDFContent.text_23__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>LD.atas_nama_notaris__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PDFContent.text_24__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>FormatNominalKK</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PDFContent.text_25__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>LD.pembayaran_kepada_kk__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PDFContent.text_26__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Bank_Name_for_Pelunasan_Kredit.Name</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PDFContent.text_27__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>LD.kanca_kk__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PDFContent.text_28__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>LD.norek_kk_2__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PDFContent.text_29__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>LD.atas_nama_kk__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PDFContent.text_30__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>FormatNominalHutang</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PDFContent.text_31__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>LD.pembayaran_kepada_hutang__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PDFContent.text_32__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Bank_Name_Hutang.Name</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PDFContent.text_33__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>LD.kanca_hutang__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PDFContent.text_34__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>LD.norek_hutang_2__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PDFContent.text_35__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>LD.atas_nama_hutang__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PDFContent.text_36__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>FormatNominalHold</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PDFContent.text_37__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>LD.jumlah_angsuran_hold__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PDFContent.text_38__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Bank_Name_Hold.Name</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PDFContent.text_39__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>LD.kanca_hold__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PDFContent.text_40__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>LD.norek_hold_2__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PDFContent.text_41__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>LD.atas_nama_hold__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PDFContent.text_42__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>FormatNominalIMB</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PDFContent.text_43__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>FormatNominalIMB</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PDFContent.text_44__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Bank_Name_IMB.Name</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PDFContent.text_45__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>LD.kanca_imb__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PDFContent.text_46__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>LD.norek_imb_2__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PDFContent.text_47__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>LD.atas_nama_imb__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PDFContent.text_48__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>FormatNominalKontrak</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PDFContent.text_49__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>LD.nomor_kontrak_general_2__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PDFContent.text_50__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>LD.kanca_kontrak__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PDFContent.text_51__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>LD.norek_kontrak_2__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PDFContent.text_52__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>LD.atas_nama_kontrak__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PDFContent.text_53__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>FormatNominalSisa</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PDFContent.text_54__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Bank_Name_Sisa_Pembayaran.Name</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PDFContent.text_55__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>LD.kanca_sisa__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PDFContent.text_56__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>LD.norek_sisa_2__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PDFContent.text_57__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>LD.atas_nama_sisa__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PDFContent.text_58__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>LD.persyaratan_sisa__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PDFContent.text_59__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>LD.lokasi_legal_doc_general__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PDFContent.text_60__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>TodayDateTime</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PDFContent.text_61__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>LD.nama_penyedia_general__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PDFContent.text_62__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Application.Customer_Name__c</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Save_Data_to_PDF_Object</targetReference>
+        </connector>
+    </assignments>
+    <environments>Default</environments>
+    <formulas>
+        <name>FormatAssetInsurance</name>
+        <dataType>String</dataType>
+        <expression>IF(
+    LEN(TEXT({!calc.asset_insurance_premium__c})) &gt; 15,
+    LEFT(TEXT({!calc.asset_insurance_premium__c}), LEN(TEXT({!calc.asset_insurance_premium__c})) - 15) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!calc.asset_insurance_premium__c}), LEN(TEXT({!calc.asset_insurance_premium__c})) - 14, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!calc.asset_insurance_premium__c}), LEN(TEXT({!calc.asset_insurance_premium__c})) - 11, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!calc.asset_insurance_premium__c}), LEN(TEXT({!calc.asset_insurance_premium__c})) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!calc.asset_insurance_premium__c}), LEN(TEXT({!calc.asset_insurance_premium__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT({!calc.asset_insurance_premium__c}), 3),
+    IF(
+        LEN(TEXT({!calc.asset_insurance_premium__c})) &gt; 12,
+        LEFT(TEXT({!calc.asset_insurance_premium__c}), LEN(TEXT({!calc.asset_insurance_premium__c})) - 12) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!calc.asset_insurance_premium__c}), LEN(TEXT({!calc.asset_insurance_premium__c})) - 11, 3) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!calc.asset_insurance_premium__c}), LEN(TEXT({!calc.asset_insurance_premium__c})) - 8, 3) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!calc.asset_insurance_premium__c}), LEN(TEXT({!calc.asset_insurance_premium__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+        RIGHT(TEXT({!calc.asset_insurance_premium__c}), 3),
+        IF(
+            LEN(TEXT({!calc.asset_insurance_premium__c})) &gt; 9,
+            LEFT(TEXT({!calc.asset_insurance_premium__c}), LEN(TEXT({!calc.asset_insurance_premium__c})) - 9) &amp; &quot;.&quot; &amp;
+            MID(TEXT({!calc.asset_insurance_premium__c}), LEN(TEXT({!calc.asset_insurance_premium__c})) - 8, 3) &amp; &quot;.&quot; &amp;
+            MID(TEXT({!calc.asset_insurance_premium__c}), LEN(TEXT({!calc.asset_insurance_premium__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+            RIGHT(TEXT({!calc.asset_insurance_premium__c}), 3),
+            IF(
+                LEN(TEXT({!calc.asset_insurance_premium__c})) &gt; 6,
+                LEFT(TEXT({!calc.asset_insurance_premium__c}), LEN(TEXT({!calc.asset_insurance_premium__c})) - 6) &amp; &quot;.&quot; &amp;
+                MID(TEXT({!calc.asset_insurance_premium__c}), LEN(TEXT({!calc.asset_insurance_premium__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+                RIGHT(TEXT({!calc.asset_insurance_premium__c}), 3),
+                IF(
+                    LEN(TEXT({!calc.asset_insurance_premium__c})) &gt; 3,
+                    LEFT(TEXT({!calc.asset_insurance_premium__c}), LEN(TEXT({!calc.asset_insurance_premium__c})) - 3) &amp; &quot;.&quot; &amp;
+                    RIGHT(TEXT({!calc.asset_insurance_premium__c}), 3),
+                    TEXT({!calc.asset_insurance_premium__c})
+                )
+            )
+        )
+    )
+)</expression>
+    </formulas>
+    <formulas>
+        <name>FormatFrm10</name>
+        <dataType>String</dataType>
+        <expression>IF(
+    LEN(TEXT({!Frm10})) &gt; 15,
+    LEFT(TEXT({!Frm10}), LEN(TEXT({!Frm10})) - 15) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!Frm10}), LEN(TEXT({!Frm10})) - 14, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!Frm10}), LEN(TEXT({!Frm10})) - 11, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!Frm10}), LEN(TEXT({!Frm10})) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!Frm10}), LEN(TEXT({!Frm10})) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT({!Frm10}), 3),
+    IF(
+        LEN(TEXT({!Frm10})) &gt; 12,
+        LEFT(TEXT({!Frm10}), LEN(TEXT({!Frm10})) - 12) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!Frm10}), LEN(TEXT({!Frm10})) - 11, 3) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!Frm10}), LEN(TEXT({!Frm10})) - 8, 3) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!Frm10}), LEN(TEXT({!Frm10})) - 5, 3) &amp; &quot;.&quot; &amp;
+        RIGHT(TEXT({!Frm10}), 3),
+        IF(
+            LEN(TEXT({!Frm10})) &gt; 9,
+            LEFT(TEXT({!Frm10}), LEN(TEXT({!Frm10})) - 9) &amp; &quot;.&quot; &amp;
+            MID(TEXT({!Frm10}), LEN(TEXT({!Frm10})) - 8, 3) &amp; &quot;.&quot; &amp;
+            MID(TEXT({!Frm10}), LEN(TEXT({!Frm10})) - 5, 3) &amp; &quot;.&quot; &amp;
+            RIGHT(TEXT({!Frm10}), 3),
+            IF(
+                LEN(TEXT({!Frm10})) &gt; 6,
+                LEFT(TEXT({!Frm10}), LEN(TEXT({!Frm10})) - 6) &amp; &quot;.&quot; &amp;
+                MID(TEXT({!Frm10}), LEN(TEXT({!Frm10})) - 5, 3) &amp; &quot;.&quot; &amp;
+                RIGHT(TEXT({!Frm10}), 3),
+                IF(
+                    LEN(TEXT({!Frm10})) &gt; 3,
+                    LEFT(TEXT({!Frm10}), LEN(TEXT({!Frm10})) - 3) &amp; &quot;.&quot; &amp;
+                    RIGHT(TEXT({!Frm10}), 3),
+                    TEXT({!Frm10})
+                )
+            )
+        )
+    )
+)</expression>
+    </formulas>
+    <formulas>
+        <name>FormatFrm8</name>
+        <dataType>String</dataType>
+        <expression>IF(
+    LEN(TEXT({!Frm8})) &gt; 15,
+    LEFT(TEXT({!Frm8}), LEN(TEXT({!Frm8})) - 15) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!Frm8}), LEN(TEXT({!Frm8})) - 14, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!Frm8}), LEN(TEXT({!Frm8})) - 11, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!Frm8}), LEN(TEXT({!Frm8})) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!Frm8}), LEN(TEXT({!Frm8})) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT({!Frm8}), 3),
+    IF(
+        LEN(TEXT({!Frm8})) &gt; 12,
+        LEFT(TEXT({!Frm8}), LEN(TEXT({!Frm8})) - 12) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!Frm8}), LEN(TEXT({!Frm8})) - 11, 3) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!Frm8}), LEN(TEXT({!Frm8})) - 8, 3) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!Frm8}), LEN(TEXT({!Frm8})) - 5, 3) &amp; &quot;.&quot; &amp;
+        RIGHT(TEXT({!Frm8}), 3),
+        IF(
+            LEN(TEXT({!Frm8})) &gt; 9,
+            LEFT(TEXT({!Frm8}), LEN(TEXT({!Frm8})) - 9) &amp; &quot;.&quot; &amp;
+            MID(TEXT({!Frm8}), LEN(TEXT({!Frm8})) - 8, 3) &amp; &quot;.&quot; &amp;
+            MID(TEXT({!Frm8}), LEN(TEXT({!Frm8})) - 5, 3) &amp; &quot;.&quot; &amp;
+            RIGHT(TEXT({!Frm8}), 3),
+            IF(
+                LEN(TEXT({!Frm8})) &gt; 6,
+                LEFT(TEXT({!Frm8}), LEN(TEXT({!Frm8})) - 6) &amp; &quot;.&quot; &amp;
+                MID(TEXT({!Frm8}), LEN(TEXT({!Frm8})) - 5, 3) &amp; &quot;.&quot; &amp;
+                RIGHT(TEXT({!Frm8}), 3),
+                IF(
+                    LEN(TEXT({!Frm8})) &gt; 3,
+                    LEFT(TEXT({!Frm8}), LEN(TEXT({!Frm8})) - 3) &amp; &quot;.&quot; &amp;
+                    RIGHT(TEXT({!Frm8}), 3),
+                    TEXT({!Frm8})
+                )
+            )
+        )
+    )
+)</expression>
+    </formulas>
+    <formulas>
+        <name>FormatFrm9</name>
+        <dataType>String</dataType>
+        <expression>IF(
+    LEN(TEXT({!Frm9})) &gt; 15,
+    LEFT(TEXT({!Frm9}), LEN(TEXT({!Frm9})) - 15) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!Frm9}), LEN(TEXT({!Frm9})) - 14, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!Frm9}), LEN(TEXT({!Frm9})) - 11, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!Frm9}), LEN(TEXT({!Frm9})) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!Frm9}), LEN(TEXT({!Frm9})) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT({!Frm9}), 3),
+    IF(
+        LEN(TEXT({!Frm9})) &gt; 12,
+        LEFT(TEXT({!Frm9}), LEN(TEXT({!Frm9})) - 12) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!Frm9}), LEN(TEXT({!Frm9})) - 11, 3) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!Frm9}), LEN(TEXT({!Frm9})) - 8, 3) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!Frm9}), LEN(TEXT({!Frm9})) - 5, 3) &amp; &quot;.&quot; &amp;
+        RIGHT(TEXT({!Frm9}), 3),
+        IF(
+            LEN(TEXT({!Frm9})) &gt; 9,
+            LEFT(TEXT({!Frm9}), LEN(TEXT({!Frm9})) - 9) &amp; &quot;.&quot; &amp;
+            MID(TEXT({!Frm9}), LEN(TEXT({!Frm9})) - 8, 3) &amp; &quot;.&quot; &amp;
+            MID(TEXT({!Frm9}), LEN(TEXT({!Frm9})) - 5, 3) &amp; &quot;.&quot; &amp;
+            RIGHT(TEXT({!Frm9}), 3),
+            IF(
+                LEN(TEXT({!Frm9})) &gt; 6,
+                LEFT(TEXT({!Frm9}), LEN(TEXT({!Frm9})) - 6) &amp; &quot;.&quot; &amp;
+                MID(TEXT({!Frm9}), LEN(TEXT({!Frm9})) - 5, 3) &amp; &quot;.&quot; &amp;
+                RIGHT(TEXT({!Frm9}), 3),
+                IF(
+                    LEN(TEXT({!Frm9})) &gt; 3,
+                    LEFT(TEXT({!Frm9}), LEN(TEXT({!Frm9})) - 3) &amp; &quot;.&quot; &amp;
+                    RIGHT(TEXT({!Frm9}), 3),
+                    TEXT({!Frm9})
+                )
+            )
+        )
+    )
+)</expression>
+    </formulas>
+    <formulas>
+        <name>FormatLifeInsurance</name>
+        <dataType>String</dataType>
+        <expression>IF(
+    LEN(TEXT({!calc.life_insurance_premium__c})) &gt; 15,
+    LEFT(TEXT({!calc.life_insurance_premium__c}), LEN(TEXT({!calc.life_insurance_premium__c})) - 15) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!calc.life_insurance_premium__c}), LEN(TEXT({!calc.life_insurance_premium__c})) - 14, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!calc.life_insurance_premium__c}), LEN(TEXT({!calc.life_insurance_premium__c})) - 11, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!calc.life_insurance_premium__c}), LEN(TEXT({!calc.life_insurance_premium__c})) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!calc.life_insurance_premium__c}), LEN(TEXT({!calc.life_insurance_premium__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT({!calc.life_insurance_premium__c}), 3),
+    IF(
+        LEN(TEXT({!calc.life_insurance_premium__c})) &gt; 12,
+        LEFT(TEXT({!calc.life_insurance_premium__c}), LEN(TEXT({!calc.life_insurance_premium__c})) - 12) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!calc.life_insurance_premium__c}), LEN(TEXT({!calc.life_insurance_premium__c})) - 11, 3) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!calc.life_insurance_premium__c}), LEN(TEXT({!calc.life_insurance_premium__c})) - 8, 3) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!calc.life_insurance_premium__c}), LEN(TEXT({!calc.life_insurance_premium__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+        RIGHT(TEXT({!calc.life_insurance_premium__c}), 3),
+        IF(
+            LEN(TEXT({!calc.life_insurance_premium__c})) &gt; 9,
+            LEFT(TEXT({!calc.life_insurance_premium__c}), LEN(TEXT({!calc.life_insurance_premium__c})) - 9) &amp; &quot;.&quot; &amp;
+            MID(TEXT({!calc.life_insurance_premium__c}), LEN(TEXT({!calc.life_insurance_premium__c})) - 8, 3) &amp; &quot;.&quot; &amp;
+            MID(TEXT({!calc.life_insurance_premium__c}), LEN(TEXT({!calc.life_insurance_premium__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+            RIGHT(TEXT({!calc.life_insurance_premium__c}), 3),
+            IF(
+                LEN(TEXT({!calc.life_insurance_premium__c})) &gt; 6,
+                LEFT(TEXT({!calc.life_insurance_premium__c}), LEN(TEXT({!calc.life_insurance_premium__c})) - 6) &amp; &quot;.&quot; &amp;
+                MID(TEXT({!calc.life_insurance_premium__c}), LEN(TEXT({!calc.life_insurance_premium__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+                RIGHT(TEXT({!calc.life_insurance_premium__c}), 3),
+                IF(
+                    LEN(TEXT({!calc.life_insurance_premium__c})) &gt; 3,
+                    LEFT(TEXT({!calc.life_insurance_premium__c}), LEN(TEXT({!calc.life_insurance_premium__c})) - 3) &amp; &quot;.&quot; &amp;
+                    RIGHT(TEXT({!calc.life_insurance_premium__c}), 3),
+                    TEXT({!calc.life_insurance_premium__c})
+                )
+            )
+        )
+    )
+)</expression>
+    </formulas>
+    <formulas>
+        <name>FormatNominalBFI</name>
+        <dataType>String</dataType>
+        <expression>IF(
+    LEN(TEXT({!LD.nominal_bfi__c})) &gt; 15,
+    LEFT(TEXT({!LD.nominal_bfi__c}), LEN(TEXT({!LD.nominal_bfi__c})) - 15) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!LD.nominal_bfi__c}), LEN(TEXT({!LD.nominal_bfi__c})) - 14, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!LD.nominal_bfi__c}), LEN(TEXT({!LD.nominal_bfi__c})) - 11, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!LD.nominal_bfi__c}), LEN(TEXT({!LD.nominal_bfi__c})) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!LD.nominal_bfi__c}), LEN(TEXT({!LD.nominal_bfi__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT({!LD.nominal_bfi__c}), 3),
+    IF(
+        LEN(TEXT({!LD.nominal_bfi__c})) &gt; 12,
+        LEFT(TEXT({!LD.nominal_bfi__c}), LEN(TEXT({!LD.nominal_bfi__c})) - 12) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!LD.nominal_bfi__c}), LEN(TEXT({!LD.nominal_bfi__c})) - 11, 3) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!LD.nominal_bfi__c}), LEN(TEXT({!LD.nominal_bfi__c})) - 8, 3) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!LD.nominal_bfi__c}), LEN(TEXT({!LD.nominal_bfi__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+        RIGHT(TEXT({!LD.nominal_bfi__c}), 3),
+        IF(
+            LEN(TEXT({!LD.nominal_bfi__c})) &gt; 9,
+            LEFT(TEXT({!LD.nominal_bfi__c}), LEN(TEXT({!LD.nominal_bfi__c})) - 9) &amp; &quot;.&quot; &amp;
+            MID(TEXT({!LD.nominal_bfi__c}), LEN(TEXT({!LD.nominal_bfi__c})) - 8, 3) &amp; &quot;.&quot; &amp;
+            MID(TEXT({!LD.nominal_bfi__c}), LEN(TEXT({!LD.nominal_bfi__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+            RIGHT(TEXT({!LD.nominal_bfi__c}), 3),
+            IF(
+                LEN(TEXT({!LD.nominal_bfi__c})) &gt; 6,
+                LEFT(TEXT({!LD.nominal_bfi__c}), LEN(TEXT({!LD.nominal_bfi__c})) - 6) &amp; &quot;.&quot; &amp;
+                MID(TEXT({!LD.nominal_bfi__c}), LEN(TEXT({!LD.nominal_bfi__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+                RIGHT(TEXT({!LD.nominal_bfi__c}), 3),
+                IF(
+                    LEN(TEXT({!LD.nominal_bfi__c})) &gt; 3,
+                    LEFT(TEXT({!LD.nominal_bfi__c}), LEN(TEXT({!LD.nominal_bfi__c})) - 3) &amp; &quot;.&quot; &amp;
+                    RIGHT(TEXT({!LD.nominal_bfi__c}), 3),
+                    TEXT({!LD.nominal_bfi__c})
+                )
+            )
+        )
+    )
+)</expression>
+    </formulas>
+    <formulas>
+        <name>FormatNominalHold</name>
+        <dataType>String</dataType>
+        <expression>IF(
+    LEN(TEXT({!LD.nominal_hold__c})) &gt; 15,
+    LEFT(TEXT({!LD.nominal_hold__c}), LEN(TEXT({!LD.nominal_hold__c})) - 15) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!LD.nominal_hold__c}), LEN(TEXT({!LD.nominal_hold__c})) - 14, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!LD.nominal_hold__c}), LEN(TEXT({!LD.nominal_hold__c})) - 11, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!LD.nominal_hold__c}), LEN(TEXT({!LD.nominal_hold__c})) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!LD.nominal_hold__c}), LEN(TEXT({!LD.nominal_hold__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT({!LD.nominal_hold__c}), 3),
+    IF(
+        LEN(TEXT({!LD.nominal_hold__c})) &gt; 12,
+        LEFT(TEXT({!LD.nominal_hold__c}), LEN(TEXT({!LD.nominal_hold__c})) - 12) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!LD.nominal_hold__c}), LEN(TEXT({!LD.nominal_hold__c})) - 11, 3) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!LD.nominal_hold__c}), LEN(TEXT({!LD.nominal_hold__c})) - 8, 3) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!LD.nominal_hold__c}), LEN(TEXT({!LD.nominal_hold__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+        RIGHT(TEXT({!LD.nominal_hold__c}), 3),
+        IF(
+            LEN(TEXT({!LD.nominal_hold__c})) &gt; 9,
+            LEFT(TEXT({!LD.nominal_hold__c}), LEN(TEXT({!LD.nominal_hold__c})) - 9) &amp; &quot;.&quot; &amp;
+            MID(TEXT({!LD.nominal_hold__c}), LEN(TEXT({!LD.nominal_hold__c})) - 8, 3) &amp; &quot;.&quot; &amp;
+            MID(TEXT({!LD.nominal_hold__c}), LEN(TEXT({!LD.nominal_hold__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+            RIGHT(TEXT({!LD.nominal_hold__c}), 3),
+            IF(
+                LEN(TEXT({!LD.nominal_hold__c})) &gt; 6,
+                LEFT(TEXT({!LD.nominal_hold__c}), LEN(TEXT({!LD.nominal_hold__c})) - 6) &amp; &quot;.&quot; &amp;
+                MID(TEXT({!LD.nominal_hold__c}), LEN(TEXT({!LD.nominal_hold__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+                RIGHT(TEXT({!LD.nominal_hold__c}), 3),
+                IF(
+                    LEN(TEXT({!LD.nominal_hold__c})) &gt; 3,
+                    LEFT(TEXT({!LD.nominal_hold__c}), LEN(TEXT({!LD.nominal_hold__c})) - 3) &amp; &quot;.&quot; &amp;
+                    RIGHT(TEXT({!LD.nominal_hold__c}), 3),
+                    TEXT({!LD.nominal_hold__c})
+                )
+            )
+        )
+    )
+)</expression>
+    </formulas>
+    <formulas>
+        <name>FormatNominalHutang</name>
+        <dataType>String</dataType>
+        <expression>IF(
+    LEN(TEXT({!LD.nominal_hutang__c})) &gt; 15,
+    LEFT(TEXT({!LD.nominal_hutang__c}), LEN(TEXT({!LD.nominal_hutang__c})) - 15) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!LD.nominal_hutang__c}), LEN(TEXT({!LD.nominal_hutang__c})) - 14, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!LD.nominal_hutang__c}), LEN(TEXT({!LD.nominal_hutang__c})) - 11, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!LD.nominal_hutang__c}), LEN(TEXT({!LD.nominal_hutang__c})) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!LD.nominal_hutang__c}), LEN(TEXT({!LD.nominal_hutang__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT({!LD.nominal_hutang__c}), 3),
+    IF(
+        LEN(TEXT({!LD.nominal_hutang__c})) &gt; 12,
+        LEFT(TEXT({!LD.nominal_hutang__c}), LEN(TEXT({!LD.nominal_hutang__c})) - 12) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!LD.nominal_hutang__c}), LEN(TEXT({!LD.nominal_hutang__c})) - 11, 3) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!LD.nominal_hutang__c}), LEN(TEXT({!LD.nominal_hutang__c})) - 8, 3) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!LD.nominal_hutang__c}), LEN(TEXT({!LD.nominal_hutang__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+        RIGHT(TEXT({!LD.nominal_hutang__c}), 3),
+        IF(
+            LEN(TEXT({!LD.nominal_hutang__c})) &gt; 9,
+            LEFT(TEXT({!LD.nominal_hutang__c}), LEN(TEXT({!LD.nominal_hutang__c})) - 9) &amp; &quot;.&quot; &amp;
+            MID(TEXT({!LD.nominal_hutang__c}), LEN(TEXT({!LD.nominal_hutang__c})) - 8, 3) &amp; &quot;.&quot; &amp;
+            MID(TEXT({!LD.nominal_hutang__c}), LEN(TEXT({!LD.nominal_hutang__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+            RIGHT(TEXT({!LD.nominal_hutang__c}), 3),
+            IF(
+                LEN(TEXT({!LD.nominal_hutang__c})) &gt; 6,
+                LEFT(TEXT({!LD.nominal_hutang__c}), LEN(TEXT({!LD.nominal_hutang__c})) - 6) &amp; &quot;.&quot; &amp;
+                MID(TEXT({!LD.nominal_hutang__c}), LEN(TEXT({!LD.nominal_hutang__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+                RIGHT(TEXT({!LD.nominal_hutang__c}), 3),
+                IF(
+                    LEN(TEXT({!LD.nominal_hutang__c})) &gt; 3,
+                    LEFT(TEXT({!LD.nominal_hutang__c}), LEN(TEXT({!LD.nominal_hutang__c})) - 3) &amp; &quot;.&quot; &amp;
+                    RIGHT(TEXT({!LD.nominal_hutang__c}), 3),
+                    TEXT({!LD.nominal_hutang__c})
+                )
+            )
+        )
+    )
+)</expression>
+    </formulas>
+    <formulas>
+        <name>FormatNominalIMB</name>
+        <dataType>String</dataType>
+        <expression>IF(
+    LEN(TEXT({!LD.nominal_imb__c})) &gt; 15,
+    LEFT(TEXT({!LD.nominal_imb__c}), LEN(TEXT({!LD.nominal_imb__c})) - 15) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!LD.nominal_imb__c}), LEN(TEXT({!LD.nominal_imb__c})) - 14, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!LD.nominal_imb__c}), LEN(TEXT({!LD.nominal_imb__c})) - 11, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!LD.nominal_imb__c}), LEN(TEXT({!LD.nominal_imb__c})) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!LD.nominal_imb__c}), LEN(TEXT({!LD.nominal_imb__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT({!LD.nominal_imb__c}), 3),
+    IF(
+        LEN(TEXT({!LD.nominal_imb__c})) &gt; 12,
+        LEFT(TEXT({!LD.nominal_imb__c}), LEN(TEXT({!LD.nominal_imb__c})) - 12) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!LD.nominal_imb__c}), LEN(TEXT({!LD.nominal_imb__c})) - 11, 3) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!LD.nominal_imb__c}), LEN(TEXT({!LD.nominal_imb__c})) - 8, 3) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!LD.nominal_imb__c}), LEN(TEXT({!LD.nominal_imb__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+        RIGHT(TEXT({!LD.nominal_imb__c}), 3),
+        IF(
+            LEN(TEXT({!LD.nominal_imb__c})) &gt; 9,
+            LEFT(TEXT({!LD.nominal_imb__c}), LEN(TEXT({!LD.nominal_imb__c})) - 9) &amp; &quot;.&quot; &amp;
+            MID(TEXT({!LD.nominal_imb__c}), LEN(TEXT({!LD.nominal_imb__c})) - 8, 3) &amp; &quot;.&quot; &amp;
+            MID(TEXT({!LD.nominal_imb__c}), LEN(TEXT({!LD.nominal_imb__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+            RIGHT(TEXT({!LD.nominal_imb__c}), 3),
+            IF(
+                LEN(TEXT({!LD.nominal_imb__c})) &gt; 6,
+                LEFT(TEXT({!LD.nominal_imb__c}), LEN(TEXT({!LD.nominal_imb__c})) - 6) &amp; &quot;.&quot; &amp;
+                MID(TEXT({!LD.nominal_imb__c}), LEN(TEXT({!LD.nominal_imb__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+                RIGHT(TEXT({!LD.nominal_imb__c}), 3),
+                IF(
+                    LEN(TEXT({!LD.nominal_imb__c})) &gt; 3,
+                    LEFT(TEXT({!LD.nominal_imb__c}), LEN(TEXT({!LD.nominal_imb__c})) - 3) &amp; &quot;.&quot; &amp;
+                    RIGHT(TEXT({!LD.nominal_imb__c}), 3),
+                    TEXT({!LD.nominal_imb__c})
+                )
+            )
+        )
+    )
+)</expression>
+    </formulas>
+    <formulas>
+        <name>FormatNominalKK</name>
+        <dataType>String</dataType>
+        <expression>IF(
+    LEN(TEXT({!LD.nominal_kk__c})) &gt; 15,
+    LEFT(TEXT({!LD.nominal_kk__c}), LEN(TEXT({!LD.nominal_kk__c})) - 15) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!LD.nominal_kk__c}), LEN(TEXT({!LD.nominal_kk__c})) - 14, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!LD.nominal_kk__c}), LEN(TEXT({!LD.nominal_kk__c})) - 11, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!LD.nominal_kk__c}), LEN(TEXT({!LD.nominal_kk__c})) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!LD.nominal_kk__c}), LEN(TEXT({!LD.nominal_kk__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT({!LD.nominal_kk__c}), 3),
+    IF(
+        LEN(TEXT({!LD.nominal_kk__c})) &gt; 12,
+        LEFT(TEXT({!LD.nominal_kk__c}), LEN(TEXT({!LD.nominal_kk__c})) - 12) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!LD.nominal_kk__c}), LEN(TEXT({!LD.nominal_kk__c})) - 11, 3) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!LD.nominal_kk__c}), LEN(TEXT({!LD.nominal_kk__c})) - 8, 3) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!LD.nominal_kk__c}), LEN(TEXT({!LD.nominal_kk__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+        RIGHT(TEXT({!LD.nominal_kk__c}), 3),
+        IF(
+            LEN(TEXT({!LD.nominal_kk__c})) &gt; 9,
+            LEFT(TEXT({!LD.nominal_kk__c}), LEN(TEXT({!LD.nominal_kk__c})) - 9) &amp; &quot;.&quot; &amp;
+            MID(TEXT({!LD.nominal_kk__c}), LEN(TEXT({!LD.nominal_kk__c})) - 8, 3) &amp; &quot;.&quot; &amp;
+            MID(TEXT({!LD.nominal_kk__c}), LEN(TEXT({!LD.nominal_kk__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+            RIGHT(TEXT({!LD.nominal_kk__c}), 3),
+            IF(
+                LEN(TEXT({!LD.nominal_kk__c})) &gt; 6,
+                LEFT(TEXT({!LD.nominal_kk__c}), LEN(TEXT({!LD.nominal_kk__c})) - 6) &amp; &quot;.&quot; &amp;
+                MID(TEXT({!LD.nominal_kk__c}), LEN(TEXT({!LD.nominal_kk__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+                RIGHT(TEXT({!LD.nominal_kk__c}), 3),
+                IF(
+                    LEN(TEXT({!LD.nominal_kk__c})) &gt; 3,
+                    LEFT(TEXT({!LD.nominal_kk__c}), LEN(TEXT({!LD.nominal_kk__c})) - 3) &amp; &quot;.&quot; &amp;
+                    RIGHT(TEXT({!LD.nominal_kk__c}), 3),
+                    TEXT({!LD.nominal_kk__c})
+                )
+            )
+        )
+    )
+)</expression>
+    </formulas>
+    <formulas>
+        <name>FormatNominalKontrak</name>
+        <dataType>String</dataType>
+        <expression>IF(
+    LEN(TEXT({!LD.nominal_kontrak__c})) &gt; 15,
+    LEFT(TEXT({!LD.nominal_kontrak__c}), LEN(TEXT({!LD.nominal_kontrak__c})) - 15) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!LD.nominal_kontrak__c}), LEN(TEXT({!LD.nominal_kontrak__c})) - 14, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!LD.nominal_kontrak__c}), LEN(TEXT({!LD.nominal_kontrak__c})) - 11, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!LD.nominal_kontrak__c}), LEN(TEXT({!LD.nominal_kontrak__c})) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!LD.nominal_kontrak__c}), LEN(TEXT({!LD.nominal_kontrak__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT({!LD.nominal_kontrak__c}), 3),
+    IF(
+        LEN(TEXT({!LD.nominal_kontrak__c})) &gt; 12,
+        LEFT(TEXT({!LD.nominal_kontrak__c}), LEN(TEXT({!LD.nominal_kontrak__c})) - 12) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!LD.nominal_kontrak__c}), LEN(TEXT({!LD.nominal_kontrak__c})) - 11, 3) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!LD.nominal_kontrak__c}), LEN(TEXT({!LD.nominal_kontrak__c})) - 8, 3) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!LD.nominal_kontrak__c}), LEN(TEXT({!LD.nominal_kontrak__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+        RIGHT(TEXT({!LD.nominal_kontrak__c}), 3),
+        IF(
+            LEN(TEXT({!LD.nominal_kontrak__c})) &gt; 9,
+            LEFT(TEXT({!LD.nominal_kontrak__c}), LEN(TEXT({!LD.nominal_kontrak__c})) - 9) &amp; &quot;.&quot; &amp;
+            MID(TEXT({!LD.nominal_kontrak__c}), LEN(TEXT({!LD.nominal_kontrak__c})) - 8, 3) &amp; &quot;.&quot; &amp;
+            MID(TEXT({!LD.nominal_kontrak__c}), LEN(TEXT({!LD.nominal_kontrak__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+            RIGHT(TEXT({!LD.nominal_kontrak__c}), 3),
+            IF(
+                LEN(TEXT({!LD.nominal_kontrak__c})) &gt; 6,
+                LEFT(TEXT({!LD.nominal_kontrak__c}), LEN(TEXT({!LD.nominal_kontrak__c})) - 6) &amp; &quot;.&quot; &amp;
+                MID(TEXT({!LD.nominal_kontrak__c}), LEN(TEXT({!LD.nominal_kontrak__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+                RIGHT(TEXT({!LD.nominal_kontrak__c}), 3),
+                IF(
+                    LEN(TEXT({!LD.nominal_kontrak__c})) &gt; 3,
+                    LEFT(TEXT({!LD.nominal_kontrak__c}), LEN(TEXT({!LD.nominal_kontrak__c})) - 3) &amp; &quot;.&quot; &amp;
+                    RIGHT(TEXT({!LD.nominal_kontrak__c}), 3),
+                    TEXT({!LD.nominal_kontrak__c})
+                )
+            )
+        )
+    )
+)</expression>
+    </formulas>
+    <formulas>
+        <name>FormatNominalNotaris</name>
+        <dataType>String</dataType>
+        <expression>IF(
+    LEN(TEXT({!LD.nominal_notaris__c})) &gt; 15,
+    LEFT(TEXT({!LD.nominal_notaris__c}), LEN(TEXT({!LD.nominal_notaris__c})) - 15) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!LD.nominal_notaris__c}), LEN(TEXT({!LD.nominal_notaris__c})) - 14, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!LD.nominal_notaris__c}), LEN(TEXT({!LD.nominal_notaris__c})) - 11, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!LD.nominal_notaris__c}), LEN(TEXT({!LD.nominal_notaris__c})) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!LD.nominal_notaris__c}), LEN(TEXT({!LD.nominal_notaris__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT({!LD.nominal_notaris__c}), 3),
+    IF(
+        LEN(TEXT({!LD.nominal_notaris__c})) &gt; 12,
+        LEFT(TEXT({!LD.nominal_notaris__c}), LEN(TEXT({!LD.nominal_notaris__c})) - 12) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!LD.nominal_notaris__c}), LEN(TEXT({!LD.nominal_notaris__c})) - 11, 3) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!LD.nominal_notaris__c}), LEN(TEXT({!LD.nominal_notaris__c})) - 8, 3) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!LD.nominal_notaris__c}), LEN(TEXT({!LD.nominal_notaris__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+        RIGHT(TEXT({!LD.nominal_notaris__c}), 3),
+        IF(
+            LEN(TEXT({!LD.nominal_notaris__c})) &gt; 9,
+            LEFT(TEXT({!LD.nominal_notaris__c}), LEN(TEXT({!LD.nominal_notaris__c})) - 9) &amp; &quot;.&quot; &amp;
+            MID(TEXT({!LD.nominal_notaris__c}), LEN(TEXT({!LD.nominal_notaris__c})) - 8, 3) &amp; &quot;.&quot; &amp;
+            MID(TEXT({!LD.nominal_notaris__c}), LEN(TEXT({!LD.nominal_notaris__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+            RIGHT(TEXT({!LD.nominal_notaris__c}), 3),
+            IF(
+                LEN(TEXT({!LD.nominal_notaris__c})) &gt; 6,
+                LEFT(TEXT({!LD.nominal_notaris__c}), LEN(TEXT({!LD.nominal_notaris__c})) - 6) &amp; &quot;.&quot; &amp;
+                MID(TEXT({!LD.nominal_notaris__c}), LEN(TEXT({!LD.nominal_notaris__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+                RIGHT(TEXT({!LD.nominal_notaris__c}), 3),
+                IF(
+                    LEN(TEXT({!LD.nominal_notaris__c})) &gt; 3,
+                    LEFT(TEXT({!LD.nominal_notaris__c}), LEN(TEXT({!LD.nominal_notaris__c})) - 3) &amp; &quot;.&quot; &amp;
+                    RIGHT(TEXT({!LD.nominal_notaris__c}), 3),
+                    TEXT({!LD.nominal_notaris__c})
+                )
+            )
+        )
+    )
+)</expression>
+    </formulas>
+    <formulas>
+        <name>FormatNominalSisa</name>
+        <dataType>String</dataType>
+        <expression>IF(
+    LEN(TEXT({!LD.nominal_sisa__c})) &gt; 15,
+    LEFT(TEXT({!LD.nominal_sisa__c}), LEN(TEXT({!LD.nominal_sisa__c})) - 15) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!LD.nominal_sisa__c}), LEN(TEXT({!LD.nominal_sisa__c})) - 14, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!LD.nominal_sisa__c}), LEN(TEXT({!LD.nominal_sisa__c})) - 11, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!LD.nominal_sisa__c}), LEN(TEXT({!LD.nominal_sisa__c})) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!LD.nominal_sisa__c}), LEN(TEXT({!LD.nominal_sisa__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT({!LD.nominal_sisa__c}), 3),
+    IF(
+        LEN(TEXT({!LD.nominal_sisa__c})) &gt; 12,
+        LEFT(TEXT({!LD.nominal_sisa__c}), LEN(TEXT({!LD.nominal_sisa__c})) - 12) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!LD.nominal_sisa__c}), LEN(TEXT({!LD.nominal_sisa__c})) - 11, 3) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!LD.nominal_sisa__c}), LEN(TEXT({!LD.nominal_sisa__c})) - 8, 3) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!LD.nominal_sisa__c}), LEN(TEXT({!LD.nominal_sisa__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+        RIGHT(TEXT({!LD.nominal_sisa__c}), 3),
+        IF(
+            LEN(TEXT({!LD.nominal_sisa__c})) &gt; 9,
+            LEFT(TEXT({!LD.nominal_sisa__c}), LEN(TEXT({!LD.nominal_sisa__c})) - 9) &amp; &quot;.&quot; &amp;
+            MID(TEXT({!LD.nominal_sisa__c}), LEN(TEXT({!LD.nominal_sisa__c})) - 8, 3) &amp; &quot;.&quot; &amp;
+            MID(TEXT({!LD.nominal_sisa__c}), LEN(TEXT({!LD.nominal_sisa__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+            RIGHT(TEXT({!LD.nominal_sisa__c}), 3),
+            IF(
+                LEN(TEXT({!LD.nominal_sisa__c})) &gt; 6,
+                LEFT(TEXT({!LD.nominal_sisa__c}), LEN(TEXT({!LD.nominal_sisa__c})) - 6) &amp; &quot;.&quot; &amp;
+                MID(TEXT({!LD.nominal_sisa__c}), LEN(TEXT({!LD.nominal_sisa__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+                RIGHT(TEXT({!LD.nominal_sisa__c}), 3),
+                IF(
+                    LEN(TEXT({!LD.nominal_sisa__c})) &gt; 3,
+                    LEFT(TEXT({!LD.nominal_sisa__c}), LEN(TEXT({!LD.nominal_sisa__c})) - 3) &amp; &quot;.&quot; &amp;
+                    RIGHT(TEXT({!LD.nominal_sisa__c}), 3),
+                    TEXT({!LD.nominal_sisa__c})
+                )
+            )
+        )
+    )
+)</expression>
+    </formulas>
+    <formulas>
+        <name>FormatProvisionFee</name>
+        <dataType>String</dataType>
+        <expression>IF(
+    LEN(TEXT({!calc.provision_fee__c})) &gt; 15,
+    LEFT(TEXT({!calc.provision_fee__c}), LEN(TEXT({!calc.provision_fee__c})) - 15) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!calc.provision_fee__c}), LEN(TEXT({!calc.provision_fee__c})) - 14, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!calc.provision_fee__c}), LEN(TEXT({!calc.provision_fee__c})) - 11, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!calc.provision_fee__c}), LEN(TEXT({!calc.provision_fee__c})) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!calc.provision_fee__c}), LEN(TEXT({!calc.provision_fee__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT({!calc.provision_fee__c}), 3),
+    IF(
+        LEN(TEXT({!calc.provision_fee__c})) &gt; 12,
+        LEFT(TEXT({!calc.provision_fee__c}), LEN(TEXT({!calc.provision_fee__c})) - 12) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!calc.provision_fee__c}), LEN(TEXT({!calc.provision_fee__c})) - 11, 3) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!calc.provision_fee__c}), LEN(TEXT({!calc.provision_fee__c})) - 8, 3) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!calc.provision_fee__c}), LEN(TEXT({!calc.provision_fee__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+        RIGHT(TEXT({!calc.provision_fee__c}), 3),
+        IF(
+            LEN(TEXT({!calc.provision_fee__c})) &gt; 9,
+            LEFT(TEXT({!calc.provision_fee__c}), LEN(TEXT({!calc.provision_fee__c})) - 9) &amp; &quot;.&quot; &amp;
+            MID(TEXT({!calc.provision_fee__c}), LEN(TEXT({!calc.provision_fee__c})) - 8, 3) &amp; &quot;.&quot; &amp;
+            MID(TEXT({!calc.provision_fee__c}), LEN(TEXT({!calc.provision_fee__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+            RIGHT(TEXT({!calc.provision_fee__c}), 3),
+            IF(
+                LEN(TEXT({!calc.provision_fee__c})) &gt; 6,
+                LEFT(TEXT({!calc.provision_fee__c}), LEN(TEXT({!calc.provision_fee__c})) - 6) &amp; &quot;.&quot; &amp;
+                MID(TEXT({!calc.provision_fee__c}), LEN(TEXT({!calc.provision_fee__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+                RIGHT(TEXT({!calc.provision_fee__c}), 3),
+                IF(
+                    LEN(TEXT({!calc.provision_fee__c})) &gt; 3,
+                    LEFT(TEXT({!calc.provision_fee__c}), LEN(TEXT({!calc.provision_fee__c})) - 3) &amp; &quot;.&quot; &amp;
+                    RIGHT(TEXT({!calc.provision_fee__c}), 3),
+                    TEXT({!calc.provision_fee__c})
+                )
+            )
+        )
+    )
+)</expression>
+    </formulas>
+    <formulas>
+        <name>FormatReverseOtr</name>
+        <dataType>String</dataType>
+        <expression>IF(
+    LEN(TEXT({!calc.reverse_otr__c})) &gt; 15,
+    LEFT(TEXT({!calc.reverse_otr__c}), LEN(TEXT({!calc.reverse_otr__c})) - 15) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!calc.reverse_otr__c}), LEN(TEXT({!calc.reverse_otr__c})) - 14, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!calc.reverse_otr__c}), LEN(TEXT({!calc.reverse_otr__c})) - 11, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!calc.reverse_otr__c}), LEN(TEXT({!calc.reverse_otr__c})) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!calc.reverse_otr__c}), LEN(TEXT({!calc.reverse_otr__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT({!calc.reverse_otr__c}), 3),
+    IF(
+        LEN(TEXT({!calc.reverse_otr__c})) &gt; 12,
+        LEFT(TEXT({!calc.reverse_otr__c}), LEN(TEXT({!calc.reverse_otr__c})) - 12) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!calc.reverse_otr__c}), LEN(TEXT({!calc.reverse_otr__c})) - 11, 3) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!calc.reverse_otr__c}), LEN(TEXT({!calc.reverse_otr__c})) - 8, 3) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!calc.reverse_otr__c}), LEN(TEXT({!calc.reverse_otr__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+        RIGHT(TEXT({!calc.reverse_otr__c}), 3),
+        IF(
+            LEN(TEXT({!calc.reverse_otr__c})) &gt; 9,
+            LEFT(TEXT({!calc.reverse_otr__c}), LEN(TEXT({!calc.reverse_otr__c})) - 9) &amp; &quot;.&quot; &amp;
+            MID(TEXT({!calc.reverse_otr__c}), LEN(TEXT({!calc.reverse_otr__c})) - 8, 3) &amp; &quot;.&quot; &amp;
+            MID(TEXT({!calc.reverse_otr__c}), LEN(TEXT({!calc.reverse_otr__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+            RIGHT(TEXT({!calc.reverse_otr__c}), 3),
+            IF(
+                LEN(TEXT({!calc.reverse_otr__c})) &gt; 6,
+                LEFT(TEXT({!calc.reverse_otr__c}), LEN(TEXT({!calc.reverse_otr__c})) - 6) &amp; &quot;.&quot; &amp;
+                MID(TEXT({!calc.reverse_otr__c}), LEN(TEXT({!calc.reverse_otr__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+                RIGHT(TEXT({!calc.reverse_otr__c}), 3),
+                IF(
+                    LEN(TEXT({!calc.reverse_otr__c})) &gt; 3,
+                    LEFT(TEXT({!calc.reverse_otr__c}), LEN(TEXT({!calc.reverse_otr__c})) - 3) &amp; &quot;.&quot; &amp;
+                    RIGHT(TEXT({!calc.reverse_otr__c}), 3),
+                    TEXT({!calc.reverse_otr__c})
+                )
+            )
+        )
+    )
+)</expression>
+    </formulas>
+    <formulas>
+        <name>FormatTDP</name>
+        <dataType>String</dataType>
+        <expression>IF(
+    LEN(TEXT({!calc.total_down_payment_amount__c})) &gt; 15,
+    LEFT(TEXT({!calc.total_down_payment_amount__c}), LEN(TEXT({!calc.total_down_payment_amount__c})) - 15) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!calc.total_down_payment_amount__c}), LEN(TEXT({!calc.total_down_payment_amount__c})) - 14, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!calc.total_down_payment_amount__c}), LEN(TEXT({!calc.total_down_payment_amount__c})) - 11, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!calc.total_down_payment_amount__c}), LEN(TEXT({!calc.total_down_payment_amount__c})) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!calc.total_down_payment_amount__c}), LEN(TEXT({!calc.total_down_payment_amount__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT({!calc.total_down_payment_amount__c}), 3),
+    IF(
+        LEN(TEXT({!calc.total_down_payment_amount__c})) &gt; 12,
+        LEFT(TEXT({!calc.total_down_payment_amount__c}), LEN(TEXT({!calc.total_down_payment_amount__c})) - 12) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!calc.total_down_payment_amount__c}), LEN(TEXT({!calc.total_down_payment_amount__c})) - 11, 3) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!calc.total_down_payment_amount__c}), LEN(TEXT({!calc.total_down_payment_amount__c})) - 8, 3) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!calc.total_down_payment_amount__c}), LEN(TEXT({!calc.total_down_payment_amount__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+        RIGHT(TEXT({!calc.total_down_payment_amount__c}), 3),
+        IF(
+            LEN(TEXT({!calc.total_down_payment_amount__c})) &gt; 9,
+            LEFT(TEXT({!calc.total_down_payment_amount__c}), LEN(TEXT({!calc.total_down_payment_amount__c})) - 9) &amp; &quot;.&quot; &amp;
+            MID(TEXT({!calc.total_down_payment_amount__c}), LEN(TEXT({!calc.total_down_payment_amount__c})) - 8, 3) &amp; &quot;.&quot; &amp;
+            MID(TEXT({!calc.total_down_payment_amount__c}), LEN(TEXT({!calc.total_down_payment_amount__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+            RIGHT(TEXT({!calc.total_down_payment_amount__c}), 3),
+            IF(
+                LEN(TEXT({!calc.total_down_payment_amount__c})) &gt; 6,
+                LEFT(TEXT({!calc.total_down_payment_amount__c}), LEN(TEXT({!calc.total_down_payment_amount__c})) - 6) &amp; &quot;.&quot; &amp;
+                MID(TEXT({!calc.total_down_payment_amount__c}), LEN(TEXT({!calc.total_down_payment_amount__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+                RIGHT(TEXT({!calc.total_down_payment_amount__c}), 3),
+                IF(
+                    LEN(TEXT({!calc.total_down_payment_amount__c})) &gt; 3,
+                    LEFT(TEXT({!calc.total_down_payment_amount__c}), LEN(TEXT({!calc.total_down_payment_amount__c})) - 3) &amp; &quot;.&quot; &amp;
+                    RIGHT(TEXT({!calc.total_down_payment_amount__c}), 3),
+                    TEXT({!calc.total_down_payment_amount__c})
+                )
+            )
+        )
+    )
+)</expression>
+    </formulas>
+    <formulas>
+        <name>Frm10</name>
+        <dataType>Number</dataType>
+        <expression>{!calc.admin_fee__c} + {!calc.santunan_insurance_premium__c}</expression>
+        <scale>0</scale>
+    </formulas>
+    <formulas>
+        <name>Frm8</name>
+        <dataType>Number</dataType>
+        <expression>ABS({!calc.reverse_otr__c} - {!calc.total_down_payment_amount__c})</expression>
+        <scale>0</scale>
+    </formulas>
+    <formulas>
+        <name>Frm9</name>
+        <dataType>Number</dataType>
+        <expression>{!Frm10} +  {!calc.provision_fee__c} + {!calc.asset_insurance_premium__c} + {!calc.life_insurance_premium__c}</expression>
+        <scale>0</scale>
+    </formulas>
+    <formulas>
+        <name>TodayDateTime</name>
+        <dataType>String</dataType>
+        <expression>TEXT(DAY(TODAY())) &amp; &quot; &quot; &amp; 
+CASE(MONTH(TODAY()), 
+    1, &quot;Januari&quot;, 
+    2, &quot;Februari&quot;, 
+    3, &quot;Maret&quot;, 
+    4, &quot;April&quot;, 
+    5, &quot;Mei&quot;, 
+    6, &quot;Juni&quot;, 
+    7, &quot;Juli&quot;, 
+    8, &quot;Agustus&quot;, 
+    9, &quot;September&quot;, 
+    10, &quot;Oktober&quot;, 
+    11, &quot;November&quot;, 
+    12, &quot;Desember&quot;, 
+    &quot;&quot;) &amp; &quot; &quot; &amp; 
+TEXT(YEAR(TODAY()))</expression>
+    </formulas>
+    <interviewLabel>D025B Get Data {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>D025B Get Data</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordCreates>
+        <name>Save_Data_to_PDF_Object</name>
+        <label>Save Data to PDF Object</label>
+        <locationX>176</locationX>
+        <locationY>1430</locationY>
+        <inputReference>PDFContent</inputReference>
+    </recordCreates>
+    <recordLookups>
+        <name>calc</name>
+        <label>Get Calc Params</label>
+        <locationX>176</locationX>
+        <locationY>242</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Get_Guarantor</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>related_id__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>InputRecordID</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>API_Loan_Calculator_Non_KPR__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Application</name>
+        <label>Get Application Review</label>
+        <locationX>176</locationX>
+        <locationY>134</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>calc</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>InputRecordID</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Application__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Bank_Name_BFI</name>
+        <label>Get Bank Name For Pembayaran BFI</label>
+        <locationX>176</locationX>
+        <locationY>1214</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Set_Value_for_D025B_Content</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>code__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>LD.bank_bfi__c</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Master_Bank__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Bank_Name_for_Pelunasan_Kredit</name>
+        <label>Get Bank Name for Pelunasan Kredit</label>
+        <locationX>176</locationX>
+        <locationY>566</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Get_Bank_Name_Hutang</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>code__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>LD.bank_kk__c</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Master_Bank__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Bank_Name_Hold</name>
+        <label>Get Bank Name For Hold Pembayaran</label>
+        <locationX>176</locationX>
+        <locationY>782</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Get_Bank_Name_IMB</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>code__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>LD.bank_hold__c</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Master_Bank__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Bank_Name_Hutang</name>
+        <label>Get Bank Name For Pelunasan Hutang</label>
+        <locationX>176</locationX>
+        <locationY>674</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Get_Bank_Name_Hold</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>code__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>LD.bank_hutang__c</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Master_Bank__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Bank_Name_IMB</name>
+        <label>Get Bank Name For Pembayaran IMB</label>
+        <locationX>176</locationX>
+        <locationY>890</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Get_Bank_Name_Sisa_Pembayaran</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>code__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>LD.bank_imb__c</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Master_Bank__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Bank_Name_Notaris</name>
+        <label>Get Bank Name for Pembayaran Notaris</label>
+        <locationX>176</locationX>
+        <locationY>1106</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Get_Bank_Name_BFI</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>code__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>LD.bank_notaris__c</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Master_Bank__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Bank_Name_Sisa_Pembayaran</name>
+        <label>Get Bank Name For Sisa Pembayaran</label>
+        <locationX>176</locationX>
+        <locationY>998</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Get_Bank_Name_Notaris</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>code__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>LD.bank_sisa__c</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Master_Bank__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Guarantor</name>
+        <label>Get Guarantor</label>
+        <locationX>176</locationX>
+        <locationY>350</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>LD</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Survey__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Application.Survey__c</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Guarantor__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>LD</name>
+        <label>Get Legal Document</label>
+        <locationX>176</locationX>
+        <locationY>458</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Get_Bank_Name_for_Pelunasan_Kredit</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>application_id__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>InputRecordID</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Legal_Document__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Get_Application</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <variables>
+        <name>InputRecordID</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>PDFContent</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>pdf_content__c</objectType>
+    </variables>
+    <variables>
+        <name>SavedRecordID</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+    </variables>
+</Flow>

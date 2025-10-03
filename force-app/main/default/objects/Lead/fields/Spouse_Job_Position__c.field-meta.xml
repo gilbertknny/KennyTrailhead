@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Spouse_Job_Position__c</fullName>
+    <label>Spouse Job Position</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Manajer</fullName>
+                <default>false</default>
+                <label>Manajer</label>
+            </value>
+            <value>
+                <fullName>Kepala Bagian</fullName>
+                <default>false</default>
+                <label>Kepala Bagian</label>
+            </value>
+            <value>
+                <fullName>Staff Office</fullName>
+                <default>false</default>
+                <label>Staff Office</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

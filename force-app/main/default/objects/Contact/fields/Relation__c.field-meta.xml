@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Relation__c</fullName>
+    <label>Relation</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Pihak Berelasi</fullName>
+                <default>false</default>
+                <label>Pihak Berelasi</label>
+            </value>
+            <value>
+                <fullName>Pihak Tidak Berelasi</fullName>
+                <default>false</default>
+                <label>Pihak Tidak Berelasi</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

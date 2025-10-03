@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>SP_Place_of_Birth_Min_3_Characters</fullName>
+    <active>false</active>
+    <errorConditionFormula>(IF( $User.Is_Debug_User__c = TRUE,FALSE,IF(ISBLANK( Spouse_Place_of_Birth__c ), FALSE, LEN( Spouse_Place_of_Birth__c ) &lt; 3)))&amp;&amp; !IsVRBypassed__c</errorConditionFormula>
+    <errorDisplayField>Spouse_Place_of_Birth__c</errorDisplayField>
+    <errorMessage>Please enter at least 3 character</errorMessage>
+</ValidationRule>

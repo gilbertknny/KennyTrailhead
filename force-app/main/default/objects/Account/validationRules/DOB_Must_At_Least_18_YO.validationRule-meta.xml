@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>DOB_Must_At_Least_18_YO</fullName>
+    <active>false</active>
+    <errorConditionFormula>IF( RecordType.Name == &quot;Company&quot;, FALSE, TODAY() - Date_of_Birth__c &lt; 18 * 365)</errorConditionFormula>
+    <errorDisplayField>Date_of_Birth__c</errorDisplayField>
+    <errorMessage>You must be at least 18 years old.</errorMessage>
+</ValidationRule>

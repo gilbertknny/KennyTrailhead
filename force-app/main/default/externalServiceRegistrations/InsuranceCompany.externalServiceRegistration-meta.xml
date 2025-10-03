@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ExternalServiceRegistration xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label>InsuranceCompany</label>
+    <namedCredentialReference>MasterDataNmCred</namedCredentialReference>
+    <operations>
+        <active>true</active>
+        <name>insurancex20company</name>
+    </operations>
+    <registrationProviderType>Custom</registrationProviderType>
+    <schema>{
+  &quot;openapi&quot;: &quot;3.0.1&quot;,
+  &quot;info&quot;: {
+    &quot;title&quot;: &quot;InsuranceCompany&quot;,
+    &quot;description&quot;: &quot;&quot;
+  },
+  &quot;paths&quot;: {
+    &quot;/krakend-gateway/sf/insurance/v1/insco/companies&quot;: {
+      &quot;get&quot;: {
+        &quot;description&quot;: &quot;&quot;,
+        &quot;operationId&quot;: &quot;Insurance Company&quot;,
+        &quot;responses&quot;: {
+          &quot;2XX&quot;: {
+            &quot;description&quot;: &quot;&quot;,
+            &quot;content&quot;: {
+              &quot;application/json&quot;: {
+                &quot;schema&quot;: {
+                  &quot;type&quot;: &quot;object&quot;,
+                  &quot;properties&quot;: {
+                    &quot;number&quot;: {
+                      &quot;type&quot;: &quot;integer&quot;,
+                      &quot;format&quot;: &quot;int64&quot;
+                    },
+                    &quot;last&quot;: {
+                      &quot;type&quot;: &quot;boolean&quot;
+                    },
+                    &quot;size&quot;: {
+                      &quot;type&quot;: &quot;integer&quot;,
+                      &quot;format&quot;: &quot;int64&quot;
+                    },
+                    &quot;total_elements&quot;: {
+                      &quot;type&quot;: &quot;integer&quot;,
+                      &quot;format&quot;: &quot;int64&quot;
+                    },
+                    &quot;pageable&quot;: {
+                      &quot;type&quot;: &quot;object&quot;,
+                      &quot;properties&quot;: {
+                        &quot;paged&quot;: {
+                          &quot;type&quot;: &quot;boolean&quot;
+                        },
+                        &quot;page_number&quot;: {
+                          &quot;type&quot;: &quot;integer&quot;,
+                          &quot;format&quot;: &quot;int64&quot;
+                        },
+                        &quot;offset&quot;: {
+                          &quot;type&quot;: &quot;integer&quot;,
+                          &quot;format&quot;: &quot;int64&quot;
+                        },
+                        &quot;unpaged&quot;: {
+                          &quot;type&quot;: &quot;boolean&quot;
+                        },
+                        &quot;sort&quot;: {
+                          &quot;type&quot;: &quot;array&quot;,
+                          &quot;items&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          }
+                        },
+                        &quot;page_size&quot;: {
+                          &quot;type&quot;: &quot;integer&quot;,
+                          &quot;format&quot;: &quot;int64&quot;
+                        }
+                      }
+                    },
+                    &quot;total_pages&quot;: {
+                      &quot;type&quot;: &quot;integer&quot;,
+                      &quot;format&quot;: &quot;int64&quot;
+                    },
+                    &quot;sort&quot;: {
+                      &quot;type&quot;: &quot;array&quot;,
+                      &quot;items&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int64&quot;
+                      }
+                    },
+                    &quot;number_of_elements&quot;: {
+                      &quot;type&quot;: &quot;integer&quot;,
+                      &quot;format&quot;: &quot;int64&quot;
+                    },
+                    &quot;content&quot;: {
+                      &quot;type&quot;: &quot;array&quot;,
+                      &quot;items&quot;: {
+                        &quot;type&quot;: &quot;object&quot;,
+                        &quot;properties&quot;: {
+                          &quot;rt&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;tolerance_amount&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;rw&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;days_in_year&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;description&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;area_phone_1&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;zip_code&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;area_phone_2&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;products&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;asset_insurance&quot;: {
+                                &quot;type&quot;: &quot;object&quot;,
+                                &quot;properties&quot;: {
+                                  &quot;acquisition_cost&quot;: {
+                                    &quot;type&quot;: &quot;integer&quot;,
+                                    &quot;format&quot;: &quot;int64&quot;
+                                  },
+                                  &quot;tax_discount&quot;: {
+                                    &quot;type&quot;: &quot;number&quot;,
+                                    &quot;format&quot;: &quot;int64&quot;
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          &quot;mobile_phone&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;contact_person_name&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;id&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;fax&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;area_fax&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;email&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;term_of_payment&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                          },
+                          &quot;phone_2&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;phone_1&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;insurance_company_id&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;address&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;is_active&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;connection_type&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;is_syariah&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                          },
+                          &quot;contact_person_title&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;sub_district_id&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;district_id&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;insurance_type_name&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;city_id&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          }
+                        }
+                      }
+                    },
+                    &quot;first&quot;: {
+                      &quot;type&quot;: &quot;boolean&quot;
+                    },
+                    &quot;empty&quot;: {
+                      &quot;type&quot;: &quot;boolean&quot;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}</schema>
+    <schemaType>OpenApi3</schemaType>
+    <serviceBinding>{&quot;host&quot;:&quot;&quot;,&quot;basePath&quot;:&quot;/&quot;,&quot;allowedSchemes&quot;:[],&quot;requestMediaTypes&quot;:[],&quot;responseMediaTypes&quot;:[],&quot;compatibleMediaTypes&quot;:{},&quot;extensions&quot;:{}}</serviceBinding>
+    <status>Complete</status>
+    <systemVersion>5</systemVersion>
+</ExternalServiceRegistration>

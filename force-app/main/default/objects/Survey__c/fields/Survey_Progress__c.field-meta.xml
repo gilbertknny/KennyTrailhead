@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Survey_Progress__c</fullName>
+    <defaultValue>&quot;Jadwal Survey&quot;</defaultValue>
+    <label>Survey Progress</label>
+    <required>true</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Jadwal Survey</fullName>
+                <default>true</default>
+                <label>Jadwal Survey</label>
+            </value>
+            <value>
+                <fullName>Ringkasan Survey</fullName>
+                <default>false</default>
+                <label>Ringkasan Survey</label>
+            </value>
+            <value>
+                <fullName>Input Survey</fullName>
+                <default>false</default>
+                <label>Input Survey</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

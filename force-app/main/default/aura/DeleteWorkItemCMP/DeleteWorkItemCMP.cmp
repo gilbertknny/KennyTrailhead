@@ -1,0 +1,69 @@
+<aura:component controller="DeleteWorkItemHandler" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction" access="global" >
+    <aura:attribute type="sf_devops__Work_Item__c[]" name="workItemList"/>
+    <aura:attribute type="Map" name="projectList"/>
+    <aura:attribute name="showWorkItem" type="boolean" default="false"/>
+    <aura:attribute name="loaded" type="boolean" default="false"/>
+    <aura:attribute name="hideDeleteButton" type="boolean" default="true"/>
+    <aura:attribute name="mycolumns" type="List"/>
+    <aura:attribute name="selectedWorkItems" type="List"/>
+    <aura:attribute name="isModalOpen" type="boolean" default="false"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.init}"/>
+    <lightning:card title="Select and Delect Work Items" iconName="standard:work_type">
+        <div class="slds-p-horizontal_medium">
+            <lightning:combobox name="projects" label="" value="inProgress" placeholder="Select Project" options="{! v.projectList }" onchange="{! c.handleProjectSelect }"/>
+            
+        </div>
+        
+        <aura:if isTrue = "{!v.showWorkItem}">     
+            <br/>
+            <lightning:datatable data="{! v.workItemList}" 
+                                 columns="{! v.mycolumns }" 
+                                 keyField="id"
+                                 onrowselection="{!c.handleSelect}"/>
+            <br/>
+            <center>
+                <lightning:button onclick="{!c.confirmSelection}" label="Delete Selected Work Items" variant="brand" disabled="{!v.hideDeleteButton}"/>
+            </center>
+            <aura:if isTrue="{! v.loaded }">
+                    <lightning:spinner alternativeText="Loading" />
+            </aura:if>
+            <aura:if isTrue="{!v.isModalOpen}">
+                
+                <!-- Modal/Popup Box starts here-->
+                <section tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                    <div class="slds-modal__container">
+                        <!-- Modal/Popup Box Header Starts here-->
+                        <header class="slds-modal__header">
+                            <lightning:buttonIcon iconName="utility:close"
+                                                  onclick="{! c.closeModel }"
+                                                  alternativeText="close"
+                                                  variant="bare-inverse"
+                                                  class="slds-modal__close"/>
+                            <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Confirm Selection</h2>
+                        </header>
+                        <!--Modal/Popup Box Body Starts here-->
+                        <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                            <p><b>You are going to delete {!v.selectedWorkItems.length} Work Items.
+                                </b>
+                            </p>
+                        </div>
+                        <!--Modal/Popup Box Footer Starts here-->
+                        <footer class="slds-modal__footer">
+                            <lightning:button variant="neutral"
+                                              label="Close"
+                                              title="Close"
+                                              onclick="{! c.closeModel }"/>
+                            <lightning:button variant="brand"
+                                              label="Delete Work Item"
+                                              title="Delete Work Item"
+                                              onclick="{! c.deleteWorkItems}"/>
+                        </footer>
+                    </div>
+                </section>
+                <div class="slds-backdrop slds-backdrop_open"></div>
+            </aura:if>
+        </aura:if>
+    </lightning:card>
+    
+</aura:component>

@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ExternalServiceRegistration xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label>CreateMOU</label>
+    <namedCredentialReference>MasterDataNmCred</namedCredentialReference>
+    <operations>
+        <active>true</active>
+        <name>createx20mou</name>
+    </operations>
+    <registrationProviderType>Custom</registrationProviderType>
+    <schema>{
+  &quot;openapi&quot;: &quot;3.0.1&quot;,
+  &quot;info&quot;: {
+    &quot;title&quot;: &quot;CreateMOU&quot;,
+    &quot;description&quot;: &quot;&quot;
+  },
+  &quot;paths&quot;: {
+    &quot;/krakend-gateway/sf/agreement/v1/mou&quot;: {
+      &quot;post&quot;: {
+        &quot;description&quot;: &quot;&quot;,
+        &quot;operationId&quot;: &quot;Create MOU&quot;,
+        &quot;parameters&quot;: [{
+          &quot;name&quot;: &quot;X-Idempotency-Key&quot;,
+          &quot;in&quot;: &quot;header&quot;,
+          &quot;required&quot;: true,
+          &quot;schema&quot;: {
+            &quot;type&quot;: &quot;string&quot;
+          }
+        }],
+        &quot;requestBody&quot;: {
+          &quot;description&quot;: &quot;&quot;,
+          &quot;content&quot;: {
+            &quot;application/json&quot;: {
+              &quot;schema&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                  &quot;mou_type_code&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;mou_number&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;collaterals&quot;: {
+                    &quot;type&quot;: &quot;array&quot;,
+                    &quot;items&quot;: {
+                      &quot;type&quot;: &quot;object&quot;,
+                      &quot;properties&quot;: {
+                        &quot;asset_type_id&quot;: {
+                          &quot;type&quot;: &quot;string&quot;
+                        },
+                        &quot;sequence&quot;: {
+                          &quot;type&quot;: &quot;integer&quot;,
+                          &quot;format&quot;: &quot;int64&quot;
+                        },
+                        &quot;collateral_pricing&quot;: {
+                          &quot;type&quot;: &quot;object&quot;,
+                          &quot;properties&quot;: {
+                            &quot;otr_price&quot;: {
+                              &quot;type&quot;: &quot;integer&quot;,
+                              &quot;format&quot;: &quot;int64&quot;
+                            },
+                            &quot;down_payment_amount&quot;: {
+                              &quot;type&quot;: &quot;integer&quot;,
+                              &quot;format&quot;: &quot;int64&quot;
+                            }
+                          }
+                        },
+                        &quot;asset_code&quot;: {
+                          &quot;type&quot;: &quot;string&quot;
+                        },
+                        &quot;attributes&quot;: {
+                          &quot;type&quot;: &quot;array&quot;,
+                          &quot;items&quot;: {
+                            &quot;type&quot;: &quot;object&quot;,
+                            &quot;properties&quot;: {
+                              &quot;attribute_id&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              },
+                              &quot;attribute_content&quot;: {
+                                &quot;type&quot;: &quot;string&quot;
+                              }
+                            }
+                          }
+                        },
+                        &quot;asset_usage&quot;: {
+                          &quot;type&quot;: &quot;string&quot;
+                        },
+                        &quot;asset_condition&quot;: {
+                          &quot;type&quot;: &quot;string&quot;
+                        },
+                        &quot;asset_status&quot;: {
+                          &quot;type&quot;: &quot;string&quot;
+                        }
+                      }
+                    }
+                  },
+                  &quot;mou_detail&quot;: {
+                    &quot;type&quot;: &quot;object&quot;,
+                    &quot;properties&quot;: {
+                      &quot;end_date&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                      },
+                      &quot;tenor&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int64&quot;
+                      },
+                      &quot;workflow&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                      },
+                      &quot;branch_id&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int64&quot;
+                      },
+                      &quot;customer_cif_id&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                      },
+                      &quot;channel&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                      },
+                      &quot;installment_scheme&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                      },
+                      &quot;is_revolving&quot;: {
+                        &quot;type&quot;: &quot;boolean&quot;
+                      },
+                      &quot;effective_rate&quot;: {
+                        &quot;type&quot;: &quot;number&quot;,
+                        &quot;format&quot;: &quot;double&quot;
+                      },
+                      &quot;application_id&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                      },
+                      &quot;start_date&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                      }
+                    }
+                  },
+                  &quot;total_plafond_amount&quot;: {
+                    &quot;type&quot;: &quot;integer&quot;,
+                    &quot;format&quot;: &quot;int64&quot;
+                  }
+                }
+              }
+            }
+          },
+          &quot;required&quot;: true
+        },
+        &quot;responses&quot;: {
+          &quot;2XX&quot;: {
+            &quot;description&quot;: &quot;&quot;,
+            &quot;content&quot;: {
+              &quot;application/json&quot;: {
+                &quot;schema&quot;: {
+                  &quot;type&quot;: &quot;object&quot;,
+                  &quot;properties&quot;: {
+                    &quot;mou_number&quot;: {
+                      &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;status&quot;: {
+                      &quot;type&quot;: &quot;string&quot;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}</schema>
+    <schemaType>OpenApi3</schemaType>
+    <serviceBinding>{&quot;host&quot;:&quot;&quot;,&quot;basePath&quot;:&quot;/&quot;,&quot;allowedSchemes&quot;:[],&quot;requestMediaTypes&quot;:[],&quot;responseMediaTypes&quot;:[],&quot;compatibleMediaTypes&quot;:{},&quot;extensions&quot;:{}}</serviceBinding>
+    <status>Complete</status>
+    <systemVersion>7</systemVersion>
+</ExternalServiceRegistration>

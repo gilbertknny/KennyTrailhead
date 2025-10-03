@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Spouse_Name_Must_Alphabet</fullName>
+    <active>true</active>
+    <description>If Marital Status = Married then validate spouse name must be filled with alphabet</description>
+    <errorConditionFormula>IF(OR(ISBLANK(Spouse_Name__c), ISNULL(Spouse_Name__c),Spouse_Name__c= &quot;&quot;),FALSE, OR(AND(   ISPICKVAL(Marital_Status__c , &quot;KAWIN&quot;), NOT(REGEX( Spouse_Name__c , &quot;^[a-zA-Z ]*$&quot;)) )))</errorConditionFormula>
+    <errorDisplayField>Spouse_Name__c</errorDisplayField>
+    <errorMessage>Some character are not allowed, for example / \ :*?&quot;&lt;&gt;|</errorMessage>
+</ValidationRule>

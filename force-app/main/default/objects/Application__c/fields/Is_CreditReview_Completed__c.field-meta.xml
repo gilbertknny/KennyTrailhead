@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Is_CreditReview_Completed__c</fullName>
+    <formula>OR(
+ Temp_Is_CreditReview_Completed__c ,
+ AND (
+  NOT( ISBLANK(TEXT(Worst_Collectability_Credit_by_Pefindo_d__c) )),
+  NOT( ISBLANK(TEXT(Is_Take_Over__c) )),
+  NOT( ISBLANK(TEXT(Jenis_Penggunaan_Dana__c) )),
+  NOT( ISBLANK(Loan_Information__r.Account.Primary_Contact__r.Profession__c  )),
+  NOT( ISBLANK(Living_Cost__c )),
+  NOT( ISBLANK(TEXT(Survey__r.Model_Hak_Tanggungan__c)) )
+ )
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Is CreditReview Completed</label>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

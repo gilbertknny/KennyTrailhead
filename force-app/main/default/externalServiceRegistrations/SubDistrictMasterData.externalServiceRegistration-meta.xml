@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ExternalServiceRegistration xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label>SubDistrictMasterData</label>
+    <namedCredentialReference>MasterDataNmCred</namedCredentialReference>
+    <operations>
+        <active>true</active>
+        <name>getsubdistrict</name>
+    </operations>
+    <registrationProviderType>Custom</registrationProviderType>
+    <schema>{
+  &quot;openapi&quot;: &quot;3.0.1&quot;,
+  &quot;info&quot;: {
+    &quot;title&quot;: &quot;General Master Data Sub District&quot;,
+    &quot;description&quot;: &quot;&quot;
+  },
+  &quot;paths&quot;: {
+    &quot;/krakend-gateway/sf/masterdata/v1/address/sub_district&quot;: {
+      &quot;get&quot;: {
+        &quot;description&quot;: &quot;Get general master data sub districts&quot;,
+        &quot;operationId&quot;: &quot;GetSubDistrict&quot;,
+        &quot;parameters&quot;: [
+          {
+            &quot;name&quot;: &quot;district_code&quot;,
+            &quot;in&quot;: &quot;query&quot;,
+            &quot;description&quot;: &quot;&quot;,
+            &quot;required&quot;: true,
+            &quot;allowEmptyValue&quot;: false,
+            &quot;schema&quot;: {
+              &quot;type&quot;: &quot;string&quot;
+            }
+          },
+          {
+            &quot;name&quot;: &quot;page&quot;,
+            &quot;in&quot;: &quot;query&quot;,
+            &quot;description&quot;: &quot;&quot;,
+            &quot;required&quot;: false,
+            &quot;allowEmptyValue&quot;: false,
+            &quot;schema&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;default&quot;: &quot;1&quot;
+            }
+          },
+          {
+            &quot;name&quot;: &quot;limit&quot;,
+            &quot;in&quot;: &quot;query&quot;,
+            &quot;description&quot;: &quot;&quot;,
+            &quot;required&quot;: false,
+            &quot;allowEmptyValue&quot;: false,
+            &quot;schema&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;default&quot;: &quot;1000&quot;
+            }
+          }          
+      ],
+        &quot;responses&quot;: {
+          &quot;200&quot;: {
+            &quot;description&quot;: &quot;Successful response&quot;,
+            &quot;content&quot;: {
+              &quot;application/json&quot;: {
+                &quot;schema&quot;: {
+                  &quot;type&quot;: &quot;object&quot;,
+                  &quot;properties&quot;: {
+                    &quot;content&quot;: {
+                      &quot;type&quot;: &quot;array&quot;,
+                      &quot;items&quot;: {
+                        &quot;type&quot;: &quot;object&quot;,
+                        &quot;properties&quot;: {
+                            &quot;code&quot;: {
+                              &quot;type&quot;: &quot;string&quot;
+                            },
+                            &quot;name&quot;: {
+                              &quot;type&quot;: &quot;string&quot;
+                            },
+                            &quot;district_code&quot;: {
+                              &quot;type&quot;: &quot;string&quot;
+                            },
+                            &quot;zip_code&quot;: {
+                              &quot;type&quot;: &quot;string&quot;
+                            }
+                        }
+                      }
+                    },
+                    &quot;pageable&quot;: {
+                      &quot;type&quot;: &quot;object&quot;,
+                      &quot;properties&quot;: {
+                        &quot;sort&quot;: {
+                          &quot;type&quot;: &quot;object&quot;,
+                          &quot;properties&quot;: {
+                            &quot;unsorted&quot;: {
+                              &quot;type&quot;: &quot;boolean&quot;,
+                              &quot;example&quot;: true
+                            },
+                            &quot;sorted&quot;: {
+                              &quot;type&quot;: &quot;boolean&quot;,
+                              &quot;example&quot;: false
+                            },
+                            &quot;empty&quot;: {
+                              &quot;type&quot;: &quot;boolean&quot;,
+                              &quot;example&quot;: true
+                            }
+                          }
+                        },
+                        &quot;page_number&quot;: {
+                          &quot;type&quot;: &quot;integer&quot;,
+                          &quot;example&quot;: 0
+                        },
+                        &quot;page_size&quot;: {
+                          &quot;type&quot;: &quot;integer&quot;,
+                          &quot;example&quot;: 1000
+                        },
+                        &quot;offset&quot;: {
+                          &quot;type&quot;: &quot;integer&quot;,
+                          &quot;example&quot;: 0
+                        },
+                        &quot;paged&quot;: {
+                          &quot;type&quot;: &quot;boolean&quot;,
+                          &quot;example&quot;: true
+                        },
+                        &quot;unpaged&quot;: {
+                          &quot;type&quot;: &quot;boolean&quot;,
+                          &quot;example&quot;: false
+                        }
+                      }
+                    },
+                    &quot;total_pages&quot;: {
+                      &quot;type&quot;: &quot;integer&quot;,
+                      &quot;example&quot;: 1
+                    },
+                    &quot;total_elements&quot;: {
+                      &quot;type&quot;: &quot;integer&quot;,
+                      &quot;example&quot;: 38
+                    },
+                    &quot;last&quot;: {
+                      &quot;type&quot;: &quot;boolean&quot;,
+                      &quot;example&quot;: true
+                    },
+                    &quot;number_of_elements&quot;: {
+                      &quot;type&quot;: &quot;integer&quot;,
+                      &quot;example&quot;: 38
+                    },
+                    &quot;first&quot;: {
+                      &quot;type&quot;: &quot;boolean&quot;,
+                      &quot;example&quot;: true
+                    },
+                    &quot;size&quot;: {
+                      &quot;type&quot;: &quot;integer&quot;,
+                      &quot;example&quot;: 1000
+                    },
+                    &quot;number&quot;: {
+                      &quot;type&quot;: &quot;integer&quot;,
+                      &quot;example&quot;: 0
+                    },
+                    &quot;sort&quot;: {
+                      &quot;type&quot;: &quot;object&quot;,
+                      &quot;properties&quot;: {
+                        &quot;unsorted&quot;: {
+                          &quot;type&quot;: &quot;boolean&quot;,
+                          &quot;example&quot;: true
+                        },
+                        &quot;sorted&quot;: {
+                          &quot;type&quot;: &quot;boolean&quot;,
+                          &quot;example&quot;: false
+                        },
+                        &quot;empty&quot;: {
+                          &quot;type&quot;: &quot;boolean&quot;,
+                          &quot;example&quot;: true
+                        }
+                      }
+                    },
+                    &quot;empty&quot;: {
+                      &quot;type&quot;: &quot;boolean&quot;,
+                      &quot;example&quot;: false
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}</schema>
+    <schemaType>OpenApi3</schemaType>
+    <schemaUploadFileExtension>json</schemaUploadFileExtension>
+    <schemaUploadFileName>master-data-subdistrict-schema</schemaUploadFileName>
+    <serviceBinding>{&quot;host&quot;:&quot;&quot;,&quot;basePath&quot;:&quot;/&quot;,&quot;allowedSchemes&quot;:[],&quot;requestMediaTypes&quot;:[],&quot;responseMediaTypes&quot;:[],&quot;compatibleMediaTypes&quot;:{},&quot;extensions&quot;:{}}</serviceBinding>
+    <status>Complete</status>
+    <systemVersion>5</systemVersion>
+</ExternalServiceRegistration>

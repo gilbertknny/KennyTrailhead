@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>SP_Monthly_Income_Min_1000000</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND( Marital_Status__c 
+ = &quot;Married&quot;,OR(ISBLANK(Spouse_Monthly_Income_Omset__c), Spouse_Monthly_Income_Omset__c &lt; 1000000)) &amp;&amp; !IsVRBypassed__c</errorConditionFormula>
+    <errorDisplayField>Spouse_Monthly_Income_Omset__c</errorDisplayField>
+    <errorMessage>Monthly income must be greater than Rp. 1.000.000</errorMessage>
+</ValidationRule>

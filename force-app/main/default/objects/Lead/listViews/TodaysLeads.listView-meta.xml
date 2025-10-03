@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>TodaysLeads</fullName>
+    <columns>Lead_ID__c</columns>
+    <columns>FULL_NAME</columns>
+    <columns>Product_Type__c</columns>
+    <columns>NTF_Pengajuan__c</columns>
+    <columns>Activity_Formula__c</columns>
+    <columns>Referral_Name__c</columns>
+    <columns>Owner_Fullname__c</columns>
+    <columns>LEAD.CREATED_DATE</columns>
+    <columns>LEAD.STATUS</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>LEAD.CREATED_DATE</field>
+        <operation>equals</operation>
+        <value>TODAY</value>
+    </filters>
+    <label>Today&apos;s Leads</label>
+</ListView>

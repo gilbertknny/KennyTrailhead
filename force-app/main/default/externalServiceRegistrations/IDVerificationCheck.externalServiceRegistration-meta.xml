@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ExternalServiceRegistration xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label>IDVerificationCheck</label>
+    <namedCredentialReference>MasterDataNmCred</namedCredentialReference>
+    <operations>
+        <active>true</active>
+        <name>idx20verificationx20check</name>
+    </operations>
+    <registrationProviderType>Custom</registrationProviderType>
+    <schema>{
+  &quot;openapi&quot;: &quot;3.0.1&quot;,
+  &quot;info&quot;: {
+    &quot;title&quot;: &quot;IDVerificationCheck&quot;,
+    &quot;description&quot;: &quot;&quot;
+  },
+  &quot;paths&quot;: {
+    &quot;/krakend-gateway/sf/kyc-proxy/v1/id-verification&quot;: {
+      &quot;post&quot;: {
+        &quot;description&quot;: &quot;&quot;,
+        &quot;operationId&quot;: &quot;ID Verification Check&quot;,
+        &quot;requestBody&quot;: {
+          &quot;description&quot;: &quot;&quot;,
+          &quot;content&quot;: {
+            &quot;application/json&quot;: {
+              &quot;schema&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                  &quot;nik&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;address&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;occupation&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;gender&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;marital_status&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;birth_date&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;name&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;mother_name&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;birth_place&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;phone_number&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;selfie_image&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  },
+                  &quot;force_vendor_call&quot;: {
+                    &quot;type&quot;: &quot;boolean&quot;
+                  },
+                  &quot;vendor&quot;: {
+                    &quot;type&quot;: &quot;string&quot;
+                  }
+                }
+              }
+            }
+          },
+          &quot;required&quot;: true
+        },
+        &quot;responses&quot;: {
+          &quot;2XX&quot;: {
+            &quot;description&quot;: &quot;&quot;,
+            &quot;content&quot;: {
+              &quot;application/json&quot;: {
+                &quot;schema&quot;: {
+                  &quot;type&quot;: &quot;object&quot;,
+                  &quot;properties&quot;: {
+                    &quot;process_id&quot;: {
+                      &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;code&quot;: {
+                      &quot;type&quot;: &quot;integer&quot;,
+                      &quot;format&quot;: &quot;int64&quot;
+                    },
+                    &quot;data&quot;: {
+                      &quot;type&quot;: &quot;object&quot;,
+                      &quot;properties&quot;: {
+                        &quot;valid&quot;: {
+                          &quot;type&quot;: &quot;boolean&quot;
+                        },
+                        &quot;score_threshold&quot;: {
+                          &quot;type&quot;: &quot;number&quot;,
+                          &quot;format&quot;: &quot;double&quot;
+                        },
+                        &quot;score&quot;: {
+                          &quot;type&quot;: &quot;string&quot;
+                        },
+                        &quot;vendor&quot;: {
+                          &quot;type&quot;: &quot;string&quot;
+                        },
+                        &quot;vendor_issuer&quot;: {
+                          &quot;type&quot;: &quot;string&quot;
+                        },
+                        &quot;status&quot;: {
+                          &quot;type&quot;: &quot;string&quot;
+                        },
+                        &quot;details&quot;: {
+                          &quot;type&quot;: &quot;object&quot;,
+                          &quot;properties&quot;: {
+                            &quot;birth_place_threshold&quot;: {
+                              &quot;type&quot;: &quot;number&quot;,
+                              &quot;format&quot;: &quot;double&quot;
+                            },
+                            &quot;address&quot;: {
+                              &quot;type&quot;: &quot;boolean&quot;
+                            },
+                            &quot;occupation&quot;: {
+                              &quot;type&quot;: &quot;boolean&quot;
+                            },
+                            &quot;gender&quot;: {
+                              &quot;type&quot;: &quot;boolean&quot;
+                            },
+                            &quot;name_threshold&quot;: {
+                              &quot;type&quot;: &quot;number&quot;,
+                              &quot;format&quot;: &quot;double&quot;
+                            },
+                            &quot;birth_date&quot;: {
+                              &quot;type&quot;: &quot;boolean&quot;
+                            },
+                            &quot;mother_name&quot;: {
+                              &quot;type&quot;: &quot;boolean&quot;
+                            },
+                            &quot;birth_place&quot;: {
+                              &quot;type&quot;: &quot;boolean&quot;
+                            },
+                            &quot;mother_name_threshold&quot;: {
+                              &quot;type&quot;: &quot;number&quot;,
+                              &quot;format&quot;: &quot;double&quot;
+                            },
+                            &quot;address_threshold&quot;: {
+                              &quot;type&quot;: &quot;number&quot;,
+                              &quot;format&quot;: &quot;double&quot;
+                            },
+                            &quot;nik&quot;: {
+                              &quot;type&quot;: &quot;boolean&quot;
+                            },
+                            &quot;marital_status&quot;: {
+                              &quot;type&quot;: &quot;boolean&quot;
+                            },
+                            &quot;name&quot;: {
+                              &quot;type&quot;: &quot;boolean&quot;
+                            },
+                            &quot;selfie_comparasion_percentage&quot;: {
+                              &quot;type&quot;: &quot;number&quot;,
+                              &quot;format&quot;: &quot;double&quot;
+                            }
+                          }
+                        }
+                      }
+                    },
+                    &quot;message&quot;: {
+                      &quot;type&quot;: &quot;string&quot;
+                    }
+                  }
+                }
+              }
+            }
+          },
+          &quot;4XX&quot;: {
+            &quot;description&quot;: &quot;&quot;,
+            &quot;content&quot;: {
+              &quot;application/json&quot;: {
+                &quot;schema&quot;: {
+                  &quot;type&quot;: &quot;object&quot;,
+                  &quot;properties&quot;: {
+                    &quot;code&quot;: {
+                      &quot;type&quot;: &quot;integer&quot;,
+                      &quot;format&quot;: &quot;int64&quot;
+                    },
+                    &quot;details&quot;: {
+                      &quot;type&quot;: &quot;array&quot;,
+                      &quot;items&quot;: {
+                        &quot;type&quot;: &quot;object&quot;,
+                        &quot;properties&quot;: {
+                          &quot;code&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;@type&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;sub_code&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          },
+                          &quot;info&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                          }
+                        }
+                      }
+                    },
+                    &quot;message&quot;: {
+                      &quot;type&quot;: &quot;string&quot;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}</schema>
+    <schemaType>OpenApi3</schemaType>
+    <serviceBinding>{&quot;host&quot;:&quot;&quot;,&quot;basePath&quot;:&quot;/&quot;,&quot;allowedSchemes&quot;:[],&quot;requestMediaTypes&quot;:[],&quot;responseMediaTypes&quot;:[],&quot;compatibleMediaTypes&quot;:{},&quot;extensions&quot;:{}}</serviceBinding>
+    <status>Complete</status>
+    <systemVersion>5</systemVersion>
+</ExternalServiceRegistration>

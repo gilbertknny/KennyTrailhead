@@ -1,0 +1,5 @@
+<aura:component>
+    <aura:attribute name="recordTypeId" type="String"/>
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}"/>
+    <lightning:flow aura:id="flowData"/>
+</aura:component>

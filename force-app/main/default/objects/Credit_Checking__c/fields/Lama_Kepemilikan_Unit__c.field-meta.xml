@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Lama_Kepemilikan_Unit__c</fullName>
+    <label>Lama Kepemilikan Unit</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>&lt;= 1 Tahun</fullName>
+                <default>false</default>
+                <label>&lt;= 1 Tahun</label>
+            </value>
+            <value>
+                <fullName>&gt; 1 Tahun - 2 Tahun</fullName>
+                <default>false</default>
+                <label>&gt; 1 Tahun - 2 Tahun</label>
+            </value>
+            <value>
+                <fullName>&gt; 2 Tahun - 5 Tahun</fullName>
+                <default>false</default>
+                <label>&gt; 2 Tahun - 5 Tahun</label>
+            </value>
+            <value>
+                <fullName>&gt; 5 Tahun</fullName>
+                <default>false</default>
+                <label>&gt; 5 Tahun</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

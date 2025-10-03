@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>KK_Number_Must_16_Digits</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+NOT(ISBLANK(nomor_kartu_keluarga__c)),
+NOT(REGEX(nomor_kartu_keluarga__c, &quot;^[0-9]{16}$&quot;))
+)</errorConditionFormula>
+    <errorDisplayField>nomor_kartu_keluarga__c</errorDisplayField>
+    <errorMessage>Please input 16 digit number only.</errorMessage>
+</ValidationRule>

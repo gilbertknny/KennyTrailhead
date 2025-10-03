@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>CAA_Final_Approver__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF( AND(
+NOT(ISBLANK(Approval_Result__c)),
+NOT(ISBLANK( NST_Pricing_Shadow__r.Approval_Result__c ))
+),
+
+IF(
+AND( BEGINS(Approval_Result__c,&apos;Approve&apos;) , BEGINS(NST_Pricing_Shadow__r.Approval_Result__c,&apos;Approve&apos;))
+,&apos;Approve&apos;,&apos;Reject&apos;
+)
+
+,&apos;Waiting For Approval&apos;)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>CAA Final Approver</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

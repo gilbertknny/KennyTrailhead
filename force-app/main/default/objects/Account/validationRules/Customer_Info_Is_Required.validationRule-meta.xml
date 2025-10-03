@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Customer_Info_Is_Required</fullName>
+    <active>false</active>
+    <errorConditionFormula>IF( $User.Is_Debug_User__c = TRUE,FALSE,AND( ISPICKVAL(  Lead_Progress__c  , &quot;Loan Informations&quot;),  Primary_Contact__r.Is_Edited__c = FALSE))</errorConditionFormula>
+    <errorMessage>Please complete customer information</errorMessage>
+</ValidationRule>

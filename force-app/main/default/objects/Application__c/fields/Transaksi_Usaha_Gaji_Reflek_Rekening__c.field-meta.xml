@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Transaksi_Usaha_Gaji_Reflek_Rekening__c</fullName>
+    <label>Transaksi Usaha/ Gaji Reflek Rekening</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>100% reflect rekening</fullName>
+                <default>false</default>
+                <label>100% reflect rekening</label>
+            </value>
+            <value>
+                <fullName>&gt;75% reflect rekening</fullName>
+                <default>false</default>
+                <label>&gt;75% reflect rekening</label>
+            </value>
+            <value>
+                <fullName>50% reflect rekening &amp; 50% cash basis</fullName>
+                <default>false</default>
+                <label>50% reflect rekening &amp; 50% cash basis</label>
+            </value>
+            <value>
+                <fullName>&lt;50% reflect rekening 5. Full cash basis</fullName>
+                <default>false</default>
+                <label>&lt;50% reflect rekening 5. Full cash basis</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

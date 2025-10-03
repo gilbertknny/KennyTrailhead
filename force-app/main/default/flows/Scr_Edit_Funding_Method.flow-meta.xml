@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <apiVersion>63.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <decisions>
+        <name>Check_Selected_Funding</name>
+        <label>Check Selected Funding</label>
+        <locationX>314</locationX>
+        <locationY>458</locationY>
+        <defaultConnector>
+            <targetReference>Update_Operation</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Full_Funding</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>editor_Funding_Method</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Full Funding</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Delete_All_Funding</targetReference>
+            </connector>
+            <label>Full Funding</label>
+        </rules>
+    </decisions>
+    <description>7 July 2025
+1. Remove view TDP</description>
+    <dynamicChoiceSets>
+        <name>Picklist_FundingMethod</name>
+        <dataType>Picklist</dataType>
+        <displayField xsi:nil="true"/>
+        <object xsi:nil="true"/>
+        <picklistField>funding_method__c</picklistField>
+        <picklistObject>Operation__c</picklistObject>
+    </dynamicChoiceSets>
+    <environments>Default</environments>
+    <formulas>
+        <name>formatTDP</name>
+        <dataType>String</dataType>
+        <expression>&quot;Rp. &quot; &amp; IF(
+    LEN(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c})) &gt; 15,
+    LEFT(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c}), LEN(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c})) - 15) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c}), LEN(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c})) - 14, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c}), LEN(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c})) - 11, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c}), LEN(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c})) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c}), LEN(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c}), 3),
+    IF(
+        LEN(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c})) &gt; 12,
+        LEFT(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c}), LEN(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c})) - 12) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c}), LEN(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c})) - 11, 3) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c}), LEN(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c})) - 8, 3) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c}), LEN(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+        RIGHT(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c}), 3),
+        IF(
+            LEN(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c})) &gt; 9,
+            LEFT(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c}), LEN(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c})) - 9) &amp; &quot;.&quot; &amp;
+            MID(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c}), LEN(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c})) - 8, 3) &amp; &quot;.&quot; &amp;
+            MID(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c}), LEN(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+            RIGHT(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c}), 3),
+            IF(
+                LEN(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c})) &gt; 6,
+                LEFT(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c}), LEN(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c})) - 6) &amp; &quot;.&quot; &amp;
+                MID(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c}), LEN(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+                RIGHT(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c}), 3),
+                IF(
+                    LEN(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c})) &gt; 3,
+                    LEFT(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c}), LEN(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c})) - 3) &amp; &quot;.&quot; &amp;
+                    RIGHT(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c}), 3),
+                    TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c})
+                )
+            )
+        )
+    )
+)</expression>
+    </formulas>
+    <formulas>
+        <name>func_total_additional_beneficiary_amount</name>
+        <dataType>Currency</dataType>
+        <expression>IF({!editor_Funding_Method} == &quot;Split Funding&quot;, {!Get_Operation.total_additional_beneficiary_amount__c}, 0)</expression>
+        <scale>2</scale>
+    </formulas>
+    <interviewLabel>[Scr] Edit Funding Method {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>[Scr] Edit Funding Method</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>Flow</processType>
+    <recordDeletes>
+        <name>Delete_All_Funding</name>
+        <label>Delete All Funding</label>
+        <locationX>50</locationX>
+        <locationY>566</locationY>
+        <connector>
+            <targetReference>Update_Operation</targetReference>
+        </connector>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Update_Operation</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Operation__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <object>Operation_Split_Funding__c</object>
+    </recordDeletes>
+    <recordLookups>
+        <name>Get_Loan_Calculation_Result</name>
+        <label>Get Loan Calculation Result</label>
+        <locationX>314</locationX>
+        <locationY>242</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>scr_Funding_Method</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>related_id__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Operation.Application__c</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>API_Loan_Calculator_Non_KPR__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Operation</name>
+        <label>Get Operation</label>
+        <locationX>314</locationX>
+        <locationY>134</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Get_Loan_Calculation_Result</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Operation__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordUpdates>
+        <name>Update_Operation</name>
+        <label>Update Operation</label>
+        <locationX>314</locationX>
+        <locationY>806</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>funding_method_selected__c</field>
+            <value>
+                <elementReference>editor_Funding_Method</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>funding_note__c</field>
+            <value>
+                <elementReference>editor_Catatan</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>total_additional_beneficiary_amount__c</field>
+            <value>
+                <elementReference>func_total_additional_beneficiary_amount</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Operation__c</object>
+    </recordUpdates>
+    <screens>
+        <name>scr_Funding_Method</name>
+        <label>Funding Method</label>
+        <locationX>314</locationX>
+        <locationY>350</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>true</allowPause>
+        <connector>
+            <targetReference>Check_Selected_Funding</targetReference>
+        </connector>
+        <fields>
+            <name>editor_Funding_Method</name>
+            <choiceReferences>Picklist_FundingMethod</choiceReferences>
+            <dataType>String</dataType>
+            <defaultValue>
+                <elementReference>Get_Operation.funding_method_selected__c</elementReference>
+            </defaultValue>
+            <fieldText>Funding Method</fieldText>
+            <fieldType>DropdownBox</fieldType>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>true</isRequired>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <fields>
+            <name>editor_Catatan</name>
+            <dataType>String</dataType>
+            <defaultValue>
+                <elementReference>Get_Operation.funding_note__c</elementReference>
+            </defaultValue>
+            <fieldText>Catatan</fieldText>
+            <fieldType>InputField</fieldType>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>true</isRequired>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <nextOrFinishButtonLabel>Save</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <start>
+        <locationX>188</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Get_Operation</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <variables>
+        <name>recordId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>NTF_Pengajuan__c</fullName>
+    <description>formula field to set Exposure</description>
+    <formula>IF( OR( ISNULL(Exposure__c) , Exposure__c=0) , Loan_Information__r.NTF_Pengajuan__c, Exposure__c)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>NTF_Pengajuan</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Currency</type>
+</CustomField>

@@ -1,0 +1,486 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <apiVersion>63.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <name>Assign_Date</name>
+        <label>Assign Date</label>
+        <locationX>182</locationX>
+        <locationY>566</locationY>
+        <assignmentItems>
+            <assignToReference>effective_date</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>effective_date_formula</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>golive_date</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>golive_date_formula</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Get_Accrued_Interest</targetReference>
+        </connector>
+    </assignments>
+    <decisions>
+        <name>Screen_Check</name>
+        <label>Screen Check</label>
+        <locationX>182</locationX>
+        <locationY>998</locationY>
+        <defaultConnector>
+            <targetReference>Copy_2_of_Set_Accrued_Value</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Is_Accrued_Value_Changed</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Operation.Is_Accrued_Value_Changed__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Set_Accrued_Value</targetReference>
+            </connector>
+            <label>Is Accrued Value Changed</label>
+        </rules>
+    </decisions>
+    <dynamicChoiceSets>
+        <name>Picklist_FundingMethod</name>
+        <dataType>Picklist</dataType>
+        <displayField xsi:nil="true"/>
+        <object xsi:nil="true"/>
+        <picklistField>funding_method__c</picklistField>
+        <picklistObject>Operation__c</picklistObject>
+    </dynamicChoiceSets>
+    <environments>Default</environments>
+    <formulas>
+        <name>effective_date_formula</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!editor_Effective_Date})</expression>
+    </formulas>
+    <formulas>
+        <name>formatTDP</name>
+        <dataType>String</dataType>
+        <expression>&quot;Rp. &quot; &amp; IF(
+    LEN(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c})) &gt; 15,
+    LEFT(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c}), LEN(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c})) - 15) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c}), LEN(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c})) - 14, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c}), LEN(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c})) - 11, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c}), LEN(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c})) - 8, 3) &amp; &quot;.&quot; &amp;
+    MID(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c}), LEN(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+    RIGHT(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c}), 3),
+    IF(
+        LEN(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c})) &gt; 12,
+        LEFT(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c}), LEN(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c})) - 12) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c}), LEN(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c})) - 11, 3) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c}), LEN(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c})) - 8, 3) &amp; &quot;.&quot; &amp;
+        MID(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c}), LEN(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+        RIGHT(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c}), 3),
+        IF(
+            LEN(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c})) &gt; 9,
+            LEFT(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c}), LEN(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c})) - 9) &amp; &quot;.&quot; &amp;
+            MID(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c}), LEN(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c})) - 8, 3) &amp; &quot;.&quot; &amp;
+            MID(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c}), LEN(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+            RIGHT(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c}), 3),
+            IF(
+                LEN(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c})) &gt; 6,
+                LEFT(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c}), LEN(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c})) - 6) &amp; &quot;.&quot; &amp;
+                MID(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c}), LEN(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c})) - 5, 3) &amp; &quot;.&quot; &amp;
+                RIGHT(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c}), 3),
+                IF(
+                    LEN(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c})) &gt; 3,
+                    LEFT(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c}), LEN(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c})) - 3) &amp; &quot;.&quot; &amp;
+                    RIGHT(TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c}), 3),
+                    TEXT({!Get_Loan_Calculation_Result.total_down_payment_amount__c})
+                )
+            )
+        )
+    )
+)</expression>
+    </formulas>
+    <formulas>
+        <name>func_AccruedInterest_round</name>
+        <dataType>Number</dataType>
+        <expression>IF(
+  NOT(ISBLANK({!Get_Operation.Accrued_Interest__c})),
+  ROUND({!Get_Operation.Accrued_Interest__c}, 0),
+  null
+)</expression>
+        <scale>0</scale>
+    </formulas>
+    <formulas>
+        <name>funcS_IsAccrueValueChange_value</name>
+        <dataType>Boolean</dataType>
+        <expression>NOT {!Get_Operation.Is_Accrued_Value_Changed__c}</expression>
+    </formulas>
+    <formulas>
+        <name>golive_date_formula</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!editor_Golive_Date})</expression>
+    </formulas>
+    <interviewLabel>[Scr] Edit Additional Info {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>[Scr] Edit Additional Info</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>Flow</processType>
+    <recordLookups>
+        <name>Get_Agreement_Id_Creation</name>
+        <label>Get Agreement Id Creation</label>
+        <locationX>182</locationX>
+        <locationY>350</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>scr_Additional_Info</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Application__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Operation.Application__c</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>agreement_id_creation__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Loan_Calculation_Result</name>
+        <label>Get Loan Calculation Result</label>
+        <locationX>182</locationX>
+        <locationY>242</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Get_Agreement_Id_Creation</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>related_id__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Operation.Application__c</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>API_Loan_Calculator_Non_KPR__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Operation</name>
+        <label>Get Operation</label>
+        <locationX>182</locationX>
+        <locationY>134</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Get_Loan_Calculation_Result</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Operation__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordUpdates>
+        <name>Copy_2_of_Set_Accrued_Value</name>
+        <label>Set Accrued Value</label>
+        <locationX>314</locationX>
+        <locationY>1106</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Is_Accrued_Value_Changed__c</field>
+            <value>
+                <elementReference>funcS_IsAccrueValueChange_value</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Operation__c</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Set_Accrued_Value</name>
+        <label>Set Accrued Value</label>
+        <locationX>50</locationX>
+        <locationY>1106</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Is_Accrued_Value_Changed__c</field>
+            <value>
+                <elementReference>funcS_IsAccrueValueChange_value</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Operation__c</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Agreement_Id_Creation</name>
+        <label>Update Agreement Id Creation</label>
+        <locationX>182</locationX>
+        <locationY>890</locationY>
+        <connector>
+            <targetReference>Screen_Check</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Application__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Agreement_Id_Creation.Application__c</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>effective_date__c</field>
+            <value>
+                <elementReference>effective_date</elementReference>
+            </value>
+        </inputAssignments>
+        <object>agreement_id_creation__c</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Operation</name>
+        <label>Update Operation</label>
+        <locationX>182</locationX>
+        <locationY>782</locationY>
+        <connector>
+            <targetReference>Update_Agreement_Id_Creation</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Accrued_Interest__c</field>
+            <value>
+                <elementReference>Get_Accrued_Interest.accrued_interest</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Golive_Date__c</field>
+            <value>
+                <elementReference>editor_Golive_Date</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>accrued_type__c</field>
+            <value>
+                <elementReference>Get_Accrued_Interest.accrued_type</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>effective_date__c</field>
+            <value>
+                <elementReference>editor_Effective_Date</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Operation__c</object>
+    </recordUpdates>
+    <screens>
+        <name>scr_Additional_Info</name>
+        <label>Additional Info</label>
+        <locationX>182</locationX>
+        <locationY>458</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>true</allowPause>
+        <connector>
+            <targetReference>Assign_Date</targetReference>
+        </connector>
+        <fields>
+            <name>editor_Agreement_Date</name>
+            <dataType>Date</dataType>
+            <defaultValue>
+                <elementReference>Get_Operation.agreement_date__c</elementReference>
+            </defaultValue>
+            <fieldText>Agreement Date</fieldText>
+            <fieldType>InputField</fieldType>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isReadOnly>
+                <booleanValue>true</booleanValue>
+            </isReadOnly>
+            <isRequired>false</isRequired>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <fields>
+            <name>editor_Golive_Date</name>
+            <dataType>Date</dataType>
+            <defaultValue>
+                <elementReference>$Flow.CurrentDate</elementReference>
+            </defaultValue>
+            <fieldText>Golive Date</fieldText>
+            <fieldType>InputField</fieldType>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isReadOnly>
+                <booleanValue>true</booleanValue>
+            </isReadOnly>
+            <isRequired>false</isRequired>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <fields>
+            <name>editor_Effective_Date</name>
+            <dataType>Date</dataType>
+            <defaultValue>
+                <elementReference>Get_Operation.effective_date__c</elementReference>
+            </defaultValue>
+            <fieldText>Effective Date</fieldText>
+            <fieldType>InputField</fieldType>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>true</isRequired>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <fields>
+            <name>editor_Accrued_Interest</name>
+            <dataType>Currency</dataType>
+            <defaultValue>
+                <elementReference>func_AccruedInterest_round</elementReference>
+            </defaultValue>
+            <fieldText>Accrued Interest</fieldText>
+            <fieldType>InputField</fieldType>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isReadOnly>
+                <booleanValue>true</booleanValue>
+            </isReadOnly>
+            <isRequired>false</isRequired>
+            <scale>0</scale>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <nextOrFinishButtonLabel>Save</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <start>
+        <locationX>56</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Get_Operation</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <subflows>
+        <name>Get_Accrued_Interest</name>
+        <label>Get Accrued Interest</label>
+        <locationX>182</locationX>
+        <locationY>674</locationY>
+        <connector>
+            <targetReference>Update_Operation</targetReference>
+        </connector>
+        <flowName>API_Accrued</flowName>
+        <inputAssignments>
+            <name>InputEffectiveDate</name>
+            <value>
+                <elementReference>effective_date</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>InputGoliveDate</name>
+            <value>
+                <elementReference>golive_date</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>recordId</name>
+            <value>
+                <elementReference>Get_Operation.Application__c</elementReference>
+            </value>
+        </inputAssignments>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </subflows>
+    <variables>
+        <name>effective_date</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>golive_date</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>recordId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>var_AgreementIdCreation</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>agreement_id_creation__c</objectType>
+    </variables>
+</Flow>

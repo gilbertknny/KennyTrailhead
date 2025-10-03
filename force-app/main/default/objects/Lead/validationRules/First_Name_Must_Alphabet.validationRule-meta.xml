@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>First_Name_Must_Alphabet</fullName>
+    <active>true</active>
+    <errorConditionFormula>OR(NOT(REGEX(  FirstName, &quot;^[a-zA-Z ]*$&quot;)))</errorConditionFormula>
+    <errorDisplayField>FirstName</errorDisplayField>
+    <errorMessage>Number and special character are not allowed, for example / \ :*?&quot;&lt;&gt;|</errorMessage>
+</ValidationRule>

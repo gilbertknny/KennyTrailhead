@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Domicile_Longitude_Is_Required</fullName>
+    <active>false</active>
+    <errorConditionFormula>IF( $User.Is_Debug_User__c = TRUE ,FALSE,  AND( Is_Domicile_Same_as_Legal_Address__c = FALSE, OR(ISBLANK( Domicile_Latitude_Longitude__Longitude__s ),  Domicile_Latitude_Longitude__Longitude__s = 0)))</errorConditionFormula>
+    <errorDisplayField>Domicile_Latitude_Longitude__Longitude__s</errorDisplayField>
+    <errorMessage>Complete this field</errorMessage>
+</ValidationRule>

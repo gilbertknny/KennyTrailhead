@@ -1,0 +1,30 @@
+<template>
+    <lightning-card title="Custom File Upload LWC" icon-name="utility:upload">
+        <div class="slds-p-around_medium">
+            <!-- File input and Upload button -->
+            <lightning-input type="file" label="Choose a file" onchange={handleFileChange}></lightning-input>
+            <lightning-button label="Upload File" onclick={handleUploadFile} class="slds-m-top_medium"></lightning-button>
+
+            <!-- Display the file name under the Upload File button -->
+            <template if:true={file}>
+                <div class="slds-m-top_small slds-p-left_medium">
+                    <p><strong>File selected:</strong> {file.name}</p>
+                </div>
+            </template>
+
+            <!-- Display the success message under the file name -->
+            <template if:true={hasUploadedFiles}>
+                <div class="slds-m-top_small slds-p-left_medium">
+                    <p><strong>Files uploaded successfully!</strong></p>
+                    <ul>
+                        <template for:each={uploadedFiles} for:item="file">
+                            <li key={file.fileName}>
+                                {file.fileName} - <a href={file.documentUrl} target="_blank">View File</a>
+                            </li>
+                        </template>
+                    </ul>
+                </div>
+            </template>
+        </div>
+    </lightning-card>
+</template>
