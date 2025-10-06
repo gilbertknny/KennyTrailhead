@@ -1,3 +1,10 @@
+/**
+ * @description       : 
+ * @author            : ChangeMeIn@UserSettingsUnder.SFDoc
+ * @group             : 
+ * @last modified on  : 10-06-2025
+ * @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
+**/
 public with sharing class MaterialController {
     
     @AuraEnabled(cacheable=true)
@@ -8,16 +15,16 @@ public with sharing class MaterialController {
             
             // Get all materials with Module__c populated
             List<Material__c> materials = [
-                SELECT Id, Module__c
+                SELECT Id, Modules__c, Modules__r.Name
                 FROM Material__c 
-                WHERE Module__c != null
+                WHERE Modules__c != null
             ];
             
             System.debug('Total materials found: ' + materials.size());
             
             // Count materials per module
             for (Material__c material : materials) {
-                String moduleName = material.Module__c;
+                String moduleName = material.Modules__r.Name;
                 System.debug('Processing material with module: ' + moduleName);
                 
                 if (String.isNotBlank(moduleName)) {
@@ -57,9 +64,9 @@ public with sharing class MaterialController {
     public static List<Material__c> getMaterialsByModule(String moduleName) {
         try {
             return [
-                SELECT Id, Name, Module__c, Description__c, Presenter__c, Date__c, CreatedDate
+                SELECT Id, Name, Modules__c, Modules__r.Name, Description__c, Presenter__c, Date__c, CreatedDate
                 FROM Material__c 
-                WHERE Module__c = :moduleName 
+                WHERE Modules__r.Name = :moduleName 
                 ORDER BY Date__c DESC NULLS LAST, CreatedDate DESC
             ];
         } catch (Exception e) {
@@ -74,7 +81,7 @@ public with sharing class MaterialController {
             
             // Query Material with null check
             List<Material__c> materials = [
-                SELECT Id, Name, Module__c, Description__c, Presenter__c, Date__c
+                SELECT Id, Name, Modules__c, Description__c, Presenter__c, Date__c
                 FROM Material__c 
                 WHERE Id = :recordId 
                 LIMIT 1
