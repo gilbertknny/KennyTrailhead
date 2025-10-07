@@ -103,11 +103,11 @@ public with sharing class MaterialController {
                 wrappedMaterials.add(wrapper);
             }
 
-            return wrappedMaterials;
-            
         } catch (Exception e) {
             throw new AuraHandledException('Error retrieving recent materials: ' + e.getMessage());
         }
+
+         return wrappedMaterials;
     }
 
 
