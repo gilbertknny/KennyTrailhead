@@ -1,0 +1,71 @@
+<!-- lwcMaterialDetail.html -->
+<template>
+    <lightning-card title="Material Detail">
+        <div class="slds-p-around_medium">
+            <template if:true={material}>
+                <div class="slds-grid slds-wrap">
+                    <div class="slds-col slds-size_1-of-2">
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label">Name</label>
+                            <div class="slds-form-element__control">{material.Name}</div>
+                        </div>
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label">Module</label>
+                            <div class="slds-form-element__control">{material.Module__c}</div>
+                        </div>
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label">Description</label>
+                            <div class="slds-form-element__control description-content">{material.Description__c}</div>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-2">
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label">Presenter</label>
+                            <div class="slds-form-element__control">
+                                <template if:true={presenterName}>
+                                    {presenterName}
+                                    <template if:true={presenterTitle}>
+                                        <div class="slds-text-color_weak slds-text-body_small">
+                                            {presenterTitle}
+                                        </div>
+                                    </template>
+                                    <template if:true={presenterEmail}>
+                                        <div class="slds-text-color_weak slds-text-body_small">
+                                            <lightning-formatted-email value={presenterEmail}></lightning-formatted-email>
+                                        </div>
+                                    </template>
+                                </template>
+                                <template if:false={presenterName}>
+                                    <span class="slds-text-color_weak">No presenter assigned</span>
+                                </template>
+                            </div>
+                        </div>
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label">Date</label>
+                            <div class="slds-form-element__control">
+                                <lightning-formatted-date-time value={material.Date__c}></lightning-formatted-date-time>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 class="slds-text-heading_small slds-m-top_medium">Attached Files</h3>
+                <template if:true={files}>
+                    <lightning-datatable
+                        key-field="Id"
+                        data={files}
+                        columns={fileColumns}
+                        hide-checkbox-column
+                        onrowaction={handleFileAction}>
+                    </lightning-datatable>
+                </template>
+                <template if:true={hasNoFiles}>
+                    <p class="slds-text-color_weak">No files attached to this material</p>
+                </template>
+            </template>
+            <template if:true={error}>
+                <div class="slds-text-color_error">{error}</div>
+            </template>
+        </div>
+    </lightning-card>
+</template>

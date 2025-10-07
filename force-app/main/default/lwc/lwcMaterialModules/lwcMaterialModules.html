@@ -1,0 +1,32 @@
+<!-- lwcMaterialModules.html -->
+<template>
+    <lightning-card title="Material Modules">
+        <div class="slds-p-around_medium">
+            <template if:true={modules.data}>
+                <div class="slds-grid slds-wrap">
+                    <template for:each={modules.data} for:item="module">
+                        <div key={module.moduleName} class="slds-col slds-size_1-of-3 slds-p-around_small">
+                            <div class="slds-card module-card" onclick={handleModuleClick} data-name={module.moduleName}>
+                                <div class="slds-card__header slds-grid">
+                                    <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                                        <div class="slds-media__body">
+                                            <h2 class="slds-card__header-title">
+                                                <span class="slds-text-heading_small">{module.moduleName}</span>
+                                            </h2>
+                                        </div>
+                                    </header>
+                                </div>
+                                <div class="slds-card__body slds-card__body_inner">
+                                    <p>{module.materialCount} material(s) available</p>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </template>
+            <template if:true={modules.error}>
+                <div class="slds-text-color_error">{modules.error}</div>
+            </template>
+        </div>
+    </lightning-card>
+</template>

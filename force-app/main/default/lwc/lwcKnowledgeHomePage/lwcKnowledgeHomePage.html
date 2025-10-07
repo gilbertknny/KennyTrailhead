@@ -1,0 +1,203 @@
+<!--
+    LWC Name    : lwcKnowledgeHomePage.html
+    Created Date       : 06 October 2025
+    @description       : This is class ..
+    @author            : Rakeyan Nuramria
+    Modification Log :
+    Ver   Date         Author                            Modification
+    1.0   06/10/2025   Rakeyan Nuramria                  Initial Version
+
+-->
+
+<template>
+    <!-- HERO -->
+    <section class="hero slds-m-around_small" data-hero>
+        <div class="hero__image" aria-hidden="true"></div>
+        <template if:true={isHeroLoading}>
+            <div class="hero__skeleton shimmer" aria-hidden="true"></div>
+        </template>
+        <div class="hero__overlay" aria-hidden="true"></div>
+
+        <div class="slds-p-around_large hero__content">
+            <h1 class="hero__title">HOW CAN WE<br />HELP YOU TODAY?</h1>
+            <p class="hero__subtitle">With various kinds of knowledge</p>
+        </div>
+    </section>
+
+    <!-- Light panel: Modules -->
+    <section class="panel panel--light">
+        <div class="row-header">
+            <h2 class="fancy-title">
+                <span class="eyebrow">Latest</span>
+                Modules
+                <span class="glint" aria-hidden="true"></span>
+            </h2>
+            <a class="view-all" href={modulesHref} title="View all modules">View all</a>
+        </div>
+
+        <!-- Loading -->
+        <template if:true={isLoadingModules}>
+            <div class="cards-row">
+                <template for:each={skeleton5} for:item="s">
+                    <div key={s} class="card skeleton" aria-hidden="true">
+                        <div class="sk-image shimmer"></div>
+                        <div class="sk-text">
+                            <div class="sk-line shimmer w-70"></div>
+                            <div class="sk-line shimmer w-40"></div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </template>
+
+        <!-- Slider -->
+        <template if:false={isLoadingModules}>
+            <div class="carousel">
+                <!-- Prev -->
+                <button class="nav-btn left" type="button" aria-label="Previous modules" onclick={goPrevModules}
+                    disabled={isModulesPrevDisabled}>
+                    <svg aria-hidden="true" viewBox="0 0 24 24" focusable="false">
+                        <path d="M15 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg>
+                    <span class="slds-assistive-text">Previous</span>
+                </button>
+
+                <div class="viewport">
+                    <div class="track slide-fade" data-grid="modules" role="region" aria-roledescription="carousel"
+                        aria-label="Modules">
+                        <template for:each={modulesPages} for:item="page" for:index="pi">
+                            <div key={page.key} class="page">
+                                <template for:each={page.items} for:item="mod">
+                                    <button key={mod.id} class="card" type="button" data-id={mod.id}
+                                        aria-label={mod.title} title={mod.title}>
+                                        <img class="card__img" src={mod.imgSrc} alt="" loading="lazy"
+                                            onerror={handleImgError} />
+                                        <span class="card__gradient" aria-hidden="true"></span>
+                                        <span class="card__text">
+                                            <span class="card__title">{mod.title}</span>
+                                            <template if:true={mod.subtitle}>
+                                                <span class="card__sp" aria-hidden="true">&nbsp;</span>
+                                                <span class="card__subtitle">{mod.subtitle}</span>
+                                            </template>
+                                        </span>
+                                    </button>
+                                </template>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+
+                <!-- Next -->
+                <button class="nav-btn right" type="button" aria-label="Next modules" onclick={goNextModules}
+                    disabled={isModulesNextDisabled}>
+                    <svg aria-hidden="true" viewBox="0 0 24 24" focusable="false">
+                        <path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round"></path>
+                    </svg>
+                    <span class="slds-assistive-text">Next</span>
+                </button>
+            </div>
+
+            <div class="dots" role="tablist" aria-label="Modules pages">
+                <template for:each={modulesDots} for:item="d">
+                    <button key={d.key} class={d.className} type="button" title={d.title} data-index={d.index}
+                        onclick={goToModulesPage} aria-current={d.ariaCurrent}>
+                    </button>
+                </template>
+            </div>
+        </template>
+    </section>
+
+    <!-- Dark panel: Materials -->
+    <section class="panel panel--dark">
+        <div class="row-header">
+            <h2 class="fancy-title">
+                <span class="eyebrow">Latest</span>
+                Materials
+                <span class="glint" aria-hidden="true"></span>
+            </h2>
+            <a class="view-all" href={materialsHref} title="View all materials">View all</a>
+        </div>
+
+        <!-- Loading -->
+        <template if:true={isLoadingMaterials}>
+            <div class="cards-row">
+                <template for:each={skeleton5} for:item="s">
+                    <div key={s} class="card skeleton" aria-hidden="true">
+                        <div class="sk-image shimmer"></div>
+                        <div class="sk-text">
+                            <div class="sk-line shimmer w-70"></div>
+                            <div class="sk-line shimmer w-40"></div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </template>
+
+        <!-- Slider -->
+        <template if:false={isLoadingMaterials}>
+            <div class="carousel">
+                <!-- Prev -->
+                <button class="nav-btn left" type="button" aria-label="Previous materials" onclick={goPrevMaterials}
+                    disabled={isMaterialsPrevDisabled}>
+                    <svg aria-hidden="true" viewBox="0 0 24 24" focusable="false">
+                        <path d="M15 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg>
+                    <span class="slds-assistive-text">Previous</span>
+                </button>
+
+                <div class="viewport">
+                    <div class="track slide-fade" data-grid="materials" role="region" aria-roledescription="carousel"
+                        aria-label="Materials">
+                        <template for:each={materialsPages} for:item="page">
+                            <div key={page.key} class="page">
+                                <template for:each={page.items} for:item="mat">
+                                    <button key={mat.id} class="card" type="button" data-id={mat.id}
+                                        aria-label={mat.title} title={mat.title}>
+                                        <img class="card__img" src={mat.imgSrc} alt="" loading="lazy"
+                                            onerror={handleImgError} />
+                                        <span class="card__gradient" aria-hidden="true"></span>
+
+                                        <!-- module pill (shown only when moduleName exists) -->
+                                        <template if:true={mat.moduleName}>
+                                            <span class="pill pill--module"
+                                                title={mat.moduleName}>{mat.moduleName}</span>
+                                        </template>
+
+                                        <span class="card__text">
+                                            <span class="card__title">{mat.title}</span>
+                                            <template if:true={mat.subtitle}>
+                                                <span class="card__sp" aria-hidden="true">&nbsp;</span>
+                                                <span class="card__subtitle">{mat.subtitle}</span>
+                                            </template>
+                                        </span>
+                                    </button>
+                                </template>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+
+                <!-- Next -->
+                <button class="nav-btn right" type="button" aria-label="Next materials" onclick={goNextMaterials}
+                    disabled={isMaterialsNextDisabled}>
+                    <svg aria-hidden="true" viewBox="0 0 24 24" focusable="false">
+                        <path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round"></path>
+                    </svg>
+                    <span class="slds-assistive-text">Next</span>
+                </button>
+            </div>
+
+            <div class="dots" role="tablist" aria-label="Materials pages">
+                <template for:each={materialsDots} for:item="d">
+                    <button key={d.key} class={d.className} type="button" title={d.title} data-index={d.index}
+                        onclick={goToMaterialsPage} aria-current={d.ariaCurrent}>
+                    </button>
+                </template>
+            </div>
+        </template>
+    </section>
+</template>

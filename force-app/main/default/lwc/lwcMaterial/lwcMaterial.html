@@ -1,0 +1,45 @@
+<!--
+  @description       : 
+  @author            : ChangeMeIn@UserSettingsUnder.SFDoc
+  @group             : 
+  @last modified on  : 08-27-2025
+  @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
+-->
+<template>
+    <!-- Page 1: Modules -->
+    <template if:true={pageIsModules}>
+        <lightning-card title="Modules">
+            <template for:each={modules} for:item="mod">
+                <div key={mod} class="slds-box slds-m-around_small" data-value={mod} onclick={handleModuleClick}>
+                    {mod}
+                </div>
+            </template>
+        </lightning-card>
+    </template>
+
+    <!-- Page 2: Materials -->
+    <template if:true={pageIsRecords}>
+        <lightning-card title="Materials in {selectedModule}">
+            <lightning-button label="Back" onclick={handleBack} class="slds-m-bottom_small"></lightning-button>
+            <template for:each={materials} for:item="mat">
+                <div key={mat.Id} class="slds-box slds-m-around_small" data-id={mat.Id} onclick={handleRecordClick}>
+                    <b>{mat.Name}</b><br/>
+                    Presenter: {mat.Presenter__c}<br/>
+                    Date: {mat.Date__c}
+                </div>
+            </template>
+        </lightning-card>
+    </template>
+
+    <!-- Page 3: Detail -->
+    <template if:true={pageIsDetail}>
+        <lightning-card title="Material Detail">
+            <lightning-button label="Back" onclick={handleBack} class="slds-m-bottom_small"></lightning-button>
+            <p><b>Title:</b> {selectedMaterial.Name}</p>
+            <p><b>Module:</b> {selectedMaterial.Module__c}</p>
+            <p><b>Description:</b> {selectedMaterial.Description__c}</p>
+            <p><b>Presenter:</b> {selectedMaterial.Presenter__c}</p>
+            <p><b>Date:</b> {selectedMaterial.Date__c}</p>
+        </lightning-card>
+    </template>
+</template>
