@@ -2,7 +2,7 @@
  * @description       : 
  * @author            : ChangeMeIn@UserSettingsUnder.SFDoc
  * @group             : 
- * @last modified on  : 09-29-2025
+ * @last modified on  : 10-07-2025
  * @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
 **/
 public class MaterialDetailWrapper {
@@ -11,7 +11,9 @@ public class MaterialDetailWrapper {
     @AuraEnabled public String presenterName { get; set; }
     @AuraEnabled public String presenterTitle { get; set; }
     @AuraEnabled public String presenterEmail { get; set; }
-    
+    @AuraEnabled public String moduleName { get; set; }
+    @AuraEnabled public Datetime createdDate { get; set; }
+
     public class FileWrapper {
         @AuraEnabled public Id Id { get; set; }
         @AuraEnabled public String Title { get; set; }

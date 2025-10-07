@@ -2,7 +2,7 @@
  * @description       : 
  * @author            : ChangeMeIn@UserSettingsUnder.SFDoc
  * @group             : 
- * @last modified on  : 10-06-2025
+ * @last modified on  : 10-07-2025
  * @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
 **/
 public with sharing class MaterialController {
@@ -59,6 +59,58 @@ public with sharing class MaterialController {
             throw new AuraHandledException('Error retrieving modules: ' + e.getMessage());
         }
     }
+
+    //Method ambil 5 record terbaru
+  @AuraEnabled(cacheable=true)
+    public static List<Module__c> getFiveLatestModules() {
+        List<Module__c> recentModules = new List<Module__c>();
+         try {
+             recentModules = [
+                 SELECT Id, Name, CreatedDate
+                 FROM Module__c
+                 ORDER BY CreatedDate DESC
+                LIMIT 5
+             ];
+         } catch (Exception e) {
+            throw new AuraHandledException('Error retrieving recent modules: ' + e.getMessage());
+         }
+        return recentModules;
+    }
+
+    //Method ambil 5 Material terbaru 
+     @AuraEnabled(cacheable=true)
+     public static List<MaterialDetailWrapper> getFiveLatestMaterials() {
+        try {
+            List<MaterialDetailWrapper> wrappedMaterials = new List<MaterialDetailWrapper>();
+
+            List<Material__c> materials = [
+                SELECT Id, Name, Description__c, CreatedDate, 
+                       Modules__r.Name, Presenter__r.Name, Presenter__r.Title, Presenter__r.Email
+                FROM Material__c
+                ORDER BY CreatedDate DESC
+                LIMIT 5
+            ];
+
+            for (Material__c m : materials) {
+                MaterialDetailWrapper wrapper = new MaterialDetailWrapper();
+                wrapper.material = m;
+                wrapper.moduleName = m.Modules__r != null ? m.Modules__r.Name : null;
+                wrapper.presenterName = m.Presenter__r != null ? m.Presenter__r.Name : null;
+                wrapper.presenterTitle = m.Presenter__r != null ? m.Presenter__r.Title : null;
+                wrapper.presenterEmail = m.Presenter__r != null ? m.Presenter__r.Email : null;
+                wrapper.createdDate = m.CreatedDate;
+                wrapper.files = new List<MaterialDetailWrapper.FileWrapper>();
+                wrappedMaterials.add(wrapper);
+            }
+
+            return wrappedMaterials;
+            
+        } catch (Exception e) {
+            throw new AuraHandledException('Error retrieving recent materials: ' + e.getMessage());
+        }
+    }
+
+
     
     @AuraEnabled(cacheable=true)
     public static List<MaterialWrapper> getMaterialsByModule(String moduleName) {
@@ -66,7 +118,7 @@ public with sharing class MaterialController {
             List<MaterialWrapper> wrappedMaterials = new List<MaterialWrapper>();
             
             for (Material__c material : [
-                SELECT Id, Name, Modules__c, , Modules__r.Name, Description__c, Presenter__c, 
+                SELECT Id, Name, Modules__c, Modules__r.Name, Description__c, Presenter__c, 
                        Presenter__r.Name, Date__c, CreatedDate
                 FROM Material__c 
                 WHERE Modules__r.Name = :moduleName 
@@ -83,6 +135,8 @@ public with sharing class MaterialController {
             throw new AuraHandledException('Error retrieving materials: ' + e.getMessage());
         }
     }
+
+    
     
     @AuraEnabled(cacheable=true)
     public static MaterialDetailWrapper getMaterialDetail(Id recordId) {
