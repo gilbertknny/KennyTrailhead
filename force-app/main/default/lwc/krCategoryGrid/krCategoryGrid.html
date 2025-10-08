@@ -1,0 +1,114 @@
+<!--
+    LWC Name    : krCategoryGrid.html
+    Created Date       : 07 October 2025
+    @description       : This is class ..
+    @author            : Rakeyan Nuramria
+    Modification Log :
+    Ver   Date         Author                            Modification
+    1.0   07/10/2025   Rakeyan Nuramria                  Initial Version
+
+-->
+
+<template>
+    <section class="category-area slds-p-horizontal_large slds-p-vertical_small">
+        <div class="header-row slds-m-bottom_small">
+            <div class="header-left">
+                <!-- minimal home link (no pill chrome) -->
+                <button class="home-link" type="button" title="Back to Home" onclick={handleBackHome}>
+                    <svg class="home-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                        <path
+                            d="M14.7 6.7a1 1 0 0 1 0 1.4L10.83 12l3.87 3.9a1 1 0 1 1-1.42 1.4l-4.57-4.6a1 1 0 0 1 0-1.8l4.57-4.6a1 1 0 0 1 1.42 0z">
+                        </path>
+                    </svg>
+                    <span class="home-text">Home</span>
+                </button>
+
+                <h2 class="section-title">
+                    <span class="eyebrow">Browse</span>
+                    Modules
+                </h2>
+            </div>
+
+            <!-- compact, aligned combobox sorter -->
+            <div class="sorter">
+                <lightning-combobox name="sort" label="Sort modules" variant="label-hidden" value={selectedSort}
+                    options={sortOptions} onchange={handleSortChange}></lightning-combobox>
+            </div>
+        </div>
+
+        <!-- Loading -->
+        <template if:true={isLoading}>
+            <div class="cards-grid">
+                <template for:each={skeletonSlots} for:item="sk">
+                    <div key={sk} class="card skeleton" aria-hidden="true">
+                        <div class="sk-image shimmer"></div>
+                        <div class="sk-text">
+                            <div class="sk-line shimmer w-70"></div>
+                            <div class="sk-line shimmer w-40"></div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </template>
+
+        <!-- Content -->
+        <template if:true={hasContent}>
+            <div class="cards-grid">
+                <template for:each={displayItems} for:item="mod">
+                    <button key={mod.id} class="card" type="button" title={mod.title} aria-label={mod.title}>
+                        <span class="card__image" style={mod.bgStyle} aria-hidden="true"></span>
+                        <span class="card__gradient" aria-hidden="true"></span>
+                        <span class="card__text">
+                            <span class="card__title card__title--inline">{mod.title}</span>
+                            <template if:true={mod.subtitle}>&nbsp;</template>
+                            <span class="card__subtitle card__subtitle--inline">{mod.subtitle}</span>
+                        </span>
+                    </button>
+                </template>
+            </div>
+        </template>
+
+        <!-- Empty state -->
+        <template if:true={hasEmpty}>
+            <div class="state-card" role="status" aria-live="polite">
+                <div class="state-illo">
+                    <svg viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+                        <path class="s1"
+                            d="M10 22h44a4 4 0 0 1 4 4v24a6 6 0 0 1-6 6H12a6 6 0 0 1-6-6V26a4 4 0 0 1 4-4z"></path>
+                        <path class="s2" d="M8 16h16l4 6h28a4 4 0 0 1 4 4v2H4v-8a4 4 0 0 1 4-4z"></path>
+                    </svg>
+                </div>
+                <div class="state-text">
+                    <h3 class="state-title">No modules yet</h3>
+                    <p class="state-subtitle">When materials are added to a module, they’ll appear here.</p>
+                </div>
+                <div class="state-actions">
+                    <button class="btn-soft" type="button" onclick={handleRetry}>Refresh</button>
+                    <button class="btn-link" type="button" onclick={handleBackHome}>Go to Home</button>
+                </div>
+            </div>
+        </template>
+
+        <!-- Error state -->
+        <template if:true={hasError}>
+            <div class="state-card state-error" role="alert" aria-live="assertive">
+                <div class="state-illo">
+                    <svg viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+                        <circle class="e1" cx="32" cy="32" r="28"></circle>
+                        <path class="e2"
+                            d="M32 17a2 2 0 0 1 2 2v20a2 2 0 1 1-4 0V19a2 2 0 0 1 2-2zm0 30a3 3 0 1 1 0-6 3 3 0 0 1 0 6z">
+                        </path>
+                    </svg>
+                </div>
+                <div class="state-text">
+                    <h3 class="state-title">We couldn’t load modules</h3>
+                    <p class="state-subtitle">{errorMsg}</p>
+                </div>
+                <div class="state-actions">
+                    <button class="btn-soft" type="button" onclick={handleRetry}>Try again</button>
+                    <button class="btn-link" type="button" onclick={handleBackHome}>Go to Home</button>
+                </div>
+            </div>
+        </template>
+    </section>
+</template>
