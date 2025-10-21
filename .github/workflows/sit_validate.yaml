@@ -4,7 +4,7 @@ on:
       - Github_SIT_Validate
 
 jobs:
-  deploy:
+  validate_sit:
     runs-on: ubuntu-latest
 
     steps:
@@ -73,8 +73,8 @@ jobs:
             sf org login jwt \
             --client-id ${{ secrets.ASWT_CONSUMER_KEY_SIT }} \
             --jwt-key-file server.key \
-            --username ${{ secrets.ASWT_USERNAME_SIT }} \
-            --instance-url ${{ secrets.ASWT_URL_SIT }} \
+            --username ${{ vars.ASWT_USERNAME_SIT }} \
+            --instance-url ${{ vars.ASWT_URL_SIT }} \
             --alias sit
 
       # =========================
