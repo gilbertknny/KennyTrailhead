@@ -72,7 +72,7 @@ jobs:
         run: |
             sf org login jwt \
             --client-id ${{ secrets.ASWT_CONSUMER_KEY_SIT }} \
-            --jwt-key-file server.key \
+            --jwt-key-file aswt_sit_server.key \
             --username ${{ vars.ASWT_USERNAME_SIT }} \
             --instance-url ${{ vars.ASWT_URL_SIT }} \
             --alias sit
