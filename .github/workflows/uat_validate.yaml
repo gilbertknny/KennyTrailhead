@@ -1,0 +1,178 @@
+on:
+  push:
+    branches:
+      - Github_UAT_Validate
+
+jobs:
+  validate_uat:
+    runs-on: ubuntu-latest
+
+    steps:
+      # =========================
+      # 1️⃣ Checkout repo
+      # =========================
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # =========================
+      # 2️⃣ Setup environment
+      # =========================
+      - name: Setup Node.js and SF CLI
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: |
+          sudo apt-get update && sudo apt-get install -y unzip curl openjdk-17-jdk
+          npm install --global @salesforce/cli
+          echo "y" | sf plugins:install sfdx-git-delta
+
+      # =========================
+      # 3️⃣ Restore last depth cache (fixed version)
+      # =========================
+      - name: Restore last depth cache
+        id: cache-restore
+        uses: actions/cache/restore@v4
+        with:
+          path: .last_depth
+          key: depth-${{ github.ref }}-${{ github.run_id }}
+          restore-keys: |
+            depth-${{ github.ref }}-
+        continue-on-error: true
+
+      - name: Read last depth
+        id: read-depth
+        run: |
+          if [ -f ".last_depth" ]; then
+            DEPTH=$(cat .last_depth)
+          else
+            DEPTH=${{ vars.DEFAULT_VALUE_DEPTH }}
+          fi
+          echo "DEPTH=$DEPTH" >> $GITHUB_ENV
+          echo "📘 Current commit depth: $DEPTH"
+
+      # =========================
+      # 4️⃣ Prepare commit range
+      # =========================
+      - name: Prepare commit range
+        id: commits
+        run: |
+          FROM_COMMIT=$(git rev-parse HEAD~$DEPTH)
+          TO_COMMIT="${{ github.sha }}"
+
+          echo "FROM_COMMIT=$FROM_COMMIT" >> $GITHUB_ENV
+          echo "TO_COMMIT=$TO_COMMIT" >> $GITHUB_ENV
+          echo "🔍 Using commit range: $FROM_COMMIT → $TO_COMMIT"
+
+      # =========================
+      # 5️⃣ Salesforce Authentication
+      # =========================
+      - name: Authenticate Salesforce
+        run: |
+            sf org login jwt \
+            --client-id ${{ secrets.ASWT_CONSUMER_KEY_UAT }} \
+            --jwt-key-file aswt_uat_server.key \
+            --username ${{ vars.ASWT_USERNAME_UAT }} \
+            --instance-url ${{ vars.ASWT_URL_UAT }} \
+            --alias uat
+
+      # =========================
+      # 6️⃣ Generate Delta Package
+      # =========================
+      - name: Generate Delta Package
+        run: |
+          if [ -z "$FROM_COMMIT" ]; then
+            echo "⚠️ FROM_COMMIT not set, skipping delta package"
+            exit 0
+          fi
+
+          sfdx sgd:source:delta \
+            --from "$FROM_COMMIT" \
+            --to "$TO_COMMIT" \
+            --output-dir . \
+            --ignore-file .gitignore
+
+          cat package/package.xml || echo "⚠️ No package.xml generated"
+
+      # =========================
+      # 7️⃣ Validate Deployment (with accurate result detection)
+      # =========================
+      - name: Validate Deployment
+        id: validate
+        run: |
+          if [ ! -f "package/package.xml" ]; then
+            echo "✅ No changes to deploy"
+            echo "RESULT=success" >> $GITHUB_ENV
+            exit 0
+          fi
+
+          echo "🔍 Detecting test classes..."
+          APEX_CLASSES=$(yq -p=xml -o=json . < package/package.xml | jq -r \
+            '.Package.types | [.] | flatten | map(select(.name == "ApexClass")) | 
+             .[] | .members | [.] | flatten | 
+             map(select((index("*") | not) and (test("Test|Tes")))) | unique | join(" ")')
+
+          echo "APEX_CLASSES=$APEX_CLASSES"
+
+          echo "🚀 Starting validation..."
+          if [ -z "$APEX_CLASSES" ]; then
+            sf project deploy start --dry-run --manifest package/package.xml --wait 100 --target-org uat --verbose
+            DEPLOY_EXIT=$?
+          else
+            sf project deploy start --dry-run --manifest package/package.xml --wait 100 --target-org uat --verbose -l RunLocalTests
+            DEPLOY_EXIT=$?
+          fi
+
+          echo "🔢 DEPLOY_EXIT=$DEPLOY_EXIT"
+
+          if [ $DEPLOY_EXIT -eq 0 ]; then
+            echo "✅ Validation succeeded"
+            echo "RESULT=success" >> $GITHUB_ENV
+          else
+            echo "❌ Validation failed"
+            echo "RESULT=fail" >> $GITHUB_ENV
+          fi
+
+      # =========================
+      # 8️⃣ Save depth state (auto increase when failed)
+      # =========================
+      - name: Save depth state
+        if: always()
+        run: |
+          DEPTH=${DEPTH:-1}
+          RESULT=${RESULT:-fail}
+
+          if [ "$RESULT" = "success" ]; then
+            echo "1" > .last_depth
+            echo "🟢 Reset depth to 1 (validation succeeded)"
+          else
+            NEW_DEPTH=$((DEPTH+1))
+            if [ $NEW_DEPTH -gt ${{ vars.MAX_DEPTH }} ]; then
+              NEW_DEPTH=${{ vars.MAX_DEPTH }}
+            fi
+            echo "$NEW_DEPTH" > .last_depth
+            echo "⚠️ Increased depth to $NEW_DEPTH for next run"
+          fi
+
+      # =========================
+      # 9️⃣ Debug info (optional but recommended)
+      # =========================
+      - name: Debug cache info
+        if: always()
+        run: |
+          echo "🔹 Branch: ${{ github.ref }}"
+          echo "🔹 Result: $RESULT"
+          echo "🔹 Depth before: $DEPTH"
+          echo "🔹 Cache key to be saved: depth-${{ github.ref }}-${{ github.run_id }}"
+
+      # =========================
+      # 🔟 Save depth cache (safe overwrite)
+      # =========================
+      - name: Save depth cache
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: .last_depth
+          key: depth-${{ github.ref }}-${{ github.run_id }}
+          enableCrossOsArchive: false
