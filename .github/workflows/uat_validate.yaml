@@ -117,10 +117,10 @@ jobs:
 
           echo "🚀 Starting validation..."
           if [ -z "$APEX_CLASSES" ]; then
-            sf project deploy start --dry-run --manifest package/package.xml --wait 100 --target-org uat --verbose
+            sfdx project deploy start -c -x package/package.xml --dry-run --wait 1200 -o uat --verbose
             DEPLOY_EXIT=$?
           else
-            sf project deploy start --dry-run --manifest package/package.xml --wait 100 --target-org uat --verbose -l RunLocalTests
+            sfdx project deploy start -c -x package/package.xml --dry-run --wait 1200 --verbose -g -l RunSpecifiedTests --tests $APEX_CLASSES -o uat
             DEPLOY_EXIT=$?
           fi
 
