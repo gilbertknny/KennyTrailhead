@@ -71,7 +71,7 @@ jobs:
       - name: Authenticate Salesforce
         run: |
             sf org login jwt \
-            --client-id 3MVG9lQbJ_RJ3FBa3wPiJGikKQnMWRN3mCdbTelJCvIFspqVqFxua44slqxDXaRDdtxYMwz4uQWL98fGyK.ac \
+            --client-id ${{ secrets.ASWT_CONSUMER_KEY_SIT }} \
             --jwt-key-file server.key \
             --username ${{ vars.ASWT_USERNAME_SIT }} \
             --instance-url ${{ vars.ASWT_URL_SIT }} \
