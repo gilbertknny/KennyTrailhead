@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Status_Notice__c</fullName>
+    <label>Status Notice</label>
+    <required>false</required>
+    <trackHistory>true</trackHistory>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>31500</fullName>
+                <default>false</default>
+                <label>Renewal</label>
+            </value>
+            <value>
+                <fullName>31100</fullName>
+                <default>false</default>
+                <label>Renewal Overlimit HO Agrement</label>
+            </value>
+            <value>
+                <fullName>31200</fullName>
+                <default>false</default>
+                <label>Recall Non Renewal</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>
