@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Billing_To_Address_not_used__c</fullName>
+    <externalId>false</externalId>
+    <formula>Billing_To__r.BillingStreet &amp; &quot;, &quot; &amp; 
+Billing_To__r.BillingCity &amp; &quot;, &quot; &amp; 
+Billing_To__r.BillingState &amp; &quot; &quot; &amp; 
+Billing_To__r.BillingPostalCode &amp; &quot;, &quot; &amp; 
+Billing_To__r.BillingCountry</formula>
+    <label>Billing To Address(not used)</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

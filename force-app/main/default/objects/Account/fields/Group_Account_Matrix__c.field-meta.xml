@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Group_Account_Matrix__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF(
+OR(
+  AND(ISPICKVAL(Type, &apos;0&apos;),ISPICKVAL(Account_Segment__c, &apos;I&apos;),ISPICKVAL(Account_Pipeline_Status__c, &apos;Direct&apos;)),
+  AND(ISPICKVAL(Type, &apos;3&apos;),NOT(ISPICKVAL(Account_Segment__c, &apos;G&apos;)),ISPICKVAL(Account_Pipeline_Status__c, &apos;Channel&apos;)),
+  AND(ISPICKVAL(Type, &apos;Independent Surveyor&apos;),ISPICKVAL(Account_Segment__c, &apos;E&apos;),ISPICKVAL(Account_Pipeline_Status__c, &apos;Direct&apos;)),
+  AND(ISPICKVAL(Type, &apos;INSURANCE&apos;),NOT(ISPICKVAL(Account_Segment__c, &apos;I&apos;)),ISPICKVAL(Account_Pipeline_Status__c, &apos;Direct&apos;)),
+  AND(ISPICKVAL(Type, &apos;REINSURANCE&apos;),NOT(ISPICKVAL(Account_Segment__c, &apos;I&apos;)),ISPICKVAL(Account_Pipeline_Status__c, &apos;Direct&apos;)),
+  AND(ISPICKVAL(Type, &apos;BROKER&apos;),NOT(ISPICKVAL(Account_Segment__c, &apos;I&apos;)),ISPICKVAL(Account_Pipeline_Status__c, &apos;Direct&apos;)),
+  AND(ISPICKVAL(Type, &apos;Claim Surveyor&apos;),ISPICKVAL(Account_Segment__c, &apos;E&apos;),ISPICKVAL(Account_Pipeline_Status__c, &apos;Direct&apos;)),
+  AND(ISPICKVAL(Type, &apos;Claim Investigator&apos;),ISPICKVAL(Account_Segment__c, &apos;E&apos;),ISPICKVAL(Account_Pipeline_Status__c, &apos;Direct&apos;)),
+  AND(ISPICKVAL(Type, &apos;Loss Adjuster&apos;),ISPICKVAL(Account_Segment__c, &apos;E&apos;),ISPICKVAL(Account_Pipeline_Status__c, &apos;Direct&apos;)),
+  AND(ISPICKVAL(Type, &apos;Claim Consultant&apos;),ISPICKVAL(Account_Segment__c, &apos;E&apos;),ISPICKVAL(Account_Pipeline_Status__c, &apos;Direct&apos;)),
+  AND(ISPICKVAL(Type, &apos;3rd Party Claim Admin&apos;),ISPICKVAL(Account_Segment__c, &apos;E&apos;),ISPICKVAL(Account_Pipeline_Status__c, &apos;Direct&apos;)),
+  AND(ISPICKVAL(Type, &apos;Repairer Shop&apos;),ISPICKVAL(Account_Segment__c, &apos;E&apos;),ISPICKVAL(Account_Pipeline_Status__c, &apos;Direct&apos;)),
+  AND(ISPICKVAL(Type, &apos;Part Supplier&apos;),ISPICKVAL(Account_Segment__c, &apos;E&apos;),ISPICKVAL(Account_Pipeline_Status__c, &apos;Direct&apos;)),
+  AND(ISPICKVAL(Type, &apos;Salvage Buyer&apos;),NOT(ISPICKVAL(Account_Segment__c, &apos;G&apos;)),ISPICKVAL(Account_Pipeline_Status__c, &apos;Direct&apos;))
+  
+),&apos;1&apos;, 
+IF(
+  AND(ISPICKVAL(Type, &apos;0&apos;),NOT(ISPICKVAL(Account_Segment__c, &apos;I&apos;)),ISPICKVAL(Account_Pipeline_Status__c, &apos;Direct&apos;)), &apos;2&apos;, 
+IF(
+  AND(ISPICKVAL(Type, &apos;1&apos;),ISPICKVAL(Account_Segment__c, &apos;E&apos;),NOT(ISPICKVAL(Account_Pipeline_Status__c, &apos;Referral&apos;))), &apos;3&apos;,
+IF (
+  AND(ISPICKVAL(Type, &apos;4&apos;),ISPICKVAL(Account_Segment__c, &apos;E&apos;),NOT(ISPICKVAL(Account_Pipeline_Status__c, &apos;Referral&apos;))), &apos;4&apos;,
+IF (
+  AND(ISPICKVAL(Type, &apos;2&apos;),ISPICKVAL(Account_Segment__c, &apos;E&apos;),NOT(ISPICKVAL(Account_Pipeline_Status__c, &apos;Referral&apos;))), &apos;5&apos;,&apos;0&apos;
+)
+)
+)
+)
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Group Account Matrix</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>
