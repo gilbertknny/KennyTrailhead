@@ -1,0 +1,144 @@
+<template>
+    <template if:true={isLoading}>
+        <lightning-spinner alternative-text="Loading..." size="medium" class="slds-is-fixed"></lightning-spinner>
+    </template>
+
+    <lightning-card title="ACCUMULATION">
+        <div class="slds-p-around_medium">
+
+            <div class="slds-box slds-theme_default slds-m-bottom_medium">
+                <div class="slds-text-title_caps slds-m-bottom_small">
+                    LIST OF ACCUMULATION
+                </div>
+                <div class="scroll-container">
+                    <table class="slds-table slds-table_cell-buffer slds-table_bordered responsive-table">
+                        <thead>
+                            <tr class="slds-line-height_reset">
+                                <th>REQUEST NUM</th>
+                                <th>POLICY NUM</th>
+                                <th>ADDRESS</th>
+                                <th>CUR</th>
+                                <th>SUM INSURED</th>
+                                <th>RISK ID</th>
+                                <th>INCEPTION/ENDORST EFFECTIVE DATE</th>
+                                <th>ACTION</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template for:each={accumulationList} for:item="item">
+                                <tr key={item.id}>
+                                    <td>{item.requestNum}</td>
+                                    <td>{item.policyNum}</td>
+                                    <td>{item.address}</td>
+                                    <td>{item.cur}</td>
+                                    <td class="slds-text-align_right">
+                                        <lightning-formatted-number 
+                                            value={item.sumInsured} 
+                                            format-style="currency" 
+                                            currency-code={item.cur}>
+                                        </lightning-formatted-number>
+                                    </td>
+                                    <td>{item.riskId}</td>
+                                    <td>{item.effectiveDate}</td>
+                                    <td>
+                                        <lightning-button-icon icon-name="utility:delete"
+                                            alternative-text="Remove" title="Remove" data-id={item.id}
+                                            onclick={handleRemove}></lightning-button-icon>
+                                    </td>
+                                </tr>
+                            </template>
+                            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="slds-box slds-theme_default slds-m-bottom_medium">
+                <div class="slds-text-title_caps slds-m-bottom_small">
+                    SELECTION CRITERIA
+                </div>
+                <div class="slds-grid slds-wrap slds-gutters">
+                    <div class="slds-col slds-size_1-of-3">
+                        <lightning-input label="ADDRESS" 
+                                         name="address" 
+                                         value={searchCriteria.address} 
+                                         onchange={handleSearchCriteriaChange}></lightning-input>
+                    </div>
+                    <div class="slds-col slds-size_1-of-3">
+                        <lightning-input label="ZIP CODE" 
+                                         name="zipCode" 
+                                         value={searchCriteria.zipCode} 
+                                         onchange={handleSearchCriteriaChange}></lightning-input>
+                    </div>
+                    <div class="slds-col slds-size_1-of-3">
+                        <lightning-input label="CITY" value={city} readonly></lightning-input>
+                    </div>
+                </div>
+                <div class="slds-grid slds-wrap slds-gutters slds-m-top_small">
+                    
+                    <div class="slds-col slds-size_1-of-3">
+                        <lightning-input label="N.K.R" 
+                                         name="nkr" 
+                                         value={searchCriteria.nkr} 
+                                         onchange={handleSearchCriteriaChange}></lightning-input>
+                    </div>
+                </div>
+                <div class="slds-m-top_small">
+                    <lightning-button label="SEARCH" 
+                                      variant="brand" 
+                                      onclick={handleSearch}
+                                      disabled={isLoading}></lightning-button>
+                    <lightning-button label="RESET" class="slds-m-left_small" onclick={handleReset}></lightning-button>
+                </div>
+            </div>
+
+            <div class="slds-box slds-theme_default slds-m-bottom_medium" if:true={showRequestList}>
+                <div class="slds-text-title_caps slds-m-bottom_small">
+                    REQUEST LIST
+                </div>
+                <div class="scroll-container">
+                    <table class="slds-table slds-table_cell-buffer slds-table_bordered responsive-table">
+                        <thead>
+                            <tr class="slds-line-height_reset">
+                                <th>REQUEST NUM.</th>
+                                <th>POLICY NUM.</th>
+                                <th>ADDRESS</th>
+                                <th>RISK ID</th>
+                                <th>ACTION</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template for:each={requestList} for:item="req">
+                                <tr key={req.id}>
+                                    <td>{req.requestNum}</td>
+                                    <td>{req.policyNum}</td>
+                                    <td>{req.address}</td>
+                                    <td>{req.riskId}</td>
+                                    <td>
+                                        <lightning-button label="Join" data-id={req.id} onclick={handleJoin}></lightning-button>
+                                    </td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="slds-text-body_small slds-m-top_small">
+                    <i>note: Only displaying request/policy which its insurance-start-date is in the same underwriting year.</i>
+                </div>
+            </div>
+
+            <div class="slds-m-top_medium slds-align_absolute-center">
+                
+                <lightning-button 
+                    label="SET ACCUMULATION" 
+                    variant="brand" 
+                    class="slds-m-right_small"
+                    onclick={handleSetAccumulation}
+                    disabled={isLoading}>
+                </lightning-button>
+
+            </div>
+
+        </div>
+    </lightning-card>
+</template>
