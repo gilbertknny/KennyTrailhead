@@ -1,0 +1,178 @@
+<template>
+  <!-- Full-page background -->
+  <div class="page-container">
+
+    <!-- Logo header -->
+    <div class="logo-container">
+      <img
+        src="https://www.aswata.co.id/images/logo.png"
+        alt="Aswata Logo"
+        class="logo"
+      />
+    </div>
+
+    <!-- Main card -->
+    <lightning-card icon-name="standard:lead" class="lead-card">
+
+      <!-- Custom title -->
+      <div slot="title" class="card-title">
+        Aswata Asuransi Terpercaya
+      </div>
+
+      <!-- Body -->
+      <div class="slds-p-around_medium">
+
+        <!-- Form -->
+        <template if:false={isSubmitted}>
+
+          <lightning-input
+            name="FirstName"
+            label="Nama Depan"
+            required
+            pattern="[A-Za-z ]+"
+            message-when-pattern-mismatch="Hanya huruf yang diperbolehkan"
+            onchange={handleInputChange}
+          ></lightning-input>
+
+          <lightning-input
+            name="LastName"
+            label="Nama Belakang"
+            required
+            pattern="[A-Za-z ]+"
+            message-when-pattern-mismatch="Hanya huruf yang diperbolehkan"
+            onchange={handleInputChange}
+          ></lightning-input>
+
+          <lightning-input
+            name="Email"
+            label="Email"
+            type="email"
+            required
+            onchange={handleInputChange}
+          ></lightning-input>
+
+          <lightning-input
+            name="Phone"
+            label="No. Ponsel / Whatsapp"
+            type="tel"
+            required
+            onchange={handleInputChange}
+            onkeypress={handlePhoneKeypress}
+          ></lightning-input>
+
+          <!-- City lookup -->
+          <div class="slds-form-element">
+            <label class="slds-form-element__label" for="cityLookup">City</label>
+            <div class="slds-form-element__control">
+              <input
+                data-id="cityLookup"
+                class="slds-input"
+                placeholder="Cari Nama Kota..."
+                onkeyup={handleCitySearchKeyChange}
+              />
+            </div>
+          </div>
+
+          <!-- Suggestions dropdown -->
+          <template if:true={citySuggestions.length}>
+            <div class="slds-dropdown slds-dropdown_fluid">
+              <ul class="slds-dropdown__list" role="listbox">
+                <template for:each={citySuggestions} for:item="city">
+                  <li
+                    key={city.value}
+                    class="slds-dropdown__item"
+                    data-value={city.value}
+                    data-province={city.province}
+                    onclick={handleCitySelect}
+                  >
+                    <a href="javascript:void(0);" role="option">
+                      {city.label}
+                    </a>
+                  </li>
+                </template>
+              </ul>
+            </div>
+          </template>
+
+          <input
+            type="hidden"
+            name="provinceId"
+            value={provinceId}
+          />
+
+          <!-- Zip Code combobox -->
+          <lightning-combobox
+            name="ZipCode__c"
+            label="Kode Pos"
+            placeholder="Pilih Kode Pos"
+            options={zipCodeOptions}
+            value={leadData.ZipCode__c}
+            disabled={isZipCodeDisabled}
+            onchange={handleZipCodeChange}
+          ></lightning-combobox>
+
+          <input
+            type="hidden"
+            name="villageId"
+            value={villageId}
+          />
+
+          <!-- Customer Type -->
+          <lightning-combobox
+            name="Customer_Type__c"
+            label="Jenis Pelanggan"
+            placeholder="Pilih Jenis Pelanggan"
+            options={customerTypeOptions}
+            value={leadData.Customer_Type__c}
+            onchange={handleCustomerTypeChange}
+            required
+          ></lightning-combobox>
+
+          <!-- Company Name for Enterprise -->
+          <template if:true={isEnterprise}>
+            <lightning-input
+              name="Company"
+              label="Nama Perusahaan / Bisnis"
+              onchange={handleInputChange}
+            ></lightning-input>
+          </template>
+
+          <lightning-textarea
+            name="User_Description__c"
+            label="Apa yang Anda Ingin Asuransikan?"
+            onchange={handleInputChange}
+          ></lightning-textarea>
+
+          <div class="slds-m-top_medium">
+            <lightning-button
+              variant="brand"
+              label="Submit"
+              onclick={handleSubmit}
+              disabled={isButtonDisabled}
+            ></lightning-button>
+          </div>
+        </template>
+
+        <!-- Thank-you message -->
+        <template if:true={isSubmitted}>
+          <div class="thank-you-container">
+            <img
+              src="https://www.aswata.co.id/images/logo.png"
+              alt="Aswata Logo"
+              class="logo-small"
+            />
+            <p class="thank-you-text">
+              ✅ Terima kasih! Data Anda telah kami terima. Kami akan menghubungi Anda dalam waktu dekat.
+            </p>
+          </div>
+        </template>
+
+        <!-- Error message -->
+        <template if:true={error}>
+          <p class="slds-text-color_error">{error}</p>
+        </template>
+
+      </div>
+    </lightning-card>
+  </div>
+</template>
