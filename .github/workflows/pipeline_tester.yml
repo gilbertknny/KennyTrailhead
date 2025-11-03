@@ -1,0 +1,153 @@
+on:
+  push:
+    branches:
+      - master_validate
+
+jobs:
+  Validate_SIT:
+    runs-on: ubuntu-latest
+
+    steps:
+      # =========================
+      # 1️⃣ Checkout repo
+      # =========================
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # =========================
+      # 2️⃣ Setup environment
+      # =========================
+      - name: Setup Node.js and SF CLI
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: |
+          sudo apt-get update && sudo apt-get install -y unzip curl openjdk-17-jdk
+          npm install --global @salesforce/cli
+          echo "y" | sf plugins:install sfdx-git-delta
+
+      # =========================
+      # 3️⃣ Restore cached depths
+      # =========================
+      - name: Restore depth caches
+        id: cache-restore
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            .depth_package
+            .depth_destructive
+          key: depth-${{ github.ref }}-${{ github.run_id }}
+          restore-keys: |
+            depth-${{ github.ref }}-
+        continue-on-error: true
+
+      - name: Read depth states
+        id: read-depth
+        run: |
+          DEPTH_PACKAGE=$(cat .depth_package 2>/dev/null || echo 1)
+          DEPTH_DESTRUCTIVE=$(cat .depth_destructive 2>/dev/null || echo 1)
+          echo "DEPTH_PACKAGE=$DEPTH_PACKAGE" >> $GITHUB_ENV
+          echo "DEPTH_DESTRUCTIVE=$DEPTH_DESTRUCTIVE" >> $GITHUB_ENV
+          echo "📘 DEPTH_PACKAGE: $DEPTH_PACKAGE"
+          echo "📘 DEPTH_DESTRUCTIVE: $DEPTH_DESTRUCTIVE"
+
+      # =========================
+      # 4️⃣ Prepare commit ranges
+      # =========================
+      - name: Prepare commit range (package)
+        run: |
+          FROM_COMMIT_PACKAGE=$(git rev-parse HEAD~$DEPTH_PACKAGE)
+          TO_COMMIT_PACKAGE="${{ github.sha }}"
+          echo "FROM_COMMIT_PACKAGE=$FROM_COMMIT_PACKAGE" >> $GITHUB_ENV
+          echo "TO_COMMIT_PACKAGE=$TO_COMMIT_PACKAGE" >> $GITHUB_ENV
+          echo "🔍 Package commit range: $FROM_COMMIT_PACKAGE → $TO_COMMIT_PACKAGE"
+
+      - name: Prepare commit range (destructive)
+        run: |
+          FROM_COMMIT_DESTRUCTIVE=$(git rev-parse HEAD~$DEPTH_DESTRUCTIVE)
+          TO_COMMIT_DESTRUCTIVE="${{ github.sha }}"
+          echo "FROM_COMMIT_DESTRUCTIVE=$FROM_COMMIT_DESTRUCTIVE" >> $GITHUB_ENV
+          echo "TO_COMMIT_DESTRUCTIVE=$TO_COMMIT_DESTRUCTIVE" >> $GITHUB_ENV
+          echo "🔍 Destructive commit range: $FROM_COMMIT_DESTRUCTIVE → $TO_COMMIT_DESTRUCTIVE"
+
+      # =========================
+      # 5️⃣ Salesforce Authentication
+      # =========================
+      - name: Authenticate Salesforce
+        run: |
+          sf org login jwt \
+            --client-id ${{ secrets.CONSUMER_KEY }} \
+            --jwt-key-file server.key \
+            --username ${{ vars.USERNAME }} \
+            --instance-url ${{ vars.URL_INSTANCE }} \
+            --alias sit
+
+      # =========================
+      # 6️⃣ Generate Delta Package
+      # =========================
+      - name: Generate Delta Package
+        run: |
+          echo "🚧 Generating delta PACKAGE from $FROM_COMMIT_PACKAGE to $TO_COMMIT_PACKAGE..."
+          mkdir -p packageDelta
+          sfdx sgd:source:delta \
+            --from "$FROM_COMMIT_PACKAGE" \
+            --to "$TO_COMMIT_PACKAGE" \
+            --output-dir packageDelta \
+            --ignore-file .gitignore
+
+          echo "📦 Package XML:"
+          cat packageDelta/package/package.xml || echo "⚠️ No package.xml generated"
+
+          if ! grep -q "<types>" packageDelta/package/package.xml 2>/dev/null; then
+            echo "✅ Empty package.xml detected — no deploy needed"
+            echo "SKIP_PACKAGE=true" >> $GITHUB_ENV
+          else
+            echo "SKIP_PACKAGE=false" >> $GITHUB_ENV
+          fi
+
+      - name: Generate Destructive Delta
+        run: |
+          echo "🚧 Generating destructive delta from $FROM_COMMIT_DESTRUCTIVE to $TO_COMMIT_DESTRUCTIVE..."
+          mkdir -p destructiveDelta
+          sfdx sgd:source:delta \
+            --from "$FROM_COMMIT_DESTRUCTIVE" \
+            --to "$TO_COMMIT_DESTRUCTIVE" \
+            --output-dir destructiveDelta \
+            --ignore-file .gitignore 
+
+          echo "🧾 Checking destructiveChanges.xml..."
+          if [ -f "destructiveDelta/destructiveChanges/destructiveChanges.xml" ]; then
+            cat destructiveDelta/destructiveChanges/destructiveChanges.xml
+          else
+            echo "✅ No destructiveChanges.xml found"
+          fi
+
+          if ! grep -q "<types>" destructiveDelta/destructiveChanges/destructiveChanges.xml 2>/dev/null; then
+            echo "✅ Empty destructiveChanges.xml detected — skipping"
+            echo "SKIP_DESTRUCTIVE=true" >> $GITHUB_ENV
+          else
+            echo "SKIP_DESTRUCTIVE=false" >> $GITHUB_ENV
+          fi
+      # =========================
+      # 🧹 Always clean FlowInterview records
+      # =========================
+      - name: 🧹 Delete FlowInterview records (Always)
+        continue-on-error: true
+        run: |
+          echo "🧹 Querying FlowInterview records..."
+          sf data query --query "SELECT Id FROM FlowInterview" --target-org sit --result-format csv > flowinterview.csv
+
+          if [ -s flowinterview.csv ]; then
+            ids=$(tail -n +2 flowinterview.csv | tr '\n' ',' | sed 's/,$//')
+            if [ -n "$ids" ]; then
+              echo "🗑️ Deleting FlowInterview records: $ids"
+              sf data delete record --sobject FlowInterview --record-ids "$ids" --target-org sit --json || true
+              echo "✅ FlowInterview deleted successfully."
+            else
+              echo "⚠️ No FlowInterview IDs found to delete."
+            fi
+          else
+            echo "⚠️ Query returned empty result or failed."
+          fi
