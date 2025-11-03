@@ -133,21 +133,16 @@ jobs:
       # =========================
       # 🧹 Always clean FlowInterview records
       # =========================
-      - name: 🧹 Delete FlowInterview records (Always)
+      - name: 🧹 Bulk delete FlowInterview records (Always)
         continue-on-error: true
         run: |
           echo "🧹 Querying FlowInterview records..."
           sf data query --query "SELECT Id FROM FlowInterview" --target-org sit --result-format csv > flowinterview.csv
 
           if [ -s flowinterview.csv ]; then
-            ids=$(tail -n +2 flowinterview.csv | tr '\n' ',' | sed 's/,$//')
-            if [ -n "$ids" ]; then
-              echo "🗑️ Deleting FlowInterview records: $ids"
-              sf data delete record --sobject FlowInterview --record-ids "$ids" --target-org sit --json || true
-              echo "✅ FlowInterview deleted successfully."
-            else
-              echo "⚠️ No FlowInterview IDs found to delete."
-            fi
+            echo "🗑️ Running bulk delete job..."
+            sf data delete bulk --sobject FlowInterview --file flowinterview.csv --target-org sit --wait 10 || true
+            echo "✅ Bulk delete job completed."
           else
-            echo "⚠️ Query returned empty result or failed."
+            echo "⚠️ No FlowInterview records found to delete."
           fi
