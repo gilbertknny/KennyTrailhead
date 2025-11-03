@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
 	<types>
-		<members>BatchRiskAssetCoverage</members>
-		<members>BatchRiskAssetCoverage_Test</members>
-		<members>SFAWT05Queueable</members>
+		<members>SFAWT17Queueable</members>
+		<members>ScheduleSFAWT17</members>
+		<members>ScheduleSFAWT17_Test</members>
 		<members>VlocityMapping</members>
 		<members>VlocityMapping_Test</members>
 		<name>ApexClass</name>
 	</types>
 	<types>
+		<members>Account.IsSchedule__c</members>
 		<members>Endpoint_Header_List__mdt.Additional_Value__c</members>
 		<members>Endpoint_Header_List__mdt.Algorithms2__c</members>
 		<members>Endpoint_Header_List__mdt.Algorithms__c</members>
@@ -26,6 +27,8 @@
 		<members>Endpoint__mdt.Integration_Procedure__c</members>
 		<members>Endpoint__mdt.Method__c</members>
 		<members>Endpoint__mdt.Type__c</members>
+		<members>Schedule__c.Last_Schedule__c</members>
+		<members>Schedule__c.Schedule_Time__c</members>
 		<name>CustomField</name>
 	</types>
 	<types>
@@ -74,6 +77,7 @@
 		<members>Endpoint_Header_List__mdt</members>
 		<members>Endpoint_Header__mdt</members>
 		<members>Endpoint__mdt</members>
+		<members>Schedule__c</members>
 		<name>CustomObject</name>
 	</types>
 	<version>65.0</version>
