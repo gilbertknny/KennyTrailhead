@@ -116,7 +116,10 @@ jobs:
             --to "$TO_COMMIT_DESTRUCTIVE" \
             --output-dir destructiveDelta \
             --ignore-file .gitignore 
-
+          
+          echo "🧾 Checking Packages.xml..."
+          cat destructiveDelta/package/package.xml
+          
           echo "🧾 Checking destructiveChanges.xml..."
           if [ -f "destructiveDelta/destructiveChanges/destructiveChanges.xml" ]; then
             cat destructiveDelta/destructiveChanges/destructiveChanges.xml
