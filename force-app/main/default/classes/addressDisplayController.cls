@@ -2,10 +2,6 @@ public with sharing class addressDisplayController {
     public class AddressWrapper {
         @AuraEnabled public String Id { get; set; }
         @AuraEnabled public String Name { get; set; }
-        @AuraEnabled public String CountryName { get; set; }
-        @AuraEnabled public String ProvinceName { get; set; }
-        @AuraEnabled public String CityName { get; set; }
-        @AuraEnabled public String ZipName { get; set; }
         @AuraEnabled public String CountryId { get; set; }
         @AuraEnabled public String ProvinceId { get; set; }
         @AuraEnabled public String CityId { get; set; }
