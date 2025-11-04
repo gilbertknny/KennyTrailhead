@@ -54,17 +54,23 @@
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>recipientAddresses</name>
-            <value/>
+            <value>
+                <collectionElements>
+                    <elementReference>Get_Owner_User_Details.Email</elementReference>
+                </collectionElements>
+            </value>
         </inputParameters>
         <inputParameters>
             <name>senderType</name>
             <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
                 <stringValue>CurrentUser</stringValue>
             </value>
         </inputParameters>
         <inputParameters>
             <name>senderAddress</name>
             <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
                 <stringValue></stringValue>
             </value>
         </inputParameters>
@@ -83,6 +89,7 @@
         <inputParameters>
             <name>emailBody</name>
             <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
                 <stringValue>&lt;p&gt;Halo {!Get_Owner_User_Details.FirstName} {!Get_Owner_User_Details.LastName},&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;Terdapat Prospect Lead baru yang ditujukan untuk Anda.&lt;/p&gt;&lt;p&gt;Nama : {!$Record.FirstName} {!$Record.LastName}&lt;/p&gt;&lt;p&gt;Email : {!$Record.Email}&lt;/p&gt;&lt;p&gt;Telepon : {!$Record.Phone}&lt;/p&gt;&lt;p&gt;Ponsel : {!$Record.MobilePhone}&lt;/p&gt;&lt;p&gt;Customer Type : {!$Record.Account_Type__c}&lt;/p&gt;&lt;p&gt;Untuk melihat lebih detail klik tautan di bawah ini:&lt;/p&gt;&lt;p&gt;&lt;u&gt;https://ptasuransiwahanatata--sb1.sandbox.lightning.force.com/{!$Record.Id}&lt;/u&gt;&lt;/p&gt;</stringValue>
             </value>
         </inputParameters>
@@ -96,6 +103,7 @@
             <name>relatedRecordId</name>
             <value>
                 <elementReference>$Record.Id</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
             </value>
         </inputParameters>
         <nameSegment>emailSimple</nameSegment>
@@ -239,7 +247,7 @@
     <variables>
         <name>varUserIDs</name>
         <dataType>String</dataType>
-        <isCollection>false</isCollection>
+        <isCollection>true</isCollection>
         <isInput>false</isInput>
         <isOutput>false</isOutput>
     </variables>
