@@ -1,7 +1,7 @@
 on:
   push:
     branches:
-      - validation/sit
+      - Github_SIT_Validate
 
 jobs:
   validate_sit:
@@ -133,6 +133,36 @@ jobs:
             echo "❌ Validation failed"
             echo "RESULT=fail" >> $GITHUB_ENV
           fi
+          # =========================
+          LOG_FILE="validate_output.log"
+          CSV_FILE="validation_result.csv"
+
+          # Ambil output step sebelumnya (Validate Deployment)
+          echo "🔍 Extracting validation errors..."
+          tail -n 2000 $GITHUB_WORKSPACE/_temp/_runner_file_commands/* > $LOG_FILE 2>/dev/null || true
+          if [ ! -s "$LOG_FILE" ]; then
+            echo "⚠️ No validation log found, generating empty CSV."
+            echo "Type,Name,Problem,LineColumn" > "$CSV_FILE"
+            exit 0
+          fi
+
+          # Cari baris yang mirip dengan tabel error Salesforce
+          grep -E "ApexClass|ApexTrigger|ApexComponent|LightningComponent" "$LOG_FILE" | \
+            awk 'BEGIN { FS=" {2,}"; OFS=","; print "Type,Name,Problem,LineColumn" } 
+                 { gsub(/^ +| +$/, ""); if (NF>=3) print $1,$2,$3,$4 }' > "$CSV_FILE"
+
+          echo "📝 Extracted validation results to $CSV_FILE"
+      
+      # =========================
+      # Upload CSV artifact
+      # =========================
+      - name: Upload validation CSV
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: validation_result
+          path: validation_result.csv
+
 
       # =========================
       # 8️⃣ Save depth state (auto increase when failed)
@@ -176,3 +206,5 @@ jobs:
           path: .last_depth
           key: depth-${{ github.ref }}-${{ github.run_id }}
           enableCrossOsArchive: false
+
+
