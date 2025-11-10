@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Account_Sub_Segment__c</fullName>
+    <description>untuk logic omniscript</description>
+    <label>Account Sub Segment Omniscript</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <controllingField>Account_Type_Segment__c</controllingField>
+        <restricted>true</restricted>
+        <valueSetName>Account_Sub_Segment</valueSetName>
+        <valueSettings>
+            <controllingFieldValue>1_E</controllingFieldValue>
+            <controllingFieldValue>Loss Adjuster_E</controllingFieldValue>
+            <controllingFieldValue>2_E</controllingFieldValue>
+            <controllingFieldValue>Claim Investigator_E</controllingFieldValue>
+            <controllingFieldValue>3_E</controllingFieldValue>
+            <controllingFieldValue>Claim Consultant_E</controllingFieldValue>
+            <controllingFieldValue>4_E</controllingFieldValue>
+            <controllingFieldValue>3rd Party Claim Admin_E</controllingFieldValue>
+            <controllingFieldValue>5_G</controllingFieldValue>
+            <controllingFieldValue>Repairer Shop_E</controllingFieldValue>
+            <controllingFieldValue>Salvage Buyer_E</controllingFieldValue>
+            <controllingFieldValue>Part Supplier_E</controllingFieldValue>
+            <controllingFieldValue>INSURANCE_E</controllingFieldValue>
+            <controllingFieldValue>0_I</controllingFieldValue>
+            <controllingFieldValue>REINSURANCE_E</controllingFieldValue>
+            <controllingFieldValue>3_I</controllingFieldValue>
+            <controllingFieldValue>BROKER_E</controllingFieldValue>
+            <controllingFieldValue>Salvage Buyer_I</controllingFieldValue>
+            <controllingFieldValue>Independent Surveyor_E</controllingFieldValue>
+            <controllingFieldValue>0_E</controllingFieldValue>
+            <controllingFieldValue>Claim Surveyor_E</controllingFieldValue>
+            <valueName>Y</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>1_E</controllingFieldValue>
+            <controllingFieldValue>2_E</controllingFieldValue>
+            <controllingFieldValue>4_E</controllingFieldValue>
+            <controllingFieldValue>5_G</controllingFieldValue>
+            <controllingFieldValue>INSURANCE_E</controllingFieldValue>
+            <controllingFieldValue>REINSURANCE_E</controllingFieldValue>
+            <controllingFieldValue>BROKER_E</controllingFieldValue>
+            <controllingFieldValue>0_E</controllingFieldValue>
+            <valueName>N</valueName>
+        </valueSettings>
+    </valueSet>
+</CustomField>
