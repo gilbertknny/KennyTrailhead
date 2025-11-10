@@ -205,7 +205,7 @@ global with sharing class VlocityMapping implements callable{
             mapobj.put('coverages',callQueue(mapobjcv,1));
         }
         //Asset
-        if(!lasset.isEmpty() && r == true){
+        if(lasset != null && !lasset.isEmpty() && r == true){
             Integer max2 = lasset.size() > 20 ? 20 : lasset.size();
             mapobjas.put('name','SFAWT05Extend_RiskAssetCoverage');
             mapobjas.put('varout','detail_insured');
