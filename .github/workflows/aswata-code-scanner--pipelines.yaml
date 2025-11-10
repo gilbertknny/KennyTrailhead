@@ -1,0 +1,62 @@
+name: Salesforce Code Scan
+
+on:
+  push:
+    branches:
+      - validation/code_scanner
+
+
+jobs:
+  code_scan:
+    runs-on: ubuntu-latest
+
+    steps:
+      # =========================
+      # 1️⃣ Checkout repository
+      # =========================
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # =========================
+      # 2️⃣ Setup Node.js and Salesforce CLI
+      # =========================
+      - name: Setup Node.js and Salesforce CLI
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: |
+          sudo apt-get update && sudo apt-get install -y unzip curl openjdk-17-jdk
+          npm install --global @salesforce/cli
+          echo "y" | sf plugins:install @salesforce/sfdx-scanner
+
+      # =========================
+      # 3️⃣ Run SFDX Code Scanner
+      # =========================
+      - name: Run SFDX Code Scanner
+        run: |
+          mkdir -p reports
+          TIMESTAMP=$(date +'%Y%m%d_%H%M%S')
+          OUTPUT_FILE="reports/aswata_code_scan_result_${TIMESTAMP}.csv"
+
+          echo "🕒 Scan started at $TIMESTAMP"
+          echo "🚀 Running full Salesforce Code Scanner (all categories)..."
+
+          sf scanner run \
+            --target "force-app" \
+            --format csv \
+            --outfile "$OUTPUT_FILE" \
+            --engine "pmd"
+
+          echo "✅ Scan finished — result saved to $OUTPUT_FILE"
+          echo "OUTPUT_FILE=$OUTPUT_FILE" >> $GITHUB_ENV
+
+      # =========================
+      # 4️⃣ Upload Scan Report
+      # =========================
+      - name: Upload Code Scan Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: code_scan_result
+          path: ${{ env.OUTPUT_FILE }}
