@@ -1,7 +1,7 @@
 on:
   push:
     branches:
-      - UAT_Validate
+      - validation/uat
 
 jobs:
   validate_uat:
@@ -107,22 +107,24 @@ jobs:
             exit 0
           fi
 
-          echo "🔍 Detecting test classes..."
+          echo "🔍 Detecting Apex test classes..."
           APEX_CLASSES=$(yq -p=xml -o=json . < package/package.xml | jq -r \
-            '.Package.types | [.] | flatten | map(select(.name == "ApexClass")) | 
-             .[] | .members | [.] | flatten | 
+            '.Package.types | [.] | flatten | map(select(.name == "ApexClass")) |
+             .[] | .members | [.] | flatten |
              map(select((index("*") | not) and (test("Test|Tes")))) | unique | join(" ")')
 
           echo "APEX_CLASSES=$APEX_CLASSES"
 
           echo "🚀 Starting validation..."
+          set +e
           if [ -z "$APEX_CLASSES" ]; then
-            sfdx project deploy start -c -x package/package.xml --dry-run --wait 1200 -o uat --verbose
+            sf project deploy start --dry-run --manifest package/package.xml --wait 1000 --target-org uat --verbose --ignore-conflicts
             DEPLOY_EXIT=$?
           else
-            sfdx project deploy start -c -x package/package.xml --dry-run --wait 1200 --verbose -g -l RunSpecifiedTests --tests $APEX_CLASSES -o uat
+            sf project deploy start --dry-run --manifest package/package.xml --wait 1000 --target-org uat --verbose  --ignore-conflicts
             DEPLOY_EXIT=$?
           fi
+          set -e
 
           echo "🔢 DEPLOY_EXIT=$DEPLOY_EXIT"
 
@@ -132,7 +134,38 @@ jobs:
           else
             echo "❌ Validation failed"
             echo "RESULT=fail" >> $GITHUB_ENV
+            exit 1
           fi
+          # =========================
+          LOG_FILE="validate_output.log"
+          CSV_FILE="validation_result.csv"
+
+          # Ambil output step sebelumnya (Validate Deployment)
+          echo "🔍 Extracting validation errors..."
+          tail -n 2000 $GITHUB_WORKSPACE/_temp/_runner_file_commands/* > $LOG_FILE 2>/dev/null || true
+          if [ ! -s "$LOG_FILE" ]; then
+            echo "⚠️ No validation log found, generating empty CSV."
+            echo "Type,Name,Problem,LineColumn" > "$CSV_FILE"
+            exit 0
+          fi
+
+          # Cari baris yang mirip dengan tabel error Salesforce
+          grep -E "ApexClass|ApexTrigger|ApexComponent|LightningComponent" "$LOG_FILE" | \
+            awk 'BEGIN { FS=" {2,}"; OFS=","; print "Type,Name,Problem,LineColumn" } 
+                 { gsub(/^ +| +$/, ""); if (NF>=3) print $1,$2,$3,$4 }' > "$CSV_FILE"
+
+          echo "📝 Extracted validation results to $CSV_FILE"
+      
+      # =========================
+      # Upload CSV artifact
+      # =========================
+      - name: Upload validation CSV
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: validation_result
+          path: validation_result.csv
+
 
       # =========================
       # 8️⃣ Save depth state (auto increase when failed)
