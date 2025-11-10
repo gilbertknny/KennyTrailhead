@@ -121,7 +121,7 @@ jobs:
             sf project deploy start --dry-run --manifest package/package.xml --wait 1000 --target-org uat --verbose --ignore-conflicts
             DEPLOY_EXIT=$?
           else
-            sf project deploy start --dry-run --manifest package/package.xml --wait 1000 --target-org uat --verbose  --ignore-conflicts
+            sf project deploy start --dry-run --manifest package/package.xml --wait 1000 --target-org uat --verbose  --ignore-conflicts -l RunLocalTests
             DEPLOY_EXIT=$?
           fi
           set -e
