@@ -37,7 +37,7 @@ jobs:
       - name: Run SFDX Code Scanner
         run: |
           mkdir -p reports
-          TIMESTAMP=$(date +'%Y%m%d_%H%M%S')
+          TIMESTAMP=$(date +'%d%m%y_%H%M%S')
           OUTPUT_FILE="reports/aswata_code_scan_result_${TIMESTAMP}.csv"
 
           echo "🕒 Scan started at $TIMESTAMP"
