@@ -230,8 +230,6 @@ private class addressDisplayControllerTest {
         System.assertNotEquals(null, result.ProvinceName, 'ProvinceName should not be null');
         System.assertNotEquals(null, result.CityId, 'CityId should not be null');
         System.assertNotEquals(null, result.CityName, 'CityName should not be null');
-        //System.assertNotEquals(null, result.ZipId, 'ZipId should not be null');
-        //System.assertNotEquals(null, result.ZipName, 'ZipName should not be null');
     }
     
     @isTest
