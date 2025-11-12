@@ -188,9 +188,9 @@ jobs:
             echo "⚠️ Increased depth to $NEW_DEPTH for next run"
           fi
 
-      # =========================
+      # ==========================
       # 9️⃣ Debug info (optional but recommended)
-      # =========================
+      # ==========================
       - name: Debug cache info
         if: always()
         run: |
