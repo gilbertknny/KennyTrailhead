@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
-    <fullName>is_Owner__c</fullName>
-    <formula>IF ($User.Id =  OwnerId ||  $Profile.Name = &apos;System Administrator&apos;, TRUE, FALSE)</formula>
-    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
-    <label>is Owner</label>
-    <trackHistory>false</trackHistory>
-    <type>Checkbox</type>
-</CustomField>
