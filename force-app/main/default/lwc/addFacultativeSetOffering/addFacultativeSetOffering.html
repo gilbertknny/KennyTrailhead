@@ -1,0 +1,261 @@
+<template>
+    <template if:true={isOpen}>
+        <section role="dialog" tabindex="-1" aria-modal="true"
+                 class="slds-modal slds-fade-in-open custom-modal">
+            <div class="slds-modal__container">
+
+                <!-- Header -->
+                <header class="slds-modal__header">
+                    <div class="section-header slds-m-bottom_medium slds-grid slds-align_absolute-center">
+                        <lightning-icon icon-name="custom:custom21" size="small" class="slds-m-right_x-small"></lightning-icon>
+                        <h1 class="slds-text-heading_medium slds-text-heading_bold">REASSURANCE OFFERING</h1>
+                    </div>
+                </header>
+
+                <!-- Scrollable content -->
+                <div class="slds-modal__content slds-p-around_medium slds-scrollable_y"
+                     style="max-height: 80vh;">
+                    <div class="slds-box slds-p-around_small slds-theme_default slds-m-top_large">
+                        <div class="section-divider slds-m-bottom_small">
+                            <h1 class="slds-text-heading_small slds-text-heading_small_bold">Cession Setting</h1>
+                        </div>
+
+                        <div class="slds-grid slds-wrap slds-gutters slds-grid_vertical-align-start">
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                                <div class="columnBorder">
+                                    <lightning-combobox
+                                        name="inputMode"
+                                        label="Input Mode"
+                                        value={formData.inputMode}
+                                        options={inputModeOptions}
+                                        onchange={handleInputChange}>
+                                    </lightning-combobox>  
+                                    
+                                    <!--lightning-combobox
+                                        name="termCondition"
+                                        label="Terms & Conditions"
+                                        value={formData.termCondition}
+                                        options={termConditionOptions}
+                                        onchange={handleInputChange}>
+                                    </lightning-combobox-->    
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-3">  
+                                <div class="columnBorder">
+                                    <template if:true={showRiskName}>
+                                        <lightning-combobox
+                                            name="riskId"
+                                            label="Risk Name"
+                                            value={selectedRiskId}
+                                            options={riskNameOptions}
+                                            onchange={handleInputChange}>
+                                        </lightning-combobox>    
+                                    </template>
+                                    
+                                    <!-- Search Input -->
+                                    <lightning-input
+                                        type="search"
+                                        label="Search Reinsurance"
+                                        placeholder="Type account name..."
+                                        value={searchKey}
+                                        onchange={handleSearchChange}>
+                                    </lightning-input>
+
+                                    <!-- Search Dropdown -->
+                                    <template if:true={showDropdown}>
+                                        <div class="slds-box slds-m-top_xx-small slds-scrollable_y" style="max-height: 200px;">
+                                            <template if:true={searchResults.length}>
+                                                <template for:each={searchResults} for:item="acc">
+                                                    <!-- dropdown row using SLDS media object -->
+                                                    <div
+                                                        key={acc.Id}
+                                                        data-id={acc.Id}
+                                                        class="dropdown-item slds-p-vertical_xx-small slds-p-horizontal_small slds-border_bottom"
+                                                        onclick={handleSelectAccount}
+                                                        style="cursor: pointer;"
+                                                    >
+                                                        <div class="slds-media">
+                                                            <!-- figure: icon, small right margin -->
+                                                            <div class="slds-media__figure slds-m-right_small">
+                                                                <lightning-icon
+                                                                    icon-name="standard:account"
+                                                                    size="x-small"
+                                                                    class="slds-icon slds-icon_x-small slds-icon-text-default"
+                                                                ></lightning-icon>
+                                                            </div>
+
+                                                            <!-- body: stacked text -->
+                                                            <div class="slds-media__body">
+                                                                <div class="slds-text-body_regular slds-text-color_default slds-truncate">
+                                                                    {acc.Name}
+                                                                </div>
+                                                                <template if:true={acc.Insurance_ID__c}>
+                                                                    <div class="slds-text-body_small slds-text-color_weak slds-truncate">
+                                                                        {acc.Insurance_ID__c}
+                                                                    </div>
+                                                                </template>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </template>
+                                            </template>
+
+                                            <template if:false={searchResults.length}>
+                                                <p class="slds-p-around_small slds-text-color_weak">No results found</p>
+                                            </template>
+                                        </div>
+                                    </template>
+
+                                    <!-- Datatable -->
+                                    <lightning-datatable
+                                        key-field="Id"
+                                        data={listReasurance}
+                                        columns={columns}
+                                        class="slds-m-top_medium"
+                                        onrowselection={handleRowSelection}>
+                                    </lightning-datatable>
+                                    
+                                </div>
+                            </div>
+                        </div>       
+                    </div>
+                    <!-- =============================================== -->
+                    <!-- Added: Share, Rate & Commission Section -->
+                    <!-- =============================================== -->
+                    <div class="slds-box slds-p-around_small slds-theme_default slds-m-top_large">
+                        <div class="slds-m-top_large">
+                            <div class="section-divider slds-m-bottom_small">
+                                <h1 class="slds-text-heading_small slds-text-heading_small_bold">
+                                    SHARE, RATE & COMMISSION
+                                </h1>
+                            </div>
+
+                            <lightning-layout multiple-rows class="slds-m-top_large">
+                                <lightning-layout-item class="slds-size_1-of-2 slds-p-around_small">
+                                    <div class="columnBorder">
+                                        <lightning-input label="Rate" name="Rate__c" type="number" value={formData.Rate__c}  onchange={handleInputChange}></lightning-input>
+                                        <lightning-input label="Commission" name="Commission__c" type="number" value={formData.Commission__c}  onchange={handleInputChange}></lightning-input>
+                                        <!--div class="slds-form-element share-row">
+                                            <label class="slds-form-element__label">Premium on Ceded Portion</label>
+                                            <div class="slds-form-element__control">
+                                                <span class="slds-form-element__static">{formData.Premium_Ceded__c}</span>
+                                            </div>
+                                        </div-->
+                                        <!--div class="slds-form-element share-row">
+                                            <label class="slds-form-element__label">Rebate / Commission Ceded Portion</label>
+                                            <div class="slds-form-element__control">
+                                                <span class="slds-form-element__static">{formData.rebateCeded}</span>
+                                            </div>
+                                        </div-->
+                                    </div>
+                                </lightning-layout-item>
+
+                                <lightning-layout-item class="slds-size_1-of-2 slds-p-around_small">
+                                    <div class="columnBorder">
+                                        <lightning-input 
+                                            label="Share Offered (% of TSI)" 
+                                            type="number"
+                                            value={shareOfferedPercent}
+                                            placeholder="%"
+                                            min="0"
+                                            max="100"
+                                            step="0.01"
+                                            onchange={handleInputChange}
+                                            name="Share_Offered__c">
+                                        </lightning-input>
+                                        <!--p class="slds-text-body_small slds-m-top_xx-small">
+                                            IDR: {totalSumInsuredIdr} | Total: {shareOfferedIdr}
+                                        </p-->
+
+                                        <lightning-input 
+                                            label="Share Accepted / Approved (% of TSI)" 
+                                            type="number" 
+                                            value={shareAcceptedPercent}
+                                            placeholder="%"
+                                            min="0"
+                                            max="100"
+                                            step="0.01"
+                                            onchange={handleInputChange}
+                                            name="Share_Accepted_Approved__c">
+                                        </lightning-input>
+                                        <!--p class="slds-text-body_small slds-m-top_xx-small">
+                                            IDR: {totalSumInsuredIdr} | Total: {shareAcceptedIdr}
+                                        </p-->
+
+                                        <lightning-input 
+                                            label="Share Binding (% of TSI)" 
+                                            type="number" 
+                                            value={shareBindingPercent}
+                                            placeholder="%"
+                                            min="0"
+                                            max="100"
+                                            step="0.01"
+                                            onchange={handleInputChange}
+                                            name="Share_Binding__c">
+                                        </lightning-input>
+                                        <!--p class="slds-text-body_small slds-m-top_xx-small">
+                                            IDR: {totalSumInsuredIdr} | Total: {shareBindingIdr}
+                                        </p-->
+                                    </div>
+                                </lightning-layout-item>
+                            </lightning-layout>                        
+                        </div>
+                    </div>
+                    <!-- =============================================== -->
+
+                    <!-- =============================================== -->
+                    <!-- Added: CLAUSES AND WARRANTY Section -->
+                    <!-- =============================================== -->
+                    <div class="slds-box slds-p-around_small slds-theme_default slds-m-top_large">
+                        <div class="slds-m-top_large">
+                            <div class="section-divider slds-m-bottom_small">
+                                <h1 class="slds-text-heading_small slds-text-heading_small_bold">
+                                    CLAUSES AND WARRANTY
+                                </h1>
+                            </div>
+
+                            <lightning-layout multiple-rows class="slds-m-top_large">
+                                <lightning-layout-item class="slds-size_1-of-1 slds-p-around_small">
+                                    <label class="slds-form-element__label" for="terms">Facultative Subjectivity or Provisonal Term (Clauses)</label>
+                                    <div class="slds-form-element__control">
+                                        <textarea id="clausesWarranty"
+                                                name="clausesWarranty" 
+                                                class="slds-textarea" 
+                                                rows="5" 
+                                                oninput={handleInputChange} 
+                                                >
+                                                {formData.clausesWarranty} 
+                                        </textarea>
+                                    </div>
+                                </lightning-layout-item>
+                                <lightning-layout-item class="slds-size_1-of-1 slds-p-around_small">
+                                    <label class="slds-form-element__label" for="terms">Facultative Subjectivity or Provisonal Term (Coverage)</label>
+                                    <div class="slds-form-element__control">
+                                        <textarea id="coverageWarranty"
+                                                name="coverageWarranty" 
+                                                class="slds-textarea" 
+                                                rows="5" 
+                                                oninput={handleInputChange} 
+                                                >
+                                                {formData.coverageWarranty} 
+                                        </textarea>
+                                    </div>
+                                </lightning-layout-item>
+                            </lightning-layout>                        
+                        </div>
+                    </div>
+                    <!-- =============================================== -->
+                </div>
+
+                <!-- Footer -->
+                <footer class="slds-modal__footer">
+                    <lightning-button variant="destructive" label="Submit" onclick={handleSubmit}></lightning-button>
+                    <lightning-button variant="neutral" label="Close" onclick={handleClose}></lightning-button>
+                </footer>
+            </div>
+        </section>
+
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+</template>
