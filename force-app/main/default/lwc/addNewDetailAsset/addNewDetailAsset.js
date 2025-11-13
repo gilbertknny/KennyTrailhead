@@ -29,9 +29,11 @@ export default class AddNewPolicyDetailInsured extends LightningElement {
     @track dynamicFieldShow1 = false;
     @track dynamicFieldShow2 = false;
     @track dynamicFieldShow3 = false;
+    @track dynamicFieldShow4 = false;
     @track dynamicFieldsSec1 = [];
     @track dynamicFieldsSec2 = [];
     @track dynamicFieldsSec3 = [];
+    @track dynamicFieldsSec4 = [];
     @track formData = {};
     @track picklistValues; 
     @track transactionData = [];
@@ -54,6 +56,7 @@ export default class AddNewPolicyDetailInsured extends LightningElement {
     @track showDataTable = false;
 
     controllingValue;
+
     recordTypeIdAsset;
     activeFieldData;
     picklistOptions;
@@ -175,6 +178,10 @@ export default class AddNewPolicyDetailInsured extends LightningElement {
     get visibleFieldsSec3() {
         return this.getFilteredFields(this.dynamicFieldsSec3);
     }
+    get visibleFieldsSec4() {
+        return this.getFilteredFields(this.dynamicFieldsSec4);
+    }
+
 
     getFilteredFields(sectionFields) {
         return sectionFields.filter(f => {
@@ -283,13 +290,13 @@ export default class AddNewPolicyDetailInsured extends LightningElement {
                 };
             }
 
-            // // update formData
+            // update formData
             this.formData = {
                 ...this.formData,
                 [fieldName]: value
             };
 
-            // // also update fields so UI re-renders safely
+            // also update fields so UI re-renders safely
             this.dynamicFields = this.dynamicFields.map(f => {
                 if (f.latitudeName === fieldName) {
                     return { ...f, latitude: value };
@@ -313,12 +320,12 @@ export default class AddNewPolicyDetailInsured extends LightningElement {
             const fieldName = event.target.name;
             let value = Number(event.target.value);
             console.log(fieldName,value);
-            // // update formData
+            // update formData
             this.formData = {
                 ...this.formData,
                 [fieldName]: value
             };
-            // // also update fields so UI re-renders safely
+            // also update fields so UI re-renders safely
             // this.dynamicFields = this.dynamicFields.map(f => {
             //     if (f.latitudeName === fieldName) {
             //         return { ...f, latitude: value };
@@ -364,6 +371,8 @@ export default class AddNewPolicyDetailInsured extends LightningElement {
                 this.dynamicFieldShow2=true;
             }else if(item=='3' && this.dynamicFieldsSec3.length>0){
                 this.dynamicFieldShow3=true;
+            }else if(item=='4' && this.dynamicFieldsSec4.length>0){
+                this.dynamicFieldShow4=true;
             }
         })
     }
@@ -417,6 +426,7 @@ export default class AddNewPolicyDetailInsured extends LightningElement {
         this.dynamicFieldShow1 = false;
         this.dynamicFieldShow2 = false;
         this.dynamicFieldShow3 = false;
+        this.dynamicFieldShow4 = false;
         this.formData = {
             ...this.formData,
             [fieldApiName]: null
@@ -477,7 +487,7 @@ export default class AddNewPolicyDetailInsured extends LightningElement {
             
             const response = await saveDetailAsset({ formData : dataToSave });
             const newRecordId = response;
-            
+            console.log('Saved record Id : ', newRecordId);
             if (!newRecordId) {
                 throw new Error('Insert failed. Record ID is null.');
             }
@@ -495,7 +505,7 @@ export default class AddNewPolicyDetailInsured extends LightningElement {
             
             const recordUrl = `/lightning/r/Asset/${this.recordId}/view`;
             window.location.href = recordUrl;
-
+            // this.dispatchEvent(new CloseActionScreenEvent());
         } catch (error) {
             this.dispatchEvent(
                 new ShowToastEvent({
@@ -522,7 +532,7 @@ export default class AddNewPolicyDetailInsured extends LightningElement {
         this.dynamicFieldsSec1 = [];
         this.dynamicFieldsSec2 = [];
         this.dynamicFieldsSec3 = [];
-        
+        this.dynamicFieldsSec4 = [];
         this.dynamicFields = this.dynamicFields.map(f => {
             const typeData = (f.dataType || '').toLowerCase().trim();
             let lookupFields = 'Name';
@@ -563,8 +573,8 @@ export default class AddNewPolicyDetailInsured extends LightningElement {
                 
                 // ✅ PENTING: Load value dari formData jika ada
                 value: (this.formData && this.formData[f.apiName] !== undefined)
-                    ? this.formData[f.apiName]
-                    : null
+                ? this.formData[f.apiName]
+                : null
             };
 
             // Picklist options
@@ -599,6 +609,8 @@ export default class AddNewPolicyDetailInsured extends LightningElement {
                 this.dynamicFieldsSec2.push(fieldConfig);
             } else if (sectionValue === 3) {
                 this.dynamicFieldsSec3.push(fieldConfig);
+            } else if (sectionValue === 4) {
+                this.dynamicFieldsSec4.push(fieldConfig);
             }
         });
         
@@ -606,6 +618,7 @@ export default class AddNewPolicyDetailInsured extends LightningElement {
         console.log('📦 Section 1 fields:', this.dynamicFieldsSec1.length);
         console.log('📦 Section 2 fields:', this.dynamicFieldsSec2.length);
         console.log('📦 Section 3 fields:', this.dynamicFieldsSec3.length);
+        console.log('📦 Section 4 fields:', this.dynamicFieldsSec4.length);
     }
 
 
