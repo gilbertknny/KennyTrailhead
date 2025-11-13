@@ -1,0 +1,168 @@
+<template>
+    <!-- BEST SOLUTION: Inline style backdrop (overrides everything) -->
+    <div class="slds-backdrop slds-backdrop_open" style="background-color: rgba(0, 0, 0, 0.08) !important;"></div>
+    
+    <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+        <div class="slds-modal__container">
+            <header class="slds-modal__header">
+                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={handleCloseModal}>
+                    <lightning-icon icon-name="utility:close" alternative-text="close" size="small"></lightning-icon>
+                    <span class="slds-assistive-text">Close</span>
+                </button>
+                <lightning-icon icon-name="custom:custom57" size="small" class="icon-left"></lightning-icon>
+                <span class="card-title">EDIT RISK</span>
+            </header>
+
+            <div class="slds-modal__content slds-p-around_medium">
+                <!-- Loading Spinner -->
+                <template if:true={isLoading}>
+                    <div class="slds-align_absolute-center slds-p-around_large">
+                        <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+                    </div>
+                </template>
+
+                <!-- Form Fields -->
+                <template if:false={isLoading}>
+                    <template if:true={fields}>
+                        <div class="slds-grid slds-wrap">
+                            <template for:each={fields} for:item="field">
+                                
+                                <!-- TEXT -->
+                                <template if:true={field.isText}>
+                                    <div key={field.apiName} class="slds-col slds-size_2-of-2 slds-p-around_x-small">
+                                        <lightning-input 
+                                            type="text" 
+                                            label={field.label} 
+                                            name={field.apiName} 
+                                            value={field.value}
+                                            onchange={handleInputChange}>
+                                        </lightning-input>
+                                    </div>
+                                </template>
+
+                                <!-- TEXT AREA -->
+                                <template if:true={field.isTextArea}>
+                                    <div key={field.apiName} class="slds-col slds-size_2-of-2 slds-p-around_x-small">
+                                        <lightning-textarea
+                                            label={field.label}
+                                            name={field.apiName}
+                                            value={field.value}
+                                            onchange={handleInputChange}>
+                                        </lightning-textarea>
+                                    </div>
+                                </template>
+
+                                <!-- Read Only -->
+                                <template if:true={field.isReadonly}>
+                                    <div key={field.apiName} class="slds-col slds-size_2-of-2 slds-p-around_x-small">
+                                        <lightning-input 
+                                            type="text" 
+                                            label={field.label} 
+                                            name={field.apiName} 
+                                            value={field.value}
+                                            onchange={handleInputChange} 
+                                            disabled>
+                                        </lightning-input>
+                                    </div>
+                                </template>
+
+                                <!-- NUMBER -->
+                                <template if:true={field.isNumber}>
+                                    <div key={field.apiName} class="slds-col slds-size_2-of-2 slds-p-around_x-small">
+                                        <lightning-input 
+                                            type="number" 
+                                            label={field.label} 
+                                            name={field.apiName} 
+                                            value={field.value}
+                                            onchange={handleInputChange}>
+                                        </lightning-input>
+                                    </div>
+                                </template>
+
+                                <!-- GEOLOCATION -->
+                                <template if:true={field.isGeolocation}>
+                                    <div key={field.apiName} class="slds-col slds-size_2-of-2 slds-p-around_x-small slds-grid slds-wrap">
+                                        <div class="slds-col slds-size_1-of-2 slds-p-around_x-small">
+                                            <lightning-input
+                                                type="number"
+                                                step="0.000001"
+                                                label={field.latitudeLabel}
+                                                name={field.latitudeName}
+                                                value={field.latitude}
+                                                onchange={handleInputChange}>
+                                            </lightning-input>
+                                        </div>
+                                        <div class="slds-col slds-size_1-of-2 slds-p-around_x-small">
+                                            <lightning-input
+                                                type="number"
+                                                step="0.000001"
+                                                label={field.longitudeLabel}
+                                                name={field.longitudeName}
+                                                value={field.longitude}
+                                                onchange={handleInputChange}>
+                                            </lightning-input>
+                                        </div>
+                                    </div>
+                                </template>
+
+                                <!-- PICKLIST -->
+                                <template if:true={field.isPicklist}>
+                                    <div key={field.apiName} class="slds-col slds-size_2-of-2 slds-p-around_x-small">
+                                        <lightning-combobox
+                                            label={field.label}
+                                            name={field.apiName}
+                                            value={field.value}
+                                            placeholder="Select an option"
+                                            options={field.options}
+                                            onchange={handleInputChange}>
+                                        </lightning-combobox>
+                                    </div>
+                                </template>
+
+                                <!-- LOOKUP -->
+                                <template if:true={field.isLookup}>
+                                    <div key={field.apiName} class="slds-col slds-size_2-of-2 slds-p-horizontal_x-small slds-p-vertical_none">
+                                        <c-custom-lookup
+                                            label={field.label}
+                                            placeholder={field.label}
+                                            icon-name="standard:location"
+                                            object-api-name={field.lookupObject}
+                                            fields={field.fieldsToQuery}
+                                            record-type-name={field.filter}
+                                            data-field={field.apiName}
+                                            province-id={provinceId} 
+                                            city-id={cityId}
+                                            record-id={field.value}
+                                            show-data={field.showData}
+                                            onrecordselected={handleLookUpSelected}
+                                            onrecordcleared={handleLookUpCleared}>
+                                        </c-custom-lookup>
+
+                                        <template if:true={field.isAddress}>
+                                            <lightning-input 
+                                                type="text" 
+                                                label="Address Description"
+                                                placeholder="Enter street / building details"
+                                                value={addressDescription}
+                                                name="Address_Description__c"
+                                                onchange={handleInputChange}>
+                                            </lightning-input>
+                                        </template>
+                                    </div>
+                                </template>
+
+                            </template>
+                        </div>
+                    </template>
+                </template>
+            </div>
+
+            <footer class="slds-modal__footer">
+                <div class="slds-grid slds-grid_align-center slds-m-around_medium">
+                    <lightning-button label="Close" onclick={handleCloseModal}></lightning-button>
+                    <lightning-button variant="brand" label="Update" onclick={handleUpdateAsset}></lightning-button>
+                </div>
+            </footer>
+        </div>
+    </section>
+</template>

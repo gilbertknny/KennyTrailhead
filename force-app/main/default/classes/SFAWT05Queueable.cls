@@ -1,3 +1,12 @@
+/**
+ * @description       : 
+ * @author            : 
+ * @createdDate       : 
+ * @lastModifiedBy    : 
+ * @lastModifiedDate  : 
+ * @testCoverage      : 
+ */
+
 /** @description SFAWT05Queueable   */
 public with sharing class SFAWT05Queueable implements Queueable, Database.AllowsCallouts {
     public Queueableparam qp = new Queueableparam();

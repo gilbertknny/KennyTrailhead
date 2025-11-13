@@ -86,7 +86,9 @@ public class Aswata_Lead_Distribution_Queueable implements Queueable {
                         Master_Data__c assignedSalesman = salesmen.get(Math.mod(counter, salesmanCount));
                         lead.OwnerId = assignedSalesman.Round_Robin_Member__c;
                         leadsToUpdate.add(lead);
-
+						
+                        System.debug('assignedSalesman: ' + assignedSalesman.Id);
+                        System.debug('assignedSalesman.Round_Robin_Counter_Branch__c: ' + assignedSalesman.Round_Robin_Counter_Branch__c);
                         // Update counter for that salesman
                         if (!salesmanToUpdate.containsKey(assignedSalesman.Id)) {
                             assignedSalesman.Round_Robin_Counter_Branch__c += 1;

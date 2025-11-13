@@ -86,6 +86,16 @@ public class Aswata_TestDataFactory {
         return opp;
     }
 
+    public static Quote createQuote(Opportunity opp, String name) {
+        Quote quo = new Quote(
+            Name = name,
+            //AccountId = acc.Id,
+            OpportunityId = opp.id
+        );
+        insert quo;
+        return quo;
+    }
+
     public static Asset createRisk(Opportunity oppty, String name) {
     
         RecordType rt = [
@@ -240,5 +250,34 @@ public class Aswata_TestDataFactory {
         Schema.Location address = new Schema.Location(Name = 'Jl. Sudirman No. 10', RecordTypeId = rtAddress.Id);
         return address;
 
+    }
+
+    // 🔹 Overloaded version (reusable)
+    public static InsurancePolicy createInsurancePolicy(Account acc, Opportunity opp) {
+        InsurancePolicy policy = new InsurancePolicy(
+            Name = 'Test Insurance Policy',
+            NameInsuredId = acc.Id,
+            SourceOpportunityId = opp.Id
+        );
+        insert policy;
+
+        return policy;
+    }
+
+    
+    public static Transaction_Data__c createTransactionData(String recordTypeName, String recordName) {
+        RecordType rt = [
+            SELECT Id FROM RecordType
+            WHERE SObjectType = 'Transaction_Data__c' AND Name =: recordTypeName
+            LIMIT 1
+        ];
+        
+        Transaction_Data__c transactionData = new Transaction_Data__c(
+            Name = recordName,
+            RecordTypeId = rt.Id
+        );
+        insert transactionData;
+
+        return transactionData;
     }
 }

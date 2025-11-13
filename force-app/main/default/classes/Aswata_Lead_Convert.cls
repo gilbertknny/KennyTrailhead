@@ -13,7 +13,7 @@ public with sharing class Aswata_Lead_Convert {
 
         // Query Leads
         List<Lead> leads = [
-            SELECT Id, FirstName, LastName, Company, Email, Phone, Account_Segment__c, Account__c,
+            SELECT Id, FirstName, LastName, Company, Email, Phone, Account_Segment__c, Account__c, Interest_COB__c,
             Account_Sub_Segment__c, Account_Type__c,Account_Pipeline_Status__c, Channel__c, Business_Segmentation__c, 
             Province__c, City__c, Village__c, Zip__c, Address__c, Description, OwnerId FROM Lead WHERE Id IN :leadIds
         ];
@@ -105,7 +105,8 @@ public with sharing class Aswata_Lead_Convert {
                 recordTypeId = recordTypeId,
                 OwnerId = lead.OwnerId, 
                 ParentId = lead.Account__c,
-                Has_Beneficial_Owner__c = 'Y'
+                Has_Beneficial_Owner__c = 'Y',
+                Interest_COB__c = lead.Interest_COB__c
             );
             accountsToInsert.add(acc);
         }
