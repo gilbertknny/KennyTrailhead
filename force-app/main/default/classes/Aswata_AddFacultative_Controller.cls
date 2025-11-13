@@ -1,5 +1,5 @@
 public with sharing class Aswata_AddFacultative_Controller {
-    @AuraEnabled(cacheable=false)
+    /*@AuraEnabled(cacheable=false)
     public static List<Asset> getRiskList() {
         return [
             SELECT Id,
@@ -14,13 +14,12 @@ public with sharing class Aswata_AddFacultative_Controller {
                 AND Facultative_Folder__c = null WITH SECURITY_ENFORCED  
         ];
     }
-
     @AuraEnabled(cacheable=true)
     public static Map<String, Object> getDefaultRiskDetail(String recordId) {
 
         // === STEP 1: Get Treaty JSON from Quote ===
         Quote quoteRecord = [
-            SELECT Id, Treaty_Distribution_Response__c
+            SELECT Id, Treaty_Distribution_Response__c, OpportunityId
             FROM Quote
             WHERE Id = :recordId
             WITH SECURITY_ENFORCED
@@ -57,17 +56,17 @@ public with sharing class Aswata_AddFacultative_Controller {
 
         // === STEP 4: Execute SOQL ===
         String finalQuery = 
-            'SELECT Id, Name, Amount_Insured__c, Risk_ID__c, Description, Address_Description__c,' +
-            ' Volcanic_Zone__c, Flood_Zone__c, Eq_Zone__c, Tsunami_Zone__c,' +
-            ' Opportunity__c, Opportunity__r.Name, Opportunity__r.StageName,' +
-            ' Opportunity__r.Start_Date_Periode__c, Opportunity__r.End_Date_Periode__c,' +
-            ' Opportunity__r.Busreq_ID__c, Opportunity__r.The_Insured_Name__r.Name,' +
-            ' Facultative_Folder__r.Name, Facultative_SOO__r.Name, Opportunity_Facultative__r.Name,' +
-            ' Commission_All_Coverages__c, Rate_All_Coverages__c, ' +
-            ' Facultative_Folder__r.Rate_Offered__c, Facultative_Folder__r.Commission_Offered__c, ' +
-            ' Facultative_Folder__r.Share_Offered__c, Facultative_Folder__r.Share_Accepted__c, ' + 
-            ' Facultative_Folder__r.Share_Binding__c, Facultative_Folder__r.Share_Pending_Bending__c, ' +
-            ' Facultative_Folder__r.Short_Fall__c, Facultative_Folder__r.Folder_Status__c, Facultative_Folder__r.Currency__c '+
+            'SELECT Id, origin_risk__r.Name, origin_risk__r.Amount_Insured__c, origin_risk__r.Risk_ID__c , origin_risk__r.Description, origin_risk__r.Address_Description__c,' +
+            ' origin_risk__r.Volcanic_Zone__c, origin_risk__r.Flood_Zone__c, origin_risk__r.Eq_Zone__c, origin_risk__r.Tsunami_Zone__c,' +
+            ' origin_risk__r.Opportunity__c, origin_risk__r.Opportunity__r.Name, origin_risk__r.Opportunity__r.StageName,' +
+            ' origin_risk__r.Opportunity__r.Start_Date_Periode__c, origin_risk__r.Opportunity__r.End_Date_Periode__c,' +
+            ' origin_risk__r.Opportunity__r.Busreq_ID__c, origin_risk__r.Opportunity__r.The_Insured_Name__r.Name,' +
+            ' opportunity_facultative__r.Facultative_Folder__r.Name, origin_risk__r.Opportunity__r.Name,' +
+            ' origin_risk__r.Commission_All_Coverages__c, origin_risk__r.Rate_All_Coverages__c, ' +
+            ' opportunity_facultative__r.Rate__c, opportunity_facultative__r.Commission__c, ' +
+            ' opportunity_facultative__r.Share_Offered__c, opportunity_facultative__r.Share_Accepted_Approved__c, ' + 
+            ' opportunity_facultative__r.Share_Binding__c, opportunity_facultative__r.Share_Pending_Binding__c, ' +
+            ' opportunity_facultative__r.ShortFall__c, opportunity_facultative__r.Facultative_Folder__r.Folder_Status__c '+
             ' FROM Asset WHERE ' + String.join(conditions, ' OR ') +
             ' WITH SECURITY_ENFORCED';
 
@@ -82,10 +81,10 @@ public with sharing class Aswata_AddFacultative_Controller {
         List<Map<String, String>> options = new List<Map<String, String>>();
         for (Asset ast : assets) {
             options.add(new Map<String, String>{
-                'label' => ast.Opportunity__r.Busreq_ID__c + ' - ' + ast.Risk_ID__c,
+                'label' => ast.origin_risk__r.Opportunity__r.Busreq_ID__c + ' - ' + ast.origin_risk__r.Risk_ID__c,
                 'value' => ast.Id
             });
-            system.debug('StageName: ' + ast.Opportunity__r.StageName);
+            system.debug('StageName: ' + ast.origin_risk__r.Opportunity__r.StageName);
         }
 
         List<Map<String, Object>> sooList = new List<Map<String, Object>>();
@@ -257,15 +256,151 @@ public with sharing class Aswata_AddFacultative_Controller {
                 'ShareOfferedAmount' => shareOfferedAmount,
                 'ShareAcceptedAmount' => shareAcceptedAmount,
                 'ShareBindingAmount' => shareBindingAmount,
-                'SharePendingAmoung' => sharePendingAmount,
+                'SharePendingAmount' => sharePendingAmount,
                 'ShortFallAmount' => shortFallAmount,
                 'FacultativeOpportunityNo' => firstAsset.Opportunity_Facultative__r?.Name
             },
-            'options' => options,
-            'sooList' => sooList
+            'options' => options
+            //,'sooList' => sooList
         };
 
         System.debug('Result: '+ result);
+        return result;
+    }*/
+
+    @AuraEnabled(cacheable=true)
+    public static Map<String, Object> getFolderAndRiskDetail(String recordId) {
+        // === STEP 1: Get Quote Opportunity
+        Quote quoteRecord = [
+            SELECT Id, OpportunityId
+            FROM Quote
+            WHERE Id = :recordId
+            WITH SECURITY_ENFORCED
+            LIMIT 1
+        ];
+
+        // === STEP 2: Build folder Options dropdown ===
+        List<Asset> folderList = [Select Id, Name, Risk_ID__c, Facultative_Folder__r.Name,
+                                                Facultative_Folder__r.Folder_Status__c, Facultative_Folder__r.Id
+                                                from Asset where RecordType.Name = 'Risk' and Opportunity__c =: quoteRecord.OpportunityId 
+                                                and Opportunity__r.Opportunity_Type__c != 'Facultative Outward'
+                                                //and Set_Facultative__c >= 1 cek jika risk ini memang sudah di set facultative
+                                                WITH SECURITY_ENFORCED];
+
+        List<Map<String, String>> folderoptions = new List<Map<String, String>>();
+        Map<String, String> folderStatusMap = new Map<String, String>();
+        Set<Id> uniqueFolderIds = new Set<Id>();
+        for (Asset ast : folderList) {
+            if (ast.Facultative_Folder__r != null && !uniqueFolderIds.contains(ast.Facultative_Folder__r.Id)) {
+                uniqueFolderIds.add(ast.Facultative_Folder__r.Id);
+
+                folderOptions.add(new Map<String, String>{
+                    'label' => ast.Facultative_Folder__r.Name,
+                    'value' => ast.Facultative_Folder__r.Id
+                });
+
+                folderStatusMap.put(ast.Facultative_Folder__r.Id, ast.Facultative_Folder__r.Folder_Status__c);
+            }
+        }
+
+        // === STEP 3: Prepare result map ===
+        Map<String, Object> result = new Map<String, Object>{
+            'folderOptions' => folderOptions,
+            'folderStatusMap' => folderStatusMap
+        };
+
+        System.debug('Result: '+ result);
+        return result;
+    }
+
+    @AuraEnabled
+    public static Map<String, Object> getListOpportunityFolder(String recordId) {
+        // === STEP 2: Build folder Options dropdown ===
+        List<Asset> assetList = [SELECT Id,
+                                    Name,
+                                    Amount_Insured__c,
+                                    Risk_ID__c,
+                                    Opportunity__c,
+                                    Opportunity__r.Name,
+                                    Opportunity__r.Busreq_ID__c 
+                                    FROM Asset WHERE RecordType.Name = 'Risk' 
+                                    AND Has_Facultative__c = true 
+                                    AND Opportunity__r.Opportunity_Type__c != 'Facultative Outward'
+                                    AND Facultative_Folder__c =: recordId WITH SECURITY_ENFORCED 
+                                ];
+
+        
+        // === STEP 2: Prepare a simpler list of maps for LWC ===
+        List<Map<String, Object>> folderOpportunities = new List<Map<String, Object>>();
+        for (Asset ast : assetList) {
+            folderOpportunities.add(new Map<String, Object>{
+                'Id' => ast.Id,
+                'OpportunityName' => ast.Opportunity__r != null ? ast.Opportunity__r.Name : null,
+                'BusreqID' => ast.Opportunity__r != null ? ast.Opportunity__r.Busreq_ID__c : null,
+                'Risk_ID__c' => ast.Risk_ID__c,
+                'Name' => ast.Name,
+                'Amount_Insured__c' => ast.Amount_Insured__c
+            });
+        }
+
+
+        // === STEP 2.1: Additional Responsee All Opportunities ===
+        
+        List<Opportunity> offeringList = [Select Id, 
+                                            Name,
+                                            Busreq_ID__c, 
+                                            Account.Name, 
+                                            Share_Offered__c, 
+                                            Share_Accepted_Approved__c, 
+                                            Offering_status__c from Opportunity 
+                                            WHERE Opportunity_Type__c = 'Facultative Outward'
+                                            AND Facultative_Folder__c =: recordId 
+                                            WITH SECURITY_ENFORCED 
+                                        ];
+        // === STEP 2.2 : Prepare a simpler list of maps for LWC ===
+        List<Map<String, Object>> offeringOpportunities = new List<Map<String, Object>>();
+        for (Opportunity opty : offeringList) {
+            offeringOpportunities.add(new Map<String, Object>{
+                'Id' => opty.Id,
+                'OpportunityName' => opty.Name,
+                'BusreqID' => opty.Busreq_ID__c,
+                'Reinsurer' => opty.Account.Name,
+                'Share_offered__c' => opty.Share_Offered__c,
+                'Share_accepted__c' => opty.Share_Accepted_Approved__c,
+                'Status' => opty.Offering_status__c  
+            });
+        }
+
+        // === STEP 2.3: Get All Risk Within Folder ===
+        // === STEP 2.3 : Query all Assets related to those Opportunities ===
+        if (!offeringList.isEmpty()) {
+            assetList = [
+                SELECT Id, Opportunity__r.Name, Risk_ID__c, Origin_Risk__c, 
+                Origin_Risk__r.Opportunity__r.Busreq_ID__c,
+                Origin_Risk__r.Risk_ID__c FROM Asset
+                WHERE Origin_Risk__c != '' AND Opportunity__r.Id IN :offeringList
+                WITH SECURITY_ENFORCED
+            ];
+        }
+
+        // ✅ Convert into label-value format for LWC picklist
+        List<Map<String, String>> assetPicklist = new List<Map<String, String>>();
+        for (Asset a : assetList) {
+            String label = a.Opportunity__r.Name + ' - '+ a.Origin_Risk__r.Opportunity__r.Busreq_ID__c + ' - ' + a.Origin_Risk__r.Risk_ID__c;
+            assetPicklist.add(new Map<String, String>{
+                'label' => label,
+                'value' => a.Id
+            });
+        }
+
+        // === STEP 3: Return as structured JSON ===
+        Map<String, Object> result = new Map<String, Object>{
+            'folderOpportunities' => folderOpportunities,
+            'offeringOpportunities' => offeringOpportunities,
+            'assetFolder' => assetPicklist
+        };
+
+        System.debug('✅ Result: ' + result);
         return result;
     }
     
@@ -275,18 +410,17 @@ public with sharing class Aswata_AddFacultative_Controller {
     public static Map<String, Object> getRiskDetail(Id riskId) {
          // === STEP 1: Get Asset Record ===
         Asset assetRecord = [
-            SELECT Id, Name, Risk_ID__c, Amount_Insured__c, Description, Address_Description__c,
-                    Volcanic_Zone__c, Flood_Zone__c, Eq_Zone__c, Tsunami_Zone__c,
-                    Opportunity__c, Opportunity__r.Name, Opportunity__r.StageName,
-                    Opportunity__r.Start_Date_Periode__c, Opportunity__r.End_Date_Periode__c,
-                    Opportunity__r.Busreq_ID__c, Opportunity__r.The_Insured_Name__r.Name,
-                    Facultative_Folder__r.Name, Facultative_SOO__r.Name, Opportunity_Facultative__r.Name,
-                    Commission_All_Coverages__c, Rate_All_Coverages__c,
-                    Facultative_Folder__r.Rate_Offered__c, Facultative_Folder__r.Commission_Offered__c,
-                    Facultative_Folder__r.Share_Offered__c, Facultative_Folder__r.Share_Accepted__c,
-                    Facultative_Folder__r.Share_Binding__c, Facultative_Folder__r.Share_Pending_Bending__c,
-                    Facultative_Folder__r.Short_Fall__c, Facultative_Folder__r.Folder_Status__c,
-                    Facultative_Folder__r.Currency__c
+            SELECT  Id, origin_risk__r.Name, origin_risk__r.Amount_Insured__c, origin_risk__r.Risk_ID__c , origin_risk__r.Risk_Description__c, origin_risk__r.Risk_Address__c,
+                    origin_risk__r.Volcanic_Zone__c, origin_risk__r.Flood_Zone__c, origin_risk__r.Eq_Zone__c, origin_risk__r.Tsunami_Zone__c,
+                    origin_risk__r.Opportunity__c, origin_risk__r.Opportunity__r.StageName,Opportunity__r.Name,
+                    origin_risk__r.Opportunity__r.Start_Date_Periode__c, origin_risk__r.Opportunity__r.End_Date_Periode__c,
+                    origin_risk__r.Opportunity__r.Busreq_ID__c, origin_risk__r.Opportunity__r.The_Insured_Name__r.Name,
+                    Opportunity__r.Facultative_Folder__r.Name, origin_risk__r.Opportunity__r.Name,
+                    origin_risk__r.Commission_All_Coverages__c, origin_risk__r.Rate_All_Coverages__c,
+                    Opportunity__r.Rate__c, Opportunity__r.Commision__c, 
+                    Opportunity__r.Share_Offered__c, Opportunity__r.Share_Accepted_Approved__c, 
+                    Opportunity__r.Share_Binding__c, Opportunity__r.Share_Pending_Binding__c, 
+                    Opportunity__r.ShortFall__c, Opportunity__r.Facultative_Folder__r.Folder_Status__c 
             FROM Asset
             WHERE Id = :riskId
             WITH SECURITY_ENFORCED
@@ -301,7 +435,7 @@ public with sharing class Aswata_AddFacultative_Controller {
         Quote relatedQuote = [
             SELECT Id, Treaty_Distribution_Response__c
             FROM Quote
-            WHERE OpportunityId = :assetRecord.Opportunity__c
+            WHERE OpportunityId = :assetRecord.origin_risk__r.Opportunity__c
             WITH SECURITY_ENFORCED
             LIMIT 1
         ];
@@ -313,26 +447,26 @@ public with sharing class Aswata_AddFacultative_Controller {
 
         // === STEP 3: Situation field composition ===
         List<String> parts = new List<String>();
-        if (String.isNotBlank(assetRecord.Address_Description__c)) {
-            parts.add('Address: ' + assetRecord.Address_Description__c);
+        if (String.isNotBlank(assetRecord.origin_risk__r.Risk_Address__c)) {
+            parts.add('Address: ' + assetRecord.origin_risk__r.Risk_Address__c);
         }
-        if (String.isNotBlank(assetRecord.Flood_Zone__c)) {
-            parts.add('Flood Zone: ' + assetRecord.Flood_Zone__c);
+        if (String.isNotBlank(assetRecord.origin_risk__r.Flood_Zone__c)) {
+            parts.add('Flood Zone: ' + assetRecord.origin_risk__r.Flood_Zone__c);
         }
-        if (String.isNotBlank(assetRecord.Eq_Zone__c)) { 
-            parts.add('EQ Zone: ' + assetRecord.Eq_Zone__c);
+        if (String.isNotBlank(assetRecord.origin_risk__r.Eq_Zone__c)) { 
+            parts.add('EQ Zone: ' + assetRecord.origin_risk__r.Eq_Zone__c);
         }
-        if (String.isNotBlank(assetRecord.Volcanic_Zone__c)) {
-            parts.add('Volcanic Zone: ' + assetRecord.Volcanic_Zone__c);
+        if (String.isNotBlank(assetRecord.origin_risk__r.Volcanic_Zone__c)) {
+            parts.add('Volcanic Zone: ' + assetRecord.origin_risk__r.Volcanic_Zone__c);
         }
-        if (String.isNotBlank(assetRecord.Tsunami_Zone__c)) {
-            parts.add('Tsunami Zone: ' + assetRecord.Tsunami_Zone__c);
+        if (String.isNotBlank(assetRecord.origin_risk__r.Tsunami_Zone__c)) {
+            parts.add('Tsunami Zone: ' + assetRecord.origin_risk__r.Tsunami_Zone__c);
         }
         String situation = String.join(parts, ' | ');
 
         // === STEP 4: Match Treaty JSON by Busreq & Risk ===
-        String busreqId = assetRecord.Opportunity__r?.Busreq_ID__c;
-        String riskNo = assetRecord.Risk_ID__c;
+        String busreqId = assetRecord.origin_risk__r.Opportunity__r?.Busreq_ID__c;
+        String riskNo = assetRecord.origin_risk__r.Risk_ID__c;
 
         Decimal totalSumInsured = null;
         Decimal accumulationAWTShare = null;
@@ -355,46 +489,11 @@ public with sharing class Aswata_AddFacultative_Controller {
             }
         }
 
-
-        Decimal shareOfferedAmount;
-        Decimal shareAcceptedAmount;
-        Decimal shareBindingAmount;
-        Decimal sharePendingAmount;
-        Decimal shortFallAmount;
-
-        // Safely retrieve related rate fields
-        Decimal rateOffered = assetRecord.Facultative_Folder__r?.Share_Offered__c;
-        Decimal rateAccepted = assetRecord.Facultative_Folder__r?.Share_Accepted__c;
-        Decimal rateBinding   = assetRecord.Facultative_Folder__r?.Share_Binding__c;
-        Decimal ratePending   = assetRecord.Facultative_Folder__r?.Share_Pending_Bending__c;
-        Decimal rateShortfall = assetRecord.Facultative_Folder__r?.Short_Fall__c;
-
-        // Calculate each safely
-        shareOfferedAmount = (rateOffered != null && totalSumInsured != null && totalSumInsured > 0)
-            ? (rateOffered * totalSumInsured) / 100
-            : 0;
-
-        shareAcceptedAmount = (rateAccepted != null && totalSumInsured != null && totalSumInsured > 0)
-            ? (rateAccepted * totalSumInsured) / 100
-            : 0;
-
-        shareBindingAmount = (rateBinding != null && totalSumInsured != null && totalSumInsured > 0)
-            ? (rateBinding * totalSumInsured) / 100
-            : 0;
-
-        sharePendingAmount = (ratePending != null && totalSumInsured != null && totalSumInsured > 0)
-            ? (ratePending * totalSumInsured) / 100
-            : 0;
-
-        shortFallAmount = (rateShortfall != null && totalSumInsured != null && totalSumInsured > 0)
-            ? (rateShortfall * totalSumInsured) / 100
-            : 0;
-
         // === STEP 5: Get QQ Names ===
         List<Transaction_Data__c> qqList = [
             SELECT QQ_Name__r.Name
             FROM Transaction_Data__c
-            WHERE Opportunity__c = :assetRecord.Opportunity__c
+            WHERE Opportunity__c = :assetRecord.Origin_Risk__r.Opportunity__c
             AND RecordType.Name = 'Member of QQ'
             AND QQ_Name__r.Name != null
             WITH SECURITY_ENFORCED
@@ -406,44 +505,66 @@ public with sharing class Aswata_AddFacultative_Controller {
         }
         String qqNameCombined = qqNames.isEmpty() ? null : String.join(qqNames, ', ');
 
+        System.debug('assetRecord: ' + assetRecord);
         // === STEP 6: Return FLAT structure ===
         return new Map<String, Object>{
-            'RiskId' => assetRecord.Risk_ID__c,
-            'Name' => assetRecord.Name,
-            'Description' => assetRecord.Description,
+            'RiskId' => assetRecord.Origin_Risk__r.Risk_ID__c,
+            'Name' => assetRecord.Origin_Risk__r.Name,
+            'Description' => assetRecord.Origin_Risk__r.Risk_Description__c,
             'Situation' => situation,
             'AmountInsured' => totalSumInsured,
             'AccumulationAswataShare' => accumulationAWTShare,
-            'OpportunityId' => assetRecord.Opportunity__c,
-            'OpportunityName' => assetRecord.Opportunity__r?.Name,
-            'OpportunityStage' => assetRecord.Opportunity__r?.StageName,
-            'BusreqId' => assetRecord.Opportunity__r?.Busreq_ID__c,
-            'FacFolderNo' => assetRecord.Facultative_Folder__r?.Name,
-            'FacultativeOpportunityNo' => assetRecord.Opportunity_Facultative__r?.Name,
-            'InsuredName' => assetRecord.Opportunity__r?.The_Insured_Name__r?.Name,
-            'StartDate' => assetRecord.Opportunity__r?.Start_Date_Periode__c,
-            'EndDate' => assetRecord.Opportunity__r?.End_Date_Periode__c,
+            'OpportunityId' => assetRecord.Origin_Risk__r.Opportunity__c,
+            'OpportunityName' => assetRecord.Origin_Risk__r.Opportunity__r?.Name,
+            'OpportunityStage' => assetRecord.Origin_Risk__r.Opportunity__r?.StageName,
+            'BusreqId' => assetRecord.Origin_Risk__r.Opportunity__r?.Busreq_ID__c,
+            'FacFolderNo' => assetRecord.Opportunity__r.Facultative_Folder__r.Name,
+            'FacultativeOpportunityNo' => assetRecord.Opportunity__r?.Name,
+            'InsuredName' => assetRecord.Origin_risk__r.Opportunity__r?.The_Insured_Name__r?.Name,
+            'StartDate' => assetRecord.Origin_risk__r.Opportunity__r?.Start_Date_Periode__c,
+            'EndDate' => assetRecord.Origin_risk__r.Opportunity__r?.End_Date_Periode__c,
             'TreatyAmount' => treatyAmount,
             'ExhaustedAmount' => exhaustedUtilizedAmount,
             'RemainingAmount' => remainingAmount,
             'ExcessAmount' => excessAmount,
-            'OriginalRate' => assetRecord.Rate_All_Coverages__c,
-            'OriginalCommission' => assetRecord.Commission_All_Coverages__c,
-            'RateOffered' => assetRecord.Facultative_Folder__r?.Rate_Offered__c,
-            'CommissionOffered' => assetRecord.Facultative_Folder__r?.Commission_Offered__c,
-            'ShareOfferedPercent' => assetRecord.Facultative_Folder__r?.Share_Offered__c,
-            'ShareOfferedAmount' => shareOfferedAmount,
-            'ShareAcceptedAmount' => shareAcceptedAmount,
-            'ShareBindingAmount' => shareBindingAmount,
-            'SharePendingAmoung' => sharePendingAmount,
-            'ShortFallAmount' => shortFallAmount,
-            'ShareAcceptedPercent' => assetRecord.Facultative_Folder__r?.Share_Accepted__c,
-            'ShareBinding' => assetRecord.Facultative_Folder__r?.Share_Binding__c,
-            'SharePendingBinding' => assetRecord.Facultative_Folder__r?.Share_Pending_Bending__c,
-            'ShortFall' => assetRecord.Facultative_Folder__r?.Short_Fall__c,
-            'FolderStatus' => assetRecord.Facultative_Folder__r?.Folder_Status__c,
-            'Currency' => assetRecord.Facultative_Folder__r?.Currency__c,
+            'OriginalRate' => assetRecord.Origin_risk__r.Rate_All_Coverages__c,
+            'OriginalCommission' => assetRecord.Origin_risk__r.Commission_All_Coverages__c,
+            'RateOffered' => assetRecord.Opportunity__r?.Rate__c,
+            'CommissionOffered' => assetRecord.Opportunity__r?.Commision__c,
+            'ShareOfferedPercent' => assetRecord.Opportunity__r?.Share_Offered__c,
+            'ShareAcceptedPercent' => assetRecord.Opportunity__r?.Share_Accepted_Approved__c,
+            'ShareBinding' => assetRecord.Opportunity__r?.Share_Binding__c,
+            'SharePendingBinding' => assetRecord.Opportunity__r?.Share_Pending_Binding__c,
+            'ShortFall' => assetRecord.Opportunity__r?.ShortFall__c,
+            'FolderStatus' => assetRecord.Opportunity__r.Facultative_Folder__r?.Folder_Status__c,
             'QQName' => qqNameCombined
         };
     }
+
+    @AuraEnabled(cacheable=false)
+    public static List<Account> searchAccounts(String searchKey) {
+        if (String.isBlank(searchKey)) {
+            return new List<Account>();
+        }
+        return [
+            SELECT Id, Name, Insurance_ID__c
+            FROM Account
+            WHERE Name LIKE :('%' + searchKey + '%') and Type = 'REINSURANCE'
+            With SECURITY_ENFORCED 
+            ORDER BY Name
+            LIMIT 5
+        ];
+    }
+
+    @AuraEnabled
+    public static void updateFacultativeStatus(Id recordId, String newStatus) {
+        if (String.isBlank(recordId) || String.isBlank(newStatus)) {
+            throw new AuraHandledException('Missing parameters.');
+        }
+
+        Opportunity so = [SELECT Id, Offering_status__c FROM Opportunity WHERE Id = :recordId LIMIT 1];
+        so.Offering_status__c = newStatus;
+        update so;
+    }
+
 }
