@@ -126,7 +126,8 @@ global with sharing class VlocityMapping implements callable{
         List<Object> ldocumentclauses = (List<Object>) inputMap.get('document_clauses') ;
         Object documentPolicy = (Object) inputMap.get('documentPolicy');
         Boolean r = false;
-
+        lasset = lasset == null ? new List<Object>() : lasset;
+        //List<Object> lasset2 = new List<Object>();
         //Risk
         if(!lrisk.isEmpty()){
             Integer max3 = lrisk.size() > 20 ? 20 : lrisk.size();
@@ -191,6 +192,60 @@ global with sharing class VlocityMapping implements callable{
 
         //InsurancePolicyCoverage
         if(!lcoverages.isEmpty() && r == true){
+            List<Object> listcovid = new List<Object>();
+            List<Object> listmd = new List<Object>();
+            Map<String,Object> md = new Map<String,Object>();
+            Map<String,Object> mapobj3 = new Map<String,Object>();
+            Map<String,Object> mapobj5 = new Map<String,Object>();
+            Integer x = 0;
+            for(Object obj:lcoverages){
+                Map<String,Object> mapobj1 = (Map<String,Object>) obj;
+                Map<String,Object> mapobj2 = new Map<String,Object>();
+                if(mapobj1.containsKey('m_coverage_ref_id')){
+                    mapobj2.put('listref',mapobj1.get('m_coverage_ref_id'));
+                    listcovid.add(mapobj2);
+                }
+            }
+            if(!listcovid.isEmpty()){
+                mapobj3.put('covid',listcovid);
+                md = callIP('Get_CoverageAsset', JSON.serialize(mapobj3));
+                listmd = (List<Object>) md.get('output') ;
+                if(!listmd.isEmpty()){
+                    for(Object md1:listmd){
+                        Map<String,Object> mapobj4 = (Map<String,Object>) md1;
+                        mapobj5.put((String) mapobj4.get('COVERAGE_REF_ID__c'),mapobj4);
+                    }
+                }
+            }
+            if(!mapobj5.isEmpty()){
+                for(Object obj:lcoverages){
+                    x++;
+                    Map<String,Object> mapast = new Map<String,Object>();
+                    Map<String,Object> mapobj1 = (Map<String,Object>) obj;
+                    String m_coverage_ref_id = String.valueOf(mapobj1.get('m_coverage_ref_id'));
+                    if(mapobj5.containsKey(m_coverage_ref_id)){
+                        Map<String,Object> mapobj6 = (Map<String,Object>) mapobj5.get(m_coverage_ref_id);
+                        Map<String,Object> mac = (Map<String,Object>) mapobj6.get('Asset_Category__r');
+                        Map<String,Object> msc = (Map<String,Object>) mapobj6.get('Asset_Section__r');
+                            
+                        if(mapobj1.containsKey('riskId')){
+                            mapast.put('risk_id',mapobj1.get('riskId'));
+                        }
+                        if(mapobj1.containsKey('minimum_cur_id')){
+                            mapast.put('currency_code',mapobj1.get('minimum_cur_id'));
+                        }
+                        mapast.put('detail_description',mac.get('Name')+' '+msc.get('Name'));
+                        mapast.put('partitionCode',mapobj1.get('partitionCode'));
+                        mapast.put('risk_detail_flag',null);
+                        mapast.put('busreq_id',mapobj1.get('busreqId'));
+                        mapast.put('riskDetailId',x);
+                        mapast.put('amount_insured',mapobj1.get('amount_insured'));
+                        mapast.put('m_coverage_ref_id',mapobj1.get('m_coverage_ref_id'));
+                        lasset.add(mapast);
+                    }
+                }
+            }
+
             Integer max1 = lcoverages.size() > 20 ? 20 : lcoverages.size();
             mapobjsp = (Map<String, Object>) JSON.deserializeUntyped(JSON.serialize(documentPolicy));
             mapobjcv.put('name','SFAWT05Extend_RiskAssetCoverage');
@@ -204,8 +259,9 @@ global with sharing class VlocityMapping implements callable{
             mapobjcv.put('listconasw',lcoverages);
             mapobj.put('coverages',callQueue(mapobjcv,1));
         }
+        system.debug('lasset '+lasset);
         //Asset
-        if(lasset != null && !lasset.isEmpty() && r == true){
+        if(!lasset.isEmpty() && r == true){
             Integer max2 = lasset.size() > 20 ? 20 : lasset.size();
             mapobjas.put('name','SFAWT05Extend_RiskAssetCoverage');
             mapobjas.put('varout','detail_insured');
