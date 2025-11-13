@@ -1,7 +1,7 @@
 /**
  * @description       : Data Handler for LWC Treaty Distribution
  * @author            : Ahmad Yazid Munif
- * @last modified on  : 10-28-2025
+ * @last modified on  : 11-07-2025
  * @last modified by  : Ahmad Yazid Munif
 **/
 public with sharing class Aswata_Treaty_Distribution {
@@ -38,21 +38,93 @@ public with sharing class Aswata_Treaty_Distribution {
      * @param recordId string Id quote
      * @return Quote object
      */
-    @AuraEnabled(cacheable=true)
-    public static Quote getRelatedOpportunityData(String recordId) {
-        if (!Schema.sObjectType.Quote.isAccessible()) {
-            throw new SecurityException(
-                'Insufficient permissions to access Quote'
-            );
-        }
-        Quote resultOppty = [
-            SELECT OpportunityId,
-            Opportunity.Name,Opportunity.Total_Sum_Insured__c,
-            Opportunity.Start_Date_Periode__c,Opportunity.End_Date_Periode__c,
-            Treaty_Distribution_Response__c
-            FROM Quote WHERE Id = :recordId
+    @AuraEnabled
+    public static List<QuoteOpptyRelated> getRelatedListRisk(String recordId) {
+        RecordType rtRisk = [
+            SELECT id FROM RecordType 
+            WHERE SobjectType = 'Asset' AND Name = 'RIsk'
+            WITH SECURITY_ENFORCED LIMIT 1
         ];
-        return resultOppty;
+        Quote resultOppty = [
+            SELECT OpportunityId,Treaty_Distribution_Response__c
+            FROM Quote WHERE Id = :recordId
+            WITH SECURITY_ENFORCED LIMIT 1
+        ];
+        System.debug('resultOppty'+resultOppty);
+        List<Asset> relatedAsset = [
+            SELECT Id,name, Risk_ID__c, 
+            Accumulation__c, Accumulation__r.Name, 
+            Opportunity__r.Busreq_ID__c, Opportunity__r.Name,
+            Opportunity__r.Start_Date_Periode__c,
+            Opportunity__r.End_Date_Periode__c,
+            Opportunity__r.Total_Sum_Insured__c,
+            Opportunity__c
+            FROM Asset WHERE Opportunity__c = :resultOppty.OpportunityId
+            AND RecordTypeId = :rtRisk.Id
+            AND Accumulation__c != null
+            WITH SECURITY_ENFORCED
+        ];
+        System.debug('relatedAsset'+relatedAsset);
+        List<QuoteOpptyRelated> listOpptyQuote = new List<QuoteOpptyRelated>();
+        for(Asset item : relatedAsset){
+            QuoteOpptyRelated opptyQuote = new QuoteOpptyRelated();
+            opptyQuote.id = item.Opportunity__c;
+            opptyQuote.labelName = item.Opportunity__r.Busreq_ID__c+' - '+item.Risk_ID__c;
+            opptyQuote.findId = item.Opportunity__r.Busreq_ID__c+item.Risk_ID__c;
+            opptyQuote.busreqId = item.Opportunity__r.Busreq_ID__c;
+            opptyQuote.opportunityName = item.Opportunity__r.Name;
+            opptyQuote.oppTotalSumInsured = item.Opportunity__r.Total_Sum_Insured__c;
+            opptyQuote.oppStartDatePeriode = item.Opportunity__r.Start_Date_Periode__c;
+            opptyQuote.oppEndDatePeriode = item.Opportunity__r.End_Date_Periode__c;
+            opptyQuote.treatyResponse = resultOppty.Treaty_Distribution_Response__c;
+            listOpptyQuote.add(opptyQuote);
+        }
+        System.debug('listOpptyQuote'+listOpptyQuote);
+        return listOpptyQuote;
+    }
+    /**
+     * @description function for get opportunity related from quote
+     * @param recordId string Id quote
+     * @return Quote object
+     */
+    // @AuraEnabled(cacheable=true)
+    // public static Quote getRelatedOpportunityData(String recordId) {
+    //     if (!Schema.sObjectType.Quote.isAccessible()) {
+    //         throw new SecurityException(
+    //             'Insufficient permissions to access Quote'
+    //         );
+    //     }
+    //     Quote resultOppty = [
+    //         SELECT OpportunityId,
+    //         Opportunity.Name,Opportunity.Total_Sum_Insured__c,
+    //         Opportunity.Start_Date_Periode__c,Opportunity.End_Date_Periode__c,
+    //         Treaty_Distribution_Response__c
+    //         FROM Quote WHERE Id = :recordId
+    //         LIMIT 1
+    //     ];
+        
+    //     // QuoteOpptyRelated opptyQuote = new QuoteOpptyRelated();
+    //     // opptyQuote.id = resultOppty.OpportunityId;
+    //     // opptyQuote.opportunityName = resultOppty.Opportunity.Name;
+    //     // opptyQuote.oppTotalSumInsured = resultOppty.Opportunity.Total_Sum_Insured__c;
+    //     // opptyQuote.oppStartDatePeriode = resultOppty.Opportunity.Start_Date_Periode__c;
+    //     // opptyQuote.oppEndDatePeriode = resultOppty.Opportunity.End_Date_Periode__c;
+    //     return resultOppty;
+    // }
+    /**
+     * @description Class wrapper return getRelatedOppty
+     * all value JSON can deserialize with this wrapper
+     */
+    public class QuoteOpptyRelated {
+        @AuraEnabled public String id;
+        @AuraEnabled public String labelName;
+        @AuraEnabled public String findId;
+        @AuraEnabled public String busreqId;
+        @AuraEnabled public String opportunityName;
+        @AuraEnabled public Decimal oppTotalSumInsured;
+        @AuraEnabled public Date oppStartDatePeriode;
+        @AuraEnabled public Date oppEndDatePeriode;
+        @AuraEnabled public String treatyResponse;
     }
     /**
      * @description function for save setFacultative
