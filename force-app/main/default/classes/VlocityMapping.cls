@@ -210,7 +210,7 @@ global with sharing class VlocityMapping implements callable{
                 mapobj3.put('covid',listcovid);
                 md = callIP('Get_CoverageAsset', JSON.serialize(mapobj3));
                 listmd = (List<Object>) md.get('output') ;
-                if(!listmd.isEmpty()){
+                if(listmd!=null){
                     for(Object md1:listmd){
                         Map<String,Object> mapobj4 = (Map<String,Object>) md1;
                         mapobj5.put((String) mapobj4.get('COVERAGE_REF_ID__c'),mapobj4);
@@ -259,7 +259,7 @@ global with sharing class VlocityMapping implements callable{
             mapobjcv.put('listconasw',lcoverages);
             mapobj.put('coverages',callQueue(mapobjcv,1));
         }
-        system.debug('lasset '+lasset);
+        
         //Asset
         if(!lasset.isEmpty() && r == true){
             Integer max2 = lasset.size() > 20 ? 20 : lasset.size();
