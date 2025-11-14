@@ -1,0 +1,52 @@
+<template>
+    <lightning-input if:true={showInput} type={fieldInfo.dataType} 
+        label={fieldInfo.label} required={fieldInfo.required} 
+        field-level-help={fieldInfo.inlineHelpText} onchange={handleChange}
+        key={fieldName} name={fieldName} disabled={fieldInfo.disabled} data-id={fieldName}
+        value={fieldValue}>
+    </lightning-input>
+    <lightning-textarea if:true={showTextArea}
+        name={fieldName} label={fieldInfo.label}
+        required={fieldInfo.required} onchange={handleChangeTextArea}>
+    </lightning-textarea>
+    <lightning-combobox if:true={showPicklist}
+            name={fieldName}
+            label={fieldInfo.label}
+            value={fieldValue}
+            options={options}
+            onchange={handleChange} 
+            required={fieldInfo.required} >
+    </lightning-combobox>
+    <lightning-input-address if:true={showAddress}
+        name={fieldName}
+        label={fieldInfo.label}
+        address-line-one-label="Street"
+        city-label="City"
+        state-label="State"
+        postal-code-label="Postal Code"
+        country-label="Country"
+        show-address-lookup="true"
+        onchange={handleAddressSelect}
+        required={fieldInfo.required} >
+    </lightning-input-address>
+    <lightning-input-location if:true={showGeolocation} 
+        name={fieldName}
+        label={fieldInfo.label}
+        onchange={handleGeolocation}
+        required={fieldInfo.required}>
+    </lightning-input-location>
+    <!--<c-lwc-custom-lookup if:true={showLookup} value={fieldValue} object-api-name={fieldLookup} label={fieldInfo.label} types={fieldFilter} onrecordupdated={handleLookup} >
+    </c-lwc-custom-lookup>-->
+    <lightning-record-picker if:true={showLookup} 
+        lwc:ref="myPicker"
+        label={fieldInfo.label}
+        object-api-name={fieldLookup}
+        display-fields="Name"
+        required={fieldInfo.required} 
+        value={fieldValue}
+        filter={filter}
+        display-info={displayInfo}
+        matching-info={matchingInfo}
+        onchange={handleChangeLookup}>
+    </lightning-record-picker>
+</template>
