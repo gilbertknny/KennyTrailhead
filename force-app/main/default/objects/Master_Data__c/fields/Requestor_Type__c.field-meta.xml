@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Requestor_Type__c</fullName>
+    <label>Requestor Type</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Agent</fullName>
+                <default>false</default>
+                <label>Agent</label>
+            </value>
+            <value>
+                <fullName>Bank</fullName>
+                <default>false</default>
+                <label>Bank</label>
+            </value>
+            <value>
+                <fullName>Broker</fullName>
+                <default>false</default>
+                <label>Broker</label>
+            </value>
+            <value>
+                <fullName>General</fullName>
+                <default>false</default>
+                <label>General</label>
+            </value>
+            <value>
+                <fullName>Leasing</fullName>
+                <default>false</default>
+                <label>Leasing</label>
+            </value>
+            <value>
+                <fullName>Priority</fullName>
+                <default>false</default>
+                <label>Priority</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

@@ -1,0 +1,85 @@
+<template>
+    <div class="slds-form-element">
+        <label class="slds-form-element__label">{label}</label>
+        <div class="slds-form-element__control">
+            <div class="slds-combobox_container">
+                <div class={comboboxClass} aria-expanded={isDropdownOpen} aria-haspopup="listbox" role="combobox">
+                    <!-- If record is selected, show pill -->
+                    <div class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_right">
+                        <template if:true={selectedRecord}>
+                            <lightning-pill 
+                                label={selectedRecord.Name}
+                                onremove={clearSelection}
+                                class="slds-pill_container"
+                            >
+                                <lightning-icon icon-name={iconName} size="small" alternative-text="Selected"></lightning-icon>
+                            </lightning-pill>
+                        
+                        </template>
+
+                        <!-- Else show search input -->
+                        <template if:false={selectedRecord}>
+                            <div class="slds-input-has-icon slds-input-has-icon_left">
+                                <lightning-icon 
+                                    icon-name="utility:search"
+                                    size="x-small"
+                                    class="slds-input__icon slds-input__icon_left"
+                                ></lightning-icon>
+                                <input 
+                                    type="text" 
+                                    class="slds-input" 
+                                    placeholder={placeholder} 
+                                    value={searchKey} 
+                                    oninput={handleInputChange}
+                                    onfocus={openDropdown}
+                                />
+
+                                <!--lightning-input
+                                type="search"
+                                value={searchKey}
+                                placeholder={placeholder}
+                                onchange={handleInputChange}
+                                onfocus={openDropdown}
+                            ></lightning-input-->
+                            </div>
+                        </template>
+                    </div>    
+                    <!-- Dropdown results -->
+                    <div if:true={isDropdownOpen} class="slds-dropdown slds-dropdown_length-5 slds-dropdown_fluid">
+                        <ul class="slds-listbox slds-listbox_vertical" role="listbox">
+                            <template if:true={results.length}>
+                                <template for:each={results} for:item="record">
+                                    <li key={record.Id} role="presentation" class="slds-listbox__item">
+                                        <div 
+                                            class="slds-media slds-listbox__option slds-listbox__option_entity slds-media_center"
+                                            role="option"
+                                            onclick={selectRecord}
+                                            data-id={record.Id}
+                                            data-name={record.Name}
+                                            data-subtitle={record.Subtitle}
+                                        >
+                                            <span class="slds-media__figure">
+                                                <lightning-icon icon-name={iconName} size="small"></lightning-icon>
+                                            </span>
+                                            <span class="slds-media__body">
+                                                <span class="slds-listbox__option-text slds-listbox__option-text_entity">
+                                                    <span class="slds-truncate">{record.Name}</span>
+                                                </span>
+                                                <span class="slds-listbox__option-meta slds-truncate">
+                                                    {recordTypeName} • {record.Subtitle}
+                                                </span>
+                                            </span>
+                                        </div>
+                                    </li>
+                                </template>
+                            </template>
+                            <template if:true={showNoResults}>
+                                <li class="slds-listbox__item">No results found</li>
+                            </template>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
