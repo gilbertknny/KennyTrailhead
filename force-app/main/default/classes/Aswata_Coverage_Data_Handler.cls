@@ -1,7 +1,7 @@
 /**
  * @description       : Generate Data for Insert Coverage
  * @author            : Ahmad Yazid Munif
- * @last modified on  : 11-10-2025
+ * @last modified on  : 11-13-2025
  * @last modified by  : Ahmad Yazid Munif
 **/
 public without sharing class Aswata_Coverage_Data_Handler {
@@ -41,7 +41,7 @@ public without sharing class Aswata_Coverage_Data_Handler {
             coverage.Total_Rebate__c = wrapper.rebate.totalRebate;
             coverage.Discount__c = wrapper.rebate.discountValue;
             coverage.Commision__c = wrapper.rebate.commissionValue;
-            coverage.Banks_Fee__c = wrapper.rebate.bankFeeValue;
+            coverage.Banks_Fee_Comission__c = wrapper.rebate.bankFeeValue;
             coverage.Risk_Closing_Survey_Fee_BSP__c = wrapper.rebate.bspValue;
             coverage.Profit_Sharing__c = wrapper.rebate.profitValue;
             coverage.Leasing_Fee__c = wrapper.rebate.leasingValue;
