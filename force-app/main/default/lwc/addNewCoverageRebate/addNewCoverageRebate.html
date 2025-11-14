@@ -1,0 +1,364 @@
+<!--
+  @description       : 
+  @author            : Ahmad Yazid Munif
+  @group             : 
+  @last modified on  : 11-03-2025
+  @last modified by  : Ahmad Yazid Munif
+-->
+<template>
+    <div class="slds-p-around_medium slds-scrollable_x" style="margin-bottom: 30px;">
+        <lightning-radio-group
+            label="Rebate Setting"
+            options={modeOptions}
+            value={selectedMode}
+            onchange={handleModeChange}
+            required
+            class="slds-m-bottom_medium"
+            disabled=true>
+        </lightning-radio-group>
+        <!-- <div class="slds-m-vertical_medium">
+            <h2 class="slds-text-heading_small slds-text-align_center slds-p-bottom_small">
+                Rebate
+            </h2>
+        </div> -->
+        <template if:true={coverageData}>
+            <div class="vertical-scroll-container">
+                <table class="slds-table slds-table_cell-buffer slds-table_bordered" 
+                    style="width: auto; min-width: 100%;">
+                    <thead>
+                        <tr class="slds-line-height_reset">
+                            <th class="slds-text-align_left" scope="col" style="width: 4%;">
+                                <div class="wrap-header" title="ID Coverage">ID</div>
+                            </th>
+                            <th class="slds-text-align_left" scope="col">
+                                <div class="wrap-header" title="Coverage Name">Name</div>
+                            </th>
+                            <template if:true={showDiscount}>
+                                <th class="slds-text-align_left" scope="col" style="width: 10%;">
+                                    <div class="slds-cell-wrap" title="Discount">Discount</div>
+                                </th>
+                            </template>
+                            <template if:true={showCommission}>
+                                <th class="slds-text-align_left" scope="col" style="width: 10%;">
+                                    <div class="slds-cell-wrap" title="Commission">Commission</div>
+                                </th>
+                            </template>
+                            <template if:true={showBankFeeBool}>
+                                <th class="slds-text-align_left" scope="col" style="width: 10%;">
+                                    <div class="slds-cell-wrap" title="Bank Fee">Bank's Fee</div>
+                                </th>
+                            </template>
+                            <template if:true={showLeasing}>
+                                <th class="slds-text-align_left" scope="col" style="width: 10%;">
+                                    <div class="slds-cell-wrap" title="Leasing Fee">Leasing's Fee</div>
+                                </th>
+                            </template>
+                            <template if:true={showOverriding}>
+                                <th class="slds-text-align_left" scope="col" style="width: 10%;">
+                                    <div class="slds-cell-wrap" title="Overriding">Overriding</div>
+                                </th>
+                            </template>
+                            <template if:true={showBSP}>
+                                <th class="slds-text-align_left" scope="col" style="width: 10%;">
+                                    <div class="slds-cell-wrap" title="Risk/ BSP">Risk/Closing Survey Fee / BSP</div>
+                                </th>
+                            </template>
+                            <!-- <template if:true={showProfit}>
+                                <th class="slds-text-align_left" scope="col" style="width: 10%;">
+                                    <div class="slds-cell-wrap" title="Profit Sharing">Profit Sharing</div>
+                                </th>
+                            </template> -->
+                            <th class="slds-text-align_left" scope="col" style="width: 10%;">
+                                <div class="slds-cell-wrap" title="Total Rebate">Total Rebate</div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={coverageData} for:item="row">
+                            <template if:false={row.isSingleRate}> 
+                                <tr key={row.id}> 
+                                    <td data-label="ID Coverage">{row.coverageId}</td>
+                                    <td data-label="Coverage Name" class="slds-cell-wrap">{row.coverageName}</td>
+                                    <template if:true={showDiscount}>
+                                        <td data-label="Discount">
+                                            <lightning-input
+                                                    type="text" onkeydown={handleNumericKeyDown}
+                                                    value={row.rebate.discountValue}
+                                                    data-id={row.id}
+                                                    data-fieldname="discountValue"
+                                                    onchange={handleInputChange}
+                                                    disabled={row.isDisabledInputRebate}
+                                                    variant="label-hidden">
+                                            </lightning-input>
+                                        </td>
+                                    </template>
+                                    <template if:true={showCommission}>
+                                        <td data-label="Commission">
+                                            <lightning-input
+                                                    type="text" onkeydown={handleNumericKeyDown}
+                                                    value={row.rebate.commissionValue}
+                                                    data-id={row.id}
+                                                    data-fieldname="commissionValue"
+                                                    onchange={handleInputChange}
+                                                    disabled={row.isDisabledInputRebate}
+                                                    variant="label-hidden">
+                                            </lightning-input>
+                                        </td>
+                                    </template>
+                                    <template if:true={showBankFeeBool}>
+                                        <td data-label="Bank Fee">
+                                            <lightning-input
+                                                    type="text" onkeydown={handleNumericKeyDown}
+                                                    value={row.rebate.bankFeeValue}
+                                                    data-id={row.id}
+                                                    data-fieldname="bankFeeValue"
+                                                    onchange={handleInputChange}
+                                                    disabled={row.isDisabledInputRebate}
+                                                    variant="label-hidden">
+                                            </lightning-input>
+                                        </td>
+                                    </template>
+                                    <template if:true={showLeasing}>
+                                        <td data-label="Leasing Fee">
+                                            <lightning-input
+                                                    type="text" onkeydown={handleNumericKeyDown}
+                                                    value={row.rebate.leasingValue}
+                                                    data-id={row.id}
+                                                    data-fieldname="leasingValue"
+                                                    onchange={handleInputChange}
+                                                    disabled={row.isDisabledInputRebate}
+                                                    variant="label-hidden">
+                                            </lightning-input>
+                                        </td>
+                                    </template>
+                                    <template if:true={showOverriding}>
+                                        <td data-label="Overriding">
+                                            <lightning-input
+                                                    type="text" onkeydown={handleNumericKeyDown}
+                                                    value={row.rebate.overridingValue}
+                                                    data-id={row.id}
+                                                    data-fieldname="overridingValue"
+                                                    onchange={handleInputChange}
+                                                    disabled={row.isDisabledInputRebate}
+                                                    variant="label-hidden">
+                                            </lightning-input>
+                                        </td>
+                                    </template>
+                                    <template if:true={showBSP}>
+                                        <td data-label="BSP">
+                                            <lightning-input
+                                                    type="text" onkeydown={handleNumericKeyDown}
+                                                    value={row.rebate.bspValue}
+                                                    data-id={row.id}
+                                                    data-fieldname="bspValue"
+                                                    onchange={handleInputChange}
+                                                    disabled={row.isDisabledInputRebate}
+                                                    variant="label-hidden">
+                                            </lightning-input>
+                                        </td>
+                                    </template>
+                                    <!-- <template if:true={showProfit}>
+                                        <td data-label="Profit">
+                                            <lightning-input
+                                                    type="text" onkeydown={handleNumericKeyDown}
+                                                    value={row.profitValue}
+                                                    data-id={row.id}
+                                                    data-fieldname="profitValue"
+                                                    onchange={handleInputChange}
+                                                    disabled={row.isDisabledInputRebate}
+                                                    variant="label-hidden">
+                                            </lightning-input>
+                                        </td>
+                                    </template> -->
+                                    <td data-label="Total Rebate">
+                                        <lightning-input
+                                                type="text" onkeydown={handleNumericKeyDown}
+                                                value={row.rebate.totalRebate}
+                                                data-id={row.id}
+                                                data-fieldname="totalRebate"
+                                                disabled={row.isDisabledTotalRebate}
+                                                variant="label-hidden">
+                                        </lightning-input>
+                                    </td>
+                                </tr>
+                            </template>
+                            <!-- <template if:true={isModeBreakdown}>
+                                <template if:true={row.isSingleRate}> 
+                                    <tr key={row.id}> 
+                                        <th colspan="2" class="slds-text-align_left" scope="col" style="width: 20%;">
+                                            <div class="wrap-header" title="Composite Deductible">Total Rebate</div>
+                                        </th>
+                                        <template if:true={showDiscount}>
+                                            <th class="slds-text-align_center" scope="col">
+                                                {discountSum}
+                                            </th>
+                                        </template>
+                                        <template if:true={showCommission}>
+                                            <th class="slds-text-align_center" scope="col">
+                                                {commisionSum}
+                                            </th>
+                                        </template>
+                                        <template if:true={showBankFeeBool}>
+                                            <th class="slds-text-align_center" scope="col">
+                                                {bankFeeSum}
+                                            </th>
+                                        </template>
+                                        <template if:true={showLeasing}>
+                                            <th class="slds-text-align_center" scope="col">
+                                                {leasingSum}
+                                            </th>
+                                        </template>
+                                        <template if:true={showOverriding}>
+                                            <th class="slds-text-align_center" scope="col">
+                                                {overridingSum}
+                                            </th>
+                                        </template>
+                                        <template if:true={showBSP}>
+                                            <th class="slds-text-align_center" scope="col">
+                                                {riskBSPSum}
+                                            </th>
+                                        </template>
+                                        <th class="slds-text-align_left" scope="col">
+                                            {totalRebateSum}
+                                        </th>
+                                    </tr>
+                                </template>
+                            </template> -->
+                            <template if:false={isModeBreakdown}>
+                                <template if:true={row.isSingleRate}>
+                                    <tr key={row.id}>
+                                        <th colspan="2" class="slds-text-align_left" scope="col" style="width: 20%;">
+                                            <div class="wrap-header" title="Composite Deductible">Composite/ Single Rebate</div>
+                                        </th>
+                                        <template if:true={showDiscount}>
+                                            <th class="slds-text-align_center slds-text-title_bold" scope="col">
+                                                <lightning-input
+                                                    type="text" onkeydown={handleNumericKeyDown}
+                                                    value={row.rebate.discountValue}
+                                                    data-id={row.id}
+                                                    data-fieldname="discountValue"
+                                                    onchange={handleInputChangeSingle}
+                                                    disabled={row.isDisabledTotalRebate}
+                                                    variant="label-hidden">
+                                                </lightning-input>
+                                            </th>
+                                        </template>
+                                        <template if:true={showCommission}>
+                                            <th class="slds-text-align_center slds-text-title_bold" scope="col">
+                                                <lightning-input
+                                                    type="text" onkeydown={handleNumericKeyDown}
+                                                    value={row.rebate.commissionValue}
+                                                    data-id={row.id}
+                                                    data-fieldname="commissionValue"
+                                                    onchange={handleInputChangeSingle}
+                                                    disabled={row.isDisabledTotalRebate}
+                                                    variant="label-hidden">
+                                                </lightning-input>
+                                            </th>
+                                        </template>
+                                        <template if:true={showBankFeeBool}>
+                                            <th class="slds-text-align_center slds-text-title_bold" scope="col">
+                                                <lightning-input
+                                                    type="text" onkeydown={handleNumericKeyDown}
+                                                    value={row.rebate.bankFeeValue}
+                                                    data-id={row.id}
+                                                    data-fieldname="bankFeeValue"
+                                                    onchange={handleInputChangeSingle}
+                                                    disabled={row.isDisabledTotalRebate}
+                                                    variant="label-hidden">
+                                                </lightning-input>
+                                            </th>
+                                        </template>
+                                        <template if:true={showLeasing}>
+                                            <th class="slds-text-align_center slds-text-title_bold" scope="col">
+                                                <lightning-input
+                                                        type="text" onkeydown={handleNumericKeyDown}
+                                                        value={row.rebate.leasingValue}
+                                                        data-id={row.id}
+                                                        data-fieldname="leasingValue"
+                                                        disabled={row.isDisabledTotalRebate}
+                                                        onchange={handleInputChangeSingle}
+                                                        variant="label-hidden">
+                                                </lightning-input>
+                                            </th>
+                                        </template>
+                                        <template if:true={showOverriding}>
+                                            <th class="slds-text-align_center slds-text-title_bold" scope="col">
+                                                <lightning-input
+                                                        type="text" onkeydown={handleNumericKeyDown}
+                                                        value={row.rebate.overridingValue}
+                                                        data-id={row.id}
+                                                        data-fieldname="overridingValue"
+                                                        disabled={row.isDisabledTotalRebate}
+                                                        onchange={handleInputChangeSingle}
+                                                        variant="label-hidden">
+                                                </lightning-input>
+                                            </th>
+                                        </template>
+                                        <template if:true={showBSP}>
+                                            <th class="slds-text-align_center slds-text-title_bold" scope="col">
+                                                <lightning-input
+                                                        type="text" onkeydown={handleNumericKeyDown}
+                                                        value={row.rebate.bspValue}
+                                                        data-id={row.id}
+                                                        data-fieldname="bspValue"
+                                                        disabled={row.isDisabledTotalRebate}
+                                                        onchange={handleInputChangeSingle}
+                                                        variant="label-hidden">
+                                                </lightning-input>
+                                            </th>
+                                        </template>
+                                        <th class="slds-text-align_left" scope="col">
+                                            <lightning-input
+                                                type="text" onkeydown={handleNumericKeyDown}
+                                                value={row.rebate.totalRebate}
+                                                data-id={row.id}
+                                                data-fieldname="totalRebate"
+                                                disabled=true
+                                                variant="label-hidden">
+                                            </lightning-input>
+                                        </th>
+                                    </tr>
+                                </template>
+                            </template>
+                        </template>
+                        <template if:false={isModeBreakdown}>
+                            <tr class="slds-line-height_reset slds-text-color_default">
+                                <th colspan="2" class="slds-text-align_left" scope="col" style="width: 280px;">
+                                    <div class="slds-cell-wrap">Description</div>
+                                </th>
+                                <th colspan="5" class="slds-text-align_left" scope="col">
+                                    <lightning-input
+                                        type="text" 
+                                        value={descriptionRate}
+                                        data-fieldname="descriptionRate"
+                                        onchange={handleChangeDesc}
+                                        variant="label-hidden"
+                                        class="full-width-input">
+                                    </lightning-input>
+                                </th>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+            </div>
+        </template>
+    </div>
+    <footer class="slds-modal__footer">
+        <div class="slds-grid slds-grid_align-end slds-m-top_large">
+            <div class="slds-grid slds-grid_align-center slds-gap_small">
+                <lightning-button 
+                    label="Previous" 
+                    onclick={handlePrevious} 
+                    variant="neutral">
+                </lightning-button>
+                <lightning-button 
+                    label="Next" 
+                    onclick={handleNext} 
+                    class="slds-m-left_small"
+                    variant="brand">
+                </lightning-button>
+            </div>
+        </div>
+    </footer>
+</template>

@@ -210,7 +210,7 @@ global with sharing class VlocityMapping implements callable{
                 mapobj3.put('covid',listcovid);
                 md = callIP('Get_CoverageAsset', JSON.serialize(mapobj3));
                 listmd = (List<Object>) md.get('output') ;
-                if(!listmd.isEmpty()){
+                if(listmd!=null){
                     for(Object md1:listmd){
                         Map<String,Object> mapobj4 = (Map<String,Object>) md1;
                         mapobj5.put((String) mapobj4.get('COVERAGE_REF_ID__c'),mapobj4);
@@ -220,24 +220,22 @@ global with sharing class VlocityMapping implements callable{
             if(!mapobj5.isEmpty()){
                 for(Object obj:lcoverages){
                     x++;
+                    String jsobj = JSON.serialize(obj);
+                    jsobj = jsobj.replace('"busreqId"','"busreq_id"');
                     Map<String,Object> mapast = new Map<String,Object>();
-                    Map<String,Object> mapobj1 = (Map<String,Object>) obj;
+                    Map<String,Object> mapobj1 = (Map<String,Object>) JSON.deserializeUntyped(jsobj);
                     String m_coverage_ref_id = String.valueOf(mapobj1.get('m_coverage_ref_id'));
                     if(mapobj5.containsKey(m_coverage_ref_id)){
                         Map<String,Object> mapobj6 = (Map<String,Object>) mapobj5.get(m_coverage_ref_id);
                         Map<String,Object> mac = (Map<String,Object>) mapobj6.get('Asset_Category__r');
                         Map<String,Object> msc = (Map<String,Object>) mapobj6.get('Asset_Section__r');
                             
-                        if(mapobj1.containsKey('riskId')){
-                            mapast.put('risk_id',mapobj1.get('riskId'));
-                        }
-                        if(mapobj1.containsKey('minimum_cur_id')){
-                            mapast.put('currency_code',mapobj1.get('minimum_cur_id'));
-                        }
+                        mapast.put('risk_id',mapobj1.get('riskId'));
+                        mapast.put('currency_code',mapobj1.get('minimum_cur_id'));
+                        mapast.put('busreq_id',mapobj1.get('busreq_id'));
                         mapast.put('detail_description',mac.get('Name')+' '+msc.get('Name'));
                         mapast.put('partitionCode',mapobj1.get('partitionCode'));
                         mapast.put('risk_detail_flag',null);
-                        mapast.put('busreq_id',mapobj1.get('busreqId'));
                         mapast.put('riskDetailId',x);
                         mapast.put('amount_insured',mapobj1.get('amount_insured'));
                         mapast.put('m_coverage_ref_id',mapobj1.get('m_coverage_ref_id'));

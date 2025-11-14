@@ -1,0 +1,660 @@
+<template>
+    <lightning-card title="Facultative">
+        <div class="slds-m-around_medium slds-p-bottom_none">
+
+            <!-- Coverage Header -->
+            <div class="section-header slds-m-bottom_medium slds-grid slds-align_absolute-center">
+                <lightning-icon icon-name="custom:custom21" size="small" class="slds-m-right_x-small"></lightning-icon>
+                <h1 class="slds-text-heading_medium slds-text-heading_bold">FACULTATIVE OFFERING</h1>
+            </div>
+            <div class="columnBorder">
+                <div class="slds-grid slds-wrap slds-grid_vertical-align-center slds-grid_align-spread slds-m-bottom_medium">
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                        <!--lightning-combobox
+                            name="opportunityName"
+                            value={formData.opportunityName}
+                            options={opportunityOptions}
+                            placeholder="Choose an Opportunity"
+                            onchange={handleOptySelected}>
+                        </lightning-combobox-->
+                        <lightning-combobox
+                            name="folderFacultative"
+                            value={formData.folderName}
+                            options={folderOptions}
+                            placeholder="Choose an Folder"
+                            onchange={handleFolderSelected}>
+                        </lightning-combobox>
+                    </div>
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                        <div class="slds-grid slds-grid_vertical-align-center slds-grid_align-end">
+                            <div class="slds-text-title_bold slds-p-right_x-small">Status:</div>
+                            <lightning-badge 
+                                label={formData.statusFolder}
+                                class={badgeClass}>
+                            </lightning-badge>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-grid slds-wrap slds-gutters">
+                    <!-- Combo box -->
+                    <div class="slds-col slds-size_3-of-12 slds-align-top">
+                        <div class="slds-grid slds-grid_vertical-align-center">
+                            <lightning-button 
+                                label="Add Risk"
+                                variant="brand"
+                                onclick={handleAddOpty}
+                                >
+                            </lightning-button>
+                        </div>
+                    </div>
+                        <div class="slds-col slds-size_9-of-12 slds-align-top"> 
+                    </div>
+                </div>
+                <br>
+                <lightning-datatable
+                    key-field="Id"
+                    data={folderOpportunities}
+                    columns={columns}
+                    onrowselection={handleRowSelection}
+                    >
+                </lightning-datatable>
+                <div class="slds-grid slds-wrap slds-grid_align-spread">
+                    <div class="slds-col slds-size_12-of-12">
+                        <div class="slds-grid slds-grid_align-end slds-m-top_large">
+                            <lightning-button 
+                                label="Set Offering" 
+                                variant="destructive" 
+                                onclick={handleOpenModal}
+                                class="slds-m-top_small"> 
+                            </lightning-button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="columnBorder">
+                <div class="section-divider">
+                    <h1 class="slds-text-heading_small slds-text-heading_small_bold">LIST OF OFFERING</h1>
+                </div>
+
+                <lightning-datatable
+                    key-field="Id"
+                    data={pagedData}
+                    columns={sooColumns}
+                    onrowaction={handleRowAction}
+                    hide-checkbox-column
+                    >
+                </lightning-datatable>
+                <div class="slds-m-top_small slds-align_absolute-center">
+                    <lightning-button 
+                        label="Previous" 
+                        onclick={handlePrevious}
+                        disabled={disablePrevious}>
+                    </lightning-button>
+
+                    <span class="slds-m-horizontal_small">
+                        Page {currentPage} of {totalPages}
+                    </span>
+
+                    <lightning-button 
+                        label="Next" 
+                        onclick={handleNext}
+                        disabled={disableNext}>
+                    </lightning-button>
+                </div>
+            </div>
+            
+
+            
+            <div class="columnBorder">
+                <lightning-combobox
+                    name="opportunityName"
+                    value={selectedOfferingOpportunity}
+                    options={opportunityOptions}
+                    placeholder="Choose an Opportunity"
+                    onchange={handleOptySelected}>
+                </lightning-combobox>
+                <!-- ========== REFERENCE ========== -->
+                <div class="section-divider">
+                    <h1 class="slds-text-heading_small slds-text-heading_small_bold">REFERENCE</h1>
+                </div>
+                <div class="slds-grid slds-wrap slds-gutters">
+                    <!-- Left Column -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                        <div class="slds-form-element share-row">
+                            <label class="slds-form-element__label">Facultative Opportunity Folder No</label>
+                            <div class="slds-form-element__control">
+                                <span class="slds-form-element__static">{formData.facFolderNo}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                        <div class="slds-form-element share-row">
+                            <label class="slds-form-element__label">Opportunity No</label>
+                            <div class="slds-form-element__control">
+                                <span class="slds-form-element__static">{formData.opportunityNo}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slds-grid slds-wrap slds-gutters">
+                    <!-- Left Column -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                        <div class="slds-form-element share-row">
+                            <label class="slds-form-element__label">Facultative Opportunity No</label>
+                            <div class="slds-form-element__control">
+                                <span class="slds-form-element__static">{formData.facultativeOpportunityNo}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                        <div class="slds-form-element share-row">
+                            <label class="slds-form-element__label">Opportunity Name</label>
+                            <div class="slds-form-element__control">
+                                <span class="slds-form-element__static">{formData.opportunityName}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slds-grid slds-wrap slds-gutters">
+                    <!-- Left Column -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                        <div class="slds-form-element share-row">
+                            <label class="slds-form-element__label">Request/Policy No.</label>
+                            <div class="slds-form-element__control">
+                                <span class="slds-form-element__static">{formData.busreqId}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                        <div class="slds-form-element share-row">
+                            <label class="slds-form-element__label">Opportunity Status</label>
+                            <div class="slds-form-element__control">
+                                <span class="slds-form-element__static">{formData.opportunityStage}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="slds-grid slds-wrap slds-gutters ">
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                        <!-- ========== PERIOD ========== -->
+                        <div class="section-divider">
+                            <h1 class="slds-text-heading_small slds-text-heading_small_bold">PERIOD</h1>
+                        </div>
+                        <div class="slds-form-element share-row">
+                            <div class="slds-grid slds-wrap slds-gutters">
+                                <div class="slds-col slds-size_1-of-2">
+                                    <label class="slds-form-element__label">Insurance Start Date</label>
+                                    <div class="slds-form-element__control">
+                                        <span class="slds-form-element__static">{formData.startDatePeriod}</span>
+                                    </div>
+                                </div>
+
+                                <div class="slds-col slds-size_1-of-2">
+                                    <label class="slds-form-element__label">Insurance End Date</label>
+                                    <div class="slds-form-element__control">
+                                        <span class="slds-form-element__static">{formData.endDatePeriod}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-form-element share-row">
+                            <div class="slds-grid slds-wrap slds-gutters">
+                                <div class="slds-col slds-size_1-of-2">
+                                    <label class="slds-form-element__label">Facultative Start Date</label>
+                                    <div class="slds-form-element__control">
+                                        <span class="slds-form-element__static">{formData.facultativeStartPeriod}</span>
+                                    </div>
+                                </div>
+
+                                <div class="slds-col slds-size_1-of-2">
+                                    <label class="slds-form-element__label">Facultative End Date</label>
+                                    <div class="slds-form-element__control">
+                                        <span class="slds-form-element__static">{formData.facultativeEndPeriod}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                        <!-- ========== THE INSURED ========== -->
+                        <div class="section-divider">
+                            <h1 class="slds-text-heading_small slds-text-heading_small_bold">THE INSURED</h1>
+                        </div>
+                        <div class="slds-form-element share-row">
+                            <div class="slds-grid slds-wrap slds-gutters">
+                                <div class="slds-col slds-size_1-of-1">
+                                    <label class="slds-form-element__label">The Insured Name</label>
+                                    <div class="slds-form-element__control">
+                                        <span class="slds-form-element__static">{formData.insuredName}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>             
+                        <div class="slds-form-element share-row">
+                            <div class="slds-grid slds-wrap slds-gutters">        
+                                <div class="slds-col slds-size_1-of-1">
+                                    <label class="slds-form-element__label">QQ. Name</label>
+                                    <div class="slds-form-element__control">
+                                        <span class="slds-form-element__static">{formData.qqName}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ========== RISK ========== -->
+                <div class="section-divider">
+                    <h1 class="slds-text-heading_small slds-text-heading_small_bold">RISK AND ASSET</h1>
+                </div>
+
+                <div class="slds-grid slds-wrap slds-gutters">
+                    <!-- Left Column -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                        <div class="slds-form-element share-row">
+                            <label class="slds-form-element__label">Risk No</label>
+                            <div class="slds-form-element__control">
+                                <span class="slds-form-element__static">{formData.riskNo}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                        <div class="slds-form-element share-row">
+                            <label class="slds-form-element__label">Description</label>
+                            <div class="slds-form-element__control">
+                                <span class="slds-form-element__static">{formData.description}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slds-grid slds-wrap slds-gutters">
+                    <!-- Left Column -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                        <div class="slds-form-element share-row">
+                            <label class="slds-form-element__label">Risk Name</label>
+                            <div class="slds-form-element__control">
+                                <span class="slds-form-element__static">{formData.riskName}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                        <div class="slds-form-element share-row">
+                            <label class="slds-form-element__label">Situation</label>
+                            <div class="slds-form-element__control">
+                                <span class="slds-form-element__static">{formData.situation}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slds-grid slds-wrap slds-gutters">
+                    <!-- Left Column -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                        <div class="slds-form-element share-row">
+                            <label class="slds-form-element__label">Total SUM Insured - Aswata Share</label>
+                            <div class="slds-form-element__control">
+                                <span class="slds-form-element__static">{formData.totalSumInsured}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                        <div class="slds-form-element share-row">
+                            <label class="slds-form-element__label">Accumulation - Aswata Share</label>
+                            <div class="slds-form-element__control">
+                                <span class="slds-form-element__static">{formData.accumAmount}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ========== CAPACITY SETTING ========== -->
+                <div class="slds-grid slds-wrap slds-gutters">
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                        <div class="section-divider">
+                            <h1 class="slds-text-heading_small slds-text-heading_small_bold">CAPACITY SETTING</h1>
+                        </div>
+
+                        <div class="slds-grid slds-wrap slds-gutters">
+                            <!-- Left Column -->
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                                <div class="slds-form-element share-row">
+                                    <label class="slds-form-element__label">Treaty</label>
+                                    <div class="slds-form-element__control">
+                                        <span class="slds-form-element__static">{formData.treatyAmount}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Right Column -->
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                                <div class="slds-form-element share-row">
+                                    <label class="slds-form-element__label">Excess</label>
+                                    <div class="slds-form-element__control">
+                                        <span class="slds-form-element__static">{formData.excessAmount}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="slds-grid slds-wrap slds-gutters">
+                            <!-- Left Column -->
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                                <div class="slds-form-element share-row">
+                                    <label class="slds-form-element__label">Exhausted/Utilized</label>
+                                    <div class="slds-form-element__control">
+                                        <span class="slds-form-element__static">{formData.exhaustedAmount}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Right Column -->
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                                <div class="slds-form-element share-row">
+                                    <label class="slds-form-element__label">Set Facultative</label>
+                                    <div class="slds-form-element__control">
+                                        <span class="slds-form-element__static">{formData.setFacultative}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="slds-grid slds-wrap slds-gutters">
+                            <!-- Left Column -->
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                                <div class="slds-form-element share-row">
+                                    <label class="slds-form-element__label">Remaining</label>
+                                    <div class="slds-form-element__control">
+                                        <span class="slds-form-element__static">{formData.remainingAmount}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Right Column -->
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                                <!--div class="slds-form-element share-row">
+                                    
+                                </div-->
+                            </div>
+                        </div>
+                    </div>
+
+                
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                        <div class="section-divider">
+                            <h1 class="slds-text-heading_small slds-text-heading_small_bold">SHARE</h1>
+                        </div>
+                        
+                        <div class="slds-form-element share-row">
+                            <label class="slds-form-element__label">Share Offered</label>
+                            <div class="slds-grid slds-gutters">
+                                <div class="slds-form-element__control slds-col slds-size_2-of-6">
+                                    <span class="slds-form-element__static">{formData.shareOfferedPercent} %</span>
+                                </div>
+                                <div class="slds-form-element__control slds-col slds-size_1-of-6">
+                                    <span class="slds-form-element__static">{formData.shareOfferedCurrency} </span>
+                                </div>
+                                <div class="slds-form-element__control slds-col slds-size_3-of-6">
+                                    <span class="slds-form-element__static">{shareOfferedAmountDisplay}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="slds-form-element share-row">
+                            <label class="slds-form-element__label">Share Accepted/Approved</label>
+                            <div class="slds-grid slds-gutters">
+                                <div class="slds-form-element__control slds-col slds-size_2-of-6">
+                                    <span class="slds-form-element__static">{formData.shareAcceptedPercent} %</span>
+                                </div>
+                                <div class="slds-form-element__control slds-col slds-size_1-of-6">
+                                    <span class="slds-form-element__static">{formData.shareAcceptedCurrency} </span>
+                                </div>
+                                <div class="slds-form-element__control slds-col slds-size_3-of-6">
+                                    <span class="slds-form-element__static">{shareAcceptedAmountDisplay}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- SHARE BINDING -->
+                        <div class="slds-form-element share-row">
+                            <label class="slds-form-element__label">Share Binding</label>
+                            <div class="slds-grid slds-gutters">
+                                <div class="slds-form-element__control slds-col slds-size_2-of-6">
+                                    <span class="slds-form-element__static">{formData.shareBindingPercent} %</span>
+                                </div>
+                                <div class="slds-form-element__control slds-col slds-size_1-of-6">
+                                    <span class="slds-form-element__static">{formData.shareBindingCurrency} </span>
+                                </div>
+                                <div class="slds-form-element__control slds-col slds-size_3-of-6">
+                                    <span class="slds-form-element__static">{shareBindingAmountDisplay}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- SHARE PENDING BINDING -->
+                        <div class="slds-form-element share-row">
+                            <label class="slds-form-element__label">Share Pending Binding</label>
+                            <div class="slds-grid slds-gutters">
+                                <div class="slds-form-element__control slds-col slds-size_2-of-6">
+                                    <span class="slds-form-element__static">{formData.sharePendingPercent} %</span>
+                                </div>
+                                <div class="slds-form-element__control slds-col slds-size_1-of-6">
+                                    <span class="slds-form-element__static">{formData.sharePendingCurrency} </span>
+                                </div>
+                                <div class="slds-form-element__control slds-col slds-size_3-of-6">
+                                    <span class="slds-form-element__static">{sharePendingAmountDisplay}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- SHORT FALL -->
+                        <div class="slds-form-element share-row">
+                            <label class="slds-form-element__label">Short Fall</label>
+                            <div class="slds-grid slds-gutters">
+                                <div class="slds-form-element__control slds-col slds-size_2-of-6">
+                                    <span class="slds-form-element__static">{formData.shortFallPercent} %</span>
+                                </div>
+                                <div class="slds-form-element__control slds-col slds-size_1-of-6">
+                                    <span class="slds-form-element__static">{formData.shortFallCurrency}</span>
+                                </div>
+                                <div class="slds-form-element__control slds-col slds-size_3-of-6">
+                                    <span class="slds-form-element__static">{shortFallAmountDisplay}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="section-divider">
+                            <h1 class="slds-text-heading_small slds-text-heading_small_bold">RATE & COMMISSION</h1>
+                        </div>
+
+                        <div class="slds-grid slds-wrap slds-gutters">
+                            <!-- Left Column -->
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                                <div class="slds-form-element share-row">
+                                    <label class="slds-form-element__label">Rate Origin</label>
+                                    <div class="slds-form-element__control">
+                                        <span class="slds-form-element__static">{formData.originalRate} %</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Right Column -->
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                                <div class="slds-form-element share-row">
+                                    <label class="slds-form-element__label">Rate Offered</label>
+                                    <div class="slds-form-element__control">
+                                        <span class="slds-form-element__static">{formData.rateOffered} %</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="slds-grid slds-wrap slds-gutters">
+                            <!-- Left Column -->
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                                <div class="slds-form-element share-row">
+                                    <label class="slds-form-element__label">Commission Origin</label>
+                                    <div class="slds-form-element__control">
+                                        <span class="slds-form-element__static">{formData.originalCommission} %</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Right Column -->
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                                <div class="slds-form-element share-row">
+                                    <label class="slds-form-element__label">Commission Offered</label>
+                                    <div class="slds-form-element__control">
+                                        <span class="slds-form-element__static">{formData.commissionOffered} %</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Premium on Ceded Portion -->
+                            <div class="slds-grid slds-wrap slds-gutters">
+                            <!-- Left Column -->
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                                <div class="slds-form-element share-row">
+                                    <label class="slds-form-element__label">Premium on Ceded Portion Origin</label>
+                                    <div class="slds-form-element__control">
+                                        <span class="slds-form-element__static">{formData.premiumOriginal}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Right Column -->
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                                <div class="slds-form-element share-row">
+                                    <label class="slds-form-element__label">Premium on Ceded Portion Offered</label>
+                                    <div class="slds-form-element__control">
+                                        <span class="slds-form-element__static">{formData.premiumOffered}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Rebate/Commission Ceded Portion -->
+                        <div class="slds-grid slds-wrap slds-gutters">
+                            <!-- Left Column -->
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                                <div class="slds-form-element share-row">
+                                    <label class="slds-form-element__label">Commission Ceded Portion Origin</label>
+                                    <div class="slds-form-element__control">
+                                        <span class="slds-form-element__static">{formData.rebateOriginal}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Right Column -->
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                                <div class="slds-form-element share-row">
+                                    <label class="slds-form-element__label">Commission Ceded Portion Offered</label>
+                                    <div class="slds-form-element__control">
+                                        <span class="slds-form-element__static">{formData.rebateOffered}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <c-add-facultative-set-offering onclose={handleCloseModal}></c-add-facultative-set-offering>
+        
+<!-- Modal Add Opportunity -->
+        <template if:true={isModalOpen}>
+            <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open custom-medium-modal">
+                <div class="slds-modal__container">
+                    <!-- Header -->
+                    <header class="slds-modal__header">
+                        <h2 class="slds-text-heading_medium">Select an Opportunity</h2>
+                        <!--button class="slds-button slds-button_icon slds-modal__close" onclick={handleCloseModal}>
+                            <lightning-icon icon-name="utility:close" alternative-text="close" size="small"></lightning-icon>
+                        </button-->
+                    </header>
+
+                    <!-- Body -->
+                    <div class="slds-modal__content slds-p-around_medium">
+                        <template if:true={isLoading}>
+                            <lightning-spinner alternative-text="Loading opportunities"></lightning-spinner>
+                        </template>
+
+                        <template if:false={isLoading}>
+                            <template if:true={opportunityList.length}>
+                                <lightning-datatable
+                                    key-field="Id"
+                                    data={opportunityList}
+                                    columns={columns}
+                                    onrowselection={handleRowSelection}>
+                                </lightning-datatable>
+                            </template>
+                            <template if:false={opportunityList.length}>
+                                <p>No opportunities found.</p>
+                            </template>
+                        </template>
+                    </div>
+
+                    <!-- Footer -->
+                    <footer class="slds-modal__footer">
+                        <lightning-button variant="neutral" label="Close" onclick={handleCloseModalOpty}></lightning-button>
+                        <lightning-button variant="neutral" label="Add" onclick={handleAddOpportunity}></lightning-button>
+                    </footer>
+                </div>
+            </section>
+
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+<!-- modal to update opportunity -->
+        <template if:true={isUpdateStatusModalOpen}>
+            <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <h2 class="slds-text-heading_medium">Update Status</h2>
+                    </header>
+
+                    <div class="slds-modal__content slds-p-around_medium">
+                        <lightning-combobox
+                            name="status"
+                            label="Select New Status"
+                            value={selectedStatus}
+                            options={statusOptions}
+                            placeholder="Choose status"
+                            onchange={handleStatusChange}>
+                        </lightning-combobox>
+                    </div>
+
+                    <footer class="slds-modal__footer">
+                        <lightning-button
+                            variant="neutral"
+                            label="Cancel"
+                            onclick={handleCloseStatusModal}>
+                        </lightning-button>
+                        <lightning-button
+                            variant="brand"
+                            label="Submit"
+                            onclick={handleSubmitStatus}>
+                        </lightning-button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+    </lightning-card>
+</template>
