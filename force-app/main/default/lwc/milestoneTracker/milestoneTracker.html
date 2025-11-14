@@ -1,0 +1,78 @@
+<template>
+    <lightning-card title="Milestone Tracker">
+        <div class="slds-var-m-around_medium">
+            <lightning-icon icon-name="standard:entity_milestone" size="small"></lightning-icon>
+            <span class="slds-var-m-around_medium slds-text-heading_x-small"><b>Milestones</b></span>
+        </div>
+        <div class="slds-var-p-horizontal_medium">
+            <template if:false={hasCaseType}>
+                <div class="slds-var-m-bottom_large">
+                    <!--Tidak ada tonggak sejarah yang dapat ditunjukkan.--> <!--No milestones to show.-->
+                    <b style="color:red">NO Milestone!</b>
+                </div>
+            </template>
+            <!-- Individual Milestones -->
+            <template if:true={milestones.length}>
+                <template for:each={milestones} for:item="milestone">
+                    <div key={milestone.id} class="milestone" style={milestone.milestoneClass}>
+                        <b>
+                            <h3 data-item-id={milestone.id} onclick={handleClickName} style="cursor: pointer;">{milestone.name}</h3>
+                        </b>
+                        <b>
+                            <h3>{milestone.teamName}</h3>
+                        </b>
+                        <template if:true={milestone.showTarget}>
+                            <p><i>Target Penyelesaian: </i>
+                                <template if:true={milestone.milestoneStarted}>
+                                    <span>{milestone.targetTimeInDays} Kerja sampai tanggal </span>
+                                    <span><lightning-formatted-date-time
+                                            value={milestone.targetDate}></lightning-formatted-date-time></span>
+                                </template>
+                                <template if:false={milestone.milestoneStarted}>
+                                    <span>{milestone.targetTimeInDays} Kerja</span>
+                                </template>
+                                <span style="float: right;">
+                                    <template if:true={milestone.isCompleted}>
+                                        <template if:false={milestone.isViolated}>
+                                            <lightning-icon icon-name="utility:success" variant="success"></lightning-icon>
+                                        </template>
+                                        <template if:true={milestone.isViolated}>
+                                            <lightning-icon icon-name="utility:success" variant="error"></lightning-icon>
+                                        </template>
+                                    </template>
+                                </span>
+                            </p>
+                        </template>
+                        <template if:false={milestone.showTarget}>
+                            <p><i>&nbsp;</i>
+                                <span style="float: right;">
+                                    <template if:true={milestone.isCompleted}>
+                                        <template if:false={milestone.isViolated}>
+                                            <lightning-icon icon-name="utility:success" variant="success"></lightning-icon>
+                                        </template>
+                                        <template if:true={milestone.isViolated}>
+                                            <lightning-icon icon-name="utility:success" variant="error"></lightning-icon>
+                                        </template>
+                                    </template>
+                                </span>
+                            </p>
+                        </template>
+                        <p><i>Waktu Penyelesaian: </i>
+                            <span>
+                                <template if:true={milestone.isViolated}>
+                                    -
+                                </template>
+                                <template if:true={milestone.milestoneStarted}>
+                                    <span> {milestone.formattedRemainingTime} </span>
+                                </template>
+                                <template if:false={milestone.milestoneStarted}>
+                                    0 Hari 0 Jam 0 Menit 0 Detik
+                                </template>
+                            </span>
+                        </p>
+                    </div>
+                </template>
+            </template>
+        </div>
+    </lightning-card>
+</template>
