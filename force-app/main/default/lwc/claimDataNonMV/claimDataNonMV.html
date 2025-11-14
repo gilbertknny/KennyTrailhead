@@ -1,0 +1,105 @@
+<template>
+    <lightning-card title="OBJECT DATA Non-MV" icon-name="standard:asset">
+        <template if:true={isLoading}>
+            <lightning-spinner alternative-text="Loading..." size="medium"></lightning-spinner>
+        </template>
+
+        <div class="slds-p-around_medium">
+            <h3 class="slds-section__title slds-m-bottom_small">GENERAL</h3>
+            <lightning-layout multiple-rows="true">
+                 <lightning-layout-item size="6" padding="horizontal-small"> <lightning-input label="POLICY NO." value={policyNo} disabled></lightning-input> </lightning-layout-item>
+                 <lightning-layout-item size="6" padding="horizontal-small"> <lightning-input type="date" label="POLICY DATE" value={policyDate} disabled></lightning-input> </lightning-layout-item>
+                 <lightning-layout-item size="6" padding="horizontal-small">
+                     <label class="slds-form-element__label">CLASS OF BUSINESS</label>
+                     <lightning-layout>
+                         <lightning-layout-item size="3" padding="right-xsmall"> <lightning-input value={classOfBusiness} variant="label-hidden" label="Class Code" disabled></lightning-input> </lightning-layout-item>
+                         <lightning-layout-item size="9"> <lightning-input value={classOfBusiness} variant="label-hidden" label="Class Name" disabled></lightning-input> </lightning-layout-item>
+                     </lightning-layout>
+                 </lightning-layout-item>
+                 <lightning-layout-item size="6" padding="horizontal-small"> <lightning-input label="Busreq ID" value={busreqId} disabled></lightning-input> </lightning-layout-item>
+             </lightning-layout>
+
+            <div class="slds-box slds-m-vertical_medium">
+                <h3 class="slds-section__title slds-m-bottom_small">Object Information</h3>
+                <lightning-layout multiple-rows="true">
+                    <lightning-layout-item size="12" large-size="6" padding="horizontal-small"> <lightning-input label="RISK NAME" value={riskNameInput} onchange={handleInputChange}></lightning-input> </lightning-layout-item>
+                    <lightning-layout-item size="12" large-size="6" padding="horizontal-small"> <lightning-input label="RISK DETAIL" value={riskDetailInput} onchange={handleInputChange}></lightning-input> </lightning-layout-item>
+                    <lightning-layout-item size="12" padding="horizontal-small" class="slds-m-top_small"> <lightning-button label="SEARCH" variant="neutral" onclick={handleSearchClick}></lightning-button> </lightning-layout-item>
+                </lightning-layout>
+            </div>
+
+            <template if:true={hasModelData}>
+                <lightning-datatable key-field="id" data={modelData} columns={modelColumns} max-row-selection="1" onrowselection={handleRowSelection}></lightning-datatable>
+                <div class="slds-grid slds-grid_align-spread slds-m-top_x-small">
+                    <div class="slds-col slds-align_absolute-center"><span class="slds-text-body_small"> Page {modelPageNumber} of {modelTotalPages} &nbsp; ({modelTotalCount} items)</span></div>
+                    <div class="slds-col"><lightning-button-group> <lightning-button label="Previous" icon-name="utility:chevronleft" onclick={handlePreviousPage} disabled={isModelFirstPage}></lightning-button> <lightning-button label="Next" icon-name="utility:chevronright" icon-position="right" onclick={handleNextPage} disabled={isModelLastPage}></lightning-button> </lightning-button-group></div>
+                </div>
+            </template>
+
+            <template if:true={hasCoverageData}>
+                <h3 class="slds-section__title slds-m-top_medium slds-m-bottom_small">Coverage and Deductible</h3>
+                <lightning-datatable key-field="id" data={coverageData} columns={coverageColumns} hide-checkbox-column="true"></lightning-datatable>
+            </template>
+
+<lightning-layout multiple-rows="true" class="slds-m-top_medium">
+                 <lightning-layout-item size="12" large-size="6" padding="horizontal-small">
+                     <label class="slds-form-element__label">SUM INSURED</label>
+                     <lightning-layout>
+                         <lightning-layout-item size="4" padding="right-xsmall">
+                             <lightning-combobox value={policyCurrency} options={currencyOptions} variant="label-hidden" label="Sum Insured Currency" disabled></lightning-combobox>
+                         </lightning-layout-item>
+                         <lightning-layout-item size="8">
+                             <lightning-input type="number" formatter="currency" step="0.01" value={sumInsured} variant="label-hidden" label="Sum Insured Amount" disabled></lightning-input>
+                         </lightning-layout-item>
+                     </lightning-layout>
+                 </lightning-layout-item>
+
+                 <lightning-layout-item size="12" large-size="6" padding="horizontal-small">
+                     <label class="slds-form-element__label">VALUE AT RISK(*)</label>
+                     <lightning-layout>
+                         <lightning-layout-item size="4" padding="right-xsmall">
+                             <lightning-combobox value={policyCurrency} options={currencyOptions} variant="label-hidden" label="VAR Currency"></lightning-combobox>
+                         </lightning-layout-item>
+                         <lightning-layout-item size="8">
+                             <lightning-input type="number" formatter="currency" step="0.01" value={valueAtRisk} variant="label-hidden" label="VAR Amount"></lightning-input>
+                         </lightning-layout-item>
+                     </lightning-layout>
+                 </lightning-layout-item>
+
+                 <lightning-layout-item size="12" large-size="6" padding="horizontal-small">
+                     <label class="slds-form-element__label">DEDUCTIBLE</label>
+                     <lightning-layout>
+                         <lightning-layout-item size="4" padding="right-xsmall">
+                             <lightning-combobox value={policyCurrency} options={currencyOptions} variant="label-hidden" label="Deductible Currency"></lightning-combobox>
+                         </lightning-layout-item>
+                         <lightning-layout-item size="8">
+                             <lightning-input type="number" formatter="currency" step="0.01" value={totalDeductible} variant="label-hidden" label="Deductible Amount"></lightning-input>
+                         </lightning-layout-item>
+                     </lightning-layout>
+                 </lightning-layout-item>
+
+                 <lightning-layout-item size="12" large-size="6" padding="horizontal-small">
+                     <label class="slds-form-element__label">LOSS ESTIMATION</label>
+                     <lightning-layout>
+                         <lightning-layout-item size="4" padding="right-xsmall">
+                             <lightning-combobox value={policyCurrency} options={currencyOptions} variant="label-hidden" label="Loss Est Currency"></lightning-combobox>
+                         </lightning-layout-item>
+                         <lightning-layout-item size="8">
+                             <lightning-input type="number" formatter="currency" step="0.01" value={lossEstimation} variant="label-hidden" label="Loss Est Amount"></lightning-input>
+                         </lightning-layout-item>
+                     </lightning-layout>
+                 </lightning-layout-item>
+             </lightning-layout>
+
+            <h3 class="slds-section__title slds-m-top_medium slds-m-bottom_small">Warranty Information</h3>
+            <div class="slds-box">
+                <p>Resiko sendiri untuk kerugian total loss (CTL/ATL) : 5% of Total Sum Insured Harga Pertanggungan disesuaikan nilai plafond kredit</p>
+            </div>
+        </div>
+
+        <div slot="footer" class="slds-text-align_right slds-p-right_medium slds-p-bottom_small">
+            <lightning-button label="CLOSE" variant="neutral" class="slds-m-right_xsmall"></lightning-button>
+            <lightning-button label="SAVE" variant="brand"></lightning-button>
+        </div>
+    </lightning-card>
+</template>

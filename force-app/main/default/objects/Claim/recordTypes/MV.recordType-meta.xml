@@ -6,6 +6,10 @@
     <picklistValues>
         <picklist>Branch_Claim__c</picklist>
         <values>
+            <fullName>0</fullName>
+            <default>false</default>
+        </values>
+        <values>
             <fullName>1</fullName>
             <default>false</default>
         </values>
@@ -143,16 +147,16 @@
         </values>
         <values>
             <fullName>9</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Head Office</fullName>
             <default>false</default>
         </values>
     </picklistValues>
     <picklistValues>
         <picklist>Branch_Policy__c</picklist>
         <values>
+            <fullName>0</fullName>
+            <default>false</default>
+        </values>
+        <values>
             <fullName>1</fullName>
             <default>false</default>
         </values>
@@ -290,10 +294,6 @@
         </values>
         <values>
             <fullName>9</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Head Office</fullName>
             <default>false</default>
         </values>
     </picklistValues>
@@ -477,23 +477,7 @@
     <picklistValues>
         <picklist>ClaimType</picklist>
         <values>
-            <fullName>Annuity</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Auto</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Home</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Life</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Workers%27 Compensation</fullName>
+            <fullName>M</fullName>
             <default>false</default>
         </values>
     </picklistValues>
@@ -523,51 +507,51 @@
     <picklistValues>
         <picklist>Claim_Status__c</picklist>
         <values>
-            <fullName>00 Registered Incomplete</fullName>
+            <fullName>00</fullName>
             <default>true</default>
         </values>
         <values>
-            <fullName>02 LKS Need Approval</fullName>
+            <fullName>02</fullName>
             <default>false</default>
         </values>
         <values>
-            <fullName>03 LKS Need Adjustment</fullName>
+            <fullName>03</fullName>
             <default>false</default>
         </values>
         <values>
-            <fullName>04 Cancelled -- saat claim registration di cancel</fullName>
+            <fullName>04</fullName>
             <default>false</default>
         </values>
         <values>
-            <fullName>05 Declined -- saat lks di declined</fullName>
+            <fullName>05</fullName>
             <default>false</default>
         </values>
         <values>
-            <fullName>06 Review Claim Liability</fullName>
+            <fullName>06</fullName>
             <default>false</default>
         </values>
         <values>
-            <fullName>07 Ex-Gratia Proposed</fullName>
+            <fullName>07</fullName>
             <default>false</default>
         </values>
         <values>
-            <fullName>08 Loss Adjuster Appoinment Approval</fullName>
+            <fullName>08</fullName>
             <default>false</default>
         </values>
         <values>
-            <fullName>09 Perform Detail Survey</fullName>
+            <fullName>09</fullName>
             <default>false</default>
         </values>
         <values>
-            <fullName>10 Detail Survey Need Approval</fullName>
+            <fullName>10</fullName>
             <default>false</default>
         </values>
         <values>
-            <fullName>11 Detail Survey Need Adjustment</fullName>
+            <fullName>11</fullName>
             <default>false</default>
         </values>
         <values>
-            <fullName>12 Closed</fullName>
+            <fullName>12</fullName>
             <default>false</default>
         </values>
     </picklistValues>
@@ -812,107 +796,55 @@
     <picklistValues>
         <picklist>Status</picklist>
         <values>
-            <fullName>Abandoned</fullName>
+            <fullName>00</fullName>
             <default>false</default>
         </values>
         <values>
-            <fullName>Active</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Closed</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Compromised%2FSettled</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Coverage Confirmed</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Coverage Evaluation</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Denied</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Disallowed</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Discontinued</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Granted</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>In Dispute</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Inactive</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Initial</fullName>
+            <fullName>01</fullName>
             <default>true</default>
         </values>
         <values>
-            <fullName>Notified</fullName>
+            <fullName>02</fullName>
             <default>false</default>
         </values>
         <values>
-            <fullName>Nullified</fullName>
+            <fullName>03</fullName>
             <default>false</default>
         </values>
         <values>
-            <fullName>Open</fullName>
+            <fullName>04</fullName>
             <default>false</default>
         </values>
         <values>
-            <fullName>Other</fullName>
+            <fullName>05</fullName>
             <default>false</default>
         </values>
         <values>
-            <fullName>Paid-in Full</fullName>
+            <fullName>06</fullName>
             <default>false</default>
         </values>
         <values>
-            <fullName>Pending</fullName>
+            <fullName>07</fullName>
             <default>false</default>
         </values>
         <values>
-            <fullName>Premium Payments on the coverage are suspended</fullName>
+            <fullName>08</fullName>
             <default>false</default>
         </values>
         <values>
-            <fullName>Rejected</fullName>
+            <fullName>09</fullName>
             <default>false</default>
         </values>
         <values>
-            <fullName>Rejected Coverage Not Provided</fullName>
+            <fullName>10</fullName>
             <default>false</default>
         </values>
         <values>
-            <fullName>Reopened</fullName>
+            <fullName>11</fullName>
             <default>false</default>
         </values>
         <values>
-            <fullName>Settled</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Under Evaluation</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Under Negotiation</fullName>
+            <fullName>12</fullName>
             <default>false</default>
         </values>
     </picklistValues>
