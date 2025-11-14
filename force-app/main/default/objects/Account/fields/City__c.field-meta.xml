@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>City__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <label>City</label>
+    <lookupFilter>
+        <active>true</active>
+        <filterItems>
+            <field>Location.LocationType</field>
+            <operation>equals</operation>
+            <value>City</value>
+        </filterItems>
+        <isOptional>false</isOptional>
+    </lookupFilter>
+    <referenceTo>Location</referenceTo>
+    <relationshipLabel>Accounts (City)</relationshipLabel>
+    <relationshipName>Accounts2</relationshipName>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Lookup</type>
+</CustomField>
