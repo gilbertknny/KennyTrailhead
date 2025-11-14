@@ -356,8 +356,8 @@ export default class LwcTreatyDistribution extends LightningElement {
             shortfall:0, //18 -> 12-15
             shortfallPercent:0
         };
-        const getFromFacultative = this.totalSumInsured;
-        const getSumOpptyPercentage = (getFromFacultative/this.totalSumInsured)*100;
+        const getFromFacultative = 0;
+        const getSumOpptyPercentage = 0;
         this.RISK_KEYS.forEach(key => {
             const component = this.currentRisk[key];
             const resultTotal = totals.limit + parseFloat(component.limit) || 0;
