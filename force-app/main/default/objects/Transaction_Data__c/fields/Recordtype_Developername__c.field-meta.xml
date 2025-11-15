@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
-    <fullName>Excess_of_Loss__c</fullName>
+    <fullName>Recordtype_Developername__c</fullName>
+    <description>For Query in Flow</description>
     <externalId>false</externalId>
-    <label>Excess of Loss</label>
-    <precision>18</precision>
+    <formula>RecordType.DeveloperName</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Recordtype Developername</label>
     <required>false</required>
-    <scale>2</scale>
     <trackHistory>false</trackHistory>
     <trackTrending>false</trackTrending>
-    <type>Number</type>
+    <type>Text</type>
     <unique>false</unique>
 </CustomField>
