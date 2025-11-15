@@ -98,7 +98,7 @@ public class ClsNewRequest_Test {
         List<Account> listacc = ClsNewRequest.searchQQAccounts('ACC');
         String cob = '201';
         String description = 'test';
-        List<ClsNewRequest.data> listdata = ClsNewRequest.getMasterData(cob,description);
+        List<ClsNewRequest.data> listdata = ClsNewRequest.getMasterData(cob,description,null);
         system.assertEquals(listdata.size(),1);
         ContentDocument cd = [SELECT Id FROM ContentDocument LIMIT 1];
         Product2 pd = [SELECT Id,ProductCode FROM Product2 LIMIT 1];
@@ -110,9 +110,12 @@ public class ClsNewRequest_Test {
         ClsNewRequest.getObject('Address__c',cob,l.Id);
         ClsNewRequest.getWording(md.Id);
         ClsNewRequest.getRate('USD');
+        ClsNewRequest.getAssetSection(cob);
+        ClsNewRequest.getAssetCategory(cob,null);
+        
         
         String situation1 = '{';
-        situation1 += '"Interest_COB__c":"'+cob+'"';
+        situation1 += '"COB__c":"'+cob+'"';
         situation1 += ',"Eq_Zone__c":"Test"';
         situation1 += ',"Coordinate__c":{"latitude":"10","longitude":"20"}';
         situation1 += '}';
@@ -129,17 +132,17 @@ public class ClsNewRequest_Test {
         data += ',"risk":"multiple"';
         data += ',"riskName":"Test"';
         data += ',"policywording":"Test"';
-        data += ',"insuranceperiod":"Long Term"';
+        data += ',"insuranceperiod":"1"';
         data += ',"startdateperiod":"2025-01-01"';
         data += ',"enddateperiod":"2026-01-01"';
         data += ',"yearperiod":"1"';
         data += ',"schematype":"Sum Insured Adjustment"';
-        data += ',"transactionRows":[{"year":1,"percentage":"100","type":"Percentage"}]';
+        data += ',"transactionRows":[{"year":1,"percentage":"100","type":"1"}]';
         data += ',"description":"Test"';
         data += ',"annualperiod":"1"';
         data += ',"shortperiod":""';
         data += ',"percentageperiod":"1"';
-        data += ',"rateperiod":"1"';
+        data += ',"rateperiod":1';
         data += ',"risksituation1":' + JSON.serialize(situation1);
         data += ',"producttype":"'+pd.Id+'"';
         data += ',"sumInsured":"1"';
@@ -152,17 +155,17 @@ public class ClsNewRequest_Test {
         data += ',"filesurvey1":[{"documentId":"'+cd.Id+'","name":"Test"}]';
         data += ',"riskName2":"Test"';
         data += ',"policywording2":"Test"';
-        data += ',"insuranceperiod2":"Long Term"';
+        data += ',"insuranceperiod2":"1"';
         data += ',"startdateperiod2":"2025-01-01"';
         data += ',"enddateperiod2":"2026-01-01"';
         data += ',"schematype2":"Sum Insured Adjustment"';
-        data += ',"transactionRows2":[{"year":1,"percentage":"100","type":"Percentage"}]';
+        data += ',"transactionRows2":[{"year":1,"percentage":"100","type":"1"}]';
         data += ',"description2":"Test"';
         data += ',"yearperiod2":"1"';
         data += ',"annualperiod2":"1"';
         data += ',"shortperiod2":""';
         data += ',"percentageperiod2":"1"';
-        data += ',"rateperiod2":"1"';
+        data += ',"rateperiod2":1';
         data += ',"risksituation2":' + JSON.serialize(situation1);
         data += ',"producttype2":"'+pd.Id+'"';
         data += ',"sumInsured2":"1"';
@@ -176,8 +179,10 @@ public class ClsNewRequest_Test {
         
         data += '}';
         string result = ClsNewRequest.saveData(data);
+        system.debug('result:'+result);
         system.assertNotEquals(result,null);
         ClsNewRequest.deleteFile(cd.Id);
+        ClsNewRequest.getOpportunity(result);
     }
     
     @IsTest
