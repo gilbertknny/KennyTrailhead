@@ -1,0 +1,62 @@
+<template>
+    <lightning-card title="Section Amount Summary" icon-name="custom:custom63">
+        <template if:true={hasData}>
+            <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                <thead>
+                    <tr>
+                        <th scope="col">
+                            <div class="slds-truncate">Section</div>
+                        </th>
+                        <th scope="col">
+                            <div class="slds-truncate">Currency</div>
+                        </th>
+                        <th scope="col" class="slds-text-align_right">
+                            <div class="slds-truncate">Total Amount</div>
+                        </th>
+                        <th scope="col" class="slds-text-align_right">
+                            <div class="slds-truncate">Total Amount (IDR)</div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template for:each={summariesWithKey} for:item="row">
+                        <tr key={row.key}>
+                            <td><div class="slds-truncate">{row.sectionName}</div></td>
+                            <td><div class="slds-truncate">{row.currencyName}</div></td>
+                            <td class="slds-text-align_right">
+                                <lightning-formatted-number
+                                    value={row.totalAmount}
+                                    maximum-fraction-digits="2">
+                                </lightning-formatted-number>
+                            </td>
+                            <td class="slds-text-align_right">
+                                <lightning-formatted-number
+                                    value={row.totalAmountIDR}
+                                    maximum-fraction-digits="2">
+                                </lightning-formatted-number>
+                            </td>
+                        </tr>
+                    </template>
+
+                    <tr class="slds-theme_shade">
+                        <td colspan="3"><b>Total (IDR)</b></td>
+                        <td class="slds-text-align_right">
+                            <b>
+                                <lightning-formatted-number
+                                    value={grandTotalIDR}
+                                    maximum-fraction-digits="2">
+                                </lightning-formatted-number>
+                            </b>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </template>
+
+        <template if:false={hasData}>
+            <div class="slds-p-around_medium slds-text-align_center slds-text-color_weak">
+                No related assets found.
+            </div>
+        </template>
+    </lightning-card>
+</template>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Value_Comparison__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF(
+  AND(
+    NOT(ISBLANK(Total_Sum_Insured__c)),
+    NOT(ISBLANK(Number_16_2_Text__c))
+  ),
+  IF(
+    TEXT(Total_Sum_Insured__c) = Number_16_2_Text__c,
+    &quot;✓ MATCH&quot;,
+    &quot;✗ MISMATCH - Number: &quot; &amp; TEXT(Total_Sum_Insured__c) &amp; 
+    &quot; vs Text: &quot; &amp; Number_16_2_Text__c
+  ),
+  &quot;N/A&quot;
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Value Comparison</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>
