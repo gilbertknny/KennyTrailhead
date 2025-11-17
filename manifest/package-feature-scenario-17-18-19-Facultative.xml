@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
 	<types>
-		<members>Aswata_Trigger_Account</members>
 		<members>Aswata_Trigger_Asset</members>
 		<members>Aswata_Trigger_Lead</members>
 		<members>Aswata_Trigger_Opportunity</members>
@@ -15,6 +14,72 @@
 		<members>editLeadAccountInformation</members>
 		<members>editRisk</members>
 		<name>LightningComponentBundle</name>
+	</types>
+	<types>
+		<members>Aswata_ApprovalProcess_Logic</members>
+		<members>Aswata_ApprovalProcess_Logic_Test</members>
+		<members>InvocableClass</members>
+		<members>InvocableClass_Test</members>
+		<members>ListTotalAmountPerCurrency_Controller</members>
+		<name>ApexClass</name>
+	</types>
+	<types>
+		<members>InsurancePolicy.IP_Renewal_Underwriting</members>
+		<name>ApprovalProcess</name>
+	</types>
+	<types>
+		<members>Opportunity.Opportunity Facultative</members>
+		<name>BusinessProcess</name>
+	</types>
+	<types>
+		<members>InsurancePolicy.Approval_Status__c</members>
+		<members>InsurancePolicy.Email__c</members>
+		<members>InsurancePolicy.Set_Notif_1__c</members>
+		<members>InsurancePolicy.Set_Notif_2__c</members>
+		<members>InsurancePolicy.Set_Notif_3__c</members>
+		<members>InsurancePolicy.Set_Task__c</members>
+		<members>InsurancePolicy.Status_Notice__c</members>
+		<members>InsurancePolicy.Status_Renewal__c</members>
+		<members>InsurancePolicy.Underwriting_User__c</members>
+		<name>CustomField</name>
+	</types>
+	<types>
+		<members>Aswata_Sales/Renewal_Email</members>
+		<name>EmailTemplate</name>
+	</types>
+	<types>
+		<members>InsurancePolicy_Approval</members>
+		<members>InsurnacePolicy_Schedule_Renewal_Notice_Email</members>
+		<members>Opportunity_Closed_Lost</members>
+		<members>Policy_Endorsement</members>
+		<name>Flow</name>
+	</types>
+	<types>
+		<members>InsurancePolicy_Approval</members>
+		<members>InsurnacePolicy_Schedule_Renewal_Notice_Email</members>
+		<name>FlowDefinition</name>
+	</types>
+	<types>
+		<members>Asset.Input_Coverage2</members>
+		<name>QuickAction</name>
+	</types>
+	<types>
+		<members>Quote.Print</members>
+		<name>WebLink</name>
+	</types>
+	<types>
+		<members>InsurancePolicy.EA_Insurance_Policy_Renewal_Notice</members>
+		<name>WorkflowAlert</name>
+	</types>
+	<types>
+		<members>InsurancePolicy.IP_Decision_Underwriting_Submitted</members>
+		<members>InsurancePolicy.Reject_Update_Status</members>
+		<members>InsurancePolicy.Update_Status_Approve</members>
+		<members>Quote.Quote_Status_Approved</members>
+		<members>Quote.Quote_Status_Contra_Quote</members>
+		<members>Quote.Quote_Status_Rejected</members>
+		<members>Quote.Quote_Status_Waiting_Approval</members>
+		<name>WorkflowFieldUpdate</name>
 	</types>
 	<version>65.0</version>
 </Package>
