@@ -7,7 +7,7 @@
     TEXT(
         (IF(NOT(ISBLANK( Email )), 1, 0)) +
         (IF(NOT(ISBLANK(  City__c )), 1, 0)) +
-        (IF(NOT(ISBLANK(TEXT( Interest_COB__c ))), 1, 0)) +
+        (IF(NOT(ISBLANK( Interest_COB__c )), 1, 0)) +
         (IF( Task__c , 1, 0)) + 
         (IF(NOT(ISBLANK( Address__c )), 1, 0))
     ) &amp;
@@ -16,10 +16,15 @@
 )</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
     <inlineHelpText>Field berikut harus diisi
+
 1. Task (Minimal 3)
+
 2. Email
+
 3. City
+
 4. Interest COB
+
 5. Address</inlineHelpText>
     <label>Lead scoring</label>
     <required>false</required>
