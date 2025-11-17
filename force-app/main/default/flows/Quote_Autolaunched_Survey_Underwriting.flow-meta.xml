@@ -187,9 +187,6 @@
         <label>Checking Parameter</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
-        <defaultConnector>
-            <targetReference>Update_Opportunity_Flag_Survey_UW</targetReference>
-        </defaultConnector>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>Enter_Conditions</name>
@@ -242,6 +239,7 @@
             <label>Enter Conditions</label>
         </rules>
     </decisions>
+    <description>remove unused flag update</description>
     <environments>Default</environments>
     <formulas>
         <name>formuaCheckSurveyUW</name>
@@ -318,9 +316,6 @@
         <label>Update Flag Need Survey</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
-        <connector>
-            <targetReference>Update_Opportunity_Flag_Survey_UW</targetReference>
-        </connector>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Id</field>
@@ -336,27 +331,6 @@
             </value>
         </inputAssignments>
         <object>Quote</object>
-    </recordUpdates>
-    <recordUpdates>
-        <name>Update_Opportunity_Flag_Survey_UW</name>
-        <label>Update Opportunity Flag Survey UW</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>Id</field>
-            <operator>EqualTo</operator>
-            <value>
-                <elementReference>Get_Opportunity_Record.Id</elementReference>
-            </value>
-        </filters>
-        <inputAssignments>
-            <field>Survey_Underwriting_Check__c</field>
-            <value>
-                <elementReference>formuaCheckSurveyUW</elementReference>
-            </value>
-        </inputAssignments>
-        <object>Opportunity</object>
     </recordUpdates>
     <start>
         <locationX>0</locationX>
