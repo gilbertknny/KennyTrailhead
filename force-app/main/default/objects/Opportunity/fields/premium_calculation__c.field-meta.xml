@@ -1,38 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
-    <fullName>Offering_status__c</fullName>
-    <label>Offering status</label>
+    <fullName>premium_calculation__c</fullName>
+    <label>premium calculation</label>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>
     <trackHistory>false</trackHistory>
     <type>Picklist</type>
     <valueSet>
+        <restricted>true</restricted>
         <valueSetDefinition>
             <sorted>false</sorted>
             <value>
-                <fullName>Offering</fullName>
+                <fullName>1</fullName>
                 <default>false</default>
-                <label>Offering</label>
+                <label>1 Flat</label>
             </value>
             <value>
-                <fullName>Accepted</fullName>
+                <fullName>2</fullName>
                 <default>false</default>
-                <label>Accepted</label>
+                <label>2 Decrasing Sum Insured</label>
             </value>
             <value>
-                <fullName>Reject</fullName>
+                <fullName>3</fullName>
                 <default>false</default>
-                <label>Reject</label>
+                <label>3 Discount Rate</label>
             </value>
             <value>
-                <fullName>Bainding</fullName>
+                <fullName>4</fullName>
                 <default>false</default>
-                <label>Bainding</label>
+                <label>4 Pro rata</label>
             </value>
             <value>
-                <fullName>Slip Generated</fullName>
+                <fullName>5</fullName>
                 <default>false</default>
-                <label>Slip Generated</label>
+                <label>5 Percentage</label>
+            </value>
+            <value>
+                <fullName>6</fullName>
+                <default>false</default>
+                <label>6 Long Period</label>
             </value>
         </valueSetDefinition>
     </valueSet>
