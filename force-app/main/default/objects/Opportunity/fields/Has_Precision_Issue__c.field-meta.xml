@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Has_Precision_Issue__c</fullName>
+    <formula>OR(
+  /* Check 1: Digit melebihi 16? */
+  Check_Digit_Length__c &gt; 16,
+  
+  /* Check 2: Combined value melebihi max Number(18,2)? */
+  AND(
+    NOT(ISBLANK(Digit_16__c)),
+    NOT(ISBLANK(Decimal_2__c)),
+    Digit_16__c + Decimal_2__c &gt; 9999999999999999.99
+  ),
+  
+  /* Check 3: Mismatch antara Number vs Text? */
+  AND(
+    NOT(ISBLANK(Total_Sum_Insured__c)),
+    NOT(ISBLANK(Number_16_2_Text__c)),
+    TEXT(Total_Sum_Insured__c) != Number_16_2_Text__c
+  )
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Has Precision Issue</label>
+    <trackHistory>false</trackHistory>
+    <type>Checkbox</type>
+</CustomField>
