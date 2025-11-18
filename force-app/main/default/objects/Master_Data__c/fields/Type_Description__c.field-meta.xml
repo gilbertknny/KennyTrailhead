@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Type_Description__c</fullName>
+    <externalId>false</externalId>
+    <formula>CASE(
+RecordType.Name,
+&apos;M_Occupy&apos;,IF(Is_Industry__c == &apos;Y&apos; &amp;&amp; Is_Niaga__c == &apos;Y&apos;,&apos;Industry - Niaga&apos;,
+IF(Is_Industry__c == &apos;Y&apos; &amp;&amp; Is_Niaga__c == &apos;N&apos;,&apos;Industri - Non Niaga&apos;,
+IF(Is_Industry__c == &apos;N&apos; &amp;&amp; Is_Niaga__c == &apos;Y&apos;,&apos;Non Industry - Niaga&apos;,
+IF(Is_Industry__c == &apos;N&apos; &amp;&amp; Is_Niaga__c == &apos;N&apos;,&apos;Non Industry - Non Niaga&apos;,&apos;&apos;)))),
+&apos;&apos;
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Type Description</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>
