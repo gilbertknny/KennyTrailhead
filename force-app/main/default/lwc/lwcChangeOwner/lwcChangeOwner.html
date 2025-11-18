@@ -1,0 +1,207 @@
+<template>
+    <lightning-card title="Change Owner" icon-name="standard:task">
+        <template if:true={isLoading}>
+            <lightning-spinner alternative-text="Loading" size="medium" variant="brand"></lightning-spinner>
+        </template>
+        <div class="slds-p-around_medium">
+            <lightning-progress-indicator current-step={currentStep} type="base" variant="base" class="slds-m-bottom_large">
+                <lightning-progress-step label="User" value="1">
+                </lightning-progress-step>
+                <lightning-progress-step label="Lead" value="2">
+                </lightning-progress-step>
+                <lightning-progress-step label="Account" value="3">
+                </lightning-progress-step>
+                <lightning-progress-step label="Opportunity" value="4">
+                </lightning-progress-step>
+                <lightning-progress-step label="Insurance Policy" value="5">
+                </lightning-progress-step>
+                <lightning-progress-step label="Case" value="6">
+                </lightning-progress-step>
+                <lightning-progress-step label="Claim" value="7">
+                </lightning-progress-step>
+                <lightning-progress-step label="Confirmation" value="8">
+                </lightning-progress-step>
+            </lightning-progress-indicator>
+            <div>&nbsp;</div>
+            <!-- USER-->
+            <template if:true={show1}>
+                <div class="slds-p-around_large" style="height: 200px !important;border:1px solid gray;">
+                    <!-- OLD USER-->
+                    <div class="slds-col slds-size_1-of-2">
+                        <lightning-record-picker
+                            label="Old User"
+                            placeholder="Search User..."
+                            object-api-name="User"
+                            display-fields="Name"
+                            onchange={handleUser}
+                            display-info={displayInfo}
+                            matching-info={matchingInfo}
+                            filter={filter}
+                            value={oldUserId}
+                            required>
+                        </lightning-record-picker>
+                    </div>
+                    <!-- NEW USER-->
+                    <template if:true={oldBranch}>
+                        <div class="slds-col slds-size_1-of-2">
+                            <lightning-record-picker
+                                label="New User"
+                                placeholder="Search User..."
+                                object-api-name="User"
+                                display-fields="Name"
+                                onchange={handleNewUser}
+                                display-info={displayInfo}
+                                matching-info={matchingInfo}
+                                filter={filter2}
+                                value={newUserId}
+                                required>
+                            </lightning-record-picker>
+                        </div>
+                    </template>
+                </div>
+            </template>
+            <!-- LEAD-->
+            <template if:true={show2}>
+                <div class="slds-p-around_large" style="height: 400px !important;border:1px solid gray;">
+                    <div>Total Lead : {lead.length}</div>
+                    <div style="height: 350px;">
+                        <c-lwc-custom-data-table
+                            class="slds-max-medium-table_stacked"
+                            key-field="Id"
+                            data={lead} 
+                            columns={leadcolumn} 
+                            user={user}
+                            newuserid={newUserId}
+                            onlookupchanged={leadLookupChanged}
+                            hide-checkbox-column
+                            suppress-bottom-bar="true">
+                        </c-lwc-custom-data-table>
+                    </div>
+                </div>
+            </template>
+            <!-- ACCOUNT-->
+            <template if:true={show3}>
+                <div class="slds-p-around_large" style="height: 400px !important;border:1px solid gray;">
+                    <div>Total Account : {accounts.length}</div>
+                    <div style="height: 350px;">
+                        <c-lwc-custom-data-table
+                            class="slds-max-medium-table_stacked"
+                            key-field="Id"
+                            data={accounts} 
+                            columns={accountcolumn} 
+                            user={user}
+                            newuserid={newUserId}
+                            onlookupchanged={accountLookupChanged}
+                            hide-checkbox-column
+                            suppress-bottom-bar="true">
+                        </c-lwc-custom-data-table>
+                    </div>
+                </div>
+            </template>
+            <!-- OPPORTUNITY-->
+            <template if:true={show4}>
+                <div class="slds-p-around_large" style="height: 400px !important;border:1px solid gray;">
+                    <div>Total Opportunity : {opportunity.length}</div>
+                    <div style="height: 350px;">
+                        <c-lwc-custom-data-table
+                            class="slds-max-medium-table_stacked"
+                            key-field="Id"
+                            data={opportunity} 
+                            columns={opportunitycolumn} 
+                            user={user}
+                            newuserid={newUserId}
+                            onlookupchanged={opportunityLookupChanged}
+                            hide-checkbox-column
+                            suppress-bottom-bar="true">
+                        </c-lwc-custom-data-table>
+                    </div>
+                </div>
+            </template>
+            <!-- INSURANCE POLICY-->
+            <template if:true={show5}>
+                <div class="slds-p-around_large" style="height: 400px !important;border:1px solid gray;">
+                    <div>Total Insurance Policy : {insurancepolicy.length}</div>
+                    <div style="height: 350px;">
+                        <c-lwc-custom-data-table
+                            class="slds-max-medium-table_stacked"
+                            key-field="Id"
+                            data={insurancepolicy} 
+                            columns={insurancepolicycolumn} 
+                            user={user}
+                            newuserid={newUserId}
+                            onlookupchanged={insurancepolicyLookupChanged}
+                            hide-checkbox-column
+                            suppress-bottom-bar="true">
+                        </c-lwc-custom-data-table>
+                    </div>
+                </div>
+            </template>
+            <!-- CASE-->
+            <template if:true={show6}>
+                <div class="slds-p-around_large" style="height: 400px !important;border:1px solid gray;">
+                    <div>Total Case : {cases.length}</div>
+                    <div style="height: 350px;">
+                        <c-lwc-custom-data-table
+                            class="slds-max-medium-table_stacked"
+                            key-field="Id"
+                            data={cases} 
+                            columns={casescolumn} 
+                            user={user}
+                            newuserid={newUserId}
+                            onlookupchanged={caseLookupChanged}
+                            hide-checkbox-column
+                            suppress-bottom-bar="true">
+                        </c-lwc-custom-data-table>
+                    </div>
+                </div>
+            </template>
+            <!-- CLAIM-->
+            <template if:true={show7}>
+                <div class="slds-p-around_large" style="height: 400px !important;border:1px solid gray;">
+                    <div>Total Claim : {claim.length}</div>
+                    <div style="height: 350px;">
+                        <c-lwc-custom-data-table
+                            class="slds-max-medium-table_stacked"
+                            key-field="Id"
+                            data={claim} 
+                            columns={claimcolumn} 
+                            user={user}
+                            newuserid={newUserId}
+                            onlookupchanged={claimLookupChanged}
+                            hide-checkbox-column
+                            suppress-bottom-bar="true">
+                        </c-lwc-custom-data-table>
+                    </div>
+                </div>
+            </template>    
+            <!-- SUMMARY-->
+            <template if:true={show8}>
+                <div class="slds-p-around_large" style="height: 400px !important;border:1px solid gray;">
+                    <div>Apakah Anda yakin ingin melanjutkan proses penggantian Owner ini?</div>
+                    <div>User : {user.Name}</div>
+                    <div>Lead : {lead.length}</div>
+                    <div>Account : {accounts.length}</div>
+                    <div>Opportunity : {opportunity.length}</div>
+                    <div>Insurance Policy : {insurancepolicy.length}</div>
+                    <div>Case : {cases.length}</div>
+                    <div>Claim : {claim.length}</div>
+                </div>
+            </template>
+            <div>&nbsp;</div>
+            <!-- SUBMIT-->
+            <div class="slds-align_absolute-center">
+                <div class="slds-grid slds-wrap">
+                    <template if:true={showPrev}>
+                        <lightning-button label="Previous" onclick={handlePrev} class="slds-m-right_x-small"></lightning-button>
+                    </template>
+                    <template lwc:if={show8}>
+                        <lightning-button label="Save" onclick={handleSave}></lightning-button>
+                    </template>
+                    <template lwc:else>
+                        <lightning-button label="Next" onclick={handleNext}></lightning-button>
+                    </template>
+                </div>
+            </div>
+        </div>
+    </lightning-card>
+</template>

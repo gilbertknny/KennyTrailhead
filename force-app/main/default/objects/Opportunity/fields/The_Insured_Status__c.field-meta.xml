@@ -2,8 +2,15 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>The_Insured_Status__c</fullName>
     <externalId>false</externalId>
-    <formula>TEXT(The_Insured_Name__r.FinServ__Status__c)</formula>
-    <label>The Insured Status</label>
+    <formula>CASE(
+    TEXT(The_Insured_Name__r.Profile_Status__c),
+    &quot;0&quot;, &quot;Potential&quot;,
+    &quot;1&quot;, &quot;Active&quot;,
+    &quot;2&quot;, &quot;In-Active&quot;,
+    &quot;3&quot;, &quot;Blacklist&quot;,
+    &quot;&quot;
+)</formula>
+    <label>Profile Status</label>
     <required>false</required>
     <trackHistory>false</trackHistory>
     <type>Text</type>

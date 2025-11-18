@@ -129,6 +129,10 @@
     <picklistValues>
         <picklist>Branch__c</picklist>
         <values>
+            <fullName>0</fullName>
+            <default>false</default>
+        </values>
+        <values>
             <fullName>1</fullName>
             <default>false</default>
         </values>
@@ -266,10 +270,6 @@
         </values>
         <values>
             <fullName>9</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Head Office</fullName>
             <default>false</default>
         </values>
     </picklistValues>
@@ -920,7 +920,6 @@
             <default>false</default>
         </values>
     </picklistValues>
-    <!--
     <picklistValues>
         <picklist>Financial_Action_Task_Force__c</picklist>
         <values>
@@ -931,7 +930,7 @@
             <fullName>Yes</fullName>
             <default>false</default>
         </values>
-    </picklistValues> -->
+    </picklistValues>
     <picklistValues>
         <picklist>Gender__c</picklist>
         <values>
@@ -1086,6 +1085,157 @@
         </values>
         <values>
             <fullName>Utilities</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Interest_COB__c</picklist>
+        <values>
+            <fullName>101</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>201</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>202</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>203</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>204</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>205</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>301</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>302</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>303</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>402</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>403</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>404</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>405</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>406</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>408</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>409</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>411</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>501</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>502</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>503</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>551</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>601</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>602</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>603</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>604</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>701</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>702</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>703</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>704</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>707</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>801</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>851</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>852</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>901</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>903</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>951</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>COB Digital</fullName>
             <default>false</default>
         </values>
     </picklistValues>
@@ -2000,12 +2150,12 @@
             <default>false</default>
         </values>
     </picklistValues>
-    <!-- <picklistValues>
+    <picklistValues>
         <picklist>Rating</picklist>
         <values>
             <fullName>Potensial</fullName>
             <default>false</default>
-        </values> 
+        </values>
         <values>
             <fullName>Sangat Potensial</fullName>
             <default>false</default>
@@ -2014,7 +2164,7 @@
             <fullName>Tidak Potensial</fullName>
             <default>false</default>
         </values>
-    </picklistValues> -->
+    </picklistValues>
     <picklistValues>
         <picklist>Regional__c</picklist>
         <values>
@@ -2072,7 +2222,7 @@
             <default>false</default>
         </values>
     </picklistValues>
-    <!-- <picklistValues>
+    <picklistValues>
         <picklist>Type</picklist>
         <values>
             <fullName>0</fullName>
@@ -2130,7 +2280,7 @@
             <fullName>Salvage Buyer</fullName>
             <default>false</default>
         </values>
-    </picklistValues>-->
+    </picklistValues>
     <picklistValues>
         <picklist>Workshop_Category__c</picklist>
         <values>
@@ -2157,7 +2307,7 @@
             <fullName>6</fullName>
             <default>false</default>
         </values>
-    </picklistValues> 
+    </picklistValues>
     <picklistValues>
         <picklist>Workshop_Type__c</picklist>
         <values>

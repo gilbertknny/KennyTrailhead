@@ -1,0 +1,70 @@
+/* Full-page background image */
+.page-container {
+  background-image: url("https://www.aswata.co.id/templates/awt/images/header1.jpg");
+  background-size: cover;
+  background-position: center;
+  min-height: 100vh;
+  padding: 2rem;          /* gives breathing room around the card */
+  box-sizing: border-box;
+}
+
+/* Centers your logo above the form */
+.logo-container {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+/* Scales the logo to fit nicely */
+.logo {
+  max-width: 200px;
+  height: auto;
+}
+
+/* Optional: add a slight shadow and margin for the card */
+.lead-card {
+  max-width: 500px;
+  margin: 0 auto;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+/* Tune your custom title styling if needed */
+.card-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+/* Full-page background */
+.pageWrapper {
+  background-image: url("https://www.aswata.co.id/templates/awt/images/header1.jpg");
+  background-size: cover;
+  background-position: center;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: start;
+  padding-top: 2rem;
+  box-sizing: border-box;
+}
+
+/* Logo wrapper */
+.logoWrapper {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.logoImg {
+  max-width: 240px;
+  height: auto;
+}
+
+/* White, bordered form area centered */
+.formContainer {
+  width: 360px;
+  background: rgba(255,255,255,0.85);
+  border: 2px solid #000;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  text-align: center;
+}
