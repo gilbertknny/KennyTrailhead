@@ -118,10 +118,10 @@ jobs:
           echo "🚀 Starting validation..."
           set +e
           if [ -z "$APEX_CLASSES" ]; then
-            sf project deploy start --manifest package/package.xml --wait 1000 --target-org uat --verbose --ignore-conflicts
+            sf project deploy start --manifest package/package.xml --wait 1000 --target-org uat --verbose
             DEPLOY_EXIT=$?
           else
-            sf project deploy start --manifest package/package.xml --wait 1000 --target-org uat --verbose  --ignore-conflicts -l RunLocalTests
+            sf project deploy start --manifest package/package.xml --wait 1000 --target-org uat --verbose -l RunLocalTests
             DEPLOY_EXIT=$?
           fi
           set -e
