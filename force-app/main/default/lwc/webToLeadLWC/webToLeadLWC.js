@@ -3,6 +3,8 @@ import findCities from '@salesforce/apex/LeadController.findCities';
 import getZipCodes from '@salesforce/apex/LeadController.getZipCodes';
 import getCustomerTypeOptions from '@salesforce/apex/LeadController.getCustomerTypeOptions';
 import createLead from '@salesforce/apex/LeadController.createLead';
+import ASWATA_LOGO from '@salesforce/resourceUrl/AswataLogo';
+import backgroundUrl from '@salesforce/resourceUrl/AswataBackgroundWeb';
 
 export default class WebToLeadLWC extends LightningElement {
   @track leadData = {};
@@ -18,8 +20,10 @@ export default class WebToLeadLWC extends LightningElement {
 
   @track provinceId  = null;
   @track cityName    = null;
-
   @track villageId   = null;
+
+  // Static resource URLs (only logos now)
+  aswataLogo = ASWATA_LOGO;
 
   // for lookup
   @track citySearchKey = null;
@@ -37,7 +41,11 @@ export default class WebToLeadLWC extends LightningElement {
   }
 
   connectedCallback() {
-    console.log('Last updated 20-10-2025 10.45');
+    console.log('Last updated 19-11-2025 16.01');
+  }
+
+  get backgroundStyle() {
+      return `background-image:url(${backgroundUrl})`;
   }
 
   handlePhoneKeypress(event) {
@@ -47,7 +55,6 @@ export default class WebToLeadLWC extends LightningElement {
       event.preventDefault();
     }
   }
-
 
   // Generic input handler
   handleInputChange(event) {
@@ -99,7 +106,7 @@ export default class WebToLeadLWC extends LightningElement {
     this.leadData.Province__c = province;
     this.leadData.City__c = id;
 
-    // Set the input’s value
+    // Set the input's value
     const inputEl = this.template.querySelector('[data-id="cityLookup"]');
     if (inputEl) {
         inputEl.value = name;
@@ -124,25 +131,9 @@ export default class WebToLeadLWC extends LightningElement {
         }));
         this.isZipCodeDisabled = false;
       });
-
   }
 
   // Disable Submit until all required fields are filled
-  /*
-  get isSubmitDisabled() {
-    const req = [
-      this.leadData.FirstName,
-      this.leadData.LastName,
-      this.leadData.Email,
-      this.leadData.Phone,
-      this.leadData.Customer_Type__c
-    ];
-    // if Enterprise, Company is mandatory
-    if (this.isEnterprise) {
-      req.push(this.leadData.Company);
-    }
-    return req.some((v) => !v) || this.isSubmitting;
-  } */
   get isSubmitDisabled() {
     const req = [
         this.leadData.FirstName,
