@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
-    <applicationVisibilities>
+    <!-- <applicationVisibilities>
         <application>Aswata_Claim_App</application>
         <visible>true</visible>
     </applicationVisibilities>
     <applicationVisibilities>
         <application>Aswata_Sales_App</application>
         <visible>true</visible>
-    </applicationVisibilities>
+    </applicationVisibilities> -->
     <classAccesses>
         <apexClass>APILog</apexClass>
         <enabled>true</enabled>
@@ -40,7 +40,7 @@
         <apexClass>ErrorLogRecord_Test</apexClass>
         <enabled>true</enabled>
     </classAccesses>
-    <classAccesses>
+    <!-- <classAccesses>
         <apexClass>mcdm_15__AccountSelector</apexClass>
         <enabled>true</enabled>
     </classAccesses>
@@ -5131,12 +5131,12 @@
     <classAccesses>
         <apexClass>omnistudio__ZippexTests</apexClass>
         <enabled>true</enabled>
-    </classAccesses>
-    <classAccesses>
+    </classAccesses>-->
+    <!-- <classAccesses>
         <apexClass>opptyFluc</apexClass>
         <enabled>true</enabled>
-    </classAccesses>
-    <classAccesses>
+    </classAccesses> -->
+    <!-- <classAccesses>
         <apexClass>usf3__ConvertRecordsToCSVQueueable</apexClass>
         <enabled>true</enabled>
     </classAccesses>
@@ -5259,7 +5259,7 @@
     <classAccesses>
         <apexClass>usf3__ZippexTests</apexClass>
         <enabled>true</enabled>
-    </classAccesses>
+    </classAccesses> -->
     <fieldPermissions>
         <editable>true</editable>
         <field>Opportunity.Interest_COB_Not_use__c</field>
