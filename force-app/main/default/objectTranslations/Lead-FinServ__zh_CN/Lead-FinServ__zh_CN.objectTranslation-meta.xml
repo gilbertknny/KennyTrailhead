@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fieldSets>
+        <label><!-- LBL.Label_Field_Set_Referrals_Made --></label>
+        <name>FSC_Business_Referrals_Made</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- LBL.Label_Field_Set_Referral_Form --></label>
+        <name>FSC_Referral_Form</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- LBL.Label_Field_Set_Referrals_Expressed_Interest --></label>
+        <name>FSC_Referrals_Expressed_Interest</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- LBL.Label_Field_Set_Referrals_Made --></label>
+        <name>FSC_Referrals_Made</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- LBL.Label_Field_Set_Referrals_Made --></label>
+        <name>FSC_Referrals_Made_Community</name>
+    </fieldSets>
+    <recordTypes>
+        <description>商业银行业务推荐的企业或组织</description>
+        <label>业务推荐</label>
+        <name>FinServ__BusinessReferral</name>
+    </recordTypes>
+    <recordTypes>
+        <label>一般</label>
+        <name>FinServ__General</name>
+    </recordTypes>
+    <recordTypes>
+        <description>被推荐的人、企业或组织</description>
+        <label>个人推荐</label>
+        <name>FinServ__Referral</name>
+    </recordTypes>
+    <recordTypes>
+        <label>退休规划</label>
+        <name>FinServ__RetirementPlanning</name>
+    </recordTypes>
+    <validationRules>
+        <errorMessage>内部推荐人必须是内部 Salesforce 用户。</errorMessage>
+        <name>FinServ__NonPortalUserReferrer</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>输入内部推荐人或外部推荐人。每个推荐只能列出一个推荐人。</errorMessage>
+        <name>FinServ__SingleReferredByEntryByRecord</name>
+    </validationRules>
+    <webLinks>
+        <label><!-- GoogleMaps --></label>
+        <name>GoogleMaps</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- GoogleNews --></label>
+        <name>GoogleNews</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- GoogleSearch --></label>
+        <name>GoogleSearch</name>
+    </webLinks>
+</CustomObjectTranslation>

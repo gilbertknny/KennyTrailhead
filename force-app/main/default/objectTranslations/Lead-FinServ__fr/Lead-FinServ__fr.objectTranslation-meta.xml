@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fieldSets>
+        <label><!-- LBL.Label_Field_Set_Referrals_Made --></label>
+        <name>FSC_Business_Referrals_Made</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- LBL.Label_Field_Set_Referral_Form --></label>
+        <name>FSC_Referral_Form</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- LBL.Label_Field_Set_Referrals_Expressed_Interest --></label>
+        <name>FSC_Referrals_Expressed_Interest</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- LBL.Label_Field_Set_Referrals_Made --></label>
+        <name>FSC_Referrals_Made</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- LBL.Label_Field_Set_Referrals_Made --></label>
+        <name>FSC_Referrals_Made_Community</name>
+    </fieldSets>
+    <recordTypes>
+        <description>Une entreprise ou une organisation qui est un référent commercial d&apos;une activité bancaire</description>
+        <label>Entreprise référente</label>
+        <name>FinServ__BusinessReferral</name>
+    </recordTypes>
+    <recordTypes>
+        <label>Général</label>
+        <name>FinServ__General</name>
+    </recordTypes>
+    <recordTypes>
+        <description>Une personne, une entreprise ou une organisation qui est un référent</description>
+        <label>Personne référente</label>
+        <name>FinServ__Referral</name>
+    </recordTypes>
+    <recordTypes>
+        <label>Plan de retraite</label>
+        <name>FinServ__RetirementPlanning</name>
+    </recordTypes>
+    <validationRules>
+        <errorMessage>Les référents internes doivent être des utilisateurs Salesforce internes.</errorMessage>
+        <name>FinServ__NonPortalUserReferrer</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Saisissez un référent interne ou un référent externe. Vous pouvez répertorier un seul référent pour chaque référence.</errorMessage>
+        <name>FinServ__SingleReferredByEntryByRecord</name>
+    </validationRules>
+    <webLinks>
+        <label><!-- GoogleMaps --></label>
+        <name>GoogleMaps</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- GoogleNews --></label>
+        <name>GoogleNews</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- GoogleSearch --></label>
+        <name>GoogleSearch</name>
+    </webLinks>
+</CustomObjectTranslation>

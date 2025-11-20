@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EntitlementProcess xmlns="http://soap.sforce.com/2006/04/metadata">
+    <SObjectType>Case</SObjectType>
+    <active>false</active>
+    <description>Case Entitlement</description>
+    <entryStartDateField>Case.CreatedDate</entryStartDateField>
+    <exitCriteriaFilterItems>
+        <field>Case.IsClosed</field>
+        <operation>equals</operation>
+        <value>true</value>
+    </exitCriteriaFilterItems>
+    <isVersionDefault>false</isVersionDefault>
+    <milestones>
+        <businessHours>sabtu minggu libur</businessHours>
+        <milestoneCriteriaFormula>AND(
+IsClosed == FALSE,
+NOT(ISBLANK(SCC_Call_Type__c)),
+ShowSLA__c,
+NOT(ISPICKVAL(Status, &quot;Waiting Document&quot;))
+)</milestoneCriteriaFormula>
+        <milestoneName>Total SLA</milestoneName>
+        <minutesCustomClass>CaseTotalSLAMilestoneTimeCalculator</minutesCustomClass>
+        <useCriteriaStartTime>true</useCriteriaStartTime>
+    </milestones>
+    <milestones>
+        <criteriaBooleanFilter>((1 AND 4) OR (2 AND 3 AND 4)) AND 5 AND 6</criteriaBooleanFilter>
+        <milestoneCriteriaFilterItems>
+            <field>Case.Status</field>
+            <operation>equals</operation>
+            <value>New</value>
+        </milestoneCriteriaFilterItems>
+        <milestoneCriteriaFilterItems>
+            <field>Case.Status</field>
+            <operation>equals</operation>
+            <value>Working</value>
+        </milestoneCriteriaFilterItems>
+        <milestoneCriteriaFilterItems>
+            <field>Case.Returned_Case__c</field>
+            <operation>equals</operation>
+            <value>true</value>
+        </milestoneCriteriaFilterItems>
+        <milestoneCriteriaFilterItems>
+            <field>Case.SCC_Assigned_Date__c</field>
+            <operation>notEqual</operation>
+            <value></value>
+        </milestoneCriteriaFilterItems>
+        <milestoneCriteriaFilterItems>
+            <field>Case.Owner_User__c</field>
+            <operation>equals</operation>
+            <value>true</value>
+        </milestoneCriteriaFilterItems>
+        <milestoneCriteriaFilterItems>
+            <field>Case.Branch_Code__c</field>
+            <operation>equals</operation>
+            <value>00229</value>
+        </milestoneCriteriaFilterItems>
+        <milestoneName>Agent OLA (Kanpus)</milestoneName>
+        <minutesCustomClass>CaseOLAKanpusMilestoneTimeCalculator</minutesCustomClass>
+        <timeTriggers>
+            <actions>
+                <name>Over_Agent_OLA_Kanpus</name>
+                <type>FieldUpdate</type>
+            </actions>
+            <timeLength>0</timeLength>
+            <workflowTimeTriggerUnit>Minutes</workflowTimeTriggerUnit>
+        </timeTriggers>
+        <useCriteriaStartTime>true</useCriteriaStartTime>
+    </milestones>
+    <milestones>
+        <businessHours>sabtu minggu libur</businessHours>
+        <criteriaBooleanFilter>((1 AND 4) OR (2 AND 3 AND 4)) AND 5 AND 6</criteriaBooleanFilter>
+        <milestoneCriteriaFilterItems>
+            <field>Case.Status</field>
+            <operation>equals</operation>
+            <value>New</value>
+        </milestoneCriteriaFilterItems>
+        <milestoneCriteriaFilterItems>
+            <field>Case.Status</field>
+            <operation>equals</operation>
+            <value>Working</value>
+        </milestoneCriteriaFilterItems>
+        <milestoneCriteriaFilterItems>
+            <field>Case.Returned_Case__c</field>
+            <operation>equals</operation>
+            <value>true</value>
+        </milestoneCriteriaFilterItems>
+        <milestoneCriteriaFilterItems>
+            <field>Case.SCC_Assigned_Date__c</field>
+            <operation>notEqual</operation>
+            <value></value>
+        </milestoneCriteriaFilterItems>
+        <milestoneCriteriaFilterItems>
+            <field>Case.Owner_User__c</field>
+            <operation>equals</operation>
+            <value>true</value>
+        </milestoneCriteriaFilterItems>
+        <milestoneCriteriaFilterItems>
+            <field>Case.Branch_Code__c</field>
+            <operation>notEqual</operation>
+            <value>00229</value>
+        </milestoneCriteriaFilterItems>
+        <milestoneName>Customer Service OLA (Uker)</milestoneName>
+        <minutesCustomClass>CaseOLAUkerMilestoneTimeCalculator</minutesCustomClass>
+        <timeTriggers>
+            <actions>
+                <name>Over_Agent_OLA_Uker</name>
+                <type>FieldUpdate</type>
+            </actions>
+            <timeLength>0</timeLength>
+            <workflowTimeTriggerUnit>Minutes</workflowTimeTriggerUnit>
+        </timeTriggers>
+        <useCriteriaStartTime>true</useCriteriaStartTime>
+    </milestones>
+    <milestones>
+        <milestoneCriteriaFilterItems>
+            <field>Case.Status</field>
+            <operation>equals</operation>
+            <value>Waiting Document</value>
+        </milestoneCriteriaFilterItems>
+        <milestoneName>Waiting Document</milestoneName>
+        <minutesCustomClass>CaseWaitingMilestoneTimeCalculator</minutesCustomClass>
+        <useCriteriaStartTime>true</useCriteriaStartTime>
+    </milestones>
+    <milestones>
+        <businessHours>sabtu minggu libur</businessHours>
+        <milestoneCriteriaFilterItems>
+            <field>Case.SCC_Sub_Escalation_Level__c</field>
+            <operation>equals</operation>
+            <value>Escalation Level 1</value>
+        </milestoneCriteriaFilterItems>
+        <milestoneCriteriaFilterItems>
+            <field>Case.Status</field>
+            <operation>equals</operation>
+            <value>Escalated</value>
+        </milestoneCriteriaFilterItems>
+        <milestoneCriteriaFilterItems>
+            <field>Case.ShowSLA__c</field>
+            <operation>equals</operation>
+            <value>true</value>
+        </milestoneCriteriaFilterItems>
+        <milestoneName>Level 1 OLA</milestoneName>
+        <minutesCustomClass>CaseLevel1MilestoneTimeCalculator</minutesCustomClass>
+        <timeTriggers>
+            <actions>
+                <name>Over_Level_1_OLA</name>
+                <type>FieldUpdate</type>
+            </actions>
+            <timeLength>0</timeLength>
+            <workflowTimeTriggerUnit>Minutes</workflowTimeTriggerUnit>
+        </timeTriggers>
+        <useCriteriaStartTime>true</useCriteriaStartTime>
+    </milestones>
+    <milestones>
+        <businessHours>sabtu minggu libur</businessHours>
+        <milestoneCriteriaFilterItems>
+            <field>Case.SCC_Sub_Escalation_Level__c</field>
+            <operation>equals</operation>
+            <value>Escalation Level 2</value>
+        </milestoneCriteriaFilterItems>
+        <milestoneCriteriaFilterItems>
+            <field>Case.Status</field>
+            <operation>equals</operation>
+            <value>Escalated</value>
+        </milestoneCriteriaFilterItems>
+        <milestoneCriteriaFilterItems>
+            <field>Case.ShowSLA__c</field>
+            <operation>equals</operation>
+            <value>true</value>
+        </milestoneCriteriaFilterItems>
+        <milestoneName>Level 2 OLA</milestoneName>
+        <minutesCustomClass>CaseLevel2MilestoneTimeCalculator</minutesCustomClass>
+        <timeTriggers>
+            <actions>
+                <name>Over_Level_2_OLA</name>
+                <type>FieldUpdate</type>
+            </actions>
+            <timeLength>0</timeLength>
+            <workflowTimeTriggerUnit>Minutes</workflowTimeTriggerUnit>
+        </timeTriggers>
+        <useCriteriaStartTime>true</useCriteriaStartTime>
+    </milestones>
+    <milestones>
+        <businessHours>sabtu minggu libur</businessHours>
+        <milestoneCriteriaFilterItems>
+            <field>Case.SCC_Sub_Escalation_Level__c</field>
+            <operation>equals</operation>
+            <value>Escalation Level 3</value>
+        </milestoneCriteriaFilterItems>
+        <milestoneCriteriaFilterItems>
+            <field>Case.Status</field>
+            <operation>equals</operation>
+            <value>Escalated</value>
+        </milestoneCriteriaFilterItems>
+        <milestoneCriteriaFilterItems>
+            <field>Case.ShowSLA__c</field>
+            <operation>equals</operation>
+            <value>true</value>
+        </milestoneCriteriaFilterItems>
+        <milestoneName>Level 3 OLA</milestoneName>
+        <minutesCustomClass>CaseLevel3MilestoneTimeCalculator</minutesCustomClass>
+        <timeTriggers>
+            <actions>
+                <name>Over_Level_3_OLA</name>
+                <type>FieldUpdate</type>
+            </actions>
+            <timeLength>0</timeLength>
+            <workflowTimeTriggerUnit>Minutes</workflowTimeTriggerUnit>
+        </timeTriggers>
+        <useCriteriaStartTime>true</useCriteriaStartTime>
+    </milestones>
+    <milestones>
+        <businessHours>sabtu minggu libur</businessHours>
+        <milestoneCriteriaFilterItems>
+            <field>Case.SCC_Sub_Escalation_Level__c</field>
+            <operation>equals</operation>
+            <value>Escalation Level 4</value>
+        </milestoneCriteriaFilterItems>
+        <milestoneCriteriaFilterItems>
+            <field>Case.Status</field>
+            <operation>equals</operation>
+            <value>Escalated</value>
+        </milestoneCriteriaFilterItems>
+        <milestoneCriteriaFilterItems>
+            <field>Case.ShowSLA__c</field>
+            <operation>equals</operation>
+            <value>true</value>
+        </milestoneCriteriaFilterItems>
+        <milestoneName>Level 4 OLA</milestoneName>
+        <minutesCustomClass>CaseLevel4MilestoneTimeCalculator</minutesCustomClass>
+        <timeTriggers>
+            <actions>
+                <name>Over_Level_4_OLA</name>
+                <type>FieldUpdate</type>
+            </actions>
+            <timeLength>0</timeLength>
+            <workflowTimeTriggerUnit>Minutes</workflowTimeTriggerUnit>
+        </timeTriggers>
+        <useCriteriaStartTime>true</useCriteriaStartTime>
+    </milestones>
+    <name>Case Entitlement</name>
+    <versionMaster>552MR000000Fy5V</versionMaster>
+    <versionNumber>9</versionNumber>
+</EntitlementProcess>

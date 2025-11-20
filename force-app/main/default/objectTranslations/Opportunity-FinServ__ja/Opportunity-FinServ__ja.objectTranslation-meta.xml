@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <recordTypes>
+        <label>一般</label>
+        <name>FinServ__General</name>
+    </recordTypes>
+    <recordTypes>
+        <label>退職プラン</label>
+        <name>FinServ__RetirementPlanning</name>
+    </recordTypes>
+    <recordTypes>
+        <label>商談 (ウォレットシェア)</label>
+        <name>FinServ__WalletShareOpportunity</name>
+    </recordTypes>
+    <validationRules>
+        <errorMessage>内部紹介者は内部の Salesforce ユーザーである必要があります。</errorMessage>
+        <name>FinServ__NonPortalUserReferrer</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>内部紹介者または外部紹介者を入力します。紹介ごとに 1 人の紹介者のみを含めることができます。</errorMessage>
+        <name>FinServ__SingleReferredByEntryByRecord</name>
+    </validationRules>
+</CustomObjectTranslation>

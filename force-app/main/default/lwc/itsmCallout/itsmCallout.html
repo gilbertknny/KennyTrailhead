@@ -1,0 +1,7 @@
+<template>
+    <lightning-input label="Case ID" value={caseId} onchange={handleCaseIdChange}></lightning-input>
+    <lightning-button label="Make Callout" onclick={handleCallout}></lightning-button>
+    <template if:true={response}>
+        <p>Response: {response}</p>
+    </template>
+</template>

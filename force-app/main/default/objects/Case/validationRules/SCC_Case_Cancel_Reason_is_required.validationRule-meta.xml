@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>SCC_Case_Cancel_Reason_is_required</fullName>
+    <active>true</active>
+    <description>When case status is cancelled, cancel reason is mandatory.</description>
+    <errorConditionFormula>AND(
+NOT($Permission.By_Pass_Validation_for_Migration),
+ISCHANGED( Status ) ,
+ISPICKVAL(Status, &apos;Cancelled&apos;) ,
+ISPICKVAL( SCC_Cancel_reasons__c, &apos;&apos;)
+)</errorConditionFormula>
+    <errorDisplayField>SCC_Cancel_reasons__c</errorDisplayField>
+    <errorMessage>Please enter Cancellation Reason</errorMessage>
+</ValidationRule>

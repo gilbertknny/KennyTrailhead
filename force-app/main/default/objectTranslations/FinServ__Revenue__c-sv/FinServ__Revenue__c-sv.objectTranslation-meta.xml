@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <article>Definite</article>
+        <plural>false</plural>
+        <value>Intäkten</value>
+    </caseValues>
+    <caseValues>
+        <article>Indefinite</article>
+        <plural>false</plural>
+        <value>En intäkt</value>
+    </caseValues>
+    <caseValues>
+        <article>None</article>
+        <plural>false</plural>
+        <value>Intäkt</value>
+    </caseValues>
+    <caseValues>
+        <article>Definite</article>
+        <plural>true</plural>
+        <value>Intäkterna</value>
+    </caseValues>
+    <caseValues>
+        <article>Indefinite</article>
+        <plural>true</plural>
+        <value>Intäkter</value>
+    </caseValues>
+    <caseValues>
+        <article>None</article>
+        <plural>true</plural>
+        <value>Intäkter</value>
+    </caseValues>
+    <gender>Feminine</gender>
+    <nameFieldLabel>Intäktstransaktion</nameFieldLabel>
+    <validationRules>
+        <errorMessage><!-- Enter either the Client or the Financial Account for this Revenue source. --></errorMessage>
+        <name>FinServ__AccountOrFinancialAccountRequired</name>
+    </validationRules>
+</CustomObjectTranslation>

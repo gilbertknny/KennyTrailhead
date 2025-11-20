@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>For_Agent_only</fullName>
+    <active>true</active>
+    <errorConditionFormula>ISNEW() &amp;&amp; (!$Permission.BO_Maker_NFT &amp;&amp;  !$Permission.BO_Maker_NFT_ISSUER &amp;&amp; $Profile.Name != &quot;System Administrator&quot; &amp;&amp; $Profile.Name != &quot;Salesforce API Only System Integrations&quot;)</errorConditionFormula>
+    <errorMessage>Tidak bisa submit rekon</errorMessage>
+</ValidationRule>

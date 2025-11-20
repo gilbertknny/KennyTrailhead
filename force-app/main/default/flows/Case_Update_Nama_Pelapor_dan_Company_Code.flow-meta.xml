@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>64.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <description>update condition</description>
+    <environments>Default</environments>
+    <formulas>
+        <name>company_code</name>
+        <dataType>String</dataType>
+        <expression>MID(
+  {!$Record.SCC_Notes__c},
+  FIND(&apos;&quot;Company Code&quot;:&quot;&apos;,  {!$Record.SCC_Notes__c}) + LEN(&apos;&quot;Company Code&quot;:&quot;&apos;),
+  FIND(&apos;&quot;&apos;,  {!$Record.SCC_Notes__c}, FIND(&apos;&quot;Company Code&quot;:&quot;&apos;,  {!$Record.SCC_Notes__c}) + LEN(&apos;&quot;Company Code&quot;:&quot;&apos;)) 
+  - (FIND(&apos;&quot;Company Code&quot;:&quot;&apos;,  {!$Record.SCC_Notes__c}) + LEN(&apos;&quot;Company Code&quot;:&quot;&apos;))
+)</expression>
+    </formulas>
+    <formulas>
+        <name>user_login_code</name>
+        <dataType>String</dataType>
+        <expression>MID(
+  {!$Record.SCC_Notes__c},
+  FIND(&apos;&quot;User login Code&quot;:&quot;&apos;, {!$Record.SCC_Notes__c}) + LEN(&apos;&quot;User login Code&quot;:&quot;&apos;),
+  FIND(&apos;&quot;&apos;, {!$Record.SCC_Notes__c}, FIND(&apos;&quot;User login Code&quot;:&quot;&apos;, {!$Record.SCC_Notes__c}) + LEN(&apos;&quot;User login Code&quot;:&quot;&apos;)) 
+  - (FIND(&apos;&quot;User login Code&quot;:&quot;&apos;, {!$Record.SCC_Notes__c}) + LEN(&apos;&quot;User login Code&quot;:&quot;&apos;))
+)</expression>
+    </formulas>
+    <interviewLabel>[Case] Update Nama Pelapor dan Company Code {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>[Case] Update Nama Pelapor dan Company Code</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <name>Update_Nama_Pelapor_dan_Company_Code</name>
+        <label>Update Nama Pelapor dan Company Code</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <inputAssignments>
+            <field>Company_Code__c</field>
+            <value>
+                <elementReference>company_code</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>SCC_Nama_Pelapor__c</field>
+            <value>
+                <elementReference>user_login_code</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Update_Nama_Pelapor_dan_Company_Code</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Origin</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>QLola Cash Web</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>SCC_Notes__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <object>Case</object>
+        <recordTriggerType>Create</recordTriggerType>
+        <triggerType>RecordBeforeSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

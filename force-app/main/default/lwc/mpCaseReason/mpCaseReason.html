@@ -1,0 +1,67 @@
+<template>
+    <c-expandable-section id="1" label={clabel.casereasonsection}>
+        <div class="slds-var-m-around_medium">
+            <div class="form-container">
+                <template if:true={isSpinner}>
+                    <lightning-spinner alternative-text="Loading" variant="brand" size="large">
+                    </lightning-spinner>
+                </template>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <lightning-checkbox-group name="Case Reason"
+                                    label={clabel.casereason}
+                                    options={options}
+                                    value={value}
+                                    onchange={handleChange}
+                                    required="true"
+                                    disabled={isDisabled}>
+                                </lightning-checkbox-group>
+                            </td>
+                            <template lwc:if={isClosed}>
+                                <td style="text-align: center;">
+                                    <lightning-button variant="brand" label="Save" onclick={handleSave}></lightning-button>
+                                </td>
+                            </template>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!--<p>Selected Values are: {selectedValues}</p>-->
+        </div>
+    </c-expandable-section>
+<!--<lightning-card title="Case Reason">
+    <div class="slds-var-m-around_medium">
+        <div class="form-container">
+            <table>
+                <tbody>
+                    <tr>
+                        <td>
+                            <lightning-combobox name="picklist" label={label}
+                                placeholder="Select Case Reason" value={selectedValues} options={options}
+                                onchange={handleChange}>
+                            </lightning-combobox>
+                        </td>
+                        <td style="padding-top: 10px; text-align: center;">
+                            <lightning-button variant="brand" label="Save" onclick={handleSave}></lightning-button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <template if:true={selectedValues.length}>
+            <div class="selected-values">
+                <template for:each={selectedValues} for:item="value">
+                    <span key={value} class="pill">
+                        {value}
+                        <lightning-icon icon-name="utility:close" alternative-text="Remove" size="xx-small"
+                            class="remove-icon" data-value={value} onclick={removeItem}></lightning-icon>
+                    </span>
+                </template>
+            </div>
+        </template>
+    </div>
+</lightning-card>-->
+</template>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>Relation de compte à compte</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Relations de compte à compte</value>
+    </caseValues>
+    <fieldSets>
+        <label><!-- Related Accounts --></label>
+        <name>WM_Household_RelatedAccounts</name>
+    </fieldSets>
+    <gender>Feminine</gender>
+    <nameFieldLabel>Nom de la relation du compte</nameFieldLabel>
+    <startsWith>Consonant</startsWith>
+    <validationRules>
+        <errorMessage>Cet enregistrement ne peut pas être modifié. Pour mettre à jour les informations sur la relation, vous pouvez désactiver cet enregistrement et en créer un nouveau.</errorMessage>
+        <name>FinServ__AARCanOnlyBeDeactivated</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Compte et Compte associé doivent être des entités distinctes.</errorMessage>
+        <name>FinServ__AccountAndRelatedAccountCannotBeSame</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Un compte ne peut pas faire partie d&apos;un individu.</errorMessage>
+        <name>FinServ__AccountCannotBeAnIndividual</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Une relation de compte à compte ne peut pas être créée comme inactive.</errorMessage>
+        <name>FinServ__CannotCreateInactiveRecord</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Un enregistrement inactif ne peut pas être modifié. Pour mettre à jour les informations sur la relation, vous pouvez créer un autre enregistrement.</errorMessage>
+        <name>FinServ__InactiveAARCannotBeEdited</name>
+    </validationRules>
+</CustomObjectTranslation>

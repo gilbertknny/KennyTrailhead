@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Sabrina_API</fullName>
+    <booleanFilter>1 AND ((2 AND 3) OR (4 OR 5))</booleanFilter>
+    <columns>NAME</columns>
+    <columns>Class_Name__c</columns>
+    <columns>Endpoint__c</columns>
+    <columns>CREATED_DATE</columns>
+    <columns>User_Run__c</columns>
+    <columns>Response_Status_Code__c</columns>
+    <columns>Response_Body__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>CREATED_DATE</field>
+        <operation>equals</operation>
+        <value>TODAY</value>
+    </filters>
+    <filters>
+        <field>User_Run__c</field>
+        <operation>contains</operation>
+        <value>BRI Integration</value>
+    </filters>
+    <filters>
+        <field>Endpoint__c</field>
+        <operation>contains</operation>
+        <value>conversation</value>
+    </filters>
+    <filters>
+        <field>User_Run__c</field>
+        <operation>contains</operation>
+        <value>Sabrina</value>
+    </filters>
+    <filters>
+        <field>User_Run__c</field>
+        <operation>contains</operation>
+        <value>vieri</value>
+    </filters>
+    <label>Sabrina</label>
+</ListView>

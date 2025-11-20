@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fieldSets>
+        <label><!-- Relationship Group Members --></label>
+        <name>WM_Client_Relationship_Group_Members</name>
+    </fieldSets>
+    <recordTypes>
+        <description>Datos de contacto para una institución o cuenta de negocio</description>
+        <label>Compañía</label>
+        <name>FinServ__IndustriesBusiness</name>
+    </recordTypes>
+    <recordTypes>
+        <description>Datos de contacto para un cliente minorista</description>
+        <label>Individuo</label>
+        <name>FinServ__IndustriesIndividual</name>
+    </recordTypes>
+    <validationRules>
+        <errorMessage>La fecha de nacimiento no puede estar en el futuro.</errorMessage>
+        <name>FinServ__BirthdateCannotBeInFuture</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Solo se puede designar una dirección como la dirección principal.</errorMessage>
+        <name>FinServ__CannotHaveMoreThanOnePrimaryAddress</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>No se puede asociar un prospecto o contacto con una cuenta doméstica.</errorMessage>
+        <name>FinServ__ContactCannotBeAssociatedToHousehold</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>La cuenta seleccionada tiene un tipo de registro Individuo y no pueden asociarse contactos adicionales con ella</errorMessage>
+        <name>FinServ__IndividualCannotHaveMoreThanOneContact</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Los referentes internos deben ser usuarios de Salesforce.</errorMessage>
+        <name>FinServ__NonPortalUserReferrer</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>No se puede cambiar el tipo de registro Individuo</errorMessage>
+        <name>FinServ__NotAllowingConversionFromIndividual</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>No se puede cambiar el tipo de registro a Individuo.</errorMessage>
+        <name>FinServ__NotAllowingConversionToIndividual</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Ingrese un referente interno o un referente externo. Solo puede enumerar un único referente por cada referencia.</errorMessage>
+        <name>FinServ__SingleReferredByEntryByRecord</name>
+    </validationRules>
+    <webLinks>
+        <label>Agregar relación</label>
+        <name>FinServ__AddRelation</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- GoogleMaps --></label>
+        <name>GoogleMaps</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- GoogleSearch --></label>
+        <name>GoogleSearch</name>
+    </webLinks>
+</CustomObjectTranslation>

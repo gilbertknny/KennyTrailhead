@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>BRI_File_Size_Not_More_Than_25_MB</fullName>
+    <active>true</active>
+    <errorConditionFormula>IF ( ContentSize &gt; VALUE( $Label.BRI_File_Size_More_Than_25MB ) , True, False)</errorConditionFormula>
+    <errorMessage>Anda tidak dapat memasukkan file lebih dari 25 MB</errorMessage>
+</ValidationRule>

@@ -1,0 +1,181 @@
+/* FOR MODAL */
+/* .slds-modal__content {
+    max-height: 400px;
+    overflow-y: auto;
+} */
+
+.model-content-2 {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+/* END FOR MODAL */
+
+.slds-m-around_medium .file-input-container {
+    width: 100%;
+}
+
+.slds-file-selector__button {
+    padding: 12px 24px; /* Adjust the button size */
+}
+
+.lightning-input__input {
+    width: 100%; /* Set the width to be 100% of the container */
+    padding: 12px; /* Add padding to make it larger */
+    font-size: 16px; /* Increase font size for better visibility */
+}
+
+.lightning-input__label {
+    font-size: 14px; /* Optionally adjust the label font size */
+}
+
+/* Custom styling for the file input container */
+/* Custom styling for the file input container */
+.custom-dropzone {
+    display: flex;
+    flex-direction: column; /* Stack items vertically */
+    justify-content: center;
+    align-items: center;
+    border: 2px dashed #0070d2; /* Blue dashed border */
+    border-radius: 8px;
+    padding: 20px;
+    background-color: #f9fafb;
+    min-height: 250px; /* Minimum height for the dropzone */
+    width: 100%; /* Full width */
+    max-width: 600px; /* Maximum width */
+    margin: 0 auto; /* Center the dropzone */
+    text-align: center;
+    position: relative;
+    overflow: hidden; /* Prevent overflow if content is too large */
+}
+
+/* Make the lightning-input label take the full width of the dropzone */
+.lightning-file-input label {
+    width: 100%; /* Make the label take up full width of the container */
+    padding: 20px;
+    background-color: #0070d2; /* Blue background */
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* Hide the default file input button but keep its functionality */
+.lightning-file-input input[type="file"] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%; /* Ensure it covers the entire drop zone */
+    height: 100%;
+    opacity: 0; /* Make the file input button invisible but clickable */
+    cursor: pointer; /* Indicate it is clickable */
+}
+
+/* Styling for the dropzone message */
+.dropzone-text {
+    margin-top: 20px;
+    font-size: 16px;
+    color: #0070d2; /* Blue color for the text */
+    text-align: center;
+}
+
+/* Change the background color when hovering over the dropzone */
+.custom-dropzone.hovered {
+    background-color: #e6efff;
+}
+
+/* Responsiveness: adjust layout for smaller screens */
+@media (max-width: 600px) {
+    .custom-dropzone {
+        padding: 20px;
+        min-height: 180px;
+    }
+
+    .dropzone-text {
+        font-size: 14px;
+    }
+
+    .lightning-file-input label {
+        font-size: 14px;
+        padding: 12px 25px;
+    }
+
+
+}
+
+/* END */
+
+.custom-card {
+    display: block;
+}
+
+/* FOR ERROR MESSAGE MODAL */
+
+dl {
+    margin: 0;
+    padding: 0;
+}
+
+dt {
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+dd {
+    margin-left: 20px;
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+
+.error-message {
+    margin-left: 20px;
+    font-size: 14px;
+}
+
+.model-content-2 p {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+li {
+    margin-bottom: 5px;
+}
+
+b {
+    font-weight: bold;
+}
+
+/* Indentation for error messages */
+.error-indent {
+    padding-left: 20px; /* Indentation level for error messages */
+}
+/* END FOR ERROR MESSAGE MODAL */
+
+.slds-button-group {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.slds-button-group .slds-spinner {
+    margin-right: 0.5rem; /* Space between spinner and button */
+}
+
+/*EXPERIMENT*/
+
+.custom-spinner{
+    position: relative;
+    display: inline-block;
+    /* margin-left: -5px; */
+    margin: 0 -10px 0 -5px;
+    width: 55px;
+    vertical-align: middle;
+    white-space: nowrap;
+}

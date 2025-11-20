@@ -1,0 +1,46 @@
+<template>
+    <lightning-card title="Non-Voice Milestone" icon-name="standard:case_milestone">
+        <div class="card-sosmed slds-p-around_medium">
+            <div class="card-sosmed-orgin">
+                <p class="card-sosmed-title-content">Channel Pengaduan Non-Voice:</p>
+                <p class="card-sosmed-content">{originTicket}</p>
+            </div>
+            <div class="card-sosmed-target">
+                <p class="card-sosmed-title-content">Timer Service Level:</p>
+                <p class={timerCalc}>{timer}</p>
+            </div>
+            <div class="card-sosmed-target">
+                <p class="card-sosmed-title-content">Target Penyelesaian:</p>
+                <p class="card-sosmed-content">{target}</p>
+            </div>
+            <template lwc:if={isCompleted}>
+                <div class="card-sosmed-penyelesaian">
+                    <p class="card-sosmed-title-content">Waktu Penyelesaian:</p>
+                    <p class={completed}>{penyelesaian}</p>
+                </div>
+            </template>
+        </div>
+        <!-- <div class="slds-p-around_medium">
+            <template if:true={isSosmedTicket}>
+                <div class="timer-container slds-text-align_center">
+                    <h1 class={computedClass}>
+                        {timer}
+                    </h1>
+
+                    <template if:true={isCompleted}>
+                        <p class="completed-text">{timer}</p>
+                    </template>
+
+                    <template if:true={showViolation}>
+                        <p class="violation-text">
+                            Service Level dari Sosial Media telah Violated
+                        </p>
+                    </template>
+                </div>
+            </template>
+            <template if:false={isSosmedTicket}>
+                <p class="error-text">{errorMessage}</p>
+            </template>
+        </div> -->
+    </lightning-card>
+</template>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>Emprego</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Empregos</value>
+    </caseValues>
+    <gender>Masculine</gender>
+    <nameFieldLabel>Nome do funcionário</nameFieldLabel>
+    <validationRules>
+        <errorMessage>A data de término não pode ser no futuro.</errorMessage>
+        <name>FinServ__EndDateCannotBeInFuture</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>A data de início não pode ser no futuro.</errorMessage>
+        <name>FinServ__StartDateCannotBeInFuture</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>A data de início não pode ser anterior à data de término.</errorMessage>
+        <name>FinServ__StartDateCannotBeLaterThanEndDate</name>
+    </validationRules>
+</CustomObjectTranslation>

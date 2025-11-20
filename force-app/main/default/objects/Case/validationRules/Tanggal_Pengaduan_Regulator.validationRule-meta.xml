@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Tanggal_Pengaduan_Regulator</fullName>
+    <active>true</active>
+    <description>Tanggal Pengaduan Regulator</description>
+    <errorConditionFormula>AND(
+Pengisian_Form_APPK__c = TRUE,
+NOT(ISNULL(Tanggal_Pengaduan_Regulator__c)),
+NOT(ISNULL(Tanggal_Tanggapan_ke_EMAIL_APPK__c)),
+Tanggal_Pengaduan_Regulator__c &gt; Tanggal_Tanggapan_ke_EMAIL_APPK__c
+)</errorConditionFormula>
+    <errorMessage>Tanggal Pengaduan Regulator tidak boleh lebih dari hari ini (TODAY) atau Closed Date</errorMessage>
+</ValidationRule>

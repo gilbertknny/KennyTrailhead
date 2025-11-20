@@ -1,0 +1,10 @@
+<template>
+    <template if:true={imageUrl}>
+        <div class="image-container">
+            <img src={imageUrl} alt="Preview Image" class="preview-img"/>
+        </div>
+    </template>
+    <template if:true={error}>
+        <p class="error">Gagal Preview Gambar : {error}</p>
+    </template>
+</template>

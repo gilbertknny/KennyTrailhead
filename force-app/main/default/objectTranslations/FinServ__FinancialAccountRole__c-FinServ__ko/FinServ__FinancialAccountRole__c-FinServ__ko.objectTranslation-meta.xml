@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>금융 계정 역할</value>
+    </caseValues>
+    <fieldSets>
+        <label><!-- Financial Account Role --></label>
+        <name>WM_Client_FinancialAccountRole</name>
+    </fieldSets>
+    <nameFieldLabel>역할 번호</nameFieldLabel>
+    <recordTypes>
+        <description>주식회사 또는 LCC와 같은 조직 엔티티가 담당하는 역할</description>
+        <label>계정 역할</label>
+        <name>FinServ__AccountRole</name>
+    </recordTypes>
+    <recordTypes>
+        <description>개인이 담당하는 역할</description>
+        <label>연락처 역할</label>
+        <name>FinServ__ContactRole</name>
+    </recordTypes>
+    <validationRules>
+        <errorMessage>금융 계정 역할은 비활성으로 만들 수 없습니다</errorMessage>
+        <name>FinServ__CannotCreateInactiveRecord</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>이 레코드는 편집할 수 없습니다. 역할 정보를 업데이트하기 위해 이 레코드를 비활성화하고 새 레코드를 생성할 수 있습니다.</errorMessage>
+        <name>FinServ__FARCannotBeModified</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>비활성 레코드는 편집할 수 없습니다. FAR을 업데이트하기 위해 새 레코드를 생성할 수 있습니다.</errorMessage>
+        <name>FinServ__InactiveFARCannotBeEdited</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>비활성 금융 역할은 재활성화할 수 없습니다.</errorMessage>
+        <name>FinServ__InactiveRecordCannotBeReactivated</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>소유권을 금융 계정에서만 업데이트할 수 있기 때문에 이 레코드는 비활성화할 수 없습니다.</errorMessage>
+        <name>FinServ__OwnershipRolesCannotBeDeactivated</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>소유권을 금융 계정에서만 지정할 수 있기 때문에 이 레코드는 수정할 수 없습니다.</errorMessage>
+        <name>FinServ__OwnershipRolesCannotBeModified</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>관련 계정 또는 관련 연락처 중 하나는 필수 항목입니다.</errorMessage>
+        <name>FinServ__RelatedAccountOrContactRequired</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>역할은 필수 항목입니다.</errorMessage>
+        <name>FinServ__RoleIsMandatory</name>
+    </validationRules>
+</CustomObjectTranslation>

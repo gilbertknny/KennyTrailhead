@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Access_Outside_Business_Hours</fullName>
+    <columns>NAME</columns>
+    <columns>Error_Datetime__c</columns>
+    <columns>Error_Messages__c</columns>
+    <columns>Type_Name__c</columns>
+    <columns>User_Run__c</columns>
+    <columns>Class_Name__c</columns>
+    <columns>Menu__c</columns>
+    <columns>Anomali__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Response_Status_Code__c</field>
+        <operation>equals</operation>
+        <value>200</value>
+    </filters>
+    <filters>
+        <field>Anomali__c</field>
+        <operation>equals</operation>
+        <value>Access Outside Business Hours</value>
+    </filters>
+    <filters>
+        <field>Menu__c</field>
+        <operation>notEqual</operation>
+        <value>Home</value>
+    </filters>
+    <label>Access Outside Business Hours</label>
+</ListView>

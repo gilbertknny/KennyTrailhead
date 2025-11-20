@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Retreive_Image_from_session_Id_Store_to_Case_Record</name>
+        <label>Retreive Image from session Id Store to Case Record</label>
+        <locationX>50</locationX>
+        <locationY>647</locationY>
+        <actionName>tspa__ImageFromSessionId</actionName>
+        <actionType>apex</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>imageRecordId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>recordId</name>
+            <value>
+                <elementReference>Get_Case_Related.Id</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>sessionId</name>
+            <value>
+                <elementReference>Get_Session_Invite_Record.tspa__sessionId__c</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>tspa__ImageFromSessionId</nameSegment>
+        <offset>0</offset>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </actionCalls>
+    <apiVersion>63.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <decisions>
+        <name>Decision_Where_Session_were_initiated</name>
+        <label>Decision Where Session were initiated</label>
+        <locationX>182</locationX>
+        <locationY>431</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>From_Object_Case</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Session_Invite_Record.tspa__RecordId__c</leftValueReference>
+                <operator>StartsWith</operator>
+                <rightValue>
+                    <stringValue>500</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Case_Related</targetReference>
+            </connector>
+            <label>From Object Case</label>
+        </rules>
+    </decisions>
+    <description>[Demo VRA] Get image from VRA session into file in case initiate session VRA</description>
+    <environments>Default</environments>
+    <interviewLabel>[Demo VRA] Trigger Get Image to Case VRA {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>[Demo VRA] Trigger Get Image to Case VRA</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <name>Get_Case_Related</name>
+        <label>Get Case Related</label>
+        <locationX>50</locationX>
+        <locationY>539</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Retreive_Image_from_session_Id_Store_to_Case_Record</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>CaseNumber</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Session_Invite_Record.tspa__Refrence_Number__c</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Case</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <description>Get Session Invite Record from Trigger</description>
+        <name>Get_Session_Invite_Record</name>
+        <label>Get Session Invite Record</label>
+        <locationX>182</locationX>
+        <locationY>323</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Decision_Where_Session_were_initiated</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>tspa__sessionId__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.tspa__Session_Id__c</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>tspa__TechSeeSessions__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <start>
+        <locationX>56</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Get_Session_Invite_Record</targetReference>
+        </connector>
+        <object>tspa__Visual_Image__c</object>
+        <recordTriggerType>Create</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

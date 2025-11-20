@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>Ingreso</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Ingresos</value>
+    </caseValues>
+    <gender>Masculine</gender>
+    <nameFieldLabel>Transacción de ingresos</nameFieldLabel>
+    <validationRules>
+        <errorMessage><!-- Enter either the Client or the Financial Account for this Revenue source. --></errorMessage>
+        <name>FinServ__AccountOrFinancialAccountRequired</name>
+    </validationRules>
+</CustomObjectTranslation>

@@ -1,0 +1,118 @@
+<template>
+    <lightning-card title="BriLink Search">
+        <div class="slds-grid slds-gutters">
+            <div class="slds-col ">
+                <lightning-input label="TID" value={tid} onchange={handleTidChange} disabled={disableTidField} ></lightning-input>
+            </div>
+            <div class="slds-col ">
+                <lightning-input label="ID OUTLET" value={mid} onchange={handleMidChange} disabled={disableMidField} ></lightning-input>
+            </div>
+            <div class="slds-col" style="align-content: end;">
+                <lightning-button  variant="brand" label="Cari" onclick={handleSearch}  ></lightning-button>
+            </div>
+        </div>
+        <template if:true={error}>
+            <div class="slds-text-color_error slds-m-top_medium">{error}</div>
+        </template>
+        <template if:true={dataexist}>
+            <template  for:each={listdata} for:item="data">
+            <table key={data.UniqueId} class="slds-table slds-table_cell-buffer slds-table_bordered slds-m-top_medium" style="border-left: 1px solid #ccc; border-right: 1px solid #ccc;">
+                <thead>
+                    <tr>
+                        <th>MID Induk</th>
+                        <th>Merchant</th>
+                        <th>Status</th>
+                        <th>Tanggal Pasang</th>
+                        <th>Detail</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                    <tr key={data.kode_agen}>
+                        <td>{data.mid}</td>
+                        <td>{data.nama_merchant}</td>
+                        <td>{data.status}</td>
+                        <td>{data.tanggal_dibuat}</td>
+                        <td>
+                            <lightning-button data-id={data.UniqueId} label="Lihat" onclick={showDetail}></lightning-button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        
+       
+        <template if:true={data.showSection}>
+            <div key={data.UniqueId} class="slds-m-around_medium" style="border: 1px solid #ccc;">
+            <div class="slds-grid slds-wrap slds-m-top_medium">
+                <div class="slds-col slds-size_1-of-2">
+                    <div class="slds-text-title"><b>Nama Agen BRILink:</b></div>
+                    <div>{data.nama_agen}</div>
+                    <div class="slds-text-title"><b>Alamat Agent BRILink:</b></div>
+                    <div>{data.alamat_agen}</div>
+                    <div class="slds-text-title"><b>Nomor Rekening:</b></div>
+                    <div>{data.nomor_rekening}</div>
+                    <div class="slds-text-title"><b>Nama Ibu Kandung:</b></div>
+                    <div>{data.nama_ibu_kandung}</div>
+                    <div class="slds-text-title"><b>Tanggal Lahir:</b></div>
+                    <div>{data.tanggal_lahir}</div>
+                    <div class="slds-text-title"><b>Nama Lengkap:</b></div>
+                    <div>{data.nama_lengkap}</div>
+                    <div class="slds-text-title"><b>Kode Channel Agent BRILnk:</b></div>
+                    <div>{data.kode_channel}</div>
+                    <div class="slds-text-title"><b>MID / Kode BRILink:</b></div>
+                    <div>{data.mid}</div>
+                    <div class="slds-text-title"><b>Telepon:</b></div>
+                    <div>{data.telepon}</div>
+                    <div class="slds-text-title"><b>Kode Uker Pengelola:</b></div>
+                    <div>{data.kode_uker_pengelola}</div>
+                    <div class="slds-text-title"><b>Regional Office Pengelola:</b></div>
+                    <div>{data.region_office_pengelola}</div>
+                    <div class="slds-text-title"><b>Jenis Usaha BRILink:</b></div>
+                    <div>{data.jenis_usaha}</div>
+                    <div class="slds-text-title"><b>Nomor Kartu Debit:</b></div>
+                    <div>{data.nomor_kartu_debit}</div>
+                    <div class="slds-text-title"><b>Nomor Kontak PAB:</b></div>
+                    <div>{data.nomor_kontak_pab}</div>
+                    <div class="slds-text-title"><b>Status Agen BRILink:</b></div>
+                    <div>{data.status}</div>
+                    <!-- Add more fields with <b> tags for bold labels -->
+                </div>
+                <div class="slds-col slds-size_1-of-2">
+                   
+                    <div class="slds-text-title"><b>Kode Merchant BRILink WEB:</b></div>
+                    <div>{data.kode_merchant}</div>
+                    <div class="slds-text-title"><b>Kode Agen (BRILink Web):</b></div>
+                    <div>{data.kode_agen}</div>
+                    <div class="slds-text-title"><b>Nama Merchant BRILink WEB:</b></div>
+                    <div>{data.nama_merchant}</div>
+                    <div class="slds-text-title"><b>Nomor KTP:</b></div>
+                    <div>{data.nomor_ktp}</div>
+                    <div class="slds-text-title"><b>No SIUP / TDP:</b></div>
+                    <div>{data.nomor_siup}</div>
+                    <div class="slds-text-title"><b>No Rekening Pelimpahan Merchant:</b></div>
+                    <div>{data.nomor_rekening_pelimpahan}</div>
+                    <div class="slds-text-title"><b>No Rekening Pinjaman:</b></div>
+                    <div>{data.nomor_rekening_pinjaman}</div>
+                    <div class="slds-text-title"><b>Limit Transaksi:</b></div>
+                    <div>{data.limit_transaksi}</div>
+                    <div class="slds-text-title"><b>Sharing Fee:</b></div>
+                    <div>{data.sharing_fee}</div>
+                    <div class="slds-text-title"><b>PIC Unit Kerja:</b></div>
+                    <div>{data.pic_uker}</div>
+                    <div class="slds-text-title"><b>Tanggal Dibuat:</b></div>
+                    <div>{data.tanggal_dibuat}</div>
+                    <div class="slds-text-title"><b>Tanggal Modifikasi Terakhir:</b></div>
+                    <div>{data.tanggal_modifikasi}</div>
+                    <div class="slds-text-title"><b>Modifikasi Oleh:</b></div>
+                    <div>{data.modifikasi_oleh}</div>
+                    <div class="slds-text-title"><b>Jenis Jaringan:</b></div>
+                    <div>{data.jenis_jaringan}</div>
+                    <!-- Add corresponding fields for the right column -->
+                </div>
+            </div>
+            </div>
+            </template>
+        </template>
+        </template>
+    </lightning-card>
+</template>

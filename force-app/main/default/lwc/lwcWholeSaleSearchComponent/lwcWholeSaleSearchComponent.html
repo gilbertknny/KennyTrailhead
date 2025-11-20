@@ -1,0 +1,186 @@
+<!--
+    LWC Name           : lwcWholeSaleSearchComponent.html
+    Created Date       : 16 September 2024
+    @description       : This is class ..
+    @author            : Rakeyan Nuramria
+    Modification Log :
+    Ver   Date         Author                            Modification
+    1.0   16/09/2024   Rakeyan Nuramria                  Initial Version
+    1.0   30/09/2024   Rakeyan Nuramria                  Adjust UI
+    1.0   24/10/2024   Rakeyan Nuramria                  Adjust UI CSS horizontally
+-->
+
+<template>
+    <!-- Search Section -->
+    <lightning-card title="" variant="base" class="custom-card slds-m-top_xx-small slds-card_boundary">
+        <div class="slds-grid slds-gutters slds-m-around_small">
+            <div class="slds-col">
+                <lightning-input required label="Id Pangkalan" value={idPangkalan} onchange={handleIdPangkalanChange}
+                    disabled={disableIdPangkalanField}></lightning-input>
+            </div>
+            <div class="slds-col">
+                <lightning-input type="date" required label="Tanggal Awal" value={startDate}
+                    onchange={handleStartDateChange} disabled={disableStartDateField}></lightning-input>
+            </div>
+            <div class="slds-col">
+                <lightning-input type="date" required label="Tanggal Akhir" value={endDate}
+                    onchange={handleEndDateChange} disabled={disableEndDateField}></lightning-input>
+            </div>
+            <div class="slds-col" style="margin-top: 20px">
+                <lightning-button label="Cari" variant="brand" onclick={handleSearch}
+                    disabled={disableSearchButton}></lightning-button>
+            </div>
+        </div>
+
+        <!-- <template if:true={errorMsg}>
+            <div class="slds-text-color_error slds-m-left_small">
+                {errorMsg}
+            </div>
+        </template> -->
+    </lightning-card>
+    <!-- End Search Section -->
+
+    <template if:true={isLoading}>
+        <div class="spinner-container" style="height:6rem;position:relative">
+            <div role="status" class="slds-spinner slds-spinner_small">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </template>
+
+    <!-- Result Data Section -->
+    <template if:false={isLoading}>
+        <template if:true={hasError}>
+            <div class="slds-text-color_error slds-text-align_center">
+                <b>{errorMsg}</b>
+            </div>
+        </template>
+
+        <!-- Informasi Card -->
+        <template if:true={parsedData}>
+            <lightning-card title="Informasi Agen" icon-name="" variant="base"
+                class="custom-card slds-m-top_xx-small slds-card_boundary">
+                <div class="slds-p-around_small slds-m-top_xx-small">
+                    <div class="slds-scrollable_y custom-scroll">
+                        <table class="slds-table slds-table_bordered slds-table_fixed-layout custom-table">
+                            <thead>
+                                <tr class="slds-line-height_reset">
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Nama Agen">Nama Agen</div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Nama Pangkalan">Nama Pangkalan</div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Id Agen">Id Agen</div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Alamat">Alamat</div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Id Pangkalan">Id Pangkalan</div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Nomor Rekening Agen">Nomor Rekening Agen</div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Corp BRIVA">Corp BRIVA</div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Client Corp BRIVA">Client Corp BRIVA</div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="slds-hint-parent">
+                                    <td>{parsedData.agenName}</td>
+                                    <td>{parsedData.pangkalanName}</td>
+                                    <td>{parsedData.agenId}</td>
+                                    <td>{parsedData.agenAlamat}</td>
+                                    <td>{parsedData.pangkalanId}</td>
+                                    <td>{parsedData.agenNorek}</td>
+                                    <td>{parsedData.corpBriva}</td>
+                                    <td>{parsedData.corpClientBriva}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </lightning-card>
+        </template>
+
+        <!-- Transaksi Card -->
+        <template if:true={hasErrorTrx}>
+            <div class="slds-text-color_error slds-text-align_center">
+                <b>{errorMsg}</b>
+            </div>
+        </template>
+        <template if:true={inqueryTableData}>
+            <lightning-card title="Detail Transaksi" icon-name="" variant="base"
+                class="custom-card slds-m-top_xx-small slds-card_boundary">
+                <div class="slds-p-around_small slds-m-top_xx-small">
+                    <div class="slds-scrollable_y custom-scroll">
+                        <table class="slds-table slds-table_bordered slds-table_fixed-layout custom-table">
+                            <thead>
+                                <tr class="slds-line-height_reset">
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Id Order">Id Order</div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Jenis Pembayaran">Jenis Pembayaran</div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="No BRIVA">No BRIVA</div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Agen">Agen</div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Pangkalan">Pangkalan</div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Jumlah Tabung">Jumlah Tabung</div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Harga Tabung">Harga Tabung</div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Total Harga">Total Harga</div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Biaya Admin">Biaya Admin</div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Status Bayar">Status Bayar</div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Tanggal Order">Tanggal Order</div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={inqueryTableData} for:item="row">
+                                    <tr key={row.orderId} class="slds-hint-parent">
+                                        <td>{row.orderId}</td>
+                                        <td>{row.jenisPembayaran}</td>
+                                        <td>{row.noBriva}</td>
+                                        <td>{row.agenName}</td>
+                                        <td>{row.pangkalanName}</td>
+                                        <td>{row.jumlahTabung}</td>
+                                        <td>{row.hargaTabung}</td>
+                                        <td>{row.totalHarga}</td>
+                                        <td>{row.biayaAdmin}</td>
+                                        <td>{row.statusBayar}</td>
+                                        <td>{row.tanggalOrder}</td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </lightning-card>
+        </template>
+    </template>
+</template>

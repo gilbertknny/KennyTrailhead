@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <article>Definite</article>
+        <plural>false</plural>
+        <value>המסמך המזהה</value>
+    </caseValues>
+    <caseValues>
+        <article>None</article>
+        <plural>false</plural>
+        <value>מסמך מזהה</value>
+    </caseValues>
+    <caseValues>
+        <article>Definite</article>
+        <plural>true</plural>
+        <value>המסמכים המזהים</value>
+    </caseValues>
+    <caseValues>
+        <article>None</article>
+        <plural>true</plural>
+        <value>מסמכים מזהים</value>
+    </caseValues>
+    <gender>Masculine</gender>
+    <nameFieldLabel>מסמך</nameFieldLabel>
+    <validationRules>
+        <errorMessage><!-- The expiration date can&apos;t be earlier than the issue date. --></errorMessage>
+        <name>FinServ__ExpDateCannotBeLaterThanStart</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- The issue date can&apos;t be in the future. --></errorMessage>
+        <name>FinServ__IssueDateCannotBeInFuture</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Verification date and time can&apos;t be in the future. --></errorMessage>
+        <name>FinServ__VerificationDateTimeCannotBeInFuture</name>
+    </validationRules>
+</CustomObjectTranslation>

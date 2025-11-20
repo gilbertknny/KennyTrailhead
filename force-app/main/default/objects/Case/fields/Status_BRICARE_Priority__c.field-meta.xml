@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Status_BRICARE_Priority__c</fullName>
+    <externalId>false</externalId>
+    <formula>CASE(TEXT(Status),
+&apos;New&apos;, 1,
+&apos;Working&apos;, 2,
+&apos;Escalated&apos;, 3,
+&apos;Waiting Document&apos;, 4,
+&apos;Return&apos;, 5,
+&apos;Returned&apos;, 6,
+&apos;Closed&apos;, 7,
+7)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Status BRICARE Priority</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>財務帳戶角色</value>
+    </caseValues>
+    <fieldSets>
+        <label><!-- Financial Account Role --></label>
+        <name>WM_Client_FinancialAccountRole</name>
+    </fieldSets>
+    <nameFieldLabel>角色號碼</nameFieldLabel>
+    <recordTypes>
+        <description>角色已由組織實體佔用，例如公司或 LLC</description>
+        <label>帳戶角色</label>
+        <name>FinServ__AccountRole</name>
+    </recordTypes>
+    <recordTypes>
+        <description>角色已由人員佔用</description>
+        <label>連絡人角色</label>
+        <name>FinServ__ContactRole</name>
+    </recordTypes>
+    <validationRules>
+        <errorMessage>無法以未啟用狀態建立財務帳戶角色</errorMessage>
+        <name>FinServ__CannotCreateInactiveRecord</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>無法編輯此記錄。若要更新角色資訊，您可以停用此記錄並新建記錄。</errorMessage>
+        <name>FinServ__FARCannotBeModified</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>無法編輯未啟用的記錄。若要更新 FAR，您可以新建記錄。</errorMessage>
+        <name>FinServ__InactiveFARCannotBeEdited</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>無法重新啟用未啟用的財務角色。</errorMessage>
+        <name>FinServ__InactiveRecordCannotBeReactivated</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>由於只能在財務帳戶上更新擁有權，因此無法停用此記錄。</errorMessage>
+        <name>FinServ__OwnershipRolesCannotBeDeactivated</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>由於只能在財務帳戶上指定擁有權，因此無法修改此記錄。</errorMessage>
+        <name>FinServ__OwnershipRolesCannotBeModified</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>「相關帳戶」或「相關連絡人」為必填。</errorMessage>
+        <name>FinServ__RelatedAccountOrContactRequired</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>「角色」為必填。</errorMessage>
+        <name>FinServ__RoleIsMandatory</name>
+    </validationRules>
+</CustomObjectTranslation>

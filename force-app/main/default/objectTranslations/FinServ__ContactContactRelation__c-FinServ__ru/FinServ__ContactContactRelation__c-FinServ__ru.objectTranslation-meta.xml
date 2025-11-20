@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <caseType>Nominative</caseType>
+        <plural>false</plural>
+        <value>Взаимосвязь между контактами</value>
+    </caseValues>
+    <caseValues>
+        <caseType>Nominative</caseType>
+        <plural>true</plural>
+        <value>Взаимосвязи между контактами</value>
+    </caseValues>
+    <caseValues>
+        <caseType>Accusative</caseType>
+        <plural>false</plural>
+        <value>Взаимосвязь между контактами</value>
+    </caseValues>
+    <caseValues>
+        <caseType>Accusative</caseType>
+        <plural>true</plural>
+        <value>Взаимосвязи между контактами</value>
+    </caseValues>
+    <caseValues>
+        <caseType>Genitive</caseType>
+        <plural>false</plural>
+        <value>Взаимосвязи между контактами</value>
+    </caseValues>
+    <caseValues>
+        <caseType>Genitive</caseType>
+        <plural>true</plural>
+        <value>Взаимосвязей между контактами</value>
+    </caseValues>
+    <caseValues>
+        <caseType>Dative</caseType>
+        <plural>false</plural>
+        <value>Взаимосвязи между контактами</value>
+    </caseValues>
+    <caseValues>
+        <caseType>Dative</caseType>
+        <plural>true</plural>
+        <value>Взаимосвязям между контактами</value>
+    </caseValues>
+    <caseValues>
+        <caseType>Instrumental</caseType>
+        <plural>false</plural>
+        <value>Взаимосвязью между контактами</value>
+    </caseValues>
+    <caseValues>
+        <caseType>Instrumental</caseType>
+        <plural>true</plural>
+        <value>Взаимосвязями между контактами</value>
+    </caseValues>
+    <caseValues>
+        <caseType>Prepositional</caseType>
+        <plural>false</plural>
+        <value>Взаимосвязи между контактами</value>
+    </caseValues>
+    <caseValues>
+        <caseType>Prepositional</caseType>
+        <plural>true</plural>
+        <value>Взаимосвязях между контактами</value>
+    </caseValues>
+    <fieldSets>
+        <label><!-- Related Contacts --></label>
+        <name>WM_Client_RelatedContacts</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Related Contacts --></label>
+        <name>WM_Household_RelatedContacts</name>
+    </fieldSets>
+    <gender>Feminine</gender>
+    <nameFieldLabel>Имя связи контакта</nameFieldLabel>
+    <validationRules>
+        <errorMessage><!-- This record can&apos;t be edited. To update relationship information, you can deactivate this record and create a new one. --></errorMessage>
+        <name>FinServ__CCRCanOnlyBeDeactivated</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Взаимосвязь типа &quot;Контакт-контакт&quot; не может быть создана со статусом &quot;Неактивно&quot;.</errorMessage>
+        <name>FinServ__CannotCreateInactiveRecord</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Contact and Related Contact must be different entities. --></errorMessage>
+        <name>FinServ__ContactAndRelatedContactCannotBeSame</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Inactive record can&apos;t be edited. To update relationship information, you can create a new one. --></errorMessage>
+        <name>FinServ__InactiveCCRCannotBeEdited</name>
+    </validationRules>
+</CustomObjectTranslation>

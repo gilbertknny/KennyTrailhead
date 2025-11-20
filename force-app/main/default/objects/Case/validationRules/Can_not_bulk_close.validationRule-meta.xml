@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Can_not_bulk_close</fullName>
+    <active>false</active>
+    <description>requested by Pak Hadi, user CC and BO can not close case that not they own</description>
+    <errorConditionFormula>Case_Owner_X_User__c = False 
+&amp;&amp;
+ TEXT(Status) = &apos;Closed&apos;
+&amp;&amp;
+ ($Permission.CC_Maker || $Permission.BO_Maker)</errorConditionFormula>
+    <errorMessage>Anda tidak bisa tutup tiket secara massal</errorMessage>
+</ValidationRule>

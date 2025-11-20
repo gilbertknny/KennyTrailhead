@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Case_Type__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <label>Case Type</label>
+    <referenceTo>SSC_Call_Type__c</referenceTo>
+    <relationshipLabel>Master Kors</relationshipLabel>
+    <relationshipName>Master_Kors</relationshipName>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

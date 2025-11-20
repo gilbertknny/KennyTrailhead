@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <columns>
+        <field>CUST_NAME</field>
+    </columns>
+    <columns>
+        <field>Request_Leave__c.Type_Request__c</field>
+    </columns>
+    <columns>
+        <field>Request_Leave__c.Date_From__c</field>
+    </columns>
+    <columns>
+        <field>Request_Leave__c.Date_To__c</field>
+    </columns>
+    <columns>
+        <field>Request_Leave__c.Notes__c</field>
+    </columns>
+    <columns>
+        <field>Request_Leave__c.Approval_Status__c</field>
+    </columns>
+    <columns>
+        <field>Request_Leave__c.Agent_Leader__c</field>
+    </columns>
+    <columns>
+        <field>Request_Leave__c.Assistant_Manager__c</field>
+    </columns>
+    <columns>
+        <field>Request_Leave__c.SPV__c</field>
+    </columns>
+    <filter>
+        <criteriaItems>
+            <column>Request_Leave__c.Type_Request__c</column>
+            <columnToColumn>false</columnToColumn>
+            <isUnlocked>true</isUnlocked>
+            <operator>equals</operator>
+            <value>Request Off</value>
+        </criteriaItems>
+        <language>en_US</language>
+    </filter>
+    <format>Tabular</format>
+    <name>Request Off yang Diajukan [Minggu Ini]</name>
+    <params>
+        <name>co</name>
+        <value>1</value>
+    </params>
+    <reportType>CustomEntity$Request_Leave__c</reportType>
+    <scope>user</scope>
+    <showDetails>true</showDetails>
+    <showGrandTotal>true</showGrandTotal>
+    <showSubTotals>true</showSubTotals>
+    <timeFrameFilter>
+        <dateColumn>Request_Leave__c.Date_From__c</dateColumn>
+        <interval>INTERVAL_THISMONTH</interval>
+    </timeFrameFilter>
+</Report>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Need_Approval_Agent_Leader</fullName>
+    <columns>NAME</columns>
+    <columns>Nama_Agent__c</columns>
+    <columns>Nama_Nasabah_New__c</columns>
+    <columns>No_Tiket_New__c</columns>
+    <columns>Perihal__c</columns>
+    <columns>Periode__c</columns>
+    <columns>Total_Critical_Error__c</columns>
+    <columns>Total_Non_Critical_Error__c</columns>
+    <columns>Total_Sikap_Melayani__c</columns>
+    <columns>CREATED_DATE</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Status_Approval__c</field>
+        <operation>equals</operation>
+        <value>Open</value>
+    </filters>
+    <label>Need Approval - Agent Leader</label>
+</ListView>

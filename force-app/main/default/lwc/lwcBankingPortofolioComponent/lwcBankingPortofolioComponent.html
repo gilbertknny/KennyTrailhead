@@ -1,0 +1,221 @@
+<!--
+ * !! READ NOTE, IMPORTANT !! => If there any changes in here check/must mirror it to the lwcCustomerSearchBankingComponent too.
+
+    LWC Name           : lwcBankingPortofolioComponent.html
+    Created Date       : 10 September 2024
+    @description       : This is class ..
+    @author            : Rakeyan Nuramria
+    Modification Log :
+    Ver   Date         Author                            Modification
+    1.0   10/09/2024   Rakeyan Nuramria                  Initial Version
+    1.0   23/09/2024   Rakeyan Nuramria                  Adjust UI for API
+    1.0   01/10/2024   Rakeyan Nuramria                  Adjust for Blokir Kartu (BL/PL)
+    1.0   09/10/2024   Rakeyan Nuramria                  [FROM SIT] Adjust UI to scrollable horizontally
+    1.0   09/10/2024   Rakeyan Nuramria                  [FROM SIT] Adjust logic to pass cardNo to mutasi
+    release 3
+    1.1   10/01/2025   Rakeyan Nuramria                  Add Action to show UI Data Ibbiz component
+    1.1   13/01/2025   Rakeyan Nuramria                  Add Action to show UI Blokir saldo component
+    1.1   14/01/2025   Rakeyan Nuramria                  Adjust menu-item (alignment auto -> right) to show all list menu & cleansing CSS file *Temporary fix, change it if found better solution
+    1.1   16/01/2025   Rakeyan Nuramria                  Adjust functionality to close Blokir saldo component
+    1.1   24/01/2025   Rakeyan Nuramria                  Add Action to show UI BRIMO component
+    1.1   28/01/2025   Rakeyan Nuramria                  Add Action param to pass data to BRIMO component
+    1.1   03/02/2025   Rakeyan Nuramria                  Add param to pass CIF & Phone Number data to BRIMO component
+    1.0   18/02/2025   Rakeyan Nuramria                  [FROM SIT] Adjust UI to show blokir saldo based on custom permission
+    1.0   07/03/2025   Rakeyan Nuramria                  Adjust UI visibility BRIMO based on custom permission (Alternative to wait surrounding(BRI) go live to prod)
+    [POST DEPLOYMENT R3]
+    1.1   20/03/2025   Rakeyan Nuramria                  [FROM SIT] Adjust UI for fetch data API getCustomer based on the condition.
+
+
+-->
+
+<template>
+    <!-- Banking Protofolio Section -->
+    <lightning-card icon-name="" variant="base" class="custom-card slds-m-top_xx-small slds-card_boundary">
+
+        <template if:true={isLoading}>
+            <div class="spinner-container" style="height:6rem;position:relative">
+                <div role="status" class="slds-spinner slds-spinner_small">
+                    <span class="slds-assistive-text">Loading</span>
+                    <div class="slds-spinner__dot-a"></div>
+                    <div class="slds-spinner__dot-b"></div>
+                </div>
+            </div>
+        </template>
+
+        <template if:false={isLoading}>
+
+            <template if:true={errorMsg}>
+                <div class="slds-text-color_error slds-m-top_small slds-m-bottom_small slds-text-align_center">
+                    <b>{errorMsg}</b>
+                </div>
+            </template>
+
+            <template if:false={errorMsg}>
+                <div class="slds-p-around_small slds-m-top_xx-small">
+                    <div class="slds-scrollable_y custom-scroll">
+                        <table class="slds-table slds-table_bordered slds-table_fixed-layout custom-table">
+                            <thead>
+                                <tr class="slds-line-height_reset">
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Nama">Nama</div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Nomor Rekening">Nomor Rekening</div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Nomor Kartu">Nomor Kartu</div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="CIF">CIF</div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Produk">Produk</div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Tipe Produk">Tipe Produk</div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Status">Status</div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Tanggal Buka Rekening">Tanggal Buka Rekening
+                                        </div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Status Transaksi">Action</div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={processedSimpananData} for:item="data">
+                                    <template for:each={data.simpanan} for:item="simpanan" for:index="index">
+                                        <tr key={simpanan.accountNumber} class="slds-hint-parent">
+                                            <td>{data.demografi.namaSesuaiIdentitas}</td>
+                                            <td>{simpanan.accountNumber}</td>
+                                            <!-- <template if:true={simpanan.cardList}>
+                                        <template for:each={simpanan.cardList} for:item="card" for:index="cardIndex">
+                                            <td key={card.cardNo}>{card.cardNo}</td>
+                                        </template>
+                                    </template> -->
+                                            <td>{simpanan.cardNo}</td>
+                                            <td>{simpanan.cifno}</td>
+                                            <td>{simpanan.product}</td>
+                                            <td>{simpanan.productType}</td>
+                                            <td>{simpanan.status}</td>
+                                            <td>{simpanan.openAccountDate}</td>
+                                            <td>
+                                                <lightning-button-menu alternative-text="Action"
+                                                    icon-name="utility:down"
+                                                    class="slds-m-left_x-small custom-button-menu"
+                                                    menu-alignment="right">
+                                                    <lightning-menu-item label="Mutasi Rekening" value="mutasi_rekening"
+                                                        data-nomor-rekening={simpanan.accountNumber}
+                                                        data-nomor-kartu={simpanan.cardNo} onclick={handleMutasiAction}
+                                                        onclose={handleCloseMutasiBanking}
+                                                        is-close-hidden={isCloseHidden}></lightning-menu-item>
+                                                    <!-- <lightning-menu-item label="Data Kartu" value="data_kartu"
+                                                data-nomor-kartu={simpanan.nomorKartu} onclose={handleCloseDataKartu}
+                                                onclick={handleDataKartuAction}></lightning-menu-item> -->
+                                                    <!-- <template for:each={simpanan.cardList} for:item="card"
+                                                for:index="cardIndex"> -->
+                                                    <lightning-menu-item key={simpanan.cardNo} label="Data Kartu"
+                                                        value="data_kartu" data-nomor-kartu={simpanan.cardNo}
+                                                        onclose={handleCloseDataKartu}
+                                                        onclick={handleDataKartuAction}></lightning-menu-item>
+                                                    <!-- </template> -->
+                                                    <lightning-menu-item label="Data User Ibbiz" value="data_ibbiz"
+                                                        data-nomor-rekening={simpanan.accountNumber}
+                                                        data-nomor-kartu={simpanan.cardNo}
+                                                        onclick={handleDataIbbizAction}
+                                                        onclose={handleCloseDataIbbiz}></lightning-menu-item>
+
+                                                    <template if:true={showComponentBrimo}>
+                                                        <lightning-menu-item label="Data User Brimo" value="data_brimo"
+                                                            data-nomor-rekening={simpanan.accountNumber}
+                                                            data-nomor-kartu={simpanan.cardNo}
+                                                            data-nomor-cif={simpanan.cifno}
+                                                            data-user-phone-number={data.demografi.handphone}
+                                                            onclick={handleDataBrimoAction}
+                                                            onclose={handleCloseDataBrimo}></lightning-menu-item>
+                                                    </template>
+
+                                                    <template if:true={showComponentBlokir}>
+                                                        <lightning-menu-item label="Blokir Saldo" value="blokir_saldo"
+                                                            data-nomor-rekening={simpanan.accountNumber}
+                                                            data-nomor-kartu={simpanan.cardNo}
+                                                            onclick={handleBlokirSaldoAction}
+                                                            onclose={handleCloseBlokirSaldo}></lightning-menu-item>
+                                                    </template>
+                                                </lightning-button-menu>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </template>
+
+        </template>
+
+
+    </lightning-card>
+    <!-- End Banking Protofolio Section -->
+
+    <!-- Mutasi Banking Section -->
+    <template if:true={showMutasiBanking}>
+        <lightning-card icon-name="" variant="base" class="custom-card slds-m-top_xx-small slds-card_boundary">
+            <div class="scrollable-banking-container">
+                <c-lwc-mutasi-rekening-component class="mutasi-banking-component" onclose={handleCloseMutasiBanking}
+                    no-rekening={selectedNomorRekening} no-kartu={selectedNomorKartu}
+                    record-id={recordId}></c-lwc-mutasi-rekening-component>
+            </div>
+        </lightning-card>
+    </template>
+    <!-- End Mutasi Banking Section -->
+
+    <!-- Data Kartu Section -->
+    <template if:true={showDataKartu}>
+        <!-- <lightning-card icon-name="" variant="base" class="custom-card slds-m-top_xx-small slds-card_boundary"> -->
+        <div class="scrollable-data-kartu-container">
+            <c-lwc-data-kartu-banking-component class="data-kartu-component" onclose={handleCloseDataKartu}
+                no-kartu={selectedNomorKartu} record-id={recordId}
+                for-blokir={forBlokir}></c-lwc-data-kartu-banking-component>
+        </div>
+        <!-- </lightning-card> -->
+    </template>
+    <!-- EndData Kartu Section -->
+
+    <!-- Data Ibbiz Section -->
+    <template if:true={showDataIbbiz}>
+        <div class="scrollable-data-ibbiz-container">
+            <c-lwc-data-user-ibbiz-component class="data-ibbiz-component" onclose={handleCloseDataIbbiz}
+                no-rekening={selectedNomorRekening} no-kartu={selectedNomorKartu}
+                record-id={recordId}></c-lwc-data-user-ibbiz-component>
+        </div>
+    </template>
+    <!-- End Data Ibbiz Section -->
+
+    <!-- Blokir Saldo Section -->
+    <template if:true={showBlokirSaldo}>
+        <div class="scrollable-blokir-saldo-container">
+            <c-lwc-blokir-saldo-banking-component class="blokir-saldo-component" onclose={handleCloseBlokirSaldo}
+                no-rekening={selectedNomorRekening} no-kartu={selectedNomorKartu}
+                record-id={recordId}></c-lwc-blokir-saldo-banking-component>
+        </div>
+    </template>
+    <!-- End Blokir Saldo Section -->
+
+    <!-- Data Brimo Section -->
+    <template if:true={showDataBrimo}>
+        <div class="scrollable-data-brimo-container">
+            <c-lwc-data-user-brimo-component class="data-brimo-component" onclose={handleCloseDataBrimo}
+                record-id={recordId} no-rekening={selectedNomorRekening} no-kartu={selectedNomorKartu}
+                no-cif={selectedNomorCif} no-telp={userPhoneNumber}></c-lwc-data-user-brimo-component>
+        </div>
+    </template>
+    <!-- End Data Brimo Section -->
+
+
+</template>

@@ -1,0 +1,19 @@
+<template>
+    <lightning-card title="OCR RESULT">
+        <template if:true={isLoading}>
+            <div class="exampleHolder">
+                <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+            </div>
+            <p class="slds-text-heading_large center-text">Menunggu hasil OCR...</p>
+        </template>
+        <template if:false={isLoading}>
+            <p class="slds-text-heading_large center-text">Proses OCR telah selesai </p>
+        </template>
+        <!-- <template if:false={isFailed}>
+            <div class="slds-p-around_medium">
+                <lightning-icon icon-name="utility:error" alternative-text="failed" size="small" class="slds-m-right_x-small"></lightning-icon>
+                <span class="slds-text-color_error"><strong>Proses OCR gagal. Silakan coba ulang.</strong></span>
+            </div>
+        </template> -->
+    </lightning-card>
+</template>

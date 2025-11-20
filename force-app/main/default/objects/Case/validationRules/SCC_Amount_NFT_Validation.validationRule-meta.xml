@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>SCC_Amount_NFT_Validation</fullName>
+    <active>true</active>
+    <errorConditionFormula>NOT($Permission.By_Pass_Validation_for_Migration) &amp;&amp;
+( SCC_Call_Type__r.External_Id__c = &apos;8812&apos; || SCC_Call_Type__r.External_Id__c = &apos;8915&apos; ) &amp;&amp; (TEXT(Status) != &apos;Working&apos; &amp;&amp; TEXT(Status) != &apos;New&apos;) &amp;&amp;
+(( MOD(SCC_Amount__c,50000) != 0) || SCC_Terminal_ID__c = null || SCC_Amount__c &lt; 0)
+&amp;&amp; NOT(OR(CreatedBy.Alias = &apos;Migrasi&apos;, CreatedBy.Alias = &apos;migration&apos;, CreatedBy.Alias = &apos;bhart&apos;))</errorConditionFormula>
+    <errorMessage>1. Nomor Rekening,
+2. Nomor Kartu,
+3. Waktu Transaksi,
+4. Telepon,
+5. TID, &amp;
+6. Nominal
+Wajib diisi sebelum eskalasi ke Back Office &amp; Nominal harus kelipatan Rp50.000</errorMessage>
+</ValidationRule>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <caseType>Nominative</caseType>
+        <plural>false</plural>
+        <value>Kontakt-Kontakt-Beziehung</value>
+    </caseValues>
+    <caseValues>
+        <caseType>Nominative</caseType>
+        <plural>true</plural>
+        <value>Kontakt-Kontakt-Beziehungen</value>
+    </caseValues>
+    <caseValues>
+        <caseType>Accusative</caseType>
+        <plural>false</plural>
+        <value>Kontakt-Kontakt-Beziehung</value>
+    </caseValues>
+    <caseValues>
+        <caseType>Accusative</caseType>
+        <plural>true</plural>
+        <value>Kontakt-Kontakt-Beziehungen</value>
+    </caseValues>
+    <caseValues>
+        <caseType>Genitive</caseType>
+        <plural>false</plural>
+        <value>Kontakt-Kontakt-Beziehung</value>
+    </caseValues>
+    <caseValues>
+        <caseType>Genitive</caseType>
+        <plural>true</plural>
+        <value>Kontakt-Kontakt-Beziehungen</value>
+    </caseValues>
+    <caseValues>
+        <caseType>Dative</caseType>
+        <plural>false</plural>
+        <value>Kontakt-Kontakt-Beziehung</value>
+    </caseValues>
+    <caseValues>
+        <caseType>Dative</caseType>
+        <plural>true</plural>
+        <value>Kontakt-Kontakt-Beziehungen</value>
+    </caseValues>
+    <fieldSets>
+        <label><!-- Related Contacts --></label>
+        <name>WM_Client_RelatedContacts</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Related Contacts --></label>
+        <name>WM_Household_RelatedContacts</name>
+    </fieldSets>
+    <gender>Feminine</gender>
+    <nameFieldLabel>Name für Kontaktbeziehung</nameFieldLabel>
+    <validationRules>
+        <errorMessage>Dieser Datensatz kann nicht bearbeitet werden. Zum Aktualisieren von Beziehungsinformationen können Sie diesen Datensatz deaktivieren und einen neuen erstellen.</errorMessage>
+        <name>FinServ__CCRCanOnlyBeDeactivated</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Eine &quot;Kontakt-Kontakt-Beziehung&quot; kann nicht als &quot;Inaktiv&quot; verwendet werden.</errorMessage>
+        <name>FinServ__CannotCreateInactiveRecord</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Bei &quot;Kontakt&quot; und &quot;Zugehöriger Kontakt&quot; muss es sich um unterschiedliche Einheiten handeln.</errorMessage>
+        <name>FinServ__ContactAndRelatedContactCannotBeSame</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Inaktive Datensätze können nicht bearbeitet werden. Zum Aktualisieren von Beziehungsinformationen können Sie einen neuen erstellen.</errorMessage>
+        <name>FinServ__InactiveCCRCannotBeEdited</name>
+    </validationRules>
+</CustomObjectTranslation>

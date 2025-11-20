@@ -1,0 +1,54 @@
+<apex:page >
+
+    <div style="background-image: url('{!URLFOR($Resource.BRI_BG)}'); background-size: cover; background-repeat: no-repeat; background-attachment: fixed; margin: 0; padding: 0; backdrop-filter: blur(10px);">
+        <div class="container">
+            <div class="header">
+                <apex:image url="/resource/BRI_Logo" style="height: 100px;" />
+            </div>
+            <div class="survey-content">
+                <h1>Maaf Survey Hanya Bisa Diisi Sekali.</h1>
+                <br></br>
+                <br></br>
+                <h2>Terima Kasih Telah Mengisi Survey</h2>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .container {
+            margin: 0 auto;
+            margin-top: 5rem;
+            padding: 300px;
+            background-color: rgba(255, 255, 255, 0.85); 
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column; 
+            justify-content: start; 
+            align-items: start;
+        }
+
+        .header {
+            text-align: start;
+            margin-bottom: 20px;
+        }
+
+        .survey-content {
+           margin-top: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 22px;
+        }
+
+        p {
+            text-align: center;
+            font-size: 16px;
+            color: #555;
+            margin-bottom: 30px;
+        }
+
+    </style>
+</apex:page>

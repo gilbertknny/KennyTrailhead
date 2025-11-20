@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Outbound_Category_Detail__c</fullName>
+    <label>Outbound Category Detail</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <controllingField>Outbound_Category__c</controllingField>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Big Interest</fullName>
+                <default>false</default>
+                <label>Big Interest</label>
+            </value>
+            <value>
+                <fullName>Nasabah setuju atau tertarik dengan program yang ditawarkan</fullName>
+                <default>false</default>
+                <label>Nasabah setuju atau tertarik dengan program yang ditawarkan</label>
+            </value>
+            <value>
+                <fullName>Bunga 0%</fullName>
+                <default>false</default>
+                <label>Bunga 0%</label>
+            </value>
+            <value>
+                <fullName>Appointment</fullName>
+                <default>false</default>
+                <label>Appointment</label>
+            </value>
+            <value>
+                <fullName>Miss Customer</fullName>
+                <default>false</default>
+                <label>Miss Customer</label>
+            </value>
+            <value>
+                <fullName>Nomor yang dihubungi salah sambung</fullName>
+                <default>false</default>
+                <label>Nomor yang dihubungi salah sambung</label>
+            </value>
+            <value>
+                <fullName>Data tidak sesuai (verifikasi)</fullName>
+                <default>false</default>
+                <label>Data tidak sesuai (verifikasi)</label>
+            </value>
+            <value>
+                <fullName>Available limit tidak mencukupi</fullName>
+                <default>false</default>
+                <label>Available limit tidak mencukupi</label>
+            </value>
+            <value>
+                <fullName>Nada sambung tidak terangkat (Not Answer)</fullName>
+                <default>false</default>
+                <label>Nada sambung tidak terangkat (Not Answer)</label>
+            </value>
+            <value>
+                <fullName>Mailbox</fullName>
+                <default>false</default>
+                <label>Mailbox</label>
+            </value>
+            <value>
+                <fullName>Busy</fullName>
+                <default>false</default>
+                <label>Busy</label>
+            </value>
+            <value>
+                <fullName>Admin terlalu tinggi</fullName>
+                <default>false</default>
+                <label>Admin terlalu tinggi</label>
+            </value>
+            <value>
+                <fullName>belum memiliki dana</fullName>
+                <default>false</default>
+                <label>belum memiliki dana</label>
+            </value>
+            <value>
+                <fullName>Bunga terlalu Tinggi</fullName>
+                <default>false</default>
+                <label>Bunga terlalu Tinggi</label>
+            </value>
+            <value>
+                <fullName>Dana yang ditawarkan kecil</fullName>
+                <default>false</default>
+                <label>Dana yang ditawarkan kecil</label>
+            </value>
+            <value>
+                <fullName>Dana yang ditransfer terlalu sedikit</fullName>
+                <default>false</default>
+                <label>Dana yang ditransfer terlalu sedikit</label>
+            </value>
+            <value>
+                <fullName>Hanya ingin mencoba</fullName>
+                <default>false</default>
+                <label>Hanya ingin mencoba</label>
+            </value>
+            <value>
+                <fullName>Masih banyak cicilan</fullName>
+                <default>false</default>
+                <label>Masih banyak cicilan</label>
+            </value>
+            <value>
+                <fullName>Nasabah Full Payment</fullName>
+                <default>false</default>
+                <label>Nasabah Full Payment</label>
+            </value>
+            <value>
+                <fullName>Nasabah merasa tidak mengajukan</fullName>
+                <default>false</default>
+                <label>Nasabah merasa tidak mengajukan</label>
+            </value>
+            <value>
+                <fullName>Nasabah membatalkan proses pengajuan</fullName>
+                <default>false</default>
+                <label>Nasabah membatalkan proses pengajuan</label>
+            </value>
+            <value>
+                <fullName>Nasabah tidak mau dikonfirmasi</fullName>
+                <default>false</default>
+                <label>Nasabah tidak mau dikonfirmasi</label>
+            </value>
+            <value>
+                <fullName>Pembayaran Min Payment</fullName>
+                <default>false</default>
+                <label>Pembayaran Min Payment</label>
+            </value>
+            <value>
+                <fullName>Promo tidak menarik</fullName>
+                <default>false</default>
+                <label>Promo tidak menarik</label>
+            </value>
+            <value>
+                <fullName>Tidak membutuhkan dana</fullName>
+                <default>false</default>
+                <label>Tidak membutuhkan dana</label>
+            </value>
+            <value>
+                <fullName>Tidak memiliki rekening BRI</fullName>
+                <default>false</default>
+                <label>Tidak memiliki rekening BRI</label>
+            </value>
+            <value>
+                <fullName>Tidak merasa melakukan transaksi</fullName>
+                <default>false</default>
+                <label>Tidak merasa melakukan transaksi</label>
+            </value>
+            <value>
+                <fullName>Via Aplikasi</fullName>
+                <default>false</default>
+                <label>Via Aplikasi</label>
+            </value>
+            <value>
+                <fullName>Via Call Center</fullName>
+                <default>false</default>
+                <label>Via Call Center</label>
+            </value>
+        </valueSetDefinition>
+        <valueSettings>
+            <controllingFieldValue>Interest</controllingFieldValue>
+            <valueName>Big Interest</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Interest</controllingFieldValue>
+            <valueName>Nasabah setuju atau tertarik dengan program yang ditawarkan</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Interest</controllingFieldValue>
+            <valueName>Bunga 0%</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Hard to contact</controllingFieldValue>
+            <valueName>Nada sambung tidak terangkat (Not Answer)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Hard to contact</controllingFieldValue>
+            <valueName>Mailbox</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Hard to contact</controllingFieldValue>
+            <valueName>Busy</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Appointment</controllingFieldValue>
+            <valueName>Appointment</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Appointment</controllingFieldValue>
+            <valueName>Miss Customer</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Not Qualified</controllingFieldValue>
+            <valueName>Data tidak sesuai (verifikasi)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Not Qualified</controllingFieldValue>
+            <valueName>Available limit tidak mencukupi</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Invalid Number</controllingFieldValue>
+            <valueName>Nomor yang dihubungi salah sambung</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Not Interest</controllingFieldValue>
+            <valueName>Admin terlalu tinggi</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Not Interest</controllingFieldValue>
+            <valueName>belum memiliki dana</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Not Interest</controllingFieldValue>
+            <valueName>Bunga terlalu Tinggi</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Not Interest</controllingFieldValue>
+            <valueName>Dana yang ditawarkan kecil</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Not Interest</controllingFieldValue>
+            <valueName>Dana yang ditransfer terlalu sedikit</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Not Interest</controllingFieldValue>
+            <valueName>Hanya ingin mencoba</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Not Interest</controllingFieldValue>
+            <valueName>Masih banyak cicilan</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Not Interest</controllingFieldValue>
+            <valueName>Nasabah Full Payment</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Not Interest</controllingFieldValue>
+            <valueName>Nasabah merasa tidak mengajukan</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Not Interest</controllingFieldValue>
+            <valueName>Nasabah membatalkan proses pengajuan</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Not Interest</controllingFieldValue>
+            <valueName>Nasabah tidak mau dikonfirmasi</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Not Interest</controllingFieldValue>
+            <valueName>Pembayaran Min Payment</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Not Interest</controllingFieldValue>
+            <valueName>Promo tidak menarik</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Not Interest</controllingFieldValue>
+            <valueName>Tidak membutuhkan dana</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Not Interest</controllingFieldValue>
+            <valueName>Tidak memiliki rekening BRI</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Not Interest</controllingFieldValue>
+            <valueName>Tidak merasa melakukan transaksi</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Not Interest</controllingFieldValue>
+            <valueName>Via Aplikasi</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Not Interest</controllingFieldValue>
+            <valueName>Via Call Center</valueName>
+        </valueSettings>
+    </valueSet>
+</CustomField>

@@ -1,0 +1,36 @@
+<aura:component implements="flexipage:availableForAllPageTypes" access="global" > 
+    <aura:attribute name="markedupText" type="String" />  
+    <aura:registerEvent name="avayaEvent" type="c:AvayaEvent"/> 
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}" /> 
+    <aura:handler name="avayaEvent" action="{!c.handleAvayaEvent}"/> 
+    <article class="slds-card"> 
+        <div class="slds-card__header slds-grid"> 
+            <header class="slds-media slds-media_center slds-has flexi-truncate"> 
+                <div class="slds-media__figure"> 
+                    <span class="slds-icon_container slds-icon standard-contact"> 
+                        <lightning:icon iconName="standard:live_chat" size="small" /> 
+                    </span> 
+                </div> 
+                <div class="slds-media__body"> 
+                    <h2>
+                        <span class="slds-text-heading_small">
+                            Avaya CRM Connected Desktop Messages
+                        </span>
+                    </h2> 
+                </div> 
+            </header> 
+        </div>
+        <div class="slds-card__body"> 
+            <div class="slds-size_2-of-2"> 
+                <div class="slds-box slds-box_x-small slds-text
+                            align_center slds-m-around_x-small"> 
+                    <div class="slds-align_absolute-center" 
+                         style="min-height:100px; max-height:200px; overflow:auto;"> 
+                        <ui:outputRichText value="{!v.markedupText}" 
+                                           /> 
+                    </div> 
+                </div> 
+            </div> 
+        </div> 
+    </article>     
+</aura:component>

@@ -1,0 +1,75 @@
+<aura:component implements="lightning:availableForFlowScreens" access="global" controller="SCC_WFM_Picklist">
+    <!-- System --> 
+    <aura:attribute name="activeSections" type="List" default="['A','B']" />
+    <aura:attribute name="tglshw2" type="Boolean" default="false"/>
+    <aura:attribute name="typechs" type="Boolean" default="false" />
+    <aura:attribute name="typechs2" type="Boolean" default="false" />
+    <aura:attribute name="optionsshf1" type="List" />
+    <aura:attribute name="optionsshf2" type="List" />
+    <aura:attribute name="optiontype" type="List" />
+    <!-- input & output mandatory -->
+    <aura:attribute name="type" type="String" />
+    <aura:attribute name="notes" type="String" />
+    <aura:attribute name="tanggal1" type="Date" />
+    <aura:attribute name="tanggal2" type="Date" />
+    <aura:attribute name="userid1" type="String" />
+    <aura:attribute name="userid2" type="String" />
+    <!-- input & output optional -->
+    <aura:attribute name="jkid1" type="String" />
+    <aura:attribute name="jkid2" type="String" />
+    <aura:attribute name="shfid1" type="String" />
+    <aura:attribute name="shfid2" type="String" />
+    <aura:attribute name="lokasi1" type="String" />
+    <aura:attribute name="lokasi2" type="String" />
+    <aura:attribute name="nama1" type="String" />
+    <aura:attribute name="nama2" type="String" />
+    <aura:handler name="init" value="{! this }" action="{! c.doinit }"/>
+    <lightning:layout>
+        <lightning:layoutItem size="12"   padding="around-small">
+            <lightning:select name="typeid" label="Type" aura:id="typeid" value="{!v.type}" onchange="{!c.selecttype}" required="true">
+                <aura:iteration items="{!v.optiontype}" var="option">
+                    <option text="{!option.label}" value="{!option.value}" selected="{!option.selected}"/>
+                </aura:iteration>
+            </lightning:select>
+            <lightning:textarea name="notesid" label="Notes" placeholder="type here..." value="{!v.notes}"/>
+        </lightning:layoutItem>
+    </lightning:layout>
+    <aura:if isTrue="{!v.typechs}">
+        <lightning:accordion activeSectionName="{!v.activeSections}" allowMultipleSectionsOpen="true" >
+            <lightning:accordionSection label="Yang Mengajukan" name="A">
+                <lightning:layout>
+                    <lightning:layoutItem size="12"   padding="around-small">
+                        <lightning:input type="date" name="tglid" label="Tanggal" value="{!v.tanggal1}" onchange="{!c.optionShift1}" required="true"/>
+                        <lightning:select name="shiftid1" label="Shift" aura:id="shiftid1" value="{!v.jkid1}" onchange="{!c.selectedShift1}" required="true">
+                            <aura:iteration items="{!v.optionsshf1}" var="option">
+                                <option text="{!option.label}" value="{!option.value}" selected="{!option.selected}"/>
+                            </aura:iteration>
+                        </lightning:select>
+                        <lightning:input name="namaid1" disabled="true" value="{!v.nama1}" label="Nama" />
+                        <lightning:input name="lokasiid1" disabled="true" value="{!v.lokasi1}" label="Lokasi" />
+                    </lightning:layoutItem>
+                </lightning:layout>
+            </lightning:accordionSection>
+            <aura:if isTrue="{!v.typechs2}">
+                <lightning:accordionSection label="Yang Terkait" name="B">
+                    <lightning:layout>
+                        <lightning:layoutItem size="12"   padding="around-small">
+                            <aura:if isTrue="{!v.tglshw2}">
+                                <lightning:input type="date" name="tglid" label="Tanggal" value="{!v.tanggal2}" onchange="{!c.optionShift2}" required="true"/>
+                            </aura:if>
+                            <lightning:select name="shiftid2" label="Shift" aura:id="shiftid1" value="{!v.jkid2}" onchange="{!c.selectedShift2}" required="true">
+                                <aura:iteration items="{!v.optionsshf2}" var="option">
+                                    <option text="{!option.label}" value="{!option.value}" selected="{!option.selected}"/>
+                                </aura:iteration>
+                            </lightning:select>
+                            <lightning:input name="namaid2" disabled="true" value="{!v.nama2}" label="Nama" />
+                            <lightning:input name="lokasiid2" disabled="true" value="{!v.lokasi2}" label="Lokasi" />
+                        </lightning:layoutItem>
+                    </lightning:layout>
+                </lightning:accordionSection>    
+            </aura:if>
+        </lightning:accordion>
+    </aura:if>
+    
+    
+</aura:component>

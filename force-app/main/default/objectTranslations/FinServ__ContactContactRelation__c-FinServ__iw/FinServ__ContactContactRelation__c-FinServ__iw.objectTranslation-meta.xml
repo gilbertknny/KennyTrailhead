@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <article>Definite</article>
+        <plural>false</plural>
+        <value>קשר האיש קשר-איש קשר</value>
+    </caseValues>
+    <caseValues>
+        <article>None</article>
+        <plural>false</plural>
+        <value>קשר איש קשר-איש קשר</value>
+    </caseValues>
+    <caseValues>
+        <article>Definite</article>
+        <plural>true</plural>
+        <value>קשרי האיש קשר-איש קשר</value>
+    </caseValues>
+    <caseValues>
+        <article>None</article>
+        <plural>true</plural>
+        <value>קשרי איש קשר-איש קשר</value>
+    </caseValues>
+    <fieldSets>
+        <label><!-- Related Contacts --></label>
+        <name>WM_Client_RelatedContacts</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Related Contacts --></label>
+        <name>WM_Household_RelatedContacts</name>
+    </fieldSets>
+    <gender>Masculine</gender>
+    <nameFieldLabel>שם קשר של איש הקשר</nameFieldLabel>
+    <validationRules>
+        <errorMessage>לא ניתן לערוך רשומה זו. כדי לעדכן את פרטי הקשר, תוכל להשבית רשומה זו וליצור רשומה חדשה.</errorMessage>
+        <name>FinServ__CCRCanOnlyBeDeactivated</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>לא ניתן ליצור קשר מסוג &apos;איש קשר-איש קשר&apos; כ&apos;לא פעיל&apos;.</errorMessage>
+        <name>FinServ__CannotCreateInactiveRecord</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>איש הקשר ואיש הקשר הקשור חייבים להיות ישויות שונות.</errorMessage>
+        <name>FinServ__ContactAndRelatedContactCannotBeSame</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>לא ניתן לערוך רשומה לא פעילה. כדי לעדכן את פרטי הקשר, תוכל ליצור רשומה חדשה.</errorMessage>
+        <name>FinServ__InactiveCCRCannotBeEdited</name>
+    </validationRules>
+</CustomObjectTranslation>

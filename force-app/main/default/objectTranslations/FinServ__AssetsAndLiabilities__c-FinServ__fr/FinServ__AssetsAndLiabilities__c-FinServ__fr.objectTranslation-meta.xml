@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>Actif et passif</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Actifs et passifs</value>
+    </caseValues>
+    <fieldSets>
+        <label><!-- Assets &amp; Liabilities --></label>
+        <name>WM_Client_Assets_Liabilities</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Assets &amp; Liabilities --></label>
+        <name>WM_Household_Assets_Liabilities</name>
+    </fieldSets>
+    <gender>Masculine</gender>
+    <nameFieldLabel>Nom de l&apos;actif ou du passif</nameFieldLabel>
+    <recordTypes>
+        <description>Dette due, telle qu&apos;un emprunt immobilier</description>
+        <label>Passif</label>
+        <name>FinServ__Liability</name>
+    </recordTypes>
+    <recordTypes>
+        <description>Actif non représenté dans les comptes financiers, tel qu&apos;un bien immobilier ou un objet de valeur</description>
+        <label>Actif</label>
+        <name>FinServ__NonfinancialAsset</name>
+    </recordTypes>
+    <startsWith>Vowel</startsWith>
+    <validationRules>
+        <errorMessage>Les comptes de propriété individuelle ne peuvent pas avoir de propriétaire joint.</errorMessage>
+        <name>FinServ__NoJointOwnerForIndividualAccounts</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Le propriétaire principal et le copropriétaire doivent être différents.</errorMessage>
+        <name>FinServ__PrimaryAndJointOwnerCannotBeSame</name>
+    </validationRules>
+</CustomObjectTranslation>

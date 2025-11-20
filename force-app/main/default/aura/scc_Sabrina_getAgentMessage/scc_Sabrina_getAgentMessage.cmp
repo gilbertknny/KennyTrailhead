@@ -1,0 +1,25 @@
+<!--
+  @description       : 
+  @author            : Christian Vieri
+  @group             : 
+  @last modified on  : 03-03-2025
+  @last modified by  : Christian Vieri
+-->
+<aura:component implements="flexipage:availableForAllPageTypes,force:hasRecordId" 
+                access="global" 
+                controller="scc_SabrinaMilestoneCtrl">
+    
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="targetFirstResponseTime" type="Integer" />
+    <aura:attribute name="isProcessing" type="Boolean" default="false" />
+    <aura:attribute name="agentMessages" type="Object[]" default="[]" />
+    
+    <aura:handler name="init" value="{!this}" action="{!c.initComponent}" />
+    <aura:attribute name="previousMessages" type="String[]" default="[]" />
+    <aura:attribute name="sessionStatus" type="String" default="" description="Status sesi messaging saat ini" />
+    <aura:attribute name="intervalId" type="Object" description="ID interval untuk polling" />
+
+    <c:scc_SabrinaMilestone aura:id="sccSabrinaMilestoneTimer" 
+                           targetTime="{!v.targetFirstResponseTime}" 
+                           recordId="{!v.recordId}" />
+</aura:component>

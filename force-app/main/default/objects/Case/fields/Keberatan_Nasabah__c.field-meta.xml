@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Keberatan_Nasabah__c</fullName>
+    <description>Keberatan Tidak Sesuai Konteks/Menyertakan Bukti Baru/Tidak Keberatan/Tidak Menyertakan Bukti Baru</description>
+    <label>Keberatan Nasabah</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <controllingField>Komplain__c</controllingField>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Keberatan Tidak Sesuai Konteks</fullName>
+                <default>false</default>
+                <label>Keberatan Tidak Sesuai Konteks</label>
+            </value>
+            <value>
+                <fullName>Menyertakan Bukti Baru</fullName>
+                <default>false</default>
+                <label>Menyertakan Bukti Baru</label>
+            </value>
+            <value>
+                <fullName>Tidak Keberatan</fullName>
+                <default>false</default>
+                <label>Tidak Keberatan</label>
+            </value>
+            <value>
+                <fullName>Tidak Menyertakan Bukti Baru</fullName>
+                <default>false</default>
+                <label>Tidak Menyertakan Bukti Baru</label>
+            </value>
+        </valueSetDefinition>
+        <valueSettings>
+            <controllingFieldValue>iDeb SLIK</controllingFieldValue>
+            <valueName>Keberatan Tidak Sesuai Konteks</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>iDeb SLIK</controllingFieldValue>
+            <valueName>Menyertakan Bukti Baru</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>iDeb SLIK</controllingFieldValue>
+            <valueName>Tidak Keberatan</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>iDeb SLIK</controllingFieldValue>
+            <valueName>Tidak Menyertakan Bukti Baru</valueName>
+        </valueSettings>
+    </valueSet>
+</CustomField>

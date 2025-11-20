@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>鉴定文档</value>
+    </caseValues>
+    <nameFieldLabel>文档</nameFieldLabel>
+    <validationRules>
+        <errorMessage><!-- The expiration date can&apos;t be earlier than the issue date. --></errorMessage>
+        <name>FinServ__ExpDateCannotBeLaterThanStart</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- The issue date can&apos;t be in the future. --></errorMessage>
+        <name>FinServ__IssueDateCannotBeInFuture</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Verification date and time can&apos;t be in the future. --></errorMessage>
+        <name>FinServ__VerificationDateTimeCannotBeInFuture</name>
+    </validationRules>
+</CustomObjectTranslation>

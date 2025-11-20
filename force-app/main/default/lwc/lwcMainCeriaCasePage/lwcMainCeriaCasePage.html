@@ -1,0 +1,18 @@
+<!--
+    LWC Name           : lwcMainCeriaCasePage.html
+    Created Date       : 09 Januaria 2025
+    @description       : This is class ..
+    @author            : Rakeyan Nuramria
+    Modification Log :
+    Ver   Date         Author                            Modification
+    release 3
+    1.0   09/01/2025   Rakeyan Nuramria                  Initial Version
+-->
+
+<template>
+    <lightning-accordion allow-multiple-sections-open onsectiontoggle={handleAccordionSectionToggle}>
+        <lightning-accordion-section name="dataSearch" label="Data Search">
+            <c-lwc-ceria-search-component case-id={recordId}></c-lwc-ceria-search-component>
+        </lightning-accordion-section>
+    </lightning-accordion>
+</template>

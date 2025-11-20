@@ -1,0 +1,328 @@
+<!--
+  @description       : Sanggahan Penilaian QA
+  @author            : Christian Vieri
+  @group             : 
+  @last modified on  : 13-01-2025
+  @last modified by  : Christian Vieri
+-->
+<template>
+    <lightning-card>
+        <div class="slds-p-around_medium">
+            <h3 style="text-align: center; font-size: 2rem; font-weight: bold; margin-bottom: 20px; color: #1d3557;">
+                Form Sanggahan Penilaian QA
+            </h3>     
+            <div class="slds-grid slds-wrap slds-gutters">
+                <!-- No Tiket Bricare -->
+                <div class="slds-col slds-size_1-of-2 slds-p-around_small">
+                    <lightning-input type="text" label="No Tiket Bricare" name="noTiketBricare" value={caseData.CaseNumber} disabled="true"></lightning-input>
+                </div>
+
+                <!-- Nama Nasabah -->
+                <template if:true={showNamaNasabah}>
+                    <div class="slds-col slds-size_1-of-2 slds-p-around_small">
+                        <lightning-input type="text" label="Nama Nasabah" name="namaNasabah" value={caseData.Account.Name} disabled="true"></lightning-input>
+                    </div>
+                </template>
+
+                <!-- Nomor Kartu -->
+                <template if:true={showNomorKartu}>
+                    <div class="slds-col slds-size_1-of-2 slds-p-around_small">
+                        <lightning-input type="text" label="Nomor Kartu" name="nomorKartu" value={caseData.SCC_Card_Number__c} disabled="true"></lightning-input>
+                    </div>
+                </template>
+
+                <!-- Nomor Rekening -->
+                <template if:true={showNomorRekening}>
+                    <div class="slds-col slds-size_1-of-2 slds-p-around_small">
+                        <lightning-input type="text" label="Nomor Rekening" name="nomorRekening" value={caseData.SCC_Account_Number__c} disabled="true"></lightning-input>
+                    </div>
+                </template>
+
+                <!-- Nomor Ponsel / Telepon -->
+                <template if:true={showNomorPonsel}>
+                    <div class="slds-col slds-size_1-of-2 slds-p-around_small">
+                        <lightning-input type="text" label="Nomor Ponsel / Telepon" name="nomorPonsel" value={caseData.Cust_Current_Phone__c} disabled="true"></lightning-input>
+                    </div>
+                </template>
+
+                <!-- Ext Avaya /  ID Login -->
+                <template if:true={showExtAvaya}>
+                    <div class="slds-col slds-size_1-of-2 slds-p-around_small">
+                        <lightning-input type="text" label="Ext Avaya / ID Login" name="extAvayaIdLogin" value={formData.extAvayaIdLogin} onchange={handleInputChange} disabled="true"></lightning-input>
+                    </div>
+                </template>
+
+                <!-- Durasi Percakapan -->
+                <template if:true={showDurasi}>
+                    <div class="slds-col slds-size_1-of-2 slds-p-around_small">
+                        <lightning-input type="text" label="Durasi Percakapan" name="durasiPercakapan" value={formData.durasiPercakapan} onchange={handleInputChange} disabled="true"></lightning-input>
+                    </div>
+                </template>
+
+                <!-- Waktu Interaksi -->
+                <template if:true={showWaktuInteraksi}>
+                    <div class="slds-col slds-size_1-of-2 slds-p-around_small">
+                        <lightning-input type="text" label="Waktu Interaksi" name="waktuInteraksi" value={formData.waktuInteraksi} onchange={handleInputChange} disabled="true"></lightning-input>
+                    </div>
+                </template>
+
+                <!-- Tanggal Callmon -->
+                <template if:true={showTanggalCallmon}>
+                    <div class="slds-col slds-size_1-of-2 slds-p-around_small">
+                        <lightning-input type="date" label="Tanggal Callmon" name="tanggalCallmon" value={formData.tanggalCallmon} onchange={handleInputChange} disabled="true"></lightning-input>
+                    </div>
+                </template>
+
+                <!-- Calltype -->
+                <template if:true={showCalltype}>
+                    <div class="slds-col slds-size_1-of-2 slds-p-around_small">
+                        <lightning-input type="text" label="Calltype" name="calltype" value={formData.calltype} onchange={handleInputChange} disabled="true"></lightning-input>
+                    </div>
+                </template>
+
+                <!-- Perihal -->
+                <template if:true={showPerihal}>
+                    <div class="slds-col slds-size_1-of-2 slds-p-around_small">
+                        <lightning-input type="text" label="Perihal" name="perihal" value={formData.perihal} onchange={handleInputChange} disabled="true"></lightning-input>
+                    </div>
+                </template>
+
+                <!-- Nama QA -->
+                <template if:true={showNamaQA}>
+                    <div class="slds-col slds-size_1-of-2 slds-p-around_small">
+                        <lightning-input type="text" label="Nama QA" name="namaQA" value={formData.namaQA} onchange={handleInputChange} disabled="true"></lightning-input>
+                    </div>
+                </template>
+
+                <!-- Inisial Agent -->
+                <template if:true={showInisialAgent}>
+                    <div class="slds-col slds-size_1-of-2 slds-p-around_small">
+                        <lightning-input type="text" label="Inisial Agent" name="inisialAgent" value={formData.inisialAgent} onchange={handleInputChange} disabled="true"></lightning-input>
+                    </div>
+                </template>
+
+                <!-- Channel -->
+                <template if:true={showChannel}>
+                    <div class="slds-col slds-size_1-of-2 slds-p-around_small">
+                        <lightning-input type="text" label="Channel" name="channel" value={formData.channel} onchange={handleInputChange} disabled="true"></lightning-input>
+                    </div>
+                </template>
+
+                <!-- Tanggal Interaksi -->
+                <template if:true={showTanggalInteraksi}>
+                    <div class="slds-col slds-size_1-of-2 slds-p-around_small">
+                        <lightning-input type="date" label="Tanggal Interaksi" name="tanggalInteraksi" value={formData.tanggalInteraksi} onchange={handleInputChange} disabled="true"></lightning-input>
+                    </div>
+                </template>
+
+                <!-- Respon Jawab -->
+                <template if:true={showResponJawab}>
+                    <div class="slds-col slds-size_1-of-2 slds-p-around_small">
+                        <lightning-input type="text" label="Respon Jawab" name="responJawab" value={formData.responJawab} onchange={handleInputChange} disabled="true"></lightning-input>
+                    </div>
+                </template>
+
+                <!-- Nama Agent -->
+                <template if:true={showNamaAgent}>
+                    <div class="slds-col slds-size_1-of-2 slds-p-around_small">
+                        <lightning-input type="text" label="Nama Agent" name="namaAgent" value={formData.namaAgent} onchange={handleInputChange} disabled="true"></lightning-input>
+                    </div>
+                </template>
+
+                 <!-- ID Agent -->
+                 <template if:true={showNamaAgent}>
+                    <div class="slds-col slds-size_1-of-2 slds-p-around_small" style="display:none">
+                        <lightning-input type="text" label="Agent Id" name="AgentId" value={formData.AgentId} onchange={handleInputChange} disabled="true" ></lightning-input>
+                    </div>
+                </template>
+
+            </div>
+        </div>
+
+        <div class="slds-p-around_medium" style="border: 1px solid #00529c; border-radius: 5px; background-color:#00529c">
+            <!-- Table Header -->
+            <table class="slds-table slds-table_bordered" style="width: 100%; border-collapse: collapse; background-color: #ffffff;">
+                <thead>
+                    <tr style="background-color: #f4f6f9; color: #1d3557;">
+                        <th class="slds-text-align_center" >Aspek Penilaian</th>
+                        <th class="slds-text-align_center" >Bobot %</th>
+                        <th class="slds-text-align_center" >Hasil</th>
+                        <th class="slds-text-align_center" >Skor</th>
+                        <th class="slds-text-align_center" >Finding</th>
+                        <th class="slds-text-align_center" >Keterangan Penilaian QA</th>
+                        <th class="slds-text-align_center" >Sanggahan Hasil</th>
+                        <th class="slds-text-align_center" >Sanggahan Skor</th>
+                        <th class="slds-text-align_center" >Sanggahan Finding</th>
+                        <th class="slds-text-align_center" >Sanggahan Keterangan Penilaian QA</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Section Group -->
+                    <template for:each={groupedData} for:item="sectionData">
+                        <!-- Section Header -->
+                        <template if:false={agentLeaderView}>
+                            <tr key={sectionData.section} style="background-color: #f4f6f9; font-weight: bold; color: #1d3557;">
+                                <td colspan="10" class="slds-text-align_left slds-size_1-of-1 slds-text-heading_small" style="border-top: 2px solid #c9c9c9; border-right: 2px solid #c9c9c9;border-left: 1px solid #c9c9c9">
+                                    {sectionData.section}
+                                </td>
+                            </tr>
+                        </template>
+                        <!-- Section For Agent Leader -->
+                        <template if:true={agentLeaderView}>
+                            <tr key={sectionData.section} style="background-color: #f4f6f9; font-weight: bold; color: #1d3557;">
+                                <td colspan="1" class="slds-text-align_center" style="border-right: 1px solid #c9c9c9;">{sectionData.section}</td>
+                                <td colspan="1" class="slds-text-align_center" style="border-right: 1px solid #c9c9c9;">{sectionData.bobot}</td>
+                                <td colspan="1" class="slds-text-align_center" style="border-right: 1px solid #c9c9c9;"></td>
+                                <td colspan="1" class="slds-text-align_center" style="border-right: 1px solid #c9c9c9;">
+                                    <template if:true={sectionData.bobot}>
+                                        {sectionData.sectionScore}
+                                    </template>
+                                </td>
+                                <td colspan="2" class="slds-text-align_center" style="border-right: 1px solid #c9c9c9;"></td>
+                                <td colspan="1" class="slds-text-align_center" style="border-right: 1px solid #c9c9c9;"></td>
+                                <td colspan="1" class="slds-text-align_center" style="border-right: 1px solid #c9c9c9;">
+                                    <template if:true={sectionData.bobot}>
+                                        {sectionData.sectionSanggahanScore}
+                                    </template>
+                                </td>
+                                <td colspan="2" class="slds-text-align_center" style="border-right: 1px solid #c9c9c9;"></td>
+                            </tr>
+                        </template>
+                        <!-- Section Rows -->
+                        <template for:each={sectionData.rows} for:item="row">
+                            <tr key={row.Id} style="text-align: center;">
+                                <td class="slds-text-align_center" style="border-right: 1px solid #c9c9c9;border-left: 1px solid #c9c9c9" hidden>{row.Id}</td>
+                                <td class="slds-text-align_center" style="border-right: 1px solid #c9c9c9;border-left: 1px solid #c9c9c9">{row.Name}</td>
+                                <td class="slds-text-align_center" style="border-right: 1px solid #c9c9c9;">{row.Bobot__c}</td>
+                                <td class="slds-text-align_center" style="border-right: 1px solid #c9c9c9; background-color: #f5f5f5; color: #9e9e9e; pointer-events: none; user-select: none;">{row.Hasil} </td>
+                                <template if:false={agentLeaderView}>
+                                    <td class="slds-text-align_center" style="border-right: 1px solid #c9c9c9">{row.Skor}</td>
+                                </template>
+                                <template if:true={agentLeaderView}>
+                                    <td class="slds-text-align_center" style="border-right: 1px solid #c9c9c9">
+                                        <template if:false={sectionData.bobot}>
+                                            {row.Skor}
+                                        </template>
+                                        <template if:true={sectionData.bobot}>
+                                            <!-- Kosongkan sel jika sectionData.bobot adalah true -->
+                                        </template>
+                                    </td>
+                                </template>
+                                <td>
+                                    <select value={row.Finding__c} data-id={row.Id} onchange={handleFindingChange} 
+                                        style="width: 150px; height: 30px; border: 1px solid #ccc; border-radius: 4px; background-color: #f5f5f5; color: #9e9e9e; pointer-events: none;" disabled>
+                                        <option value="">--Select--</option>
+                                        <template for:each={row.picklist} for:item="option">
+                                            <option key={option.value} value={option.value} selected={option.selected}>
+                                                {option.label}
+                                            </option>
+                                        </template>
+                                    </select>
+                                </td> 
+                                <td class="slds-text-align_center" style="border-right: 1px solid #c9c9c9; background-color: #f5f5f5; color: #9e9e9e; pointer-events: none; user-select: none;">{row.Keterangan_Penilaian_QA__c}</td>
+                                <!-- SANGGAHAN -->
+                                <td class="slds-text-align_center" style="border-right: 1px solid #c9c9c9;">
+                                    <input value={row.sanggahanHasil__c} data-id={row.Id} onchange={handleSangahanHasilChange} 
+                                            style="border: none; outline: none; background-color: transparent; text-align: center; padding: 0;"/>
+                                </td>
+                                <!-- <td class="slds-text-align_center" style="border-right: 1px solid #c9c9c9;">{row.sanggahanSkor}</td> -->
+                                <template if:false={agentLeaderView}>
+                                    <td class="slds-text-align_center" style="border-right: 1px solid #c9c9c9">{row.sanggahanSkor}</td>
+                                </template>
+                                <template if:true={agentLeaderView}>
+                                    <td class="slds-text-align_center" style="border-right: 1px solid #c9c9c9">
+                                        <template if:false={sectionData.bobot}>
+                                            {row.sanggahanSkor}
+                                        </template>
+                                        <template if:true={sectionData.bobot}>
+                                            <!-- Kosongkan sel jika sectionData.bobot adalah true -->
+                                        </template>
+                                    </td>
+                                </template>
+                                <td class="slds-text-align_center" style="border-right: 1px solid #c9c9c9;">
+                                    <select value={row.sanggahanFinding__c} data-id={row.Id} onchange={handleFindingChange} 
+                                        style="width: 100%; border: 1px solid #ccc; border-radius: 4px; padding: 4px;">
+                                        <option value="">--Select--</option>
+                                        <template for:each={row.picklistSanggahan} for:item="optionSanggahan">
+                                            <option key={optionSanggahan.value} value={optionSanggahan.value} selected={optionSanggahan.selected}>{optionSanggahan.label}</option>
+                                        </template>
+                                    </select>
+                                </td>
+                                <td class="slds-text-align_center" style="border-right: 1px solid #c9c9c9;">
+                                    <input value={row.sanggahanKeterangan_Penilaian_QA__c} data-id={row.Id} onchange={handleKeteranganChange}
+                                    style="border: none; outline: none; background-color: transparent; text-align: center; padding: 0;" />
+                                </td>
+                            </tr>
+                        </template>
+                    </template>
+                </tbody>
+                <!-- Footer Totals -->
+                <tfoot>
+                    <tr style="background-color: #f4f6f9; font-weight: bold; color: #1d3557;">
+                        <td colspan="1" style="padding: 8px; border: 1px solid #c9c9c9;">Total Critical Error</td>
+                        <td colspan="3" style="padding: 8px; border: 1px solid #c9c9c9; text-align: center;">{totalCriticalError}</td>
+                        <!-- <td colspan="2" style="padding: 8px; border: 1px solid #c9c9c9; text-align: center;">{averageCriticalError}</td> -->
+                        <td colspan="2" style="padding: 8px; border: 1px solid #c9c9c9; text-align: center;">{countCriticalZero}</td>
+                        <td colspan="3" style="padding: 8px; border: 1px solid #c9c9c9; text-align: center;">{totalCriticalErrorSanggahan}</td>
+                        <td colspan="3" style="padding: 8px; border: 1px solid #c9c9c9; text-align: center;">{countCriticalErrorSanggahan}</td>
+                        <!-- <td colspan="2" style="padding: 8px; border: 1px solid #c9c9c9; text-align: center;">{averageCriticalErrorSanggahan}</td> -->
+                    </tr>
+                    <tr style="background-color: #f4f6f9; font-weight: bold; color: #1d3557;">
+                        <td colspan="1" style="padding: 8px; border: 1px solid #c9c9c9;">Total Non-Critical Error</td>
+                        <td colspan="3" style="padding: 8px; border: 1px solid #c9c9c9; text-align: center;">{totalNonCriticalError}</td>
+                        <!-- <td colspan="2" style="padding: 8px; border: 1px solid #c9c9c9; text-align: center;">{averageNonCriticalError}</td> -->
+                        <td colspan="2" style="padding: 8px; border: 1px solid #c9c9c9; text-align: center;">{countNonCriticalZero}</td>
+                        <td colspan="3" style="padding: 8px; border: 1px solid #c9c9c9; text-align: center;">{totalNonCriticalErrorSanggahan}</td>
+                        <td colspan="3" style="padding: 8px; border: 1px solid #c9c9c9; text-align: center;">{countNonCriticalErrorSanggahan}</td>
+                        <!-- <td colspan="2" style="padding: 8px; border: 1px solid #c9c9c9; text-align: center;">{averageNonCriticalErrorSanggahan}</td> -->
+                    </tr>
+                    <tr style="background-color: #f4f6f9; font-weight: bold; color: #1d3557;">
+                        <td colspan="1" style="padding: 8px; border: 1px solid #c9c9c9;">Total Penilaian</td>
+                        <td colspan="5" style="padding: 8px; border: 1px solid #c9c9c9; text-align: center;">{totalUtama}</td>
+                        <td colspan="4" style="padding: 8px; border: 1px solid #c9c9c9; text-align: center;">{totalUtamaSanggahan}</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>        
+
+        <div class="slds-text-align_center slds-m-top_medium">
+            <lightning-button label="Submit" variant="brand" class="slds-m-top_medium" onclick={openModal}></lightning-button>
+        </div>
+        <template if:true={isModalOpen}>
+            <section class="slds-modal slds-fade-in-open" style="border-radius: 8px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);">
+                <div class="slds-modal__container" style="border-radius: 10px;">
+                    <!-- Header -->
+                    <header class="slds-modal__header" style="background-color: #f4f6f9; border-radius: 10px 10px 0 0; text-align: center; padding: 16px;">
+                        <h2 class="slds-text-heading_medium" style="color: #333; font-weight: bold;">
+                            <lightning-icon icon-name="utility:info" size="small" style="margin-right: 8px;"></lightning-icon>
+                            Konfirmasi Simpan Data
+                        </h2>
+                    </header>
+        
+                    <!-- Content -->
+                    <div class="slds-modal__content slds-p-around_medium" style="font-size: 16px; text-align: center; color: #555;">
+                        <p>Apakah Anda yakin ingin menyimpan data ini?</p>
+                    </div>
+        
+                    <!-- Footer -->
+                    <footer class="slds-modal__footer" style="background-color: #f9f9f9; border-radius: 0 0 10px 10px; text-align: center; padding: 16px;">
+                        <lightning-button 
+                            label="Tidak" 
+                            onclick={closeModal} 
+                            variant="neutral" 
+                            class="slds-m-right_small" 
+                            style="border-radius: 8px;">
+                        </lightning-button>
+                        <lightning-button 
+                            label="Ya" 
+                            onclick={handleSaveData} 
+                            variant="brand" 
+                            style="border-radius: 8px; background-color: #00529c; border: none;">
+                        </lightning-button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>        
+    </lightning-card>
+</template>

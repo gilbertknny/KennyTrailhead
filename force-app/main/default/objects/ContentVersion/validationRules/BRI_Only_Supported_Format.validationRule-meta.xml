@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>BRI_Only_Supported_Format</fullName>
+    <active>true</active>
+    <description>tambah mp4</description>
+    <errorConditionFormula>AND(FileType &lt;&gt; &apos;PDF&apos;, FileType &lt;&gt; &apos;WORD_X&apos;, FileType &lt;&gt; &apos;POWER_POINT_X&apos;, FileType &lt;&gt; &apos;POWER_POINT&apos;, FileType &lt;&gt; &apos;EXCEL_X&apos;, FileType &lt;&gt; &apos;EXCEL&apos;,FileType &lt;&gt; &apos;PNG&apos;,FileType &lt;&gt; &apos;JPG&apos;, FileType &lt;&gt; &apos;JPEG&apos;, FileType &lt;&gt; &apos;MPG&apos;, FileType &lt;&gt; &apos;ZIP&apos;, FileType &lt;&gt; &apos;MP4&apos;, FileType &lt;&gt; &apos;UNKNOWN&apos; )</errorConditionFormula>
+    <errorMessage>Hanya format .docx, .pdf, .ppt, .pptx, .xls, dan .xlsx yang didukung dan diperbolehkan !</errorMessage>
+</ValidationRule>

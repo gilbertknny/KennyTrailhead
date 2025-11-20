@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>Request Cuti &amp; Off</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Request Cuti &amp; Off</value>
+    </caseValues>
+    <startsWith>Consonant</startsWith>
+    <validationRules>
+        <errorMessage><!-- &quot;Date From&quot; tidak boleh lebih dari hari ini --></errorMessage>
+        <name>ValidateDateFrom</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- &quot;Date To&quot; tidak boleh lebih dari hari ini --></errorMessage>
+        <name>ValidateDateTo</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- &quot;Date To&quot; tidak boleh lebih kecil dari &quot;Date From&quot; --></errorMessage>
+        <name>ValidateDateTo2</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Tanggal cuti tidak boleh lebih dari 8 hari --></errorMessage>
+        <name>ValidateHariCuti</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- &quot;Date From&quot; tidak boleh lebih dari TAHUN INI --></errorMessage>
+        <name>ValidateThisYear</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Request Cuti hanya dapat dilakukan tanggal 1-15 --></errorMessage>
+        <name>Validation_Max_Request_15</name>
+    </validationRules>
+    <webLinks>
+        <label><!-- New_Request --></label>
+        <name>New_Request</name>
+    </webLinks>
+</CustomObjectTranslation>

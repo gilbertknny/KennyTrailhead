@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>Activos y responsabilidades</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Activos y responsabilidades</value>
+    </caseValues>
+    <fieldSets>
+        <label><!-- Assets &amp; Liabilities --></label>
+        <name>WM_Client_Assets_Liabilities</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Assets &amp; Liabilities --></label>
+        <name>WM_Household_Assets_Liabilities</name>
+    </fieldSets>
+    <gender>Masculine</gender>
+    <nameFieldLabel>Nombre de activo o responsabilidad</nameFieldLabel>
+    <recordTypes>
+        <description>Deudas, como una hipoteca</description>
+        <label>Responsabilidad</label>
+        <name>FinServ__Liability</name>
+    </recordTypes>
+    <recordTypes>
+        <description>Activo no representado en cuentas financieras, como activos cobrables o bienes raíces</description>
+        <label>Activo</label>
+        <name>FinServ__NonfinancialAsset</name>
+    </recordTypes>
+    <validationRules>
+        <errorMessage>Las cuentas que son propiedad individual no pueden tener un propietario conjunto.</errorMessage>
+        <name>FinServ__NoJointOwnerForIndividualAccounts</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>El propietario principal y el copropietario deben ser diferentes.</errorMessage>
+        <name>FinServ__PrimaryAndJointOwnerCannotBeSame</name>
+    </validationRules>
+</CustomObjectTranslation>

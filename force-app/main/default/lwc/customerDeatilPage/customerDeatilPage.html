@@ -1,0 +1,140 @@
+<template>
+
+    <lightning-card title="Informasi Nasabah" icon-name={iconName}>
+        <template if:true={successMessage}>
+            <div class="slds-text-color_success slds-m-bottom_medium">
+                {successMessage}
+            </div>
+        </template>
+
+        <!-- Error Message -->
+        <template if:true={error}>
+            <div class="slds-text-color_error slds-m-bottom_medium">
+                {error}
+            </div>
+        </template>
+
+        <div class="slds-form-element slds-form-element_readonly slds-var-p-left_x-small slds-var-p-right_x-small slds-var-p-top_xxx-small slds-var-p-bottom_xxx-small slds-border_bottom">
+            <span class="slds-form-element__label">Nama Nasabah</span>
+            <div class="slds-form-element__control">
+                <div class="slds-form-element__static">{accountData.Name}
+                    <template if:true={checkAgeValue}>
+                        <span style="float: right;">{accountData.SCC_TanggalLahir__c} Years Old</span>
+                    </template>
+                </div>
+            </div>
+        </div>
+
+        <div class="slds-form-element slds-form-element_readonly slds-var-p-left_x-small slds-var-p-right_x-small slds-var-p-top_xxx-small slds-var-p-bottom_xxx-small slds-border_bottom">
+            <span class="slds-form-element__label">Address</span>
+            <div class="slds-form-element__control">
+                <div class="slds-form-element__static">{accountData.SCC_Address__c}</div>
+            </div>
+        </div>
+
+        <!-- Grid layout for customer information -->
+        <div class="slds-grid slds-gutters" if:true={accountData}>
+            <!-- First column -->
+            <div class="slds-col">
+                <div class="slds-form-element slds-form-element_readonly slds-var-p-left_x-small slds-var-p-right_x-small slds-var-p-top_xxx-small slds-var-p-bottom_xxx-small slds-border_bottom">
+                    <span class="slds-form-element__label">Jenis Nasabah</span>
+                    <div class="slds-form-element__control">
+                        <div class="slds-form-element__static">{accountData.SCC_Jenis_Nasabah__c}</div>
+                    </div>
+                </div>
+                <div class="slds-form-element slds-form-element_readonly slds-var-p-left_x-small slds-var-p-right_x-small slds-var-p-top_xxx-small slds-var-p-bottom_xxx-small ">
+                    <span class="slds-form-element__label">Tipe Nasabah</span>
+                    <div class="slds-form-element__control">
+                        <div class="slds-form-element__static">{accountData.SCC_Tipe_Nasabah__c}</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Second column -->
+            <div class="slds-col">
+                <div class="slds-form-element slds-form-element_readonly slds-var-p-left_x-small slds-var-p-right_x-small slds-var-p-top_xxx-small slds-var-p-bottom_xxx-small slds-border_bottom">
+                    <span class="slds-form-element__label">Phone Number</span>
+                    <div class="slds-form-element__control">
+                        <div class="slds-form-element__static">{accountData.Phone}</div>
+                    </div>
+                </div>
+
+                <div class="slds-form-element slds-form-element_readonly slds-var-p-left_x-small slds-var-p-right_x-small slds-var-p-top_xxx-small slds-var-p-bottom_xxx-small slds-border_bottom">
+                    <span class="slds-form-element__label">Email</span>
+                    <div class="slds-form-element__control">
+                        <div class="slds-form-element__static">{accountData.SCC_Primary_Email__c}</div>
+                    </div>
+                </div>
+
+                <div class="slds-form-element slds-form-element_readonly slds-var-p-left_x-small slds-var-p-right_x-small slds-var-p-top_xxx-small slds-var-p-bottom_xxx-small slds-border_bottom">
+                    <span class="slds-form-element__label">Facebook</span>
+                    <div class="slds-grid slds-wrap slds-grid_align-spread">
+                        <template if:true={isFacebookEditing}>
+                            <lightning-input value={accountData.SCC_Facebook__c}
+                                onchange={handleFacebookChange}></lightning-input>
+                        </template>
+                        <template if:false={isFacebookEditing}>
+                            <div class="slds-form-element__control">
+                                <div class="slds-form-element__static">{editedFaceBookValue}</div>
+                            </div>
+                        </template>
+                        <span onclick={editFacebook}>
+                            <lightning-icon icon-name="utility:edit" size="x-small" alternative-text="Edit"></lightning-icon>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="slds-form-element slds-form-element_readonly slds-var-p-left_x-small slds-var-p-right_x-small slds-var-p-top_xxx-small slds-var-p-bottom_xxx-small slds-border_bottom">
+                    <span class="slds-form-element__label">Instagram</span>
+                    <div class="slds-grid slds-wrap slds-grid_align-spread">
+                        <template if:true={isInstagramEditing}>
+                            <lightning-input value={accountData.SCC_Instagram__c}
+                                onchange={handleInstagramChange}></lightning-input>
+                        </template>
+                        <template if:false={isInstagramEditing}>
+                            <div class="slds-form-element__control">
+                                <div class="slds-form-element__static">{editedInstagramValue}</div>
+                            </div>
+                        </template>
+                        <span onclick={editInstagram}>
+                            <lightning-icon icon-name="utility:edit" size="x-small" alternative-text="Edit"></lightning-icon>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="slds-form-element slds-form-element_readonly slds-var-p-left_x-small slds-var-p-right_x-small slds-var-p-top_xxx-small slds-var-p-bottom_xxx-small">
+                    <span class="slds-form-element__label">X</span>
+                    <div class="slds-grid slds-wrap slds-grid_align-spread">
+                        <template if:true={isXEditing}>
+                            <lightning-input value={accountData.SCC_X__c} onchange={handleXChange}></lightning-input>
+                        </template>
+                        <template if:false={isXEditing}>
+                            <div class="slds-form-element__control">
+                                <div class="slds-form-element__static">{editedXValue}</div>
+                            </div>
+                        </template>
+                        <span onclick={editX}>
+                            <lightning-icon icon-name="utility:edit" size="x-small" alternative-text="Edit"></lightning-icon>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- If no account data available -->
+        <template if:false={accountData}>
+            <div class="slds-p-around_medium">
+                <p>No account data available.</p>
+            </div>
+        </template>
+
+        <!-- Save and Cancel buttons -->
+        <template if:true={isEditing}>
+            <div class="slds-grid slds-grid_align-end slds-p-around_medium">
+                <lightning-button label="Save" variant="brand" onclick={saveRecord}></lightning-button>
+                <lightning-button label="Cancel" onclick={cancelEdit}></lightning-button>
+            </div>
+        </template>
+    </lightning-card>
+</template>

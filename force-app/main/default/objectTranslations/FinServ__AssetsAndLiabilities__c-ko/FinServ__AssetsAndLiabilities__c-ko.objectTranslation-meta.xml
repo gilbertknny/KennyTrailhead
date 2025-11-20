@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>자산 및 부채</value>
+    </caseValues>
+    <fieldSets>
+        <label><!-- Assets &amp; Liabilities --></label>
+        <name>WM_Client_Assets_Liabilities</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Assets &amp; Liabilities --></label>
+        <name>WM_Household_Assets_Liabilities</name>
+    </fieldSets>
+    <nameFieldLabel>자산 또는 부채 이름</nameFieldLabel>
+    <recordTypes>
+        <description><!-- Debt owed, such as a mortgage --></description>
+        <label><!-- Liability --></label>
+        <name>FinServ__Liability</name>
+    </recordTypes>
+    <recordTypes>
+        <description><!-- Asset not represented in financial accounts, such as real estate or collectibles --></description>
+        <label><!-- Asset --></label>
+        <name>FinServ__NonfinancialAsset</name>
+    </recordTypes>
+    <validationRules>
+        <errorMessage><!-- Individually owned accounts can&apos;t have a joint owner. --></errorMessage>
+        <name>FinServ__NoJointOwnerForIndividualAccounts</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- The primary and joint owner must be different. --></errorMessage>
+        <name>FinServ__PrimaryAndJointOwnerCannotBeSame</name>
+    </validationRules>
+</CustomObjectTranslation>

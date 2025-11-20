@@ -1,0 +1,60 @@
+/* NEW USING SCROLLABLE HORIZONTALY */
+.custom-scroll {
+    max-height: 300px;
+    overflow-y: auto;
+    overflow-x: auto; /* Enable horizontal scrolling */
+}
+
+.custom-table {
+    width: 100%; /* Ensure the table takes full width */
+    table-layout: fixed; /* Fixed layout for equal column widths */
+    max-width: 800px; /* Set a maximum width for the table */
+}
+
+.custom-table thead th {
+    background-color: #0176D3; 
+    color: #ffffff;
+    width: 150px; /* Set a fixed width for each column */
+}
+
+.custom-table th, .custom-table td {
+    text-align: center;
+    vertical-align: middle;
+    padding: 5px;
+}
+
+.custom-table td {
+    position: relative;
+    overflow: visible; /* Allow overflow */
+    white-space: normal; /* Allow text to wrap */
+    word-wrap: break-word; /* Break long words onto the next line */
+}
+
+.custom-table th .slds-truncate {
+    overflow: visible; /* Allow overflow */
+    white-space: normal; /* Allow text to wrap */
+}
+
+.custom-table td .slds-truncate {
+    overflow: visible; /* Allow overflow */
+    white-space: normal; /* Allow text to wrap */
+    word-wrap: break-word; /* Break long words onto the next line */
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.custom-card {
+    display: block;
+}
+
+.custom-button-menu .slds-dropdown {
+    min-width: 150px;
+    text-align: center;
+}
+
+/* END NEW USING SCROLLABLE HORIZONTALY */

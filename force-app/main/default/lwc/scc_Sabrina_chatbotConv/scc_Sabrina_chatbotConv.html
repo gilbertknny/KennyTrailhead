@@ -1,0 +1,34 @@
+<!--
+  @description       : 
+  @author            : Christian Vieri
+  @group             : 
+  @last modified on  : 19-02-2025
+  @last modified by  : Christian Vieri
+-->
+<template>
+    <div style="margin: 1rem;">
+        <lightning-record-view-form record-id={recordId} object-api-name="MessagingSession__c">
+            <lightning-output-field field-name="Chatbot_Conversation__c">
+            </lightning-output-field>
+        </lightning-record-view-form>
+
+        <div>
+            <!-- Tampilkan percakapan jika ada data -->
+            <template if:true={formattedConversations.length}>
+                <template for:each={formattedConversations} for:item="conv">
+                    <div key={conv.id} style="border: 1px solid #d8dde6; border-radius: 0.25rem; background-color: #ffffff; padding: 0.5rem; margin-bottom: 0.5rem;">
+                        <p><strong style="color: #4b4b4b;">{conv.sender}:</strong>
+                            <lightning-formatted-rich-text value={conv.messageText}>
+                            </lightning-formatted-rich-text>
+                        </p>
+                    </div>
+                </template>
+            </template>
+
+            <!-- Pesan fallback jika tidak ada data -->
+            <template if:false={formattedConversations.length}>
+                <p style="color: gray;">No chatbot conversations found.</p>
+            </template>
+        </div>
+    </div>
+</template>

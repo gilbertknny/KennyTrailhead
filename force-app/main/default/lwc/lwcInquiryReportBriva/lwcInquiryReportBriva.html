@@ -1,0 +1,109 @@
+<template>
+    <lightning-card title="" variant="base" class="custom-card slds-m-top_xx-small slds-card_boundary">
+    <div class="slds-grid slds-wrap slds-m-around_small">
+        <div class="slds-col slds-size_1-of-1">
+            <lightning-input required label="Nomor Briva" value={corpCode} onchange={handleCorpCode}
+                disabled={disableNomorRekeningField}></lightning-input>
+        </div>
+        <div class="slds-col slds-size_1-of-1">
+            <lightning-input type="date" required label="Tanggal Awal" value={trxDateAwal} onchange={handleTrxDateAwal}
+                disabled={disableTrxDateField}></lightning-input>
+        </div>
+        <div class="slds-col slds-size_1-of-1">
+            <lightning-input type="date" required label="Tanggal Akhir" value={trxDateAkhir} onchange={handleTrxDateAkhir}
+                disabled={disableTrxDateField}></lightning-input>
+        </div>
+        <div class="slds-col slds-size_1-of-1">
+                <lightning-combobox
+                    name="jumlah"
+                    label="Jumlah Data"
+                    value={sizeData}
+                    placeholder="Pilih jumlah data yang ingin ditampilkan"
+                    options={optionSize}
+                    onchange={handleSizeData} >
+                </lightning-combobox>
+        </div>
+        <div class="slds-col slds-size_1-of-1" style="margin-top: 10px;">
+            <lightning-button label="Cari" variant="brand" onclick={handleSearch}
+                disabled={disableSearchButton}></lightning-button>
+        </div>
+    </div>
+    </lightning-card>
+
+      <template if:true={isLoading}>
+        <div class="spinner-container" style="height:6rem;position:relative">
+            <div role="status" class="slds-spinner slds-spinner_small">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </template>
+
+    <template if:true={hasError}>
+            <div class="slds-text-color_error slds-text-align_center slds-m-top_xx-small">
+                <b>{errorMessage}</b>
+            </div>
+    </template>
+
+    <template if:true={showSearchResults}>
+          <lightning-card title="" icon-name="" variant="base" class="custom-card slds-m-top_xx-small slds-card_boundary">
+                    <div class="slds-p-around_small slds-m-top_xx-small">
+                        <div class="slds-scrollable_y custom-scroll">
+                            <table class="slds-table slds-table_bordered slds-table_fixed-layout custom-table">
+                                <thead>
+                                    <tr class="slds-line-height_reset">
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="No">No</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Nomor Briva">Nomor Briva</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Tanggal">Tanggal</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Status">Status</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Nominal">Nominal</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Nomor Rekening">Nomor Rekening</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Transaction ID">Transaction ID</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Remark">Remark</div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <template for:each={data} for:item="row" for:index="index">
+                                      <tr key={row.trxID} class="slds-hint-parent">
+                                        <td>{row.No}</td>
+                                        <td>{row.brivaNo}</td>
+                                        <td>{row.paymentDate}</td>
+                                        <td>{row.trstat}</td>
+                                        <td>{row.amount}</td>
+                                        <td>{row.norek}</td>
+                                        <td>{row.trxID}</td>
+                                        <td>{row.trremk}</td>
+                                     </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <!-- pagination-->
+                          <div class="slds-p-around_medium">
+                            <lightning-button label="Previous" onclick={handlePrev} disabled={isPrevDisabled}></lightning-button>
+                            <span class="slds-p-horizontal_small">Halaman {currentPage} / {totalPages}</span>
+                            <lightning-button label="Next" onclick={handleNext} disabled={isLastPage}></lightning-button>
+                         </div>
+                        <!--pagination-->
+                    </div>
+            </lightning-card>
+    </template>
+</template>

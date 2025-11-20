@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>60.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <customErrors>
+        <description>This error message is dispayed when non CC supervisor users tries to cancel the case</description>
+        <name>CancelCaseError</name>
+        <label>CancelCaseError</label>
+        <locationX>176</locationX>
+        <locationY>323</locationY>
+        <customErrorMessages>
+            <errorMessage>{!$Label.SCC_CCSupervisor_Cancel_Case}</errorMessage>
+            <isFieldError>false</isFieldError>
+        </customErrorMessages>
+    </customErrors>
+    <description>Only CC Supervisors are allowed to Cancel the invalid Case</description>
+    <environments>Default</environments>
+    <interviewLabel>SCC_CCSupervisor_Only_Can_Cancel_Case {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>SCC_CCSupervisor_Only_Can_Cancel_Case</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>CancelCaseError</targetReference>
+        </connector>
+        <filterFormula>!{!$Permission.Change_owner_Custom_permission} &amp;&amp; ISPICKVAL({!$Record.Status}, &apos;Cancelled&apos;)</filterFormula>
+        <object>Case</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Draft</status>
+    <triggerOrder>650</triggerOrder>
+    <variables>
+        <description>This will hold the CC Supervisor permission set name</description>
+        <name>CCSupervisor</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <stringValue>SCC_CC_Checker_CC_Supervisor_Manager</stringValue>
+        </value>
+    </variables>
+    <variables>
+        <description>This is variable just to hold the boolean values</description>
+        <name>Confirmed</name>
+        <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SharingRules xmlns="http://soap.sforce.com/2006/04/metadata">
+    <sharingCriteriaRules>
+        <fullName>Banding_Access_User_QA_Pembina</fullName>
+        <accessLevel>Edit</accessLevel>
+        <label>Banding - Access User QA Pembina</label>
+        <sharedTo>
+            <group>QA_Pembina</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>Status_Approval__c</field>
+            <operation>notEqual</operation>
+            <value></value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>Sanggahan_Access_User_Agent_Leader</fullName>
+        <accessLevel>Edit</accessLevel>
+        <label>Sanggahan - Access User Agent Leader</label>
+        <sharedTo>
+            <group>QA_User_Agent_Leader</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>Status_Approval__c</field>
+            <operation>notEqual</operation>
+            <value></value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>Sanggahan_Access_User_QA_Penilai</fullName>
+        <accessLevel>Edit</accessLevel>
+        <label>Sanggahan - Access User QA Penilai</label>
+        <sharedTo>
+            <group>QA_Penilai</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>Status_Approval__c</field>
+            <operation>notEqual</operation>
+            <value></value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+</SharingRules>

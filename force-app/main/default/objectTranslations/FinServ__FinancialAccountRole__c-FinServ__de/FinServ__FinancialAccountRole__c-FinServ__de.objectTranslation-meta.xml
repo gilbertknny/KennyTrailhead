@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <caseType>Nominative</caseType>
+        <plural>false</plural>
+        <value>Finanz-Accountrolle</value>
+    </caseValues>
+    <caseValues>
+        <caseType>Nominative</caseType>
+        <plural>true</plural>
+        <value>Finanz-Accountrollen</value>
+    </caseValues>
+    <caseValues>
+        <caseType>Accusative</caseType>
+        <plural>false</plural>
+        <value>Finanz-Accountrolle</value>
+    </caseValues>
+    <caseValues>
+        <caseType>Accusative</caseType>
+        <plural>true</plural>
+        <value>Finanz-Accountrollen</value>
+    </caseValues>
+    <caseValues>
+        <caseType>Genitive</caseType>
+        <plural>false</plural>
+        <value>Finanz-Accountrolle</value>
+    </caseValues>
+    <caseValues>
+        <caseType>Genitive</caseType>
+        <plural>true</plural>
+        <value>Finanz-Accountrollen</value>
+    </caseValues>
+    <caseValues>
+        <caseType>Dative</caseType>
+        <plural>false</plural>
+        <value>Finanz-Accountrolle</value>
+    </caseValues>
+    <caseValues>
+        <caseType>Dative</caseType>
+        <plural>true</plural>
+        <value>Finanz-Accountrollen</value>
+    </caseValues>
+    <fieldSets>
+        <label><!-- Financial Account Role --></label>
+        <name>WM_Client_FinancialAccountRole</name>
+    </fieldSets>
+    <gender>Feminine</gender>
+    <nameFieldLabel>Rollennummer</nameFieldLabel>
+    <recordTypes>
+        <description>Die Rolle ist durch eine Organisationseinheit, wie beispielsweise eine Kapitalgesellschaft oder LLC belegt.</description>
+        <label>Accountrolle</label>
+        <name>FinServ__AccountRole</name>
+    </recordTypes>
+    <recordTypes>
+        <description>Die Rolle ist durch eine Person belegt.</description>
+        <label>Kontaktrolle</label>
+        <name>FinServ__ContactRole</name>
+    </recordTypes>
+    <validationRules>
+        <errorMessage>Eine &quot;Finanz-Accountrolle&quot; kann nicht als &quot;Inaktiv&quot; erstellt werden.</errorMessage>
+        <name>FinServ__CannotCreateInactiveRecord</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Dieser Datensatz kann nicht bearbeitet werden. Zum Aktualisieren von Rolleninformationen können Sie diesen Datensatz deaktivieren und einen neuen erstellen.</errorMessage>
+        <name>FinServ__FARCannotBeModified</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Inaktiver Datensatz kann nicht bearbeitet werden. Zum Aktualisieren der FAR (Federal Acquisition Regulation) können Sie eine neue erstellen.</errorMessage>
+        <name>FinServ__InactiveFARCannotBeEdited</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Inaktive Finanzrollen können nicht erneut aktiviert werden.</errorMessage>
+        <name>FinServ__InactiveRecordCannotBeReactivated</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Dieser Datensatz kann nicht deaktiviert werden, da die Inhaberschaft nur für den Finanz-Account aktualisiert werden kann.</errorMessage>
+        <name>FinServ__OwnershipRolesCannotBeDeactivated</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Dieser Datensatz kann nicht geändert werden, da die Inhaberschaft nur für den Finanz-Account angegeben werden kann.</errorMessage>
+        <name>FinServ__OwnershipRolesCannotBeModified</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>&quot;Zugehöriger Account&quot; oder &quot;Zugehöriger Kontakt&quot; ist erforderlich.</errorMessage>
+        <name>FinServ__RelatedAccountOrContactRequired</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>&quot;Rolle&quot; ist erforderlich.</errorMessage>
+        <name>FinServ__RoleIsMandatory</name>
+    </validationRules>
+</CustomObjectTranslation>

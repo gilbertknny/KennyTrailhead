@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <caseType>Nominative</caseType>
+        <plural>false</plural>
+        <value>Account-Account-Beziehung</value>
+    </caseValues>
+    <caseValues>
+        <caseType>Nominative</caseType>
+        <plural>true</plural>
+        <value>Account-Account-Beziehungen</value>
+    </caseValues>
+    <caseValues>
+        <caseType>Accusative</caseType>
+        <plural>false</plural>
+        <value>Account-Account-Beziehung</value>
+    </caseValues>
+    <caseValues>
+        <caseType>Accusative</caseType>
+        <plural>true</plural>
+        <value>Account-Account-Beziehungen</value>
+    </caseValues>
+    <caseValues>
+        <caseType>Genitive</caseType>
+        <plural>false</plural>
+        <value>Account-Account-Beziehung</value>
+    </caseValues>
+    <caseValues>
+        <caseType>Genitive</caseType>
+        <plural>true</plural>
+        <value>Account-Account-Beziehungen</value>
+    </caseValues>
+    <caseValues>
+        <caseType>Dative</caseType>
+        <plural>false</plural>
+        <value>Account-Account-Beziehung</value>
+    </caseValues>
+    <caseValues>
+        <caseType>Dative</caseType>
+        <plural>true</plural>
+        <value>Account-Account-Beziehungen</value>
+    </caseValues>
+    <fieldSets>
+        <label><!-- Related Accounts --></label>
+        <name>WM_Household_RelatedAccounts</name>
+    </fieldSets>
+    <gender>Feminine</gender>
+    <nameFieldLabel>Name für Accountbeziehung</nameFieldLabel>
+    <validationRules>
+        <errorMessage>Dieser Datensatz kann nicht bearbeitet werden. Zum Aktualisieren von Beziehungsinformationen können Sie diesen Datensatz deaktivieren und einen neuen erstellen.</errorMessage>
+        <name>FinServ__AARCanOnlyBeDeactivated</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Bei &quot;Account&quot; und &quot;Zugehöriger Account&quot; muss es sich um unterschiedliche Einheiten handeln.</errorMessage>
+        <name>FinServ__AccountAndRelatedAccountCannotBeSame</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Account kann nicht Teil einer Einzelperson sein.</errorMessage>
+        <name>FinServ__AccountCannotBeAnIndividual</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Eine &quot;Account-Account-Beziehung&quot; kann nicht als &quot;Inaktiv&quot; erstellt werden.</errorMessage>
+        <name>FinServ__CannotCreateInactiveRecord</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Inaktive Datensätze können nicht bearbeitet werden. Zum Aktualisieren von Beziehungsinformationen können Sie einen neuen erstellen.</errorMessage>
+        <name>FinServ__InactiveAARCannotBeEdited</name>
+    </validationRules>
+</CustomObjectTranslation>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Keterangan_diterima_LAPS_Audiensi__c</fullName>
+    <label>Keterangan (diterima/ LAPS/ Audiensi)</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Solusi Bank ditolak Pelapor. Namun Pelapor tidak meneruskan ke LAPS</fullName>
+                <default>false</default>
+                <label>Solusi Bank ditolak Pelapor. Namun Pelapor tidak meneruskan ke LAPS</label>
+            </value>
+            <value>
+                <fullName>Solusi Bank ditolak Pelapor. Pelapor meneruskan ke LAPS</fullName>
+                <default>false</default>
+                <label>Solusi Bank ditolak Pelapor. Pelapor meneruskan ke LAPS</label>
+            </value>
+            <value>
+                <fullName>Solusi Bank ditolak Pelapor. Pelapor meneruskan ke LAPS. Namun LAPS menolak permintaan mediasi</fullName>
+                <default>false</default>
+                <label>Solusi Bank ditolak Pelapor. Pelapor meneruskan ke LAPS. Namun LAPS menolak permintaan mediasi</label>
+            </value>
+            <value>
+                <fullName>Menerima penyelesaian pengaduan</fullName>
+                <default>false</default>
+                <label>Menerima penyelesaian pengaduan</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

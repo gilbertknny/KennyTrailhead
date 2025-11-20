@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fieldSets>
+        <label><!-- Relationship Group Members --></label>
+        <name>WM_Client_Relationship_Group_Members</name>
+    </fieldSets>
+    <recordTypes>
+        <description>Kontaktdaten für den Account einer Institution oder eines Unternehmens</description>
+        <label>Geschäft</label>
+        <name>FinServ__IndustriesBusiness</name>
+    </recordTypes>
+    <recordTypes>
+        <description>Kontaktdaten für Privatkunden</description>
+        <label>Einzelperson</label>
+        <name>FinServ__IndustriesIndividual</name>
+    </recordTypes>
+    <validationRules>
+        <errorMessage>&quot;Geburtsdatum&quot; kann nicht in der Zukunft liegen.</errorMessage>
+        <name>FinServ__BirthdateCannotBeInFuture</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Nur eine Adresse kann als die primäre festgelegt werden.</errorMessage>
+        <name>FinServ__CannotHaveMoreThanOnePrimaryAddress</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Das Zuordnen eines Leads oder Kontakts zu einem Haushaltsaccount ist nicht möglich.</errorMessage>
+        <name>FinServ__ContactCannotBeAssociatedToHousehold</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Der ausgewählte Account verfügt über den Datensatztyp &quot;Einzeln&quot;. Mit ihm können keine zusätzlichen Kontakte verknüpft sein.</errorMessage>
+        <name>FinServ__IndividualCannotHaveMoreThanOneContact</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Interne Empfehler müssen interne Salesforce-Benutzer sein.</errorMessage>
+        <name>FinServ__NonPortalUserReferrer</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Der Datensatztyp &quot;Einzelperson&quot; kann nicht geändert werden.</errorMessage>
+        <name>FinServ__NotAllowingConversionFromIndividual</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Der Datensatztyp kann nicht in &quot;Einzelperson&quot; geändert werden.</errorMessage>
+        <name>FinServ__NotAllowingConversionToIndividual</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Geben Sie einen internen oder externen Empfehler ein. Sie können pro Empfehlung nur einen Empfehler angeben.</errorMessage>
+        <name>FinServ__SingleReferredByEntryByRecord</name>
+    </validationRules>
+    <webLinks>
+        <label>Beziehung hinzufügen</label>
+        <name>FinServ__AddRelation</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- GoogleMaps --></label>
+        <name>GoogleMaps</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- GoogleSearch --></label>
+        <name>GoogleSearch</name>
+    </webLinks>
+</CustomObjectTranslation>

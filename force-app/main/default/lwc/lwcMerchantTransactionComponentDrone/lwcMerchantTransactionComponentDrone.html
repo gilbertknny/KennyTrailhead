@@ -1,0 +1,510 @@
+<template>
+
+     <!-- Search Section -->
+     <lightning-card title="Pencarian Transaksi Drone" variant="base"
+     class="custom-card slds-m-top_xx-small slds-card_boundary">
+
+     <div slot="actions">
+         <template if:false={isCloseHidden}>
+             <lightning-button-icon icon-name="utility:close" alternative-text="Close" title="Close"
+                 onclick={handleCloseComponent} class="cssClass" variant="bare">
+             </lightning-button-icon>
+         </template>
+     </div>
+
+     <div class="slds-grid slds-gutters slds-m-around_small">
+         <div class="slds-col">
+             <lightning-input type="date" required label="Tanggal Transaksi" value={transactionDate}
+                 onchange={handleTransactionDateChange} disabled={disableTransactionDateField}></lightning-input>
+         </div>
+         <!-- <div class="slds-col">
+             <lightning-input type="time" required label="Waktu Transaksi" value={transactionTime}
+                 onchange={handleTransactionTimeChange} disabled={disableTransactionTimeField}></lightning-input>
+         </div> -->
+         <div class="slds-col" style="align-content: center; margin-top: 20px">
+             <lightning-button label="Cari" variant="brand" onclick={handleSearch}
+                 disabled={disableSearchButton}></lightning-button>
+         </div>
+     </div>
+
+     <template if:true={errorMessage}>
+         <div class="slds-text-color_error slds-m-left_small">
+             {errorMessage}
+         </div>
+     </template>
+ </lightning-card>
+ <!-- End Search Section -->
+
+ <template if:true={isLoadingData}>
+     <lightning-card class="custom-card slds-m-top_xx-small slds-card_boundary">
+         <div class="spinner-container" style="height:6rem;position:relative">
+             <div role="status" class="slds-spinner slds-spinner_small">
+                 <span class="slds-assistive-text">Loading</span>
+                 <div class="slds-spinner__dot-a"></div>
+                 <div class="slds-spinner__dot-b"></div>
+             </div>
+         </div>
+     </lightning-card>
+ </template>
+
+ <template if:true={isLoadingSaveData}>
+     <div class="slds-spinner_container">
+        <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+            <span class="slds-assistive-text">Loading...</span>
+            <div class="slds-spinner__dot-a"></div>
+            <div class="slds-spinner__dot-b"></div>
+        </div>
+    </div>
+ </template>
+
+ <template if:true={hasError}>
+     <div class="slds-text-color_error slds-m-top_medium slds-text-align_center">
+         <b>{errorMsg}</b>
+     </div>
+ </template>
+
+ <!-- Result Data Section -->
+ <template if:true={showSearchResults}>
+     <!-- Informasi Card -->
+     <lightning-card title="Daftar Transaksi" icon-name="" variant="base"
+         class="custom-card slds-m-top_xx-small slds-card_boundary">
+         <div class="slds-p-around_small slds-m-top_xx-small">
+             <div class="slds-scrollable_y custom-scroll">
+                 <table class="slds-table slds-table_bordered slds-table_fixed-layout custom-table">
+                     <thead>
+                         <tr class="slds-line-height_reset">
+                             <th scope="col">
+                                 <div class="slds-truncate" title="Transaction Date">Transaction Date</div>
+                             </th>
+                             <th scope="col">
+                                 <div class="slds-truncate" title="Transaction Time">Transaction Time</div>
+                             </th>
+                             <th scope="col">
+                                 <div class="slds-truncate" title="MID">MID</div>
+                             </th>
+                             <th scope="col">
+                                 <div class="slds-truncate" title="TID">TID</div>
+                             </th>
+                             <th scope="col">
+                                 <div class="slds-truncate" title="Reference Number">Reference Number</div>
+                             </th>
+                             <th scope="col">
+                                 <div class="slds-truncate" title="Jenis Transaksi">Jenis Transaksi</div>
+                             </th>
+                             <th scope="col">
+                                 <div class="slds-truncate" title="Amount">Amount</div>
+                             </th>
+                             <th scope="col">
+                                 <div class="slds-truncate" title="MTI">MTI</div>
+                             </th>
+                             <th scope="col">
+                                 <div class="slds-truncate" title="Nama Merchant">Nama Merchant</div>
+                             </th>
+                             <th scope="col">
+                                 <div class="slds-truncate" title="Detail">Detail</div>
+                             </th>
+                         </tr>
+                     </thead>
+                     <tbody>
+                         <template for:each={transactionData} for:item='item'>
+                             <tr class="slds-hint-parent" key={item.appCodeReffNum} data-id={item.appCodeReffNum}>
+                                 <td>{item.trxDate}</td>
+                                 <td>{item.trxTime}</td>
+                                 <td>{item.midOrMpan}</td>
+                                 <td>{item.tidOrStoreId}</td>
+                                 <td>{item.appCodeReffNum}</td>
+                                 <td>{item.jenisTrx}</td>
+                                 <td>{item.trxAmount}</td>
+                                 <td>{item.mti}</td>
+                                 <td>{item.merchantName}</td>
+                                 <td>
+                                     <!-- <lightning-button label="Lihat" onclick={handleLihatClick}
+                                         data-id={item.appCodeReffNum}></lightning-button> -->
+                                     <div class="button-container">
+                                         <lightning-button label="Lihat" onclick={showDetail}
+                                             data-id={item.appCodeReffNum}
+                                             data-trxtime={item.trxTime}></lightning-button>
+                                     </div>
+                                 </td>
+                             </tr>
+                         </template>
+                     </tbody>
+                 </table>
+             </div>
+         </div>
+     </lightning-card>
+
+     <!-- Detail Transaksi Card -->
+     <!-- <template for:each={transactionData} for:item="transaction"> -->
+     <template if:true={showDetailSection}>
+         <template for:each={detailTrxData} for:item="transaction">
+             <!-- <template if:true={transaction.showSection}> -->
+             <lightning-card key={transaction.appCodeReffNum} title="Detail Transaksi" icon-name="" variant="base"
+                 class="custom-card slds-m-top_xx-small slds-card_boundary">
+
+                 <div slot="actions">
+                     <template if:false={isCloseHidden}>
+                         <lightning-button-icon data-id={transaction.appCodeReffNum} icon-name="utility:close"
+                             alternative-text="Close" title="Close" onclick={handleCloseDetail} class="cssClass"
+                             variant="bare">
+                         </lightning-button-icon>
+                     </template>
+                 </div>
+
+
+                 <li class="field-container">
+                     <div class="slds-m-left_small slds-theme_default">
+                         <div class="slds-grid slds-wrap slds-gutters">
+                             <!-- Transaction Date -->
+                             <div class="slds-col slds-size_1-of-4 slds-p-around_medium">
+                                 <div class="slds-form-element">
+                                     <label class="slds-form-element__label" for="trxDate">Transaction Date</label>
+                                     <div class="slds-form-element__control">
+                                         <input class="slds-input text-bold" type="text" id="trxDate" readonly
+                                             value={transaction.trxDate} />
+                                     </div>
+                                 </div>
+                             </div>
+                             <!-- Transaction Time -->
+                             <div class="slds-col slds-size_1-of-4 slds-p-around_medium">
+                                 <div class="slds-form-element">
+                                     <label class="slds-form-element__label" for="trxTime">Transaction Time</label>
+                                     <div class="slds-form-element__control">
+                                         <input class="slds-input text-bold" type="text" id="trxTime" readonly
+                                             value={transaction.trxTime} />
+                                     </div>
+                                 </div>
+                             </div>
+                             <!-- Nomor Kartu -->
+                             <div class="slds-col slds-size_1-of-4 slds-p-around_medium">
+                                 <div class="slds-form-element">
+                                     <label class="slds-form-element__label" for="noKartuCpan">Nomor Kartu</label>
+                                     <div class="slds-form-element__control">
+                                         <input class="slds-input text-bold" type="text" id="noKartuCpan" readonly
+                                             value={transaction.noKartuCpan} />
+                                     </div>
+                                 </div>
+                             </div>
+                             <!-- MID -->
+                             <div class="slds-col slds-size_1-of-4 slds-p-around_medium">
+                                 <div class="slds-form-element">
+                                     <label class="slds-form-element__label" for="midOrMpan">MID</label>
+                                     <div class="slds-form-element__control">
+                                         <input class="slds-input text-bold" type="text" id="midOrMpan" readonly
+                                             value={transaction.midOrMpan} />
+                                     </div>
+                                 </div>
+                             </div>
+                             <!-- TID -->
+                             <div class="slds-col slds-size_1-of-4 slds-p-around_medium">
+                                 <div class="slds-form-element">
+                                     <label class="slds-form-element__label" for="tidOrStoreId">TID</label>
+                                     <div class="slds-form-element__control">
+                                         <input class="slds-input text-bold" type="text" id="tidOrStoreId" readonly
+                                             value={transaction.tidOrStoreId} />
+                                     </div>
+                                 </div>
+                             </div>
+                             <!-- Nama Merchant -->
+                             <div class="slds-col slds-size_1-of-4 slds-p-around_medium">
+                                 <div class="slds-form-element">
+                                     <label class="slds-form-element__label" for="merchantName">Nama Merchant</label>
+                                     <div class="slds-form-element__control">
+                                         <input class="slds-input text-bold" type="text" id="merchantName" readonly
+                                             value={transaction.merchantName} />
+                                     </div>
+                                 </div>
+                             </div>
+                             <!-- App Code Reference Number -->
+                             <div class="slds-col slds-size_1-of-4 slds-p-around_medium">
+                                 <div class="slds-form-element">
+                                     <label class="slds-form-element__label" for="appCodeReffNum">App Code Reference
+                                         Number</label>
+                                     <div class="slds-form-element__control">
+                                         <input class="slds-input text-bold" type="text" id="appCodeReffNum" readonly
+                                             value={transaction.appCodeReffNum} />
+                                     </div>
+                                 </div>
+                             </div>
+                             <!-- Nomor Batch -->
+                             <div class="slds-col slds-size_1-of-4 slds-p-around_medium">
+                                 <div class="slds-form-element">
+                                     <label class="slds-form-element__label" for="batchNo">Nomor Batch</label>
+                                     <div class="slds-form-element__control">
+                                         <input class="slds-input text-bold" type="text" id="batchNo" readonly
+                                             value={transaction.batchNo} />
+                                     </div>
+                                 </div>
+                             </div>
+                             <!-- Jenis Transaksi -->
+                             <div class="slds-col slds-size_1-of-4 slds-p-around_medium">
+                                 <div class="slds-form-element">
+                                     <label class="slds-form-element__label" for="jenisTrx">Jenis Transaksi</label>
+                                     <div class="slds-form-element__control">
+                                         <input class="slds-input text-bold" type="text" id="jenisTrx" readonly
+                                             value={transaction.jenisTrx} />
+                                     </div>
+                                 </div>
+                             </div>
+                             <!-- Jumlah Transaksi -->
+                             <div class="slds-col slds-size_1-of-4 slds-p-around_medium">
+                                 <div class="slds-form-element">
+                                     <label class="slds-form-element__label" for="trxAmount">Jumlah Transaksi</label>
+                                     <div class="slds-form-element__control">
+                                         <input class="slds-input text-bold" type="text" id="trxAmount" readonly
+                                             value={transaction.trxAmount} />
+                                     </div>
+                                 </div>
+                             </div>
+                             <!-- MDR -->
+                             <div class="slds-col slds-size_1-of-4 slds-p-around_medium">
+                                 <div class="slds-form-element">
+                                     <label class="slds-form-element__label" for="mdr">MDR</label>
+                                     <div class="slds-form-element__control">
+                                         <input class="slds-input text-bold" type="text" id="mdr" readonly
+                                             value={transaction.mdr} />
+                                     </div>
+                                 </div>
+                             </div>
+                             <!-- Channel -->
+                             <div class="slds-col slds-size_1-of-4 slds-p-around_medium">
+                                 <div class="slds-form-element">
+                                     <label class="slds-form-element__label" for="channelID">Channel</label>
+                                     <div class="slds-form-element__control">
+                                         <input class="slds-input text-bold" type="text" id="channelID" readonly
+                                             value={transaction.channelID} />
+                                     </div>
+                                 </div>
+                             </div>
+                             <!-- Proccode -->
+                             <div class="slds-col slds-size_1-of-4 slds-p-around_medium">
+                                 <div class="slds-form-element">
+                                     <label class="slds-form-element__label" for="proccode">Proccode</label>
+                                     <div class="slds-form-element__control">
+                                         <input class="slds-input text-bold" type="text" id="proccode" readonly
+                                             value={transaction.proccode} />
+                                     </div>
+                                 </div>
+                             </div>
+                             <!-- Nama Fitur -->
+                             <div class="slds-col slds-size_1-of-4 slds-p-around_medium">
+                                 <div class="slds-form-element">
+                                     <label class="slds-form-element__label" for="namaFitur">Nama Fitur</label>
+                                     <div class="slds-form-element__control">
+                                         <input class="slds-input text-bold" type="text" id="namaFitur" readonly
+                                             value={transaction.namaFitur} />
+                                     </div>
+                                 </div>
+                             </div>
+                             <!-- Local Cross Border -->
+                             <div class="slds-col slds-size_1-of-4 slds-p-around_medium">
+                                 <div class="slds-form-element">
+                                     <label class="slds-form-element__label" for="localCrossBorder">Local Cross
+                                         Border</label>
+                                     <div class="slds-form-element__control">
+                                         <input class="slds-input text-bold" type="text" id="localCrossBorder"
+                                             readonly value={transaction.localCrossBorder} />
+                                     </div>
+                                 </div>
+                             </div>
+                             <!-- On Us Not On Us -->
+                             <div class="slds-col slds-size_1-of-4 slds-p-around_medium">
+                                 <div class="slds-form-element">
+                                     <label class="slds-form-element__label" for="onUsNotOnUs">On Us Not On
+                                         Us</label>
+                                     <div class="slds-form-element__control">
+                                         <input class="slds-input text-bold" type="text" id="onUsNotOnUs" readonly
+                                             value={transaction.onUsNotOnUs} />
+                                     </div>
+                                 </div>
+                             </div>
+                             <!-- Tipe Kartu -->
+                             <div class="slds-col slds-size_1-of-4 slds-p-around_medium">
+                                 <div class="slds-form-element">
+                                     <label class="slds-form-element__label" for="cardType">Tipe Kartu</label>
+                                     <div class="slds-form-element__control">
+                                         <input class="slds-input text-bold" type="text" id="cardType" readonly
+                                             value={transaction.cardType} />
+                                     </div>
+                                 </div>
+                             </div>
+                             <!-- RC -->
+                             <div class="slds-col slds-size_1-of-4 slds-p-around_medium">
+                                 <div class="slds-form-element">
+                                     <label class="slds-form-element__label" for="rc">RC</label>
+                                     <div class="slds-form-element__control">
+                                         <input class="slds-input text-bold" type="text" id="rc" readonly
+                                             value={transaction.rc} />
+                                     </div>
+                                 </div>
+                             </div>
+                             <!-- Status -->
+                             <div class="slds-col slds-size_1-of-4 slds-p-around_medium">
+                                 <div class="slds-form-element">
+                                     <label class="slds-form-element__label" for="status">Status</label>
+                                     <div class="slds-form-element__control">
+                                         <input class="slds-input text-bold" type="text" id="status" readonly
+                                             value={transaction.status} />
+                                     </div>
+                                 </div>
+                             </div>
+                             <!-- Status Transaksi -->
+                             <div class="slds-col slds-size_1-of-4 slds-p-around_medium">
+                                 <div class="slds-form-element">
+                                     <label class="slds-form-element__label" for="trxStatus">Status Transaksi</label>
+                                     <div class="slds-form-element__control">
+                                         <input class="slds-input text-bold" type="text" id="trxStatus" readonly
+                                             value={transaction.trxStatus} />
+                                     </div>
+                                 </div>
+                             </div>
+                             <!-- Tipe Transaksi -->
+                             <div class="slds-col slds-size_1-of-4 slds-p-around_medium">
+                                 <div class="slds-form-element">
+                                     <label class="slds-form-element__label" for="trxType">Tipe Transaksi</label>
+                                     <div class="slds-form-element__control">
+                                         <input class="slds-input text-bold" type="text" id="trxType" readonly
+                                             value={transaction.trxType} />
+                                     </div>
+                                 </div>
+                             </div>
+                             <!-- MTI -->
+                             <div class="slds-col slds-size_1-of-4 slds-p-around_medium">
+                                 <div class="slds-form-element">
+                                     <label class="slds-form-element__label" for="mti">MTI</label>
+                                     <div class="slds-form-element__control">
+                                         <input class="slds-input text-bold" type="text" id="mti" readonly
+                                             value={transaction.mti} />
+                                     </div>
+                                 </div>
+                             </div>
+                             <!-- Trace Number -->
+                             <div class="slds-col slds-size_1-of-4 slds-p-around_medium">
+                                 <div class="slds-form-element">
+                                     <label class="slds-form-element__label" for="traceNum">Trace Number</label>
+                                     <div class="slds-form-element__control">
+                                         <input class="slds-input text-bold" type="text" id="traceNum" readonly
+                                             value={transaction.traceNum} />
+                                     </div>
+                                 </div>
+                             </div>
+                             <!-- MCC -->
+                             <div class="slds-col slds-size_1-of-4 slds-p-around_medium">
+                                 <div class="slds-form-element">
+                                     <label class="slds-form-element__label" for="mcc">MCC</label>
+                                     <div class="slds-form-element__control">
+                                         <input class="slds-input text-bold" type="text" id="mcc" readonly
+                                             value={transaction.mcc} />
+                                     </div>
+                                 </div>
+                             </div>
+                             <!-- Lokasi -->
+                             <div class="slds-col slds-size_1-of-4 slds-p-around_medium">
+                                 <div class="slds-form-element">
+                                     <label class="slds-form-element__label" for="location">Lokasi</label>
+                                     <div class="slds-form-element__control">
+                                         <input class="slds-input text-bold" type="text" id="location" readonly
+                                             value={transaction.location} />
+                                     </div>
+                                 </div>
+                             </div>
+                             <!-- Acq Bank -->
+                             <div class="slds-col slds-size_1-of-4 slds-p-around_medium">
+                                 <div class="slds-form-element">
+                                     <label class="slds-form-element__label" for="acqBank">Acq Bank</label>
+                                     <div class="slds-form-element__control">
+                                         <input class="slds-input text-bold" type="text" id="acqBank" readonly
+                                             value={transaction.acqBank} />
+                                     </div>
+                                 </div>
+                             </div>
+                             <!-- Post Entry Mode -->
+                             <div class="slds-col slds-size_1-of-4 slds-p-around_medium">
+                                 <div class="slds-form-element">
+                                     <label class="slds-form-element__label" for="posEntryMode">Post Entry
+                                         Mode</label>
+                                     <div class="slds-form-element__control">
+                                         <input class="slds-input text-bold" type="text" id="posEntryMode" readonly
+                                             value={transaction.posEntryMode} />
+                                     </div>
+                                 </div>
+                             </div>
+                             <!-- Settle Amount -->
+                             <div class="slds-col slds-size_1-of-4 slds-p-around_medium">
+                                 <div class="slds-form-element">
+                                     <label class="slds-form-element__label" for="settleAmount">Settle Amount</label>
+                                     <div class="slds-form-element__control">
+                                         <input class="slds-input text-bold" type="text" id="settleAmount" readonly
+                                             value={transaction.settleAmount} />
+                                     </div>
+                                 </div>
+                             </div>
+                             <!-- Settle Date -->
+                             <div class="slds-col slds-size_1-of-4 slds-p-around_medium">
+                                 <div class="slds-form-element">
+                                     <label class="slds-form-element__label" for="settleDate">Settle Date</label>
+                                     <div class="slds-form-element__control">
+                                         <input class="slds-input text-bold" type="text" id="settleDate" readonly
+                                             value={transaction.settleDate} />
+                                     </div>
+                                 </div>
+                             </div>
+                             <!-- Payment Date -->
+                             <div class="slds-col slds-size_1-of-4 slds-p-around_medium">
+                                 <div class="slds-form-element">
+                                     <label class="slds-form-element__label" for="paymentDate">Payment Date</label>
+                                     <div class="slds-form-element__control">
+                                         <input class="slds-input text-bold" type="text" id="paymentDate" readonly
+                                             value={transaction.paymentDate} />
+                                     </div>
+                                 </div>
+                             </div>
+                             <!-- Nomor Rekening Merchant -->
+                             <div class="slds-col slds-size_1-of-4 slds-p-around_medium">
+                                 <div class="slds-form-element">
+                                     <label class="slds-form-element__label" for="noRekMerchant">Nomor Rekening
+                                         Merchant</label>
+                                     <div class="slds-form-element__control">
+                                         <input class="slds-input text-bold" type="text" id="noRekMerchant" readonly
+                                             value={transaction.noRekMerchant} />
+                                     </div>
+                                 </div>
+                             </div>
+                             <!-- Payment Remark -->
+                             <div class="slds-col slds-size_1-of-4 slds-p-around_medium">
+                                 <div class="slds-form-element">
+                                     <label class="slds-form-element__label" for="paymentRemark">Payment
+                                         Remark</label>
+                                     <div class="slds-form-element__control">
+                                         <input class="slds-input text-bold" type="text" id="paymentRemark" readonly
+                                             value={transaction.paymentRemark} />
+                                     </div>
+                                 </div>
+                             </div>
+                             <!-- Switch -->
+                             <div class="slds-col slds-size_1-of-4 slds-p-around_medium">
+                                 <div class="slds-form-element">
+                                     <label class="slds-form-element__label" for="switchs">Switch</label>
+                                     <div class="slds-form-element__control">
+                                         <input class="slds-input text-bold" type="text" id="switchs" readonly
+                                             value={transaction.switchs} />
+                                     </div>
+                                 </div>
+                             </div>
+                         </div>
+
+                         <!-- button save -->
+                          <template if:true ={isBOIssuer}>
+                                <div class="slds-align_absolute-center slds-p-around_medium">
+                                    <lightning-button label="Simpan" variant="brand" onclick={saveDataRemark}></lightning-button>
+                                </div>
+                          </template>
+                     </div>
+                 </li>
+             </lightning-card>
+             <!-- </template> -->
+         </template>
+     </template>
+ </template>
+    
+</template>

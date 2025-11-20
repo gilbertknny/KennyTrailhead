@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <article>Definite</article>
+        <plural>false</plural>
+        <value>Tillgången och utgiften</value>
+    </caseValues>
+    <caseValues>
+        <article>Indefinite</article>
+        <plural>false</plural>
+        <value>En tillgång och utgift</value>
+    </caseValues>
+    <caseValues>
+        <article>None</article>
+        <plural>false</plural>
+        <value>Tillgång och utgift</value>
+    </caseValues>
+    <caseValues>
+        <article>Definite</article>
+        <plural>true</plural>
+        <value>Tillgångarna och utgifterna</value>
+    </caseValues>
+    <caseValues>
+        <article>Indefinite</article>
+        <plural>true</plural>
+        <value>Tillgångar och utgifter</value>
+    </caseValues>
+    <caseValues>
+        <article>None</article>
+        <plural>true</plural>
+        <value>Tillgångar och utgifter</value>
+    </caseValues>
+    <fieldSets>
+        <label><!-- Assets &amp; Liabilities --></label>
+        <name>WM_Client_Assets_Liabilities</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Assets &amp; Liabilities --></label>
+        <name>WM_Household_Assets_Liabilities</name>
+    </fieldSets>
+    <gender>Feminine</gender>
+    <nameFieldLabel>Namn på tillgång eller utgift</nameFieldLabel>
+    <recordTypes>
+        <description>En skuld, som till exempel en inteckning.</description>
+        <label>Utgift</label>
+        <name>FinServ__Liability</name>
+    </recordTypes>
+    <recordTypes>
+        <description>En tillgång som inte är representerad i finanskonton, som fastigheter eller samlarobjekt</description>
+        <label>Tillgångar</label>
+        <name>FinServ__NonfinancialAsset</name>
+    </recordTypes>
+    <validationRules>
+        <errorMessage>Individuellt ägda konton kan inte ha en samägare.</errorMessage>
+        <name>FinServ__NoJointOwnerForIndividualAccounts</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Den primära ägaren och samägaren måste vara olika.</errorMessage>
+        <name>FinServ__PrimaryAndJointOwnerCannotBeSame</name>
+    </validationRules>
+</CustomObjectTranslation>

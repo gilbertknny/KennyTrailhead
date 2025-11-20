@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>Relacionamento entre contatos</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Relacionamentos entre contatos</value>
+    </caseValues>
+    <fieldSets>
+        <label><!-- Related Contacts --></label>
+        <name>WM_Client_RelatedContacts</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Related Contacts --></label>
+        <name>WM_Household_RelatedContacts</name>
+    </fieldSets>
+    <gender>Masculine</gender>
+    <nameFieldLabel>Nome da relação do contato</nameFieldLabel>
+    <validationRules>
+        <errorMessage>Não é possível editar este registro. É possível desativar este registro e criar um novo para atualizar as informações de relacionamento.</errorMessage>
+        <name>FinServ__CCRCanOnlyBeDeactivated</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Não foi possível criar um relacionamento entre contatos como Inativo.</errorMessage>
+        <name>FinServ__CannotCreateInactiveRecord</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>O Contato e o Contato relacionado devem ser entidades diferentes.</errorMessage>
+        <name>FinServ__ContactAndRelatedContactCannotBeSame</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Não é possível editar o registro inativo. É possível criar um novo registro para atualizar as informações de relacionamento.</errorMessage>
+        <name>FinServ__InactiveCCRCannotBeEdited</name>
+    </validationRules>
+</CustomObjectTranslation>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Pengajuan_Cuti__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <label>Pengajuan Cuti</label>
+    <referenceTo>Request_Leave__c</referenceTo>
+    <relationshipLabel>Relasi Cuti</relationshipLabel>
+    <relationshipName>Relasi_Cuti</relationshipName>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

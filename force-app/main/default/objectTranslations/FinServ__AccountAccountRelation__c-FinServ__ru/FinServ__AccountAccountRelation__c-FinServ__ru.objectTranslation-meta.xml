@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <caseType>Nominative</caseType>
+        <plural>false</plural>
+        <value>Взаимосвязь между организациями</value>
+    </caseValues>
+    <caseValues>
+        <caseType>Nominative</caseType>
+        <plural>true</plural>
+        <value>Взаимосвязи между организациями</value>
+    </caseValues>
+    <caseValues>
+        <caseType>Accusative</caseType>
+        <plural>false</plural>
+        <value>Взаимосвязь между организациями</value>
+    </caseValues>
+    <caseValues>
+        <caseType>Accusative</caseType>
+        <plural>true</plural>
+        <value>Взаимосвязи между организациями</value>
+    </caseValues>
+    <caseValues>
+        <caseType>Genitive</caseType>
+        <plural>false</plural>
+        <value>Взаимосвязи между организациями</value>
+    </caseValues>
+    <caseValues>
+        <caseType>Genitive</caseType>
+        <plural>true</plural>
+        <value>Взаимосвязей между организациями</value>
+    </caseValues>
+    <caseValues>
+        <caseType>Dative</caseType>
+        <plural>false</plural>
+        <value>Взаимосвязи между организациями</value>
+    </caseValues>
+    <caseValues>
+        <caseType>Dative</caseType>
+        <plural>true</plural>
+        <value>Взаимосвязям между организациями</value>
+    </caseValues>
+    <caseValues>
+        <caseType>Instrumental</caseType>
+        <plural>false</plural>
+        <value>Взаимосвязью между организациями</value>
+    </caseValues>
+    <caseValues>
+        <caseType>Instrumental</caseType>
+        <plural>true</plural>
+        <value>Взаимосвязями между организациями</value>
+    </caseValues>
+    <caseValues>
+        <caseType>Prepositional</caseType>
+        <plural>false</plural>
+        <value>Взаимосвязи между организациями</value>
+    </caseValues>
+    <caseValues>
+        <caseType>Prepositional</caseType>
+        <plural>true</plural>
+        <value>Взаимосвязях между организациями</value>
+    </caseValues>
+    <fieldSets>
+        <label><!-- Related Accounts --></label>
+        <name>WM_Household_RelatedAccounts</name>
+    </fieldSets>
+    <gender>Feminine</gender>
+    <nameFieldLabel>Имя связи организации</nameFieldLabel>
+    <validationRules>
+        <errorMessage><!-- This record can&apos;t be edited. To update relationship information, you can deactivate this record and create a new one. --></errorMessage>
+        <name>FinServ__AARCanOnlyBeDeactivated</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Account and Related Account must be different entities. --></errorMessage>
+        <name>FinServ__AccountAndRelatedAccountCannotBeSame</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Account can&apos;t be a part of an individual. --></errorMessage>
+        <name>FinServ__AccountCannotBeAnIndividual</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Взаимосвязь типа &quot;Организация-организация&quot; не может быть создана со статусом &quot;Неактивно&quot;.</errorMessage>
+        <name>FinServ__CannotCreateInactiveRecord</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Inactive record can&apos;t be edited. To update relationship information, you can create a new one. --></errorMessage>
+        <name>FinServ__InactiveAARCannotBeEdited</name>
+    </validationRules>
+</CustomObjectTranslation>

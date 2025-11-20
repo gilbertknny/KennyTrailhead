@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>Documento de identificación</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Documentos de identificación</value>
+    </caseValues>
+    <gender>Masculine</gender>
+    <nameFieldLabel>Documento</nameFieldLabel>
+    <validationRules>
+        <errorMessage>La fecha de caducidad no puede ser anterior a la fecha de emisión.</errorMessage>
+        <name>FinServ__ExpDateCannotBeLaterThanStart</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>La fecha de emisión no puede estar en el futuro.</errorMessage>
+        <name>FinServ__IssueDateCannotBeInFuture</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>La fecha y hora de verificación no puede estar en el futuro.</errorMessage>
+        <name>FinServ__VerificationDateTimeCannotBeInFuture</name>
+    </validationRules>
+</CustomObjectTranslation>

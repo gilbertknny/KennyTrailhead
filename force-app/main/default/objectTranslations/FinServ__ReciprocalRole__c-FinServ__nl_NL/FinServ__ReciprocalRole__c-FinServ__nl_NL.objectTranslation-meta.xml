@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>Equivalente rol</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Equivalente rollen</value>
+    </caseValues>
+    <gender>Feminine</gender>
+    <nameFieldLabel>Rol</nameFieldLabel>
+    <recordTypes>
+        <description>Rollen die zijn gekoppeld aan account-account-relaties</description>
+        <label>Accountrol</label>
+        <name>FinServ__AccountRole</name>
+    </recordTypes>
+    <recordTypes>
+        <description>Rollen die zijn gekoppeld aan contactpersoon-contactpersoon-relaties</description>
+        <label>Contactrol</label>
+        <name>FinServ__ContactRole</name>
+    </recordTypes>
+    <validationRules>
+        <errorMessage>Wederkerige rol kan niet worden gewijzigd</errorMessage>
+        <name>FinServ__ProhibitUpdates</name>
+    </validationRules>
+</CustomObjectTranslation>

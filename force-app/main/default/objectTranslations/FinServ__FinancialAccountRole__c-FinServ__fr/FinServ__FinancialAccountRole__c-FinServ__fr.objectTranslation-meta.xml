@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>Rôle de compte financier</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Rôles de compte financier</value>
+    </caseValues>
+    <fieldSets>
+        <label><!-- Financial Account Role --></label>
+        <name>WM_Client_FinancialAccountRole</name>
+    </fieldSets>
+    <gender>Masculine</gender>
+    <nameFieldLabel>Numéro du rôle</nameFieldLabel>
+    <recordTypes>
+        <description>Rôle qu&apos;occupe une entité organisationnelle, tel que société ou SARL</description>
+        <label>Rôle du compte</label>
+        <name>FinServ__AccountRole</name>
+    </recordTypes>
+    <recordTypes>
+        <description>Rôle qu&apos;occupe une personne</description>
+        <label>Rôle du contact</label>
+        <name>FinServ__ContactRole</name>
+    </recordTypes>
+    <startsWith>Consonant</startsWith>
+    <validationRules>
+        <errorMessage>Un rôle Compte financier ne peut pas être créé comme inactif</errorMessage>
+        <name>FinServ__CannotCreateInactiveRecord</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Cet enregistrement ne peut pas être modifié. Pour mettre à jour les informations sur le rôle, vous pouvez désactiver cet enregistrement et en créer un nouveau.</errorMessage>
+        <name>FinServ__FARCannotBeModified</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>L&apos;enregistrement inactif ne peut pas être modifié. Pour mettre à jour le FAR (système de régulation), vous pouvez en créer un nouveau.</errorMessage>
+        <name>FinServ__InactiveFARCannotBeEdited</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Les rôles financiers inactifs ne peuvent pas être réactivés.</errorMessage>
+        <name>FinServ__InactiveRecordCannotBeReactivated</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Cet enregistrement ne peut pas être désactivé, car la propriété peut être mise à jour uniquement dans le compte financier.</errorMessage>
+        <name>FinServ__OwnershipRolesCannotBeDeactivated</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Cet enregistrement ne peut pas être modifié, car la propriété peut être spécifiée uniquement dans le compte financier.</errorMessage>
+        <name>FinServ__OwnershipRolesCannotBeModified</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Un Compte associé ou un Contact associé est requis.</errorMessage>
+        <name>FinServ__RelatedAccountOrContactRequired</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Un rôle est requis.</errorMessage>
+        <name>FinServ__RoleIsMandatory</name>
+    </validationRules>
+</CustomObjectTranslation>

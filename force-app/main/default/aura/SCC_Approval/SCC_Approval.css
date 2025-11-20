@@ -1,0 +1,97 @@
+.THIS .header {
+    background-color: var(--primary-color);
+    padding: 10px;
+    border-bottom: 1px solid #333;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--text-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.THIS .right-align {
+    text-align: right;
+}
+            
+.THIS table {
+    font-family: Arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.THIS th, .THIS td {
+    border: 1px solid var(--border-color);
+    padding: 8px;
+    text-align: left;
+}
+
+.THIS th {
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+}
+
+.THIS tr:nth-child(even) {
+    background-color: var(--bg-color);
+}
+
+.THIS .select-all-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-bottom: 10px;
+}
+
+.THIS .select-all-container input[type="checkbox"] {
+    margin-right: 5px;
+}
+
+.THIS .button-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.THIS .header-title {
+    font-size: 1.5rem;
+    color: var(--text-color);
+}
+
+.THIS .data-summary {
+    font-size: 1rem;
+    font-weight: bold;
+    margin-top: 1rem;
+}
+
+.THIS .logo {
+    height: 50px;
+    margin-right: 10px;
+}
+
+.THIS .pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.THIS .pagination button {
+    margin: 0 5px;
+}
+
+.THIS .search-container {
+    display: flex;
+    flex-direction: column;
+    background-color: #f4f6f9;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.THIS .search-container .slds-input {
+    margin-bottom: 10px;
+}
+
+.THIS .search-container .slds-button {
+    align-self: flex-start;
+}

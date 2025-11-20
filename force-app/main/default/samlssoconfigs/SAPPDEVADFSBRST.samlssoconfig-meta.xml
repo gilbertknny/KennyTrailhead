@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SamlSsoConfig xmlns="http://soap.sforce.com/2006/04/metadata">
+    <identityLocation>SubjectNameId</identityLocation>
+    <identityMapping>FederationId</identityMapping>
+    <issuer>http://SAPPDEVADFSBRST.DEV.BRI.CO.ID/adfs/services/trust</issuer>
+    <loginUrl>https://sappdevadfsbrst.dev.bri.co.id/adfs/ls/</loginUrl>
+    <name>PN</name>
+    <oauthTokenEndpoint>https://bankbri--sitest.sandbox.my.salesforce.com/services/oauth2/token</oauthTokenEndpoint>
+    <redirectBinding>true</redirectBinding>
+    <requestSignatureMethod>1</requestSignatureMethod>
+    <requestSigningCertId>0P1Mg00000006yH</requestSigningCertId>
+    <salesforceLoginUrl>https://bankbri--sitest.sandbox.my.salesforce.com</salesforceLoginUrl>
+    <samlEntityId>https://bankbri--sitest.sandbox.my.salesforce.com</samlEntityId>
+    <samlVersion>SAML2_0</samlVersion>
+    <singleLogoutBinding>RedirectBinding</singleLogoutBinding>
+    <singleLogoutUrl>https://sappdevadfsbrst.dev.bri.co.id/adfs/ls/</singleLogoutUrl>
+    <useConfigRequestMethod>false</useConfigRequestMethod>
+    <useSameDigestAlgoForSigning>true</useSameDigestAlgoForSigning>
+    <userProvisioning>false</userProvisioning>
+    <validationCert>MIIC9jCCAd6gAwIBAgIQVzIJ38Xew6FLldGfQKU2/zANBgkqhkiG9w0BAQsFADA3MTUwMwYDVQQDEyxBREZTIFNpZ25pbmcgLSBTQVBQREVWQURGU0JSU1QuREVWLkJSSS5DTy5JRDAeFw0yNDAyMTYxMTExMTRaFw0yNTAyMTUxMTExMTRaMDcxNTAzBgNVBAMTLEFERlMgU2lnbmluZyAtIFNBUFBERVZBREZTQlJTVC5ERVYuQlJJLkNPLklEMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEArM2ehWPRmu9S0hv5YSGDqiKlEmFtSnMwpsIQHVWZcmZVJ/pdAe79MpzWzn/FmKd1e4Dlvkb1OH99QGCTHa7O+zqf/wq5V8TOYpVnk97DQ0qmK4AwaHcenkX92unKbiBEj9xR2jHUnyPze0WjL87mlgMMFXeGj5bvrHbeO/PXoYgwQWbGhtXfSGEMf7lzdCIgZwbJ6tkfTOS6H8ejyZse+oeW7PP1HMvrgGRlrff2FNKBzPiqlEhx+Pq1AhCSXFwKmd59tgnZjkeJ67wOkMa/UNJEo/fRa8URAm6XnSrzql1S4/+ygBaO4MXwbGK7v/2SmfauuQqJpDCN/Sq4E4nGaQIDAQABMA0GCSqGSIb3DQEBCwUAA4IBAQBnxmepDZ/UOKER4LOzrEYwe2yU3tCdvN4v8qsv6PU+OqWfz/jrQGnvz4JeUtaZK0Izy3EhQoGfqfmlcOJeN9ar1fZ2R+wcMfxlM4/K2qVhKH94054fFeFyHNQIztXAzx4VVpTiRdQFnrh6gBDUWTPexckj5HxSQ41WYpBDzLZTiLHPJQf6TGevr5ubVc4LX2XklsRU/tvJUZwlrLkqtWpvIIQuFRz4BJRaaFZpwCoBkfFCC0W1gCD0yGR6TPVp+32J2CLBB8O6flBqhElVJsjJiuv85Oqai8YglTd47jh86LxUTxIgmEo/X+2AQYsXEfx7AHNHBeHSABMlhGnLGz6g</validationCert>
+</SamlSsoConfig>

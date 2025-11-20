@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fieldSets>
+        <label><!-- Financial Accounts Summary --></label>
+        <name>FSC_Banker_Profile_Fin_Acct_Summary</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Financial Accounts Summary --></label>
+        <name>WM_Client_Profile_Fin_Acct_Summary</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Household Summary --></label>
+        <name>WM_Client_Profile_Relations_HH_Summary</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Relationship Group Members --></label>
+        <name>WM_Client_Relationship_Group_Members</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Relationship Groups --></label>
+        <name>WM_Client_Relationship_Groups</name>
+    </fieldSets>
+    <recordTypes>
+        <description>비즈니스 또는 조직</description>
+        <label>비즈니스</label>
+        <name>FinServ__IndustriesBusiness</name>
+    </recordTypes>
+    <recordTypes>
+        <description>관계자 및 기관 그룹화</description>
+        <label>가구</label>
+        <name>FinServ__IndustriesHousehold</name>
+    </recordTypes>
+    <recordTypes>
+        <description>잠재 고객 또는 클라이언트인 개인</description>
+        <label>개인</label>
+        <name>FinServ__IndustriesIndividual</name>
+    </recordTypes>
+    <recordTypes>
+        <description>잠재 고객 또는 클라이언트인 협회</description>
+        <label>협회</label>
+        <name>FinServ__IndustriesInstitution</name>
+    </recordTypes>
+    <validationRules>
+        <errorMessage><!-- Anda tidak boleh merubah nomor telepon --></errorMessage>
+        <name>Admin_Validation_Phone</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>내부 의뢰자는 내부 Salesforce 사용자여야 합니다.</errorMessage>
+        <name>FinServ__NonPortalUserReferrer</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>개인 레코드 유형은 변경할 수 없습니다</errorMessage>
+        <name>FinServ__NotAllowingConversionFromIndividual</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>레코드 유형은 개인으로 변경할 수 없습니다</errorMessage>
+        <name>FinServ__NotAllowingConversionToIndividual</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>내부 의뢰자 또는 외부 의뢰자를 입력하십시오. 각 의뢰에 한 명의 의뢰자만 나열할 수 있습니다.</errorMessage>
+        <name>FinServ__SingleReferredByEntryByRecord</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Nomor telepon harus angka dan 10-14 Digit --></errorMessage>
+        <name>Phone_Validation</name>
+    </validationRules>
+    <webLinks>
+        <label>구성원 추가</label>
+        <name>FinServ__AddMember</name>
+    </webLinks>
+    <webLinks>
+        <label>관계 추가</label>
+        <name>FinServ__AddRelation</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- GoogleMaps --></label>
+        <name>GoogleMaps</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- GoogleNews --></label>
+        <name>GoogleNews</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- GoogleSearch --></label>
+        <name>GoogleSearch</name>
+    </webLinks>
+</CustomObjectTranslation>

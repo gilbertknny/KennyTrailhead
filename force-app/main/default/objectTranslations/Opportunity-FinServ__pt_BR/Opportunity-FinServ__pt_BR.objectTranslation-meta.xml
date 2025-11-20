@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <recordTypes>
+        <label>Geral</label>
+        <name>FinServ__General</name>
+    </recordTypes>
+    <recordTypes>
+        <label>Planejamento de aposentadoria</label>
+        <name>FinServ__RetirementPlanning</name>
+    </recordTypes>
+    <recordTypes>
+        <label>Oportunidade (participação nos gastos)</label>
+        <name>FinServ__WalletShareOpportunity</name>
+    </recordTypes>
+    <validationRules>
+        <errorMessage>Referenciais internos devem ser usuários internos do Salesforce.</errorMessage>
+        <name>FinServ__NonPortalUserReferrer</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Insira uma referência interna ou externa. Você pode listar apenas um referencial para cada referência.</errorMessage>
+        <name>FinServ__SingleReferredByEntryByRecord</name>
+    </validationRules>
+</CustomObjectTranslation>

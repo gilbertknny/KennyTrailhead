@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<InboundNetworkConnection xmlns="http://soap.sforce.com/2006/04/metadata">
+    <connectionType>AwsPrivateLink</connectionType>
+    <description>Integration with on premise BRI using Private Link</description>
+    <inboundNetworkConnProperties>
+        <propertyName>Region</propertyName>
+        <propertyValue>ap-southeast-3</propertyValue>
+    </inboundNetworkConnProperties>
+    <inboundNetworkConnProperties>
+        <propertyName>AwsVpcEndpointId</propertyName>
+        <propertyValue>vpce-0ff7292e4b55753ea</propertyValue>
+    </inboundNetworkConnProperties>
+    <inboundNetworkConnProperties>
+        <propertyName>SourceIpRanges</propertyName>
+        <propertyValue>[{&quot;startIp&quot;:&quot;100.113.46.12&quot;,&quot;endIp&quot;:&quot;100.113.46.14&quot;}]</propertyValue>
+    </inboundNetworkConnProperties>
+    <isActive>true</isActive>
+    <label>BRI_PrivateLink</label>
+    <status>Ready</status>
+</InboundNetworkConnection>

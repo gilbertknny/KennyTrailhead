@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>财务帐户</value>
+    </caseValues>
+    <fieldSets>
+        <label><!-- Auto Loan Account --></label>
+        <name>FSC_Client_AutoLoan</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Checking Account --></label>
+        <name>FSC_Client_CheckingAccount</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Credit Card Account --></label>
+        <name>FSC_Client_CreditCard</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- HELOC Account --></label>
+        <name>FSC_Client_HELOC</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Loan Account --></label>
+        <name>FSC_Client_LoanAccount</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Mortgage Account --></label>
+        <name>FSC_Client_MortgageAccount</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Savings Account --></label>
+        <name>FSC_Client_SavingsAccount</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Auto Loan Account --></label>
+        <name>FSC_Group_AutoLoan</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Checking Account --></label>
+        <name>FSC_Group_CheckingAccount</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Credit Card Account --></label>
+        <name>FSC_Group_CreditCard</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- HELOC Account --></label>
+        <name>FSC_Group_HELOC</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Loan Account --></label>
+        <name>FSC_Group_LoanAccount</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Mortgage Account --></label>
+        <name>FSC_Group_MortgageAccount</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Savings Account --></label>
+        <name>FSC_Group_SavingsAccount</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Banking Account --></label>
+        <name>WM_Client_BankingAccount</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Insurance Policy --></label>
+        <name>WM_Client_InsuranceAccount</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Investment Account --></label>
+        <name>WM_Client_InvestmentAccount</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Banking Account --></label>
+        <name>WM_Household_BankingAccount</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Insurance Policy --></label>
+        <name>WM_Household_InsuranceAccount</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Investment Account --></label>
+        <name>WM_Household_InvestmentAccount</name>
+    </fieldSets>
+    <nameFieldLabel>财务帐户名称</nameFieldLabel>
+    <recordTypes>
+        <description>代表一种为购买汽车融资的贷款。</description>
+        <label>汽车贷款</label>
+        <name>FinServ__AutoLoan</name>
+    </recordTypes>
+    <recordTypes>
+        <description>银行帐户，例如储蓄、支票和信贷</description>
+        <label>银行帐户</label>
+        <name>FinServ__BankingAccount</name>
+    </recordTypes>
+    <recordTypes>
+        <description>代表用于取款和存款的存款帐户</description>
+        <label>活期存款帐户</label>
+        <name>FinServ__CheckingAccount</name>
+    </recordTypes>
+    <recordTypes>
+        <description>代表一种用信用额度发行的支付卡</description>
+        <label>信用卡</label>
+        <name>FinServ__CreditCard</name>
+    </recordTypes>
+    <recordTypes>
+        <description>普通财务帐户</description>
+        <label>普通帐户</label>
+        <name>FinServ__General</name>
+    </recordTypes>
+    <recordTypes>
+        <description>代表由不动产权益担保的信贷额度。</description>
+        <label>HELOC</label>
+        <name>FinServ__HELOC</name>
+    </recordTypes>
+    <recordTypes>
+        <description>保险单</description>
+        <label>保险单</label>
+        <name>FinServ__InsurancePolicy</name>
+    </recordTypes>
+    <recordTypes>
+        <description>投资帐户，例如经纪帐户</description>
+        <label>投资帐户</label>
+        <name>FinServ__InvestmentAccount</name>
+    </recordTypes>
+    <recordTypes>
+        <description>代表为购买融资的帐户类型。</description>
+        <label>贷款帐户</label>
+        <name>FinServ__LoanAccount</name>
+    </recordTypes>
+    <recordTypes>
+        <description>代表一种为购买不动产融资的贷款。</description>
+        <label>抵押贷款</label>
+        <name>FinServ__Mortgage</name>
+    </recordTypes>
+    <recordTypes>
+        <description>代表有息存款帐户</description>
+        <label>储蓄帐户</label>
+        <name>FinServ__SavingsAccount</name>
+    </recordTypes>
+    <recordTypes>
+        <description>为首席财务官或财务主管提供交易或投资服务的帐户。</description>
+        <label>财务服务</label>
+        <name>FinServ__TreasuryService</name>
+    </recordTypes>
+    <validationRules>
+        <errorMessage>为此财务帐户选择托管或暂挂。</errorMessage>
+        <name>FinServ__ManagedAndHeldAwayCannotBeBothSelected</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>个人拥有的帐户不能有联合所有人。</errorMessage>
+        <name>FinServ__NoJointOwnerForIndividualAccounts</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>主要所有人和联合所有人必须不同。</errorMessage>
+        <name>FinServ__PrimaryAndJointOwnerCannotBeSame</name>
+    </validationRules>
+</CustomObjectTranslation>

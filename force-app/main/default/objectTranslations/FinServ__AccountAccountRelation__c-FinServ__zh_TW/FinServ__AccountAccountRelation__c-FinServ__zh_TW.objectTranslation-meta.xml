@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>帳戶對帳戶關係</value>
+    </caseValues>
+    <fieldSets>
+        <label><!-- Related Accounts --></label>
+        <name>WM_Household_RelatedAccounts</name>
+    </fieldSets>
+    <nameFieldLabel>帳戶關係名稱</nameFieldLabel>
+    <validationRules>
+        <errorMessage>無法編輯此記錄。若要更新關係資訊，您可以停用此記錄並新建記錄。</errorMessage>
+        <name>FinServ__AARCanOnlyBeDeactivated</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>帳戶和相關帳戶必須是不同的實體。</errorMessage>
+        <name>FinServ__AccountAndRelatedAccountCannotBeSame</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>帳戶不能為個人的一部分。</errorMessage>
+        <name>FinServ__AccountCannotBeAnIndividual</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>無法以非啟用狀態建立帳戶對帳戶關係。</errorMessage>
+        <name>FinServ__CannotCreateInactiveRecord</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>無法編輯未啟用的記錄。若要更新關係資訊，您可以新建記錄。</errorMessage>
+        <name>FinServ__InactiveAARCannotBeEdited</name>
+    </validationRules>
+</CustomObjectTranslation>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>Contactpersoon-/contactpersoonsrelatie</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Contactpersoon-/contactpersoonsrelaties</value>
+    </caseValues>
+    <fieldSets>
+        <label><!-- Related Contacts --></label>
+        <name>WM_Client_RelatedContacts</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Related Contacts --></label>
+        <name>WM_Household_RelatedContacts</name>
+    </fieldSets>
+    <gender>Feminine</gender>
+    <nameFieldLabel>Naam van contactpersoonsrelatie</nameFieldLabel>
+    <validationRules>
+        <errorMessage>Deze record kan niet worden bewerkt. Voor het bijwerken van relatiegegevens kunt u deze record deactiveren en een nieuwe maken.</errorMessage>
+        <name>FinServ__CCRCanOnlyBeDeactivated</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Een contactpersoon-contactpersoonrelatie kan niet als Niet-actief worden gemaakt.</errorMessage>
+        <name>FinServ__CannotCreateInactiveRecord</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Contactpersoon en Gerelateerde contactpersoon moeten verschillende entiteiten zijn.</errorMessage>
+        <name>FinServ__ContactAndRelatedContactCannotBeSame</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Niet-actieve record kan niet worden bewerkt. Voor het bijwerken van relatiegegevens kunt u een nieuwe maken.</errorMessage>
+        <name>FinServ__InactiveCCRCannotBeEdited</name>
+    </validationRules>
+</CustomObjectTranslation>

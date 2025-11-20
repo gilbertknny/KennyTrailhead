@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Access_Datahub</fullName>
+    <columns>NAME</columns>
+    <columns>Error_Messages__c</columns>
+    <columns>CREATED_DATE</columns>
+    <columns>Type_Name__c</columns>
+    <columns>User_Run__c</columns>
+    <columns>Class_Name__c</columns>
+    <columns>Menu__c</columns>
+    <columns>Anomali__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Response_Status_Code__c</field>
+        <operation>equals</operation>
+        <value>200</value>
+    </filters>
+    <filters>
+        <field>Destination__c</field>
+        <operation>equals</operation>
+        <value>Data Hub</value>
+    </filters>
+    <filters>
+        <field>User_Run__c</field>
+        <operation>equals</operation>
+        <value>kurniati rindu</value>
+    </filters>
+    <filters>
+        <field>CREATED_DATE</field>
+        <operation>equals</operation>
+        <value>TODAY</value>
+    </filters>
+    <label>Access Datahub</label>
+</ListView>

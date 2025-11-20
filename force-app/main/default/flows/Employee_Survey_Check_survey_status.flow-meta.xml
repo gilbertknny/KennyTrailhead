@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>62.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <customErrors>
+        <name>Custom_Error_Message_1</name>
+        <label>Error Message Survey Active</label>
+        <locationX>308</locationX>
+        <locationY>431</locationY>
+        <customErrorMessages>
+            <errorMessage>{!err_select_surveyId}</errorMessage>
+            <fieldSelection>Survey__c</fieldSelection>
+            <isFieldError>true</isFieldError>
+        </customErrorMessages>
+    </customErrors>
+    <decisions>
+        <name>Check_Survey_is_Active_or_Not</name>
+        <label>Check Survey is Active or Not</label>
+        <locationX>176</locationX>
+        <locationY>323</locationY>
+        <defaultConnector>
+            <targetReference>Custom_Error_Message_1</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Active</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Survey__r.ActiveVersionId</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <label>Active</label>
+        </rules>
+    </decisions>
+    <description>update error message</description>
+    <environments>Default</environments>
+    <interviewLabel>[Employee Survey] Check survey status {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>[Employee Survey] Check survey status</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Check_Survey_is_Active_or_Not</targetReference>
+        </connector>
+        <object>Employee_Survey__c</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+    <textTemplates>
+        <name>err_select_surveyId</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>Survey yang anda pilih tidak mempunya versi yang aktif﻿</text>
+    </textTemplates>
+</Flow>

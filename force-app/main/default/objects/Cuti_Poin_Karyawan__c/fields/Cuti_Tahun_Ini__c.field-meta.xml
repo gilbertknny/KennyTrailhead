@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Cuti_Tahun_Ini__c</fullName>
+    <label>Cuti Tahun Ini</label>
+    <summarizedField>Cuti_Karyawan__c.Sisa_Cuti__c</summarizedField>
+    <summaryFilterItems>
+        <field>Cuti_Karyawan__c.Tahun_Cuti__c</field>
+        <operation>equals</operation>
+        <value>Tahun Ini</value>
+    </summaryFilterItems>
+    <summaryForeignKey>Cuti_Karyawan__c.Cuti_Poin_Karyawan__c</summaryForeignKey>
+    <summaryOperation>sum</summaryOperation>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Summary</type>
+</CustomField>

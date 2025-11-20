@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>Papel recíproco</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Papéis recíprocos</value>
+    </caseValues>
+    <gender>Masculine</gender>
+    <nameFieldLabel>Papel</nameFieldLabel>
+    <recordTypes>
+        <description>Funções associadas a relacionamentos conta-conta</description>
+        <label>Papel da conta</label>
+        <name>FinServ__AccountRole</name>
+    </recordTypes>
+    <recordTypes>
+        <description>Funções associadas a relacionamentos contato-contato</description>
+        <label>Papel do contato</label>
+        <name>FinServ__ContactRole</name>
+    </recordTypes>
+    <validationRules>
+        <errorMessage>Não foi possível modificar o Papel recíproco</errorMessage>
+        <name>FinServ__ProhibitUpdates</name>
+    </validationRules>
+</CustomObjectTranslation>

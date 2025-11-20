@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <article>Definite</article>
+        <plural>false</plural>
+        <value>הנכסים וההתחייבויות</value>
+    </caseValues>
+    <caseValues>
+        <article>None</article>
+        <plural>false</plural>
+        <value>נכסים והתחייבויות</value>
+    </caseValues>
+    <caseValues>
+        <article>Definite</article>
+        <plural>true</plural>
+        <value>הנכסים וההתחייבויות</value>
+    </caseValues>
+    <caseValues>
+        <article>None</article>
+        <plural>true</plural>
+        <value>נכסים והתחייבויות</value>
+    </caseValues>
+    <fieldSets>
+        <label><!-- Assets &amp; Liabilities --></label>
+        <name>WM_Client_Assets_Liabilities</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Assets &amp; Liabilities --></label>
+        <name>WM_Household_Assets_Liabilities</name>
+    </fieldSets>
+    <gender>Masculine</gender>
+    <nameFieldLabel>שם נכס או התחייבות</nameFieldLabel>
+    <recordTypes>
+        <description>חוב קיים, כגון משכנתה</description>
+        <label>התחייבות</label>
+        <name>FinServ__Liability</name>
+    </recordTypes>
+    <recordTypes>
+        <description>הנכס אינו מוצג בחשבונות פיננסיים, כגון נדל&quot;ן או פריטי אספנות</description>
+        <label>נכס</label>
+        <name>FinServ__NonfinancialAsset</name>
+    </recordTypes>
+    <validationRules>
+        <errorMessage>לחשבונות בבעלות פרטית לא יכול להיות בעלים משותף.</errorMessage>
+        <name>FinServ__NoJointOwnerForIndividualAccounts</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>הבעלים הראשי והמשותף חייבים להיות שונים.</errorMessage>
+        <name>FinServ__PrimaryAndJointOwnerCannotBeSame</name>
+    </validationRules>
+</CustomObjectTranslation>

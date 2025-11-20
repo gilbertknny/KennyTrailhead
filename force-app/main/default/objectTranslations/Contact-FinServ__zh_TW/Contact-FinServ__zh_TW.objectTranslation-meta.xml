@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fieldSets>
+        <label><!-- Relationship Group Members --></label>
+        <name>WM_Client_Relationship_Group_Members</name>
+    </fieldSets>
+    <recordTypes>
+        <description>機構或公司帳戶的連絡人資料</description>
+        <label>公司</label>
+        <name>FinServ__IndustriesBusiness</name>
+    </recordTypes>
+    <recordTypes>
+        <description>零售客戶的連絡人資料</description>
+        <label>個人</label>
+        <name>FinServ__IndustriesIndividual</name>
+    </recordTypes>
+    <validationRules>
+        <errorMessage>出生日期不能為未來。</errorMessage>
+        <name>FinServ__BirthdateCannotBeInFuture</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>只有一個地址可以設為主要地址。</errorMessage>
+        <name>FinServ__CannotHaveMoreThanOnePrimaryAddress</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>無法將商機或連絡人與家庭帳戶建立關聯。</errorMessage>
+        <name>FinServ__ContactCannotBeAssociatedToHousehold</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>所選帳戶具有一個個別記錄類型，且無法與其他連絡人相關</errorMessage>
+        <name>FinServ__IndividualCannotHaveMoreThanOneContact</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>內部轉介者必須為內部 Salesforce 使用者。</errorMessage>
+        <name>FinServ__NonPortalUserReferrer</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>無法變更個別記錄類型</errorMessage>
+        <name>FinServ__NotAllowingConversionFromIndividual</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>無法將記錄類型變更為個別記錄。</errorMessage>
+        <name>FinServ__NotAllowingConversionToIndividual</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>輸入內部轉介者或外部轉介者。您僅能為每次轉介列出一名轉介者。</errorMessage>
+        <name>FinServ__SingleReferredByEntryByRecord</name>
+    </validationRules>
+    <webLinks>
+        <label>新增親屬</label>
+        <name>FinServ__AddRelation</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- GoogleMaps --></label>
+        <name>GoogleMaps</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- GoogleSearch --></label>
+        <name>GoogleSearch</name>
+    </webLinks>
+</CustomObjectTranslation>

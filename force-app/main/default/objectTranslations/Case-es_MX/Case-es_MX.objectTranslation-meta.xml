@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <recordTypes>
+        <description><!-- This record type is for BRI Cases --></description>
+        <label><!-- BRI Open Case --></label>
+        <name>BRI_Open_Case</name>
+    </recordTypes>
+    <recordTypes>
+        <description><!-- This record type is used to store Migrated Cases --></description>
+        <label><!-- Case Migration --></label>
+        <name>Case_Migration</name>
+    </recordTypes>
+    <recordTypes>
+        <description><!-- This record type is for BRI Closed Cases. --></description>
+        <label><!-- BRI Closed Case --></label>
+        <name>SSC_BRI_Closed_Case</name>
+    </recordTypes>
+    <validationRules>
+        <errorMessage><!-- Apabila Priority High, maka Alasan High (Urgent) harus diisi! --></errorMessage>
+        <name>Alasan_High_Harus_Diisi</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- canceled --></errorMessage>
+        <name>Alasan_High_Tidak_Boleh_Template</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Nomor BRIVA dan Rekening tidak boleh sama --></errorMessage>
+        <name>BRIVA</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Wajib isi Nomor Rekening, Kartu Brizzi, Waktu Transaksi &amp; Nominal --></errorMessage>
+        <name>BRIZZI</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Anda tidak bisa tutup tiket secara massal --></errorMessage>
+        <name>Can_not_bulk_close</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Tidak bisa ganti owner --></errorMessage>
+        <name>Case_CC_Maker_cannot_change_owner</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Anda tidak dapat mengubah origin kasus. --></errorMessage>
+        <name>Case_Origin_Validation</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Mohon isi Case Type --></errorMessage>
+        <name>Case_Type_Cannot_Empty</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Harap Isi Dengan 16 Digit Angka --></errorMessage>
+        <name>Digit_and_Numeric</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Harap Isi Dengan 15 Digit Angka --></errorMessage>
+        <name>Digit_and_Numeric_BRIVA</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Harap Isi Dengan 15-18 Digit --></errorMessage>
+        <name>Digit_and_Numeric_Rekening</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Mohon isi Account &amp; Current Phone Number sebelum Eskalasi --></errorMessage>
+        <name>Escalated_must_have_Account</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Fitur Id wajib diisi --></errorMessage>
+        <name>FiturId_Mandatory</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Anda tidak boleh menutup Case --></errorMessage>
+        <name>Maker_Checker_NFT_Cannot_Close_Case</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Nama Pelapor harus Alpabet --></errorMessage>
+        <name>Nama_Pelapor</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Silahkan mengisi Nama Pelapor jika tidak ada Nama Nasabah --></errorMessage>
+        <name>Nama_Pelapor_When_Status_Changed</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Harap isi dengan 10-14 digit angka ! --></errorMessage>
+        <name>Phone_Current_Validation</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Harap isi dengan 10-14 digit angka ! --></errorMessage>
+        <name>Phone_Validation</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- The SCC Nama Pelapor field cannot be edited once it has a value --></errorMessage>
+        <name>Prevent_Edit_SCC_Nama_Pelapor</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Apabila Closed, maka Alasan High (Urgent) tidak bisa diubah! --></errorMessage>
+        <name>Reason_High_Tidak_Bisa_Diubah</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Anda tidak dapat mengubah data di Account ! --></errorMessage>
+        <name>Related_Account_Validation</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>
+            <!-- 1. Nomor Rekening,
+2. Nomor Kartu,
+3. Waktu Transaksi,
+4. Telepon,
+5. TID, &amp;
+6. Nominal
+Wajib diisi sebelum eskalasi ke Back Office &amp; Nominal harus kelipatan Rp50.000 -->
+        </errorMessage>
+        <name>SCC_Amount_NFT_Validation</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>
+            <!-- 1. Nomor Rekening,
+2. Nomor Kartu,
+3. Waktu Transaksi,
+4. Telepon,
+5. TID, &amp;
+6. Nominal
+Wajib diisi sebelum eskalasi ke Back Office &amp; Nominal harus kelipatan Rp50.000 -->
+        </errorMessage>
+        <name>SCC_Amount_NFT_Validation_Create</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Nominal tidak bisa minus --></errorMessage>
+        <name>SCC_Amount_Negative</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Tidak bisa update case milik orang lain --></errorMessage>
+        <name>SCC_BO_NFT_Validation</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>
+            <!-- Hanya Supervisor yang dapat melakukan Cancel case.
+Please reach out to your supervisor to cancel the case -->
+        </errorMessage>
+        <name>SCC_CCSupervisor_Only_Can_Cancel_Case</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Pada saat status ini Call Type diwajibkan untuk diisi ! --></errorMessage>
+        <name>SCC_Call_Type_Mandatory</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Hanya Case dengan status New yang dapat di cancel. --></errorMessage>
+        <name>SCC_CaseCanBeCancelledForNewStatusOnly</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Anda tidak dapat mengubah field apapun pada Ticket yang sudah Closed --></errorMessage>
+        <name>SCC_CaseCloseValidationFlow</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Please enter Cancellation Reason --></errorMessage>
+        <name>SCC_Case_Cancel_Reason_is_required</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Field ini diwajibkan untuk diisi ! --></errorMessage>
+        <name>SCC_Case_Category_cant_be_blank</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Harap isi diisi closure comments / komentar penutup sebelum menutup case ! --></errorMessage>
+        <name>SCC_Closure_Comment_should_not_be_blank</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Field ini diwajibkan untuk diisi ! --></errorMessage>
+        <name>SCC_Description_Can_not_be_blank</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>
+            <!-- 1. Tenor (bulan),
+2. Bunga,
+3. Cicilan per Bulan,
+4. Exp Date Kartu,
+5. AVL Installment, &amp;
+6. Biaya Administrasi
+Wajib diisi sebelum eskalasi ke Back Office -->
+        </errorMessage>
+        <name>SCC_Escalate_Case_Cicilan</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>
+            <!-- 1. Nomor Rekening,
+2. Nomor Kartu,
+3. Waktu Transaksi, &amp;
+4. Telepon
+Wajib diisi sebelum eskalasi ke Back Office -->
+        </errorMessage>
+        <name>SCC_Escalate_Case_Resolution</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Tidak bisa membuat nota analisa, harap hapus nota analisa yang ada jika sudah terbentuk --></errorMessage>
+        <name>SCC_Nota_Analisa</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- “Keterangan wajib diisi”. Field Other Reason / Alasan Lain harus diisi ketika pilahan &quot;Lainnya&quot; dipilih ! --></errorMessage>
+        <name>SCC_Other_Reason_required_for_Lainnya</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Field ini diwajibkan untuk diisi ! --></errorMessage>
+        <name>SCC_Product_L1_cant_be_blank</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Field ini diwajibkan untuk diisi ! --></errorMessage>
+        <name>SCC_Product_L2_cant_be_blank</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Silakan pilih salah satu Kategori Resolusi / Resolution Category sebelum menutup kasus ! --></errorMessage>
+        <name>SCC_ResolutionCategoryRequiredToCloseCas</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Field ini diwajibkan untuk diisi ! --></errorMessage>
+        <name>SCC_Segment_cant_be_blank</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Kasus sudah terkunci / Case Locked ! --></errorMessage>
+        <name>SCC_Validation_Case_Resolution</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Waktu transaksi tidak boleh melebihi hari ini --></errorMessage>
+        <name>SCC_Waktu_Transaksi</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Hanya status Diproses yang bisa mengubah eskalasi --></errorMessage>
+        <name>Sub_Escalation_Level</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Silakan mengisi informasi Sub Case terlebih dahulu --></errorMessage>
+        <name>Sub_case_filed_is_empty</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Tanggal Pengaduan Regulator tidak boleh lebih dari hari ini (TODAY) atau Closed Date --></errorMessage>
+        <name>Tanggal_Pengaduan_Regulator</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Saat memilih case type MMS, anda harus memilih Channel pengaduan mms --></errorMessage>
+        <name>check_mms_ticket</name>
+    </validationRules>
+    <webLinks>
+        <label><!-- Create_Case --></label>
+        <name>Create_Case</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- Demo_Form_Upload_KTP --></label>
+        <name>Demo_Form_Upload_KTP</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- Login_Sprout_List --></label>
+        <name>Login_Sprout_List</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- Penilaian_QA --></label>
+        <name>Penilaian_QA</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- Print --></label>
+        <name>Print</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- Show_Nota --></label>
+        <name>Show_Nota</name>
+    </webLinks>
+</CustomObjectTranslation>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fieldSets>
+        <label><!-- LBL.Label_Field_Set_Referrals_Made --></label>
+        <name>FSC_Business_Referrals_Made</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- LBL.Label_Field_Set_Referral_Form --></label>
+        <name>FSC_Referral_Form</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- LBL.Label_Field_Set_Referrals_Expressed_Interest --></label>
+        <name>FSC_Referrals_Expressed_Interest</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- LBL.Label_Field_Set_Referrals_Made --></label>
+        <name>FSC_Referrals_Made</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- LBL.Label_Field_Set_Referrals_Made --></label>
+        <name>FSC_Referrals_Made_Community</name>
+    </fieldSets>
+    <recordTypes>
+        <description>상업 은행 비즈니스 의뢰에 해당하는 비즈니스 또는 조직.</description>
+        <label>비즈니스 의뢰</label>
+        <name>FinServ__BusinessReferral</name>
+    </recordTypes>
+    <recordTypes>
+        <label>일반</label>
+        <name>FinServ__General</name>
+    </recordTypes>
+    <recordTypes>
+        <description>의뢰에 해당하는 개인, 비즈니스 또는 조직</description>
+        <label>개인 의뢰</label>
+        <name>FinServ__Referral</name>
+    </recordTypes>
+    <recordTypes>
+        <label>은퇴 계획</label>
+        <name>FinServ__RetirementPlanning</name>
+    </recordTypes>
+    <validationRules>
+        <errorMessage>내부 의뢰자는 내부 Salesforce 사용자여야 합니다.</errorMessage>
+        <name>FinServ__NonPortalUserReferrer</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>내부 의뢰자 또는 외부 의뢰자를 입력하십시오. 각 의뢰에 한 명의 의뢰자만 나열할 수 있습니다.</errorMessage>
+        <name>FinServ__SingleReferredByEntryByRecord</name>
+    </validationRules>
+    <webLinks>
+        <label><!-- GoogleMaps --></label>
+        <name>GoogleMaps</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- GoogleNews --></label>
+        <name>GoogleNews</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- GoogleSearch --></label>
+        <name>GoogleSearch</name>
+    </webLinks>
+</CustomObjectTranslation>

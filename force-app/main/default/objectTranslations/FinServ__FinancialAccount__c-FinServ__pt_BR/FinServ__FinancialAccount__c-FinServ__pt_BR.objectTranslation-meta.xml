@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>Conta financeira</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Contas financeiras</value>
+    </caseValues>
+    <fieldSets>
+        <label><!-- Auto Loan Account --></label>
+        <name>FSC_Client_AutoLoan</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Checking Account --></label>
+        <name>FSC_Client_CheckingAccount</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Credit Card Account --></label>
+        <name>FSC_Client_CreditCard</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- HELOC Account --></label>
+        <name>FSC_Client_HELOC</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Loan Account --></label>
+        <name>FSC_Client_LoanAccount</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Mortgage Account --></label>
+        <name>FSC_Client_MortgageAccount</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Savings Account --></label>
+        <name>FSC_Client_SavingsAccount</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Auto Loan Account --></label>
+        <name>FSC_Group_AutoLoan</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Checking Account --></label>
+        <name>FSC_Group_CheckingAccount</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Credit Card Account --></label>
+        <name>FSC_Group_CreditCard</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- HELOC Account --></label>
+        <name>FSC_Group_HELOC</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Loan Account --></label>
+        <name>FSC_Group_LoanAccount</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Mortgage Account --></label>
+        <name>FSC_Group_MortgageAccount</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Savings Account --></label>
+        <name>FSC_Group_SavingsAccount</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Banking Account --></label>
+        <name>WM_Client_BankingAccount</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Insurance Policy --></label>
+        <name>WM_Client_InsuranceAccount</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Investment Account --></label>
+        <name>WM_Client_InvestmentAccount</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Banking Account --></label>
+        <name>WM_Household_BankingAccount</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Insurance Policy --></label>
+        <name>WM_Household_InsuranceAccount</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Investment Account --></label>
+        <name>WM_Household_InvestmentAccount</name>
+    </fieldSets>
+    <gender>Feminine</gender>
+    <nameFieldLabel>Nome da conta financeira</nameFieldLabel>
+    <recordTypes>
+        <description>Representa um tipo de empréstimo para financiar a compra de um veículo motorizado.</description>
+        <label>Financiamento de veículos</label>
+        <name>FinServ__AutoLoan</name>
+    </recordTypes>
+    <recordTypes>
+        <description>Contas bancárias, como poupança, verificação e crédito</description>
+        <label>Conta bancária</label>
+        <name>FinServ__BankingAccount</name>
+    </recordTypes>
+    <recordTypes>
+        <description>Representa uma conta de depósito para saques e depósitos</description>
+        <label>Conta de verificação</label>
+        <name>FinServ__CheckingAccount</name>
+    </recordTypes>
+    <recordTypes>
+        <description>Representa um tipo de cartão de pagamento emitido com uma linha de crédito</description>
+        <label>Cartão de crédito</label>
+        <name>FinServ__CreditCard</name>
+    </recordTypes>
+    <recordTypes>
+        <description>Contas financeiras gerais</description>
+        <label>Conta geral</label>
+        <name>FinServ__General</name>
+    </recordTypes>
+    <recordTypes>
+        <description>Representa uma linha de crédito garantida pelo patrimônio em imóveis.</description>
+        <label>HELOC</label>
+        <name>FinServ__HELOC</name>
+    </recordTypes>
+    <recordTypes>
+        <description>Apólices de seguro</description>
+        <label>Apólice de seguro</label>
+        <name>FinServ__InsurancePolicy</name>
+    </recordTypes>
+    <recordTypes>
+        <description>Contas de investimento, como contas de corretagem</description>
+        <label>Conta de investimento</label>
+        <name>FinServ__InvestmentAccount</name>
+    </recordTypes>
+    <recordTypes>
+        <description>Representa um tipo de conta para financiar uma compra.</description>
+        <label>Conta de empréstimo</label>
+        <name>FinServ__LoanAccount</name>
+    </recordTypes>
+    <recordTypes>
+        <description>Representa um tipo de empréstimo para financiar a compra de um imóvel.</description>
+        <label>Hipoteca</label>
+        <name>FinServ__Mortgage</name>
+    </recordTypes>
+    <recordTypes>
+        <description>Representa uma conta de depósito remunerada a juros</description>
+        <label>Poupança</label>
+        <name>FinServ__SavingsAccount</name>
+    </recordTypes>
+    <recordTypes>
+        <description>Contas que fornecem serviços de transação ou investimento para diretores financeiros ou tesoureiros.</description>
+        <label>Serviço de tesouraria</label>
+        <name>FinServ__TreasuryService</name>
+    </recordTypes>
+    <validationRules>
+        <errorMessage>Selecione Gerenciado ou Não gerenciado para esta Conta financeira.</errorMessage>
+        <name>FinServ__ManagedAndHeldAwayCannotBeBothSelected</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Contas individuais não podem ter um coproprietário.</errorMessage>
+        <name>FinServ__NoJointOwnerForIndividualAccounts</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>O titular principal e cotitular devem ser diferentes.</errorMessage>
+        <name>FinServ__PrimaryAndJointOwnerCannotBeSame</name>
+    </validationRules>
+</CustomObjectTranslation>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>All</fullName>
+    <columns>External_Id__c</columns>
+    <columns>NAME</columns>
+    <columns>SCC_Level1_Escalation_team__c</columns>
+    <columns>SSC_Level_1_Escalation_Team__c</columns>
+    <columns>Active__c</columns>
+    <columns>SSC_Case_Description__c</columns>
+    <columns>SCC_Customer_Segment__c</columns>
+    <columns>SSC_Product_L1__c</columns>
+    <columns>SSC_Product_L2__c</columns>
+    <columns>SSC_Case_Category__c</columns>
+    <columns>Send_to_Drone__c</columns>
+    <columns>SCC_List_of_Required_Documents__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>External_Id__c</field>
+        <operation>notEqual</operation>
+    </filters>
+    <label>All</label>
+</ListView>

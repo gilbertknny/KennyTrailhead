@@ -1,0 +1,101 @@
+<!--
+  @description       : 
+  @author            : Ardyta Yudianto
+  @group             : 
+  @last modified on  : 07-05-2025
+  @last modified by  : Ardyta Yudianto
+-->
+<template>    
+    <div class="slds-grid slds-gutters">    
+        <!-- <div class="slds-col">    
+            <lightning-combobox name="currency" label="Currency" value={currency} placeholder="Pilih Currency"    
+                options={currencyOptions} onchange={handleCurrencyChange}>    
+            </lightning-combobox>    
+        </div>     -->
+        <div class="slds-col">
+            <label class="slds-form-element__label">Currency</label>
+            <div class="slds-form-element__control">
+                <span>{currency}</span>
+            </div>
+        </div>             
+        <div class="slds-col">    
+            <lightning-input    
+                label="Id Setoran"    
+                value={idSetoran}    
+                onchange={handleIdSetoranChange}    
+                required>    
+            </lightning-input>    
+        </div>    
+        <div class="slds-col" style="align-content: end;">    
+            <lightning-button    
+                variant="brand"    
+                label="Cari"    
+                onclick={handleSearch}    
+                disabled={isSearchDisabled}>    
+            </lightning-button>    
+        </div>    
+    </div>
+
+    <template if:true={error}>    
+        <div class="slds-text-color_error slds-m-top_medium">{error}</div>    
+    </template>    
+
+    <template if:true={dataExist}>    
+        <div class="slds-m-around_medium rounded-border" style="border: 1px solid #ccc; border-radius: 5px; padding: 1rem;">    
+            <lightning-button-icon    
+                icon-name="utility:close"    
+                alternative-text="Close"    
+                title="Close"    
+                onclick={handleClose}    
+                class="slds-float_right"    
+                variant="bare">    
+            </lightning-button-icon>    
+
+            <div class="slds-grid slds-wrap slds-m-top_medium">    
+                <div class="slds-col slds-size_1-of-2">    
+                    <div class="slds-text-title large-text slds-m-bottom_small"><b>Id Setoran:</b></div>    
+                    <div class="large-text slds-m-bottom_small">{responseData.idSetoran}</div>    
+                    <div class="slds-text-title large-text slds-m-bottom_small"><b>Transaction Currency Code:</b></div>    
+                    <div class="large-text slds-m-bottom_small">{responseData.transactionCurrencyCode}</div>    
+                    <div class="slds-text-title large-text slds-m-bottom_small"><b>Transaction Amount:</b></div>    
+                    <div class="large-text slds-m-bottom_small">{responseData.transactionAmount}</div>    
+                    <div class="slds-text-title large-text slds-m-bottom_small"><b>System Trace Audit Number:</b></div>    
+                    <div class="large-text slds-m-bottom_small">{responseData.systemTraceAuditNumber}</div>    
+                    <div class="slds-text-title large-text slds-m-bottom_small"><b>Merchant Types:</b></div>    
+                    <div class="large-text slds-m-bottom_small">{responseData.merchantTypes}</div>    
+                    <div class="slds-text-title large-text slds-m-bottom_small"><b>Retrieval Reference Number:</b></div>    
+                    <div class="large-text slds-m-bottom_small">{responseData.retrievalReferenceNumber}</div>    
+                    <div class="slds-text-title large-text slds-m-bottom_small"><b>Nama WP:</b></div>    
+                    <div class="large-text slds-m-bottom_small">{responseData.namaWP}</div>    
+                    <div class="slds-text-title large-text slds-m-bottom_small"><b>Alamat WP:</b></div>    
+                    <div class="large-text slds-m-bottom_small">{responseData.alamatWP}</div>    
+                    <div class="slds-text-title large-text slds-m-bottom_small"><b>NPWP:</b></div>    
+                    <div class="large-text slds-m-bottom_small">{responseData.npwp}</div>    
+                </div>    
+                <div class="slds-col slds-size_1-of-2">    
+                    <div class="slds-text-title large-text slds-m-bottom_small"><b>Jumlah Detail:</b></div>    
+                    <div class="large-text slds-m-bottom_small">{responseData.jumlahDetail}</div>    
+                    <div class="slds-text-title large-text slds-m-bottom_small"><b>Jenis Dokumen:</b></div>    
+                    <div class="large-text slds-m-bottom_small">{responseData.jenisDokumen}</div>    
+                    <div class="slds-text-title large-text slds-m-bottom_small"><b>Nomor Dokumen:</b></div>    
+                    <div class="large-text slds-m-bottom_small">{responseData.nomorDokumen}</div>    
+                    <div class="slds-text-title large-text slds-m-bottom_small"><b>Tanggal Dokumen:</b></div>    
+                    <div class="large-text slds-m-bottom_small">{responseData.tanggalDokumen}</div>    
+                    <div class="slds-text-title large-text slds-m-bottom_small"><b>Kode KPBC:</b></div>    
+                    <div class="large-text slds-m-bottom_small">{responseData.kodeKpbc}</div>    
+                    <div class="slds-text-title large-text slds-m-bottom_small"><b>Id Peserta:</b></div>    
+                    <div class="large-text slds-m-bottom_small">{responseData.idPeserta}</div>    
+                    <div class="slds-text-title large-text slds-m-bottom_small"><b>Kode NTB:</b></div>    
+                    <div class="large-text slds-m-bottom_small">{responseData.kodeNTB}</div>    
+                    <div class="slds-text-title large-text slds-m-bottom_small"><b>Kode KL:</b></div>    
+                    <div class="large-text slds-m-bottom_small">{responseData.kodeKL}</div>    
+                    <div class="slds-text-title large-text slds-m-bottom_small"><b>Kode NTPN:</b></div>    
+                    <div class="large-text slds-m-bottom_small">{responseData.kodeNTPN}</div>
+                </div>    
+            </div>    
+            <div class="slds-m-top_medium slds-text-align_center">    
+                <hr class="dashed-divider" />    
+            </div>    
+        </div>    
+    </template>  
+</template>

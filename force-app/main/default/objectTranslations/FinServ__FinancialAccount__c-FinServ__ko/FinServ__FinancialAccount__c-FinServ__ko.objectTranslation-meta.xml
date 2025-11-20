@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>금융 계정</value>
+    </caseValues>
+    <fieldSets>
+        <label><!-- Auto Loan Account --></label>
+        <name>FSC_Client_AutoLoan</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Checking Account --></label>
+        <name>FSC_Client_CheckingAccount</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Credit Card Account --></label>
+        <name>FSC_Client_CreditCard</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- HELOC Account --></label>
+        <name>FSC_Client_HELOC</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Loan Account --></label>
+        <name>FSC_Client_LoanAccount</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Mortgage Account --></label>
+        <name>FSC_Client_MortgageAccount</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Savings Account --></label>
+        <name>FSC_Client_SavingsAccount</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Auto Loan Account --></label>
+        <name>FSC_Group_AutoLoan</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Checking Account --></label>
+        <name>FSC_Group_CheckingAccount</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Credit Card Account --></label>
+        <name>FSC_Group_CreditCard</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- HELOC Account --></label>
+        <name>FSC_Group_HELOC</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Loan Account --></label>
+        <name>FSC_Group_LoanAccount</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Mortgage Account --></label>
+        <name>FSC_Group_MortgageAccount</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Savings Account --></label>
+        <name>FSC_Group_SavingsAccount</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Banking Account --></label>
+        <name>WM_Client_BankingAccount</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Insurance Policy --></label>
+        <name>WM_Client_InsuranceAccount</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Investment Account --></label>
+        <name>WM_Client_InvestmentAccount</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Banking Account --></label>
+        <name>WM_Household_BankingAccount</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Insurance Policy --></label>
+        <name>WM_Household_InsuranceAccount</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Investment Account --></label>
+        <name>WM_Household_InvestmentAccount</name>
+    </fieldSets>
+    <nameFieldLabel>금융 계정 이름</nameFieldLabel>
+    <recordTypes>
+        <description>자동차 구매 자금 조달을 위한 대출 유형을 나타냅니다.</description>
+        <label>자동차 대출</label>
+        <name>FinServ__AutoLoan</name>
+    </recordTypes>
+    <recordTypes>
+        <description>저축, 당좌, 입금 계좌와 같은 은행 계좌를 나타냅니다.</description>
+        <label>은행 계좌</label>
+        <name>FinServ__BankingAccount</name>
+    </recordTypes>
+    <recordTypes>
+        <description>인출 및 입금을 위한 예금 계좌를 나타냅니다.</description>
+        <label>당좌 예금 계좌</label>
+        <name>FinServ__CheckingAccount</name>
+    </recordTypes>
+    <recordTypes>
+        <description>신용 한도가 있는 결제 카드의 유형을 나타냅니다.</description>
+        <label>신용카드</label>
+        <name>FinServ__CreditCard</name>
+    </recordTypes>
+    <recordTypes>
+        <description>일반 금융 계좌</description>
+        <label>일반 계좌</label>
+        <name>FinServ__General</name>
+    </recordTypes>
+    <recordTypes>
+        <description>부동산 자산을 담보로 제공되는 신용 한도를 나타냅니다.</description>
+        <label>HELOC</label>
+        <name>FinServ__HELOC</name>
+    </recordTypes>
+    <recordTypes>
+        <description>보험 정책</description>
+        <label>보험 정책</label>
+        <name>FinServ__InsurancePolicy</name>
+    </recordTypes>
+    <recordTypes>
+        <description>중개 계정과 같은 투자 계정</description>
+        <label>투자 계정</label>
+        <name>FinServ__InvestmentAccount</name>
+    </recordTypes>
+    <recordTypes>
+        <description>구매 자금 조달을 위한 계정 유형을 나타냅니다.</description>
+        <label>대출 계정</label>
+        <name>FinServ__LoanAccount</name>
+    </recordTypes>
+    <recordTypes>
+        <description>부동산 구매 자금 조달을 위한 대출 유형을 나타냅니다.</description>
+        <label>주택 담보 대출</label>
+        <name>FinServ__Mortgage</name>
+    </recordTypes>
+    <recordTypes>
+        <description>이자가 붙는 예금 계좌를 나타냅니다.</description>
+        <label>저축 예금 계좌</label>
+        <name>FinServ__SavingsAccount</name>
+    </recordTypes>
+    <recordTypes>
+        <description>최고 재무 책임자 또는 회계 담당자에게 거래 또는 투자 서비스를 제공하는 계정</description>
+        <label>재무 서비스</label>
+        <name>FinServ__TreasuryService</name>
+    </recordTypes>
+    <validationRules>
+        <errorMessage>이 금융 계정에 대해 관리 또는 손실 자산 중에서 선택하십시오.</errorMessage>
+        <name>FinServ__ManagedAndHeldAwayCannotBeBothSelected</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>개별적으로 소유한 계정은 공동 소유자를 포함할 수 없습니다.</errorMessage>
+        <name>FinServ__NoJointOwnerForIndividualAccounts</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>기본 소유자와 공동 소유자는 달라야 합니다.</errorMessage>
+        <name>FinServ__PrimaryAndJointOwnerCannotBeSame</name>
+    </validationRules>
+</CustomObjectTranslation>

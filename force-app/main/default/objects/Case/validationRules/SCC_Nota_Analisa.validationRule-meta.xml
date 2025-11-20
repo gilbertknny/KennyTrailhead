@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>SCC_Nota_Analisa</fullName>
+    <active>false</active>
+    <errorConditionFormula>Count_Nota__c &gt; 0 &amp;&amp; SCC_Count_Queuetrans__c &gt; 0</errorConditionFormula>
+    <errorMessage>Tidak bisa membuat nota analisa, harap hapus nota analisa yang ada jika sudah terbentuk</errorMessage>
+</ValidationRule>

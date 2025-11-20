@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>SCC_Target_Response_Time_Non_Voice__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF(
+OR(
+ISPICKVAL(Origin, &quot;Twitter&quot;),
+ISPICKVAL(Origin, &quot;X&quot;),
+ISPICKVAL(Origin, &quot;Instagram&quot;),
+ISPICKVAL(Origin, &quot;Facebook&quot;),
+ISPICKVAL(Origin, &quot;TikTok&quot;)), 15, 
+
+IF(ISPICKVAL(Origin, &quot;Email&quot;), 60, 
+
+IF(
+OR(
+ISPICKVAL(Origin, &quot;Apple App Store&quot;),
+ISPICKVAL(Origin, &quot;Appstore&quot;),
+ISPICKVAL(Origin, &quot;Playstore&quot;),
+ISPICKVAL(Origin, &quot;Google Play Store&quot;),
+ISPICKVAL(Origin, &quot;YouTube&quot;)), 1440, 0) ) )</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>SL Sosmed-Target Response Time Non Voice</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

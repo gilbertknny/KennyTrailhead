@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fieldSets>
+        <label><!-- Financial Accounts Summary --></label>
+        <name>FSC_Banker_Profile_Fin_Acct_Summary</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Financial Accounts Summary --></label>
+        <name>WM_Client_Profile_Fin_Acct_Summary</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Household Summary --></label>
+        <name>WM_Client_Profile_Relations_HH_Summary</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Relationship Group Members --></label>
+        <name>WM_Client_Relationship_Group_Members</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Relationship Groups --></label>
+        <name>WM_Client_Relationship_Groups</name>
+    </fieldSets>
+    <recordTypes>
+        <description>公司或组织</description>
+        <label>公司</label>
+        <name>FinServ__IndustriesBusiness</name>
+    </recordTypes>
+    <recordTypes>
+        <description>相关的人和机构的组合</description>
+        <label>家庭</label>
+        <name>FinServ__IndustriesHousehold</name>
+    </recordTypes>
+    <recordTypes>
+        <description>作为潜在客户或客户的人员</description>
+        <label>个人</label>
+        <name>FinServ__IndustriesIndividual</name>
+    </recordTypes>
+    <recordTypes>
+        <description>作为潜在客户或客户的机构</description>
+        <label>机构</label>
+        <name>FinServ__IndustriesInstitution</name>
+    </recordTypes>
+    <validationRules>
+        <errorMessage><!-- Anda tidak boleh merubah nomor telepon --></errorMessage>
+        <name>Admin_Validation_Phone</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>内部推荐人必须是内部 Salesforce 用户。</errorMessage>
+        <name>FinServ__NonPortalUserReferrer</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>无法更改个人记录类型</errorMessage>
+        <name>FinServ__NotAllowingConversionFromIndividual</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>记录类型不能更改为个人。</errorMessage>
+        <name>FinServ__NotAllowingConversionToIndividual</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>输入内部推荐人或外部推荐人。每个推荐只能列出一个推荐人。</errorMessage>
+        <name>FinServ__SingleReferredByEntryByRecord</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Nomor telepon harus angka dan 10-14 Digit --></errorMessage>
+        <name>Phone_Validation</name>
+    </validationRules>
+    <webLinks>
+        <label>添加成员</label>
+        <name>FinServ__AddMember</name>
+    </webLinks>
+    <webLinks>
+        <label>添加关系</label>
+        <name>FinServ__AddRelation</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- GoogleMaps --></label>
+        <name>GoogleMaps</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- GoogleNews --></label>
+        <name>GoogleNews</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- GoogleSearch --></label>
+        <name>GoogleSearch</name>
+    </webLinks>
+</CustomObjectTranslation>

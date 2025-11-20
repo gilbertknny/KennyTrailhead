@@ -1,0 +1,26 @@
+<template>
+    <div class="overlay slds-fade-in-open" if:true={isModalOpen}>
+        <div class="modal">
+            <div class="modal-content">
+                <lightning-card >
+                    <div class="slds-p-around_small">
+                        <p class="slds-text-heading_large pulse-title">{titleSurvey}</p>
+                        <p class="slds-text-heading_small pulse-subtitle">{subtitleSurvey}</p>
+                        <div class="slds-m-top_medium">
+                            <p class="pulse-content">{contentSurvey}</p>
+                            <!-- tambah visibility -->
+                            <div class={defaultText}> 
+                                <a class="slds-button slds-button_brand slds-m-top_medium " href={linkSurvey} onclick={handleSurveyClick}>Lakukan Pengisian Survey</a>
+                                <!-- <button class="slds-button slds-button_destructive slds-m-top_medium"  onclick={handleCloseButton}>Tutup Survei (Kebutuhan dev)</button> -->
+                            </div> 
+
+                            <div class={defaultInformation}>
+                                <p>Harap selesaikan pengisian survey. Jika sudah selesai tolong refresh</p>
+                            </div>
+                        </div>
+                    </div>
+            </lightning-card>
+            </div>
+        </div>
+    </div>
+</template>

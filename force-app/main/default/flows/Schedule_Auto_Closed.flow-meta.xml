@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Call_Check_Auto_Closed</name>
+        <label>Call Check Auto Closed</label>
+        <locationX>176</locationX>
+        <locationY>252</locationY>
+        <actionName>SCC_CaseResolution_Invoc</actionName>
+        <actionType>apex</actionType>
+        <connector>
+            <targetReference>Copy_1_of_Call_Check_Auto_Closed</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>source</name>
+            <value>
+                <stringValue>Rekon</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>tipe</name>
+            <value>
+                <stringValue>Auto Closed Rekon</stringValue>
+            </value>
+        </inputParameters>
+        <nameSegment>SCC_CaseResolution_Invoc</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <actionCalls>
+        <name>Copy_1_of_Call_Check_Auto_Closed</name>
+        <label>Copy 1 of Call Check Auto Closed</label>
+        <locationX>176</locationX>
+        <locationY>360</locationY>
+        <actionName>SCC_CaseResolution_Invoc</actionName>
+        <actionType>apex</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>source</name>
+            <value>
+                <stringValue>Rekon</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>tipe</name>
+            <value>
+                <stringValue>MPN</stringValue>
+            </value>
+        </inputParameters>
+        <nameSegment>SCC_CaseResolution_Invoc</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <apiVersion>61.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <description>Add MPN (Yudi)</description>
+    <environments>Default</environments>
+    <interviewLabel>Schedule Auto Closed {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Schedule Auto Closed</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Call_Check_Auto_Closed</targetReference>
+        </connector>
+        <schedule>
+            <frequency>Daily</frequency>
+            <startDate>2024-06-01</startDate>
+            <startTime>10:00:00.000Z</startTime>
+        </schedule>
+        <triggerType>Scheduled</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

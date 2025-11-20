@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>자산 및 부채</value>
+    </caseValues>
+    <fieldSets>
+        <label><!-- Assets &amp; Liabilities --></label>
+        <name>WM_Client_Assets_Liabilities</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Assets &amp; Liabilities --></label>
+        <name>WM_Household_Assets_Liabilities</name>
+    </fieldSets>
+    <nameFieldLabel>자산 또는 부채 이름</nameFieldLabel>
+    <recordTypes>
+        <description>주택 담보 대출처럼 갚아야 하는 빚</description>
+        <label>부채</label>
+        <name>FinServ__Liability</name>
+    </recordTypes>
+    <recordTypes>
+        <description>부동산 또는 수집품처럼 금융 계정에 드러나지 않는 자산</description>
+        <label>자산</label>
+        <name>FinServ__NonfinancialAsset</name>
+    </recordTypes>
+    <validationRules>
+        <errorMessage>개별적으로 소유한 계정은 공동 소유자를 포함할 수 없습니다.</errorMessage>
+        <name>FinServ__NoJointOwnerForIndividualAccounts</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>기본 소유자와 공동 소유자는 달라야 합니다.</errorMessage>
+        <name>FinServ__PrimaryAndJointOwnerCannotBeSame</name>
+    </validationRules>
+</CustomObjectTranslation>

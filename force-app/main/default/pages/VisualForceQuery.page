@@ -1,0 +1,52 @@
+<apex:page controller="VisualForceQueryParamsController" action="{!redirect}"> 
+    <apex:pageBlock title="Inbound Call Information"> 
+    <style type="text/css"> 
+        .zui-table { 
+            border: solid 1px #DDEEEE; 
+            border-collapse: collapse; 
+            border-spacing: 0; 
+            font: normal 13px Arial, sans-serif; 
+        } 
+        .zui-table thead th { 
+            background-color: #DDEFEF; 
+            border: solid 1px #DDEEEE; 
+            color: #336B6B; 
+            padding: 10px; 
+            text-align: left; 
+            text-shadow: 1px 1px 1px #fff; 
+        } 
+        .zui-table tbody td { 
+            border: solid 1px #DDEEEE; 
+            color: #333; 
+            padding: 10px; 
+            text-shadow: 1px 1px 1px #fff; 
+        } 
+    </style> 
+        <table class="zui-table"> 
+            <tr style="background-color: #DDEFEF;"> 
+                <td>Parameter Name</td> 
+                <td>Parameter Value</td> 
+            </tr> 
+            <tr> 
+                <td>ANI</td> 
+                <td>{!ani }</td> 
+            </tr> 
+            <tr> 
+                <td>DNIS</td> 
+                <td>{!dnis}</td> 
+            </tr> 
+            <tr>  
+                <td>UUI</td> 
+                <td>{!uui }</td> 
+            </tr> 
+            <tr> 
+                <td>UCID</td> 
+                <td>{!ucid }</td> 
+            </tr> 
+            <tr> 
+                <td>Queue</td> 
+                <td>{!queue }</td> 
+            </tr> 
+        </table> 
+    </apex:pageBlock> 
+</apex:page>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>senyum</fullName>
+    <columns>CASES.CASE_NUMBER</columns>
+    <columns>SCC_Call_Type__c</columns>
+    <columns>CASES.SUBJECT</columns>
+    <columns>CASES.REASON</columns>
+    <columns>CASES.STATUS</columns>
+    <columns>CASES.PRIORITY</columns>
+    <columns>CORE.USERS.ALIAS</columns>
+    <columns>CASES.SOURCE</columns>
+    <columns>CASES.CREATED_DATE_DATE_ONLY</columns>
+    <columns>SCC_Account_Number__c</columns>
+    <columns>SCC_Card_Number__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>CASES.ORIGIN</field>
+        <operation>equals</operation>
+        <value>Ceria,Senyum</value>
+    </filters>
+    <label>SENYUM</label>
+</ListView>

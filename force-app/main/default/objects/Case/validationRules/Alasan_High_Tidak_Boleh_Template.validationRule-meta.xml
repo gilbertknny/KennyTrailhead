@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Alasan_High_Tidak_Boleh_Template</fullName>
+    <active>false</active>
+    <description>canceled</description>
+    <errorConditionFormula>AND(
+TEXT(Priority) == &apos;High (Urgent/Critical)&apos;,
+TEXT(Reason)==&apos;Silahkan mengisi salah satu alasan disini&apos;
+)</errorConditionFormula>
+    <errorMessage>canceled</errorMessage>
+</ValidationRule>

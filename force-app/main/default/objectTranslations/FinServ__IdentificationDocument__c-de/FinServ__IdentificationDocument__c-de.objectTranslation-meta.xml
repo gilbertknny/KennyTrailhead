@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <caseType>Nominative</caseType>
+        <plural>false</plural>
+        <value>Identitätsnachweis</value>
+    </caseValues>
+    <caseValues>
+        <caseType>Nominative</caseType>
+        <plural>true</plural>
+        <value>Identitätsnachweise</value>
+    </caseValues>
+    <caseValues>
+        <caseType>Accusative</caseType>
+        <plural>false</plural>
+        <value>Identitätsnachweis</value>
+    </caseValues>
+    <caseValues>
+        <caseType>Accusative</caseType>
+        <plural>true</plural>
+        <value>Identitätsnachweise</value>
+    </caseValues>
+    <caseValues>
+        <caseType>Genitive</caseType>
+        <plural>false</plural>
+        <value>Identitätsnachweises</value>
+    </caseValues>
+    <caseValues>
+        <caseType>Genitive</caseType>
+        <plural>true</plural>
+        <value>Identitätsnachweise</value>
+    </caseValues>
+    <caseValues>
+        <caseType>Dative</caseType>
+        <plural>false</plural>
+        <value>Identitätsnachweis</value>
+    </caseValues>
+    <caseValues>
+        <caseType>Dative</caseType>
+        <plural>true</plural>
+        <value>Identitätsnachweisen</value>
+    </caseValues>
+    <gender>Masculine</gender>
+    <nameFieldLabel>Dokument</nameFieldLabel>
+    <validationRules>
+        <errorMessage><!-- The expiration date can&apos;t be earlier than the issue date. --></errorMessage>
+        <name>FinServ__ExpDateCannotBeLaterThanStart</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- The issue date can&apos;t be in the future. --></errorMessage>
+        <name>FinServ__IssueDateCannotBeInFuture</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Verification date and time can&apos;t be in the future. --></errorMessage>
+        <name>FinServ__VerificationDateTimeCannotBeInFuture</name>
+    </validationRules>
+</CustomObjectTranslation>

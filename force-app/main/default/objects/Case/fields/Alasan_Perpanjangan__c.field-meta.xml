@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Alasan_Perpanjangan__c</fullName>
+    <label>Alasan Perpanjangan</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Transaksi keuangan yang diadukan oleh Konsumen memerlukan penelitian khusus terhadap dokumen-dokumen PUJK</fullName>
+                <default>false</default>
+                <label>Transaksi keuangan yang diadukan oleh Konsumen memerlukan penelitian khusus terhadap dokumen-dokumen PUJK</label>
+            </value>
+            <value>
+                <fullName>Kantor PUJK yang menerima pengaduan tidak sama dengan kantor PUJK tempat terjadinya permasalahan yang diadukan dan terdapat kendala komunikasi di antara kedua kantor PUJK tersebut.</fullName>
+                <default>false</default>
+                <label>Kantor PUJK yang menerima pengaduan tidak sama dengan kantor PUJK tempat terjadinya permasalahan yang diadukan dan terdapat kendala komunikasi di antara kedua kantor PUJK tersebut.</label>
+            </value>
+            <value>
+                <fullName>Terdapat hal-hal lain di luar kendali PUJK seperti adanya keterlibatan pihak ketiga di luar PUJK dalam transaksi keuangan yang dilakukan oleh Konsumen.</fullName>
+                <default>false</default>
+                <label>Terdapat hal-hal lain di luar kendali PUJK seperti adanya keterlibatan pihak ketiga di luar PUJK dalam transaksi keuangan yang dilakukan oleh Konsumen.</label>
+            </value>
+            <value>
+                <fullName>Lainnya</fullName>
+                <default>false</default>
+                <label>Lainnya</label>
+            </value>
+            <value>
+                <fullName>Belum mendapatkan tanggapan dari produk Owner</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Belum mendapatkan tanggapan dari produk Owner</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

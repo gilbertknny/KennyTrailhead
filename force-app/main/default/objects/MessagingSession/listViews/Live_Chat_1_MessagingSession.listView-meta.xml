@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Live_Chat_1_MessagingSession</fullName>
+    <columns>Name</columns>
+    <columns>MessagingChannel</columns>
+    <columns>MessagingEndUser</columns>
+    <columns>Owner</columns>
+    <columns>PlatformType</columns>
+    <columns>Status</columns>
+    <columns>StartTime</columns>
+    <columns>EndTime</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>MessagingChannel</field>
+        <operation>equals</operation>
+        <value>Qlola (Beta)</value>
+    </filters>
+    <filters>
+        <field>Company_Code__c</field>
+        <operation>notEqual</operation>
+        <value>Investment</value>
+    </filters>
+    <label>Qlola</label>
+    <sharedTo>
+        <allInternalUsers></allInternalUsers>
+    </sharedTo>
+</ListView>

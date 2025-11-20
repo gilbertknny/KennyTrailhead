@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fieldSets>
+        <label><!-- Relationship Group Members --></label>
+        <name>WM_Client_Relationship_Group_Members</name>
+    </fieldSets>
+    <recordTypes>
+        <description>機関または法人取引先の取引先責任者データ</description>
+        <label>ビジネス</label>
+        <name>FinServ__IndustriesBusiness</name>
+    </recordTypes>
+    <recordTypes>
+        <description>リテールクライアントの取引先責任者データ</description>
+        <label>個人</label>
+        <name>FinServ__IndustriesIndividual</name>
+    </recordTypes>
+    <validationRules>
+        <errorMessage>誕生日は将来の日付にはできません。</errorMessage>
+        <name>FinServ__BirthdateCannotBeInFuture</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>第 1 住所として指定できる住所は 1 つのみです。</errorMessage>
+        <name>FinServ__CannotHaveMoreThanOnePrimaryAddress</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>リードまたは取引先責任者を世帯団体に関連付けることができません。</errorMessage>
+        <name>FinServ__ContactCannotBeAssociatedToHousehold</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>選択された取引先には個人レコードタイプがあり、追加の取引先責任者を関連付けることはできません。</errorMessage>
+        <name>FinServ__IndividualCannotHaveMoreThanOneContact</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>内部紹介者は内部の Salesforce ユーザーである必要があります。</errorMessage>
+        <name>FinServ__NonPortalUserReferrer</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>個人レコードタイプは変更できません。</errorMessage>
+        <name>FinServ__NotAllowingConversionFromIndividual</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>このレコードタイプを個人に変更することはできません。</errorMessage>
+        <name>FinServ__NotAllowingConversionToIndividual</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>内部紹介者または外部紹介者を入力します。紹介ごとに 1 人の紹介者のみを含めることができます。</errorMessage>
+        <name>FinServ__SingleReferredByEntryByRecord</name>
+    </validationRules>
+    <webLinks>
+        <label>リレーションの追加</label>
+        <name>FinServ__AddRelation</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- GoogleMaps --></label>
+        <name>GoogleMaps</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- GoogleSearch --></label>
+        <name>GoogleSearch</name>
+    </webLinks>
+</CustomObjectTranslation>

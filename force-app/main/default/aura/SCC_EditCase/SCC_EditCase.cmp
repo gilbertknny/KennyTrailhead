@@ -1,0 +1,29 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" 
+access="global" controller="SCC_EditCase">
+    <aura:attribute name="recordId" type="String"/>
+    <aura:attribute name="case" type="Case" default="{ 'sobjectType': 'Case' }"/>
+    <aura:attribute name="recordLoadError" type="String"/>
+    <aura:attribute name="recordcase" type="Object"/>
+    <aura:attribute name="parentObj" type="Object" default=""/>
+    <force:recordData aura:id="recordLoader" recordId="{!v.recordId}"  fields="Id,Case_Number__c,parentid,parent.case_number__c" targetFields="{!v.recordcase}" targetError="{!v.recordLoadError}" />
+    <aura:handler name="init" value="{! this }" action="{! c.init }"/>
+    <aura:attribute name="loaded" type="Boolean" default="true" />
+    <aura:if isTrue="{!v.loaded}">
+        <aura:set attribute="else">
+            <div aura:id="spinnerId" class="slds-spinner_container">
+                <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                    <span class="slds-assistive-text">Loading...</span>
+                    <div class="slds-spinner__dot-a"></div>
+                    <div class="slds-spinner__dot-b"></div>
+                </div>
+            </div>
+        </aura:set>
+    </aura:if>   
+    <lightning:layout>
+        <lightning:layoutItem size="12"   padding="around-small">
+            <lightning:messages />
+            <c:CustomLookup objectName="Case" fieldName="Case_Number__c" label="Parent Case" iconName="standard:case" selectedRecord="{!v.parentObj}"  placeholder="Search..."  />
+            <lightning:button type="submit" name="Submit" label="submit" class="slds-m-top_medium" onclick="{!c.handleSubmit}" />
+        </lightning:layoutItem>
+    </lightning:layout>
+</aura:component>

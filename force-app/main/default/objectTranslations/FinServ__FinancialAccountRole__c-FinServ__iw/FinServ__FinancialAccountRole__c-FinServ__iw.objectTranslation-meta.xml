@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <article>Definite</article>
+        <plural>false</plural>
+        <value>התפקיד בחשבון הפיננסי</value>
+    </caseValues>
+    <caseValues>
+        <article>None</article>
+        <plural>false</plural>
+        <value>תפקיד בחשבון פיננסי</value>
+    </caseValues>
+    <caseValues>
+        <article>Definite</article>
+        <plural>true</plural>
+        <value>התפקידים בחשבונות הפיננסיים</value>
+    </caseValues>
+    <caseValues>
+        <article>None</article>
+        <plural>true</plural>
+        <value>תפקידים בחשבונות פיננסיים</value>
+    </caseValues>
+    <fieldSets>
+        <label><!-- Financial Account Role --></label>
+        <name>WM_Client_FinancialAccountRole</name>
+    </fieldSets>
+    <gender>Masculine</gender>
+    <nameFieldLabel>מספר תפקיד</nameFieldLabel>
+    <recordTypes>
+        <description>התפקיד מתבצע על-ידי ישות ארגונית, כגון תאגיד או חברה בע&quot;מ</description>
+        <label>תפקיד בחשבון</label>
+        <name>FinServ__AccountRole</name>
+    </recordTypes>
+    <recordTypes>
+        <description>התפקיד מתבצע על-ידי אדם</description>
+        <label>תפקיד איש קשר</label>
+        <name>FinServ__ContactRole</name>
+    </recordTypes>
+    <validationRules>
+        <errorMessage>לא ניתן ליצור פקיד בחשבון פיננסי כ&apos;לא פעיל&apos;</errorMessage>
+        <name>FinServ__CannotCreateInactiveRecord</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>לא ניתן לערוך רשומה זו. כדי לעדכן את פרטי התפקיד, תוכל להשבית רשומה זו וליצור רשומה חדשה.</errorMessage>
+        <name>FinServ__FARCannotBeModified</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>לא ניתן לערוך רשומה לא פעילה. כדי לעדכן את התפקיד בחשבון הפיננסי, תוכל ליצור רשומה חדשה.</errorMessage>
+        <name>FinServ__InactiveFARCannotBeEdited</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>לא ניתן להפעיל מחדש תפקידים פיננסיים שאינם פעילים.</errorMessage>
+        <name>FinServ__InactiveRecordCannotBeReactivated</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>לא ניתן להפעיל רשומה זו מחדש משום שניתן לעדכן את הבעלות בחשבון הפיננסי בלבד.</errorMessage>
+        <name>FinServ__OwnershipRolesCannotBeDeactivated</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>לא ניתן לשנות רשומה זו מחדש משום שניתן לציין את הבעלות בחשבון הפיננסי בלבד.</errorMessage>
+        <name>FinServ__OwnershipRolesCannotBeModified</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>נדרש חשבון קשור או איש קשר קשור.</errorMessage>
+        <name>FinServ__RelatedAccountOrContactRequired</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>נדרש תפקיד.</errorMessage>
+        <name>FinServ__RoleIsMandatory</name>
+    </validationRules>
+</CustomObjectTranslation>

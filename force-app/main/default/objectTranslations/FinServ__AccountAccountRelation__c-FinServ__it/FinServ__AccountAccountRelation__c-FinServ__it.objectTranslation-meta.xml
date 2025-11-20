@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>Relazione account-account</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Relazioni account-account</value>
+    </caseValues>
+    <fieldSets>
+        <label><!-- Related Accounts --></label>
+        <name>WM_Household_RelatedAccounts</name>
+    </fieldSets>
+    <gender>Feminine</gender>
+    <nameFieldLabel>Nome relazione account</nameFieldLabel>
+    <startsWith>Consonant</startsWith>
+    <validationRules>
+        <errorMessage>Questo record non può essere modificato. Per aggiornare le informazioni sulla relazione, disattivare questo record e crearne uno nuovo.</errorMessage>
+        <name>FinServ__AARCanOnlyBeDeactivated</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>L&apos;account e l&apos;account correlato devono essere entità diverse.</errorMessage>
+        <name>FinServ__AccountAndRelatedAccountCannotBeSame</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>L&apos;account non può essere parte di una persona.</errorMessage>
+        <name>FinServ__AccountCannotBeAnIndividual</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Non è possibile creare una relazione account-account come inattiva.</errorMessage>
+        <name>FinServ__CannotCreateInactiveRecord</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Il record inattivo non può essere modificato. Per aggiornare le informazioni sulla relazione, crearne uno nuovo.</errorMessage>
+        <name>FinServ__InactiveAARCannotBeEdited</name>
+    </validationRules>
+</CustomObjectTranslation>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Isi_Field</fullName>
+    <active>true</active>
+    <errorConditionFormula>( ISPICKVAL(SCC_Jenis__c, &quot;Field Bypass&quot;) &amp;&amp; ISBLANK(SCC_Field__c) )</errorConditionFormula>
+    <errorMessage>Isikan Field yang sesuai dengan Jenis yang dipilih!</errorMessage>
+</ValidationRule>

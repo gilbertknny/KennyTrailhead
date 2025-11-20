@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fieldSets>
+        <label><!-- Financial Accounts Summary --></label>
+        <name>FSC_Banker_Profile_Fin_Acct_Summary</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Financial Accounts Summary --></label>
+        <name>WM_Client_Profile_Fin_Acct_Summary</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Household Summary --></label>
+        <name>WM_Client_Profile_Relations_HH_Summary</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Relationship Group Members --></label>
+        <name>WM_Client_Relationship_Group_Members</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Relationship Groups --></label>
+        <name>WM_Client_Relationship_Groups</name>
+    </fieldSets>
+    <recordTypes>
+        <description>En verksamhet eller en organisation</description>
+        <label>Verksamhet</label>
+        <name>FinServ__IndustriesBusiness</name>
+    </recordTypes>
+    <recordTypes>
+        <description>En grupp av relaterade personer och institutioner</description>
+        <label>Hushåll</label>
+        <name>FinServ__IndustriesHousehold</name>
+    </recordTypes>
+    <recordTypes>
+        <description>En person som är ett prospekt eller en klient</description>
+        <label>Individuell</label>
+        <name>FinServ__IndustriesIndividual</name>
+    </recordTypes>
+    <recordTypes>
+        <description>En institution som är ett prospekt eller en klient</description>
+        <label>Institution</label>
+        <name>FinServ__IndustriesInstitution</name>
+    </recordTypes>
+    <validationRules>
+        <errorMessage><!-- Anda tidak boleh merubah nomor telepon --></errorMessage>
+        <name>Admin_Validation_Phone</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Interna referenser måste vara interna Salesforce-användare.</errorMessage>
+        <name>FinServ__NonPortalUserReferrer</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Posttypen Individ går inte att ändra</errorMessage>
+        <name>FinServ__NotAllowingConversionFromIndividual</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Posttypen kan inte ändras till Individ.</errorMessage>
+        <name>FinServ__NotAllowingConversionToIndividual</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Ange en intern eller extern referens. Det går endast att ange en referens för varje hänvisning.</errorMessage>
+        <name>FinServ__SingleReferredByEntryByRecord</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Nomor telepon harus angka dan 10-14 Digit --></errorMessage>
+        <name>Phone_Validation</name>
+    </validationRules>
+    <webLinks>
+        <label>Lägg till medlem</label>
+        <name>FinServ__AddMember</name>
+    </webLinks>
+    <webLinks>
+        <label>Lägg till relation</label>
+        <name>FinServ__AddRelation</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- GoogleMaps --></label>
+        <name>GoogleMaps</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- GoogleNews --></label>
+        <name>GoogleNews</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- GoogleSearch --></label>
+        <name>GoogleSearch</name>
+    </webLinks>
+</CustomObjectTranslation>

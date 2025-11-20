@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>SCC_Description_Can_not_be_blank</fullName>
+    <active>false</active>
+    <description>Once we select the call type after that description field cant be blank</description>
+    <errorConditionFormula>AND (NOT($Permission.By_Pass_Validation_for_Migration),ISBLANK(  Description ),NOT(ISBLANK( SCC_Call_Type__c )), NOT(ISBLANK(PRIORVALUE( SCC_Call_Type__c ))) )</errorConditionFormula>
+    <errorDisplayField>Description</errorDisplayField>
+    <errorMessage>Field ini diwajibkan untuk diisi !</errorMessage>
+</ValidationRule>

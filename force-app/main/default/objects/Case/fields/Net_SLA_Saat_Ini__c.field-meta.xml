@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Net_SLA_Saat_Ini__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF(IsClosed, Datevalue(ClosedDate) - Datevalue(CreatedDate),  TODAY()  - Datevalue(CreatedDate)) 
+- Waiting_Document_Duration__c - Holiday__c</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Net SLA Saat Ini</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>Case Type</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Case Types</value>
+    </caseValues>
+    <nameFieldLabel>Case Type Number</nameFieldLabel>
+    <startsWith>Consonant</startsWith>
+    <validationRules>
+        <errorMessage><!-- Case Type Number tidak dapat diubah --></errorMessage>
+        <name>CaseTypeNumberCheck</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Customer Segment/Product Grouping/Product/Case Category/Deskripsi Case wajib diisi --></errorMessage>
+        <name>MandatoryCheck</name>
+    </validationRules>
+</CustomObjectTranslation>

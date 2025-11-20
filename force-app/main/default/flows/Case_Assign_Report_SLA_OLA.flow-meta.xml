@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>63.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <name>Assign_Level_1_MilestoneType_Id</name>
+        <label>Assign Level 1 MilestoneType Id</label>
+        <locationX>732</locationX>
+        <locationY>755</locationY>
+        <assignmentItems>
+            <assignToReference>Level1Id</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Loop_Milestone_Type.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_Milestone_Type</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Total_SLA_milestoneType_id</name>
+        <label>Assign Total SLA milestoneType id</label>
+        <locationX>468</locationX>
+        <locationY>755</locationY>
+        <assignmentItems>
+            <assignToReference>TotalSLAId</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Loop_Milestone_Type.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_Milestone_Type</targetReference>
+        </connector>
+    </assignments>
+    <decisions>
+        <name>Check_if_Target_OLA_level_1_exists</name>
+        <label>Check if Target OLA level 1 exists</label>
+        <locationX>182</locationX>
+        <locationY>1355</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>target_level_1_exists</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Report_SLA_OLA.Tanggal_Target_1__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Report_SLA_OLA</targetReference>
+            </connector>
+            <label>target level 1 exists</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_if_Total_SLA_in_report_Exists</name>
+        <label>Check if Total SLA in report Exists</label>
+        <locationX>380</locationX>
+        <locationY>1247</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>if_exists</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Report_SLA_OLA.Tanggal_Total_Target_SLA__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Check_if_Target_OLA_level_1_exists</targetReference>
+            </connector>
+            <label>if exists</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_milestone_type_name</name>
+        <label>Check milestone type name</label>
+        <locationX>732</locationX>
+        <locationY>647</locationY>
+        <defaultConnector>
+            <targetReference>Loop_Milestone_Type</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Total_SLA</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_Milestone_Type.Name</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Total SLA</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_Total_SLA_milestoneType_id</targetReference>
+            </connector>
+            <label>Total SLA</label>
+        </rules>
+        <rules>
+            <name>Level_1</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_Milestone_Type.Name</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Level 1 OLA</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_Level_1_MilestoneType_Id</targetReference>
+            </connector>
+            <label>Level 1</label>
+        </rules>
+    </decisions>
+    <description>[21/01/2025] - adjust waktu gmt+7</description>
+    <environments>Default</environments>
+    <formulas>
+        <name>Tanggal_Target_Level_1_formula</name>
+        <dataType>String</dataType>
+        <expression>MID(TEXT(DATETIMEVALUE({!Get_Case_Milestone_Level_1.TargetDate}) + (7/24)), 9, 2) &amp; &quot;-&quot; &amp; 
+MID(TEXT(DATETIMEVALUE({!Get_Case_Milestone_Level_1.TargetDate}) + (7/24)), 6, 2) &amp; &quot;-&quot; &amp; 
+LEFT(TEXT(DATETIMEVALUE({!Get_Case_Milestone_Level_1.TargetDate}) + (7/24)), 4) &amp; &quot; &quot; &amp;
+MID(TEXT(DATETIMEVALUE({!Get_Case_Milestone_Level_1.TargetDate}) + (7/24)), 12, 8)</expression>
+    </formulas>
+    <formulas>
+        <name>Tanggal_Target_Total_SLA_formula</name>
+        <dataType>String</dataType>
+        <expression>MID(TEXT({!Get_Case_Milestone_Total_SLA.TargetDate}+ (7/24)), 9, 2) &amp; &quot;-&quot; &amp; 
+MID(TEXT({!Get_Case_Milestone_Total_SLA.TargetDate} + (7/24)), 6, 2) &amp; &quot;-&quot; &amp; 
+LEFT(TEXT({!Get_Case_Milestone_Total_SLA.TargetDate} + (7/24)), 4) &amp; &quot; &quot; &amp;
+MID(TEXT({!Get_Case_Milestone_Total_SLA.TargetDate}+ (7/24)), 12, 8)</expression>
+    </formulas>
+    <interviewLabel>[Case] - Assign Report SLA OLA {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>[Case] - Assign Report SLA OLA</label>
+    <loops>
+        <name>Loop_Milestone_Type</name>
+        <label>Loop Milestone Type</label>
+        <locationX>380</locationX>
+        <locationY>539</locationY>
+        <collectionReference>Get_MilestoneType</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Check_milestone_type_name</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>Get_Case_Milestone_Total_SLA</targetReference>
+        </noMoreValuesConnector>
+    </loops>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <name>Get_Case_Milestone_Level_1</name>
+        <label>Get Case Milestone Level 1</label>
+        <locationX>380</locationX>
+        <locationY>1139</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Check_if_Total_SLA_in_report_Exists</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>CaseId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>MilestoneTypeId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Level1Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>CaseMilestone</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Case_Milestone_Total_SLA</name>
+        <label>Get Case Milestone Total SLA</label>
+        <locationX>380</locationX>
+        <locationY>1031</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Get_Case_Milestone_Level_1</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>CaseId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>MilestoneTypeId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>TotalSLAId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>CaseMilestone</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_MilestoneType</name>
+        <label>Get MilestoneType</label>
+        <locationX>380</locationX>
+        <locationY>323</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Get_Report_SLA_OLA</targetReference>
+        </connector>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>MilestoneType</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Report_SLA_OLA</name>
+        <label>Get Report SLA OLA</label>
+        <locationX>380</locationX>
+        <locationY>431</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Loop_Milestone_Type</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Case_Number__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>SLA_OLA__c</object>
+        <sortField>CreatedDate</sortField>
+        <sortOrder>Desc</sortOrder>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordUpdates>
+        <name>Update_Report_SLA_OLA</name>
+        <label>Update Report SLA OLA</label>
+        <locationX>50</locationX>
+        <locationY>1463</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Case_Number__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Tanggal_Target_1__c</field>
+            <value>
+                <elementReference>Tanggal_Target_Level_1_formula</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Tanggal_Total_Target_SLA__c</field>
+            <value>
+                <elementReference>Tanggal_Target_Total_SLA_formula</elementReference>
+            </value>
+        </inputAssignments>
+        <object>SLA_OLA__c</object>
+    </recordUpdates>
+    <start>
+        <locationX>254</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Get_MilestoneType</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Start_SLA__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Start_SLA__c</field>
+            <operator>IsChanged</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <object>Case</object>
+        <recordTriggerType>Update</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+    <variables>
+        <name>Level1Id</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>TotalSLAId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

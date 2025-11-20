@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fieldSets>
+        <label><!-- Relationship Group Members --></label>
+        <name>WM_Client_Relationship_Group_Members</name>
+    </fieldSets>
+    <recordTypes>
+        <description>Données de contact d&apos;une institution ou d&apos;un compte d&apos;entreprise</description>
+        <label>Entreprise</label>
+        <name>FinServ__IndustriesBusiness</name>
+    </recordTypes>
+    <recordTypes>
+        <description>Données de contact d&apos;un client de détail</description>
+        <label>Individu</label>
+        <name>FinServ__IndustriesIndividual</name>
+    </recordTypes>
+    <validationRules>
+        <errorMessage>La date de naissance ne peut pas être future.</errorMessage>
+        <name>FinServ__BirthdateCannotBeInFuture</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Une seule adresse peut être désignée en tant qu&apos;adresse principale.</errorMessage>
+        <name>FinServ__CannotHaveMoreThanOnePrimaryAddress</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Impossible d&apos;associer une piste ou un contact à un compte de foyer.</errorMessage>
+        <name>FinServ__ContactCannotBeAssociatedToHousehold</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Le compte sélectionné a un type d&apos;enregistrement Individu et ne peut pas avoir de contacts associés</errorMessage>
+        <name>FinServ__IndividualCannotHaveMoreThanOneContact</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Les référents internes doivent être des utilisateurs Salesforce internes.</errorMessage>
+        <name>FinServ__NonPortalUserReferrer</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Le type d&apos;enregistrement Individu ne peut pas être modifié</errorMessage>
+        <name>FinServ__NotAllowingConversionFromIndividual</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Le type d&apos;enregistrement ne peut pas être modifié en Individu.</errorMessage>
+        <name>FinServ__NotAllowingConversionToIndividual</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Saisissez un référent interne ou un référent externe. Vous pouvez répertorier un seul référent pour chaque référence.</errorMessage>
+        <name>FinServ__SingleReferredByEntryByRecord</name>
+    </validationRules>
+    <webLinks>
+        <label>Ajouter une relation</label>
+        <name>FinServ__AddRelation</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- GoogleMaps --></label>
+        <name>GoogleMaps</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- GoogleSearch --></label>
+        <name>GoogleSearch</name>
+    </webLinks>
+</CustomObjectTranslation>

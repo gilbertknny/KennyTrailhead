@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Nomer_Telepon__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF(
+    LEFT(MessagingPlatformKey, 2) = &quot;62&quot;, 
+    &quot;0&quot; &amp; MID(MessagingPlatformKey, 3, LEN(MessagingPlatformKey) - 2), 
+    MessagingPlatformKey
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Nomer Telepon</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

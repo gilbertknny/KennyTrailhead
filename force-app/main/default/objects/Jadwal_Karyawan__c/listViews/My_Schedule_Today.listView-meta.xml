@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>My_Schedule_Today</fullName>
+    <columns>NAME</columns>
+    <columns>Nama_Karyawan__c</columns>
+    <columns>ID_Karyawan__c</columns>
+    <columns>Tanggal__c</columns>
+    <columns>Opsi_Jadwal__c</columns>
+    <columns>Jam_Masuk__c</columns>
+    <columns>Jam_Pulang__c</columns>
+    <columns>Lokasi__c</columns>
+    <filterScope>Mine</filterScope>
+    <filters>
+        <field>Tanggal__c</field>
+        <operation>equals</operation>
+        <value>TODAY</value>
+    </filters>
+    <label>My Schedule - Today</label>
+</ListView>

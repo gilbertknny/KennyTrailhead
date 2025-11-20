@@ -1,0 +1,100 @@
+<aura:component implements="flexipage:availableForAllPageTypes,force:hasRecordId,force:lightningQuickAction,lightning:actionOverride,lightning:hasPageReference" access="global" controller="SCC_Brizzi_AdjustDeposit_UI">
+    <!-- Load the custom style -->
+    <lightning:navigation aura:id="navService"/> 
+    <ltng:require styles="{!$Resource.adjustDepositStyle}"/>
+    <aura:attribute name="recordId" type="String"/>
+    <aura:handler name="init" value="{! this }" action="{! c.doInit }"/>   
+    <!-- Case data -->
+    <aura:attribute name="caseRecord" type="Case" />
+    <!-- Attributes -->
+    <aura:attribute name="cardNumber" type="String"/>
+    <aura:attribute name="DataBrizzi" type="List"/>
+    <aura:attribute name="saldo" type="Decimal"/>
+    <aura:attribute name="saldoDeposit" type="Decimal"/>
+    <aura:attribute name="adjustDeposit" type="Decimal"/>
+    <aura:attribute name="reduceBalance" type="String" default="true"/>
+    <aura:attribute name="options" type="List" default="[
+    {'label': 'Ya', 'value': 'true'},
+    {'label': 'Tidak', 'value': 'false'}
+    ]"/>
+    <aura:attribute name="reduce" type="String" default="true"/>
+    <aura:attribute name="loaded" type="Boolean" default="true" />
+    <lightning:messages />
+    <!--loading spinner start-->
+    <aura:if isTrue="{!v.loaded}">
+        <aura:set attribute="else">
+            <div aura:id="spinnerId" class="slds-spinner_container">
+                <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                    <span class="slds-assistive-text">Loading...</span>
+                    <div class="slds-spinner__dot-a"></div>
+                    <div class="slds-spinner__dot-b"></div>
+                </div>
+            </div>
+        </aura:set>
+    </aura:if>
+    <!-- Modal Wrapper -->
+    <div class="slds-modal slds-fade-in-open custom-adjust-deposit-modal">
+        <div class="slds-modal__container custom-modal-container">
+            <!-- Modal Header -->
+            <div class="slds-modal__header">
+                <h2 class="slds-text-heading_medium">Adjust Deposit</h2>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="slds-modal__content custom-modal-content">
+                <div class="form-container">
+                    <!-- Card Number -->
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">No. Kartu BRIZZI :</label>
+                        <div class="slds-form-element__control">
+                            <ui:inputText value="{!v.caseRecord.SCC_Brizzi_Card_Number__c}" disabled="true"/>
+                        </div>
+                        <div class="slds-form-element__control">
+                            <lightning:button type="submit" name="cari_kartuBrizzi" label="Cek Saldo" class="slds-m-top_medium" onclick="{!c.searchKartuBrizzi}"/>
+                        </div>
+                    </div>
+                    <!-- Card Balance -->
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">SALDO KARTU :</label>
+                        <div class="slds-form-element__control">
+                            <ui:inputCurrency value="{!v.saldo}" disabled="true"/>
+                        </div>
+                    </div>
+
+                    <!-- Deposit Balance -->
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">SALDO DEPOSIT :</label>
+                        <div class="slds-form-element__control">
+                            <ui:inputCurrency value="{!v.saldoDeposit}" disabled="true"/>
+                        </div>
+                    </div>
+
+                    <!-- Adjustment Amount -->
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">NOMINAL ADJUST :</label>
+                        <div class="slds-form-element__control">
+                            <ui:inputCurrency value="{!v.adjustDeposit}"/>
+                        </div>
+                    </div>
+
+                    <!-- Radio Buttons -->
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">KURANGI SALDO :</label>
+                        <div class="slds-form-element__control">
+                            <lightning:radioGroup name="radioGroup"
+                          options="{! v.options }"
+                          value="{! v.reduceBalance }"
+                          type="radio"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="slds-modal__footer">
+                <button class="slds-button slds-button_neutral" onclick="{!c.cancelAction}">Cancel</button>
+                <button class="slds-button slds-button_brand" onclick="{!c.insertDataAdjust}">Adjust</button>
+            </div>
+        </div>
+    </div>
+</aura:component>

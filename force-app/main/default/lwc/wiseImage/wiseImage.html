@@ -1,0 +1,27 @@
+<template>
+    <div class="slds-m-around_medium">
+        <!-- <template for:each={imageData} for:item="image" for:index="imageIndex">
+            <div key={index} class="container">
+                <div class="image-card">
+                    <p class="image-info"><span class="label">Name:</span> {image.name}</p>
+                    <p class="image-info"><span class="label">URL:</span> <a href={image.url} class="url-link" target="_blank">{image.url}</a></p>
+                </div>
+            </div>
+
+        </template> -->
+
+        <template for:each={imageData} for:item="image" for:index="imageIndex">
+            <div key={index} class="image-card">
+                <div class="image-content">
+                    <div class="image-preview">
+                        <img src={image.url} alt="sample-image-1">
+                    </div>
+                    <div class="image-details">
+                        <p class="image-info"><span class="label">Name:</span>{image.name}</p>
+                        <p class="image-info"><span class="label">URL:</span> <a href={image.url} class="url-link" target="_blank">{image.url}</a></p>
+                    </div>
+                </div>
+            </div>
+        </template>
+    </div>    
+</template>

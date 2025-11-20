@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>Ruolo account finanziario</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Ruoli account finanziario</value>
+    </caseValues>
+    <fieldSets>
+        <label><!-- Financial Account Role --></label>
+        <name>WM_Client_FinancialAccountRole</name>
+    </fieldSets>
+    <gender>Masculine</gender>
+    <nameFieldLabel>Numero ruolo</nameFieldLabel>
+    <recordTypes>
+        <description>Ruolo rivestito da una struttura organizzativa, come una società di capitali o una società a responsabilità limitata</description>
+        <label>Ruolo account</label>
+        <name>FinServ__AccountRole</name>
+    </recordTypes>
+    <recordTypes>
+        <description>Ruolo rivestito da una persona</description>
+        <label>Ruolo referente</label>
+        <name>FinServ__ContactRole</name>
+    </recordTypes>
+    <startsWith>Consonant</startsWith>
+    <validationRules>
+        <errorMessage>Non è possibile creare un ruolo account finanziario come inattivo.</errorMessage>
+        <name>FinServ__CannotCreateInactiveRecord</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Questo record non può essere modificato. Per aggiornare le informazioni sul ruolo, disattivare questo record e crearne uno nuovo.</errorMessage>
+        <name>FinServ__FARCannotBeModified</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Il record inattivo non può essere modificato. Per aggiornare il ruolo account finanziario, crearne uno nuovo.</errorMessage>
+        <name>FinServ__InactiveFARCannotBeEdited</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>I ruoli finanziari inattivi non possono essere riattivati.</errorMessage>
+        <name>FinServ__InactiveRecordCannotBeReactivated</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Questo record non può essere disattivato perché la proprietà può essere aggiornata soltanto sull&apos;account finanziario.</errorMessage>
+        <name>FinServ__OwnershipRolesCannotBeDeactivated</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Questo record non può essere modificato perché la proprietà può essere specificata soltanto sull&apos;account finanziario.</errorMessage>
+        <name>FinServ__OwnershipRolesCannotBeModified</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>È necessario specificare un account correlato o un referente correlato.</errorMessage>
+        <name>FinServ__RelatedAccountOrContactRequired</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>È necessario specificare un ruolo.</errorMessage>
+        <name>FinServ__RoleIsMandatory</name>
+    </validationRules>
+</CustomObjectTranslation>

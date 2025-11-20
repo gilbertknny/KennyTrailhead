@@ -1,0 +1,131 @@
+.slds-form-element__control .text-bold {
+    font-weight: bold;
+}
+
+/* CSS FOR MODAL */
+
+.slds-modal__container p {
+    font-size: 14px;
+}
+.slds-modal__container {
+    width: 30rem;
+}
+
+.slds-align_absolute-center {
+    display: flex;
+    justify-content: center;
+}
+
+.slds-modal__content {
+    text-align: center;
+}
+
+.slds-form-element__control .text-bold {
+    font-weight: bold;
+}
+
+/* CSS FOR MODAL */
+
+.slds-modal__container p {
+    font-size: 14px;
+}
+.slds-modal__container {
+    width: 30rem;
+}
+
+.slds-align_absolute-center {
+    display: flex;
+    justify-content: center;
+}
+
+.slds-modal__content {
+    text-align: center;
+}
+
+/** For History */
+.custom-scroll {
+    max-height: 250px;
+    overflow-y: auto; 
+}
+
+.custom-table thead th {
+    background-color: #0176D3; 
+    color:#ffffff;
+}
+
+/* .custom-table thead th {
+    position: sticky;
+    top: 0;
+    background-color: #f4f6f9; 
+    background-color: #0176D3; 
+    color:#ffffff;
+    z-index: 1;
+    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
+} */
+
+.custom-table th, .custom-table td {
+    text-align: center;
+    vertical-align: middle;
+    
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    padding: 8px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+/* .custom-table td {
+    text-align: center;
+    vertical-align: middle;
+} */
+
+.custom-table td{
+    position: relative;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;  
+}
+
+.custom-table th .slds-truncate, .custom-table td .slds-truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap; 
+    word-break: break-word;
+    overflow-wrap: break-word;
+}
+
+.custom-table td:hover{
+    background-color: #fff; 
+    overflow: visible;
+    white-space: normal;
+
+    word-break: break-word;
+    overflow-wrap: break-word;
+}
+
+.custom-table th:hover .slds-truncate {
+    /* background-color: #fff;  */
+    overflow: visible;
+    white-space: normal;
+
+    word-break: break-word;
+    overflow-wrap: break-word;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.custom-card {
+    display: block;
+}
+
+.custom-button-menu .slds-dropdown {
+    min-width: 150px; /* Adjust width of the dropdown menu */
+    text-align: center; /* Center text inside the menu */
+}

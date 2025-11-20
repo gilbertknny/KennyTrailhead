@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>Función recíproca</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Funciones recíprocas</value>
+    </caseValues>
+    <gender>Feminine</gender>
+    <nameFieldLabel>Función</nameFieldLabel>
+    <recordTypes>
+        <description>Funciones asociadas con relaciones cuenta-cuenta</description>
+        <label>Función de la cuenta</label>
+        <name>FinServ__AccountRole</name>
+    </recordTypes>
+    <recordTypes>
+        <description>Funciones asociadas con relaciones contacto-contacto</description>
+        <label>Función del contacto</label>
+        <name>FinServ__ContactRole</name>
+    </recordTypes>
+    <validationRules>
+        <errorMessage>No se puede modificar la función recíproca</errorMessage>
+        <name>FinServ__ProhibitUpdates</name>
+    </validationRules>
+</CustomObjectTranslation>

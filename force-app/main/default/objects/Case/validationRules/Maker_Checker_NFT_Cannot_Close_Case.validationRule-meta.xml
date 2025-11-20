@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Maker_Checker_NFT_Cannot_Close_Case</fullName>
+    <active>true</active>
+    <description>($Permission.BO_Checker_NFT = TRUE || $Permission.BO_Maker_NFT = TRUE ||  $Permission.BO_Maker_NFT_ISSUER = TRUE) &amp;&amp; TEXT(Status) = &apos;Closed&apos; &amp;&amp; NOT($Permission.By_Pass_Validation_for_Migration)</description>
+    <errorConditionFormula>(($Permission.BO_Checker_NFT = TRUE &amp;&amp; $Permission.BO_Signer = FALSE)
+ || $Permission.BO_Maker_NFT_ISSUER = TRUE ||
+($Permission.BO_Maker_NFT = TRUE &amp;&amp; $Permission.BO_Signer = FALSE))
+ &amp;&amp; TEXT(Status) = &apos;Closed&apos; &amp;&amp; NOT($Permission.By_Pass_Validation_for_Migration)</errorConditionFormula>
+    <errorMessage>Anda tidak boleh menutup Case</errorMessage>
+</ValidationRule>

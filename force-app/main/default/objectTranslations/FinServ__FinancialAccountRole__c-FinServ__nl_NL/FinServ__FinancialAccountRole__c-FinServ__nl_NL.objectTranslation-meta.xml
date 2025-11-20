@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>Rol voor financiële rekening</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Rollen voor financiële rekeningen</value>
+    </caseValues>
+    <fieldSets>
+        <label><!-- Financial Account Role --></label>
+        <name>WM_Client_FinancialAccountRole</name>
+    </fieldSets>
+    <gender>Feminine</gender>
+    <nameFieldLabel>Rolnummer</nameFieldLabel>
+    <recordTypes>
+        <description>Rol die wordt ingenomen door een organisatorische entiteit, zoals een vennootschap of LLC</description>
+        <label>Accountrol</label>
+        <name>FinServ__AccountRole</name>
+    </recordTypes>
+    <recordTypes>
+        <description>Rol die wordt ingenomen door een persoon</description>
+        <label>Contactpersoonsrol</label>
+        <name>FinServ__ContactRole</name>
+    </recordTypes>
+    <validationRules>
+        <errorMessage>Een rol voor een financiële rekening kan niet als Niet-actief worden gemaakt</errorMessage>
+        <name>FinServ__CannotCreateInactiveRecord</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Deze record kan niet worden bewerkt. Voor het bijwerken van rolgegevens kunt u deze record deactiveren en een nieuwe maken.</errorMessage>
+        <name>FinServ__FARCannotBeModified</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Niet-actieve record kan niet worden bewerkt. Voor het bijwerken van een rol voor een financiële rekening kunt u een nieuwe maken.</errorMessage>
+        <name>FinServ__InactiveFARCannotBeEdited</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Niet-actieve financiële rollen kunnen niet opnieuw worden geactiveerd.</errorMessage>
+        <name>FinServ__InactiveRecordCannotBeReactivated</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Deze record kan niet worden gedeactiveerd, omdat eigendom alleen kan worden bijgewerkt voor de financiële rekening.</errorMessage>
+        <name>FinServ__OwnershipRolesCannotBeDeactivated</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Deze record kan niet worden gewijzigd, omdat eigendom alleen kan worden opgegeven voor de financiële rekening.</errorMessage>
+        <name>FinServ__OwnershipRolesCannotBeModified</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Gerelateerde account of Gerelateerde contactpersoon is verplicht.</errorMessage>
+        <name>FinServ__RelatedAccountOrContactRequired</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Rol is verplicht.</errorMessage>
+        <name>FinServ__RoleIsMandatory</name>
+    </validationRules>
+</CustomObjectTranslation>

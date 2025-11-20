@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ValidateThisMonth</fullName>
+    <active>true</active>
+    <errorConditionFormula>OR(
+    AND(
+        ISNEW(),
+        OR(
+            MONTH(Tanggal_Shift_Awal__c) &lt;&gt; MONTH(TODAY()), 
+            YEAR(Tanggal_Shift_Awal__c) &lt;&gt; YEAR(TODAY())
+        )
+    ),
+    AND(
+        NOT(ISNEW()),
+        Tanggal_Shift_Awal__c &gt; DATEVALUE(CreatedDate)
+    )
+)</errorConditionFormula>
+    <errorDisplayField>Tanggal_Shift_Awal__c</errorDisplayField>
+    <errorMessage>Shift Awal tidak boleh lebih dari BULAN INI</errorMessage>
+</ValidationRule>

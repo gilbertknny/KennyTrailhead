@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Count_Unmatch_Rekon__c</fullName>
+    <label>Count Unmatch Rekon</label>
+    <summaryFilterItems>
+        <field>SCC_Rekon__c.SCC_Status_Rekon__c</field>
+        <operation>equals</operation>
+        <value>Unmatch</value>
+    </summaryFilterItems>
+    <summaryForeignKey>SCC_Rekon__c.SCC_Case__c</summaryForeignKey>
+    <summaryOperation>count</summaryOperation>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Summary</type>
+</CustomField>

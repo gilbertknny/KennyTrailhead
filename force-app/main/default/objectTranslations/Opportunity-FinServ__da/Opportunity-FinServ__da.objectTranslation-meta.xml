@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <recordTypes>
+        <label>Generelt</label>
+        <name>FinServ__General</name>
+    </recordTypes>
+    <recordTypes>
+        <label>Pensionsplanlægning</label>
+        <name>FinServ__RetirementPlanning</name>
+    </recordTypes>
+    <recordTypes>
+        <label>Salgsmulighed (Wallet Share)</label>
+        <name>FinServ__WalletShareOpportunity</name>
+    </recordTypes>
+    <validationRules>
+        <errorMessage>Interne henvisere skal være interne Salesforce-brugere.</errorMessage>
+        <name>FinServ__NonPortalUserReferrer</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Angiv en intern henviser eller en ekstern henviser. Du kan kun angive en henviser for hver henvisning.</errorMessage>
+        <name>FinServ__SingleReferredByEntryByRecord</name>
+    </validationRules>
+</CustomObjectTranslation>

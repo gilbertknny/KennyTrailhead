@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Cuti_Tahun_Lalu__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <label>Cuti Tahun Lalu</label>
+    <referenceTo>Cuti_Karyawan__c</referenceTo>
+    <relationshipLabel>Master Cuti Karyawan</relationshipLabel>
+    <relationshipName>Master_Cuti_Karyawan</relationshipName>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>SCC_Escalate_Case_Resolution</fullName>
+    <active>true</active>
+    <description>( ISBLANK(SCC_Amount__c) || SCC_Account_Number__c = null || SCC_Waktu_Transaksi__c = null || SCC_Card_Number__c = null || SCC_Cust_Phone1__c = null )</description>
+    <errorConditionFormula>NOT($Permission.By_Pass_Validation_for_Migration) &amp;&amp; (TEXT(Status) = &apos;Escalated&apos; || TEXT(Status) = &apos; Waiting Document&apos; )
+&amp;&amp;
+( SCC_Call_Type__r.External_Id__c = &apos;8812&apos; || SCC_Call_Type__r.External_Id__c = &apos;8915&apos; || Sent_to_Drone__c = TRUE )
+&amp;&amp;
+( ISBLANK(SCC_Amount__c) || SCC_Account_Number__c = null || ISBLANK(SCC_Waktu_Transaksi__c) || SCC_Card_Number__c = null) &amp;&amp; NOT(OR(CreatedBy.Alias = &apos;Migrasi&apos;, CreatedBy.Alias = &apos;migration&apos;, CreatedBy.Alias = &apos;bhart&apos;))</errorConditionFormula>
+    <errorMessage>1. Nomor Rekening,
+2. Nomor Kartu,
+3. Waktu Transaksi, &amp;
+4. Telepon
+Wajib diisi sebelum eskalasi ke Back Office</errorMessage>
+</ValidationRule>

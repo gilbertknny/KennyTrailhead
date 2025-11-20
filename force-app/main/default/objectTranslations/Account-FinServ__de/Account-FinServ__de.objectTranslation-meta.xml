@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fieldSets>
+        <label><!-- Financial Accounts Summary --></label>
+        <name>FSC_Banker_Profile_Fin_Acct_Summary</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Financial Accounts Summary --></label>
+        <name>WM_Client_Profile_Fin_Acct_Summary</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Household Summary --></label>
+        <name>WM_Client_Profile_Relations_HH_Summary</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Relationship Group Members --></label>
+        <name>WM_Client_Relationship_Group_Members</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Relationship Groups --></label>
+        <name>WM_Client_Relationship_Groups</name>
+    </fieldSets>
+    <recordTypes>
+        <description>Ein Unternehmen oder eine Organisation</description>
+        <label>Geschäft</label>
+        <name>FinServ__IndustriesBusiness</name>
+    </recordTypes>
+    <recordTypes>
+        <description>Eine Gruppierung von Personen und Institutionen, die einander zugehörig sind</description>
+        <label>Haushalt</label>
+        <name>FinServ__IndustriesHousehold</name>
+    </recordTypes>
+    <recordTypes>
+        <description>Eine Person, bei der es sich um einen potenziellen Kunden oder einen Kunden handelt</description>
+        <label>Einzelperson</label>
+        <name>FinServ__IndustriesIndividual</name>
+    </recordTypes>
+    <recordTypes>
+        <description>Eine Institution, bei der es sich um einen potenziellen Kunden oder einen Kunden handelt</description>
+        <label>Institution</label>
+        <name>FinServ__IndustriesInstitution</name>
+    </recordTypes>
+    <validationRules>
+        <errorMessage><!-- Anda tidak boleh merubah nomor telepon --></errorMessage>
+        <name>Admin_Validation_Phone</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Interne Empfehler müssen interne Salesforce-Benutzer sein.</errorMessage>
+        <name>FinServ__NonPortalUserReferrer</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Der Datensatztyp &quot;Einzelperson&quot; kann nicht geändert werden.</errorMessage>
+        <name>FinServ__NotAllowingConversionFromIndividual</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Der Datensatztyp kann nicht in &quot;Einzelperson&quot; geändert werden.</errorMessage>
+        <name>FinServ__NotAllowingConversionToIndividual</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Geben Sie einen internen oder externen Empfehler ein. Sie können pro Empfehlung nur einen Empfehler angeben.</errorMessage>
+        <name>FinServ__SingleReferredByEntryByRecord</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Nomor telepon harus angka dan 10-14 Digit --></errorMessage>
+        <name>Phone_Validation</name>
+    </validationRules>
+    <webLinks>
+        <label>Mitglied hinzufügen</label>
+        <name>FinServ__AddMember</name>
+    </webLinks>
+    <webLinks>
+        <label>Beziehung hinzufügen</label>
+        <name>FinServ__AddRelation</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- GoogleMaps --></label>
+        <name>GoogleMaps</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- GoogleNews --></label>
+        <name>GoogleNews</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- GoogleSearch --></label>
+        <name>GoogleSearch</name>
+    </webLinks>
+</CustomObjectTranslation>

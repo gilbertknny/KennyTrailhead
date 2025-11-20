@@ -1,0 +1,53 @@
+<template>
+    <lightning-card title="SLA & OLA Tracker">
+        <div class="slds-var-m-around_medium">
+        <lightning-icon icon-name="standard:entity_milestone" size="small"></lightning-icon>
+        <span class="slds-var-m-around_medium slds-text-heading_small"><b>Milestones</b></span>
+        </div>
+        <div class="slds-var-p-horizontal_medium">
+            <!-- Individual Milestones -->
+            <template if:true={milestones.length}>
+                <template for:each={milestones} for:item="milestone">
+                    <div key={milestone.id} class="milestone" style={milestone.milestoneClass}>
+                        <b>
+                            <h3>{milestone.name}</h3>
+                        </b>
+                        <p><i>Target Waktu Penyelesaian: </i>
+                            <span>{milestone.targetTime}</span>
+                            <span style="float: right;">
+                                <template if:true={milestone.isCompleted}>
+                                    <lightning-icon icon-name="utility:check" size="small"></lightning-icon>
+                                    <span>
+                                        <template if:true={milestone.isViolated}>
+                                            <lightning-icon icon-name="utility:error" size="small"></lightning-icon>
+                                        </template>
+                                    </span>
+                                </template>
+                                <template if:false={milestone.isCompleted}>
+                                    <span>
+                                        <template if:true={milestone.isViolated}>
+                                            <lightning-icon icon-name="utility:error" size="small"></lightning-icon>
+                                        </template>
+                                    </span>
+                                </template>
+                            </span>
+                        </p>
+                        <p><i>Sisa Waktu Penyelesaian: </i>
+                            <span style={milestone.violatedClass}>
+                                <template if:true={milestone.isViolated}>
+                                    -
+                                </template>
+                                <span> {milestone.remainingTime}
+                                </span>
+                            </span>
+                        </p>
+                        <br>
+                    </div>
+                </template>
+            </template>
+            <template if:false={milestones.length}>
+                Tidak ada tonggak sejarah yang dapat ditunjukkan. <!--No milestones to show.-->
+            </template>
+        </div>
+    </lightning-card>
+</template>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>SCC_Other_Reason_required_for_Lainnya</fullName>
+    <active>true</active>
+    <description>User has to enter Other reason when Lainnya is selected as cancellation reason</description>
+    <errorConditionFormula>AND(
+    NOT($Permission.By_Pass_Validation_for_Migration),
+    ISCHANGED(Status),
+    TEXT(SCC_Cancel_reasons__c) = &apos;Lainnya&apos;,
+    ISBLANK( SCC_Other_Reason__c )
+    )</errorConditionFormula>
+    <errorDisplayField>SCC_Other_Reason__c</errorDisplayField>
+    <errorMessage>“Keterangan wajib diisi”. Field Other Reason / Alasan Lain harus diisi ketika pilahan &quot;Lainnya&quot; dipilih !</errorMessage>
+</ValidationRule>

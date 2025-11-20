@@ -1,0 +1,203 @@
+<!--
+    LWC Name    : wFMUpload.html
+    Created Date       : 00 - 2024
+    @description       : This is class ..
+    @author            : Bung Femy
+    Modification Log :
+    Ver   Date         Author                            Modification
+    //release 3
+    1.0   00/00/2024   Bung Femy                         Initial Version
+    1.0   14/01/2025   Rakeyan Nuramria                  Adjust UI & to show error per row/checking & validating input data
+    1.0   16/01/2025   Rakeyan Nuramria                  Adjust UI & behaviour submit button
+    1.0   22/01/2025   Rakeyan Nuramria                  Adjust UI & behaviour Upload file manually using file button
+-->
+
+<!-- <template>
+    <lightning-card title="Upload Dokumen" icon-name="custom:custom14">
+        <div class="slds-m-around_medium">
+            <lightning-select name="type" label="Upload Type" value={type} options={optionstype}
+                placeholder="Select Type" onchange={handleChangetype} required></lightning-select>
+        </div>
+        <div class="slds-m-around_medium">
+            <label class="slds-form-element__label">
+                <span class="">{fieldLabelName}</span>
+            </label>
+            <div class="slds-form-element__control">
+                <lightning-button variant="brand" label="Download" title="Download action with brand variant"
+                    icon-name="utility:download" class="slds-m-left_x-small"
+                    onclick={handleDownload}></lightning-button>
+            </div>
+        </div>
+        <div class="slds-m-around_medium">
+            <lightning-combobox name="delimiter" label="Delimiter" value={value} placeholder="Select Delimiter"
+                options={options} onchange={handleChange}></lightning-combobox>
+        </div>
+        <div class="slds-m-around_medium">
+            <lightning-input type="file" accept=".csv" label="Attachment" onchange={openfileUpload}></lightning-input>
+        </div>
+        <div class="slds-m-around_medium">
+            <template if:true={fileData}>
+                <p>{fileData.filename}</p>
+            </template>
+        </div>
+        <div class="slds-m-around_medium">
+            <lightning-button label="Submit" onclick={handleSubmit} variant="brand"></lightning-button>
+        </div>
+    </lightning-card>
+</template> -->
+
+<template>
+    <lightning-card title="Upload Dokumen" icon-name="standard:document">
+
+        <div class="slds-grid slds-wrap">
+            <div class="slds-col slds-size_4-of-12">
+                <div class="slds-m-around_small">
+                    <lightning-select name="type" label="Tipe Dokumen" value={type} options={optionstype}
+                        placeholder="Select Type" onchange={handleChangetype} required></lightning-select>
+                </div>
+            </div>
+            <div class="slds-col slds-size_7-of-12">
+                <span></span>
+            </div>
+        </div>
+
+        <lightning-card icon-name="" variant="base" class="custom-card slds-m-around_small slds-card_boundary">
+
+            <div class="slds-grid">
+                <div class="slds-col slds-size_1-of-3">
+                    <div class="slds-m-around_small">
+                        <label class="slds-form-element__label">
+                            <span class="">{fieldLabelName}</span>
+                        </label>
+                        <div class="slds-form-element__control">
+                            <lightning-button variant="brand" label="Download"
+                                title="Download action with brand variant" icon-name="utility:download" class=""
+                                onclick={handleDownload}></lightning-button>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size_2-of-3">
+                    <div class="slds-m-around_small">
+                        <lightning-combobox name="delimiter" label="Delimiter" value={value}
+                            placeholder="Select Delimiter" options={options}
+                            onchange={handleChange}></lightning-combobox>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slds-m-around_medium">
+
+                <!-- <lightning-input class="lightning-file-input" type="file" accept=".csv" label="Attachment"
+                        onchange={openfileUpload}>
+                    </lightning-input> -->
+
+                <!-- Adjust the file input with a larger size -->
+                <p style="color: #3c3c3c;">Attachment</p>
+                <div class="custom-dropzone" ondragover={handleDragOver} ondrop={handleDrop}
+                    ondragenter={handleDragEnter} ondragleave={handleDragLeave}>
+                    <!-- The lightning-input with file type, making it a clickable file input -->
+                    <lightning-input class="lightning-file-input" type="file" accept=".csv" label=""
+                        onchange={openFileUpload}>
+                    </lightning-input>
+
+                    <!-- Text displayed under the button to guide the user -->
+                    <div class="dropzone-text">Drag and drop your .csv file here, or click to browse</div>
+                </div>
+
+            </div>
+
+            <div class="slds-m-around_medium">
+                <template if:true={fileData}>
+                    <p><strong>{fileData.filename}</strong></p>
+                </template>
+            </div>
+
+        </lightning-card>
+
+        <div class="slds-m-around_small slds-text-align_right">
+            <!-- <template if:false={isSubmitting}> -->
+            <lightning-button label={submitButtonLabel} onclick={handleSubmit} disabled={isSubmitting}
+                variant="brand"></lightning-button>
+            <!-- </template> -->
+
+            <template if:true={isSubmitting}>
+                <div class="custom-spinner">
+                    <lightning-spinner alternative-text="Loading" size="x-small"></lightning-spinner>
+                </div>
+            </template>
+
+        </div>
+    </lightning-card>
+
+    <!-- Error Modal -->
+    <template if:true={showModal}>
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                        title="Close" onclick={handleModalClose}>
+                        <lightning-icon icon-name="utility:close" size="small" alternative-text="close"
+                            class="slds-button__icon slds-button__icon_large"></lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 class="slds-text-heading_medium">Konfirmasi Input Data</h2>
+                </header>
+
+
+                <div class="slds-modal__content slds-p-around_medium">
+                    <div class="slds-text-align_center slds-text-heading_small">
+                        <b>Terdapat beberapa kesalahan pada data yang input, apakah tetap lanjutkan?</b>
+                    </div>
+
+                    <!-- Render Total Invalid Rows in bold -->
+                    <div class="model-content-1 slds-m-top_small">
+                        <p><strong>Total Row(s) : {totalRows}</strong></p>
+                        <p><strong>Valid Row(s) : {validRows} (<i style="color: red;">*1 row is for header</i>)</strong>
+                        </p>
+                        <p><strong>Invalid Row(s) : {invalidRows.length}</strong></p>
+
+                        <br>
+
+                    </div>
+
+                    <p><strong>Trace log : </strong></p>
+
+                    <!-- Render the rest of the error messages -->
+                    <div class="model-content-2">
+                        <!-- <template for:each={errorMessages} for:item="message">
+                            <p key={message} class="slds-text-body_regular">{message}</p>
+                        </template> -->
+
+                        <!-- Structured error messages using <dl>, <dt>, and <dd> -->
+                        <!-- <template for:each={errorMessages} for:item="errorMessage">
+                            <dl key={errorMessage.row}>
+                                <dt>• Baris {errorMessage.row} :</dt>
+                                <template for:each={errorMessage.errors} for:item="error">
+                                    <dd key={error} class="error-message">{error}</dd>
+                                </template>
+                            </dl>
+                        </template> -->
+
+                        <!-- Structured error messages using <ul> and <li> with indentation -->
+                        <template for:each={errorMessages} for:item="errorMessage">
+                            <ul key={errorMessage.row}>
+                                <li><b>• Baris {errorMessage.row} :</b></li>
+                                <template for:each={errorMessage.errors} for:item="error">
+                                    <li key={error} class="error-indent">- {error}</li>
+                                </template>
+                            </ul>
+                        </template>
+                    </div>
+
+                </div>
+                <footer class="slds-modal__footer">
+                    <lightning-button class="slds-m-right_small" variant="neutral" label="Tidak"
+                        onclick={handleModalClose}></lightning-button>
+                    <lightning-button variant="brand" label="Ya, Lanjutkan"
+                        onclick={handleModalProceed}></lightning-button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+</template>

@@ -1,0 +1,394 @@
+<!--
+    LWC Name    : lwcDataUserBrimoComponent.html
+    Created Date       : 26 November 2024
+    @description       : This is class ..
+    @author            : Rakeyan Nuramria
+    Modification Log :
+    Ver   Date         Author                            Modification
+    //release 3
+    1.0   26/11/2024   Rakeyan Nuramria                  Initial Version
+    1.0   03/01/2025   Rakeyan Nuramria                  Adjust UI
+    1.0   04/02/2025   Rakeyan Nuramria                  Adjust UI for modal delete
+    1.0   26/02/2025   Rakeyan Nuramria                  Adjust UI to show new concat field + new column
+    1.0   26/02/2025   Rakeyan Nuramria                  Adjust UI new requirment : multi-step modal
+    1.0   27/02/2025   Rakeyan Nuramria                  Adjust UI for access user
+    1.0   28/02/2025   Rakeyan Nuramria                  Adjust UI for show username based on user alias
+-->
+
+<template>
+    <lightning-card icon-name="" variant="base" class="custom-card slds-m-top_xx-small slds-card_boundary">
+        <div slot="title">
+            Data Brimo
+        </div>
+        <div slot="actions">
+            <template if:false={isCloseHidden}>
+                <lightning-button-icon icon-name="utility:close" alternative-text="Close" title="Close"
+                    onclick={handleCloseDataBrimo} class="cssClass" variant="bare">
+                </lightning-button-icon>
+            </template>
+        </div>
+
+        <template if:true={isLoading}>
+            <div class="spinner-container" style="height:6rem;position:relative">
+                <div role="status" class="slds-spinner slds-spinner_small">
+                    <span class="slds-assistive-text">Loading</span>
+                    <div class="slds-spinner__dot-a"></div>
+                    <div class="slds-spinner__dot-b"></div>
+                </div>
+            </div>
+        </template>
+
+        <!-- <template if:false={isLoading}> -->
+        <template if:true={hasError}>
+            <div class="slds-text-color_error slds-m-top_medium slds-text-align_center">
+                <b>{errorMsg}</b>
+            </div>
+        </template>
+
+        <!-- Main Card Body  -->
+        <template if:false={isLoading}>
+            <template if:false={hasError}>
+                <div class="slds-grid slds-wrap slds-m-around_medium">
+                    <!-- Column 1 -->
+                    <div class="slds-col slds-size_4-of-12 slds-medium-size_4-of-12 slds-large-size_4-of-12">
+                        <!-- Username Brimo -->
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label" for="username-brimo">Username Brimo</label>
+                            <div class="slds-form-element__control">
+                                <input class="slds-input text-bold" type="text" id="username-brimo" readonly
+                                    value={userAlias} />
+                            </div>
+                        </div>
+                        <!-- Tanggal Registrasi -->
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label" for="tanggal-registrasi">Tanggal Registrasi</label>
+                            <div class="slds-form-element__control">
+                                <input class="slds-input text-bold" type="text" id="tanggal-registrasi" readonly
+                                    value={registeredDate} />
+                            </div>
+                        </div>
+                        <!-- Nomor Handphone -->
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label" for="nomor-handphone">Nomor Handphone</label>
+                            <div class="slds-form-element__control">
+                                <input class="slds-input text-bold" type="text" id="nomor-handphone" readonly
+                                    value={userPhoneNumber} />
+                            </div>
+                        </div>
+                        <!-- Email -->
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label" for="email">Email</label>
+                            <div class="slds-form-element__control">
+                                <input class="slds-input text-bold" type="text" id="email" readonly value={email} />
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Column 2 -->
+                    <div class="slds-col slds-size_4-of-12 slds-medium-size_4-of-12 slds-large-size_4-of-12">
+                        <!-- Status Finansial -->
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label" for="status-finansial">Status Finansial</label>
+                            <div class="slds-form-element__control">
+                                <input class="slds-input text-bold" type="text" id="status-finansial" readonly
+                                    value={financialStatus} />
+                            </div>
+                        </div>
+                        <!-- Status Akun -->
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label" for="status-akun">Status Akun</label>
+                            <div class="slds-form-element__control">
+                                <input class="slds-input text-bold" type="text" id="status-akun" readonly
+                                    value={status} />
+                            </div>
+                        </div>
+                        <!-- History Aktivitas -->
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label" for="history-aktivitas">History Aktivitas</label>
+                            <div class="slds-form-element__control">
+                                <button class="slds-button" onclick={handleOpenHistoryKartu}><b>History
+                                        Aktivitas</b></button>
+                            </div>
+                        </div>
+                        <!-- Inquiry Multi Account -->
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label" for="inqury-multi-account">Inquiry Multi
+                                Account</label>
+                            <div class="slds-form-element__control">
+                                <button class="slds-button" onclick={handleOpenInquiryAccount}><b>Inquiry Multi
+                                        Account</b></button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Column 3 -->
+                    <div class="slds-col slds-size_4-of-12 slds-medium-size_4-of-12 slds-large-size_4-of-12 slds-text-align_center"
+                        style="display: block; height: 100%; margin:auto;">
+                        <!-- <button class="slds-button slds-button_destructive" onclick={handleDeleteBrimo}><b>Hapus Akun
+                        Brimo</b></button> -->
+                        <template if:true={hasHapusBrimoPermission}>
+                            <lightning-button class="slds-text-title_bold" icon-name="utility:delete"
+                                variant="destructive" label="Hapus Akun Brimo"
+                                onclick={handleConfirmDeletionModal}></lightning-button>
+                        </template>
+
+                    </div>
+                </div>
+            </template>
+
+        </template>
+        <!-- End Main Card Body  -->
+
+    </lightning-card>
+
+    <!-- History Aktivitas Section -->
+    <template if:true={showHistoryKartu}>
+        <lightning-card title="History Aktivitas" variant="base"
+            class="custom-card slds-m-top_x-small slds-card_boundary">
+            <div slot="actions">
+                <lightning-button-icon icon-name="utility:close" alternative-text="Close" title="Close"
+                    onclick={handleCloseHistoryKartu} class="cssClass" variant="bare">
+                </lightning-button-icon>
+            </div>
+
+            <template if:true={hasActivityError}>
+                <div class="slds-text-color_error slds-m-top_medium slds-text-align_center">
+                    <b>{errorActivityMsg}</b>
+                </div>
+            </template>
+
+
+            <template if:false={hasActivityError}>
+                <div class="slds-m-around_small">
+                    <div class="slds-scrollable_y custom-scroll">
+                        <table class="slds-table slds-table_bordered slds-table_fixed-layout custom-table">
+                            <thead>
+                                <tr class="slds-line-height_reset">
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Ref. No">Ref. No</div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Date">Date</div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Time">Time</div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Task">Task</div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Total Amount">Total Amount</div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Status">Status</div>
+                                    </th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                <template for:each={history} for:item="activity">
+                                    <tr key={activity.referenceNum} class="slds-hint-parent">
+                                        <td>{activity.referenceNum}</td>
+                                        <td>{activity.date}</td>
+                                        <td>{activity.time}</td>
+                                        <td>{activity.concatTask}</td>
+                                        <td>{activity.totalAmount}</td>
+                                        <td>{activity.status}</td>
+                                    </tr>
+                                </template>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </template>
+
+        </lightning-card>
+    </template>
+    <!-- End History Aktivitas Section -->
+
+    <!-- Inquiry Multi Account Section -->
+
+    <template if:true={showInquiryKartu}>
+        <lightning-card title="Inquiry Multi Account" variant="base"
+            class="custom-card slds-m-top_x-small slds-card_boundary">
+            <div slot="actions">
+                <lightning-button-icon icon-name="utility:close" alternative-text="Close" title="Close"
+                    onclick={handleCloseInquiryAccount} class="cssClass" variant="bare">
+                </lightning-button-icon>
+            </div>
+
+            <template if:true={hasAccountError}>
+                <div class="slds-text-color_error slds-m-top_medium slds-text-align_center">
+                    <b>{errorAccountMsg}</b>
+                </div>
+            </template>
+
+            <template if:false={hasAccountError}>
+                <div class="slds-m-around_small">
+                    <div class="slds-scrollable_y custom-scroll">
+                        <table class="slds-table slds-table_bordered slds-table_fixed-layout custom-table">
+                            <thead>
+                                <tr class="slds-line-height_reset">
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Nama">Nama</div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Nomor Rekening">Nomor Rekening</div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Nomor Kartu">Nomor Kartu</div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Tipe">Tipe</div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Produk">Produk</div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Finansial Status">Finansial Status</div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Status">Status</div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={accountList} for:item="account">
+                                    <tr key={account.account} class="slds-hint-parent">
+                                        <td>{account.accountName}</td>
+                                        <td>{account.account}</td>
+                                        <td>{account.cardNumber}</td>
+                                        <td>{account.typeAccount}</td>
+                                        <td>{account.productType}</td>
+                                        <td>{account.financialStatus}</td>
+                                        <td>{account.status}</td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </template>
+
+        </lightning-card>
+    </template>
+
+    <!-- End Inquiry Multi Account Section -->
+
+    <!-- Exact layout match with the provided image -->
+    <template if:true={showModal}>
+        <div class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                        onclick={handleCancelModal}>
+                        <lightning-icon icon-name="utility:close" alternative-text="close"
+                            size="small"></lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 class="slds-text-heading_medium">
+                        {modalTitle}
+                    </h2>
+                </header>
+
+                <div class="slds-modal__content slds-p-around_medium">
+                    <!-- Step 1: Username Input -->
+                    <template if:true={isStepOne}>
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label" for="username-input">
+                                <abbr class="slds-required" title="required">*</abbr> Username BRIMO
+                            </label>
+                            <div class="slds-form-element__control">
+                                <input type="text" id="username-input" class={usernameInputClass}
+                                    placeholder="Masukkan username" value={usernameInput} onkeyup={handleUsernameChange}
+                                    required />
+                            </div>
+                            <template if:true={hasUsernameError}>
+                                <div class="slds-form-element__help slds-text-color_error">
+                                    {usernameErrorMessage}
+                                </div>
+                            </template>
+                        </div>
+                    </template>
+
+                    <!-- Step 2: Confirmation -->
+                    <template if:true={isStepTwo}>
+                        <div class="slds-text-align_center">
+                            <template if:false={isProcessing}>
+                                <p>Apakah anda yakin ingin melakukan penghapusan Akun Brimo untuk nomor rekening
+                                    <b> {selectedNomorRekening}</b> dengan username <b>{usernameInput}</b>?
+                                </p>
+                            </template>
+
+                            <!-- SLDS Spinner: Show during deletion process -->
+                            <template if:true={isProcessing}>
+                                <div class="spinner-container" style="height:6rem;position:relative">
+                                    <div role="status" class="slds-spinner slds-spinner_medium">
+                                        <span class="slds-assistive-text">Loading</span>
+                                        <div class="slds-spinner__dot-a"></div>
+                                        <div class="slds-spinner__dot-b"></div>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                    </template>
+                </div>
+
+                <!-- Custom footer to exactly match the image -->
+                <footer class="custom-footer">
+                    <!-- Left section: Cancel button at the exact left edge -->
+                    <div class="left-section">
+                        <!-- Step 1 Action -->
+                        <template if:true={isStepOne}>
+                            <button class="slds-button slds-button_neutral" onclick={handleCancelModal}
+                                disabled={isProcessing}>
+                                Batal
+                            </button>
+                        </template>
+                        <!-- Step 2 Action -->
+                        <template if:true={isStepTwo}>
+                            <button class="slds-button slds-button_neutral slds-m-right_x-small" onclick={handleBack}
+                                disabled={isProcessing}>
+                                Kembali
+                            </button>
+                        </template>
+
+                    </div>
+
+                    <!-- Center section: Progress Indicator -->
+                    <div class="center-section">
+                        <lightning-progress-indicator current-step={currentStepString} type="base" variant="base"
+                            class="compact-progress">
+                            <lightning-progress-step label="Masukan Username" value="1"></lightning-progress-step>
+                            <lightning-progress-step label="Konfirmasi" value="2"></lightning-progress-step>
+                        </lightning-progress-indicator>
+                    </div>
+
+                    <!-- Right section: Action Buttons -->
+                    <div class="right-section">
+                        <!-- Step 1 Action -->
+                        <template if:true={isStepOne}>
+                            <button class="slds-button slds-button_brand" onclick={handleNext}
+                                disabled={isNextDisabled}>
+                                Selanjutnya
+                            </button>
+                        </template>
+
+                        <!-- Step 2 Actions -->
+                        <template if:true={isStepTwo}>
+                            <button class="slds-button slds-button_brand" onclick={handleSubmitDeletion}
+                                disabled={isProcessing}>
+                                Ya
+                            </button>
+                        </template>
+                    </div>
+                </footer>
+            </div>
+        </div>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+
+</template>

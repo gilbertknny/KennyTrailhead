@@ -1,0 +1,187 @@
+<!--
+    LWC Name    : lwcDataPengajuanKreditComponent.html
+    Created Date       : 12 September 2024
+    @description       : This is class ..
+    @author            : Rakeyan Nuramria
+    Modification Log :
+    Ver   Date         Author                            Modification
+    1.0   12/09/2024   Rakeyan Nuramria                  Initial Version
+    1.0   24/09/2024   Rakeyan Nuramria                  Adjust UI for API
+    //Release 3
+    2.0   20/01/2025   Rakeyan Nuramria                  New UI for the new API
+    2.0   04/03/2025   Rakeyan Nuramria                  Adjust to show nomorKartuCensored(masking) based on feedback UAT
+-->
+
+<template>
+    <!-- Search Section -->
+    <lightning-card title="" variant="base" class="custom-card slds-m-top_xx-small slds-card_boundary">
+        <div class="slds-grid slds-gutters slds-m-around_small">
+            <div class="slds-col" style="display: flex; flex-direction: column;">
+                <lightning-input label="NIK" value={nik} onchange={handleNIKChange}
+                    disabled={disableNIKField}></lightning-input>
+                <div style="color: red; min-height: 20px;">{nikNumberError}</div> <!-- Adjust min-height as needed -->
+            </div>
+            <div class="slds-col" style="align-self: flex-start; margin-top: 22px;">
+                <lightning-button label="Cari" variant="brand" onclick={handleSearch}
+                    disabled={isCariButtonDisabled}></lightning-button>
+            </div>
+        </div>
+    </lightning-card>
+    <!-- End Search Section -->
+
+    <!-- Loading Spinner -->
+    <template if:true={isLoading}>
+        <div class="spinner-container" style="height:6rem;position:relative">
+            <div role="status" class="slds-spinner slds-spinner_small">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </template>
+
+    <!-- Error Message -->
+    <template if:true={hasError}>
+        <div class="slds-text-color_error slds-m-top_medium slds-text-align_center">
+            <b>{errorMsg}</b>
+        </div>
+    </template>
+
+    <!-- Result Section -->
+    <template if:true={showResult}>
+        <p class="slds-m-vertical_small slds-m-left_xx-small"><u>Hasil Pencarian...</u></p>
+
+        <!-- Iterate through visible data only -->
+        <template for:each={dataNasabah} for:item="nasabah">
+            <lightning-card key={nasabah.nik} title="" icon-name="" variant="base"
+                class="custom-card slds-m-top_xx-small slds-m-bottom_medium slds-card_boundary">
+
+                <!-- Personal Information Section -->
+                <lightning-card title="Informasi Nasabah" icon-name="utility:user" variant="base"
+                    class="custom-card slds-m-around_xx-small slds-card_boundary">
+                    <div class="slds-grid slds-wrap slds-m-around_medium">
+                        <div class="slds-col slds-size_3-of-12">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label" for="nama-lengkap">Nama Lengkap Nasabah</label>
+                                <div class="slds-form-element__control">
+                                    <input class="slds-input text-bold" type="text" id="nama-lengkap" readonly
+                                        value={nasabah.namaNasabahLengkap} />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_3-of-12">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label" for="nik">NIK</label>
+                                <div class="slds-form-element__control">
+                                    <input class="slds-input text-bold" type="text" id="nik" readonly
+                                        value={nasabah.nik} />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_3-of-12">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label" for="tanggal-lahir">Tanggal Lahir</label>
+                                <div class="slds-form-element__control">
+                                    <input class="slds-input text-bold" type="text" id="tanggal-lahir" readonly
+                                        value={nasabah.tanggalLahir} />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_3-of-12">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label" for="nomor-kredit">Nomor Kartu Kredit</label>
+                                <div class="slds-form-element__control">
+                                    <input class="slds-input text-bold" type="text" id="nomor-kredit" readonly
+                                        value={nasabah.nomorKartuKreditCensored} />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </lightning-card>
+
+                <!-- Pengajuan Section -->
+                <template if:true={nasabah.dataPengajuan.length}>
+                    <lightning-card title="Data Pengajuan" icon-name="utility:list" variant="base"
+                        class="custom-card slds-m-around_xx-small slds-card_boundary">
+                        <div class="slds-p-around_small slds-m-top_xx-small">
+                            <div class="slds-scrollable_y custom-scroll">
+                                <table class="slds-table slds-table_bordered slds-table_fixed-layout custom-table">
+                                    <thead>
+                                        <tr class="slds-line-height_reset">
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="Kode Aplikasi Pengajuan">Kode Aplikasi
+                                                    Pengajuan</div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="Tanggal Pengajuan">Tanggal Pengajuan
+                                                </div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="Channel Pengajuan">Channel Pengajuan
+                                                </div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="Nomor Kartu Kredit">Nomor Kartu Kredit
+                                                </div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="Progress Pengajuan">Progress Pengajuan
+                                                </div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="Deskripsi Pengajuan">Deskripsi
+                                                    Pengajuan</div>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <template for:each={nasabah.dataPengajuan} for:item="pengajuan">
+                                            <tr key={pengajuan.kodeAplikasiPengajuan}>
+                                                <td>{pengajuan.kodeAplikasiPengajuan}</td>
+                                                <td>{pengajuan.tanggalPengajuan}</td>
+                                                <td>{pengajuan.channelPengajuan}</td>
+                                                <td>
+                                                    <template for:each={pengajuan.CUSTPRO} for:item="cust">
+                                                        <div key={cust.nomorKartuKredit}>{cust.nomorKartuKreditCensored}
+                                                        </div>
+                                                    </template>
+                                                </td>
+                                                <td>
+                                                    <template for:each={pengajuan.APPFLAG} for:item="appFlag">
+                                                        <div key={appFlag.progresPengajuan}>
+                                                            {appFlag.progresPengajuan}
+                                                        </div>
+                                                    </template>
+                                                </td>
+                                                <td>
+                                                    <template for:each={pengajuan.APPFLAG} for:item="appFlag">
+                                                        <div key={appFlag.Deskripsi.deskripsiPengajuan}>
+                                                            {appFlag.Deskripsi.deskripsiPengajuan}
+                                                        </div>
+                                                    </template>
+                                                </td>
+                                            </tr>
+                                        </template>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </lightning-card>
+                </template>
+
+                <!-- No Data Pengajuan -->
+                <template if:false={nasabah.dataPengajuan.length}>
+                    <lightning-card title="Informasi Pengajuan" icon-name="utility:list" variant="base"
+                        class="custom-card slds-m-around_xx-small slds-card_boundary">
+                        <div class="slds-p-around_small slds-m-top_xx-small">
+                            <div class="slds-text-color_error slds-text-align_center">
+                                <b>Tidak ada data pengajuan</b>
+                            </div>
+                        </div>
+                    </lightning-card>
+                </template>
+            </lightning-card>
+        </template>
+    </template>
+    <!-- End Result Section -->
+</template>

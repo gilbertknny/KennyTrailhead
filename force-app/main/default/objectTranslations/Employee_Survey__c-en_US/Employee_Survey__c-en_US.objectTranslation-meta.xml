@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>Employee Survey</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Employee Surveys</value>
+    </caseValues>
+    <startsWith>Consonant</startsWith>
+    <validationRules>
+        <errorMessage><!-- End Date tidak boleh kurang atau sama dengan hari ini --></errorMessage>
+        <name>End_Date_Must_Greater_Than_Today</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- End Date (Tanggal Selesai ) tidak boleh lebih kecil/sama dari Start Date (Tanggal Mulai) --></errorMessage>
+        <name>End_Date_Smaller_than_Start_Date</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Start Date tidak boleh kurang dari hari ini --></errorMessage>
+        <name>Start_Date_Must_Greater_Than_Today</name>
+    </validationRules>
+</CustomObjectTranslation>

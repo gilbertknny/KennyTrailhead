@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Nama_Pelapor</fullName>
+    <active>false</active>
+    <errorConditionFormula>NOT(REGEX( SCC_Nama_Pelapor__c , &quot;^[a-z A-Z]*$&quot;)) &amp;&amp; NOT(ISBLANK(SCC_Nama_Pelapor__c))</errorConditionFormula>
+    <errorDisplayField>SCC_Nama_Pelapor__c</errorDisplayField>
+    <errorMessage>Nama Pelapor harus Alpabet</errorMessage>
+</ValidationRule>

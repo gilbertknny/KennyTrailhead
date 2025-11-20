@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>상호 역할</value>
+    </caseValues>
+    <nameFieldLabel>역할</nameFieldLabel>
+    <recordTypes>
+        <description>계정 간 관계와 연결된 역할</description>
+        <label>계정 역할</label>
+        <name>FinServ__AccountRole</name>
+    </recordTypes>
+    <recordTypes>
+        <description>연락처 간 관계와 연결된 역할</description>
+        <label>연락처 역할</label>
+        <name>FinServ__ContactRole</name>
+    </recordTypes>
+    <validationRules>
+        <errorMessage>상호 역할은 수정할 수 없습니다</errorMessage>
+        <name>FinServ__ProhibitUpdates</name>
+    </validationRules>
+</CustomObjectTranslation>

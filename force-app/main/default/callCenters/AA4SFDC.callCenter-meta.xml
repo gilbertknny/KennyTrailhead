@@ -1,0 +1,1234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CallCenter xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <adapterUrl>https://crmconnectorlb.bri.co.id:8484</adapterUrl>
+    <customSettings>{&quot;reqSoftphoneHeight&quot;:&quot;600&quot;,&quot;reqUseApi&quot;:&quot;true&quot;,&quot;reqSoftphoneWidth&quot;:&quot;260&quot;,&quot;reqSalesforceCompatibilityMode&quot;:&quot;Classic_and_Lightning&quot;}</customSettings>
+    <displayName>Avaya Agent for Salesforce.com</displayName>
+    <displayNameLabel>Display Name</displayNameLabel>
+    <internalNameLabel>Internal Name</internalNameLabel>
+    <sections>
+        <items>
+            <label>Web Agent Widget URL</label>
+            <name>reqAdapterUrl</name>
+            <value>https://crmconnectorlb.bri.co.id:8484</value>
+        </items>
+        <items>
+            <label>Use CTI API</label>
+            <name>reqUseApi</name>
+            <value>true</value>
+        </items>
+        <items>
+            <label>Softphone Height</label>
+            <name>reqSoftphoneHeight</name>
+            <value>600</value>
+        </items>
+        <items>
+            <label>Softphone Width</label>
+            <name>reqSoftphoneWidth</name>
+            <value>260</value>
+        </items>
+        <items>
+            <label>Salesforce Compatibility Mode</label>
+            <name>reqSalesforceCompatibilityMode</name>
+            <value>Classic_and_Lightning</value>
+        </items>
+        <label>General Information</label>
+        <name>reqGeneralInfo</name>
+    </sections>
+    <sections>
+        <items>
+            <label>Outside Prefix</label>
+            <name>reqOutsidePrefix</name>
+            <value>9</value>
+        </items>
+        <items>
+            <label>Long Distance Prefix</label>
+            <name>reqLongDistPrefix</name>
+            <value xsi:nil="true"/>
+        </items>
+        <items>
+            <label>International Prefix</label>
+            <name>reqInternationalPrefix</name>
+            <value>011</value>
+        </items>
+        <items>
+            <label>Internal Number Length</label>
+            <name>dialInternalLength</name>
+            <value>4</value>
+        </items>
+        <items>
+            <label>Country Code</label>
+            <name>dialCountryCode</name>
+            <value>1</value>
+        </items>
+        <items>
+            <label>Local Number Length</label>
+            <name>dialLocalLength</name>
+            <value>7</value>
+        </items>
+        <items>
+            <label>Long Distance Length</label>
+            <name>dialLongDistanceLength</name>
+            <value>10</value>
+        </items>
+        <items>
+            <label>Do Not Call Prefix</label>
+            <name>doNotCallPrefix</name>
+            <value xsi:nil="true"/>
+        </items>
+        <label>Dialing Options</label>
+        <name>reqDialingOptions</name>
+    </sections>
+    <sections>
+        <items>
+            <label>Is Call Center? (Y/N)</label>
+            <name>isCallCenter</name>
+            <value>Y</value>
+        </items>
+        <items>
+            <label>Transfer Button Enabled? (Y/N/C)</label>
+            <name>transferEnabled</name>
+            <value>Y</value>
+        </items>
+        <items>
+            <label>Conference Button Enabled? (Y/N/C)</label>
+            <name>conferenceEnabled</name>
+            <value>Y</value>
+        </items>
+        <items>
+            <label>Call Log Report URL</label>
+            <name>urlReportLink</name>
+            <value>00O?pc0=CALLTYPE&amp;pv0=&amp;type=te&amp;sort=CD&amp;pc1=DUE_DATE&amp;pv1=today&amp;pn1=eq&amp;c=CS&amp;c=OP&amp;c=CO&amp;c=LD&amp;c=AT&amp;c=CD_FMT&amp;c=CL_DISP&amp;c=CALLTYPE&amp;c=SU&amp;c=AS&amp;c=P1&amp;details=yes&amp;retURL=%2F00O%2Fo&amp;pn0=ne&amp;rt=24&amp;scope=user&amp;t=title_MyCallsToday&amp;closed=closed&amp;duel0=AS,SU,CALLTYPE,CL_DISP</value>
+        </items>
+        <items>
+            <label>Click-to-Dial Enabled? (Y/N/P/I)</label>
+            <name>clickToDial</name>
+            <value>Y</value>
+        </items>
+        <items>
+            <label>Click-to-Consult Enabled? (Y/N/T/C)</label>
+            <name>clickToConsult</name>
+            <value>Y</value>
+        </items>
+        <items>
+            <label>Available Type? (A/M)</label>
+            <name>readyType</name>
+            <value>A</value>
+        </items>
+        <items>
+            <label>Auxiliary Enabled? (Y/N)</label>
+            <name>auxEnabled</name>
+            <value>Y</value>
+        </items>
+        <items>
+            <label>After Call Work Enabled? (Y/N)</label>
+            <name>acwEnabled</name>
+            <value>N</value>
+        </items>
+        <items>
+            <label>Auto Login Enabled? (Y/N)</label>
+            <name>autoLoginEnabled</name>
+            <value>N</value>
+        </items>
+        <items>
+            <label>Default Language</label>
+            <name>fallbackLanguage</name>
+            <value>en_US</value>
+        </items>
+        <items>
+            <label>Password Enabled? (Y/N)</label>
+            <name>passwordEnabled</name>
+            <value>Y</value>
+        </items>
+        <items>
+            <label>Extension from Salesforce User Profile? (Y/N)</label>
+            <name>fixedExtension</name>
+            <value>N</value>
+        </items>
+        <items>
+            <label>Enable Console Logout? (Y/N)</label>
+            <name>callLogOut</name>
+            <value>Y</value>
+        </items>
+        <items>
+            <label>Display login time information? (Y/N)</label>
+            <name>loginInfo</name>
+            <value>N</value>
+        </items>
+        <items>
+            <label>Drop Selected Party Enabled? (Y/N)</label>
+            <name>dropSelectedPartyEnabled</name>
+            <value>N</value>
+        </items>
+        <items>
+            <label>Automatically answer incoming calls? (Y/A/N)</label>
+            <name>autoAnswerCalls</name>
+            <value>N</value>
+        </items>
+        <items>
+            <label>Display hold timer? (Y/N)</label>
+            <name>holdTimerShow</name>
+            <value>N</value>
+        </items>
+        <items>
+            <label>Display Agent State timer? (Y/N)</label>
+            <name>agentStateTimerShow</name>
+            <value>N</value>
+        </items>
+        <items>
+            <label>Omnichannel Enabled?(C/S/N)</label>
+            <name>omnichannelEnabled</name>
+            <value>N</value>
+        </items>
+        <items>
+            <label>Ready after Digital Complete? (Y/N)</label>
+            <name>readyAfterDigitalComplete</name>
+            <value>Y</value>
+        </items>
+        <items>
+            <label>Omnichannel Ready Status Id</label>
+            <name>omnichannelReadyStatusId</name>
+            <value xsi:nil="true"/>
+        </items>
+        <items>
+            <label>Omnichannel Not Ready Status Id</label>
+            <name>omnichannelNotReadyStatusId</name>
+            <value xsi:nil="true"/>
+        </items>
+        <items>
+            <label>Omnichannel Wrapup Status Id</label>
+            <name>omnichannelWrapupStatusId</name>
+            <value xsi:nil="true"/>
+        </items>
+        <items>
+            <label>Omnichannel Not Ready Reason Code</label>
+            <name>omnichannelNotReadyRC</name>
+            <value>21=Digital Ready</value>
+        </items>
+        <items>
+            <label>Show Device Name?(ADQ)</label>
+            <name>queryDeviceName</name>
+            <value>ADQ</value>
+        </items>
+        <items>
+            <label>Append Agent ID to UUI?(Y/N)</label>
+            <name>appendAgentIdToUUI</name>
+            <value>Y</value>
+        </items>
+        <items>
+            <label>Outbound ANI Replacement</label>
+            <name>outboundAniReplacement</name>
+            <value xsi:nil="true"/>
+        </items>
+        <items>
+            <label>ANI Replacement WS URL</label>
+            <name>anireplacementUrl</name>
+            <value xsi:nil="true"/>
+        </items>
+        <items>
+            <label>ANI Masking On Consult? (Y/N)</label>
+            <name>aniMaskingOnConsult</name>
+            <value>N</value>
+        </items>
+        <items>
+            <label>Apex User Retrieval Class</label>
+            <name>apexUserRetrieval</name>
+            <value>AvayaConnector.UserRetrieval</value>
+        </items>
+        <items>
+            <label>Apex Data Retrieval Class</label>
+            <name>apexDataRetrieval</name>
+            <value>AvayaConnector.DataRetrieval</value>
+        </items>
+        <items>
+            <label>Apex Object Retrieval Class</label>
+            <name>apexObjectRetrieval</name>
+            <value>AvayaConnector.ObjectDetailsRetrieval</value>
+        </items>
+        <items>
+            <label>Apex Salesforce Directory Class</label>
+            <name>apexSalesforceDirectory</name>
+            <value>AvayaConnector.SalesforceDirectory</value>
+        </items>
+        <items>
+            <label>Apex Picklist Values Class</label>
+            <name>apexPickListValues</name>
+            <value>AvayaConnector.CustomCallLogField</value>
+        </items>
+        <items>
+            <label>Warning Banner Message</label>
+            <name>warningBanner</name>
+            <value xsi:nil="true"/>
+        </items>
+        <items>
+            <label>Show Softphone when click-to-dial? (Y/N)</label>
+            <name>showSoftPhone</name>
+            <value>Y</value>
+        </items>
+        <items>
+            <label>Frequently Dialed Numbers Server Url</label>
+            <name>frequentlyDialedNumbers</name>
+            <value>https://crmconnectorlb.bri.co.id:8484/extensions/frequentlyDialedNumbers.json</value>
+        </items>
+        <items>
+            <label>Logout on timeout (Y/N)</label>
+            <name>logoutOnTimeout</name>
+            <value>N</value>
+        </items>
+        <label>Softphone Options</label>
+        <name>SoftphoneOptions</name>
+    </sections>
+    <sections>
+        <items>
+            <label>Call Log Enabled? (Y/A/E/N)</label>
+            <name>callLogEnabled</name>
+            <value>Y</value>
+        </items>
+        <items>
+            <label>Show Call Log? (Y/N/S/A)</label>
+            <name>callLogShow</name>
+            <value>Y</value>
+        </items>
+        <items>
+            <label>Save Call Log on Call Start? (Y/N/V)</label>
+            <name>callLogOnStart</name>
+            <value>N</value>
+        </items>
+        <items>
+            <label>Call Log on Incomplete Calls? (Y/N)</label>
+            <name>callLogAlways</name>
+            <value>N</value>
+        </items>
+        <items>
+            <label>Make Call Log Related Data Sticky? (Y/N)</label>
+            <name>callLogSelect</name>
+            <value>Y</value>
+        </items>
+        <items>
+            <label>Caller Field API Name</label>
+            <name>callLogCaller</name>
+            <value>Caller__c</value>
+        </items>
+        <items>
+            <label>Called Field API Name</label>
+            <name>callLogCalled</name>
+            <value>Called__c</value>
+        </items>
+        <items>
+            <label>UUI Field API Name</label>
+            <name>callLogUui</name>
+            <value>UUI__c</value>
+        </items>
+        <items>
+            <label>Queue Field API Name</label>
+            <name>callLogQueue</name>
+            <value>Queue__c</value>
+        </items>
+        <items>
+            <label>QueueName Field API Name</label>
+            <name>callLogQueueName</name>
+            <value>QueueName__c</value>
+        </items>
+        <items>
+            <label>Original Call Object Id</label>
+            <name>callLogOrigCallObjectId</name>
+            <value>OriginalCallObjectId__c</value>
+        </items>
+        <items>
+            <label>Call Start Time API Name</label>
+            <name>callStartTime</name>
+            <value>CallStartTime__c</value>
+        </items>
+        <items>
+            <label>Call History? (Y/N)</label>
+            <name>callLogLastThreeCalls</name>
+            <value>Y</value>
+        </items>
+        <items>
+            <label>Show Comments (Y/N)</label>
+            <name>callLogShowComments</name>
+            <value>Y</value>
+        </items>
+        <items>
+            <label>Show Name (Y/N)</label>
+            <name>callLogShowName</name>
+            <value>Y</value>
+        </items>
+        <items>
+            <label>Show Related To (Y/N)</label>
+            <name>callLogShowRelatedTo</name>
+            <value>Y</value>
+        </items>
+        <items>
+            <label>Related To Filter</label>
+            <name>callLogRelatedToFilter</name>
+            <value xsi:nil="true"/>
+        </items>
+        <items>
+            <label>Enable Task/Call Log link (Y/N)</label>
+            <name>CallLogTask</name>
+            <value>N</value>
+        </items>
+        <items>
+            <label>Update Task Status? (Y/N)</label>
+            <name>callLogStatus</name>
+            <value>Y</value>
+        </items>
+        <items>
+            <label>Enable UTC time (Y/N)</label>
+            <name>callLogUTCTime</name>
+            <value>N</value>
+        </items>
+        <items>
+            <label>Call Log Subject</label>
+            <name>callLogSubject</name>
+            <value xsi:nil="true"/>
+        </items>
+        <items>
+            <label>Enable Interaction Log? (Y/N)</label>
+            <name>callInteractionLog</name>
+            <value>N</value>
+        </items>
+        <items>
+            <label>Custom Call Log Field 1</label>
+            <name>callLogCustom1</name>
+            <value>Call_Log_1__c</value>
+        </items>
+        <items>
+            <label>Custom Call Log Field 2</label>
+            <name>callLogCustom2</name>
+            <value>Call_Log_2__c</value>
+        </items>
+        <items>
+            <label>Custom Call Log Field 3</label>
+            <name>callLogCustom3</name>
+            <value>Call_Log_3__c</value>
+        </items>
+        <items>
+            <label>Call Log Completed Status</label>
+            <name>callLogStatusCompleted</name>
+            <value>Completed</value>
+        </items>
+        <items>
+            <label>Call Log In Progress Status</label>
+            <name>callLogStatusInProgress</name>
+            <value>In Progress</value>
+        </items>
+        <items>
+            <label>Call Log Answered Status</label>
+            <name>callLogStatusAnswered</name>
+            <value>Answered</value>
+        </items>
+        <items>
+            <label>Prioritize Related To (Y/N)</label>
+            <name>prioritizeRelatedTo</name>
+            <value>N</value>
+        </items>
+        <items>
+            <label>Agent ID Field API Name</label>
+            <name>callLogAgentId</name>
+            <value>AgentId__c</value>
+        </items>
+        <items>
+            <label>Call ID Field API Name</label>
+            <name>callLogCallId</name>
+            <value>CallId__c</value>
+        </items>
+        <items>
+            <label>Old Call ID</label>
+            <name>callLogOldCallId</name>
+            <value>OldCallId__c</value>
+        </items>
+        <items>
+            <label>Differentiate Contact By</label>
+            <name>differentiateContactBy</name>
+            <value>Email</value>
+        </items>
+        <label>Call Log Options</label>
+        <name>CallLogOptions</name>
+    </sections>
+    <sections>
+        <items>
+            <label>Login Extension</label>
+            <name>loginExtLabel</name>
+            <value xsi:nil="true"/>
+        </items>
+        <items>
+            <label>Login Agent ID</label>
+            <name>loginAgentIdLabel</name>
+            <value xsi:nil="true"/>
+        </items>
+        <items>
+            <label>Login Agent Password</label>
+            <name>loginPwdLabel</name>
+            <value xsi:nil="true"/>
+        </items>
+        <items>
+            <label>Login Accept Button</label>
+            <name>loginAcceptButtonLabel</name>
+            <value xsi:nil="true"/>
+        </items>
+        <items>
+            <label>Login Reset Button</label>
+            <name>loginResetButtonLabel</name>
+            <value xsi:nil="true"/>
+        </items>
+        <items>
+            <label>Available Label</label>
+            <name>readyLabel</name>
+            <value xsi:nil="true"/>
+        </items>
+        <items>
+            <label>Auxiliary Label</label>
+            <name>auxLabel</name>
+            <value xsi:nil="true"/>
+        </items>
+        <items>
+            <label>After Call Work Label</label>
+            <name>acwLabel</name>
+            <value xsi:nil="true"/>
+        </items>
+        <items>
+            <label>Busy Call Label</label>
+            <name>busyLabel</name>
+            <value xsi:nil="true"/>
+        </items>
+        <items>
+            <label>Pending Auxiliary Label</label>
+            <name>pendingAuxLabel</name>
+            <value xsi:nil="true"/>
+        </items>
+        <items>
+            <label>Pending After Call Work Label</label>
+            <name>pendingAcwLabel</name>
+            <value xsi:nil="true"/>
+        </items>
+        <items>
+            <label>On Call Label</label>
+            <name>OnCallLabel</name>
+            <value xsi:nil="true"/>
+        </items>
+        <items>
+            <label>Log Out Label</label>
+            <name>logoutLabel</name>
+            <value xsi:nil="true"/>
+        </items>
+        <items>
+            <label>Agent Mode Label</label>
+            <name>agentModeLabel</name>
+            <value xsi:nil="true"/>
+        </items>
+        <items>
+            <label>Zone</label>
+            <name>zoneLabel</name>
+            <value xsi:nil="true"/>
+        </items>
+        <label>Label Options</label>
+        <name>LabelOptions</name>
+    </sections>
+    <sections>
+        <items>
+            <label>Pop on ANI? (Y/N)</label>
+            <name>screenPopOnAni</name>
+            <value>Y</value>
+        </items>
+        <items>
+            <label>Pop on DNIS? (Y/N)</label>
+            <name>screenPopOnDnis</name>
+            <value>N</value>
+        </items>
+        <items>
+            <label>Pop on Transfer and Conference? (Y/N/X/UUI Fields)</label>
+            <name>callPopOnTransfer</name>
+            <value>N</value>
+        </items>
+        <items>
+            <label>Use E164 format for ANI search (Y/N)</label>
+            <name>internationalAniSearch</name>
+            <value>N</value>
+        </items>
+        <items>
+            <label>UUI 1</label>
+            <name>UUI1</name>
+            <value xsi:nil="true"/>
+        </items>
+        <items>
+            <label>UUI 2</label>
+            <name>UUI2</name>
+            <value xsi:nil="true"/>
+        </items>
+        <items>
+            <label>UUI 3</label>
+            <name>UUI3</name>
+            <value xsi:nil="true"/>
+        </items>
+        <items>
+            <label>UUI 4</label>
+            <name>UUI4</name>
+            <value xsi:nil="true"/>
+        </items>
+        <items>
+            <label>UUI 5</label>
+            <name>UUI5</name>
+            <value xsi:nil="true"/>
+        </items>
+        <items>
+            <label>UUI Start</label>
+            <name>UUIStart</name>
+            <value>;</value>
+        </items>
+        <items>
+            <label>UUI Stop</label>
+            <name>UUIStop</name>
+            <value>:</value>
+        </items>
+        <items>
+            <label>UUI Separator</label>
+            <name>UUISep</name>
+            <value>!</value>
+        </items>
+        <items>
+            <label>Suppress Screen Pop(C/A/W/D)</label>
+            <name>suppressScreenPop</name>
+            <value xsi:nil="true"/>
+        </items>
+        <items>
+            <label>End Pop VisualForce Page Name</label>
+            <name>callEndScreenPop</name>
+            <value xsi:nil="true"/>
+        </items>
+        <items>
+            <label>Screen Pop Code Order</label>
+            <name>screenPopCodeOrder</name>
+            <value>500,003,800,001</value>
+        </items>
+        <items>
+            <label>Pop to Lightning Component? (Y/N)</label>
+            <name>popToLightningComponent</name>
+            <value>N</value>
+        </items>
+        <label>Call ScreenPop Options</label>
+        <name>callScreenPopOptions</name>
+    </sections>
+    <sections>
+        <items>
+            <label>Logout Reason Enabled? (Y/N)</label>
+            <name>LogoutReasonEnabled</name>
+            <value>N</value>
+        </items>
+        <items>
+            <label>Auxiliary Reason Enabled? (Y/N)</label>
+            <name>AUXReasonEnabled</name>
+            <value>Y</value>
+        </items>
+        <items>
+            <label>After Call Work Reason Enabled? (Y/N/O/X)</label>
+            <name>WrapupReasonEnabled</name>
+            <value>N</value>
+        </items>
+        <label>Reason Codes Enabled</label>
+        <name>ReasonCodesEnabled</name>
+    </sections>
+    <sections>
+        <items>
+            <label>Logout 1</label>
+            <name>Logout1</name>
+            <value>1=Time to go.</value>
+        </items>
+        <items>
+            <label>Logout 2</label>
+            <name>Logout2</name>
+            <value>2=Break time.</value>
+        </items>
+        <items>
+            <label>Logout 3</label>
+            <name>Logout3</name>
+            <value>3=Time for restroom.</value>
+        </items>
+        <items>
+            <label>Logout 4</label>
+            <name>Logout4</name>
+            <value>4=Team meeting.</value>
+        </items>
+        <items>
+            <label>Logout 5</label>
+            <name>Logout5</name>
+            <value>5=System failure.</value>
+        </items>
+        <items>
+            <label>Logout 6</label>
+            <name>Logout6</name>
+            <value xsi:nil="true"/>
+        </items>
+        <items>
+            <label>Logout 7</label>
+            <name>Logout7</name>
+            <value xsi:nil="true"/>
+        </items>
+        <items>
+            <label>Logout 8</label>
+            <name>Logout8</name>
+            <value xsi:nil="true"/>
+        </items>
+        <items>
+            <label>Logout 9</label>
+            <name>Logout9</name>
+            <value xsi:nil="true"/>
+        </items>
+        <label>Logout Reason Codes</label>
+        <name>LogoutReasonCodes</name>
+    </sections>
+    <sections>
+        <items>
+            <label>Auxiliary 1</label>
+            <name>AUX01</name>
+            <value>01=System Aux</value>
+        </items>
+        <items>
+            <label>Auxiliary 2</label>
+            <name>AUX02</name>
+            <value>02=Istirahat</value>
+        </items>
+        <items>
+            <label>Auxiliary 3</label>
+            <name>AUX03</name>
+            <value>03=Isi Foam</value>
+        </items>
+        <items>
+            <label>Auxiliary 4</label>
+            <name>AUX04</name>
+            <value>04=OutGoing call</value>
+        </items>
+        <items>
+            <label>Auxiliary 5</label>
+            <name>AUX05</name>
+            <value>05=Ask Spv/BO</value>
+        </items>
+        <items>
+            <label>Auxiliary 6</label>
+            <name>AUX06</name>
+            <value>06=Briefing/Coach</value>
+        </items>
+        <items>
+            <label>Auxiliary 7</label>
+            <name>AUX07</name>
+            <value>07=Rest Room</value>
+        </items>
+        <items>
+            <label>Auxiliary 8</label>
+            <name>AUX08</name>
+            <value>08=Sholat</value>
+        </items>
+        <items>
+            <label>Auxiliary 9</label>
+            <name>AUX09</name>
+            <value>09=System error</value>
+        </items>
+        <items>
+            <label>Auxiliary 10</label>
+            <name>AUX10</name>
+            <value xsi:nil="true"/>
+        </items>
+        <items>
+            <label>Auxiliary 11</label>
+            <name>AUX11</name>
+            <value xsi:nil="true"/>
+        </items>
+        <items>
+            <label>Auxiliary 12</label>
+            <name>AUX12</name>
+            <value xsi:nil="true"/>
+        </items>
+        <items>
+            <label>Auxiliary 13</label>
+            <name>AUX13</name>
+            <value xsi:nil="true"/>
+        </items>
+        <items>
+            <label>Auxiliary 14</label>
+            <name>AUX14</name>
+            <value xsi:nil="true"/>
+        </items>
+        <items>
+            <label>Auxiliary 15</label>
+            <name>AUX15</name>
+            <value xsi:nil="true"/>
+        </items>
+        <items>
+            <label>Auxiliary 16</label>
+            <name>AUX16</name>
+            <value xsi:nil="true"/>
+        </items>
+        <items>
+            <label>Auxiliary 17</label>
+            <name>AUX17</name>
+            <value xsi:nil="true"/>
+        </items>
+        <items>
+            <label>Auxiliary 18</label>
+            <name>AUX18</name>
+            <value xsi:nil="true"/>
+        </items>
+        <items>
+            <label>Auxiliary 19</label>
+            <name>AUX19</name>
+            <value xsi:nil="true"/>
+        </items>
+        <items>
+            <label>Auxiliary 20</label>
+            <name>AUX20</name>
+            <value xsi:nil="true"/>
+        </items>
+        <label>Auxiliary Reason Codes</label>
+        <name>AUXReasonCodes</name>
+    </sections>
+    <sections>
+        <items>
+            <label>After Call Work 1</label>
+            <name>Wrapup01</name>
+            <value>Didn&apos;t want the product anymore.</value>
+        </items>
+        <items>
+            <label>After Call Work 2</label>
+            <name>Wrapup02</name>
+            <value>Could not find the right person.</value>
+        </items>
+        <items>
+            <label>After Call Work 3</label>
+            <name>Wrapup03</name>
+            <value>Please, Callback later.</value>
+        </items>
+        <items>
+            <label>After Call Work 4</label>
+            <name>Wrapup04</name>
+            <value>Unsuccess contact.</value>
+        </items>
+        <items>
+            <label>After Call Work 5</label>
+            <name>Wrapup05</name>
+            <value>Success contact, sold it.</value>
+        </items>
+        <items>
+            <label>After Call Work 6</label>
+            <name>Wrapup06</name>
+            <value xsi:nil="true"/>
+        </items>
+        <items>
+            <label>After Call Work 7</label>
+            <name>Wrapup07</name>
+            <value xsi:nil="true"/>
+        </items>
+        <items>
+            <label>After Call Work 8</label>
+            <name>Wrapup08</name>
+            <value xsi:nil="true"/>
+        </items>
+        <items>
+            <label>After Call Work 9</label>
+            <name>Wrapup09</name>
+            <value xsi:nil="true"/>
+        </items>
+        <items>
+            <label>After Call Work 10</label>
+            <name>Wrapup10</name>
+            <value xsi:nil="true"/>
+        </items>
+        <items>
+            <label>After Call Work 11</label>
+            <name>Wrapup11</name>
+            <value xsi:nil="true"/>
+        </items>
+        <items>
+            <label>After Call Work 12</label>
+            <name>Wrapup12</name>
+            <value xsi:nil="true"/>
+        </items>
+        <items>
+            <label>After Call Work 13</label>
+            <name>Wrapup13</name>
+            <value xsi:nil="true"/>
+        </items>
+        <items>
+            <label>After Call Work 14</label>
+            <name>Wrapup14</name>
+            <value xsi:nil="true"/>
+        </items>
+        <items>
+            <label>After Call Work 15</label>
+            <name>Wrapup15</name>
+            <value xsi:nil="true"/>
+        </items>
+        <items>
+            <label>After Call Work 16</label>
+            <name>Wrapup16</name>
+            <value xsi:nil="true"/>
+        </items>
+        <items>
+            <label>After Call Work 17</label>
+            <name>Wrapup17</name>
+            <value xsi:nil="true"/>
+        </items>
+        <items>
+            <label>After Call Work 18</label>
+            <name>Wrapup18</name>
+            <value xsi:nil="true"/>
+        </items>
+        <items>
+            <label>After Call Work 19</label>
+            <name>Wrapup19</name>
+            <value xsi:nil="true"/>
+        </items>
+        <items>
+            <label>After Call Work 20</label>
+            <name>Wrapup20</name>
+            <value xsi:nil="true"/>
+        </items>
+        <label>After Call Work Reason Codes</label>
+        <name>WrapupReasonCodes</name>
+    </sections>
+    <sections>
+        <items>
+            <label>Open Dialpad</label>
+            <name>openDialpad</name>
+            <value>ctrl+alt+m</value>
+        </items>
+        <items>
+            <label>Focus Make Call Textfield</label>
+            <name>focusMakeCall</name>
+            <value>ctrl+alt+8</value>
+        </items>
+        <items>
+            <label>Access Directory Popup</label>
+            <name>accessDirectoryPopup</name>
+            <value>ctrl+alt+s</value>
+        </items>
+        <items>
+            <label>Redial</label>
+            <name>redial</name>
+            <value>ctrl+alt+n</value>
+        </items>
+        <items>
+            <label>Open My Calls Today Report</label>
+            <name>openMyCallsToday</name>
+            <value>ctrl+alt+t</value>
+        </items>
+        <items>
+            <label>Open Call History Popup</label>
+            <name>openLast3Calls</name>
+            <value>ctrl+alt+l</value>
+        </items>
+        <items>
+            <label>Drop Call</label>
+            <name>dropCall</name>
+            <value>ctrl+alt+d</value>
+        </items>
+        <items>
+            <label>Answer Call</label>
+            <name>answerCall</name>
+            <value>ctrl+alt+f</value>
+        </items>
+        <items>
+            <label>Hold Call</label>
+            <name>holdCall</name>
+            <value>ctrl+alt+h</value>
+        </items>
+        <items>
+            <label>Retrieve Call</label>
+            <name>retrieveCall</name>
+            <value>ctrl+alt+r</value>
+        </items>
+        <items>
+            <label>Consult Call</label>
+            <name>consultCall</name>
+            <value>ctrl+alt+c</value>
+        </items>
+        <items>
+            <label>Blind Transfer</label>
+            <name>blindTransfer</name>
+            <value>ctrl+alt+i</value>
+        </items>
+        <items>
+            <label>Blind Conference</label>
+            <name>blindConference</name>
+            <value>ctrl+alt+o</value>
+        </items>
+        <items>
+            <label>Complete Transfer</label>
+            <name>completeTransfer</name>
+            <value>ctrl+alt+j</value>
+        </items>
+        <items>
+            <label>Complete Conference</label>
+            <name>completeConference</name>
+            <value>ctrl+alt+k</value>
+        </items>
+        <items>
+            <label>Drop Last Party</label>
+            <name>dropLastParty</name>
+            <value>ctrl+alt+p</value>
+        </items>
+        <items>
+            <label>Focus on Subject Field</label>
+            <name>focusSubject</name>
+            <value>ctrl+alt+9</value>
+        </items>
+        <items>
+            <label>Focus on Name Dropdown</label>
+            <name>focusName</name>
+            <value>ctrl+alt+z</value>
+        </items>
+        <items>
+            <label>Focus on Related To Dropdown</label>
+            <name>focusRelatedTo</name>
+            <value>ctrl+alt+x</value>
+        </items>
+        <items>
+            <label>Focus on Comments Text Area</label>
+            <name>focusComments</name>
+            <value>ctrl+alt+v</value>
+        </items>
+        <items>
+            <label>Focus on Custom Field 1</label>
+            <name>focusCustom1</name>
+            <value>ctrl+alt+4</value>
+        </items>
+        <items>
+            <label>Focus on Custom Field 2</label>
+            <name>focusCustom2</name>
+            <value>ctrl+alt+5</value>
+        </items>
+        <items>
+            <label>Focus on Custom Field 3</label>
+            <name>focusCustom3</name>
+            <value>ctrl+alt+6</value>
+        </items>
+        <items>
+            <label>Focus on Reason Dropdown</label>
+            <name>focusReason</name>
+            <value>ctrl+alt+b</value>
+        </items>
+        <items>
+            <label>Focus First After Call Work Reason</label>
+            <name>focusFirstReason</name>
+            <value>space</value>
+        </items>
+        <items>
+            <label>Finish After Call Work</label>
+            <name>finishWrapup</name>
+            <value>ctrl+alt+w</value>
+        </items>
+        <items>
+            <label>Finish After Call Work And Set Available</label>
+            <name>finishWrapupSetAvailable</name>
+            <value>ctrl+alt+q</value>
+        </items>
+        <items>
+            <label>Previous Call</label>
+            <name>previousCall</name>
+            <value>[</value>
+        </items>
+        <items>
+            <label>Next Call</label>
+            <name>nextCall</name>
+            <value>]</value>
+        </items>
+        <items>
+            <label>Set Agent to Ready State</label>
+            <name>setReady</name>
+            <value>ctrl+alt+1</value>
+        </items>
+        <items>
+            <label>Set Agent to Auxiliary State</label>
+            <name>setNotReady</name>
+            <value>ctrl+alt+2</value>
+        </items>
+        <items>
+            <label>Set Agent to After Call Work State</label>
+            <name>setWrapup</name>
+            <value>ctrl+alt+3</value>
+        </items>
+        <items>
+            <label>Close Call History</label>
+            <name>closeLast3Calls</name>
+            <value>esc</value>
+        </items>
+        <items>
+            <label>Close Parties List</label>
+            <name>closePartiesList</name>
+            <value>esc</value>
+        </items>
+        <items>
+            <label>Cancel Ani Replacement</label>
+            <name>cancelAniReplacement</name>
+            <value>esc</value>
+        </items>
+        <items>
+            <label>Close Ani Replacement</label>
+            <name>closeAniReplacement</name>
+            <value>enter</value>
+        </items>
+        <label>Keyboard Shortcuts</label>
+        <name>KeyboardShortcuts</name>
+    </sections>
+    <sections>
+        <items>
+            <label>Host FQDN/IP</label>
+            <name>serverHostName</name>
+            <value>crmconnectorlb.bri.co.id</value>
+        </items>
+        <items>
+            <label>IEC port</label>
+            <name>port</name>
+            <value>8483</value>
+        </items>
+        <items>
+            <label>OEC port</label>
+            <name>outboundPort</name>
+            <value>8485</value>
+        </items>
+        <items>
+            <label>Use HTTPS? (Y/N)</label>
+            <name>secure</name>
+            <value>Y</value>
+        </items>
+        <items>
+            <label>Enable Debug Log Level? (Y/N)</label>
+            <name>enableDebugLogLevel</name>
+            <value>N</value>
+        </items>
+        <label>Server Configuration</label>
+        <name>CometDServerConfig</name>
+    </sections>
+    <sections>
+        <items>
+            <label>Agent Mode?(ACD-Only/Blended/Outreach-Only)</label>
+            <name>AgentMode</name>
+            <value>ACD-Only</value>
+        </items>
+        <items>
+            <label>Outreach Zone</label>
+            <name>OutreachZone</name>
+            <value>Default</value>
+        </items>
+        <items>
+            <label>Is auto nailup ?(Y/N)</label>
+            <name>IsAutoNailUp</name>
+            <value>Y</value>
+        </items>
+        <items>
+            <label>Enable Preview Cancel?(Y/N)</label>
+            <name>IsEnablePreviewCancel</name>
+            <value>Y</value>
+        </items>
+        <items>
+            <label>Nailup Call CLID</label>
+            <name>nailupCallClid</name>
+            <value xsi:nil="true"/>
+        </items>
+        <items>
+            <label>Voicemail Phone Number</label>
+            <name>voicemailPhoneNumber</name>
+            <value xsi:nil="true"/>
+        </items>
+        <items>
+            <label>Voicemail Disposition Code</label>
+            <name>dispositionCode</name>
+            <value xsi:nil="true"/>
+        </items>
+        <items>
+            <label>Logout on timeout (Y/N)</label>
+            <name>logoutOnTimeout</name>
+            <value>N</value>
+        </items>
+        <items>
+            <label>Campaign Field API Name</label>
+            <name>callLogCampaign</name>
+            <value>Campaign__c</value>
+        </items>
+        <label>Outreach Agent Configuration</label>
+        <name>POMEngineConfig</name>
+    </sections>
+    <sections>
+        <items>
+            <label>POM Screenpop? (Y/N)</label>
+            <name>POMScreenpop</name>
+            <value>Y</value>
+        </items>
+        <items>
+            <label>Search Attribute 1</label>
+            <name>SearchAttribute1</name>
+            <value>First Name: Firstname.First Name</value>
+        </items>
+        <items>
+            <label>Search Attribute 2</label>
+            <name>SearchAttribute2</name>
+            <value>Last Name: Lastname.Last Name</value>
+        </items>
+        <items>
+            <label>Search Attribute 3</label>
+            <name>SearchAttribute3</name>
+            <value>Phone 1: PhoneFields.phoneNumber.Phone 1</value>
+        </items>
+        <items>
+            <label>Search Attribute 4</label>
+            <name>SearchAttribute4</name>
+            <value>Time Zone: PhoneFields.timezone.Time Zone</value>
+        </items>
+        <items>
+            <label>Search Attribute 5</label>
+            <name>SearchAttribute5</name>
+            <value>E-Mail: EmailFields.E-Mail</value>
+        </items>
+        <items>
+            <label>Search Attribute 6</label>
+            <name>SearchAttribute6</name>
+            <value>Contract Number: CustomFields.ContractNumber</value>
+        </items>
+        <items>
+            <label>Display Attribute 1</label>
+            <name>DisplayAttribute1</name>
+            <value>Campaign Name: CampaignName</value>
+        </items>
+        <items>
+            <label>Display Attribute 2</label>
+            <name>DisplayAttribute2</name>
+            <value>E-Mail: EmailFields.E-Mail</value>
+        </items>
+        <items>
+            <label>Display Attribute 3</label>
+            <name>DisplayAttribute3</name>
+            <value>First Name: Firstname.First Name</value>
+        </items>
+        <items>
+            <label>Display Attribute 4</label>
+            <name>DisplayAttribute4</name>
+            <value>Last Name: Lastname.Last Name</value>
+        </items>
+        <items>
+            <label>Display Attribute 5</label>
+            <name>DisplayAttribute5</name>
+            <value>Phone 1: PhoneFields.phoneNumber.Phone 1</value>
+        </items>
+        <items>
+            <label>Display Attribute 6</label>
+            <name>DisplayAttribute6</name>
+            <value>Time Zone: PhoneFields.timezone.Time Zone</value>
+        </items>
+        <items>
+            <label>Display Attribute 7</label>
+            <name>DisplayAttribute7</name>
+            <value>Address Line 1: AddressList.Line1.Address Line 1 Predefined</value>
+        </items>
+        <items>
+            <label>Display Attribute 8</label>
+            <name>DisplayAttribute8</name>
+            <value>Zipcode Predefined: AddressList.ZipCode.Zipcode Predefined</value>
+        </items>
+        <items>
+            <label>Outbound Screen POP Visual Force Page URL</label>
+            <name>VisualforcePageUrl</name>
+            <value>/apex/VisualForcePOMQuery</value>
+        </items>
+        <label>Outreach Screenpop Configuration</label>
+        <name>POMScreenpopConfig</name>
+    </sections>
+</CallCenter>

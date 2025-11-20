@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>test_exception__c</fullName>
+    <fieldManageability>DeveloperControlled</fieldManageability>
+    <label>test exception</label>
+    <required>false</required>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Not Testing Exception</fullName>
+                <default>true</default>
+                <label>Not Testing Exception</label>
+            </value>
+            <value>
+                <fullName>Client-Side HTTP Error - Salesforce</fullName>
+                <default>false</default>
+                <label>Client-Side HTTP Error - Salesforce</label>
+            </value>
+            <value>
+                <fullName>Server-Side HTTP Error - External</fullName>
+                <default>false</default>
+                <label>Server-Side HTTP Error - External</label>
+            </value>
+            <value>
+                <fullName>Unauthorized Endpoint</fullName>
+                <default>false</default>
+                <label>Unauthorized Endpoint</label>
+            </value>
+            <value>
+                <fullName>Other Exceptions</fullName>
+                <default>false</default>
+                <label>Other Exceptions</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

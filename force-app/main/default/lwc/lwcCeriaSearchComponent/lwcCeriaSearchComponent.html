@@ -1,0 +1,810 @@
+<!--
+    LWC Name           : lwcCeriaSearchComponent.html
+    Created Date       : 09 Januari 2025
+    @description       : This is class for UI search data ceria
+    @author            : Rakeyan Nuramria
+    Modification Log :
+    Ver   Date         Author                            Modification
+    Release 3
+    1.0   09/01/2025   Rakeyan Nuramria                  Initial Version
+    1.0   13/01/2025   Rakeyan Nuramria                  Change UI to v2
+    1.0   22/01/2025   Rakeyan Nuramria                  Adjust UI to API
+    1.0   23/01/2025   Rakeyan Nuramria                  Adjust error handling
+    1.0   04/02/2025   Rakeyan Nuramria                  [FROM SIT] Adjust UI History
+    1.0   11/02/2025   Rakeyan Nuramria                  Hide field that doesnt exist in the API
+    1.0   03/03/2025   Rakeyan Nuramria                  Adjust UI based on feedback UAT
+-->
+<template>
+
+    <!-- Search Section -->
+    <lightning-card title="" variant="base" class="custom-card slds-m-top_xx-small slds-card_boundary">
+        <div class="slds-grid slds-gutters slds-m-around_small">
+            <div class="slds-col">
+                <lightning-input label="Ceria ID" value={nomorRekening} onchange={handleNomorRekeningChange}
+                    disabled={disableNomorRekeningField}></lightning-input>
+                <div style="color: red;">{nomorRekeningError}</div>
+            </div>
+            <div class="slds-col">
+                <lightning-input label="NIK" value={nik} onchange={handleNikChange}
+                    disabled={disableNikField}></lightning-input>
+                <template if:true={nikError}>
+                    <div class="nik-error" style="color: red;">{nikError}</div>
+                </template>
+            </div>
+            <div class="slds-col" style="align-self: flex-start; margin-top: 22px;">
+                <lightning-button label="Cari" variant="brand" onclick={handleSearch}
+                    disabled={isSearchDisabled}></lightning-button>
+            </div>
+        </div>
+
+        <template if:true={isLoading}>
+            <!-- <lightning-card class="custom-card slds-m-top_xx-small slds-card_boundary"> -->
+            <div class="spinner-container" style="height:6rem;position:relative">
+                <div role="status" class="slds-spinner slds-spinner_small">
+                    <span class="slds-assistive-text">Loading</span>
+                    <div class="slds-spinner__dot-a"></div>
+                    <div class="slds-spinner__dot-b"></div>
+                </div>
+            </div>
+            <!-- </lightning-card> -->
+        </template>
+
+        <!-- <template if:true={errorMsg}>
+            <div class="slds-text-color_error">
+                {errorMsg}
+            </div>
+        </template> -->
+    </lightning-card>
+    <!-- End Search Section -->
+
+    <!-- Result Table Section -->
+    <template if:false={isLoading}>
+        <template if:true={hasError}>
+            <div class="slds-m-top_small slds-text-color_error slds-text-align_center">
+                <b>{errorMsg}</b>
+            </div>
+        </template>
+
+        <template if:true={showResult}>
+            <lightning-card title="Hasil pencarian.." icon-name="" variant="base"
+                class="custom-card slds-m-top_xx-small slds-card_boundary">
+                <div class="slds-p-around_small slds-m-top_xx-small">
+                    <div class="slds-scrollable_y custom-scroll">
+                        <table class="slds-table slds-table_bordered slds-table_fixed-layout custom-table">
+                            <thead>
+                                <tr class="slds-line-height_reset">
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Ceria ID (ODA)">Ceria ID (ODA)</div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Nama Lengkap">Nama Lengkap</div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Tanggal Pembuka Akun Ceria">Tanggal Pembuka
+                                            Akun Ceria
+                                        </div>
+                                    </th>
+                                    <!-- <th scope="col">
+                                        <div class="slds-truncate" title="Periode">Periode</div>
+                                    </th> -->
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Sisa Outstanding">Sisa Outstanding</div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Sisa Limit">Sisa Limit</div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Action">Action</div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                <template for:each={ceriaData} for:item='customer'>
+                                    <tr key={customer.ceriaId} class="slds-hint-parent">
+                                        <td>{customer.ceriaId}</td>
+                                        <td>{customer.nama}</td>
+                                        <td>{customer.tanggalPembukaanRekening}</td>
+                                        <!-- <td>{customer.periode}</td> -->
+                                        <td>{customer.sisaOutstanding}</td>
+                                        <td>{customer.sisaLimit}</td>
+                                        <td>
+                                            <lightning-button-menu alternative-text="Action" icon-name="utility:down"
+                                                class="slds-m-left_x-small custom-button-menu" menu-alignment="right">
+                                                <lightning-menu-item label="Detail" value="detail"
+                                                    onclick={handleDetailAction} onclose={handleCloseDetail}
+                                                    data-id={customer.ceriaId}></lightning-menu-item>
+                                                <lightning-menu-item label="History Pembayaran"
+                                                    value="historyPembayaran" onclose={handleCloseHistoryPembayaran}
+                                                    onclick={handleHistoryPembayaranAction}
+                                                    data-id={customer.ceriaId}></lightning-menu-item>
+                                                <lightning-menu-item label="Data Transaksi" value="dataTransaksi"
+                                                    onclick={handleDataTransaksiAction}
+                                                    onclose={handleCloseDataTransaksi}
+                                                    data-id={customer.ceriaId}></lightning-menu-item>
+                                            </lightning-button-menu>
+                                        </td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </lightning-card>
+        </template>
+    </template>
+
+    <!-- End Result Table Section -->
+
+    <!-- Detail Section -->
+    <div class="scrollable-detail-container">
+        <template for:each={ceriaData} for:item="data">
+            <template if:true={data.showSection}>
+                <lightning-card key={data.ceriaId} title="Informasi Detail" icon-name="" variant="base"
+                    class="custom-card slds-m-top_xx-small slds-card_boundary data-detail-component">
+
+                    <div slot="actions">
+                        <template if:false={isCloseHidden}>
+                            <lightning-button-icon data-id={data.ceriaId} icon-name="utility:close"
+                                alternative-text="Close" title="Close" onclick={handleCloseDetail} class="cssClass"
+                                variant="bare">
+                            </lightning-button-icon>
+                        </template>
+                    </div>
+
+                    <div class="slds-grid slds-wrap slds-m-around_medium">
+
+                        <div class="slds-col slds-size_4-of-12">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label" for="tgl-penerbitan">Tanggal Penerbitan
+                                    Billing</label>
+                                <div class="slds-form-element__control">
+                                    <input class="slds-input text-bold" type="text" id="tgl-penerbitan" readonly
+                                        value={currentDetailData.tanggalPenerbitanBilling} />
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="slds-col slds-size_4-of-12">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label" for="tgl-jatuh-tempo">Tanggal Jatuh
+                                    Tempo</label>
+                                <div class="slds-form-element__control">
+                                    <input class="slds-input text-bold" type="text" id="tgl-jatuh-tempo" readonly
+                                        value={currentDetailData.tanggalJatuhTempo} />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="slds-col slds-size_4-of-12">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label" for="nominal-tagihan">Nominal Tagihan</label>
+                                <div class="slds-form-element__control">
+                                    <input class="slds-input text-bold" type="text" id="nominal-tagihan" readonly
+                                        value={currentDetailData.nominalTagihan} />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="slds-col slds-size_4-of-12">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label" for="status-kolektabilitas">Status
+                                    Kolektabilitas</label>
+                                <div class="slds-form-element__control">
+                                    <input class="slds-input text-bold" type="text" id="status-kolektabilitas" readonly
+                                        value={currentDetailData.statusKolektibilitas} />
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <!-- <div class="slds-col slds-size_4-of-12">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label" for="tanggal-hold">Tanggal Hold Terakhir</label>
+                                <div class="slds-form-element__control">
+                                    <input class="slds-input text-bold" type="text" id="tanggal-hold" readonly
+                                        value={currentDetailData.tanggalHoldTerakhir} />
+                                </div>
+                            </div>
+                        </div> -->
+
+                        <!-- <div class="slds-col slds-size_4-of-12">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label" for="nominal-hold">Nominal Hold</label>
+                                <div class="slds-form-element__control">
+                                    <input class="slds-input text-bold" type="text" id="nominal-hold" readonly
+                                        value={currentDetailData.nominalHold} />
+                                </div>
+                            </div>
+                        </div> -->
+
+                        <div class="slds-col slds-size_4-of-12">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label" for="tgl-pembayaran-terakhir">Tanggal Pembayaran
+                                    Terakhir</label>
+                                <div class="slds-form-element__control">
+                                    <input class="slds-input text-bold" type="text" id="tgl-pembayaran-terakhir"
+                                        readonly value={currentDetailData.tanggalPembayaranTerakhir} />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="slds-col slds-size_4-of-12">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label" for="nominal-pembayaran-terakhir">Nominal
+                                    Pembayaran Terakhir</label>
+                                <div class="slds-form-element__control">
+                                    <input class="slds-input text-bold" type="text" id="nominal-pembayaran-terakhir"
+                                        readonly value={currentDetailData.nominalPembayaranTerakhir} />
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="slds-col slds-size_4-of-12">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label" for="block-code-kolektabilitas">Block Code
+                                    Kolektabilitas</label>
+                                <div class="slds-form-element__control">
+                                    <input class="slds-input text-bold" type="text" id="block-code-kolektabilitas"
+                                        readonly value={currentDetailData.blockCodeKolektibilitas} />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="slds-col slds-size_4-of-12">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label" for="block-code-system">Block Code
+                                    System</label>
+                                <div class="slds-form-element__control">
+                                    <input class="slds-input text-bold" type="text" id="block-code-system" readonly
+                                        value={currentDetailData.blockCodeSystem} />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </lightning-card>
+            </template>
+        </template>
+    </div>
+    <!-- End Detail Section -->
+
+    <!-- History Pembayaran Section -->
+    <div class="scrollable-history-container">
+        <template for:each={ceriaData} for:item="data">
+            <template if:true={data.showHistorySection}>
+                <lightning-card key={data.ceriaId} title="History Pembayaran" icon-name="" variant="base"
+                    class="custom-card slds-m-top_xx-small slds-card_boundary data-history-component">
+
+                    <div slot="actions">
+                        <template if:false={isCloseHidden}>
+                            <lightning-button-icon data-id={data.ceriaId} icon-name="utility:close"
+                                alternative-text="Close" title="Close" onclick={handleCloseHistoryPembayaran}
+                                class="cssClass" variant="bare">
+                            </lightning-button-icon>
+                        </template>
+                    </div>
+
+                    <div class="slds-p-around_small slds-m-top_xx-small">
+                        <div class="slds-scrollable_y custom-scroll">
+                            <table class="slds-table slds-table_bordered slds-table_fixed-layout custom-table">
+                                <thead>
+                                    <tr class="slds-line-height_reset">
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Tanggal Bayar">Tanggal Bayar</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Metode Bayar">Metode Bayar</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Nominal Bayar">Nominal Bayar</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Nomor Rekening Pendebetan">Nomor Rekening
+                                                Pendebetan</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Status">Status</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Remarks">Remarks</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Reference Number">Reference Number</div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- <template for:each={currentHistoryData} for:item="data"> -->
+                                    <tr class="slds-hint-parent">
+                                        <td>{currentHistoryData.tanggalPembayaranTerakhir}</td>
+                                        <td>{currentHistoryData.metodeBayar}</td>
+                                        <td>{currentHistoryData.nominalPembayaranTerakhir}</td>
+                                        <td>{currentHistoryData.nomorRekeningPendebetan}</td>
+                                        <td>{currentHistoryData.status}</td>
+                                        <td>{currentHistoryData.remarks}</td>
+                                        <td>{currentHistoryData.referenceNumberPembayaranTerakhir}</td>
+                                    </tr>
+                                    <!-- </template> -->
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </lightning-card>
+            </template>
+        </template>
+    </div>
+    <!-- End History Pembayaran Section -->
+
+    <!-- Data Transaksi Section -->
+    <div class="scrollable-transaksi-container">
+        <template for:each={ceriaData} for:item="data">
+            <template if:true={data.showTransactionSection}>
+                <lightning-card key={data.ceriaId} title="Data Transaksi" icon-name="" variant="base"
+                    class="custom-card slds-m-top_xx-small slds-card_boundary data-transaksi-component">
+
+                    <div slot="actions">
+                        <template if:false={isCloseHidden}>
+                            <lightning-button-icon data-id={data.ceriaId} icon-name="utility:close"
+                                alternative-text="Close" title="Close" onclick={handleCloseDataTransaksi}
+                                class="cssClass" variant="bare">
+                            </lightning-button-icon>
+                        </template>
+                    </div>
+
+                    <div class="slds-p-around_small slds-m-top_xx-small">
+                        <div class="slds-scrollable_y custom-scroll">
+                            <template if:true={transactionData.length}>
+                                <table class="slds-table slds-table_bordered slds-table_fixed-layout custom-table">
+                                    <thead>
+                                        <tr class="slds-line-height_reset">
+                                            <!-- <th scope="col">
+                                                <div class="slds-truncate" title="LLA ID">LLA ID</div>
+                                            </th> -->
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="Tanggal Transaksi">Tanggal Transaksi
+                                                </div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="Merchant Ref Id">Merchant Ref Id</div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="Transaksi ">Transaksi</div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="Nama Merchant">Nama Merchant</div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="Jumlah Tenor Dipilih">Jumlah Tenor
+                                                    Dipilih
+                                                </div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="Jumlah Tenor Terbentuk">Sisa Bulan
+                                                    Cicilan</div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="Jumlah Tenor Terbentuk">Rincian
+                                                    Pembayaran</div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="Nominal Transaksi">Nominal Transaksi
+                                                </div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="Status Transaksi">Status Transaksi
+                                                </div>
+                                            </th>
+                                            <!-- <th scope="col">
+                                                <div class="slds-truncate" title="Sisa Tagihan">Sisa Tagihan</div>
+                                            </th> -->
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <template for:each={transactionData} for:item="transaction">
+                                            <tr key={transaction.reffNum} class="slds-hint-parent">
+                                                <!-- <td>{transaction.llaId}</td> -->
+                                                <td>{transaction.tanggalTrx}</td>
+                                                <td>{transaction.reffNum}</td>
+                                                <td>{transaction.jenisTransaksi}</td>
+                                                <td>{transaction.namaMerchant}</td>
+                                                <td>{transaction.tenorCicilan}</td>
+                                                <td>{transaction.sisaBulanCicilan}</td>
+                                                <td>{transaction.rincianPembayaran}</td>
+                                                <td>{transaction.nominalTransaksi}</td>
+                                                <td>{transaction.statusTransaksi}</td>
+                                                <!-- <td>{transaction.sisaTagihan}</td> -->
+                                            </tr>
+                                        </template>
+                                    </tbody>
+                                </table>
+                            </template>
+
+                            <template if:false={transactionData.length}>
+                                <div class="slds-m-top_small slds-text-color_error slds-text-align_center">
+                                    <b>Tidak ada data transaksi.</b>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+
+                </lightning-card>
+            </template>
+        </template>
+    </div>
+    <!-- End Data Transaksi Section -->
+
+
+
+
+</template>
+
+<!-- Version 1 UI - Card based -->
+<!-- <template>
+
+
+    <lightning-card title="" variant="base" class="custom-card slds-m-top_xx-small slds-card_boundary">
+        <div class="slds-grid slds-gutters slds-m-around_small">
+            <div class="slds-col">
+                <lightning-input label="Nomor Rekening" value={nomorRekening} onchange={handleNomorRekeningChange}
+                    disabled={disableNomorRekeningField}></lightning-input>
+            </div>
+            <div class="slds-col">
+                <lightning-input label="NIK" value={nik} onchange={handleNikChange}
+                    disabled={disableNikField}></lightning-input>
+                <template if:true={nikError}>
+                    <div class="nik-error" style="color: red;">{nikError}</div>
+                </template>
+            </div>
+            <div class="slds-col" style="align-content: center; margin-top: 20px">
+                <lightning-button label="Cari" variant="brand" onclick={handleSearch}
+                    disabled={disableSearchButton}></lightning-button>
+                <template if:true={hasInputError}>
+                    <div class="nik-error" style="color: red;">‎</div>
+                </template>
+            </div>
+        </div>
+
+        <template if:true={errorMsg}>
+            <div class="slds-text-color_error">
+                {errorMsg}
+            </div>
+        </template>
+    </lightning-card>
+
+
+
+    <p class="slds-m-vertical_small slds-m-left_xx-small"><u>Hasil Pencarian...</u></p>
+
+    <lightning-card title="Header Main Card" icon-name="" variant="base"
+        class="custom-card slds-m-top_xx-small slds-m-bottom_medium slds-card_boundary">
+        <div slot="title"></div>
+        <div slot="actions">
+            <lightning-button-icon icon-name="utility:close" alternative-text="Close" title="Close" data-id=""
+                onclick={handleCardClose} class="cssClass" variant="bare"></lightning-button-icon>
+        </div>
+
+
+
+        <lightning-accordion allow-multiple-sections-open active-section-name={activeSections}>
+
+            <lightning-accordion-section name="dataDiri" label="Informasi Data Diri">
+
+                <lightning-card title="" icon-name="" variant="base"
+                    class="custom-card slds-m-around_xx-small slds-card_boundary">
+                    <div class="slds-grid slds-wrap slds-m-around_medium">
+
+                        <div class="slds-col slds-size_4-of-12">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label" for="ceria-id">Ceria ID (ODA)</label>
+                                <div class="slds-form-element__control">
+                                    <input class="slds-input text-bold" type="text" id="ceria-id" readonly
+                                        value="1282918392138" />
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="slds-col slds-size_4-of-12">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label" for="tanggal-pembuka">Tanggal Pembuka
+                                    Rekening</label>
+                                <div class="slds-form-element__control">
+                                    <input class="slds-input text-bold" type="text" id="tanggal-pembuka" readonly
+                                        value="2025-01-01" />
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="slds-col slds-size_4-of-12">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label" for="nama-lengkap">Nama Lengkap</label>
+                                <div class="slds-form-element__control">
+                                    <input class="slds-input text-bold" type="text" id="nama-lengkap" readonly
+                                        value="Roy Roy" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="slds-col slds-size_4-of-12">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label" for="periode">Periode</label>
+                                <div class="slds-form-element__control">
+                                    <input class="slds-input text-bold" type="text" id="periode" readonly
+                                        value="Januari 2025" />
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="slds-col slds-size_4-of-12">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label" for="sisa-outstanding">Sisa Outstanding</label>
+                                <div class="slds-form-element__control">
+                                    <input class="slds-input text-bold" type="text" id="sisa-outstanding" readonly
+                                        value="2.150.000" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="slds-col slds-size_4-of-12">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label" for="sisa-limit">Sisa Limit</label>
+                                <div class="slds-form-element__control">
+                                    <input class="slds-input text-bold" type="text" id="sisa-limit" readonly
+                                        value="150.000" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </lightning-card>
+            </lightning-accordion-section>
+
+
+            <lightning-accordion-section name="dataDetail" label="Informasi Detail">
+
+                <lightning-card title="" icon-name="" variant="base"
+                    class="custom-card slds-m-around_xx-small slds-card_boundary">
+                    <div class="slds-grid slds-wrap slds-m-around_medium">
+
+                        <div class="slds-col slds-size_4-of-12">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label" for="tgl-penerbitan">Tanggal Penerbitan
+                                    Billing</label>
+                                <div class="slds-form-element__control">
+                                    <input class="slds-input text-bold" type="text" id="tgl-penerbitan" readonly
+                                        value="2025-01-01" />
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="slds-col slds-size_4-of-12">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label" for="tgl-jatuh-tempo">Tanggal Jatuh
+                                    Tempo</label>
+                                <div class="slds-form-element__control">
+                                    <input class="slds-input text-bold" type="text" id="tgl-jatuh-tempo" readonly
+                                        value="2025-01-03" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="slds-col slds-size_4-of-12">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label" for="nominal-tagihan">Nominal Tagihan</label>
+                                <div class="slds-form-element__control">
+                                    <input class="slds-input text-bold" type="text" id="nominal-tagihan" readonly
+                                        value="950.000" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="slds-col slds-size_4-of-12">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label" for="status-kolektabilitas">Status
+                                    Kolektabilitas</label>
+                                <div class="slds-form-element__control">
+                                    <input class="slds-input text-bold" type="text" id="status-kolektabilitas" readonly
+                                        value="Lancar" />
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="slds-col slds-size_4-of-12">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label" for="tanggal-hold">Tanggal Hold Terakhir</label>
+                                <div class="slds-form-element__control">
+                                    <input class="slds-input text-bold" type="text" id="tanggal-hold" readonly
+                                        value="2025-01-05" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="slds-col slds-size_4-of-12">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label" for="nominal-hold">Nominal Hold</label>
+                                <div class="slds-form-element__control">
+                                    <input class="slds-input text-bold" type="text" id="nominal-hold" readonly
+                                        value="700.000" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="slds-col slds-size_4-of-12">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label" for="tgl-pembayaran-terakhir">Tanggal Pembayaran
+                                    Terakhir</label>
+                                <div class="slds-form-element__control">
+                                    <input class="slds-input text-bold" type="text" id="tgl-pembayaran-terakhir"
+                                        readonly value="2025-01-08" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="slds-col slds-size_4-of-12">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label" for="nominal-pembayaran-terakhir">Nominal
+                                    Pembayaran Terakhir</label>
+                                <div class="slds-form-element__control">
+                                    <input class="slds-input text-bold" type="text" id="nominal-pembayaran-terakhir"
+                                        readonly value="200.000" />
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="slds-col slds-size_4-of-12">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label" for="block-code-kolektabilitas">Block Code
+                                    Kolektabilitas</label>
+                                <div class="slds-form-element__control">
+                                    <input class="slds-input text-bold" type="text" id="block-code-kolektabilitas"
+                                        readonly value="Q" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="slds-col slds-size_4-of-12">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label" for="block-code-system">Block Code
+                                    System</label>
+                                <div class="slds-form-element__control">
+                                    <input class="slds-input text-bold" type="text" id="block-code-system" readonly
+                                        value="S2" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </lightning-card>
+            </lightning-accordion-section>
+
+            <lightning-accordion-section name="historyPembayaran" label="History Pembayaran">
+                <lightning-card icon-name="" variant="base" class="custom-card slds-m-top_xx-small slds-card_boundary">
+                    <div class="slds-p-around_small slds-m-top_xx-small">
+                        <div class="slds-scrollable_y custom-scroll">
+                            <table class="slds-table slds-table_bordered slds-table_fixed-layout custom-table">
+                                <thead>
+                                    <tr class="slds-line-height_reset">
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Tanggal Bayar">Tanggal Bayar</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Metode Bayar">Metode Bayar</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Nominal Bayar">Nominal Bayar</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Nomor Rekening Pendaftaran">Nomor Rekening
+                                                Pendaftaran</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Status">Status</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Remarks">Remarks</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Reference Number">Reference Number</div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="slds-hint-parent">
+                                        <td>2025-01-01</td>
+                                        <td>AutoPay</td>
+                                        <td>3.000</td>
+                                        <td>12345678981</td>
+                                        <td>5</td>
+                                        <td>CERIA_0921218218</td>
+                                        <td>9876543211</td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </lightning-card>
+            </lightning-accordion-section>
+
+            <lightning-accordion-section name="dataTransaksi" label="Data Transaksi">
+                <lightning-card icon-name="" variant="base" class="custom-card slds-m-top_xx-small slds-card_boundary">
+                    <div class="slds-p-around_small slds-m-top_xx-small">
+                        <div class="slds-scrollable_y custom-scroll">
+                            <table class="slds-table slds-table_bordered slds-table_fixed-layout custom-table">
+                                <thead>
+                                    <tr class="slds-line-height_reset">
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="LLA ID">LLA ID</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Tanggal Transaksi">Tanggal Transaksi</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Merchant Ref Id">Merchant Ref Id</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Transaksi ">Transaksi</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Nama Merchant">Nama Merchant</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Jumlah Tenor Dipilih">Jumlah Tenor Dipilih
+                                            </div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Jumlah Tenor Terbentuk">Jumlah Tenor
+                                                Terbentuk</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Nominal Transaksi">Nominal Transaksi</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Sisa Tagihan">Sisa Tagihan</div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="slds-hint-parent">
+                                        <td>213321</td>
+                                        <td>2025-01-01</td>
+                                        <td>5b43asd23shrw122</td>
+                                        <td>Cashout</td>
+                                        <td>Cashout BRI</td>
+                                        <td>1</td>
+                                        <td>1</td>
+                                        <td>400.000</td>
+                                        <td>0</td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </lightning-card>
+            </lightning-accordion-section>
+
+        </lightning-accordion>
+
+    </lightning-card>
+
+
+
+
+
+
+
+
+</template> -->
+
+<!-- End Version 1 UI - Card based  -->

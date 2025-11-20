@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>Attività e passività</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Attività e passività</value>
+    </caseValues>
+    <fieldSets>
+        <label><!-- Assets &amp; Liabilities --></label>
+        <name>WM_Client_Assets_Liabilities</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Assets &amp; Liabilities --></label>
+        <name>WM_Household_Assets_Liabilities</name>
+    </fieldSets>
+    <gender>Feminine</gender>
+    <nameFieldLabel>Nome dell&apos;attività o della passività</nameFieldLabel>
+    <recordTypes>
+        <description>Debito dovuto, ad es. un&apos;ipoteca</description>
+        <label>Passività</label>
+        <name>FinServ__Liability</name>
+    </recordTypes>
+    <recordTypes>
+        <description>Attività non rappresentate in account finanziari, ad es. beni immobiliari oppure oggetti da collezione</description>
+        <label>Attività</label>
+        <name>FinServ__NonfinancialAsset</name>
+    </recordTypes>
+    <startsWith>Vowel</startsWith>
+    <validationRules>
+        <errorMessage>Gli account con proprietà individuale non possono avere un co-titolare.</errorMessage>
+        <name>FinServ__NoJointOwnerForIndividualAccounts</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Il titolare principale e il co-titolare devono essere diversi.</errorMessage>
+        <name>FinServ__PrimaryAndJointOwnerCannotBeSame</name>
+    </validationRules>
+</CustomObjectTranslation>

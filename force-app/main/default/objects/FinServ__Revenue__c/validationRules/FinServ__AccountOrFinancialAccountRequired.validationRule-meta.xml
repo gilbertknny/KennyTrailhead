@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>FinServ__AccountOrFinancialAccountRequired</fullName>
+    <active>true</active>
+    <errorConditionFormula>OR (AND(
+ISBLANK(FinServ__Account__c),
+ISBLANK(FinServ__FinancialAccount__c)
+), AND(NOT(ISBLANK(FinServ__Account__c)), NOT(ISBLANK(FinServ__FinancialAccount__c))))</errorConditionFormula>
+    <errorMessage>Enter either the Client or the Financial Account for this Revenue source.</errorMessage>
+</ValidationRule>

@@ -1,0 +1,39 @@
+<template>
+    <lightning-card title="Pilih Gambar Untuk Proses KYC">
+        <template if:true={files}>
+            <template if:true={hasFiles}>
+
+                <!-- Preview gambar besar -->
+                <template if:true={selectedFile}>
+                    <div class="preview-container">
+                        <img class="preview-image" src={selectedFile.previewUrl} alt={selectedFile.title} />
+                        <p class="preview-title">{selectedFile.title} - <span class="selected-label">Selected</span></p>
+                    </div>
+                </template>
+
+                <!-- Grid gambar -->
+                <div class="image-grid">
+                    <template for:each={files} for:item="file">
+                        <div key={file.versionId}
+                             class="image-container {file.selected ? 'selected' : ''}"
+                             onclick={handleSelect}
+                             data-id={file.versionId}>
+                            <img src={file.previewUrl} alt={file.title} />
+                            <p class="title">{file.title}</p>
+                            <template if:true={file.selected}>
+                                <p class="selected-text">Selected</p>
+                            </template>
+                        </div>
+                    </template>
+                </div>
+
+            </template>
+            <template if:false={hasFiles}>
+                <h1 class="slds-text-heading_medium">Belum ada file hasil VRA. Silakan lakukan proses VRA terlebih dahulu.</h1>
+            </template>
+        </template>
+        <template if:true={error}>
+            <p class="slds-text-color_error">Terjadi kesalahan: {error}</p>
+        </template>
+    </lightning-card>
+</template>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Sub_Escalation_Level</fullName>
+    <active>false</active>
+    <errorConditionFormula>TEXT(Status) != &apos;Escalated&apos; &amp;&amp; ISCHANGED(SCC_Sub_Escalation_Level__c)</errorConditionFormula>
+    <errorMessage>Hanya status Diproses yang bisa mengubah eskalasi</errorMessage>
+</ValidationRule>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <recordTypes>
+        <label>Allmänt</label>
+        <name>FinServ__General</name>
+    </recordTypes>
+    <recordTypes>
+        <label>Pensionsplanering</label>
+        <name>FinServ__RetirementPlanning</name>
+    </recordTypes>
+    <recordTypes>
+        <label>Säljprojekt (Wallet Share)</label>
+        <name>FinServ__WalletShareOpportunity</name>
+    </recordTypes>
+    <validationRules>
+        <errorMessage>Interna referenser måste vara interna Salesforce-användare.</errorMessage>
+        <name>FinServ__NonPortalUserReferrer</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Ange en intern eller extern referens. Det går endast att ange en referens för varje hänvisning.</errorMessage>
+        <name>FinServ__SingleReferredByEntryByRecord</name>
+    </validationRules>
+</CustomObjectTranslation>

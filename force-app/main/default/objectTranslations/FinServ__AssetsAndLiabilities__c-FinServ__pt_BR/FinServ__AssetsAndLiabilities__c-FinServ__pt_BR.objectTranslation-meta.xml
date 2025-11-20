@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>Ativo e passivo</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Ativos e passivos</value>
+    </caseValues>
+    <fieldSets>
+        <label><!-- Assets &amp; Liabilities --></label>
+        <name>WM_Client_Assets_Liabilities</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Assets &amp; Liabilities --></label>
+        <name>WM_Household_Assets_Liabilities</name>
+    </fieldSets>
+    <gender>Masculine</gender>
+    <nameFieldLabel>Nome do ativo ou do passivo</nameFieldLabel>
+    <recordTypes>
+        <description>Dívida, como uma hipoteca</description>
+        <label>Passivo</label>
+        <name>FinServ__Liability</name>
+    </recordTypes>
+    <recordTypes>
+        <description>Ativo não representado em contas financeiras, como imóveis ou colecionáveis</description>
+        <label>Ativo</label>
+        <name>FinServ__NonfinancialAsset</name>
+    </recordTypes>
+    <validationRules>
+        <errorMessage>Contas individuais não podem ter um coproprietário.</errorMessage>
+        <name>FinServ__NoJointOwnerForIndividualAccounts</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>O titular principal e cotitular devem ser diferentes.</errorMessage>
+        <name>FinServ__PrimaryAndJointOwnerCannotBeSame</name>
+    </validationRules>
+</CustomObjectTranslation>

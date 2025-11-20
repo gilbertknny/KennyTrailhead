@@ -1,0 +1,23 @@
+<!---
+    LWC Name    : Aura_CustomToastComponent
+    Created Date       : 12 September 2024
+    @description       : This is class ..
+    @author            : Rakeyan Nuramria
+    Modification Log :
+    Ver   Date         Author                            Modification
+    1.0   12/09/2024   Rakeyan Nuramria                  Initial Version
+-->
+
+
+<aura:component
+    implements="force:appHostable,flexipage:availableForAllPageTypes,force:lightningQuickAction,lightning:actionOverride,flexipage:availableForRecordHome,lightning:availableForFlowScreens,lightning:availableForFlowActions,force:hasRecordId"
+    access="global">
+    <aura:attribute name="type" type="string" default="success" />
+    <aura:attribute name="title" type="string" />
+    <aura:attribute name="message" type="string" />
+    <aura:attribute name="key" type="string" default="" />
+    <aura:attribute name="mode" type="string" default="dismissable" />
+    <aura:attribute name="duration" type="string" default="10" />
+    <aura:attribute name="urlLink" type="string" />
+    <aura:attribute name="urlLabel" type="string" />
+</aura:component>

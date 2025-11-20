@@ -1,0 +1,27 @@
+<template>
+    <lightning-card title="Pencarian Nasabah" icon-name="standard:account">
+        <div class="slds-p-around_medium">
+            <div>
+                <lightning-input label="Nomor Rekening" value={accountNumber} onchange={handleInputChange}></lightning-input>
+                <p class="slds-text-color_error">{accountNumberError}</p>
+            </div>
+            <div>
+                <lightning-input label="Nomor Kartu Kredit / Kartu Debit" value={creditCardNumber} onchange={handleInputChange}></lightning-input>
+                <p class="slds-text-color_error">{cardNumberError}</p>
+            </div>
+            <div>
+                <lightning-input label="Nomor ID" value={nikNumber} onchange={handleInputChange}></lightning-input>
+            </div>
+            <div>
+                <lightning-input label="Nomor Handphone" value={phoneNumber} onchange={handleInputChange}></lightning-input>
+                <p class="slds-text-color_error">{phoneNumberError}</p>
+            </div>
+            <br/>
+            <lightning-button label="Cari" variant="brand" onclick={handleSearch}></lightning-button>
+        </div>
+        
+            <div class="slds-m-around_medium">
+                {data}
+            </div>
+    </lightning-card>
+</template>

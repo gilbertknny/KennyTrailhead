@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>SCC_Waktu_Transaksi</fullName>
+    <active>true</active>
+    <errorConditionFormula>SCC_Waktu_Transaksi__c &gt; NOW()</errorConditionFormula>
+    <errorDisplayField>SCC_Waktu_Transaksi__c</errorDisplayField>
+    <errorMessage>Waktu transaksi tidak boleh melebihi hari ini</errorMessage>
+</ValidationRule>

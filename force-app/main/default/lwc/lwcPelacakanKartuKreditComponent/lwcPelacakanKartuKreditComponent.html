@@ -1,0 +1,179 @@
+<!--
+    LWC Name           : lwcPelacakanKartuKreditComponent.html
+    Created Date       : 08 Januari 2025
+    @description       : This is class for UI pelacakan kartu kredit
+    @author            : Rakeyan Nuramria
+    Modification Log :
+    Ver   Date         Author                            Modification
+    Release 3
+    1.0   08/01/2025   Rakeyan Nuramria                  Initial Version
+    1.0   04/02/2025   Rakeyan Nuramria                  Add Validation input
+    1.0   03/03/2025   Rakeyan Nuramria                  Adjust UI to show censor no kartu based on feedback UAT
+
+-->
+
+<template>
+    <!-- Search Section -->
+    <lightning-card title="" variant="base" class="custom-card slds-m-top_xx-small slds-card_boundary">
+        <div class="slds-grid slds-gutters slds-m-around_small">
+            <div class="slds-col">
+                <lightning-input label="Nama Lengkap" value={namaLengkap} onchange={handleNamaLengkapChange}
+                    disabled={disableNamaLengkapField}></lightning-input>
+            </div>
+            <div class="slds-col">
+                <lightning-input label="Nomor Handphone" value={nomorHp} onchange={handleNomorHandphoneChange}
+                    disabled={disableNomorHandphoneField}></lightning-input>
+                <div style="color: red;">{nomorHpError}</div>
+
+            </div>
+            <div class="slds-col">
+                <lightning-input label="Nomor Kartu Kredit" value={nomorKredit} onchange={handleNomorKreditChange}
+                    disabled={disableNomorKreditField}></lightning-input>
+                <div style="color: red;">{nomorKartuError}</div>
+
+            </div>
+            <div class="slds-col" style="align-self: flex-start; margin-top: 22px;">
+                <lightning-button label="Cari" variant="brand" onclick={handleSearch}
+                    disabled={disableSearchButton}></lightning-button>
+            </div>
+        </div>
+    </lightning-card>
+
+    <!-- Loading Spinner -->
+    <template if:true={isLoading}>
+        <div class="spinner-container" style="height:6rem;position:relative">
+            <div role="status" class="slds-spinner slds-spinner_small">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </template>
+
+    <!-- Error Message -->
+    <template if:true={hasError}>
+        <div class="slds-text-color_error slds-m-top_medium slds-text-align_center">
+            <b>{errorMsg}</b>
+        </div>
+    </template>
+
+    <!-- Result Section -->
+    <template if:true={hasResult}>
+        <p class="slds-m-vertical_small slds-m-left_xx-small"><u>Hasil Pencarian...</u></p>
+        <!-- Iterate through visible data only -->
+        <template for:each={visibleData} for:item="user" for:index="index">
+            <lightning-card key={user.cardId} title="" icon-name="" variant="base"
+                class="custom-card slds-m-top_xx-small slds-m-bottom_medium slds-card_boundary">
+                <div slot="title">{user.namaNasabahLengkap}</div>
+                <div slot="actions">
+                    <lightning-button-icon icon-name="utility:close" alternative-text="Close" title="Close"
+                        data-id={user.cardId} onclick={handleCardClose} class="cssClass"
+                        variant="bare"></lightning-button-icon>
+                </div>
+
+                <!-- Personal Information Section -->
+                <lightning-card title="Informasi Nasabah" icon-name="utility:user" variant="base"
+                    class="custom-card slds-m-around_xx-small slds-card_boundary">
+                    <div class="slds-grid slds-wrap slds-m-around_medium">
+                        <div class="slds-col slds-size_4-of-12">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label" for="nama-lengkap">Nama Lengkap Nasabah</label>
+                                <div class="slds-form-element__control">
+                                    <input class="slds-input text-bold" type="text" id="nama-lengkap" readonly
+                                        value={user.namaNasabahLengkap} />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_4-of-12">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label" for="nomor-handphone">Nomor Handphone</label>
+                                <div class="slds-form-element__control">
+                                    <input class="slds-input text-bold" type="text" id="nomor-handphone" readonly
+                                        value={user.nomorHandphone} />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_4-of-12">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label" for="nomor-kredit">Nomor Kartu Kredit</label>
+                                <div class="slds-form-element__control">
+                                    <input class="slds-input text-bold" type="text" id="nomor-kredit" readonly
+                                        value={user.nomorKartuV2} />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </lightning-card>
+
+                <!-- Delivery Section -->
+                <template if:true={user.DELIVERY_DATA.length}>
+                    <lightning-card title="Informasi Pengiriman" icon-name="utility:fulfillment_order" variant="base"
+                        class="custom-card slds-m-around_xx-small slds-card_boundary">
+                        <div class="slds-p-around_small slds-m-top_xx-small">
+                            <div class="slds-scrollable_y custom-scroll">
+                                <table class="slds-table slds-table_bordered slds-table_fixed-layout custom-table">
+                                    <thead>
+                                        <tr class="slds-line-height_reset">
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="Tanggal Pengiriman Kartu">Tanggal
+                                                    Pengiriman Kartu</div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="Tanggal Penerima Kartu">Tanggal
+                                                    Penerima Kartu</div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="Vendor Pengiriman">Vendor Pengiriman
+                                                </div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="Status Pengiriman">Status Pengiriman
+                                                </div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="Tracking Pengiriman Barang">Tracking
+                                                    Pengiriman Barang</div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="Alamat">Alamat</div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="Nama Penerima">Nama Penerima</div>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <template for:each={user.DELIVERY_DATA} for:item="delivery">
+                                            <tr key={delivery.trackingPengirimanBarang}>
+                                                <td>{delivery.tanggalPengirimanKartu}</td>
+                                                <td>{delivery.tanggalPenerimaKartu}</td>
+                                                <td>{delivery.namaVendorPengirim}</td>
+                                                <td>{delivery.statusPengirimanKartu}</td>
+                                                <td>{delivery.trackingPengirimanBarang}</td>
+                                                <td>{delivery.alamatPengirimanCC1},
+                                                    {delivery.alamatPengirimanCC2},
+                                                    {delivery.alamatPengirimanCC3}</td>
+                                                <td>{delivery.namaPenerima}</td>
+                                            </tr>
+                                        </template>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </lightning-card>
+                </template>
+                <template if:false={user.DELIVERY_DATA.length}>
+                    <lightning-card title="Informasi Pengiriman" icon-name="utility:fulfillment_order" variant="base"
+                        class="custom-card slds-m-around_xx-small slds-card_boundary">
+                        <div class="slds-p-around_small slds-m-top_xx-small">
+                            <div class="slds-text-color_error slds-text-align_center">
+                                <b>Tidak ada data pengiriman</b>
+                            </div>
+                        </div>
+                    </lightning-card>
+                </template>
+            </lightning-card>
+        </template>
+    </template>
+    <!-- End Result Section -->
+</template>

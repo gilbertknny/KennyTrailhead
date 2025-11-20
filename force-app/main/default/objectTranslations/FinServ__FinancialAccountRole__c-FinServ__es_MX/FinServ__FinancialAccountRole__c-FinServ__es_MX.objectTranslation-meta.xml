@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>Función de cuenta financiera</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Funciones de cuentas financieras</value>
+    </caseValues>
+    <fieldSets>
+        <label><!-- Financial Account Role --></label>
+        <name>WM_Client_FinancialAccountRole</name>
+    </fieldSets>
+    <gender>Feminine</gender>
+    <nameFieldLabel>Número de función</nameFieldLabel>
+    <recordTypes>
+        <description>Función ocupada por una entidad organizativa, como una corporación o sociedad de responsabilidad limitada</description>
+        <label>Función de la cuenta</label>
+        <name>FinServ__AccountRole</name>
+    </recordTypes>
+    <recordTypes>
+        <description>Función ocupada por una persona</description>
+        <label>Función del contacto</label>
+        <name>FinServ__ContactRole</name>
+    </recordTypes>
+    <validationRules>
+        <errorMessage>No se puede crear una Función de cuenta financiera como inactiva</errorMessage>
+        <name>FinServ__CannotCreateInactiveRecord</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>No se puede modificar este registro. Para actualizar la información de funciones, puede desactivar este registro y crear uno nuevo.</errorMessage>
+        <name>FinServ__FARCannotBeModified</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>No se puede modificar el registro inactivo. Para actualizar la FAR, cree uno nuevo.</errorMessage>
+        <name>FinServ__InactiveFARCannotBeEdited</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>No se pueden volver a activar funciones financieras inactivas.</errorMessage>
+        <name>FinServ__InactiveRecordCannotBeReactivated</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Este registro no se puede desactivar porque la propiedad puede actualizarse únicamente en la cuenta financiera.</errorMessage>
+        <name>FinServ__OwnershipRolesCannotBeDeactivated</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Este registro no puede modificarse porque la propiedad solo puede especificarse en la cuenta financiera.</errorMessage>
+        <name>FinServ__OwnershipRolesCannotBeModified</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Se requiere una cuenta relacionada o un contacto relacionado.</errorMessage>
+        <name>FinServ__RelatedAccountOrContactRequired</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Se requiere una función.</errorMessage>
+        <name>FinServ__RoleIsMandatory</name>
+    </validationRules>
+</CustomObjectTranslation>

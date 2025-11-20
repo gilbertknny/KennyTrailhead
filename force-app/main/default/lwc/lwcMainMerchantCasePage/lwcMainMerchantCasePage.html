@@ -1,0 +1,31 @@
+<!--
+    LWC Name           : lwcMainMerchantCasePage.html
+    Created Date       : 10 September 2024
+    @description       : This is class ..
+    @author            : Rakeyan Nuramria
+    Modification Log :
+    Ver   Date         Author                            Modification
+    1.0   10/09/2024   Rakeyan Nuramria                  Initial Version
+    1.0   22/09/2024   Rakeyan Nuramria                  Remove Transaction section (move to action in search merchant)
+-->
+
+<template>
+    <lightning-accordion allow-multiple-sections-open onsectiontoggle={handleAccordionSectionToggle}>
+        <lightning-accordion-section name="merchant" label="Merchant">
+            <c-lwc-merchant-search-component class="c-lwc-merchant-search-component"
+                case-id={recordId}></c-lwc-merchant-search-component>
+        </lightning-accordion-section>
+        <!-- <lightning-accordion-section name="transaksiMerchant" label="Transaksi Merchant">
+            <p>Coming Soon...</p>
+        </lightning-accordion-section> -->
+        <lightning-accordion-section name="customerSearch" label="Customer Search">
+            <c-lwc-customer-search-banking-component class="c-lwc-customer-search-banking-component" case-id={recordId}
+                record-id={recordId}></c-lwc-customer-search-banking-component>
+        </lightning-accordion-section>
+        <lightning-accordion-section name="creditCardSearch" label="Credit Card Search">
+            <c-lwc-customer-search-kredit-component class="c-lwc-customer-search-kredit-component" case-id={recordId}
+                record-id={recordId}></c-lwc-customer-search-kredit-component>
+        </lightning-accordion-section>
+    </lightning-accordion>
+
+</template>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Play_Store</fullName>
+    <columns>NAME</columns>
+    <columns>SproutSocialApp__PersonaId__c</columns>
+    <columns>SproutSocialApp__Content__c</columns>
+    <columns>SproutSocialApp__Message_Type__c</columns>
+    <columns>CREATED_DATE</columns>
+    <columns>SproutSocialApp__Sprout_Message_Type__c</columns>
+    <columns>SproutSocialApp__ParentId__c</columns>
+    <columns>Status_Case__c</columns>
+    <columns>CREATEDBY_USER</columns>
+    <columns>SproutSocialApp__Provider__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>SproutSocialApp__Provider__c</field>
+        <operation>contains</operation>
+        <value>Google</value>
+    </filters>
+    <label>Play Store</label>
+</ListView>

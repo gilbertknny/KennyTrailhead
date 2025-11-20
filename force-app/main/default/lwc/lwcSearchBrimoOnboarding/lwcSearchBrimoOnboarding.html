@@ -1,0 +1,212 @@
+<!--
+    LWC Name    : lwcSearchBrimoOnboarding.html
+    Created Date       : 14 July 2025
+    @description       : This is class ..
+    @author            : Rakeyan Nuramria
+    Modification Log :
+    Ver   Date         Author                            Modification
+    //release 4
+    1.0   14/07/2025   Rakeyan Nuramria                  Initial Version
+    1.0   11/08/2025   Rakeyan Nuramria                  Adjust UI to API Functionality & Record page behaviour
+
+-->
+
+<template>
+    <!-- Main card switches title/icon by context -->
+    <lightning-card icon-name={mainCardIconName}>
+        <div slot="title">{mainCardTitle}</div>
+
+        <!-- Dev mock mode button -->
+        <template if:true={showDevToggle}>
+            <lightning-button slot="actions" label={mockButtonLabel} icon-name={mockButtonIcon}
+                variant={mockButtonVariant} onclick={handleToggleMockButton}>
+            </lightning-button>
+        </template>
+
+        <div>
+            <!-- ===== HOME / APP LAYOUT ===== -->
+            <template if:false={useRecordContext}>
+                <!-- Search Section -->
+                <template if:false={hideSearchSection}>
+                    <lightning-card title="" variant="base"
+                        class="custom-card slds-m-top_xx-small slds-card_boundary slds-m-around_small">
+                        <div class="slds-grid slds-gutters slds-m-around_small">
+                            <div class="slds-col" style="display: flex; flex-direction: column;">
+                                <!-- keydown handler for Enter -->
+                                <lightning-input label="NIK" value={nik} onchange={handleNIKChange}
+                                    onkeydown={handleSearchKeydown} disabled={disableNIKField}>
+                                </lightning-input>
+                                <div style="color: red; min-height: 20px;">{nikNumberError}</div>
+                            </div>
+                            <div class="slds-col" style="align-self: flex-start; margin-top: 22px;">
+                                <lightning-button label="Cari" variant="brand" onclick={handleSearch}
+                                    disabled={isSearchButtonDisabled}>
+                                </lightning-button>
+                            </div>
+                        </div>
+                    </lightning-card>
+                </template>
+
+                <!-- Standalone spinner BEFORE the info card -->
+                <template if:true={showOuterSpinnerHomeMode}>
+                    <div class="spinner-container slds-m-around_medium" style="height:6rem;position:relative">
+                        <div role="status" class="slds-spinner slds-spinner_small">
+                            <span class="slds-assistive-text">Loading</span>
+                            <div class="slds-spinner__dot-a"></div>
+                            <div class="slds-spinner__dot-b"></div>
+                        </div>
+                    </div>
+                </template>
+
+                <!-- HOME: separate Informasi card AFTER loading (error/result only) -->
+                <template if:true={showInfoCard}>
+                    <lightning-card icon-name="utility:user" variant="base"
+                        class="custom-card slds-m-around_small slds-card_boundary">
+                        <div slot="title">Informasi Onboarding BRIMO</div>
+
+                        <!-- Close action (Home only) -->
+                        <template if:true={showHomeCloseAction}>
+                            <lightning-button-icon slot="actions" icon-name="utility:close" alternative-text="Tutup"
+                                title="Tutup" onclick={handleCloseHomeInfoCard} variant="bare">
+                            </lightning-button-icon>
+                        </template>
+
+                        <!-- Error -->
+                        <template if:true={hasError}>
+                            <div class="empty-state slds-m-around_medium">
+                                <div class="empty-state__art">
+                                    <lightning-icon icon-name={errorIconName} size="large" alternative-text="Status"
+                                        class="empty-state__icon">
+                                    </lightning-icon>
+                                </div>
+                                <div class="empty-state__text">
+                                    <h2 class="empty-state__title">{errorTitle}</h2>
+                                    <p class="empty-state__subtitle">{errorSubtitle}</p>
+                                    <div class="empty-state__actions">
+                                        <lightning-button variant="brand" label="Coba Lagi" onclick={handleRetry}
+                                            class="slds-m-right_small">
+                                        </lightning-button>
+                                        <lightning-button variant="neutral" label="Bersihkan"
+                                            onclick={clearInputFields}>
+                                        </lightning-button>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+
+                        <!-- Result -->
+                        <template if:true={showResult}>
+                            <div class="slds-grid slds-wrap slds-m-around_medium">
+                                <!-- Nama Lengkap -->
+                                <div class="slds-col slds-size_4-of-12 slds-p-right_small slds-p-bottom_small">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label" for="nama-lengkap-home">Nama
+                                            Lengkap</label>
+                                        <div class="slds-form-element__control">
+                                            <input class="slds-input text-bold" type="text" id="nama-lengkap-home"
+                                                readonly value={responseData.name} />
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- NIK -->
+                                <div class="slds-col slds-size_4-of-12 slds-p-right_small slds-p-bottom_small">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label" for="nik-display-home">NIK</label>
+                                        <div class="slds-form-element__control">
+                                            <input class="slds-input text-bold" type="text" id="nik-display-home"
+                                                readonly value={responseData.nik} />
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Status -->
+                                <div class="slds-col slds-size_4-of-12 slds-p-bottom_small">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label" for="status-home">Status</label>
+                                        <div class="slds-form-element__control">
+                                            <input class="slds-input text-bold" type="text" id="status-home" readonly
+                                                value={responseData.status_description} />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                    </lightning-card>
+                </template>
+            </template>
+
+            <!-- ===== RECORD PAGE LAYOUT ===== -->
+            <template if:true={useRecordContext}>
+                <!-- Spinner INSIDE the main card -->
+                <template if:true={isLoading}>
+                    <div class="spinner-container slds-m-around_medium" style="height:6rem;position:relative">
+                        <div role="status" class="slds-spinner slds-spinner_small">
+                            <span class="slds-assistive-text">Loading</span>
+                            <div class="slds-spinner__dot-a"></div>
+                            <div class="slds-spinner__dot-b"></div>
+                        </div>
+                    </div>
+                </template>
+
+                <!-- Error inside main card -->
+                <template if:true={hasError}>
+                    <div class="empty-state slds-m-around_medium">
+                        <div class="empty-state__art">
+                            <lightning-icon icon-name={errorIconName} size="large" alternative-text="Status"
+                                class="empty-state__icon">
+                            </lightning-icon>
+                        </div>
+                        <div class="empty-state__text">
+                            <h2 class="empty-state__title">{errorTitle}</h2>
+                            <p class="empty-state__subtitle">{errorSubtitle}</p>
+                            <div class="empty-state__actions">
+                                <lightning-button variant="brand" label="Coba Lagi" onclick={handleRetry}
+                                    class="slds-m-right_small">
+                                </lightning-button>
+                                <template if:false={useRecordContext}>
+                                    <lightning-button variant="neutral" label="Bersihkan" onclick={clearInputFields}>
+                                    </lightning-button>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+
+                <!-- Result inside main card -->
+                <template if:true={showResult}>
+                    <div class="slds-grid slds-wrap slds-m-around_medium">
+                        <!-- Nama Lengkap -->
+                        <div class="slds-col slds-size_4-of-12 slds-p-right_small slds-p-bottom_small">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label" for="nama-lengkap-record">Nama Lengkap</label>
+                                <div class="slds-form-element__control">
+                                    <input class="slds-input text-bold" type="text" id="nama-lengkap-record" readonly
+                                        value={responseData.name} />
+                                </div>
+                            </div>
+                        </div>
+                        <!-- NIK -->
+                        <div class="slds-col slds-size_4-of-12 slds-p-right_small slds-p-bottom_small">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label" for="nik-display-record">NIK</label>
+                                <div class="slds-form-element__control">
+                                    <input class="slds-input text-bold" type="text" id="nik-display-record" readonly
+                                        value={responseData.nik} />
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Status -->
+                        <div class="slds-col slds-size_4-of-12 slds-p-bottom_small">
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label" for="status-record">Status</label>
+                                <div class="slds-form-element__control">
+                                    <input class="slds-input text-bold" type="text" id="status-record" readonly
+                                        value={responseData.status_description} />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </template>
+        </div>
+    </lightning-card>
+</template>

@@ -1,0 +1,168 @@
+<template>
+    <!--
+    <div class="slds-grid slds-wrap">
+        <div class="slds-col slds-size_1-of-2 slds-p-horizontal_small">
+            <div class="slds-form-element">
+                <label class="slds-form-element__label" for="queue-search">Level 1 Escalation Team</label>
+                <div class="slds-form-element__control">
+                    <input type="text" id="queue-search" class="slds-input" placeholder="Type to search Level 1 Escalation Team..."
+                        value={searchTermLevel1} oninput={handleSearchLevel1} />
+                </div>
+                <template if:true={hasResultsLevel1}>
+                    <ul class="slds-lookup__list" role="listbox">
+                        <template for:each={searchResultsLevel1} for:item="resultLevel1">
+                            <li key={resultLevel1.value} class="slds-lookup__item" data-value={resultLevel1.value} data-label={resultLevel1.label} onclick={handleLevel1Select}>
+                                <a>
+                                    <div class="slds-lookup__result-text">{resultLevel1.label}</div>
+                                </a>
+                            </li>
+                        </template>
+                    </ul>
+                </template>
+            </div>
+
+            <div class="slds-form-element">
+                <label class="slds-form-element__label" for="queue-search2">Level 3 Escalation Team</label>
+                <div class="slds-form-element__control">
+                    <input type="text" id="queue-search2" class="slds-input" placeholder="Type to search Level 3 Escalation Team..."
+                        value={searchTermLevel3} oninput={handleSearchLevel3} />
+                </div>
+                <template if:true={hasResultsLevel3}>
+                    <ul class="slds-lookup__list" role="listbox">
+                        <template for:each={searchResultsLevel3} for:item="resultLevel3">
+                            <li key={resultLevel3.value} class="slds-lookup__item" data-value={resultLevel3.value} data-label={resultLevel3.label} onclick={handleLevel3Select}>
+                                <a>
+                                    <div class="slds-lookup__result-text">{resultLevel3.label}</div>
+                                </a>
+                            </li>
+                        </template>
+                    </ul>
+                </template>
+            </div>
+        </div>
+
+
+        <div class="slds-col slds-size_1-of-2 slds-p-horizontal_small">
+            <div class="slds-form-element">
+                <label class="slds-form-element__label" for="queue-search3">Level 2 Escalation Team</label>
+                <div class="slds-form-element__control">
+                    <input type="text" id="queue-search3" class="slds-input" placeholder="Type to search Level 2 Escalation Team..."
+                        value={searchTermLevel2} oninput={handleSearchLevel2} />
+                </div>
+                <template if:true={hasResultsLevel2}>
+                    <ul class="slds-lookup__list" role="listbox">
+                        <template for:each={searchResultsLevel2} for:item="resultLevel2">
+                            <li key={resultLevel2.value} class="slds-lookup__item" data-value={resultLevel2.value} data-label={resultLevel2.label} onclick={handleLevel2Select}>
+                                <a>
+                                    <div class="slds-lookup__result-text">{resultLevel2.label}</div>
+                                </a>
+                            </li>
+                        </template>
+                    </ul>
+                </template>
+            </div>
+
+            <div class="slds-form-element">
+                <label class="slds-form-element__label" for="queue-search4">Level 4 Escalation Team</label>
+                <div class="slds-form-element__control">
+                    <input type="text" id="queue-search4" class="slds-input" placeholder="Type to search Level 4 Escalation Team..."
+                        value={searchTermLevel4} oninput={handleSearchLevel4} />
+                </div>
+                <template if:true={hasResultsLevel4}>
+                    <ul class="slds-lookup__list" role="listbox">
+                        <template for:each={searchResultsLevel4} for:item="resultLevel4">
+                            <li key={resultLevel4.value} class="slds-lookup__item" data-value={resultLevel4.value} data-label={resultLevel4.label} onclick={handleLevel4Select}>
+                                <a>
+                                    <div class="slds-lookup__result-text">{resultLevel4.label}</div>
+                                </a>
+                            </li>
+                        </template>
+                    </ul>
+                </template>
+            </div>
+        </div>
+    </div>
+    -->
+    <lightning-card>
+        <div class="slds-p-horizontal_small">
+            <div class="slds-form-element">
+                <label class="slds-form-element__label" for="queue-search">Level 1 Escalation Team</label>
+                <div class="slds-form-element__control">
+                    <input type="text" id="queue-search" class="slds-input" placeholder="Type to search Level 1 Escalation Team..."
+                        value={searchTermLevel1} oninput={handleSearchLevel1} />
+                </div>
+                <template if:true={hasResultsLevel1}>
+                    <ul class="slds-lookup__list" role="listbox">
+                        <template for:each={searchResultsLevel1} for:item="resultLevel1">
+                            <li key={resultLevel1.value} class="slds-lookup__item" data-value={resultLevel1.value} data-label={resultLevel1.label} onclick={handleLevel1Select}>
+                                <a>
+                                    <div class="slds-lookup__result-text">{resultLevel1.label}</div>
+                                </a>
+                            </li>
+                        </template>
+                    </ul>
+                </template>
+            </div>
+
+            <div class="slds-form-element">
+                <label class="slds-form-element__label" for="queue-search3">Level 2 Escalation Team</label>
+                <div class="slds-form-element__control">
+                    <input type="text" id="queue-search3" class="slds-input" placeholder="Type to search Level 2 Escalation Team..."
+                        value={searchTermLevel2} oninput={handleSearchLevel2} />
+                </div>
+                <template if:true={hasResultsLevel2}>
+                    <ul class="slds-lookup__list" role="listbox">
+                        <template for:each={searchResultsLevel2} for:item="resultLevel2">
+                            <li key={resultLevel2.value} class="slds-lookup__item" data-value={resultLevel2.value} data-label={resultLevel2.label} onclick={handleLevel2Select}>
+                                <a>
+                                    <div class="slds-lookup__result-text">{resultLevel2.label}</div>
+                                </a>
+                            </li>
+                        </template>
+                    </ul>
+                </template>
+            </div>
+        </div>
+
+
+        <div class="slds-p-horizontal_small">
+            <div class="slds-form-element">
+                <label class="slds-form-element__label" for="queue-search2">Level 3 Escalation Team</label>
+                <div class="slds-form-element__control">
+                    <input type="text" id="queue-search2" class="slds-input" placeholder="Type to search Level 3 Escalation Team..."
+                        value={searchTermLevel3} oninput={handleSearchLevel3} />
+                </div>
+                <template if:true={hasResultsLevel3}>
+                    <ul class="slds-lookup__list" role="listbox">
+                        <template for:each={searchResultsLevel3} for:item="resultLevel3">
+                            <li key={resultLevel3.value} class="slds-lookup__item" data-value={resultLevel3.value} data-label={resultLevel3.label} onclick={handleLevel3Select}>
+                                <a>
+                                    <div class="slds-lookup__result-text">{resultLevel3.label}</div>
+                                </a>
+                            </li>
+                        </template>
+                    </ul>
+                </template>
+            </div>
+
+            <div class="slds-form-element">
+                <label class="slds-form-element__label" for="queue-search4">Level 4 Escalation Team</label>
+                <div class="slds-form-element__control">
+                    <input type="text" id="queue-search4" class="slds-input" placeholder="Type to search Level 4 Escalation Team..."
+                        value={searchTermLevel4} oninput={handleSearchLevel4} />
+                </div>
+                <template if:true={hasResultsLevel4}>
+                    <ul class="slds-lookup__list" role="listbox">
+                        <template for:each={searchResultsLevel4} for:item="resultLevel4">
+                            <li key={resultLevel4.value} class="slds-lookup__item" data-value={resultLevel4.value} data-label={resultLevel4.label} onclick={handleLevel4Select}>
+                                <a>
+                                    <div class="slds-lookup__result-text">{resultLevel4.label}</div>
+                                </a>
+                            </li>
+                        </template>
+                    </ul>
+                </template>
+            </div>
+        </div>
+    </lightning-card>
+</template>

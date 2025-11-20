@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>Identificatiedocument</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Identificatiedocumenten</value>
+    </caseValues>
+    <gender>Neuter</gender>
+    <nameFieldLabel>Document</nameFieldLabel>
+    <validationRules>
+        <errorMessage>De vervaldatum mag niet eerder zijn dan de datum van uitgifte.</errorMessage>
+        <name>FinServ__ExpDateCannotBeLaterThanStart</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>De datum van uitgifte mag niet in de toekomst liggen.</errorMessage>
+        <name>FinServ__IssueDateCannotBeInFuture</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>Verificatiedatum en -tijd mogen niet in de toekomst liggen.</errorMessage>
+        <name>FinServ__VerificationDateTimeCannotBeInFuture</name>
+    </validationRules>
+</CustomObjectTranslation>

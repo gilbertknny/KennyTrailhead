@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ValidateDateTo2</fullName>
+    <active>true</active>
+    <errorConditionFormula>Date_To__c &lt;  Date_From__c</errorConditionFormula>
+    <errorDisplayField>Date_To__c</errorDisplayField>
+    <errorMessage>&quot;Date To&quot; tidak boleh lebih kecil dari &quot;Date From&quot;</errorMessage>
+</ValidationRule>

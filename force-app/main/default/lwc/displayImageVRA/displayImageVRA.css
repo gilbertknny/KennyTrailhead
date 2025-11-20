@@ -1,0 +1,68 @@
+.image-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 16px;
+    padding: 10px;
+}
+
+.image-container {
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    padding: 8px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.3s;
+    position: relative;
+}
+
+.image-container img {
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+}
+
+.image-container.selected {
+    border-color: #0070d2;
+    background-color: #f0f8ff;
+}
+
+.title {
+    font-size: 0.85rem;
+    margin-top: 6px;
+    color: #333;
+}
+
+.selected-text {
+    color: #0070d2;
+    font-weight: bold;
+    font-size: 0.75rem;
+    margin-top: 4px;
+}
+
+.preview-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.preview-image {
+    width: 60%;
+    max-height: 300px;
+    object-fit: contain;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+}
+
+.preview-title {
+    margin-top: 10px;
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+.selected-label {
+    background-color: #0070d2;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    margin-left: 8px;
+}

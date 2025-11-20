@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>SCC_QR_Checker__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF(
+    ISBLANK(Checker__r.LastName),
+    &quot;&quot;,
+    IMAGE(
+        &quot;https://barcode.cloudanswers.com/png?size=150x150&amp;content=&quot; &amp; Checker__r.FirstName &amp; Checker__r.LastName &amp; TEXT(Approved_Date_Checker__c) &amp; &quot;&amp;qrsize=150&quot;,
+        &quot;qr code&quot;,
+        50, 50
+    )
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>QR Checker</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

@@ -1,0 +1,86 @@
+<!-- documentUploader.html -->
+<template>
+    <div class="slds-card">
+        <div class="slds-p-around_medium">
+            <!-- Header -->
+            <div class="slds-media slds-media_center">
+                <div class="slds-media__figure">
+                    <lightning-icon icon-name="utility:upload" size="small"></lightning-icon>
+                </div>
+                <div class="slds-media__body">
+                    <h2 class="slds-card__header-title">Upload Dokumen</h2>
+                </div>
+            </div>
+
+            <!-- Document Type Selection -->
+            <div class="slds-form-element slds-m-top_medium">
+                <label class="slds-form-element__label" for="docType">
+                    <abbr class="slds-required" title="required">*</abbr> Tipe Dokumen
+                </label>
+                <div class="slds-form-element__control">
+                    <div class="slds-select_container">
+                        <lightning-combobox
+                            name="category"
+                            value={selectedCategory}
+                            placeholder="Select Category"
+                            options={categoryOptions}
+                            onchange={handleCategoryChange}
+                            >
+                        </lightning-combobox>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Template Download Section -->
+            <div class="slds-grid slds-gutters slds-m-top_medium">
+                <div class="slds-col">
+                    <div class="template-section">
+                        <span>Template {selectedCategory}</span>
+                        <lightning-button 
+                            label="Download" 
+                            icon-name="utility:download"
+                            variant="brand"
+                            onclick={handleTemplateDownload}
+                            disabled={isTemplateDownloadDisabled}
+                            class="slds-m-left_x-small">
+                        </lightning-button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Attachment Section -->
+            <div class="slds-m-top_medium">
+                <div class="slds-text-heading_small slds-m-bottom_small">Attachment</div>
+                <div class="custom-box">
+                    <div class="drop-zone" 
+                         ondragover={handleDragOver}
+                         ondrop={handleDrop}
+                         onclick={handleDropzoneClick}>
+                        <div class="upload-button-container">
+                            <lightning-button 
+                                label="Upload Files" 
+                                icon-name="utility:upload"
+                                variant="neutral"
+                                class="upload-button">
+                            </lightning-button>
+                            <span class="slds-p-left_x-small">Or drop files</span>
+                        </div>
+                        <div class="drop-text">
+                            Drag and drop your .csv file here, or click to browse
+                        </div>
+                        <input type="file" 
+                               accept=".csv"
+                               onchange={handleFileUpload}
+                               class="slds-hidden"
+                               disabled={isLoading}/>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Loading Spinner -->
+            <template if:true={isLoading}>
+                <lightning-spinner alternative-text="Loading"></lightning-spinner>
+            </template>
+        </div>
+    </div>
+</template>

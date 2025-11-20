@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>SCC_Customer_Segment__c</fullName>
+    <description>Consists of the type of segment of the case.</description>
+    <label>Customer Segment</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Individu Umum</fullName>
+                <default>false</default>
+                <label>Individu Umum</label>
+            </value>
+            <value>
+                <fullName>Individu Priority &amp; Private</fullName>
+                <default>false</default>
+                <label>Individu Priority &amp; Private</label>
+            </value>
+            <value>
+                <fullName>UMKM</fullName>
+                <default>false</default>
+                <label>UMKM</label>
+            </value>
+            <value>
+                <fullName>Korporasi</fullName>
+                <default>false</default>
+                <label>Korporasi</label>
+            </value>
+            <value>
+                <fullName>All</fullName>
+                <default>false</default>
+                <label>All</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

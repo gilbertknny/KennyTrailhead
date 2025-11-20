@@ -1,0 +1,21 @@
+<template>
+    <div class="slds-modal__content slds-p-around_medium">
+        <header class="slds-modal__header">
+            <div class="slds-text-heading_medium slds-modal__title slds-hyphenate">New Case</div>
+        </header>
+        <br>
+        <lightning-record-edit-form object-api-name="Case" onsuccess={handleSuccess}>
+            <lightning-input-field field-name="Origin" required></lightning-input-field>
+            <lightning-input-field field-name="AccountId" value={recordId} disabled></lightning-input-field>
+            <lightning-input-field field-name="SCC_Email__c"></lightning-input-field>
+            <lightning-input-field field-name="Cust_Current_Phone__c"></lightning-input-field>
+            <div>
+                <lightning-button class="slds-m-around_x-small slds-float_right" variant="brand" type="submit"
+                    label="Save"></lightning-button>
+                <!--<lightning-button class="slds-m-around_x-small slds-float_right" variant="brand" type="Cancel"
+                    label="Cancel"></lightning-button>-->
+            </div>
+
+        </lightning-record-edit-form>
+    </div>
+</template>

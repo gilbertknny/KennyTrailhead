@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>연락처-연락처 관계</value>
+    </caseValues>
+    <fieldSets>
+        <label><!-- Related Contacts --></label>
+        <name>WM_Client_RelatedContacts</name>
+    </fieldSets>
+    <fieldSets>
+        <label><!-- Related Contacts --></label>
+        <name>WM_Household_RelatedContacts</name>
+    </fieldSets>
+    <nameFieldLabel>연락처 관계 이름</nameFieldLabel>
+    <validationRules>
+        <errorMessage>이 레코드는 편집할 수 없습니다. 관계 정보를 업데이트하기 위해 이 레코드를 비활성화하고 새 레코드를 생성할 수 있습니다.</errorMessage>
+        <name>FinServ__CCRCanOnlyBeDeactivated</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>연락처-연락처 관계는 비활성으로 만들 수 없습니다.</errorMessage>
+        <name>FinServ__CannotCreateInactiveRecord</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>연락처 및 관련 연락처는 다른 엔티티여야 합니다.</errorMessage>
+        <name>FinServ__ContactAndRelatedContactCannotBeSame</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage>비활성 레코드는 편집할 수 없습니다. 관계 정보를 업데이트하기 위해 새 레코드를 생성할 수 있습니다.</errorMessage>
+        <name>FinServ__InactiveCCRCannotBeEdited</name>
+    </validationRules>
+</CustomObjectTranslation>

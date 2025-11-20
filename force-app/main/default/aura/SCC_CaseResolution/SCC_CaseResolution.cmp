@@ -1,0 +1,2468 @@
+<aura:component implements="flexipage:availableForAllPageTypes,force:hasRecordId,force:lightningQuickAction,lightning:actionOverride,lightning:hasPageReference" 
+                access="global" controller="SCC_CaseResolution_UI">
+    <aura:attribute name="recordId" type="String"/>
+    <aura:attribute name="activeSections" type="List" default="['J','A','B','C','D','E','G','H','I']" />
+    <aura:attribute name="attdata" type="Object"/>
+    <aura:attribute name="attcolumns" type="List"/>
+    <aura:attribute name="quetrndata" type="Object"/> 
+    <aura:attribute name="mutrekdata" type="Object"/>
+    <aura:attribute name="srcmutrekdata" type="Object"/>
+    <aura:attribute name="srcmutrekcolumns" type="List"/>
+    <aura:attribute name="rekondata" type="Object"/>
+    <aura:attribute name="cuspro" type="Object"/>
+    <aura:attribute name="srcrekondata" type="Object"/>
+    <aura:attribute name="srcrekoncolumns" type="List"/>
+    <aura:attribute name="aktkardata" type="Object"/>
+    <aura:attribute name="aktkarcolumns" type="List"/>
+    <aura:attribute name="srcaktkardata" type="Object"/>
+    <aura:attribute name="srcaktkarcolumns" type="List"/>
+    <aura:handler name="init" value="{! this }" action="{! c.init }"/>
+    <aura:attribute name="fileName" type="String" />
+    <aura:attribute name="filetype" type="List" default="['.pdf', '.doc', '.docx', '.jpg', '.jpeg', '.png', '.zip', '.rar', '.txt']" />
+    <aura:attribute name="caseObj" type="Object"/>
+    <aura:attribute name="calltypeObj" type="Object" default=""/>
+    <aura:attribute name="tidObj" type="Object" default=""/>
+    <aura:attribute name="fituridObj" type="Object" default=""/>
+    <aura:attribute name="case" type="Case" default="{ 'sobjectType': 'Case' }"/>
+    <aura:attribute name="recordLoadError" type="String"/>
+    <force:recordData aura:id="recordLoader"
+                      recordId="{!v.recordId}"
+                      fields="Id,SCC_Call_Type__c,Terminal_ID__c,AccountId,SCC_Account_Number__c,SCC_Transaction_Date__c,SCC_Amount__c,SCC_Call_Type_Feature__c,SCC_Card_Number__c,ContactId,OwnerId"
+                      targetFields="{!v.caseObj}"
+                      targetError="{!v.recordLoadError}"/>
+    <aura:attribute name="call_type" type="String"/>
+    <aura:attribute name="Unit_Kerja" type="Object" default=""/>
+    <aura:attribute name="fiturid" type="String"/>
+    <aura:attribute name="tid" type="String"/>
+    <aura:attribute name="acc_num_dest" type="String"/>
+    <aura:attribute name="kol_rmk" type="String"/>
+    <aura:attribute name="trx_dt" type="Date" />
+    <aura:attribute name="tgl_trx_akar" type="Date" />
+    <aura:attribute name="filrec" type="String" default=""/>
+    <aura:attribute name="optionsWA" type="List" default="[
+    {'label': 'Normal/Sukses', 'value': 'Berhasil'},
+    {'label': 'Gagal', 'value': 'Gagal'},
+    {'label': 'Tidak Kirim Notifikasi', 'value': '-'}
+    ]"/>
+    <aura:attribute name="optionsWA2" type="List" default="[
+    {'label': 'Normal/Sukses', 'value': 'Berhasil'},
+    {'label': 'Gagal', 'value': 'Gagal'},
+    {'label': 'Card Replace', 'value': 'Card Replace'},
+    {'label': 'Tidak Kirim Notifikasi', 'value': '-'}
+    ]"/>
+    <aura:attribute name="valwa" type="String" default=""/>
+    <aura:attribute name="isiwa" type="String" default=""/>
+    <aura:attribute name="pageSize" type="Integer" default="100" description="number of records to be display on per page"/>
+    <!-- rekening koran -->
+    <aura:attribute name="rekoncolumns" type="List"/>
+    <aura:attribute name="tgl_awal" type="Date" />
+    <aura:attribute name="tgl_akhir" type="Date" />
+    <aura:attribute name="startPageRekeningKoran" type="Integer" />
+    <aura:attribute name="endPageRekeningKoran" type="Integer"/>
+    <aura:attribute name="selectedRekeningKoran" type="integer" default="0" description="selected Records Count"/>
+    <aura:attribute name="totalRekeningKoran" type="Integer"/>
+    <aura:attribute name="currentPageRekeningKoran" type="integer" default="1"/>
+    <aura:attribute name="totalPagesRekeningKoran" type="integer"/>
+    <aura:attribute name="PaginationRekeningKoran" type="list"/>
+    <aura:attribute name="listRekeningKoran" type="list"/>
+    <aura:attribute name="RekonSelected" type="list"/>
+    <aura:attribute name="isSCC_BO_NFT_ISSUER" type="Boolean" default="false"/>
+    <aura:attribute name="isCase8410" type="Boolean" default="false"/>
+    <aura:attribute name="isCase8412" type="Boolean" default="false"/>
+    <aura:attribute name="isSCC_BO_Supervisor_NFT_ISSUER" type="Boolean" default="false"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <!-- rekon -->
+    <aura:attribute name="mutrekcolumns" type="List"/>
+    <aura:attribute name="tgl_trx_rekon" type="Date" />
+    <aura:attribute name="startPageRekon" type="Integer" />
+    <aura:attribute name="endPageRekon" type="Integer"/>
+    <aura:attribute name="selectedRekon" type="integer" default="0" description="selected Records Count"/>
+    <aura:attribute name="totalRekon" type="Integer"/>
+    <aura:attribute name="currentPageRekon" type="integer" default="1"/>
+    <aura:attribute name="totalPagesRekon" type="integer"/>
+    <aura:attribute name="PaginationRekon" type="list"/> 
+    <aura:attribute name="listRekon" type="list"/> 
+    <!-- Berita Acara Opname  -->
+    <aura:attribute name="baocolumns" type="List"/>
+    <aura:attribute name="tgl_trx_bao" type="Date" />
+    <aura:attribute name="startPageBAO" type="Integer" />
+    <aura:attribute name="endPageBAO" type="Integer"/>
+    <aura:attribute name="selectedBAO" type="integer" default="0" description="selected Records Count"/>
+    <aura:attribute name="totalBAO" type="Integer"/>
+    <aura:attribute name="currentPageBAO" type="integer" default="1"/>
+    <aura:attribute name="totalPagesBAO" type="integer"/>
+    <aura:attribute name="PaginationBAO" type="list"/> 
+    <aura:attribute name="listBAO" type="list"/> 
+     <!-- AktivtasKartu -->
+     <aura:attribute name="noSelectionKartu" type="Boolean" default="true"/>
+     <aura:attribute name="Aktivitaskartucolumns" type="List"/>
+     <aura:attribute name="tgl_trx_kartu" type="Date" />
+     <aura:attribute name="time_trx_kartu" type="Time" />
+     <aura:attribute name="startPageKartu" type="Integer" />
+     <aura:attribute name="endPageKartu" type="Integer"/>
+     <aura:attribute name="selectedKartu" type="integer" default="0" description="selected Records Count"/>
+     <aura:attribute name="totalAktivitasKartu" type="Integer"/>
+     <aura:attribute name="currentPageKartu" type="integer" default="1"/>
+     <aura:attribute name="totalPagesKartu" type="integer"/>
+     <aura:attribute name="PaginationKartu" type="list"/> 
+     <aura:attribute name="listAktivitasKartu" type="list"/>  
+     <aura:attribute name="fiturName" type="String" />
+     <aura:attribute name="nomorFitur" type="String" />
+     
+     <!-- Brizzi Card Inquiry -->
+     <!-- <aura:attribute name="noSelectionKartu" type="Boolean" default="true"/> -->
+     <aura:attribute name="isButtonHistory" type="Boolean" default="true"/>
+     <aura:attribute name="isButtonPartnerHistory" type="Boolean" default="true"/>
+     <aura:attribute name="DataKartu" type="list"/>
+     <aura:attribute name="kartuBrizzi" type="String" />
+
+     <!-- Brizzi Trx History -->
+     <aura:attribute name="startPageTrxHistory" type="Integer" />
+     <aura:attribute name="endPageTrxHistory" type="Integer"/>
+     <aura:attribute name="totalTrxHistory" type="Integer"/>
+     <aura:attribute name="currentPageTrxHistory" type="integer" default="1"/>
+     <aura:attribute name="totalPagesTrxHistory" type="integer"/>
+     <aura:attribute name="DataTrxHistory" type="list"/> 
+     <aura:attribute name="listTrxHistory" type="list"/>
+     <aura:attribute name="countTrxHistory" type="Boolean" default="true"/>
+
+     <!-- Brizzi Partner Trx History -->
+     <aura:attribute name="startPagePtrTrxHistory" type="Integer" />
+     <aura:attribute name="endPagePtrTrxHistory" type="Integer"/>
+     <aura:attribute name="totalPtrTrxHistory" type="Integer"/>
+     <aura:attribute name="currentPagePtrTrxHistory" type="integer" default="1"/>
+     <aura:attribute name="totalPagesPtrTrxHistory" type="integer"/>
+     <aura:attribute name="DataPtrTrxHistory" type="list"/> 
+     <aura:attribute name="listPtrTrxHistory" type="list"/>
+     <aura:attribute name="countPtrTrxHistory" type="Boolean" default="true"/>
+
+     <aura:attribute name="channelTopupOptions" type="List" default="[]"/>
+
+     <!-- EJ -->
+     <aura:attribute name="processing" type="Boolean" default="false" />
+     <aura:attribute name="dateRequest" type="String" />
+     <aura:attribute name="buttonType" type="String" />
+     <aura:attribute name="isProcessing" type="Boolean" default="false" />
+     <aura:attribute name="noSelectionMade" type="Boolean" default="true"/>
+     <aura:attribute name="selectedItems" type="List" default="[]" />
+     <aura:attribute name="checkedCount" type="Integer" default="0" />
+     <aura:attribute name="initialData" type="List" />  
+     <aura:attribute name="filter" type="String" />  
+     <aura:handler name="change" value="{!v.filter}" action="{!c.handleFilter}" />
+     <aura:attribute name="originalEJData" type="List" />
+     <aura:attribute name="originalEJTotal" type="Integer" />
+     <aura:attribute name="isOpen" type="Boolean" default="false"/>
+     <aura:attribute name="responseData" type="Object[]"/>
+     <aura:attribute name="filteredData" type="Object[]"/>
+     <aura:attribute name="searchKeyword" type="String"/>
+     <aura:attribute name="Size" type="Integer" description="number of records to be display on per page"/>
+     <!-- <aura:attribute name="activeTabId" type="String" default=""/> -->
+     <aura:attribute name="tgl_input_awal" type="Date" />
+     <aura:attribute name="tgl_input_akhir" type="Date" />
+     <aura:attribute name="EJcolumns" type="List"/>
+     <aura:attribute name="startPageEJ" type="Integer" />
+     <aura:attribute name="endPageEJ" type="Integer"/>
+     <aura:attribute name="selectedEJ" type="integer" default="0" description="selected Records Count"/>
+     <aura:attribute name="totalEJ" type="Integer"/>
+     <aura:attribute name="currentPageEJ" type="integer" default="1"/>
+     <aura:attribute name="totalPagesEJ" type="integer"/>
+     <aura:attribute name="PaginationEJ" type="list"/> 
+     <aura:attribute name="listEJ" type="list" default="[]"/>
+    <!-- Adjust Deposit -->
+    <aura:attribute name="adjustmentColumns" type="List"/>
+    <aura:attribute name="noSelectionAdjust" type="Boolean" default="true"/>
+    <!-- Replace Card -->
+    <aura:attribute name="replacecolumns" type="List"/>
+    <aura:attribute name="noSelectionReplace" type="Boolean" default="true"/>
+    <!-- Queuetrans -->
+    <aura:attribute name="quetrncolumns" type="List"/>
+    <aura:attribute name="loaded" type="Boolean" default="true" />
+    <div class="slds-p-around_medium">
+        <lightning:messages />
+        <!--loading spinner start-->
+        <aura:if isTrue="{!v.loaded}">
+            <aura:set attribute="else">
+                <div aura:id="spinnerId" class="slds-spinner_container">
+                    <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                        <span class="slds-assistive-text">Loading...</span>
+                        <div class="slds-spinner__dot-a"></div>
+                        <div class="slds-spinner__dot-b"></div>
+                    </div>
+                </div>
+            </aura:set>
+        </aura:if>
+        <!-- Loading spinner end-->
+        <lightning:layout title="" multipleRows="true" verticalAlign="start">
+            <lightning:layoutItem size="6"  padding="around-small">
+                <div class="page-section page-right">
+                    <aura:if isTrue="{!v.case.IsLocked__c}">
+                        <lightning:input name="nm_nsbh" disabled="true" value="{!v.calltypeObj.label}" label="Case Type" />
+                        <aura:if isTrue="{!v.case.SCC_Case_Type_for_Suggested_Article__c != '8713'}">
+                        <lightning:input name="acc_num" disabled="true" value="{!v.tidObj.label}" label="TID" />
+                        </aura:if>
+                        <aura:set attribute="else">
+                            <c:CustomLookup objectName="SSC_Call_Type__c" fieldName="SCC_Case_Type_Detail__c" label="Case Type" iconName="standard:account" selectedRecord="{!v.calltypeObj}" 
+                                            placeholder="Search..." filterRecord="1" fieldRecord="ActiveString__c"/>
+                            <aura:if isTrue="{!v.case.SCC_Case_Type_for_Suggested_Article__c != '8713'}">
+                            <c:CustomLookupAPI label="TID" iconName="standard:account" selectedRecordId="{!v.tidObj}" trx_date="{!v.case.SCC_Transaction_Date__c}" placeholder="Search..."/>
+                            </aura:if>
+                        </aura:set>
+                    </aura:if> 
+                    <lightning:input name="nm_nsbh" disabled="true" value="{!v.case.Account.Name}" label="Nama Nasabah" />
+                    <lightning:input name="acc_num" disabled="true" value="{!v.case.SCC_Account_Number__c}" label="Nomor Rekening" />
+                    <lightning:input disabled="true" name="no_telp" label="No HP / Telepon Terkini" value="{!v.case.Cust_Current_Phone__c}"/> 
+                    <!-- <aura:if isTrue="{!v.case.SCC_Case_Type_for_Suggested_Article__c == '8713'}">
+                    <lightning:select 
+                        name="channelTopup"
+                        label="Channel Topup"
+                        disabled="{!v.case.IsLocked__c}"
+                        value="{!v.case.Channel_Topup__c}"
+                        required="true"
+                    >
+                        <option text="Select" value="" />
+                        <aura:iteration items="{!v.channelTopupOptions}" var="option">
+                            <option text="{!option.label}" value="{!option.value}" />
+                        </aura:iteration>
+                    </lightning:select>
+                    </aura:if> -->
+                    <lightning:input type="datetime" name="trx_date" label="Tanggal Transaksi" value="{!v.case.SCC_Waktu_Transaksi__c}" disabled="{!v.case.IsLocked__c}"/>
+                </div>
+            </lightning:layoutItem>
+            <lightning:layoutItem size="6"   padding="around-small">
+                <div class="page-section page-right">
+                    <aura:if isTrue="{!v.case.IsLocked__c}">
+                        <lightning:input name="nm_nsbh" disabled="true" value="{!v.fituridObj.label}" label="Fiturid" />
+
+                            <aura:if isTrue="{!v.isCase8410}">
+                                <aura:if isTrue="{!v.isSCC_BO_NFT_ISSUER}">
+                                    <lightning:input disabled="true" value="{!v.Unit_Kerja.label}" label="Unit Kerja" />
+                                </aura:if>
+
+                                <aura:if isTrue="{!v.isSCC_BO_Supervisor_NFT_ISSUER}">
+                                    <lightning:input disabled="true" value="{!v.Unit_Kerja.label}" label="Unit Kerja" />
+                                </aura:if>
+                            </aura:if>
+
+                            <aura:set attribute="else">
+                                <c:CustomLookup objectName="SCC_Call_Type_Feature__c" fieldName="SCC_Fitur_Detail__c" label="Fiturid" iconName="standard:account" selectedRecord="{!v.fituridObj}" 
+                                placeholder="Search..." filterRecord="{!V.calltypeObj.value}" fieldRecord="Call_Type__c"/>
+                                
+                                    <aura:if isTrue="{!v.isCase8410}">
+                                        <aura:if isTrue="{!v.isSCC_BO_NFT_ISSUER}">
+                                            <c:CustomLookup objectName="Branch_Unit__c" fieldName="Name" label="Unit Kerja" iconName="standard:account" selectedRecord="{!v.Unit_Kerja}" placeholder="Search..."/>
+                                        </aura:if>
+
+                                        <aura:if isTrue="{!v.isSCC_BO_Supervisor_NFT_ISSUER}">
+                                            <c:CustomLookup objectName="Branch_Unit__c" fieldName="Name" label="Unit Kerja" iconName="standard:account" selectedRecord="{!v.Unit_Kerja}" placeholder="Search..."/>
+                                        </aura:if>
+                                    </aura:if>
+
+                            </aura:set>
+                    </aura:if> 
+                    <lightning:input name="cd_num" disabled="true" value="{!v.case.SCC_Card_Number__c}" label="Nomor Kartu" />
+                    <lightning:input name="nm_ddmst" disabled="true" value="{!v.cuspro.nama}" label="Nama DDMast" />
+                    <lightning:input name="act_num_ddmst" disabled="true" value="{!v.cuspro.acc_num}" label="Acct Number DDMast" />
+                    <lightning:input label="Account Number Dest" name="acc_num_dest" value="{!v.acc_num_dest}" disabled="true" />
+                    <lightning:input label="Nomor BRIVA" name="SCC_Nomor_Briva_Tagihan__c" value="{!v.case.SCC_Nomor_Briva_Tagihan__c}" disabled="true" />
+                    <lightning:input label="Nomor Brizzi" name="SCC_Brizzi_Card_Number__c" value="{!v.case.SCC_Brizzi_Card_Number__c}" disabled="true" />
+                </div>
+            </lightning:layoutItem>
+        </lightning:layout>
+        <lightning:layout>
+            <lightning:layoutItem size="12"   padding="around-small">
+                <lightning:input type="number" label="Nominal" name="nominal" value="{!v.case.SCC_Amount__c}" disabled="true" class="right-align" />
+                <ui:inputTextArea aura:id="field" label="Detail Informasi"  value="{!v.case.Description}" rows="7" cols="20" disabled="true"/>
+                <ui:inputTextArea aura:id="field" label="Remark"  value="{!v.case.SCC_Drone_Remark_Update__c}" rows="7" cols="20" disabled="true"/>
+                <ui:inputTextArea aura:id="field" label="Kolom Remark"  value="{!v.kol_rmk}" rows="7" cols="20"/>
+                <aura:if isTrue="{!v.case.SCC_Case_Type_for_Suggested_Article__c != '8713'}">
+                    <lightning:radioGroup name="radioGroup" label="Jenis Notifikasi" options="{! v.optionsWA }" value="{! v.valwa }" type="radio" />
+                <aura:set attribute="else">
+                    <lightning:radioGroup name="radioGroup" label="Jenis Notifikasi" options="{! v.optionsWA2 }" value="{! v.valwa }" type="radio" />
+                </aura:set>
+                </aura:if>
+                <ui:inputTextArea aura:id="field" label="Text Notifikasi"  value="{!v.isiwa}" rows="7" cols="20" disabled="true"/>
+                <!-- <lightning:fileUpload label="Attach receipt" name="fileUploader" multiple="false" accept="{!v.filetype}" onuploadfinished="{!c.handleUploadFinished}" /> -->
+                <lightning:button type="submit" name="Submit" label="Submit" class="slds-m-top_medium" onclick="{!c.setCase}"/>
+            </lightning:layoutItem>
+        </lightning:layout>
+        <lightning:accordion activeSectionName="{!v.activeSections}" allowMultipleSectionsOpen="true" >
+            <!--
+            <lightning:accordionSection label="Attachment" name="A">
+                <lightning:datatable data="{! v.attdata }" columns="{! v.attcolumns }" keyField="Id" hideCheckboxColumn="true"/> 
+            </lightning:accordionSection>
+            -->
+            <lightning:accordionSection label="Data Pendukung" name="F">
+                <lightning:tabset selectedTabId="one">
+                    <aura:if isTrue="{!v.case.SCC_Case_Type_for_Suggested_Article__c == '8713'}">
+                    <lightning:tab label="Brizzi" id="one">
+                        <lightning:layout title="" multipleRows="true" verticalAlign="start">
+                            <lightning:layoutItem size="12"  padding="around-small">
+                                <div class="page-section page-right">
+                                    <lightning:input aura:id="kartuBrizzi" name="kartu_brizzi" label="Kartu Brizzi" value="{!v.case.SCC_Brizzi_Card_Number__c}" required="true" disabled="true"/>
+                                    <lightning:button type="submit" name="cari_kartuBrizzi" label="Cari" class="slds-m-top_medium" onclick="{!c.searchKartuBrizzi}"/>
+                                </div>
+                            </lightning:layoutItem>
+                            <lightning:layoutItem size="12"  padding="around-small">
+                                <div class="page-section page-right">
+                                    <ui:scrollerWrapper class="scrollerSize">
+                                        <!-- data table start-->  
+                                        <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+                                            <thead>
+                                                <tr class="slds-text-title_caps">
+                                                    <th scope="col">
+                                                        <div class="slds-truncate" title="Saldo">Status Kartu</div>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <div class="slds-truncate" title="Saldo Deposit">Saldo</div>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <div class="slds-truncate" title="Akumulasi Debet">Saldo Deposit</div>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <div class="slds-truncate" title="Akumulasi Top Up">Akumulasi Debet</div>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <div class="slds-truncate" title="Akumulasi Top Up Bulan ini">Akumulasi Kredit</div>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <div class="slds-truncate" title="Kode Cabang">Akumulasi Top Up Bulan Ini</div>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <div class="slds-truncate" title="Tipe Kartu">Last Trx Date</div>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <div class="slds-truncate" title="Expired">Last Trx Amount</div>
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <aura:iteration items="{!v.DataKartu}" var="obj">
+                                                    <tr>
+                                                        <th scope="row">
+                                                            <div class="slds-truncate" title="{!obj.data[0].status_kartu}">
+                                                                {!obj.data[0].status_kartu}
+                                                            </div>
+                                                        </th> 
+                                                        <th scope="row">
+                                                            <div class="slds-truncate" title="{!obj.data[0].saldo}">
+                                                                {!obj.data[0].saldo}
+                                                            </div>
+                                                        </th>
+                                                        <th scope="row">
+                                                            <div class="slds-truncate" title="{!obj.data[0].saldo_topup}">
+                                                                {!obj.data[0].saldo_topup}
+                                                            </div>
+                                                        </th>
+                                                        <th scope="row">
+                                                            <div class="slds-truncate" title="{!obj.data[0].akum_debet}">
+                                                                {!obj.data[0].akum_debet}
+                                                            </div>
+                                                        </th>
+                                                        <th scope="row">
+                                                            <div class="slds-truncate" title="{!obj.data[0].akum_kredit}">
+                                                                {!obj.data[0].akum_kredit}
+                                                            </div>
+                                                        </th>
+                                                        <th scope="row">
+                                                            <div class="slds-truncate" title="{!obj.data[0].topup}">
+                                                                {!obj.data[0].topup}
+                                                            </div>
+                                                        </th>
+                                                        <th scope="row">
+                                                            <div class="slds-truncate" title="{!obj.data[0].last_trx_date}">
+                                                                {!obj.data[0].last_trx_date}
+                                                            </div>
+                                                        </th>
+                                                        <th scope="row">
+                                                            <div class="slds-truncate" title="{!obj.data[0].last_trx_amount}">
+                                                                {!obj.data[0].last_trx_amount}
+                                                            </div>
+                                                        </th>
+                                                    </tr>
+                                                </aura:iteration>
+                                            </tbody>
+                                        </table>
+                                    </ui:scrollerWrapper>
+                                </div>
+                            </lightning:layoutItem>
+                            <lightning:layoutItem size="12"  padding="around-small">
+                                <div class="page-section page-right">
+                                    <lightning:button type="submit" name="trx_history" label="Trx History" class="slds-m-top_medium" onclick="{!c.searchTrxHistory}" disabled="{!v.isButtonHistory}"/>
+                                    <lightning:button type="submit" name="partnership_trx_history" label="Partnership Trx History" class="slds-m-top_medium" onclick="{!c.searchPtrTrxHistory}" disabled="{!v.isButtonPartnerHistory}"/>
+                                </div>
+                            </lightning:layoutItem>
+                            <lightning:layoutItem size="12"  padding="around-small">
+                                <p class="slds-m-around_small">
+                                    <span>
+                                        Trx History
+                                    </span>
+                                </p>
+                                <div class="page-section page-right">
+                                    <ui:scrollerWrapper class="scrollerSize">
+                                        <!-- data table start-->  
+                                        <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+                                            <thead>
+                                                <tr class="slds-text-title_caps">
+                                                    <th scope="col">
+                                                        <div class="slds-truncate" title="Saldo">MID</div>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <div class="slds-truncate" title="Saldo Deposit">TID</div>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <div class="slds-truncate" title="Akumulasi Debet">Tgl Trx</div>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <div class="slds-truncate" title="Akumulasi Top Up">Jam Trx</div>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <div class="slds-truncate" title="Akumulasi Top Up Bulan ini">Jenis Trx</div>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <div class="slds-truncate" title="Issue Date">Amount</div>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <div class="slds-truncate" title="Kode Cabang">Reff Num</div>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <div class="slds-truncate" title="Tipe Kartu">Status Trx</div>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <div class="slds-truncate" title="Expired">Deskripsi</div>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <div class="slds-truncate" title="Expired">Additional Data</div>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <div class="slds-truncate" title="Expired">User Adjustment</div>
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <aura:iteration items="{!v.DataTrxHistory}" var="obj">
+                                                    <tr>
+                                                        <th scope="row">
+                                                            <div class="slds-truncate" title="{!obj.mercID}">
+                                                                {!obj.mercID}
+                                                            </div>
+                                                        </th> 
+                                                        <th scope="row">
+                                                            <div class="slds-truncate" title="{!obj.terminID}">
+                                                                {!obj.terminID}
+                                                            </div>
+                                                        </th>
+                                                        <th scope="row">
+                                                            <div class="slds-truncate" title="{!obj.tgl_trx}">
+                                                                {!obj.tgl_trx}
+                                                            </div>
+                                                        </th>
+                                                        <th scope="row">
+                                                            <div class="slds-truncate" title="{!obj.jam_trx}">
+                                                                {!obj.jam_trx}
+                                                            </div>
+                                                        </th>
+                                                        <th scope="row">
+                                                            <div class="slds-truncate" title="{!obj.proc_code}">
+                                                                {!obj.proc_code}
+                                                            </div>
+                                                        </th>
+                                                        <th scope="row">
+                                                            <div class="slds-truncate" title="{!obj.amount_trx}">
+                                                                {!obj.amount_trx}
+                                                            </div>
+                                                        </th>
+                                                        <th scope="row">
+                                                            <div class="slds-truncate" title="{!obj.ref_number}">
+                                                                {!obj.ref_number}
+                                                            </div>
+                                                        </th>
+                                                        <th scope="row">
+                                                            <div class="slds-truncate" title="{!obj.statustrx}">
+                                                                {!obj.statustrx}
+                                                            </div>
+                                                        </th>
+                                                        <th scope="row">
+                                                            <div class="slds-truncate" title="{!obj.keterangan}">
+                                                                {!obj.keterangan}
+                                                            </div>
+                                                        </th>
+                                                        <th scope="row">
+                                                            <div class="slds-truncate" title="{!obj.remark}">
+                                                                {!obj.remark}
+                                                            </div>
+                                                        </th>
+                                                        <th scope="row">
+                                                            <div class="slds-truncate" title="{!obj.user_id}">
+                                                                {!obj.user_id}
+                                                            </div>
+                                                        </th>
+                                                    </tr>
+                                                </aura:iteration>
+                                            </tbody>
+                                        </table>
+                                         <!-- DataTable End -->
+                                         <br/>
+                                         <!--  Pagination Buttons Start -->
+                                         <div class="slds-align_absolute-center">         
+                                            <lightning:button 
+                                                label="Previous"  
+                                                disabled="{!v.currentPageTrxHistory == 1}"  
+                                                onclick="{!c.navigationTrxHistory}" 
+                                                variant="brand"
+                                                iconName="utility:back" 
+                                                name="previous"/>
+                                            
+                                            <span class="slds-badge slds-badge_lightest" 
+                                                  style="margin-right: 10px;margin-left: 10px;">
+                                                Page {!v.currentPageTrxHistory}
+                                            </span>
+                                            
+                                            <lightning:button 
+                                                label="Next" 
+                                                disabled="{!v.countTrxHistory}"
+                                                onclick="{!c.navigationTrxHistory}"
+                                                variant="brand" 
+                                                iconName="utility:forward" 
+                                                iconPosition="right" 
+                                                name="next"/>
+                                        </div>
+                                         <!--  Pagination Buttons End -->
+                                    </ui:scrollerWrapper>
+                                </div>
+                            </lightning:layoutItem>
+                            <lightning:layoutItem size="12"  padding="around-small">
+                                <p class="slds-m-around_small">
+                                    <span>
+                                        Partnership Trx History
+                                    </span>
+                                </p>
+                                <div class="page-section page-right">
+                                    <ui:scrollerWrapper class="scrollerSize">
+                                        <!-- data table start-->  
+                                        <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+                                            <thead>
+                                                <tr class="slds-text-title_caps">
+                                                    <th scope="col">
+                                                        <div class="slds-truncate" title="Saldo">MID</div>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <div class="slds-truncate" title="Saldo Deposit">TID</div>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <div class="slds-truncate" title="Akumulasi Debet">Tgl Trx</div>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <div class="slds-truncate" title="Akumulasi Top Up">Jam Trx</div>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <div class="slds-truncate" title="Akumulasi Top Up Bulan ini">Tgl Settlement</div>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <div class="slds-truncate" title="Issue Date">Jam Settlement</div>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <div class="slds-truncate" title="Kode Cabang">Proccode</div>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <div class="slds-truncate" title="Tipe Kartu">Amount</div>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <div class="slds-truncate" title="Expired">Status Trx</div>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <div class="slds-truncate" title="Expired">Status Settlement</div>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <div class="slds-truncate" title="Expired">User Adjustment</div>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <div class="slds-truncate" title="Expired">Keterangan</div>
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <aura:iteration items="{!v.DataPtrTrxHistory}" var="obj">
+                                                    <tr>
+                                                        <th scope="row">
+                                                            <div class="slds-truncate" title="{!obj.mercID}">
+                                                                {!obj.mercID}
+                                                            </div>
+                                                        </th> 
+                                                        <th scope="row">
+                                                            <div class="slds-truncate" title="{!obj.terminID}">
+                                                                {!obj.terminID}
+                                                            </div>
+                                                        </th>
+                                                        <th scope="row">
+                                                            <div class="slds-truncate" title="{!obj.tgl_trx}">
+                                                                {!obj.tgl_trx}
+                                                            </div>
+                                                        </th>
+                                                        <th scope="row">
+                                                            <div class="slds-truncate" title="{!obj.jam_trx}">
+                                                                {!obj.jam_trx}
+                                                            </div>
+                                                        </th>
+                                                        <th scope="row">
+                                                            <div class="slds-truncate" title="{!obj.tgl_set}">
+                                                                {!obj.tgl_set}
+                                                            </div>
+                                                        </th>
+                                                        <th scope="row">
+                                                            <div class="slds-truncate" title="{!obj.jam_set}">
+                                                                {!obj.jam_set}
+                                                            </div>
+                                                        </th>
+                                                        <th scope="row">
+                                                            <div class="slds-truncate" title="{!obj.proc_code}">
+                                                                {!obj.proc_code}
+                                                            </div>
+                                                        </th>
+                                                        <th scope="row">
+                                                            <div class="slds-truncate" title="{!obj.amount_trx}">
+                                                                {!obj.amount_trx}
+                                                            </div>
+                                                        </th>
+                                                        <th scope="row">
+                                                            <div class="slds-truncate" title="{!obj.statustrx}">
+                                                                {!obj.statustrx}
+                                                            </div>
+                                                        </th>
+                                                        <th scope="row">
+                                                            <div class="slds-truncate" title="{!obj.statusset}">
+                                                                {!obj.statusset}
+                                                            </div>
+                                                        </th>
+                                                        <th scope="row">
+                                                            <div class="slds-truncate" title="{!obj.user_id}">
+                                                                {!obj.user_id}
+                                                            </div>
+                                                        </th>
+                                                        <th scope="row">
+                                                            <div class="slds-truncate" title="{!obj.keterangan}">
+                                                                {!obj.keterangan}
+                                                            </div>
+                                                        </th>
+                                                    </tr>
+                                                </aura:iteration>
+                                            </tbody>
+                                        </table>
+                                        <!-- DataTable End -->
+                                        <br/>
+                                        <!--  Pagination Buttons Start -->
+                                        <div class="slds-align_absolute-center">         
+                                            <lightning:button 
+                                                label="Previous"  
+                                                disabled="{!v.currentPagePtrTrxHistory == 1}"  
+                                                onclick="{!c.navigationPtrTrxHistory}" 
+                                                variant="brand"
+                                                iconName="utility:back" 
+                                                name="previous"/>
+                                            
+                                            <span class="slds-badge slds-badge_lightest" 
+                                                  style="margin-right: 10px;margin-left: 10px;">
+                                                Page {!v.currentPagePtrTrxHistory}
+                                            </span>
+                                            
+                                            <lightning:button 
+                                                label="Next" 
+                                                disabled="{!v.countPtrTrxHistory}"
+                                                onclick="{!c.navigationPtrTrxHistory}"
+                                                variant="brand" 
+                                                iconName="utility:forward" 
+                                                iconPosition="right" 
+                                                name="next"/>
+                                        </div>  
+                                        <!--  Pagination Buttons End -->
+                                    </ui:scrollerWrapper>
+                                </div>
+                            </lightning:layoutItem>
+                        </lightning:layout>
+                    </lightning:tab>
+                    </aura:if>
+                    <lightning:tab label="Rekening Koran" id="two">
+                        <lightning:layout title="" multipleRows="true" verticalAlign="start">
+                            <lightning:layoutItem size="12"  padding="around-small">
+                                <div class="page-section page-right">
+                                    <!-- hari ini -->
+                                    <aura:if isTrue="{!v.isSCC_BO_NFT_ISSUER}">
+                                        <lightning:input aura:id="field" 
+                                            name="norek" 
+                                            label="Nomor Rekening"  
+                                            value="{!v.case.SCC_Account_Number__c}" 
+                                            required="true"/>
+                                        <aura:set attribute="else">
+                                            <lightning:input aura:id="field" 
+                                                name="norek" 
+                                                label="Nomor Rekening"  
+                                                value="{!v.case.SCC_Account_Number__c}" 
+                                                required="true" 
+                                                disabled="true"/>
+                                        </aura:set>
+                                    </aura:if>
+                                    <lightning:input type="date" name="tgl_awal" label="Tanggal Awal" value="{!v.tgl_awal}" required="true" onchange="{!c.changedatestart}"/>
+                                    <lightning:input type="date" name="tgl_akhir" label="Tanggal Akhir" value="{!v.tgl_akhir}" required="true" onchange="{!c.changedateend}"/>
+                                    <lightning:button type="submit" name="cari" label="Cari" class="slds-m-top_medium" onclick="{!c.searchRekeningKoran}"/>
+                                </div>
+                            </lightning:layoutItem>
+                            <lightning:layoutItem size="12"  padding="around-small">
+                                <div class="page-section page-right">
+                                    <!--<lightning:datatable data="{! v.srcmutrekdata }" columns="{! v.srcmutrekcolumns }" keyField="Id" hideCheckboxColumn="true"/>-->
+                                    <!-- lightning:button to get selected rows data -->
+                                    <div class="slds-clearfix slds-m-around_small">
+                                        <div class="slds-clearfix">
+                                            <div class="slds-float_right">
+                                                <lightning:button variant="destructive" label="Submit"  onclick="{! c.setRekeningKoran }" disabled="{!v.selectedRekeningKoran == 0}"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- display total record and selected record count -->    
+                                    <p class="slds-m-around_small">
+                                        <span class="slds-badge slds-badge_lightest" style="display:inline-block">
+                                            Total Records : {!v.selectedRekeningKoran > 0 ? v.selectedRekeningKoran + '/' : ''} {!v.totalRekeningKoran} 
+                                        </span>
+                                    </p>
+                                    <ui:scrollerWrapper class="scrollerSize">
+                                        <!-- data table start-->  
+                                        <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+                                            <thead>
+                                                <tr class="slds-text-title_caps">
+                                                <!--header checkbox for select all-->
+                                                    <th style="width:3.25rem;" class="slds-text-align_right">
+                                                        <div class="slds-form-element">
+                                                            <div class="slds-form-element__control">
+                                                                <label class="slds-checkbox">
+                                                                    <ui:inputCheckbox disabled="{!v.totalRekeningKoran == 0}" aura:id="selectAllIdRekeningKoran" change="{!c.selectAllRekeningKoran}"/>
+                                                                    <span class="slds-checkbox_faux"></span>
+                                                                    <span class="slds-form-element__label"></span>
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <div class="slds-truncate" title="TRANS DATE">TRANS DATE</div>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <div class="slds-truncate" title="JAM TRX">JAM TRX</div>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <div class="slds-truncate" title="NOREK">NOREK</div>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <div class="slds-truncate" title="REMARK">REMARK</div>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <div class="slds-truncate" title="SEQ NO">SEQ NO</div>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <div class="slds-truncate" title="MUTASI DEBET">MUTASI DEBET</div>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <div class="slds-truncate" title="MUTASI KREDIT">MUTASI KREDIT</div>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <div class="slds-truncate" title="USERID">USERID</div>
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <aura:iteration items="{!v.PaginationRekeningKoran}" var="obj">
+                                                    <tr class="{!if(obj.data.mutasiKredit == 0, 'green-row', 'yellow-row')}">
+                                                    <!-- <tr> -->
+                                                        <th scope="row" style="width:3.25rem;">
+                                                        <!-- <th scope="row" class="{!if(obj.data.mutasiDebet>0,'debit','kredit')}" style="width:3.25rem;"> -->
+                                                            <div class="slds-form-element">
+                                                                <div class="slds-form-element__control">
+                                                                    <label class="slds-checkbox">
+                                                                        <ui:inputCheckbox text="{!obj.num}"  value="{!obj.isChecked}" change="{!c.checkboxRekeningKoran}"/>
+                                                                        <span class="slds-checkbox_faux"></span>
+                                                                        <span class="slds-form-element__label text"></span>
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                        </th>
+                                                        <th scope="row" class="left-align">
+                                                        <!-- <th scope="row" class="{!if(obj.data.mutasiDebet>0,'debit','kredit')}"> -->
+                                                            <div class="slds-truncate" title="{!obj.tgltran}">
+                                                                {!obj.tgltran}
+                                                            </div>
+                                                        </th> 
+                                                        <th scope="row" class="left-align">
+                                                        <!-- <th scope="row" class="{!if(obj.data.mutasiDebet>0,'debit','kredit')}"> -->
+                                                            <div class="slds-truncate" title="{!obj.jamtran}">
+                                                                {!obj.jamtran}
+                                                            </div>
+                                                        </th>
+                                                        <th scope="row" class="left-align">
+                                                        <!-- <th scope="row" class="{!if(obj.data.mutasiDebet>0,'debit','kredit')}"> -->
+                                                            <!-- <div class="slds-truncate" title="{!obj.noRek}">
+                                                                {!obj.noRek} -->
+                                                            <div class="slds-truncate" title="{!obj.data.noRek}">
+                                                                {!obj.data.noRek}
+                                                            </div>
+                                                        </th>
+                                                        <th scope="row" class="left-align">
+                                                        <!-- <th scope="row" class="{!if(obj.data.mutasiDebet>0,'debit','kredit')}"> -->
+                                                            <!-- <div class="slds-truncate" title="{!obj.trremk}">
+                                                                {!obj.trremk} -->
+                                                            <div class="slds-truncate" title="{!obj.data.trremk}">
+                                                                {!obj.data.trremk}
+                                                            </div>
+                                                        </th>
+                                                        <th scope="row" class="left-align">
+                                                        <!-- <th scope="row" class="{!if(obj.data.mutasiDebet>0,'debit','kredit')}"> -->
+                                                            <!-- <div class="slds-truncate" title="{!obj.seq}">
+                                                                {!obj.seq} -->
+                                                            <div class="slds-truncate" title="{!obj.data.seq}">
+                                                                {!obj.data.seq}
+                                                            </div>
+                                                        </th>
+                                                        <th scope="row" class="left-align">
+                                                        <!-- <th scope="row" class="{!'right-align ' + (obj.data.mutasiDebet > 0 ? 'debit' : 'kredit')}"> -->
+                                                            <!-- <div class="slds-truncate left-align" title="{!obj.mutasiDebet}">
+                                                                <ui:outputNumber value="{!obj.mutasiDebet}"/> -->
+                                                            <div class="slds-truncate right-align" title="{!obj.data.mutasiDebet}">
+                                                                <ui:outputNumber value="{!obj.data.mutasiDebet}"/>
+                                                            </div>
+                                                        </th>
+                                                        <th scope="row" class="left-align">
+                                                            <!-- <div class="slds-truncate left-align" title="{!obj.mutasiKredit}">
+                                                                <ui:outputNumber value="{!obj.mutasiKredit}"/>
+                                                        <th scope="row" class="{!'right-align ' + (obj.data.mutasiKredit > 0 ? 'debit' : 'kredit')}"> -->
+                                                            <div class="slds-truncate right-align" title="{!obj.data.mutasiKredit}">
+                                                                <ui:outputNumber value="{!obj.data.mutasiKredit}"/>
+                                                            </div>
+                                                        </th>
+                                                        <th scope="row" class="left-align">
+                                                            <!-- <div class="slds-truncate left-align" title="{!obj.truser}">
+                                                                {!obj.truser} -->
+                                                        <!-- <th scope="row" class="{!if(obj.data.mutasiDebet>0,'debit','kredit')}"> -->
+                                                            <div class="slds-truncate" title="{!obj.data.truser}">
+                                                                {!obj.data.truser}
+                                                            </div>
+                                                        </th>
+                                                    </tr>
+                                                </aura:iteration>
+                                            </tbody>
+                                        </table>
+                                        <!-- DataTable End -->
+                                        <br/>
+                                        <!--  Pagination Buttons Start -->
+                                        <div class="slds-align_absolute-center">         
+                                            <lightning:button label="Previous"  disabled="{!v.startPageRekeningKoran == 0}"  onclick="{!c.navigationRekeningKoran}" variant="brand"
+                                                            iconName="utility:back" name="previous"/>
+                                            
+                                            <span class="slds-badge slds-badge_lightest" style="margin-right: 10px;margin-left: 10px;">
+                                                Page {!v.currentPageRekeningKoran} out of {!v.totalPagesRekeningKoran}
+                                            </span>
+                                            
+                                            <lightning:button label="Next" disabled="{!(v.endPageRekeningKoran + 1) >= v.totalRekeningKoran}"  onclick="{!c.navigationRekeningKoran}"
+                                                            variant="brand" iconName="utility:forward" iconPosition="right" name="next"/>
+                                        </div>  
+                                        <!--  Pagination Buttons End -->
+                                    </ui:scrollerWrapper>
+                                </div>
+                            </lightning:layoutItem>
+                        </lightning:layout>
+                    </lightning:tab>
+                    <lightning:tab label="Rekon" id="three">
+                        <lightning:layout title="" multipleRows="true" verticalAlign="start">
+                            <lightning:layoutItem size="12"  padding="around-small">
+                                <div class="page-section page-right">
+
+                                    <aura:if isTrue="{!v.case.SCC_Case_Type_for_Suggested_Article__c == '8713'}">
+                                        <lightning:input aura:id="field" name="norek2" label="Nomor Brizzi" 
+                                                        value="{!v.case.SCC_Brizzi_Card_Number__c}" required="true" disabled="true"/>
+                                        <aura:set attribute="else">
+                                            <aura:if isTrue="{!v.case.SCC_Case_Type_for_Suggested_Article__c == '8812' || v.case.SCC_Case_Type_for_Suggested_Article__c == '8915'}">
+                                                <lightning:input aura:id="field" name="norek2" label="Nomor Rekening" 
+                                                                value="{!v.case.SCC_Account_Number__c}" required="true" disabled="true"/>
+                                                <aura:set attribute="else">
+                                                    <lightning:input aura:id="field" name="norek2" label="Billing Number" 
+                                                                    value="{!v.case.scc_Billing_Number__c}" required="true" disabled="true"/>
+                                                </aura:set>
+                                            </aura:if>
+                                        </aura:set>
+                                    </aura:if>
+
+                                    <aura:if isTrue="{!v.case.SCC_Case_Type_for_Suggested_Article__c == '8412'}">
+
+                                        <lightning:input aura:id="field" name="norek2" label="Nomor Rekening Issuer" 
+                                            value="{!v.case.SCC_Account_Number__c}" required="true" disabled="true"/>
+
+                                        <lightning:input aura:id="field" name="norek2" label="Nomor Kartu Issuer" 
+                                            value="{!v.case.SCC_Card_Number__c}" required="true" disabled="true"/>
+
+                                    </aura:if>
+
+                                    <lightning:input type="date" name="tgl_trx_rekon" label="Tanggal Transaksi" value="{!v.tgl_trx_rekon}" required="true" onchange="{!c.changedate}"/>
+                                    <lightning:button type="submit" name="cari_rekon" label="Cari" class="slds-m-top_medium" onclick="{!c.searchRekon}"/>
+                                </div>
+                            </lightning:layoutItem>
+                            <lightning:layoutItem size="12"  padding="around-small">
+                                <div class="page-section page-right">
+                                    <!--<lightning:datatable data="{! v.srcrekondata }" columns="{! v.srcrekoncolumns }" keyField="Id" hideCheckboxColumn="true"/>-->
+                                    <!-- lightning:button to get selected rows data -->
+                                    <div class="slds-clearfix slds-m-around_small">
+                                        <div class="slds-clearfix">
+                                            <div class="slds-float_right">
+                                                <lightning:button variant="destructive" label="Submit"  onclick="{! c.setRekon }" disabled="{!v.selectedRekon == 0}"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- display total record and selected record count -->    
+                                    <p class="slds-m-around_small">
+                                        <span class="slds-badge slds-badge_lightest" style="display:inline-block">
+                                            Total Records : {!v.selectedRekon > 0 ? v.selectedRekon + '/' : ''} {!v.totalRekon} 
+                                        </span>
+                                    </p>
+                                    <ui:scrollerWrapper class="scrollerSize">
+                                        <!-- data table start-->  
+                                        <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+                                            <thead>
+                                                <tr class="slds-text-title_caps">
+                                                <!--header checkbox for select all-->
+                                                    <th style="width:3.25rem;" class="slds-text-align_right">
+                                                        <div class="slds-form-element">
+                                                            <div class="slds-form-element__control">
+                                                                <!--
+                                                                <label class="slds-checkbox">
+                                                                    <ui:inputCheckbox disabled="{!v.totalRekon == 0}" aura:id="selectAllIdRekon" change="{!c.selectAllRekon}"/>
+                                                                    <span class="slds-checkbox_faux"></span>
+                                                                    <span class="slds-form-element__label"></span>
+                                                                </label>
+                                                                -->
+                                                            </div>
+                                                        </div>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <div class="slds-truncate" title="Tgl Transaksi">Tgl Transaksi</div>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <div class="slds-truncate" title="Acct No">Acct No</div>
+                                                    </th>
+                                                        <aura:if isTrue="{!v.case.SCC_Case_Type_for_Suggested_Article__c != '8812' &amp;&amp; v.case.SCC_Case_Type_for_Suggested_Article__c != '8815'}">
+                                                                <th scope="col">
+                                                                    <div class="slds-truncate" title="Billing Number">Billing Number</div>
+                                                                </th>
+                                                           <aura:set attribute="else">
+                                                                <th scope="col">
+                                                                    <div class="slds-truncate" title="CardNo">CardNo</div>
+                                                                </th>
+                                                           </aura:set>
+                                                    </aura:if>
+                                                    <th scope="col">
+                                                        <div class="slds-truncate" title="Tanggal Buku Kredit">Tanggal Buku Kredit</div>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <div class="slds-truncate" title="Amount">Amount</div>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <div class="slds-truncate" title="Seq Brinets">Seq Brinets</div>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <div class="slds-truncate" title="Status Rekon">Status Rekon</div>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <div class="slds-truncate" title="Status">Status</div>
+                                                    </th>
+                                                </tr>
+                                            </thead>
+
+                                            <!-- case type 8412 -->
+                                            <aura:if isTrue="{!v.case.SCC_Case_Type_for_Suggested_Article__c == '8412'}">
+                                                <tbody>
+                                                    <aura:iteration items="{!v.PaginationRekon}" var="obj">
+                                                        <tr>
+                                                            <th scope="row" class="{!if(obj.data.StatusRekon=='Match','match','unmatch')}"  >
+                                                                <div class="slds-form-element">
+                                                                    <div class="slds-form-element__control">
+                                                                        <label class="slds-checkbox">
+                                                                            <ui:inputCheckbox text="{!obj.num}"  value="{!obj.isChecked}" change="{!c.checkboxRekon}" disabled="{!obj.isDisabled}"/>
+                                                                            <span class="slds-checkbox_faux"></span>
+                                                                            <span class="slds-form-element__label text"></span>
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                            </th>
+                                                            <th scope="row" class="{!if(obj.data.StatusRekon=='Match','match','unmatch')}">
+                                                                <div class="slds-truncate" title="{!obj.data.TanggalTrans}">
+                                                                    {!obj.data.TanggalTrans}
+                                                                </div>
+                                                            </th> 
+                                                            <th scope="row" class="{!if(obj.data.StatusRekon=='Match','match','unmatch')}">
+                                                                <div class="slds-truncate" title="{!obj.data.account_no}">
+                                                                    {!obj.data.RekDebet}
+                                                                </div>
+                                                            </th>
+                                                            <th scope="row" class="{!if(obj.data.StatusRekon=='Match','match','unmatch')}">
+                                                                <div class="slds-truncate" title="{!obj.data.BillingCode}">
+                                                                    {!obj.data.BillingCode}
+                                                                </div>
+                                                            </th>
+                                                            <th scope="row" class="{!if(obj.data.StatusRekon=='Match','match','unmatch')}">
+                                                                <div class="slds-truncate" title="{!obj.data.TanggalTrans}">
+                                                                    {!obj.data.TanggalTrans}
+                                                                </div>
+                                                            </th>
+                                                            <th scope="row" class="{!'right-align ' + (obj.data.StatusRekon == 'Match' ? 'match' : 'unmatch')}">
+                                                                <div class="slds-truncate right-align" title="{!obj.data.NominalPurchase}">
+                                                                    <ui:outputNumber value="{!obj.data.NominalPurchase}"/>
+                                                                </div>
+                                                            </th>
+                                                            <th scope="row" class="{!if(obj.data.StatusRekon=='Match','match','unmatch')}">
+                                                                <div class="slds-truncate" title="{!obj.data.seq_no}">
+                                                                    {!obj.data.Seq}
+                                                                </div>
+                                                            </th>
+                                                            <th scope="row" class="{!if(obj.data.StatusRekon=='Match','match','unmatch')}">
+                                                                <div class="slds-truncate" title="{!obj.data.StatusRecon}">
+                                                                    {!obj.data.StatusRecon}
+                                                                </div>
+                                                            </th>
+                                                            <th scope="row" class="{!if(obj.data.StatusRekon=='Match','match','unmatch')}">
+                                                                <div class="slds-truncate" title="{!obj.data.StatusMCSDesc}">
+                                                                    {!obj.data.StatusMCSDesc}
+                                                                </div>
+                                                            </th>
+                                                        </tr>
+                                                    </aura:iteration>
+                                                </tbody>
+                                                 <!-- 8812 ,8915, new rekon    -->
+                                                 <aura:set attribute="else">
+                                                        <aura:if isTrue="{!v.case.SCC_Case_Type_for_Suggested_Article__c != '8812' &amp;&amp; v.case.SCC_Case_Type_for_Suggested_Article__c != '8915'}">
+                                                            <tbody>
+                                                                <aura:iteration items="{!v.PaginationRekon}" var="obj">
+                                                                    <tr>
+                                                                        <th scope="row" class="{!if(obj.data.StatusRekon=='Match','match','unmatch')}"  >
+                                                                            <div class="slds-form-element">
+                                                                                <div class="slds-form-element__control">
+                                                                                    <label class="slds-checkbox">
+                                                                                        <ui:inputCheckbox text="{!obj.num}"  value="{!obj.isChecked}" change="{!c.checkboxRekon}" disabled="{!obj.isDisabled}"/>
+                                                                                        <span class="slds-checkbox_faux"></span>
+                                                                                        <span class="slds-form-element__label text"></span>
+                                                                                    </label>
+                                                                                </div>
+                                                                            </div>
+                                                                        </th>
+                                                                        <th scope="row" class="{!if(obj.data.StatusRekon=='Match','match','unmatch')}">
+                                                                            <div class="slds-truncate" title="{!obj.data.TanggalTrans}">
+                                                                                {!obj.data.TanggalTrans}
+                                                                            </div>
+                                                                        </th> 
+                                                                        <th scope="row" class="{!if(obj.data.StatusRekon=='Match','match','unmatch')}">
+                                                                            <div class="slds-truncate" title="{!obj.data.account_no}">
+                                                                                {!obj.data.RekDebet}
+                                                                            </div>
+                                                                        </th>
+                                                                        <th scope="row" class="{!if(obj.data.StatusRekon=='Match','match','unmatch')}">
+                                                                            <div class="slds-truncate" title="{!obj.data.BillingCode}">
+                                                                                {!obj.data.BillingCode}
+                                                                            </div>
+                                                                        </th>
+                                                                        <th scope="row" class="{!if(obj.data.StatusRekon=='Match','match','unmatch')}">
+                                                                            <div class="slds-truncate" title="{!obj.data.TanggalTrans}">
+                                                                                {!obj.data.TanggalTrans}
+                                                                            </div>
+                                                                        </th>
+                                                                        <th scope="row" class="{!'right-align ' + (obj.data.StatusRekon == 'Match' ? 'match' : 'unmatch')}">
+                                                                            <div class="slds-truncate right-align" title="{!obj.data.Nominal}">
+                                                                                <ui:outputNumber value="{!obj.data.Nominal}"/>
+                                                                            </div>
+                                                                        </th>
+                                                                        <th scope="row" class="{!if(obj.data.StatusRekon=='Match','match','unmatch')}">
+                                                                            <div class="slds-truncate" title="{!obj.data.seq_no}">
+                                                                                {!obj.data.Seq}
+                                                                            </div>
+                                                                        </th>
+                                                                        <th scope="row" class="{!if(obj.data.StatusRekon=='Match','match','unmatch')}">
+                                                                            <div class="slds-truncate" title="{!obj.data.StatusRecon}">
+                                                                                {!obj.data.StatusRecon}
+                                                                            </div>
+                                                                        </th>
+                                                                        <th scope="row" class="{!if(obj.data.StatusRekon=='Match','match','unmatch')}">
+                                                                            <div class="slds-truncate" title="{!obj.data.StatusMCSDesc}">
+                                                                                {!obj.data.StatusMCSDesc}
+                                                                            </div>
+                                                                        </th>
+                                                                    </tr>
+                                                                </aura:iteration>
+                                                            </tbody>
+                                                            <aura:set attribute="else">
+                                                                <tbody>
+                                                                    <aura:iteration items="{!v.PaginationRekon}" var="obj">
+                                                                        <tr>
+                                                                            <th scope="row" class="{!if(obj.data.StatusRekon=='Match','match','unmatch')}"  >
+                                                                                <div class="slds-form-element">
+                                                                                    <div class="slds-form-element__control">
+                                                                                        <label class="slds-checkbox">
+                                                                                            <ui:inputCheckbox text="{!obj.num}"  value="{!obj.isChecked}" change="{!c.checkboxRekon}" disabled="{!obj.isDisabled}"/>
+                                                                                            <span class="slds-checkbox_faux"></span>
+                                                                                            <span class="slds-form-element__label text"></span>
+                                                                                        </label>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </th>
+                                                                            <th scope="row" class="{!if(obj.data.StatusRekon=='Match','match','unmatch')}">
+                                                                                <div class="slds-truncate" title="{!obj.data.trx_date}">
+                                                                                    {!obj.data.trx_date}
+                                                                                </div>
+                                                                            </th> 
+                                                                            <th scope="row" class="{!if(obj.data.StatusRekon=='Match','match','unmatch')}">
+                                                                                <div class="slds-truncate" title="{!obj.data.account_no}">
+                                                                                    {!obj.data.account_no}
+                                                                                </div>
+                                                                            </th>
+                                                                            <th scope="row" class="{!if(obj.data.StatusRekon=='Match','match','unmatch')}">
+                                                                                <div class="slds-truncate" title="{!obj.data.card_no}">
+                                                                                    {!obj.data.card_no}
+                                                                                </div>
+                                                                            </th>
+                                                                            <th scope="row" class="{!if(obj.data.StatusRekon=='Match','match','unmatch')}">
+                                                                                <div class="slds-truncate" title="{!obj.data.PenyelesaianRekon}">
+                                                                                    {!obj.data.PenyelesaianRekon}
+                                                                                </div>
+                                                                            </th>
+                                                                            <th scope="row" class="{!'right-align ' + (obj.data.StatusRekon == 'Match' ? 'match' : 'unmatch')}">
+                                                                                <div class="slds-truncate right-align" title="{!obj.data.amount}">
+                                                                                    <ui:outputNumber value="{!obj.data.amount}"/>
+                                                                                </div>
+                                                                            </th>
+                                                                            <th scope="row" class="{!if(obj.data.StatusRekon=='Match','match','unmatch')}">
+                                                                                <div class="slds-truncate" title="{!obj.data.seq_no}">
+                                                                                    {!obj.data.seq_no}
+                                                                                </div>
+                                                                            </th>
+                                                                            <th scope="row" class="{!if(obj.data.StatusRekon=='Match','match','unmatch')}">
+                                                                                <div class="slds-truncate" title="{!obj.data.StatusRekon}">
+                                                                                    {!obj.data.StatusRekon}
+                                                                                </div>
+                                                                            </th>
+                                                                            <th scope="row" class="{!if(obj.data.StatusRekon=='Match','match','unmatch')}">
+                                                                                <div class="slds-truncate" title="{!obj.data.StatusPenyelesaian}">
+                                                                                    {!obj.data.StatusPenyelesaian}
+                                                                                </div>
+                                                                            </th>
+                                                                        </tr>
+                                                                    </aura:iteration>
+                                                                </tbody>
+                                                            </aura:set>
+                                                        </aura:if>
+                                                </aura:set>
+                                            </aura:if>
+                                        </table>
+                                        <!-- DataTable End -->
+                                        <br/>
+                                        <!--  Pagination Buttons Start -->
+                                        <div class="slds-align_absolute-center">         
+                                            <lightning:button label="Previous"  disabled="{!v.startPageRekon == 0}"  onclick="{!c.navigationRekon}" variant="brand"
+                                                            iconName="utility:back" name="previous"/>
+                                            
+                                            <span class="slds-badge slds-badge_lightest" style="margin-right: 10px;margin-left: 10px;">
+                                                Page {!v.currentPageRekon} out of {!v.totalPagesRekon}
+                                            </span>
+                                            
+                                            <lightning:button label="Next" disabled="{!(v.endPageRekon + 1) >= v.totalRekon}"  onclick="{!c.navigationRekon}"
+                                                            variant="brand" iconName="utility:forward" iconPosition="right" name="next"/>
+                                        </div>  
+                                        <!--  Pagination Buttons End -->
+                                    </ui:scrollerWrapper>
+                                </div>
+                            </lightning:layoutItem>
+                        </lightning:layout>
+                    </lightning:tab>
+                    <aura:if isTrue="{!v.case.SCC_Case_Type_for_Suggested_Article__c != '8713'}">
+                    <lightning:tab label="Berita Acara Opname" id="four">
+                        <lightning:layout title="" multipleRows="true" verticalAlign="start">
+                            <lightning:layoutItem size="12"  padding="around-small">
+                                <div class="page-section page-right">
+                                    <lightning:input type="String" name="tid" label="TID" value="{!v.tidObj.label}" disabled="true"/>
+                                    <!-- <lightning:input type="date" name="tgl_trx_bao" label="Tanggal Transaksi" value="{!v.tgl_trx_bao}" onchange="{!c.changedate}"/> -->
+                                    <lightning:button type="submit" name="cari_bao" label="Cari" class="slds-m-top_medium" onclick="{!c.searchBAO}"/>
+                                </div>
+                            </lightning:layoutItem>
+                            <lightning:layoutItem size="12"  padding="around-small">
+                                <div class="page-section page-right">
+                                    <!-- lightning:button to get selected rows data -->
+                                    <div class="slds-clearfix slds-m-around_small">
+                                        <div class="slds-clearfix">
+                                            <div class="slds-float_right">
+                                                <lightning:button variant="destructive" label="Submit"  onclick="{! c.setBAO }" disabled="{!v.selectedBAO == 0}"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- display total record and selected record count -->    
+                                    <p class="slds-m-around_small">
+                                        <span class="slds-badge slds-badge_lightest" style="display:inline-block">
+                                            Total Records : {!v.selectedBAO > 0 ? v.selectedBAO + '/' : ''} {!v.totalBAO} 
+                                        </span>
+                                    </p>
+                                    <ui:scrollerWrapper class="scrollerSize">
+                                        <!-- data table start-->  
+                                        <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+                                            <thead>
+                                                <tr class="slds-text-title_caps">
+                                                <!--header checkbox for select all-->
+                                                    <th style="width:3.25rem;" class="slds-text-align_right" rowspan="2">
+                                                        <div class="slds-form-element">
+                                                            <div class="slds-form-element__control">
+                                                                <label class="slds-checkbox">
+                                                                    <ui:inputCheckbox disabled="{!v.totalBAO == 0}" aura:id="selectAllIdBAO" change="{!c.selectAllBAO}"/>
+                                                                    <span class="slds-checkbox_faux"></span>
+                                                                    <span class="slds-form-element__label"></span>
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </th>
+                                                    <th scope="col" rowspan="2">
+                                                        <div class="slds-truncate" title="Branch">Branch</div>
+                                                    </th>
+                                                    <th scope="col" rowspan="2">
+                                                        <div class="slds-truncate" title="ID Terminal">ID Terminal</div>
+                                                    </th>
+                                                    <th scope="col" rowspan="2">
+                                                        <div class="slds-truncate" title="Waktu Opname">Waktu Opname</div>
+                                                    </th>
+                                                    <th scope="col" colspan="4">
+                                                        <div class="slds-truncate" title="Selisih">Selisih</div>
+                                                    </th>
+                                                    <th scope="col" rowspan="2">
+                                                        <div class="slds-truncate" title="Status Uker">Status Uker</div>
+                                                    </th>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="col" >
+                                                        <div class="slds-truncate" title="Lebih Kas">Lebih Kas</div>
+                                                    </th>
+                                                    <th scope="col" >
+                                                        <div class="slds-truncate" title="Kurang Kas">Kurang Kas</div>
+                                                    </th>
+                                                    <th scope="col" >
+                                                        <div class="slds-truncate" title="Lebih Fisik">Lebih Fisik</div>
+                                                    </th>
+                                                    <th scope="col" >
+                                                        <div class="slds-truncate" title="Kurang Fisik">Kurang Fisik</div>
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <aura:iteration items="{!v.PaginationBAO}" var="obj">
+                                                    <tr>
+                                                        <th scope="row" class="slds-text-align_right" style="background-color: #bd7777;">
+                                                            <div class="slds-form-element">
+                                                                <div class="slds-form-element__control">
+                                                                    <label class="slds-checkbox">
+                                                                        <ui:inputCheckbox text="{!obj.num}"  value="{!obj.isChecked}" change="{!c.checkboxBAO}"/>
+                                                                        <span class="slds-checkbox_faux"></span>
+                                                                        <span class="slds-form-element__label text"></span>
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                        </th>
+                                                        <th scope="row" style="background-color: #bd7777;">
+                                                            <div class="slds-truncate" title="{!obj.data.branch}">
+                                                                {!obj.data.branch}
+                                                            </div>
+                                                        </th>
+                                                        <th scope="row" style="background-color: #bd7777;">
+                                                            <div class="slds-truncate" title="{!obj.data.id_terminal}">
+                                                                {!obj.data.id_terminal}
+                                                            </div>
+                                                        </th>
+                                                        <th scope="row" style="background-color: #bd7777;">
+                                                            <div class="slds-truncate" title="{!obj.data.WaktuOpname}">
+                                                                {!obj.data.WaktuOpname}
+                                                            </div>
+                                                        </th>
+                                                        <th scope="row" style="background-color: #bd7777;" class="right-align">
+                                                            <div class="slds-truncate right-align" title="{!obj.data.LebihKas}">
+                                                                <ui:outputNumber value="{!obj.data.LebihKas}"/>
+                                                            </div>
+                                                        </th>
+                                                        <th scope="row" style="background-color: #bd7777;" class="right-align">
+                                                            <div class="slds-truncate right-align" title="{!obj.data.KurangKas}">
+                                                                <ui:outputNumber value="{!obj.data.KurangKas}"/>
+                                                            </div>
+                                                        </th>
+                                                        <th scope="row" style="background-color: #bd7777;" class="right-align">
+                                                            <div class="slds-truncate right-align" title="{!obj.data.LebihFisik}">
+                                                                <ui:outputNumber value="{!obj.data.LebihFisik}"/>
+                                                            </div>
+                                                        </th>
+                                                        <th scope="row" style="background-color: #bd7777;" class="right-align">
+                                                            <div class="slds-truncate right-align" title="{!obj.data.KurangFisik}">
+                                                                <ui:outputNumber value="{!obj.data.KurangFisik}"/>
+                                                            </div>
+                                                        </th>
+                                                        <th scope="row" style="background-color: #bd7777;">
+                                                            <div class="slds-truncate" title="{!obj.data.StatusName}">
+                                                                {!obj.data.StatusName}
+                                                            </div>
+                                                        </th>
+                                                    </tr>
+                                                </aura:iteration>
+                                            </tbody>
+                                        </table>
+                                        <!-- DataTable End -->
+                                        <br/>
+                                        <!--  Pagination Buttons Start -->
+                                        <div class="slds-align_absolute-center">         
+                                            <lightning:button label="Previous"  disabled="{!v.startPageBAO == 0}"  onclick="{!c.navigationBAO}" variant="brand"
+                                                            iconName="utility:back" name="previous"/>
+                                            
+                                            <span class="slds-badge slds-badge_lightest" style="margin-right: 10px;margin-left: 10px;">
+                                                Page {!v.currentPageBAO} out of {!v.totalPagesBAO}
+                                            </span>
+                                            
+                                            <lightning:button label="Next" disabled="{!(v.endPageBAO + 1) >= v.totalBAO}"  onclick="{!c.navigationBAO}"
+                                                            variant="brand" iconName="utility:forward" iconPosition="right" name="next"/>
+                                        </div>  
+                                        <!--  Pagination Buttons End -->
+                                    </ui:scrollerWrapper>
+                                </div>
+                            </lightning:layoutItem>
+                        </lightning:layout>
+                    </lightning:tab>
+                    </aura:if>
+                    <lightning:tab label="Aktivitas Kartu" id="five">
+                        <lightning:layout title="" multipleRows="true" verticalAlign="start">
+                            <lightning:layoutItem size="12"  padding="around-small">
+                                <div class="page-section page-right">
+                                    <!-- <lightning:input aura:id="field" name="norek2" label="Nomor Kartu" value="{!v.case.SCC_Card_Number__c}" required="true" disabled="true"/> -->
+                                    <lightning:select label="Fitur" name="picklist_fitur" value="{!v.fiturName}" required="true" onchange="{!c.selectFiturKartu}">
+                                        <!-- Options for the picklist -->
+                                        <option value="0">Pilih Fitur</option>
+                                        <option value="1">Nomor Rekening</option>
+                                        <option value="2">Nomor Kartu</option>
+                                        <option value="3">Nomor Hp</option>
+                                    </lightning:select>
+                                    <lightning:input aura:id="fieldFitur" name="nomor_fitur" label="Nomor" value="{!v.nomorFitur}" required="true" disabled="true"/>
+                                    <lightning:input type="date" name="posissi_awal" label="Tanggal Awal" value="{!v.tgl_awal}" required="true" onchange="{!c.changedatestart}"/>
+                                    <lightning:input type="date" name="posisi_akhir" label="Tanggal Akhir" value="{!v.tgl_akhir}" required="true" onchange="{!c.changedateend}"/>
+                                    <lightning:button type="submit" name="cari_aktivitas" label="Cari" class="slds-m-top_medium" onclick="{!c.searchAktivitasKartu}"/>
+                                </div>
+                            </lightning:layoutItem>
+                            <lightning:layoutItem size="12"  padding="around-small">
+                                <div class="page-section page-right">
+                                    <!--<lightning:datatable data="{! v.srcrekondata }" columns="{! v.srcrekoncolumns }" keyField="Id" hideCheckboxColumn="true"/>-->
+                                    <!-- lightning:button to get selected rows data -->
+                                    <div class="slds-clearfix slds-m-around_small">
+                                        <div class="slds-clearfix">
+                                            <div class="slds-float_right">
+                                                <lightning:button variant="destructive" label="Submit"  onclick="{! c.setAktivitasKartu }" disabled="{!v.selectedKartu == 0}"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- display total record and selected record count -->    
+                                    <p class="slds-m-around_small">
+                                        <span class="slds-badge slds-badge_lightest" style="display:inline-block">
+                                            Total Records : {!v.selectedKartu > 0 ? v.selectedKartu + '/' : ''} {!v.totalAktivitasKartu} 
+                                        </span>
+                                    </p>
+                                    <ui:scrollerWrapper class="scrollerSize">
+                                        <!-- data table start-->  
+                                        <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+                                            <thead>
+                                                <tr class="slds-text-title_caps">
+                                                <!--header checkbox for select all-->
+                                                    <th style="width:3.25rem;" class="slds-text-align_right">
+                                                        <div class="slds-form-element">
+                                                            <div class="slds-form-element__control">
+                                                                
+                                                                <label class="slds-checkbox">
+                                                                    <ui:inputCheckbox disabled="{!v.totalAktivitasKartu == 0}" aura:id="selectAllIdKartu" change="{!c.selectAllAktivitasKartu}"/>
+                                                                    <span class="slds-checkbox_faux"></span>
+                                                                    <span class="slds-form-element__label"></span>
+                                                                </label>
+                                                               
+                                                            </div>
+                                                        </div>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <div class="slds-truncate" title="Trx Date">Trx Date</div>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <div class="slds-truncate" title="Trx Time">Trx Time</div>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <div class="slds-truncate" title="Acc Num">Acc Num</div>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <div class="slds-truncate" title="Card Num">Card Num</div>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <div class="slds-truncate" title="Phone Num">Phone Num</div>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <div class="slds-truncate" title="Fitur Id">Fitur ID</div>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <div class="slds-truncate" title="Nama Fitur">Nama Fitur</div>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <div class="slds-truncate" title="Channel ID">Channel ID</div>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <div class="slds-truncate" title="Teller ID/BranchCode">Teller ID/ <br></br> BranchCode</div>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <div class="slds-truncate" title="Terminal ID">Terminal ID</div>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <div class="slds-truncate" title="Amount">Amount</div>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <div class="slds-truncate" title="Desc Response Code">Desc Response Code</div>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <div class="slds-truncate" title="Response Code">Response Code</div>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <div class="slds-truncate" title="Journal Seq">Journal Seq</div>
+                                                    </th>
+                    
+                                                </tr>
+                                            </thead>
+
+
+                                            <tbody>
+                                                <aura:iteration items="{!v.PaginationKartu}" var="obj">
+                                                    <tr>
+                                                        <th scope="row">
+                                                            <div class="slds-form-element">
+                                                                <div class="slds-form-element__control">
+                                                                    <label class="slds-checkbox">
+                                                                        <ui:inputCheckbox text="{!obj.num}"  value="{!obj.isChecked}" change="{!c.checkboxAktivitasKartu}" disabled="{!obj.isDisabled}"/>
+                                                                        <span class="slds-checkbox_faux"></span>
+                                                                        <span class="slds-form-element__label text"></span>
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                        </th>
+                                                        <th scope="row">
+                                                            <div class="slds-truncate" title="{!obj.tanggal}">
+                                                                {!obj.tanggal}
+                                                            </div>
+                                                        </th> 
+                                                        <th scope="row">
+                                                            <div class="slds-truncate" title="{!obj.data.jam}">
+                                                                {!obj.data.jam}
+                                                            </div>
+                                                        </th>
+                                                        <th scope="row">
+                                                            <div class="slds-truncate" title="{!obj.data.noRekening}">
+                                                                {!obj.data.noRekening}
+                                                            </div>
+                                                        </th>
+                                                        <th scope="row">
+                                                            <div class="slds-truncate" title="{!obj.data.noKartu}">
+                                                                {!obj.data.noKartu}
+                                                            </div>
+                                                        </th>
+                                                        <th scope="row">
+                                                            <div class="slds-truncate" title="{!obj.data.noHandphone}">
+                                                                {!obj.data.noHandphone}
+                                                            </div>
+                                                        </th>
+                                                        <th scope="row">
+                                                            <div class="slds-truncate" title="{!obj.data.fiturId}">
+                                                                {!obj.data.fiturId}
+                                                            </div>
+                                                        </th>
+                                                        <th scope="row">
+                                                            <div class="slds-truncate" title="{!obj.data.namaFitur}">
+                                                                {!obj.data.namaFitur}
+                                                            </div>
+                                                        </th>
+                                                        <th scope="row">
+                                                            <div class="slds-truncate" title="{!obj.data.channelId}">
+                                                                {!obj.data.channelId}
+                                                            </div>
+                                                        </th>
+                                                        <th scope="row">
+                                                            <div class="slds-truncate" title="{!obj.data.tellerId}">
+                                                                {!obj.data.tellerId}
+                                                            </div>
+                                                        </th>
+                                                        <th scope="row">
+                                                            <div class="slds-truncate" title="{!obj.data.terminalId}">
+                                                                {!obj.data.terminalId}
+                                                            </div>
+                                                        </th>
+                                                        <th scope="row">
+                                                            <div class="slds-truncate" title="{!obj.data.amount}">
+                                                                {!obj.data.amount}
+                                                            </div>
+                                                        </th>
+                                                        <th scope="row">
+                                                            <div class="slds-truncate" title="{!obj.data.status}">
+                                                                {!obj.data.status}
+                                                            </div>
+                                                        </th>
+                                                        <th scope="row">
+                                                            <div class="slds-truncate" title="{!obj.data.responseCode}">
+                                                                {!obj.data.responseCode}
+                                                            </div>
+                                                        </th>
+                                                        <th scope="row">
+                                                            <div class="slds-truncate" title="{!obj.data.journalSeq}">
+                                                                {!obj.data.journalSeq}
+                                                            </div>
+                                                        </th>
+                                                    </tr>
+                                                </aura:iteration>
+                                            </tbody>
+
+
+                                        </table>
+                                        <!-- DataTable End -->
+                                        <br/>
+                                        <!--  Pagination Buttons Start -->
+                                        <div class="slds-align_absolute-center">         
+                                            <lightning:button label="Previous"  disabled="{!v.startPageKartu == 0}"  onclick="{!c.navigationAktivitasKartu}" variant="brand"
+                                                            iconName="utility:back" name="previous"/>
+                                            
+                                            <span class="slds-badge slds-badge_lightest" style="margin-right: 10px;margin-left: 10px;">
+                                                Page {!v.currentPageKartu} out of {!v.totalPagesKartu}
+                                            </span>
+                                            
+                                            <lightning:button label="Next" disabled="{!(v.endPageKartu + 1) >= v.totalAktivitasKartu}"  onclick="{!c.navigationAktivitasKartu}"
+                                                            variant="brand" iconName="utility:forward" iconPosition="right" name="next"/>
+                                        </div>  
+                                        <!--  Pagination Buttons End -->
+                                    </ui:scrollerWrapper>
+                                </div>
+                            </lightning:layoutItem>
+                        </lightning:layout>
+                    </lightning:tab>
+
+                    <aura:if isTrue="{!v.case.SCC_Case_Type_for_Suggested_Article__c != '8713' || !not(v.isSCC_BO_NFT_ISSUER)}">
+                        <lightning:tab label="EJ" id="six">
+                            <lightning:layout title="" multipleRows="true" verticalAlign="start">
+                                <lightning:layoutItem size="12"  padding="around-small">
+                                    <div class="page-section page-right">
+                                        <lightning:input aura:id="tidej" name="ej_tid" label="TID" value="{!v.tidObj.label}" required="true" disabled="true"/>
+                                    </div>
+                                </lightning:layoutItem>
+                                <lightning:layoutItem size="12" padding="around-small">
+                                    <div class="page-section page-right">
+                                        <lightning:input type="date" name="tanggal_input" label="Tanggal" value="{!v.tgl_input_awal}" required="true" onchange="{!c.changedatestart}"/>
+                                        <lightning:button type="submit" name="cari_xEJ" label="EJ NFS" class="slds-m-top_medium" onclick="{!c.searchEJ}"/>
+                                        <lightning:button type="submit" name="cari_xEJK" label="EJ Kaseya" class="slds-m-top_medium" onclick="{!c.searchEJK}"/>
+                                    </div>
+                                </lightning:layoutItem>
+                            </lightning:layout>
+                        </lightning:tab>
+                    </aura:if>
+                    <aura:if isTrue="{!v.isCase8412}">
+                        <lightning:tab label="Merchant" id="seven">
+                            <c:lwcMerchantSearchComponentDrone recordId="{!v.recordId}" oncaseupdated ="{!c.handleCaseUpdated}" ></c:lwcMerchantSearchComponentDrone>  
+                        </lightning:tab>
+                    </aura:if>
+
+                </lightning:tabset>
+
+                <!-- Modal Wrapper -->
+                <aura:if isTrue="{!v.isOpen}">
+                    <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+                        <div class="slds-modal__container customModalWidth">
+
+                            <!-- Modal/Popup Header -->
+                            <header class="slds-modal__header">
+                                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick="{!c.closeModal}">
+                                    <lightning:icon iconName="utility:close" alternativeText="close" size="small"/>
+                                    <span class="slds-assistive-text">Close</span>
+                                </button>
+                                <h2 class="slds-text-heading_medium">EJ Log</h2>
+                            </header>
+
+                            <!-- Modal/Popup Body -->
+                            <div class="slds-modal__content slds-p-around_medium">
+                                <lightning:layoutItem size="12"  padding="around-small">
+                                    <div class="page-section page-right">
+                                        <!--<lightning:datatable data="{! v.srcrekondata }" columns="{! v.srcrekoncolumns }" keyField="Id" hideCheckboxColumn="true"/>-->
+                                        <!-- Search Filter Input -->
+                                        <!-- <div class="stickySearch">
+                                            <lightning:input name="x" value="{!v.filter}" label="Cari Dengan Keyword" placeholder="Cari"/>
+                                        </div> -->
+                                        <!-- <lightning:input name="x" label="Cari Dengan Keyword" value="{!v.filter}" placeholder="Cari" onkeyup="{!c.handleFilter}" /> -->
+                                        <!-- display total record and selected record count -->    
+                                        <p class="slds-m-around_small">
+                                            <span class="slds-badge slds-badge_lightest" style="display:inline-block">
+                                                Total Records : {!v.selectedEJ > 0 ? v.selectedEJ + '/' : ''} {!v.totalEJ} 
+                                            </span>
+                                        </p>
+                                        <ui:scrollerWrapper class="scrollerSize">
+                                            <!-- data table start-->  
+                                            <table data="{!v.filteredData}" class="slds-table slds-table_bordered slds-table_cell-buffer">
+                                                <thead>
+                                                    <tr class="slds-text-title_caps">
+                                                        <th style="width:3.25rem;" class="slds-text-align_right">
+                                                            <div class="slds-form-element">
+                                                                <div class="slds-form-element__control">
+                                                                    
+                                                                    <label class="slds-checkbox">
+                                                                        <!-- <ui:inputCheckbox disabled="{!v.totalEJ == 0}" aura:id="selectAllIdEJ" change="{!c.selectAllEJ}"/>
+                                                                        <span class="slds-checkbox_faux"></span>
+                                                                        <span class="slds-form-element__label"></span> -->
+                                                                    </label>
+                                                                
+                                                                </div>
+                                                            </div>
+                                                        </th>
+                                                        <th scope="col">
+                                                            <div class="slds-truncate" title="EJ Log">EJ Log</div>
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <aura:iteration items="{!v.PaginationEJ}" var="obj" indexVar="objIndex">
+                                                        <tr>
+                                                            <th scope="row">
+                                                                <div class="slds-form-element">
+                                                                    <div class="slds-form-element__control">
+                                                                        <label class="slds-checkbox">
+                                                                            <ui:inputCheckbox aura:id="ejCheckbox" name="{!objIndex}" value="{!obj.isChecked}" change="{!c.checkboxEJ}" disabled="{!obj.isDisabled}"/>
+                                                                            <span class="slds-checkbox_faux"></span>
+                                                                            <span class="slds-form-element__label text"></span>
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                            </th>
+                                                            <th scope="row" class="left-align">
+                                                                <div class="slds-truncate" title="{!obj.data.ejlog}" style="white-space: pre-wrap;">
+                                                                    {!obj.data.ejlog}
+                                                                </div>
+                                                                <div class="slds-truncate" title="{!obj.num}" style="white-space: pre-wrap;">
+                                                                    {!obj.num}
+                                                                </div>
+                                                            </th> 
+                                                        </tr>
+                                                    </aura:iteration>
+                                                </tbody>
+
+
+                                            </table>
+                                            <!-- DataTable End -->
+                                            <br/>
+                                        </ui:scrollerWrapper>
+                                        <!--  Pagination Buttons Start -->
+                                        <!-- <div class="slds-align_absolute-center">         
+                                            <lightning:button label="Previous"  disabled="{!v.startPageEJ == 0}"  onclick="{!c.navigationEJ}" variant="brand"
+                                                            iconName="utility:back" name="previous"/>
+                                            
+                                            <span class="slds-badge slds-badge_lightest" style="margin-right: 10px;margin-left: 10px;">
+                                                Page {!v.currentPageEJ} out of {!v.totalPagesEJ}
+                                            </span>
+                                            
+                                            <lightning:button label="Next" disabled="{!(v.endPageEJ + 1) >= v.totalEJ}"  onclick="{!c.navigationEJ}"
+                                                            variant="brand" iconName="utility:forward" iconPosition="right" name="next"/>
+                                        </div>   -->
+                                        <!--  Pagination Buttons End -->
+                                    </div>
+                                </lightning:layoutItem>
+                                <!-- Add more input fields as needed -->
+                            </div>
+
+                            <!-- Modal/Popup Footer -->
+                            <footer class="slds-modal__footer">
+                                <lightning:button variant="neutral" label="Cancel" onclick="{!c.closeModal}" />
+                                <lightning:button variant="destructive" label="Submit"  onclick="{! c.setEJ }" disabled="{!or(v.selectedEJ == 0, v.isProcessing)}" />
+                            </footer>
+                        </div>
+                    </section>
+
+                    <!-- Modal/Popup Backdrop -->
+                    <div class="slds-backdrop slds-backdrop_open"></div>
+                </aura:if>
+            </lightning:accordionSection>
+            <aura:if isTrue="{!equals(v.case.SCC_Case_Type_for_Suggested_Article__c,'8713')}">
+            <lightning:accordionSection label="Replace Kartu" name="J">
+                <div class="slds-clearfix slds-m-around_small">
+                    <div class="slds-clearfix">
+                        <div class="slds-float_left">
+                            <lightning:button variant="destructive" label="Delete"  onclick="{! c.deletedReplaceCard }" disabled="{!v.case.IsLocked__c || v.noSelectionReplace}"/>
+                        </div>
+                    </div>
+                </div>
+                <!-- <lightning:datatable data="{! v.quetrndata }" columns="{! v.quetrncolumns }" keyField="Id" hideCheckboxColumn="true" />-->
+                <ui:scrollerWrapper class="scrollerSize">
+                    <!-- data table start-->  
+                    <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+                        <thead>
+                            <tr class="slds-text-title_caps">
+                            <!--header checkbox for select all-->
+                                <th scope="col">
+                                    <div class="slds-truncate" title="SELECT">SELECT</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="No. Kartu Lama">No. Kartu Lama</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="No. Kartu Baru">No. Kartu Baru</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Saldo Kartu">Saldo Kartu</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Saldo Deposit">Saldo Deposit</div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <aura:iteration items="{!v.replacecolumns}" var="obj">
+                                <tr>
+                                    <th scope="row">
+                                        <div class="slds-truncate" title="{!obj.IsDeleted__c}">
+                                            <label class="slds-checkbox">
+                                                <ui:inputCheckbox text="{!obj.Id}"  value="{!obj.IsDeleted__c}" change="{!c.selectReplaceCard}"/>
+                                                <span class="slds-checkbox_faux"></span>
+                                                <span class="slds-form-element__label text"></span>
+                                            </label>
+                                        </div>
+                                    </th>
+                                    <th scope="row">
+                                        <div class="slds-truncate" title="{!obj.Nomor_Kartu_Brizzi__c}">
+                                            {!obj.Nomor_Kartu_Brizzi__c}
+                                        </div>
+                                    </th> 
+                                    <th scope="row">
+                                        <div class="slds-truncate" title="{!obj.Nomor_Kartu_Brizzi_Baru__c}">
+                                            {!obj.Nomor_Kartu_Brizzi_Baru__c}
+                                        </div>
+                                    </th> 
+                                    <th scope="row" class="right-align">
+                                        <div class="slds-truncate right-align" title="{!obj.Saldo__c}">
+                                            <ui:outputNumber value="{!obj.Saldo__c}"/>
+                                        </div>
+                                    </th>
+                                    <th scope="row" class="right-align">
+                                        <div class="slds-truncate right-align" title="{!obj.Saldo_Deposit__c}">
+                                            <ui:outputNumber value="{!obj.Saldo_Deposit__c}"/>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </aura:iteration>
+                        </tbody>
+                    </table>
+                    <!-- DataTable End -->
+                </ui:scrollerWrapper>
+            </lightning:accordionSection>
+            <lightning:accordionSection label="Adjust Deposit Brizzi" name="A">
+                <div class="slds-clearfix slds-m-around_small">
+                    <div class="slds-clearfix">
+                        <div class="slds-float_left">
+                            <lightning:button variant="destructive" label="Delete"  onclick="{! c.deletedAdjustDeposit }" disabled="{!v.case.IsLocked__c || v.noSelectionAdjust}"/>
+                        </div>
+                    </div>
+                </div>
+                <!-- <lightning:datatable data="{! v.quetrndata }" columns="{! v.quetrncolumns }" keyField="Id" hideCheckboxColumn="true" />-->
+                <ui:scrollerWrapper class="scrollerSize">
+                    <!-- data table start-->  
+                    <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+                        <thead>
+                            <tr class="slds-text-title_caps">
+                            <!--header checkbox for select all-->
+                                <th scope="col">
+                                    <div class="slds-truncate" title="SELECT">SELECT</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Branch">No. Kartu Brizzi</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="NOREK Debet 1">Saldo Kartu</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Nominal Debet 1">Saldo Deposit</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="NOREK Debet 2">Nominal Adjust</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Nominal Debet 2">Kurangi Saldo</div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <aura:iteration items="{!v.adjustmentColumns}" var="obj">
+                                <tr>
+                                    <th scope="row">
+                                        <div class="slds-truncate" title="{!obj.IsDeleted__c}">
+                                            <label class="slds-checkbox">
+                                                <ui:inputCheckbox text="{!obj.Id}"  value="{!obj.IsDeleted__c}" change="{!c.selectAdjustDeposit}"/>
+                                                <span class="slds-checkbox_faux"></span>
+                                                <span class="slds-form-element__label text"></span>
+                                            </label>
+                                        </div>
+                                    </th>
+                                    <th scope="row">
+                                        <div class="slds-truncate" title="{!obj.Nomor_Kartu_Brizzi__c}">
+                                            {!obj.Nomor_Kartu_Brizzi__c}
+                                        </div>
+                                    </th> 
+                                    <th scope="row" class="right-align">
+                                        <div class="slds-truncate right-align" title="{!obj.Saldo_Kartu__c}">
+                                            <ui:outputNumber value="{!obj.Saldo_Kartu__c}"/>
+                                        </div>
+                                    </th>
+                                    <th scope="row" class="right-align">
+                                        <div class="slds-truncate right-align" title="{!obj.Saldo_Deposit__c}">
+                                            <ui:outputNumber value="{!obj.Saldo_Deposit__c}"/>
+                                        </div>
+                                    </th>
+                                    <th scope="row" class="right-align">
+                                        <div class="slds-truncate right-align" title="{!obj.Nominal_Adjust__c}">
+                                            <ui:outputNumber value="{!obj.Nominal_Adjust__c}"/>
+                                        </div>
+                                    </th>
+                                    <th scope="row">
+                                        <div class="slds-truncate" title="{!obj.Reduce_Balance__c}">
+                                            <aura:if isTrue="{!obj.Reduce_Balance__c}">
+                                                Ya
+                                                <aura:set attribute="else">
+                                                    Tidak
+                                                </aura:set>
+                                            </aura:if>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </aura:iteration>
+                        </tbody>
+                    </table>
+                    <!-- DataTable End -->
+                </ui:scrollerWrapper>
+            </lightning:accordionSection>
+            </aura:if>
+            <lightning:accordionSection label="Queuetrans" name="B">
+                <!-- <lightning:datatable data="{! v.quetrndata }" columns="{! v.quetrncolumns }" keyField="Id" hideCheckboxColumn="true" />-->
+                <ui:scrollerWrapper class="scrollerSize">
+                    <!-- data table start-->  
+                    <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+                        <thead>
+                            <tr class="slds-text-title_caps">
+                            <!--header checkbox for select all-->
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Branch">Branch</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="NOREK Debet 1">NOREK Debet 1</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Nominal Debet 1">Nominal Debet 1</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="NOREK Debet 2">NOREK Debet 2</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Nominal Debet 2">Nominal Debet 2</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="NOREK Kredit 1">NOREK Kredit 1</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Nominal Kredit 1">Nominal Kredit 1</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Remark">Remark</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Status">Status</div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <aura:iteration items="{!v.quetrncolumns}" var="obj">
+                                <tr>
+                                    <th scope="row" style="background-color: #eef082;">
+                                        <div class="slds-truncate" title="{!obj.Branchcode__c}">
+                                            {!obj.Branchcode__c}
+                                        </div>
+                                    </th> 
+                                    <th scope="row" style="background-color: #eef082;">
+                                        <div class="slds-truncate" title="{!obj.scc_acct_debet1__c}">
+                                            {!obj.scc_acct_debet1__c}
+                                        </div>
+                                    </th>
+                                    <th scope="row" style="background-color: #eef082;" class="right-align">
+                                        <div class="slds-truncate right-align" title="{!obj.scc_amt_debet1__c}">
+                                            <ui:outputNumber value="{!obj.scc_amt_debet1__c}"/>
+                                        </div>
+                                    </th>
+                                    <th scope="row" style="background-color: #eef082;">
+                                        <div class="slds-truncate" title="{!obj.scc_acct_debet2__c}">
+                                            {!obj.scc_acct_debet2__c}
+                                        </div>
+                                    </th>
+                                    <th scope="row" style="background-color: #eef082;" class="right-align">
+                                        <div class="slds-truncate right-align" title="{!obj.scc_amt_debet2__c}">
+                                            <ui:outputNumber value="{!obj.scc_amt_debet2__c}"/>
+                                        </div>
+                                    </th>
+                                    <th scope="row" style="background-color: #eef082;">
+                                        <div class="slds-truncate" title="{!obj.scc_acct_kredit1__c}">
+                                            {!obj.scc_acct_kredit1__c}
+                                        </div>
+                                    </th>
+                                    <th scope="row" style="background-color: #eef082;" class="right-align">
+                                        <div class="slds-truncate right-align" title="{!obj.scc_amt_kredit1__c}">
+                                            <ui:outputNumber value="{!obj.scc_amt_kredit1__c}"/>
+                                        </div>
+                                    </th>
+                                    <th scope="row" style="background-color: #eef082;">
+                                        <div class="slds-truncate" title="{!obj.SCC_Remark__c}">
+                                            {!obj.SCC_Remark__c}
+                                        </div>
+                                    </th>
+                                    <th scope="row" style="background-color: #eef082;">
+                                        <div class="slds-truncate" title="{!obj.SCC_Status__c}">
+                                            {!obj.SCC_Status__c}
+                                        </div>
+                                    </th>
+                                </tr>
+                            </aura:iteration>
+                        </tbody>
+                    </table>
+                    <!-- DataTable End -->
+                </ui:scrollerWrapper>
+            </lightning:accordionSection>
+            <lightning:accordionSection label="Mutasi Rekening Koran" name="C">
+                <div class="slds-clearfix slds-m-around_small">
+                    <div class="slds-clearfix">
+                        <div class="slds-float_left">
+                            <lightning:button variant="destructive" label="Delete"  onclick="{! c.deletedRekeningKoran }" disabled="{!v.case.IsLocked__c}"/>
+                        </div>
+                    </div>
+                </div>
+                <!--<lightning:datatable data="{! v.mutrekdata }" columns="{! v.mutrekcolumns }"   keyField="Id" hideCheckboxColumn="true"/> -->
+                <ui:scrollerWrapper class="scrollerSize">
+                    <!-- data table start-->  
+                    <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+                        <thead>
+                            <tr class="slds-text-title_caps">
+                            <!--header checkbox for select all-->
+                                <th scope="col">
+                                    <div class="slds-truncate" title="SELECT">SELECT</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="TRANS DATE">TRANS DATE</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="JAM TRX">JAM TRX</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="NOREK">NOREK</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="REMARK">REMARK</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="SEQ NO">SEQ NO</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="MUTASI DEBET">MUTASI DEBET</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="MUTASI KREDIT">MUTASI KREDIT</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="USERID">USERID</div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- <aura:iteration items="{!v.mutrekcolumn}" var="obj"> -->
+                            <aura:iteration items="{!v.mutrekcolumns}" var="obj">
+                                <tr class="{!if(obj.SCC_Mutasi_Kredit__c == 0, 'green-row', 'yellow-row')}">
+                                <!-- <tr>     -->
+                                    <th scope="row">
+                                    <!-- <th scope="row" class="{!if(obj.SCC_Mutasi_Debet__c>0,'debit','kredit')}"> -->
+                                        <div class="slds-truncate" title="{!obj.IsDeleted__c}">
+                                            <label class="slds-checkbox">
+                                                <ui:inputCheckbox text="{!obj.Id}"  value="{!obj.IsDeleted__c}" change="{!c.selectRekeningKoran}"/>
+                                                <span class="slds-checkbox_faux"></span>
+                                                <span class="slds-form-element__label text"></span>
+                                            </label>
+                                        </div>
+                                    </th>
+                                    <th scope="row" class="left-align">
+                                    <!-- <th scope="row" class="{!if(obj.SCC_Mutasi_Debet__c>0,'debit','kredit')}"> -->
+                                        <div class="slds-truncate" title="{!obj.Tanggal_Transaksi__c}">
+                                            {!obj.Tanggal_Transaksi__c}
+                                        </div>
+                                    </th> 
+                                    <th scope="row" class="left-align">
+                                    <!-- <th scope="row" class="{!if(obj.SCC_Mutasi_Debet__c>0,'debit','kredit')}"> -->
+                                        <div class="slds-truncate" title="{!obj.SCC_Jam_Trans__c}">
+                                            {!obj.SCC_Jam_Trans__c}
+                                        </div>
+                                    </th>
+                                    <th scope="row" class="left-align">
+                                    <!-- <th scope="row" class="{!if(obj.SCC_Mutasi_Debet__c>0,'debit','kredit')}"> -->
+                                        <div class="slds-truncate" title="{!obj.SCC_Nomor_Rekening__c}">
+                                            {!obj.SCC_Nomor_Rekening__c}
+                                        </div>
+                                    </th>
+                                    <th scope="row" class="left-align">
+                                    <!-- <th scope="row" class="{!if(obj.SCC_Mutasi_Debet__c>0,'debit','kredit')}"> -->
+                                        <div class="slds-truncate" title="{!obj.SCC_trremk__c}">
+                                            {!obj.SCC_trremk__c}
+                                        </div>
+                                    </th>
+                                    <th scope="row" class="left-align">
+                                    <!-- <th scope="row" class="{!if(obj.SCC_Mutasi_Debet__c>0,'debit','kredit')}"> -->
+                                        <div class="slds-truncate" title="{!obj.SCC_Sequence__c}">
+                                            {!obj.SCC_Sequence__c}
+                                        </div>
+                                    </th>
+                                    <th scope="row" class="{!'some-class left-align'}">
+                                    <!-- <th scope="row" class="{!'some-class ' + (obj.SCC_Mutasi_Debet__c > 0 ? 'debit' : 'kredit') + ' right-align'}"> -->
+                                        <div class="slds-truncate left-align" title="{!obj.SCC_Mutasi_Debet__c}">
+                                            <ui:outputNumber value="{!obj.SCC_Mutasi_Debet__c}"/>
+                                        </div>
+                                    </th>
+                                    <th scope="row" class="{!'some-class left-align'}">
+                                    <!-- <th scope="row" class="{!'some-class ' + (obj.SCC_Mutasi_Kredit__c > 0 ? 'debit' : 'kredit') + ' right-align'}"> -->
+                                        <div class="slds-truncate left-align" title="{!obj.SCC_Mutasi_Kredit__c}">
+                                            <ui:outputNumber value="{!obj.SCC_Mutasi_Kredit__c}"/>
+                                        </div>
+                                    </th>
+                                    <th scope="row" class="left-align">
+                                    <!-- <th scope="row" class="{!if(obj.SCC_Mutasi_Debet__c>0,'debit','kredit')}"> -->
+                                        <div class="slds-truncate" title="{!obj.SCC_Truser__c}">
+                                            {!obj.SCC_Truser__c}
+                                        </div>
+                                    </th>
+                                </tr>
+                            </aura:iteration>
+                        </tbody>
+                    </table>
+                    <!-- DataTable End -->
+                </ui:scrollerWrapper>
+            </lightning:accordionSection>
+            <lightning:accordionSection label="Rekon" name="D">
+                <div class="slds-clearfix slds-m-around_small">
+                    <div class="slds-clearfix">
+                        <div class="slds-float_left">
+                            <lightning:button variant="destructive" label="Delete"  onclick="{! c.deletedRekon }" disabled="{!v.case.IsLocked__c}"/>
+                        </div>
+                    </div>
+                </div>
+                <!--<lightning:datatable data="{! v.rekondata }" columns="{! v.rekoncolumns }" keyField="Id" hideCheckboxColumn="true"/>-->
+                <ui:scrollerWrapper class="scrollerSize">
+                    <!-- data table start-->  
+                    <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+                        <thead>
+                            <tr class="slds-text-title_caps">
+                            <!--header checkbox for select all-->
+                                <th scope="col">
+                                    <div class="slds-truncate" title="SELECT">SELECT</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Tgl Transaksi">Tgl Transaksi</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Acct No">Acct No</div>
+                                </th>
+                                <aura:if isTrue="{!v.case.SCC_Case_Type_for_Suggested_Article__c != '8812' &amp;&amp; v.case.SCC_Case_Type_for_Suggested_Article__c != '8815'}">
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Billing Number">Billing Number</div>
+                                        </th>
+                                     <aura:set attribute="else">
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="CardNo">CardNo</div>
+                                        </th>
+                                     </aura:set>
+                                 </aura:if>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Tanggal Buku Kredit">Tanggal Buku Kredit</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Amount">Amount</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Seq Brinets">Seq Brinets</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Status Rekon">Status Rekon</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Status">Status</div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <aura:iteration items="{!v.rekoncolumns}" var="obj">
+                                <tr>
+                                    <th scope="row" class="{!if(obj.SCC_Status_Rekon__c=='Match','match','unmatch')}">
+                                        <div class="slds-truncate" title="{!obj.IsDeleted__c}">
+                                            <label class="slds-checkbox">
+                                                <ui:inputCheckbox text="{!obj.Id}"  value="{!obj.IsDeleted__c}" change="{!c.selectRekon}" disabled="{!v.case.IsLocked__c}"/>
+                                                <span class="slds-checkbox_faux"></span>
+                                                <span class="slds-form-element__label text"></span>
+                                            </label>
+                                        </div>
+                                    </th>
+                                    <th scope="row" class="{!if(obj.SCC_Status_Rekon__c=='Match','match','unmatch')}">
+                                        <div class="slds-truncate" title="{!obj.SCC_Tanggal_Transaksi__c}">
+                                            {!obj.SCC_Tanggal_Transaksi__c}
+                                        </div>
+                                    </th> 
+                                    <th scope="row" class="{!if(obj.SCC_Status_Rekon__c=='Match','match','unmatch')}">
+                                        <div class="slds-truncate" title="{!obj.SCC_Account_Number__c}">
+                                            {!obj.SCC_Account_Number__c}
+                                        </div>
+                                    </th>
+                                    <th scope="row" class="{!if(obj.SCC_Status_Rekon__c=='Match','match','unmatch')}">
+                                        <div class="slds-truncate" title="{!obj.SCC_Card_Number__c}">
+                                            {!obj.SCC_Card_Number__c}
+                                        </div>
+                                    </th>
+                                    <th scope="row" class="{!if(obj.SCC_Status_Rekon__c=='Match','match','unmatch')}">
+                                        <div class="slds-truncate" title="{!obj.SCC_Penyelesaian_Rekon__c}">
+                                            {!obj.SCC_Penyelesaian_Rekon__c}
+                                        </div>
+                                    </th>
+                                    <th scope="row" class="{!'some-class ' + (obj.SCC_Status_Rekon__c == 'Match' ? 'match' : 'unmatch') + ' right-align'}">
+                                        <div class="slds-truncate right-align" title="{!obj.SCC_Amount__c}">
+                                            <ui:outputNumber value="{!obj.SCC_Amount__c}"/>
+                                        </div>
+                                    </th>
+                                    <th scope="row" class="{!'some-class ' + (obj.SCC_Status_Rekon__c == 'Match' ? 'match' : 'unmatch') + ' right-align'}">
+                                        <div class="slds-truncate right-align" title="{!obj.SCC_Seq_No__c}">
+                                            {!obj.SCC_Seq_No__c}
+                                        </div>
+                                    </th>
+                                    <th scope="row" class="{!if(obj.SCC_Status_Rekon__c=='Match','match','unmatch')}">
+                                        <div class="slds-truncate" title="{!obj.SCC_Status_Rekon__c}">
+                                            {!obj.SCC_Status_Rekon__c}
+                                        </div>
+                                    </th>
+                                    <th scope="row" class="{!if(obj.SCC_Status_Rekon__c=='Match','match','unmatch')}">
+                                        <div class="slds-truncate" title="{!obj.SCC_Status_Penyelesaian__c}">
+                                            {!obj.SCC_Status_Penyelesaian__c}
+                                        </div>
+                                    </th>
+                                </tr>
+                            </aura:iteration>
+                        </tbody>
+                    </table>
+                    <!-- DataTable End -->
+                </ui:scrollerWrapper>
+            </lightning:accordionSection>
+            <aura:if isTrue="{!v.case.SCC_Case_Type_for_Suggested_Article__c != '8713'}">
+            <lightning:accordionSection label="Berita Acara Opname" name="G">
+                <div class="slds-clearfix slds-m-around_small">
+                    <div class="slds-clearfix">
+                        <div class="slds-float_left">
+                            <lightning:button variant="destructive" label="Delete"  onclick="{! c.deletedBAO }" disabled="{!v.case.IsLocked__c}"/>
+                        </div>
+                    </div>
+                </div>
+                <ui:scrollerWrapper class="scrollerSize">
+                    <!-- data table start-->  
+                    <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+                        <thead>
+                            <tr class="slds-text-title_caps">
+                            <!--header checkbox for select all-->
+                                <th scope="col" rowspan="2">
+                                    <div class="slds-truncate" title="SELECT">SELECT</div>
+                                </th>
+                                <th scope="col" rowspan="2">
+                                    <div class="slds-truncate" title="Branch">Branch</div>
+                                </th>
+                                <th scope="col" rowspan="2">
+                                    <div class="slds-truncate" title="ID Terminal">ID Terminal</div>
+                                </th>
+                                <th scope="col" rowspan="2">
+                                    <div class="slds-truncate" title="Waktu Opname">Waktu Opname</div>
+                                </th>
+                                <th scope="col" colspan="4">
+                                    <div class="slds-truncate" title="Selisih">Selisih</div>
+                                </th>
+                                <th scope="col" rowspan="2">
+                                    <div class="slds-truncate" title="Status Uker">Status Uker</div>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th scope="col" >
+                                    <div class="slds-truncate" title="Lebih Kas">Lebih Kas</div>
+                                </th>
+                                <th scope="col" >
+                                    <div class="slds-truncate" title="Kurang Kas">Kurang Kas</div>
+                                </th>
+                                <th scope="col" >
+                                    <div class="slds-truncate" title="Lebih Fisik">Lebih Fisik</div>
+                                </th>
+                                <th scope="col" >
+                                    <div class="slds-truncate" title="Kurang Fisik">Kurang Fisik</div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <aura:iteration items="{!v.baocolumns}" var="obj">
+                                <tr>
+                                    <th scope="row" style="background-color: #bd7777;">
+                                        <div class="slds-truncate" title="{!obj.IsDeleted__c}">
+                                            <label class="slds-checkbox">
+                                                <ui:inputCheckbox text="{!obj.Id}"  value="{!obj.IsDeleted__c}" change="{!c.selectBAO}"/>
+                                                <span class="slds-checkbox_faux"></span>
+                                                <span class="slds-form-element__label text"></span>
+                                            </label>
+                                        </div>
+                                    </th>
+                                    <th scope="row" style="background-color: #bd7777;">
+                                        <div class="slds-truncate" title="{!obj.SCC_Branch__c}">
+                                            {!obj.SCC_Branch__c}
+                                        </div>
+                                    </th>
+                                    <th scope="row" style="background-color: #bd7777;">
+                                        <div class="slds-truncate" title="{!obj.SCC_Terminal_ID__c}">
+                                            {!obj.SCC_Terminal_ID__c}
+                                        </div>
+                                    </th>
+                                    <th scope="row" style="background-color: #bd7777;">
+                                        <div class="slds-truncate" title="{!obj.SCC_Waktu_Opname__c}">
+                                            {!obj.SCC_Waktu_Opname__c}
+                                        </div>
+                                    </th>
+                                    <th scope="row" style="background-color: #bd7777;" class="right-align">
+                                        <div class="slds-truncate right-align" title="{!obj.SCC_Lebih_Kas__c}">
+                                            <ui:outputNumber value="{!obj.SCC_Lebih_Kas__c}"/>
+                                        </div>
+                                    </th>
+                                    <th scope="row" style="background-color: #bd7777;" class="right-align">
+                                        <div class="slds-truncate right-align" title="{!obj.SCC_Kurang_Kas__c}">
+                                            <ui:outputNumber value="{!obj.SCC_Kurang_Kas__c}"/>
+                                        </div>
+                                    </th>
+                                    <th scope="row" style="background-color: #bd7777;" class="right-align">
+                                        <div class="slds-truncate right-align" title="{!obj.SCC_Lebih_Fisik__c}">
+                                            <ui:outputNumber value="{!obj.SCC_Lebih_Fisik__c}"/>
+                                        </div>
+                                    </th>
+                                    <th scope="row" style="background-color: #bd7777;" class="right-align">
+                                        <div class="slds-truncate right-align" title="{!obj.SCC_Kurang_Fisik__c}">
+                                            <ui:outputNumber value="{!obj.SCC_Kurang_Fisik__c}"/>
+                                        </div>
+                                    </th>
+                                    <th scope="row" style="background-color: #bd7777;">
+                                        <div class="slds-truncate" title="{!obj.SCC_Status_Name__c	}">
+                                            {!obj.SCC_Status_Name__c}
+                                        </div>
+                                    </th>
+                                </tr>
+                            </aura:iteration>
+                        </tbody>
+                    </table>
+                    <!-- DataTable End -->
+                </ui:scrollerWrapper>
+            </lightning:accordionSection>
+            </aura:if>
+            <lightning:accordionSection label="Aktivitas Kartu" name="I">
+                <div class="slds-clearfix slds-m-around_small">
+                    <div class="slds-clearfix">
+                        <div class="slds-float_left">
+                            <lightning:button variant="destructive" label="Delete"  onclick="{! c.deletedAktivitasKartu }" disabled="{!v.case.IsLocked__c || v.noSelectionKartu}"/>
+                        </div>
+                    </div>
+                </div>
+                <ui:scrollerWrapper class="scrollerSize">
+                    <!-- data table start-->  
+                    <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+                        <thead>
+                            <tr class="slds-text-title_caps">
+                            <!--header checkbox for select all-->
+                                <th scope="col">
+                                    <div class="slds-truncate" title="SELECT">SELECT</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Trx Date">TRX DATE</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="TRX Time">TRX Time</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Acc Num">Acct Num</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Card Num">Card Num</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Phone Num">Phone Num</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Fitur Id">Fitur ID</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Nama Fitur">Nama Fitur</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Channel ID">Channel ID</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Teller ID/BranchCode">Teller ID/ <br></br> BranchCode </div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Terminal ID">Terminal ID</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Amount">Amount</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Desc Response Code">Desc Response Code</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Response Code">Response Code</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Journal Seq">Journal Seq</div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <aura:iteration items="{!v.Aktivitaskartucolumns}" var="obj">
+                                <tr>
+                                    <th scope="row">
+                                        <div class="slds-truncate" title="{!obj.IsDeleted__c}">
+                                            <label class="slds-checkbox">
+                                                <ui:inputCheckbox text="{!obj.Id}"  value="{!obj.IsDeleted__c}" change="{!c.selectAktivitasKartu}"/>
+                                                <span class="slds-checkbox_faux"></span>
+                                                <span class="slds-form-element__label text"></span>
+                                            </label>
+                                        </div>
+                                    </th>
+                                    <th scope="row">
+                                        <div class="slds-truncate" title="{!obj.Tanggal_Transaksi__c}">
+                                            {!obj.Tanggal_Transaksi__c}
+                                        </div>
+                                    </th> 
+                                    <th scope="row">
+                                        <div class="slds-truncate" title="{!obj.Jam_Transaksi__c}">
+                                            {!obj.Jam_Transaksi__c}
+                                        </div>
+                                    </th>
+                                    <th scope="row">
+                                        <div class="slds-truncate" title="{!obj.noRekening__c}">
+                                            {!obj.noRekening__c}
+                                        </div>
+                                    </th>
+                                    <th scope="row">
+                                        <div class="slds-truncate" title="{!obj.noKartu__c}">
+                                            {!obj.noKartu__c}
+                                        </div>
+                                    </th>
+                                    <th scope="row">
+                                        <div class="slds-truncate" title="{!obj.noHandphone__c}">
+                                            {!obj.noHandphone__c}
+                                        </div>
+                                    </th>
+                                    <th scope="row">
+                                        <div class="slds-truncate" title="{!obj.fiturId__c}">
+                                            {!obj.fiturId__c}
+                                        </div>
+                                    </th>
+                                    <th scope="row">
+                                        <div class="slds-truncate" title="{!obj.namaFitur__c}">
+                                            {!obj.namaFitur__c}
+                                        </div>
+                                    </th>
+                                    <th scope="row">
+                                        <div class="slds-truncate" title="{!obj.channelId__c}">
+                                            {!obj.channelId__c}
+                                        </div>
+                                    </th>
+                                    <th scope="row">
+                                        <div class="slds-truncate" title="{!obj.tellerId__c}">
+                                            {!obj.tellerId__c}
+                                        </div>
+                                    </th>
+                                    <th scope="row">
+                                        <div class="slds-truncate" title="{!obj.terminalId__c}">
+                                            {!obj.terminalId__c}
+                                        </div>
+                                    </th>
+                                    <th scope="row">
+                                        <div class="slds-truncate" title="{!obj.amount__c}">
+                                            <ui:outputNumber value="{!obj.amount__c}"/>
+                                        </div>
+                                    </th>
+                                    <th scope="row">
+                                        <div class="slds-truncate" title="{!obj.Response_Description__c}">
+                                            {!obj.Response_Description__c}
+                                        </div>
+                                    </th>
+                                    <th scope="row">
+                                        <div class="slds-truncate" title="{!obj.responseCode__c}">
+                                            {!obj.responseCode__c}
+                                        </div>
+                                    </th>
+                                    <th scope="row">
+                                        <div class="slds-truncate" title="{!obj.journalSeq__c}">
+                                            {!obj.journalSeq__c}
+                                        </div>
+                                    </th>
+                                </tr>
+                            </aura:iteration>
+                        </tbody>
+                    </table>
+                    <!-- DataTable End -->
+                </ui:scrollerWrapper>
+            </lightning:accordionSection>
+            <aura:if isTrue="{!v.case.SCC_Case_Type_for_Suggested_Article__c != '8713'}">
+            <lightning:accordionSection label="EJ" name="H">
+                <div class="slds-clearfix slds-m-around_small">
+                    <div class="slds-clearfix">
+                        <div class="slds-float_left">
+                            <lightning:button variant="destructive" label="Delete" onclick="{! c.deletedEJ }" disabled="{!v.case.IsLocked__c || v.noSelectionMade}"/>
+                        </div>
+                        <div class="slds-float_left slds-m-left_small">
+                            <lightning:button variant="destructive" label="Delete All" onclick="{! c.deletedAllEJ }" disabled="{!v.case.IsLocked__c || v.EJcolumns.length == 0}"/>
+                        </div>
+                        <div class="slds-float_right slds-m-right_small">
+                            <lightning:button variant="destructive" label="Highlight EJ" onclick="{! c.highlightEJ }" disabled="{!v.case.IsLocked__c || v.noSelectionMade}"/>
+                        </div>
+                    </div>
+                </div>
+                <ui:scrollerWrapper class="scrollerSize">
+                    <!-- data table start-->  
+                    <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+                        <thead>
+                            <tr class="slds-text-title_caps">
+                            <!--header checkbox for select all-->
+                                <th scope="col">
+                                    <div class="slds-truncate" title="SELECT">SELECT</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="EJ Log">EJ LOG</div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <aura:iteration items="{!v.EJcolumns}" var="obj">
+                                <tr class="{!obj.Highlight__c ? 'yellow2-row' : ''}">
+                                    <th scope="row">
+                                        <div class="slds-truncate" title="{!obj.IsDeleted__c}">
+                                            <label class="slds-checkbox">
+                                                <ui:inputCheckbox aura:id="checkbox" text="{!obj.Id}"  value="{!obj.IsDeleted__c}" change="{!c.selectEJ}"/>
+                                                <span class="slds-checkbox_faux"></span>
+                                                <span class="slds-form-element__label text"></span>
+                                            </label>
+                                        </div>
+                                    </th>
+                                    <th scope="row" class="{!'some-class left-align'}">
+                                        <div class="slds-truncate" title="{!obj.EJ_Log__c}" style="white-space: pre-wrap;">
+                                            {!obj.EJ_Log__c}
+                                        </div>
+                                    </th>
+                                </tr>
+                            </aura:iteration>
+                        </tbody>
+                    </table>
+                    <!-- DataTable End -->
+                </ui:scrollerWrapper>
+            </lightning:accordionSection>
+            </aura:if>
+        </lightning:accordion>
+
+    </div>
+</aura:component>

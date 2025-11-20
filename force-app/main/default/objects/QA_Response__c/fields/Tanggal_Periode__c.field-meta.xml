@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Tanggal_Periode__c</fullName>
+    <formula>IF(
+    Periode__c = &quot;Periode 1&quot;,
+    DATE(YEAR(DATEVALUE(CreatedDate)), MONTH(DATEVALUE(CreatedDate)), 7),
+    IF(
+        Periode__c = &quot;Periode 2&quot;,
+        DATE(YEAR(DATEVALUE(CreatedDate)), MONTH(DATEVALUE(CreatedDate)), 14),
+        IF(
+            Periode__c = &quot;Periode 3&quot;,
+            DATE(YEAR(DATEVALUE(CreatedDate)), MONTH(DATEVALUE(CreatedDate)), 21),
+            IF(
+                Periode__c = &quot;Periode 4&quot;,
+                DATE(
+                    YEAR(DATEVALUE(CreatedDate)),
+                    MONTH(DATEVALUE(CreatedDate)),
+                    CASE(
+                        MONTH(DATEVALUE(CreatedDate)),
+                        1, 31, /* Januari */
+                        2, IF(MOD(YEAR(DATEVALUE(CreatedDate)), 4) = 0, 29, 28), /* Februari (cek tahun kabisat) */
+                        3, 31, /* Maret */
+                        4, 30, /* April */
+                        5, 31, /* Mei */
+                        6, 30, /* Juni */
+                        7, 31, /* Juli */
+                        8, 31, /* Agustus */
+                        9, 30, /* September */
+                        10, 31, /* Oktober */
+                        11, 30, /* November */
+                        12, 31, /* Desember */
+                        NULL
+                    )
+                ),
+                NULL
+            )
+        )
+    )
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Tanggal Periode</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Date</type>
+</CustomField>

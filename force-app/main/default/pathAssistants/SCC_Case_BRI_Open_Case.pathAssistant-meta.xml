@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PathAssistant xmlns="http://soap.sforce.com/2006/04/metadata">
+    <active>true</active>
+    <entityName>Case</entityName>
+    <fieldName>Status</fieldName>
+    <masterLabel>Case BRI Open Case</masterLabel>
+    <pathAssistantSteps>
+        <fieldNames>Status</fieldNames>
+        <fieldNames>SCC_Cancel_reasons__c</fieldNames>
+        <fieldNames>SCC_Other_Reason__c</fieldNames>
+        <picklistValueName>Cancelled</picklistValueName>
+    </pathAssistantSteps>
+    <pathAssistantSteps>
+        <fieldNames>SCC_Closure_Comments__c</fieldNames>
+        <fieldNames>SCC_Resolution_Category__c</fieldNames>
+        <picklistValueName>Closed</picklistValueName>
+    </pathAssistantSteps>
+    <pathAssistantSteps>
+        <fieldNames>Status</fieldNames>
+        <picklistValueName>Disconnected</picklistValueName>
+    </pathAssistantSteps>
+    <pathAssistantSteps>
+        <fieldNames>SCC_Call_Type__c</fieldNames>
+        <fieldNames>SCC_Segment__c</fieldNames>
+        <fieldNames>SCC_Product_L1__c</fieldNames>
+        <fieldNames>SCC_Product_L2__c</fieldNames>
+        <fieldNames>SCC_Case_Category__c</fieldNames>
+        <picklistValueName>Working</picklistValueName>
+    </pathAssistantSteps>
+    <recordTypeName>BRI_Open_Case</recordTypeName>
+</PathAssistant>

@@ -1,0 +1,24 @@
+<template>
+    <lightning-card title="Kartu Credit" icon-name="utility:connected_apps">
+        <div class="slds-m-around_medium">
+            <lightning-button label="Expand" onclick={handleExpandSection}></lightning-button>
+        </div>
+        <template if:true={expandedSection}>
+            <template if:true={cardDetails}>
+                <div class="slds-m-around_medium">
+                    <template for:each={computedCardStatus} for:item="cardHolder">
+                        <div key={cardHolder.cardNumber}>
+                            {cardHolder.namaDepan} {cardHolder.namaTengah} {cardHolder.namaBelakang}, {cardHolder.cifno}, {cardHolder.productType}, {cardHolder.status}
+                        </div>
+                    </template>
+                    
+                </div>
+            </template>
+            <template if:false={cardDetails}>
+                <div class="slds-m-around_medium">
+                    No card details available.
+                </div>
+            </template>
+        </template>
+    </lightning-card>
+</template>

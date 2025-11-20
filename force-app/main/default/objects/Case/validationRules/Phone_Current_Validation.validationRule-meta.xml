@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Phone_Current_Validation</fullName>
+    <active>true</active>
+    <errorConditionFormula>NOT(
+OR(
+ISBLANK(Cust_Current_Phone__c),
+AND(
+ISNUMBER(Cust_Current_Phone__c),
+LEN(Cust_Current_Phone__c) &gt;= 10,
+LEN(Cust_Current_Phone__c) &lt;= 14
+)
+)
+)</errorConditionFormula>
+    <errorDisplayField>Cust_Current_Phone__c</errorDisplayField>
+    <errorMessage>Harap isi dengan 10-14 digit angka !</errorMessage>
+</ValidationRule>

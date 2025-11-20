@@ -1,0 +1,25 @@
+<template>
+    <div class="slds-m-around_medium">
+        <template for:each={benefitTable} for:item="table" for:index="tableIndex">
+            <div key={index} class="slds-m-bottom_medium">
+                <h2 class="slds-text-heading_medium slds-m-bottom_small">{table.name}</h2>
+                <table class="slds-table slds-table_cell-buffer slds-table_bordered custom-table">
+                    <tbody>
+                        <template for:each={table.table_data} for:item="row" for:index="rowIndex">
+                            <tr key={index} class="custom-row">
+                                <template for:each={row} for:item="cell" for:index="cellIndex">
+                                    <td key={cell.key}
+                                        rowspan={cell.row_span}
+                                        colspan={cell.col_span}
+                                        class='custom-cell'>
+                                        {cell.value}
+                                    </td>
+                                </template>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+            </div>
+        </template>
+    </div>
+</template>
