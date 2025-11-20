@@ -8,12 +8,15 @@ public class Aswata_TriggerHandler_Opportunity_Test {
         acc.RecordTypeId = strRTIndividual;
         insert acc;
         
+        User u = [SELECT Id FROM User WHERE Branch__c != null LIMIT 1];
+        
         Opportunity opp = new Opportunity();
         opp.Name = 'Test';
         opp.AccountId = acc.Id;
         opp.StageName = 'Proposal';
         opp.CloseDate = Date.Today();
         opp.Sum_Insured__c = 100000;
+        opp.OwnerId = u.Id;
         insert opp;
         
         Product2 pd = new Product2();
