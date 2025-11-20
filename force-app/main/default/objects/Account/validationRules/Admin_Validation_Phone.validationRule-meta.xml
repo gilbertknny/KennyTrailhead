@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Admin_Validation_Phone</fullName>
+    <active>false</active>
+    <description>(ISCHANGED(Phone) &amp;&amp; $Profile.Name = &apos;System Administrator&apos;) || (ISCHANGED(Phone) &amp;&amp; $Profile.Name != &apos;System Administrator&apos;) &amp;&amp; !ISBLANK(TEXT(SCC_Jenis_Nasabah__c))</description>
+    <errorConditionFormula>ISCHANGED(Phone) &amp;&amp; !ISBLANK( SCC_cifno__c ) &amp;&amp;  !$Permission.By_Pass_Validation_for_Migration</errorConditionFormula>
+    <errorDisplayField>Phone</errorDisplayField>
+    <errorMessage>Anda tidak boleh merubah nomor telepon</errorMessage>
+</ValidationRule>

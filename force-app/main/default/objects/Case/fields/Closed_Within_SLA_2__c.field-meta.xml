@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Closed_Within_SLA_2__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF(OR(ISNULL(SCC_Call_Type__c), ISBLANK(SCC_Call_Type__c)), &apos;Closed within SLA&apos;, IF(Total_SLA_2__c &lt;= SCC_Call_Type__r.SCC_Total_SLA__c, &apos;Closed within SLA&apos;, &apos;Open or Closed over SLA&apos;))</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Closed Within SLA 2</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

@@ -1,0 +1,98 @@
+<!-- sldsValidatorIgnore -->
+<template>
+    <lightning-accordion allow-multiple-sections-open active-section-name="Agent Information">
+        <lightning-accordion-section name="Agent Information" label="Agent Information" class="custom-section">
+            <div class="slds-grid slds-gutters">
+                <div class="slds-col">
+                    <lightning-input label="ID PANGKALAN" value={idPangkalan}
+                        onchange={handleInputChange} required data-id="idPangkalan"></lightning-input>
+                </div>
+                <div class="slds-col">
+                    <lightning-input label="Tanggal Awal" type="date" value={startDate} placeholder="mm/dd/yyyy"
+                        date-style="short" onchange={handleInputChange} required data-id="startDate"></lightning-input>
+                </div>
+                <div class="slds-col">
+                    <lightning-input label="Tanggal Akhir" type="date" value={endDate} placeholder="mm/dd/yyyy"
+                        date-style="short" onchange={handleInputChange} required data-id="endDate"></lightning-input>
+                </div>
+                <div class="slds-col" style="padding:20px;">
+                    <lightning-button variant="brand" label="Cari" onclick={handleSearch} disabled={disableSearchButton}></lightning-button>
+                </div>
+            </div>
+            <div style="color: red;">{errorMessage}</div>
+            <template if:true={hasParsedData}>
+                <br>
+                <lightning-card>
+                    <div style="overflow-x: auto;display: block;">
+                        <table class="slds-table slds-table_bordered slds-table_cell-buffer slds-table_striped">
+                            <thead>
+                                <tr class="slds-line-height_reset">
+                                    <th class="slds-cell-wrap" scope="col">
+                                        <div class="slds-wrap" title="NAMA AGEN">NAMA AGEN</div>
+                                    </th>
+                                    <th class="slds-cell-wrap" scope="col">
+                                        <div class="slds-wrap" title="NAMA PANGKALAN">NAMA PANGKALAN</div>
+                                    </th>
+                                    <th class="slds-cell-wrap" scope="col">
+                                        <div class="slds-wrap" title="ID AGEN">ID AGEN</div>
+                                    </th>
+                                    <th class="slds-cell-wrap" scope="col">
+                                        <div class="slds-wrap" title="ALAMAT">ALAMAT</div>
+                                    </th>
+                                    <th class="slds-cell-wrap" scope="col">
+                                        <div class="slds-wrap" title="ID PANGKALAN">ID PANGKALAN</div>
+                                    </th>
+                                    <th class="slds-cell-wrap" scope="col">
+                                        <div class="slds-wrap" title="NOMOR REKENING AGEN">NOMOR REKENING AGEN</div>
+                                    </th>
+                                    <th class="slds-cell-wrap" scope="col">
+                                        <div class="slds-wrap" title="CORP BRIVA">CORP BRIVA</div>
+                                    </th>
+                                    <th class="slds-cell-wrap" scope="col">
+                                        <div class="slds-wrap" title="CLIENT CORP BRIVA">CLIENT CORP BRIVA</div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="slds-hint-parent">
+                                    <td class="slds-cell-wrap">
+                                        <div>{parsedData.agenName}</div>
+                                    </td>
+                                    <td class="slds-cell-wrap">
+                                        <div>{parsedData.pangkalanName}</div>
+                                    </td>
+                                    <td class="slds-cell-wrap">
+                                        <div>{parsedData.agenId}</div>
+                                    </td>
+                                    <td class="slds-cell-wrap">
+                                        <div>{parsedData.agenAlamat}</div>
+                                    </td>
+                                    <td class="slds-cell-wrap">
+                                        <div>{parsedData.pangkalanId}</div>
+                                    </td>
+                                    <td class="slds-cell-wrap">
+                                        <div>{parsedData.agenNorek}</div>
+                                    </td>
+                                    <td class="slds-cell-wrap">
+                                        <div>{parsedData.corpBriva}</div>
+                                    </td>
+                                    <td class="slds-cell-wrap">
+                                        <div>{parsedData.corpClientBriva}</div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </lightning-card>
+
+                <lightning-card>
+                    <br>
+                    <lightning-datatable key-field="id" data={columnsInqueryTableData} columns={columnsInqueryTable}
+                        hide-checkbox-column="true" wrap-table-header>
+                    </lightning-datatable>
+                </lightning-card>
+
+            </template>
+        </lightning-accordion-section>
+    </lightning-accordion>
+</template>

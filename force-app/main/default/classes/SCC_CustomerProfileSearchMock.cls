@@ -1,0 +1,16 @@
+@isTest
+public class SCC_CustomerProfileSearchMock implements HttpCalloutMock {
+    /**
+     * @description HTTPResponse
+     * @param req
+     * @return HttpResponse res
+     */
+    public HTTPResponse respond(HTTPRequest req) {
+        // Create a fake response
+        HttpResponse res = new HttpResponse();
+        res.setHeader('Content-Type', 'application/json');
+        res.setBody('{"statusCode":200,"errorCode":"000","responseCode":"00","responseMessage":"Success","errors":null,"data":[{"cifno":"NNE2576","demografi":{"NPWP":"027396944416000","PEP":"TIDAK","alamatDomisili":"NULL","alamatDomisili2":"NULL","alamatKantor":"NULL","alamatKantor2":"NULL","alamatSesuaiID":"JL.KH.HASYIM ASHARI NO.99 E","alamatSesuaiID2":"RT.02/02","alamatSuratMenyurat":"NULL","bidangPekerjaan":"NULL","bidangUsaha":"PERKEBUNAN","createdDate":"2022-04-06","email":"NULL","email1":"XXX@YAHOO.COM","email2":"NULL","email3":"NULL","gelarSebelumNama":"NULL","gelarSetelahNama":"NULL","handphone":"NULL","jabatan1":"PEMILIK, DIREKTUR","jabatan2":"NULL","jabatan3":"NULL","jenisIdentitas":"NP","jenisKelamin":"NULL","jenisPekerjaan":"NULL","kecamatanDomisili":"NULL","kecamatanKantor":"NULL","kecamatanSesuaiID":"CIPONDOH","kelurahanDomisili":"NULL","kelurahanKantor":"NULL","kelurahanSesuaiID":"CIPONDOH KEL","keteranganAgama":"NULL","kewarganegaraan":"WNA","kodeBidangUsaha":"1010","kodePosDomisili":"NULL","kodePosKantor":"NULL","kodePosSesuaiID":"15148","kotaDomisili":"NULL","kotaKantor":"NULL","kotaSesuaiID":"TANGERANG KOT.","lastModifiedDate":"2022-04-06","nama1":"BAYU HUSDAVIATA THAMRIN","nama2":"NULL","nama3":"NULL","namaGadisIbuKandung":"-","namaSesuaiIdentitas":"NUREKA","namaTempatBekerja":"NUREKA","nasabahPrioritas":"NULL","negara":"INDONESIA","noAktaPendirian":"68","noIdCorp":"300614604274","nomorIdentitas":"027396944416000","pendidikanTerakhir":"NULL","propinsiDomisili":"NULL","propinsiKantor":"NULL","propinsiSesuaiID":"BANTEN","rtDomisili":"NULL","rtKantor":"NULL","rtSesuaiID":"02","rwDomisili":"NULL","rwKantor":"NULL","rwSesuaiID":"02","statusPerkawinan":"NULL","tanggalAktaPendirian":"1979-04-27","tanggalLahir":"1979-04-27","tanggalTerbit":"2015-11-13","telepon":"NULL","telepon1":"082347379586","telepon2":"NULL","telepon3":"NULL","teleponKantor":"NULL","tempatLahir":"TANGERANG","tempatPendirian":"TANGERANG","tipeIdCorp":"TD","tipeNasabah":"O","tipeNasabahDesc":"ORGANISATION","umur":45},"portofolioPerbankan":{"cardlink":[{"cardNumber":"81463183678732","cifno":"NNE2576","product":"PIJAR","productDescription":"","productType":"CC","status":"1"}],"investasi":[{"accountNumber":"26389647887101","balance":0,"cifno":"NNE2576","product":"Junio","productDescription":"","productType":"IN","status":"1"}],"pinjaman":[{"accountNumber":"122301000204156","balance":0,"cifno":"NNE2576","product":"KMK RC RITEL","productDescription":"DL-202 KMK RC RITEL","productType":"DL"}],"simpanan":[{"accountNumber":"122301000689306","balance":0,"cifno":"NNE2576","product":"Giro Umum-IDR","productDescription":"GB-210 Giro Umum-IDR","productType":"GB","status":"1"},{"accountNumber":"122301000936305","balance":0,"cifno":"NNE2576","product":"Giro Umum-IDR","productDescription":"GB-210 Giro Umum-IDR","productType":"GB","status":"1"}]}}]}');
+        res.setStatusCode(200);
+        return res;
+    }
+}

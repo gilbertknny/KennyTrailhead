@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Master_QA__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <label>QA Master</label>
+    <referenceTo>QA_Master__c</referenceTo>
+    <relationshipLabel>QA Response Item</relationshipLabel>
+    <relationshipName>Master_QA</relationshipName>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

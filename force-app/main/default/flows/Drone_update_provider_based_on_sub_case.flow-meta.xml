@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>64.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <environments>Default</environments>
+    <formulas>
+        <name>subcase_provider</name>
+        <dataType>String</dataType>
+        <expression>CASE(
+  {!$Record.SCC_Sub_Case__c},
+  &quot;Provider Pulsa Xl&quot;, &quot;XL&quot;,
+  &quot;Provider Pulsa Telkomsel&quot;, &quot;Telkomsel&quot;,
+  &quot;Provider Pulsa Indosat&quot;, &quot;Indosat Ooredoo&quot;,
+  &quot;Provider Pulsa Three&quot;, &quot;Three&quot;,
+  NULL
+)</expression>
+    </formulas>
+    <interviewLabel>[Drone] update provider based on sub case {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>[Drone] update provider based on sub case</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <name>update_provider</name>
+        <label>update provider</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <inputAssignments>
+            <field>scc_Provider__c</field>
+            <value>
+                <elementReference>subcase_provider</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>update_provider</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>SCC_Case_Type_for_Suggested_Article__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>8434</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>SCC_Sub_Case__c</field>
+            <operator>IsChanged</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <object>Case</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

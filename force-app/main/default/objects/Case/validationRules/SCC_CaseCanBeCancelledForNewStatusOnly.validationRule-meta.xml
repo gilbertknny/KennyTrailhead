@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>SCC_CaseCanBeCancelledForNewStatusOnly</fullName>
+    <active>false</active>
+    <description>This prevents users from canceling a case unless the status is &quot;New&quot;</description>
+    <errorConditionFormula>AND(
+    ISPICKVAL(Status, &quot;Cancelled&quot;),
+    NOT(ISPICKVAL(PRIORVALUE(Status), &quot;New&quot;)),
+NOT($Permission.By_Pass_Validation_for_Migration)
+)</errorConditionFormula>
+    <errorDisplayField>Status</errorDisplayField>
+    <errorMessage>Hanya Case dengan status New yang dapat di cancel.</errorMessage>
+</ValidationRule>

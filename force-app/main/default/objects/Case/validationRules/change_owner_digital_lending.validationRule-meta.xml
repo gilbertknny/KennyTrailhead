@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>change_owner_digital_lending</fullName>
+    <active>true</active>
+    <description>queue Card, Digital Lending &amp; Assets Product</description>
+    <errorConditionFormula>AND(
+    ISCHANGED(OwnerId),
+     SCC_Case_Owner__c = &quot;Card, Digital Lending &amp; Assets Product&quot;
+)</errorConditionFormula>
+    <errorMessage>tidak boleh change owner ke Card, Digital Lending &amp; Assets Product</errorMessage>
+</ValidationRule>

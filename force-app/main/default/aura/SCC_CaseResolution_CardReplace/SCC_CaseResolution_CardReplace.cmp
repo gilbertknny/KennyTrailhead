@@ -1,0 +1,254 @@
+<aura:component implements="flexipage:availableForAllPageTypes,force:hasRecordId,force:lightningQuickAction,lightning:actionOverride,lightning:hasPageReference" access="global" controller="SCC_Brizzi_CardReplace_UI">
+    <lightning:navigation aura:id="navService"/>    
+    <aura:attribute name="isOpen" type="Boolean" default="false" />
+    <aura:attribute name="isOpenAlert" type="Boolean" default="false" />
+    <aura:attribute name="cardNumberLama" type="String" default="{!v.caseRecord.SCC_Brizzi_Card_Number__c}"/>
+    <aura:attribute name="cardNumberBaru" type="String"/>
+    <aura:attribute name="DataKartuLama" type="String"/>
+    <aura:attribute name="DataKartuBaru" type="String"/>
+    <aura:attribute name="oldCard" type="String"/>
+    <aura:attribute name="newCard" type="String"/>
+    <aura:attribute name="saldoKartu" type="Integer"/>
+    <aura:attribute name="saldoDeposit" type="Integer"/>
+    <aura:attribute name="cardBalance" type="String" default="1195500" />
+    <aura:attribute name="depositBalance" type="String" default="0" />
+    <aura:handler name="init" value="{! this }" action="{! c.doInit }"/>
+    <aura:attribute name="recordId" type="String"/>
+    <aura:attribute name="caseRecord" type="Case" />
+    <aura:attribute name="loaded" type="Boolean" default="true" />
+    <lightning:messages />
+    <!--loading spinner start-->
+    <aura:if isTrue="{!v.loaded}">
+        <aura:set attribute="else">
+            <div aura:id="spinnerId" class="slds-spinner_container">
+                <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                    <span class="slds-assistive-text">Loading...</span>
+                    <div class="slds-spinner__dot-a"></div>
+                    <div class="slds-spinner__dot-b"></div>
+                </div>
+            </div>
+        </aura:set>
+    </aura:if>
+    <div class="container">   
+        <label class="slds-form-element__label">Kartu Lama</label> 
+    <div class="row">
+        <div class="slds-form-element__control slds-grid slds-align_absolute-left">
+            <ui:inputText class="small-input slds-m-right_small" value="{!v.cardNumberLama}"/>
+            <lightning:buttonIcon variant="brand" iconName="utility:search" alternativeText="Search" class="slds-button slds-button_icon" onclick="{!c.searchKartuBrizziLama}"/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="slds-form-element__control slds-grid slds-align_absolute-left">
+            <ui:inputText class="small-input slds-m-right_small" value="Nomor Kartu" disabled="true"/>
+            <span class="custom-button slds-m-right_small">:</span>
+            <ui:inputText aura:id="kartuLama" class="small-input" value="{!v.DataKartuLama.cardnum}" disabled="true"/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="slds-form-element__control slds-grid slds-align_absolute-left">
+            <ui:inputText class="small-input slds-m-right_small" value="UID" disabled="true"/>
+            <span class="custom-button slds-m-right_small">:</span>
+            <ui:inputText class="small-input" value="{!v.DataKartuLama.uid}" disabled="true"/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="slds-form-element__control slds-grid slds-align_absolute-left">
+            <ui:inputText class="small-input slds-m-right_small" value="Saldo" disabled="true"/>
+            <span class="custom-button slds-m-right_small">:</span>
+            <ui:inputCurrency aura:id="saldoLama" class="small-input" value="{!v.DataKartuLama.saldo}" disabled="true"/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="slds-form-element__control slds-grid slds-align_absolute-left">
+            <ui:inputText class="small-input slds-m-right_small" value="Status Kartu" disabled="true"/>
+            <span class="custom-button slds-m-right_small">:</span>
+            <ui:inputText class="small-input" value="{!v.DataKartuLama.status_kartu}" disabled="true"/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="slds-form-element__control slds-grid slds-align_absolute-left">
+            <ui:inputText class="small-input slds-m-right_small" value="Tanggal Issue" disabled="true"/>
+            <span class="custom-button slds-m-right_small">:</span>
+            <ui:inputText class="small-input" value="{!v.DataKartuLama.issue_date}" disabled="true"/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="slds-form-element__control slds-grid slds-align_absolute-left">
+            <ui:inputText class="small-input slds-m-right_small" value="Saldo Deposit" disabled="true"/>
+            <span class="custom-button slds-m-right_small">:</span>
+            <ui:inputCurrency aura:id="saldoDepositLama" class="small-input" value="{!v.DataKartuLama.saldo_topup}" disabled="true"/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="slds-form-element__control slds-grid slds-align_absolute-left">
+            <ui:inputText class="small-input slds-m-right_small" value="Issuer" disabled="true"/>
+            <span class="custom-button slds-m-right_small">:</span>
+            <ui:inputText class="small-input" value="{!v.DataKartuLama.cbg_issue}" disabled="true"/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="slds-form-element__control slds-grid slds-align_absolute-left">
+            <ui:inputText class="small-input slds-m-right_small" value="Tipe Kartu" disabled="true"/>
+            <span class="custom-button slds-m-right_small">:</span>
+            <ui:inputText class="small-input" value="{!v.DataKartuLama.tipe_kartu_bisnis}" disabled="true"/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="slds-form-element__control slds-grid slds-align_absolute-left">
+            <ui:inputText class="small-input slds-m-right_small" value="Model Kartu" disabled="true"/>
+            <span class="custom-button slds-m-right_small">:</span>
+            <ui:inputText class="small-input" value="{!v.DataKartuLama.model_kartu}" disabled="true"/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="slds-form-element__control slds-grid slds-align_absolute-left">
+            <ui:inputText class="small-input slds-m-right_small" value="Tgl Trx Terakhir" disabled="true"/>
+            <span class="custom-button slds-m-right_small">:</span>
+            <ui:inputText class="small-input" value="{!v.DataKartuLama.last_trx_date}" disabled="true"/>
+        </div>
+    </div>
+    </div>
+    <div class="container"> 
+    <label class="slds-form-element__label kartu-baru">Kartu Baru</label>
+    <div class="row">
+        <div class="slds-form-element__control slds-grid slds-align_absolute-left">
+            <ui:inputText class="small-input slds-m-right_small" value="{!v.cardNumberBaru}"/>
+            <lightning:buttonIcon variant="brand" iconName="utility:search" alternativeText="Search" class="slds-button slds-button_icon slds-m-right_small" onclick="{!c.searchKartuBrizziBaru}"/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="slds-form-element__control slds-grid slds-align_absolute-left">
+            <ui:inputText class="small-input slds-m-right_small" value="Nomor Kartu" disabled="true"/>
+            <span class="custom-button slds-m-right_small">:</span>
+            <ui:inputText aura:id="kartuBaru" class="small-input" value="{!v.DataKartuBaru.cardnum}" disabled="true"/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="slds-form-element__control slds-grid slds-align_absolute-left">
+            <ui:inputText class="small-input slds-m-right_small" value="UID" disabled="true"/>
+            <span class="custom-button slds-m-right_small">:</span>
+            <ui:inputText class="small-input" value="{!v.DataKartuBaru.uid}" disabled="true"/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="slds-form-element__control slds-grid slds-align_absolute-left">
+            <ui:inputText class="small-input slds-m-right_small" value="Saldo" disabled="true"/>
+            <span class="custom-button slds-m-right_small">:</span>
+            <ui:inputCurrency class="small-input" value="{!v.DataKartuBaru.saldo}" disabled="true"/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="slds-form-element__control slds-grid slds-align_absolute-left">
+            <ui:inputText class="small-input slds-m-right_small" value="Status Kartu" disabled="true"/>
+            <span class="custom-button slds-m-right_small">:</span>
+            <ui:inputText class="small-input" value="{!v.DataKartuBaru.status_kartu}" disabled="true"/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="slds-form-element__control slds-grid slds-align_absolute-left">
+            <ui:inputText class="small-input slds-m-right_small" value="Tanggal Issue" disabled="true"/>
+            <span class="custom-button slds-m-right_small">:</span>
+            <ui:inputText class="small-input" value="{!v.DataKartuBaru.issue_date}" disabled="true"/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="slds-form-element__control slds-grid slds-align_absolute-left">
+            <ui:inputText class="small-input slds-m-right_small" value="Saldo Deposit" disabled="true"/>
+            <span class="custom-button slds-m-right_small">:</span>
+            <ui:inputCurrency class="small-input" value="{!v.DataKartuBaru.saldo_topup}" disabled="true"/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="slds-form-element__control slds-grid slds-align_absolute-left">
+            <ui:inputText class="small-input slds-m-right_small" value="Issuer" disabled="true"/>
+            <span class="custom-button slds-m-right_small">:</span>
+            <ui:inputText class="small-input" value="{!v.DataKartuBaru.cbg_issue}" disabled="true"/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="slds-form-element__control slds-grid slds-align_absolute-left">
+            <ui:inputText class="small-input slds-m-right_small" value="Tipe Kartu" disabled="true"/>
+            <span class="custom-button slds-m-right_small">:</span>
+            <ui:inputText class="small-input" value="{!v.DataKartuBaru.tipe_kartu_bisnis}" disabled="true"/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="slds-form-element__control slds-grid slds-align_absolute-left">
+            <ui:inputText class="small-input slds-m-right_small" value="Model Kartu" disabled="true"/>
+            <span class="custom-button slds-m-right_small">:</span>
+            <ui:inputText class="small-input" value="{!v.DataKartuBaru.model_kartu}" disabled="true"/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="slds-form-element__control slds-grid slds-align_absolute-left">
+            <ui:inputText class="small-input slds-m-right_small" value="Tgl Trx Terakhir" disabled="true"/>
+            <span class="custom-button slds-m-right_small">:</span>
+            <ui:inputText class="small-input" value="{!v.DataKartuBaru.last_trx_date}" disabled="true"/>
+        </div>
+    </div>
+</div>
+<lightning:button variant="success" type="submit" name="cari_kartuBrizzi" label="REPLACE" class="slds-m-top_medium slds-align_absolute-center" onclick="{!c.replaceCard}"/>
+<!-- Modal Overlay -->
+<aura:if isTrue="{!v.isOpen}">
+    <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+        <div class="slds-modal__container">
+            <!-- Header -->
+            <header class="slds-modal__header">
+                <h2 class="slds-text-heading_medium" style="color: orange;">REPLACE CARD</h2>
+            </header>
+
+            <!-- Body -->
+            <div class="slds-modal__content slds-p-around_medium">
+                <div class="slds-grid slds-wrap">
+                    <div class="slds-col slds-size_1-of-1">
+                        <label>NO. KARTU LAMA:</label>
+                        <ui:inputText value="{!v.oldCard}" disabled="true" />
+                    </div>
+                    <div class="slds-col slds-size_1-of-1">
+                        <label>NO. KARTU BARU:</label>
+                        <ui:inputText value="{!v.newCard}" disabled="true" />
+                    </div>
+                    <div class="slds-col slds-size_1-of-1">
+                        <label>SALDO KARTU:</label>
+                        <ui:inputCurrency value="{!v.saldoKartu}" disabled="false" />
+                    </div>
+                    <div class="slds-col slds-size_1-of-1">
+                        <label>SALDO DEPOSIT:</label>
+                        <ui:inputCurrency value="{!v.saldoDeposit}" disabled="true"/>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <footer class="slds-modal__footer">
+                <button class="slds-button slds-button_neutral" onclick="{!c.cancelAction}">Cancel</button>
+                <lightning:button label="REPLACE" variant="brand" onclick="{!c.handleReplaceAlert}" />
+            </footer>
+        </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open"></div>
+</aura:if>
+<!-- Modal Overlay -->
+<aura:if isTrue="{!v.isOpenAlert}">
+    <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+        <div class="slds-modal__container">
+            <!-- Header -->
+            <header class="slds-modal__header">
+                <h2 class="slds-text-heading_medium" style="color: orange;">REPLACE CARD</h2>
+            </header>
+
+            <!-- Body -->
+            <div class="slds-modal__content slds-p-around_medium">
+                <label class="slds-form-element__label slds-align_absolute-center">Apakah anda yakin untuk mereplace Kartu ?</label>
+            </div>
+
+            <!-- Footer -->
+            <footer class="slds-modal__footer">
+                <button class="slds-button slds-button_neutral" onclick="{!c.cancelActionAlert}">Tidak</button>
+                <lightning:button label="Ya" variant="brand" onclick="{!c.insertDataReplace}" />
+            </footer>
+        </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open"></div>
+</aura:if>
+</aura:component>

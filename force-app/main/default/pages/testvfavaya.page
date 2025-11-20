@@ -1,0 +1,40 @@
+<apex:page lightningStylesheets="true" docType="html-5.0">
+    <script type="text/javascript" src="/support/api/60.0/interaction.js"></script>
+    <script type="text/javascript" src="/support/api/63.0/lightning/opencti_min.js"></script>
+    <script type="text/javascript">
+    var callback = function (response) {
+        if (response.result) {
+            alert(response.result);
+            console.log('API method call executed successfully! returnValue:', response.returnValue);
+        } else {
+            alert(response.error);
+        }
+        if (response.success) {
+            console.log('API method call executed successfully! returnValue:', response.returnValue);
+        } else { 
+            console.error('Something went wrong! Errors:', response.errors);
+        } 
+    };
+    function refreshPage() {
+        sforce.interaction.refreshPage(callback);
+    }
+    function searchAndScreenPopClassic() {
+        //Invokes API method
+        sforce.interaction.searchAndScreenPop('Acme', 'Key1=value1&Key2=value2', 'inbound', callback);
+    }
+    function searchAndGetScreenPopUrl() {
+        //Invokes API method
+        sforce.interaction.searchAndGetScreenPopUrl('Andy Hafidz', 'Key1=value1&Key2=value2', 'inbound', callback);
+    }
+    function searchAndScreenPop() {
+        //Invokes API method
+        sforce.opencti.searchAndScreenPop({ searchParams : 'Acme',queryParams : 'Key1=value1&Key2=value2', callType : sforce.opencti.CALL_TYPE.INBOUND,  deferred: false, callback : callback });
+    }
+    </script>
+    
+    
+    <button onclick="searchAndScreenPopClassic();">searchAndScreenPopClassic</button>
+    <button onclick="refreshPage();">refreshPage</button>
+    <button onclick="searchAndGetScreenPopUrl();">searchAndGetScreenPopUrl</button>
+    <button onclick="searchAndScreenPop();">searchAndScreenPop</button>
+</apex:page>

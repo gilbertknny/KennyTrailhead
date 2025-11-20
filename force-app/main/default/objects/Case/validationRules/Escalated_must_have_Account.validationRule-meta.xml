@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Escalated_must_have_Account</fullName>
+    <active>true</active>
+    <description>When escalated case, account cannot blank &amp;&amp; !ISCHANGED( SCC_Remark__c )</description>
+    <errorConditionFormula>NOT($Permission.By_Pass_Validation_for_Migration) &amp;&amp; ( TEXT(Status) = &apos;Escalated&apos; || TEXT(Status) = &apos;Waiting Document&apos; )
+&amp;&amp;
+( SCC_Call_Type__r.External_Id__c = &apos;8812&apos; || SCC_Call_Type__r.External_Id__c = &apos;8915&apos; || Sent_to_Drone__c = TRUE ) &amp;&amp; (ISBLANK(AccountId ) || ISBLANK( Cust_Current_Phone__c ))</errorConditionFormula>
+    <errorMessage>Mohon isi Account &amp; Current Phone Number sebelum Eskalasi</errorMessage>
+</ValidationRule>

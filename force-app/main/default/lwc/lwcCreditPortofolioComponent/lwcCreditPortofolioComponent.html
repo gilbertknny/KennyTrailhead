@@ -1,0 +1,209 @@
+<!--
+    LWC Name    : lwcCreditPortofolioComponent.html
+    Created Date       : 11 September 2024
+    @description       : This is class ..
+    @author            : Rakeyan Nuramria
+    Modification Log :
+    Ver   Date         Author                            Modification
+    1.0   11/09/2024   Rakeyan Nuramria                  Initial Version
+    1.0   27/09/2024   Rakeyan Nuramria                  Adjust UI
+    1.0   09/10/2024   Ardyta Yudianto                   [FROM SIT] Adjust UI to scrollable horizontally
+    release 3
+    [POST DEPLOYMENT R3]
+    1.1   21/03/2025   Rakeyan Nuramria                  [FROM SIT] Adjust UI for fetch data API getCustomer based on the condition.
+-->
+
+<template>
+
+    <!-- Kredit Protofolio Section -->
+    <!-- <lightning-card icon-name="" variant="base" class="custom-card slds-m-top_xx-small slds-card_boundary">
+        <div class="slds-p-around_small slds-m-top_xx-small">
+            <div class="slds-scrollable_y custom-scroll">
+                <table class="slds-table slds-table_bordered slds-table_fixed-layout custom-table">
+                    <thead>
+                        <tr class="slds-line-height_reset">
+                            <th scope="col">
+                                <div class="slds-truncate" title="Nomor Kartu">Nomor Kartu</div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="Nama">Nama</div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="CIF">CIF</div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="Jenis Kartu">Jenis Kartu</div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="Status">Status</div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="Action">Action</div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={data} for:item="row">
+                            <tr key={row.id} class="slds-hint-parent">
+                                <td>{row.nomorKartu}</td>
+                                <td>{row.nama}</td>
+                                <td>{row.cif}</td>
+                                <td>{row.jenisKartu}</td>
+                                <td>{row.status}</td>
+                                <td>
+                                    <lightning-button-menu alternative-text="Action" icon-name="utility:down"
+                                        class="slds-m-left_x-small custom-button-menu" menu-alignment="auto">
+                                        <lightning-menu-item label="Data Transaksi" value="data_transaksi"
+                                            data-nomor-kartu={row.nomorKartu} onclick={handleTransaksiAction}
+                                            onclose={handleCloseMutasiKredit}
+                                            is-close-hidden={isCloseHidden}></lightning-menu-item>
+                                        <lightning-menu-item label="Data Kartu" value="data_kartu"
+                                            data-nomor-kartu={row.nomorKartu} onclose={handleCloseDataKartu}
+                                            onclick={handleDataKartuAction}></lightning-menu-item>
+                                    </lightning-button-menu>
+                                </td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </lightning-card> -->
+
+    <lightning-card icon-name="" variant="base" class="custom-card slds-m-top_xx-small slds-card_boundary">
+
+        <template if:true={isLoading}>
+            <div class="spinner-container" style="height:6rem;position:relative">
+                <div role="status" class="slds-spinner slds-spinner_small">
+                    <span class="slds-assistive-text">Loading</span>
+                    <div class="slds-spinner__dot-a"></div>
+                    <div class="slds-spinner__dot-b"></div>
+                </div>
+            </div>
+        </template>
+
+        <template if:false={isLoading}>
+
+            <template if:true={errorMsgAcc}>
+                <div class="slds-text-color_error slds-m-top_small slds-m-bottom_small slds-text-align_center">
+                    <b>{errorMsgAcc}</b>
+                </div>
+            </template>
+
+            <template if:false={errorMsgAcc}>
+                <div class="slds-p-around_small slds-m-top_xx-small">
+                    <div class="slds-scrollable_y custom-scroll">
+                        <table class="slds-table slds-table_bordered slds-table_fixed-layout custom-table">
+                            <thead>
+                                <tr class="slds-line-height_reset">
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Nomor Kartu">Nomor Kartu</div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Nama">Nama</div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="CIF">CIF</div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Jenis Kartu">Jenis Kartu</div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Status">Status</div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Action">Action</div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- IF USING getCardlink-->
+                                <!-- <template for:each={cardData} for:item="card">
+                            <tr key={card.customerNumber} class="slds-hint-parent">
+                                <td>{card.customerNumber}</td>
+                                <td>{card.customerName}</td>
+                                <td>{card.customerNumber}</td>
+                                <td>{card.jenisKartu}</td>
+                                <td>{card.status}</td>
+                                <td>
+                                    <lightning-button-menu alternative-text="Action" icon-name="utility:down"
+                                        class="slds-m-left_x-small custom-button-menu" menu-alignment="auto">
+                                        <lightning-menu-item label="Data Transaksi" value="data_transaksi"
+                                            data-nomor-kartu={card.customerNumber} onclick={handleTransaksiAction}
+                                            onclose={handleCloseMutasiKredit}
+                                            is-close-hidden={isCloseHidden}></lightning-menu-item>
+                                        <lightning-menu-item label="Data Kartu" value="data_kartu"
+                                            data-nomor-kartu={card.customerNumber} onclose={handleCloseDataKartu}
+                                            onclick={handleDataKartuAction}></lightning-menu-item>
+                                    </lightning-button-menu>
+                                </td>
+                            </tr>
+                        </template> -->
+                                <!-- IF USING getPortofolio-->
+                                <template for:each={processedKreditData} for:item="data">
+                                    <template for:each={data.kredit} for:item="kredit" for:index="index">
+                                        <tr key={kredit.accountNumber} class="slds-hint-parent">
+                                            <td>{kredit.cardNumber}</td>
+                                            <td>{data.demografi.namaSesuaiIdentitas}</td>
+                                            <td>{kredit.cifno}</td>
+                                            <td>{kredit.product}</td>
+                                            <td>{kredit.status}</td>
+                                            <td>
+                                                <lightning-button-menu alternative-text="Action"
+                                                    icon-name="utility:down"
+                                                    class="slds-m-left_x-small custom-button-menu"
+                                                    menu-alignment="auto">
+                                                    <lightning-menu-item label="Data Transaksi" value="data_transaksi"
+                                                        data-nomor-kartu={kredit.cardNumber}
+                                                        onclick={handleTransaksiAction}
+                                                        onclose={handleCloseMutasiKredit}
+                                                        is-close-hidden={isCloseHidden}></lightning-menu-item>
+                                                    <lightning-menu-item label="Data Kartu" value="data_kartu"
+                                                        data-nomor-kartu={kredit.cardNumber}
+                                                        onclose={handleCloseDataKartu}
+                                                        onclick={handleDataKartuAction}></lightning-menu-item>
+                                                </lightning-button-menu>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </template>
+
+        </template>
+
+    </lightning-card>
+
+
+
+    <!-- End Kredit Protofolio Section -->
+
+    <!-- Mutasi Kredit Section -->
+    <template if:true={showMutasiKredit}>
+        <lightning-card icon-name="" variant="base" class="custom-card slds-m-top_xx-small slds-card_boundary">
+            <div class="scrollable-kredit-container">
+                <c-lwc-mutasi-rekening-kredit-component class="mutasi-kredit-component"
+                    onclose={handleCloseMutasiKredit} no-kartu={selectedNomorKartu} case-id={recordId}
+                    record-id={recordId}></c-lwc-mutasi-rekening-kredit-component>
+            </div>
+        </lightning-card>
+    </template>
+    <!-- End Mutasi Kredit Section -->
+
+    <!-- Data Kartu Section -->
+    <template if:true={showDataKartu}>
+        <!-- <lightning-card icon-name="" variant="base" class="custom-card slds-m-top_xx-small slds-card_boundary"> -->
+        <div class="scrollable-data-kartu-container">
+            <c-lwc-data-kartu-kredit-component class="data-kartu-component" onclose={handleCloseDataKartu}
+                no-kartu={selectedNomorKartu} kartu-data={data} case-id={recordId}
+                record-id={recordId}></c-lwc-data-kartu-kredit-component>
+        </div>
+        <!-- </lightning-card> -->
+    </template>
+    <!-- EndData Kartu Section -->
+
+</template>

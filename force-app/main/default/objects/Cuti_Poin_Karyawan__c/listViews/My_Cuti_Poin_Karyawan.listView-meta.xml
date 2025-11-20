@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>My_Cuti_Poin_Karyawan</fullName>
+    <columns>NAME</columns>
+    <columns>Nama_Karyawan__c</columns>
+    <columns>Poin__c</columns>
+    <columns>Poin_Terpakai__c</columns>
+    <columns>Sisa_Poin__c</columns>
+    <columns>Cuti_Tahun_Ini__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Nama_Karyawan__c</field>
+        <operation>equals</operation>
+        <value>$USER</value>
+    </filters>
+    <label>My Cuti &amp; Poin Karyawan</label>
+    <sharedTo>
+        <group>WFM_Agent</group>
+    </sharedTo>
+</ListView>

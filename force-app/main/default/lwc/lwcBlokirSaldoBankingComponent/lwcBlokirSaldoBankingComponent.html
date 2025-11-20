@@ -1,0 +1,190 @@
+<!--
+    LWC Name           : lwcBlokirSaldoBankingComponent.html
+    Created Date       : 13 Januari 2025
+    @description       : This is class ..
+    @author            : Rakeyan Nuramria
+    Modification Log :
+    Ver   Date         Author                            Modification
+    release 3
+    1.0   13/01/2025   Rakeyan Nuramria                  Initial Version
+    1.0   19/02/2025   Rakeyan Nuramria                  Adjust UI in input section
+    1.0   21/02/2025   Rakeyan Nuramria                  Change input section to v2 based on feedback
+
+-->
+
+<template>
+    <lightning-card title="" variant="base" class="custom-card slds-m-around_xx-small slds-card_boundary">
+
+        <div slot="title">Blokir Saldo</div>
+        <div slot="actions">
+            <!-- Close Button -->
+            <template if:false={isCloseHidden}>
+                <lightning-button-icon icon-name="utility:close" alternative-text="Close" title="Close"
+                    onclick={handleCloseBlockSearch} class="cssClass" variant="bare">
+                </lightning-button-icon>
+            </template>
+
+        </div>
+
+        <!-- Search Section -->
+        <lightning-card title="" variant="base" class="custom-card slds-m-around_small slds-card_boundary">
+
+            <div class="slds-m-left_small slds-m-bottom_medium">Nomor Rekening : <b>{selectedNomorRekening}</b></div>
+
+            <!-- v1, complete & using validation error -->
+            <!-- <div class="slds-grid slds-gutters slds-wrap slds-m-around_small form-container">
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-p-right_medium">
+                    <div class="field-container">
+                        <label class="custom-label">Hold Amount</label>
+                        <lightning-input style="width: 250px;" variant="label-hidden" value={holdAmount}
+                            onchange={handleHoldAmountChange} class={errorClasses.holdAmount}>
+                        </lightning-input>
+                        <template if:true={errors.holdAmount}>
+                            <div class="slds-text-color_error">{errors.holdAmount} <i>contoh : 10000</i></div>
+                        </template>
+                    </div>
+                </div>
+
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                    <div class="field-container">
+                        <label class="custom-required-label">Remark Hold</label>
+                        <lightning-input style="width: 250px;" variant="label-hidden" value={remarkHold}
+                            onchange={handleRemarkHoldChange} class={errorClasses.remarkHold}>
+                        </lightning-input>
+                        <template if:true={errors.remarkHold}>
+                            <div class="slds-text-color_error">{errors.remarkHold}</div>
+                        </template>
+                    </div>
+                </div>
+
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-p-right_medium slds-p-top_small">
+                    <div class="field-container">
+                        <label class="custom-required-label">Tanggal Jatuh Tempo</label>
+                        <lightning-input style="width: 250px;" type="date" variant="label-hidden" value={tglJatuhTempo}
+                            onchange={handleTglJatuhTempoChange} class={errorClasses.tglJatuhTempo}>
+                        </lightning-input>
+                        <template if:true={errors.tglJatuhTempo}>
+                            <div class="slds-text-color_error">{errors.tglJatuhTempo}</div>
+                        </template>
+                    </div>
+                </div>
+
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-p-top_small">
+                    <div class="field-container">
+                        <label class="custom-required-label">Tanggal Ditempatkan</label>
+                        <lightning-input style="width: 250px;" type="date" variant="label-hidden" value={tglDitempatkan}
+                            onchange={handleTglDitempatkanChange} class={errorClasses.tglDitempatkan}>
+                        </lightning-input>
+                        <template if:true={errors.tglDitempatkan}>
+                            <div class="slds-text-color_error">{errors.tglDitempatkan}</div>
+                        </template>
+                    </div>
+                </div>
+            </div> -->
+
+            <!-- v2, adjustment after demo-->
+            <div class="slds-grid slds-gutters slds-m-around_small">
+                <div class="slds-col">
+                    <label class="custom-required-label">Hold Amount</label>
+                    <lightning-input variant="label-hidden" value={holdAmount} onchange={handleHoldAmountChange}
+                        class={errorClasses.holdAmount}>
+                    </lightning-input>
+                    <template if:true={errors.holdAmount}>
+                        <div class="slds-text-color_error">{errors.holdAmount}</div>
+                    </template>
+                </div>
+                <div class="slds-col">
+                    <label class="custom-label">Tanggal Jatuh Tempo</label>
+                    <lightning-input type="date" variant="label-hidden" value={tglJatuhTempo}
+                        onchange={handleTglJatuhTempoChange} class={errorClasses.tglJatuhTempo}>
+                    </lightning-input>
+                    <template if:true={errors.tglJatuhTempo}>
+                        <div class="slds-text-color_error">{errors.tglJatuhTempo}</div>
+                    </template>
+
+                </div>
+                <div class="slds-col">
+                    <label class="custom-required-label">Remark Hold</label>
+                    <lightning-input variant="label-hidden" value={remarkHold} onchange={handleRemarkHoldChange}
+                        class={errorClasses.remarkHold}>
+                    </lightning-input>
+                    <template if:true={errors.remarkHold}>
+                        <div class="slds-text-color_error">{errors.remarkHold}</div>
+                    </template>
+
+                </div>
+            </div>
+
+            <!-- Search Button -->
+            <div class="slds-grid slds-grid_align-center slds-m-top_small">
+                <!-- <lightning-layout>
+                    <lightning-layout-item size="6" small-device-size="2" medium-device-size="2" large-device-size="2"
+                        padding="around-small"> -->
+                <lightning-button label="Blokir Saldo" variant="brand" onclick={handleSubmitBlokir}></lightning-button>
+                <!-- </lightning-layout-item>
+                </lightning-layout> -->
+                <br />
+            </div>
+
+            <template if:true={errorMessage}>
+                <div class="slds-text-color_error">
+                    {errorMessage}
+                </div>
+            </template>
+
+        </lightning-card>
+        <!-- End Search Section -->
+
+        <!-- Confirmation Modal -->
+        <template if:true={showConfirmationModal}>
+            <div class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                            onclick={handleCancelModal}>
+                            <lightning-icon icon-name="utility:close" alternative-text="close"
+                                size="small"></lightning-icon>
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                        <h2 class="slds-text-heading_medium">Konfirmasi Blokir</h2>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium slds-text-align_center">
+                        <template if:false={isProcessingBlokir}>
+                            <p>Apakah anda yakin ingin melakukan blokir saldo pada nomor rekening <b>{noRekening}</b>,
+                                sebesar <b>{holdAmount}</b>?
+                            </p>
+                        </template>
+
+                        <!-- SLDS Spinner: Show during deletion process -->
+                        <template if:true={isProcessingBlokir}>
+                            <div class="spinner-container" style="height:6rem;position:relative">
+                                <div role="status" class="slds-spinner slds-spinner_medium">
+                                    <span class="slds-assistive-text">Loading</span>
+                                    <div class="slds-spinner__dot-a"></div>
+                                    <div class="slds-spinner__dot-b"></div>
+                                </div>
+                            </div>
+                        </template>
+
+                    </div>
+                    <footer class="slds-modal__footer slds-text-align_center">
+                        <!-- <lightning-button variant="neutral" label="Cancel"
+                            onclick={handleCancelModal}></lightning-button> -->
+                        <lightning-button variant="brand" label="Ya" onclick={handleConfirmBlokir}
+                            disabled={isProcessingBlokir}></lightning-button>
+                    </footer>
+                </div>
+            </div>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+
+        <!-- Blocked Banking Information -->
+        <!-- <template if:true={isBlockProcessDone}> -->
+        <c-lwc-blocked-banking-information-component class="blocked-banking-component" record-id={recordId}
+            no-rekening={selectedNomorRekening}></c-lwc-blocked-banking-information-component>
+        <!-- </template> -->
+
+    </lightning-card>
+
+
+</template>

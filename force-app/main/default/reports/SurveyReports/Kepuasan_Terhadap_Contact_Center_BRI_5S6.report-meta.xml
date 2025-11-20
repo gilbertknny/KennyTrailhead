@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <columns>
+        <field>Survey.SurveyInvitations.SurveyResponses.SurveyQuestionResponses$Question</field>
+    </columns>
+    <columns>
+        <field>Survey.SurveyInvitations.SurveyResponses$Survey</field>
+    </columns>
+    <columns>
+        <field>Survey.SurveyInvitations$Case__c</field>
+    </columns>
+    <columns>
+        <field>Survey.SurveyInvitations.SurveyResponses$Status</field>
+    </columns>
+    <columns>
+        <field>Survey.SurveyInvitations$Case_Category__c</field>
+    </columns>
+    <currency>IDR</currency>
+    <filter>
+        <criteriaItems>
+            <column>Survey.SurveyInvitations.SurveyResponses.SurveyQuestionResponses$Question</column>
+            <columnToColumn>false</columnToColumn>
+            <isUnlocked>true</isUnlocked>
+            <operator>contains</operator>
+            <value>Yang terhormat Bapak / Ibu. Terima kasih telah menghubungkan Contact BRI. Untuk meningkatkan kualitas</value>
+        </criteriaItems>
+        <language>en_US</language>
+    </filter>
+    <format>Summary</format>
+    <groupingsDown>
+        <dateGranularity>Day</dateGranularity>
+        <field>Survey.SurveyInvitations.SurveyResponses.SurveyQuestionResponses$NumberValue</field>
+        <sortOrder>Asc</sortOrder>
+    </groupingsDown>
+    <name>Kepuasan Terhadap Contact Center BRI</name>
+    <params>
+        <name>co</name>
+        <value>1</value>
+    </params>
+    <reportType>Surveys__c</reportType>
+    <scope>organization</scope>
+    <showDetails>true</showDetails>
+    <showGrandTotal>true</showGrandTotal>
+    <showSubTotals>false</showSubTotals>
+    <timeFrameFilter>
+        <dateColumn>Survey$CreatedDate</dateColumn>
+        <interval>INTERVAL_CUSTOM</interval>
+    </timeFrameFilter>
+</Report>

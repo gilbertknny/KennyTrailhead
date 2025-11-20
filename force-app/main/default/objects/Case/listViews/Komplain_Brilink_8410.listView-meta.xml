@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Komplain_Brilink_8410</fullName>
+    <columns>Nomor_Tiket__c</columns>
+    <columns>CASES.STATUS</columns>
+    <columns>CASES.CREATED_DATE_DATE_ONLY</columns>
+    <columns>SCC_Call_Type__c</columns>
+    <columns>ACCOUNT.NAME</columns>
+    <columns>SCC_Card_Number__c</columns>
+    <columns>SCC_Account_Number__c</columns>
+    <columns>SCC_Amount__c</columns>
+    <columns>SCC_Waktu_Transaksi__c</columns>
+    <columns>SCC_Cust_Phone1__c</columns>
+    <columns>Returned_Case__c</columns>
+    <columns>Dokumen_Nasabah__c</columns>
+    <columns>SCC_Case_Owner__c</columns>
+    <columns>Within_Target_OLA__c</columns>
+    <columns>TRR_Checklist__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>CASES.RECORDTYPE</field>
+        <operation>equals</operation>
+        <value>Case.BRI_Open_Case</value>
+    </filters>
+    <filters>
+        <field>Approval_Status__c</field>
+        <operation>equals</operation>
+        <value>Waiting for Checker</value>
+    </filters>
+    <filters>
+        <field>SCC_Call_Type__c</field>
+        <operation>equals</operation>
+        <value>8410</value>
+    </filters>
+    <label>Komplain Brilink - 8410</label>
+    <sharedTo>
+        <group>NFT_Checker_ISSUER</group>
+    </sharedTo>
+</ListView>

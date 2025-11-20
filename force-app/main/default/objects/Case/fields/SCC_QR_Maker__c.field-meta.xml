@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>SCC_QR_Maker__c</fullName>
+    <externalId>false</externalId>
+    <formula>IMAGE(
+&quot;https://barcode.cloudanswers.com/png?size=150x150&amp;content=&quot; &amp; Maker__r.FirstName &amp; Maker__r.LastName &amp; TEXT(CreatedDate) ,
+&quot;qr code&quot;,
+50,50)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>QR Maker</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

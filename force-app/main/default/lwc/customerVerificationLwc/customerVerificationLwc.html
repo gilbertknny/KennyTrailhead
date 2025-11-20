@@ -1,0 +1,693 @@
+<template>
+    <div if:true={IsLoading}>
+        <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+    </div>
+    <lightning-card title="Verifikasi Nasabah" icon-name="standard:user">
+        <div class="category">
+           <lightning-combobox
+            name="category"
+            label=""
+            value={category}
+            options={categoryOptions}
+            variant="label-hidden"
+            onchange={handleChange} ></lightning-combobox>
+        </div>
+       <!--  <div if:true={showError}>
+            <p style="color: red">{errMsg}</p>
+        </div> -->
+        <div class="slds-grid slds-gutters" if:false={banking}>  
+           <div class="slds-col slds-size_3-of-4 slds-form_horizontal slds-form slds-grid slds-wrap">
+                <lightning-input type="text" onchange={cardChange} value={cardNumber} label="Card Number"></lightning-input>
+               
+           </div>
+           <div class="slds-col slds-size_1-of-4">
+               <lightning-button variant="brand" label="Cari" onclick={searchcardInfo} class="slds-m-left_x-small"></lightning-button>
+           </div>
+        </div>
+        <lightning-card title="Primary" if:true={showdata}>
+            <template if:true={banking}>
+                <div class="slds-grid slds-gutters">  
+                    <div class="slds-col slds-size_1-of-2 slds-border_bottom">
+                        <label style="margin-left: 10px;">Nama Nasabah</label>
+                        <div style="display: flex">
+                            <lightning-formatted-text style="margin-left: 10px;" class="outputunderline" value={caseObj.verif_Customer_Name} ></lightning-formatted-text>
+                            <lightning-input name="verif_Customer_Name" style="margin-left: auto;order: 2;" title={caseObj.verif_Customer_Name} onchange={handlecheckChange} class="checkboxmarin" type="checkbox" ></lightning-input>
+                        </div>
+
+                    </div>
+                    <template if:true={bankNonIndividual}>
+                    <div class="slds-col slds-size_1-of-2 slds-border_bottom">
+                        <label>Tanggal Berdiri</label>
+                        <div style="display: flex">
+                        <lightning-formatted-text class="outputunderline" value={caseObj.verif_Establish_Date} ></lightning-formatted-text>
+                        <lightning-input class="checkboxmarin" style="margin-left: auto;order: 2;" title={caseObj.verif_Establish_Date} name="verif_Establish_Date" type="checkbox"></lightning-input>
+                        </div>
+                    </div>
+                    </template>
+                    <template if:true={bankIndividual}>
+                        <div class="slds-col slds-size_1-of-2 slds-border_bottom">
+                            <label>Tanggal Lahir</label>
+                            <div style="display: flex">
+                            <lightning-formatted-text class="outputunderline" value={caseObj.verif_Birth_of_Date} ></lightning-formatted-text>
+                            <lightning-input class="checkboxmarin" style="margin-left: auto;order: 2;" title={caseObj.verif_Establish_Date} name="verif_Establish_Date" type="checkbox"></lightning-input>
+                            </div>
+                        </div>
+                        </template>
+                </div>
+                <div class="slds-grid slds-gutters">  
+                    <div class="slds-col slds-size_1-of-2 slds-border_bottom">
+                        <label style="margin-left: 10px;">Nama Gadis Ibu Kandung</label>
+                        <div style="display: flex">
+                            <lightning-formatted-text style="margin-left: 10px;" class="outputunderline" value={caseObj.verif_Mother_Name} ></lightning-formatted-text>
+                            <lightning-input name="verif_Mother_Name" style="margin-left: auto;order: 2;" onchange={handlecheckChange} class="checkboxmarin" type="checkbox" title={caseObj.verif_Mother_Name}></lightning-input>
+                        </div>
+                    </div>
+                    <template if:true={bankNonIndividual}>
+                        <div class="slds-col slds-size_1-of-2 slds-border_bottom">
+                            <label>NPWP</label>
+                            <div style="display: flex">
+                                <lightning-formatted-text class="outputunderline" value={caseObj.verif_NPWP} ></lightning-formatted-text>
+                                <lightning-input name="verif_NPWP" style="margin-left: auto;order: 2;" onchange={handlecheckChange} class="checkboxmarin" type="checkbox" title={caseObj.verif_NPWP}></lightning-input>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </template>
+            <template if:true={creditIndividual}>
+                <div class="slds-grid slds-gutters">  
+                    <div class="slds-col slds-size_1-of-2 slds-border_bottom">
+                        <label style="margin-left: 10px;">Nama Nasabah</label>
+                        <div style="display: flex">
+                            <lightning-formatted-text style="margin-left: 10px;" class="outputunderline" value={caseObj.verif_Customer_Name} ></lightning-formatted-text>
+                            <lightning-input name="verif_Customer_Name" style="margin-left: auto;order: 2;" onchange={handlecheckChange} class="checkboxmarin" type="checkbox" title={caseObj.verif_Customer_Name}></lightning-input>
+                        </div>
+
+                    </div>
+                    <div class="slds-col slds-size_1-of-2 slds-border_bottom">
+                        <label>Nama Gadis Ibu Kandung</label>
+                        <div style="display: flex">
+                        <lightning-formatted-text class="outputunderline" value={caseObj.verif_Mother_Name} ></lightning-formatted-text>
+                        <lightning-input class="checkboxmarin" style="margin-left: auto;order: 2;" name="verif_Mother_Name" type="checkbox" title={caseObj.verif_Mother_Name}></lightning-input>
+                        </div>
+                    </div>
+                </div>
+                
+            </template>
+            <template if:true={creditNonIndividual}>
+                <div class="slds-grid slds-gutters">  
+                    <div class="slds-col slds-size_1-of-2 slds-border_bottom">
+                        <label style="margin-left: 10px;">Nama PIC</label>
+                        <div style="display: flex">
+                            <lightning-formatted-text style="margin-left: 10px;" class="outputunderline" value={caseObj.verif_PIC_Name} ></lightning-formatted-text>
+                            <lightning-input name="verif_PIC_Name" style="margin-left: auto;order: 2;" onchange={handlecheckChange} class="checkboxmarin" type="checkbox" title={caseObj.verif_PIC_Name}></lightning-input>
+                        </div>
+
+                    </div>
+                    <div class="slds-col slds-size_1-of-2 slds-border_bottom">
+                        <label>No HP PIC</label>
+                        <div style="display: flex">
+                        <lightning-formatted-text class="outputunderline" value={caseObj.verif_PIC_Phone} ></lightning-formatted-text>
+                        <lightning-input class="checkboxmarin" style="margin-left: auto;order: 2;" name="verif_PIC_Phone" type="checkbox" title={caseObj.verif_PIC_Phone}></lightning-input>
+                        </div>
+                    </div>
+                </div>
+                
+            </template>
+        </lightning-card>
+        <lightning-card title="Secondary" if:true={showdata}>
+            <template if:true={bankIndividual}>
+                <div class="slds-grid slds-gutters">  
+                    <div class="slds-col slds-size_1-of-2 slds-border_bottom">
+                        <label style="margin-left: 10px;">Phone (BRINets)</label>
+                        <div style="display: flex">
+                            <lightning-formatted-text style="margin-left: 10px;" class="outputunderline" value={caseObj.verif_Phone_BRINets} ></lightning-formatted-text>
+                            <lightning-input name="verif_Phone_BRINets" style="margin-left: auto;order: 2;" onchange={handlecheckChange} class="checkboxmarin" type="checkbox" title={caseObj.verif_Phone_BRINets}></lightning-input>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-2 slds-border_bottom">
+                        <label>Phone (WBS)</label>
+                        <div style="display: flex">
+                        <lightning-formatted-text class="outputunderline" value={caseObj.verif_Phone_WBS} ></lightning-formatted-text>
+                        <lightning-input name="verif_Phone_WBS" style="margin-left: auto;order: 2;" class="checkboxmarin" type="checkbox" title={caseObj.verif_Phone_WBS}></lightning-input>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-grid slds-gutters">  
+                    <div class="slds-col slds-size_1-of-2 slds-border_bottom">
+                        <label style="margin-left: 10px;">NIK</label>
+                        <div style="display: flex">
+                            <lightning-formatted-text style="margin-left: 10px;" class="outputunderline" value={caseObj.verif_NIK} ></lightning-formatted-text>
+                            <lightning-input name="verif_NIK" style="margin-left: auto;order: 2;" onchange={handlecheckChange} class="checkboxmarin" type="checkbox" title={caseObj.verif_NIK}></lightning-input>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-2 slds-border_bottom">
+                        <label>Jenis Rekening</label>
+                        <div style="display: flex">
+                        <lightning-formatted-text class="outputunderline" value={caseObj.verif_Account_Type} ></lightning-formatted-text>
+                        <lightning-input name="verif_Account_Type" style="margin-left: auto;order: 2;" class="checkboxmarin" type="checkbox" title={caseObj.verif_Account_Type}></lightning-input>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-grid slds-gutters">  
+                    <div class="slds-col slds-size_1-of-2 slds-border_bottom">
+                        <label style="margin-left: 10px;">Kantor Pembuka Rekening</label>
+                        <div style="display: flex">
+                            <lightning-formatted-text style="margin-left: 10px;" class="outputunderline" value={caseObj.verif_Open_Account_Office} ></lightning-formatted-text>
+                            <lightning-input name="verif_Open_Account_Office" style="margin-left: auto;order: 2;" onchange={handlecheckChange} class="checkboxmarin" type="checkbox" title={caseObj.verif_Open_Account_Office}></lightning-input>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-2 slds-border_bottom">
+                        <label>Alamat Rumah</label>
+                        <div style="display: flex">
+                        <lightning-formatted-text class="outputunderline" value={caseObj.verif_Home_Address} ></lightning-formatted-text>
+                        <lightning-input name="verif_Home_Address" style="margin-left: auto;order: 2;" class="checkboxmarin" type="checkbox" title={caseObj.verif_Home_Address}></lightning-input>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-grid slds-gutters">  
+                    <div class="slds-col slds-size_1-of-2 slds-border_bottom">
+                        <label style="margin-left: 10px;">Alamat Email</label>
+                        <div style="display: flex">
+                            <lightning-formatted-text style="margin-left: 10px;" class="outputunderline" value={caseObj.verif_Email} ></lightning-formatted-text>
+                            <lightning-input name="verif_Email" style="margin-left: auto;order: 2;" onchange={handlecheckChange} class="checkboxmarin" type="checkbox" title={caseObj.verif_Email}></lightning-input>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-2 slds-border_bottom">
+                        <label>Kontak Darurat</label>   
+                        <div style="display: flex">
+                        <lightning-formatted-text class="outputunderline" value={caseObj.verif_Urgent_Contact} ></lightning-formatted-text>
+                        <lightning-input name="verif_Urgent_Contact" style="margin-left: auto;order: 2;" class="checkboxmarin" type="checkbox" title={caseObj.verif_Urgent_Contact}></lightning-input>
+                        </div>
+                    </div>
+                </div>
+            </template>
+            
+            <template if:true={bankNonIndividual}>
+                <div class="slds-grid slds-gutters">  
+                    <div class="slds-col slds-size_1-of-2 slds-border_bottom">
+                        <label style="margin-left: 10px;">Phone (BRINets)</label> 
+                        <div style="display: flex">
+                            <lightning-formatted-text style="margin-left: 10px;" class="outputunderline" value={caseObj.verif_Phone_BRINets} ></lightning-formatted-text>
+                            <lightning-input name="verif_Phone_BRINets" style="margin-left: auto;order: 2;" onchange={handlecheckChange} class="checkboxmarin" type="checkbox" title={caseObj.verif_Phone_BRINets}></lightning-input>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-2 slds-border_bottom">
+                        <label>Telepon</label> 
+                        <div style="display: flex">
+                           <lightning-formatted-text  class="outputunderline" value={caseObj.verif_Phone} ></lightning-formatted-text>
+                            <lightning-input name="verif_Phone" style="margin-left: auto;order: 2;" onchange={handlecheckChange} class="checkboxmarin" type="checkbox" title={caseObj.verif_Phone_BRINets}></lightning-input>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-grid slds-gutters"> 
+                    <div class="slds-col slds-size_1-of-2 slds-border_bottom">
+                        <label style="margin-left: 10px;">Nama PIC 1</label> 
+                        <div style="display: flex">
+                        <lightning-formatted-text style="margin-left: 10px;" class="outputunderline" value={caseObj.verif_PIC_Name_1} ></lightning-formatted-text>
+                        <lightning-input name="verif_PIC_Name_1" style="margin-left: auto;order: 2;" class="checkboxmarin" type="checkbox" title={caseObj.verif_PIC_Name_1}></lightning-input>
+                        </div>
+                    </div>
+               
+                 
+                    <div class="slds-col slds-size_1-of-2 slds-border_bottom">
+                        <label >Nama PIC 2</label> 
+                        <div style="display: flex">
+                            <lightning-formatted-text class="outputunderline" value={caseObj.verif_PIC_Name_2} ></lightning-formatted-text>
+                            <lightning-input name="verif_PIC_Name_2" style="margin-left: auto;order: 2;" onchange={handlecheckChange} class="checkboxmarin" type="checkbox" title={caseObj.verif_PIC_Name_2}></lightning-input>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-grid slds-gutters">  
+                    <div class="slds-col slds-size_1-of-2 slds-border_bottom">
+                        <label style="margin-left: 10px;">Nama PIC 3</label> 
+                        <div style="display: flex">
+                        <lightning-formatted-text style="margin-left: 10px;" class="outputunderline" value={caseObj.verif_PIC_Name_3} ></lightning-formatted-text>
+                        <lightning-input name="verif_PIC_Name_3" style="margin-left: auto;order: 2;" class="checkboxmarin" type="checkbox" title={caseObj.verif_PIC_Name_3}></lightning-input>
+                        </div>
+                    </div>
+               
+               
+                    <div class="slds-col slds-size_1-of-2 slds-border_bottom">
+                        <label >Alamat Kantor</label> 
+                        <div style="display: flex">
+                            <lightning-formatted-text class="outputunderline" value={caseObj.verif_Office_Address} ></lightning-formatted-text>
+                            <lightning-input name="verif_Office_Address" style="margin-left: auto;order: 2;" onchange={handlecheckChange} class="checkboxmarin" type="checkbox" title={caseObj.verif_Office_Address}></lightning-input>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-grid slds-gutters">  
+                    <div class="slds-col slds-size_1-of-2 slds-border_bottom">
+                        <label style="margin-left: 10px;">Jabatan 1</label> 
+                        <div style="display: flex">
+                        <lightning-formatted-text style="margin-left: 10px;" class="outputunderline" value={caseObj.verif_Position_1} ></lightning-formatted-text>
+                        <lightning-input name="verif_Position_1" style="margin-left: auto;order: 2;" class="checkboxmarin" type="checkbox" title={caseObj.verif_Position_1}></lightning-input>
+                        </div>
+                    </div>
+             
+               
+                    <div class="slds-col slds-size_1-of-2 slds-border_bottom">
+                        <label >Jabatan 2</label> 
+                        <div style="display: flex">
+                            <lightning-formatted-text  class="outputunderline" value={caseObj.verif_Position_2} ></lightning-formatted-text>
+                            <lightning-input name="verif_Position_2" style="margin-left: auto;order: 2;" onchange={handlecheckChange} class="checkboxmarin" type="checkbox" title={caseObj.verif_Position_2}></lightning-input>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-grid slds-gutters">  
+                    <div class="slds-col slds-size_1-of-2 slds-border_bottom">
+                        <label style="margin-left: 10px;">Jabatan 3</label> 
+                        <div style="display: flex">
+                        <lightning-formatted-text style="margin-left: 10px;" class="outputunderline" value={caseObj.verif_Position_3} ></lightning-formatted-text>
+                        <lightning-input name="verif_Position_3" style="margin-left: auto;order: 2;" class="checkboxmarin" type="checkbox" title={caseObj.verif_Position_3}></lightning-input>
+                        </div>
+                    </div>
+                </div>
+               
+            </template>
+            <template if:true={creditIndividual}>
+                <div class="slds-grid slds-gutters">  
+                    <div class="slds-col slds-size_1-of-2 slds-border_bottom">
+                        <label style="margin-left: 10px;">Phone (BRINets)</label> 
+                        <div style="display: flex">
+                            <lightning-formatted-text style="margin-left: 10px;" class="outputunderline" value={caseObj.verif_Phone_BRINets} ></lightning-formatted-text>
+                            <lightning-input name="verif_Phone_BRINets" style="margin-left: auto;order: 2;" onchange={handlecheckChange} class="checkboxmarin" type="checkbox" title={caseObj.verif_Phone_BRINets}></lightning-input>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-2 slds-border_bottom">
+                        <label>Telepon Rumah</label> 
+                        <div style="display: flex">
+                        <lightning-formatted-text class="outputunderline" value={caseObj.verif_Phone_WBS}  ></lightning-formatted-text>
+                        <lightning-input name="verif_Phone_WBS" style="margin-left: auto;order: 2;" class="checkboxmarin" type="checkbox" title={caseObj.verif_Phone_WBS}></lightning-input>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-grid slds-gutters">  
+                    <div class="slds-col slds-size_1-of-2 slds-border_bottom">
+                        <label style="margin-left: 10px;">NIK</label> 
+                        <div style="display: flex">
+                            <lightning-formatted-text style="margin-left: 10px;" class="outputunderline" value={caseObj.verif_NIK} ></lightning-formatted-text>
+                            <lightning-input name="verif_NIK" style="margin-left: auto;order: 2;" onchange={handlecheckChange} class="checkboxmarin" type="checkbox" title={caseObj.verif_NIK}></lightning-input>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-2 slds-border_bottom">
+                        <label>NPWP</label> 
+                        <div style="display: flex">
+                        <lightning-formatted-text class="outputunderline" value={caseObj.verif_NPWP}  ></lightning-formatted-text>
+                        <lightning-input name="verif_NPWP" style="margin-left: auto;order: 2;" class="checkboxmarin" type="checkbox" title={caseObj.verif_NPWP}></lightning-input>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-grid slds-gutters">  
+                    <div class="slds-col slds-size_1-of-2 slds-border_bottom">
+                        <label style="margin-left: 10px;">Expired Date Kartu</label> 
+                        <div style="display: flex">
+                            <lightning-formatted-text style="margin-left: 10px;" class="outputunderline" value={caseObj.verif_Expired_Date} ></lightning-formatted-text>
+                            <lightning-input name="verif_Expired_Date" style="margin-left: auto;order: 2;" onchange={handlecheckChange} class="checkboxmarin" type="checkbox" title={caseObj.verif_Expired_Date}></lightning-input>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-2 slds-border_bottom">
+                        <label>Alamat Rumah</label> 
+                        <div style="display: flex">
+                        <lightning-formatted-text class="outputunderline" value={caseObj.verif_Home_Address}  ></lightning-formatted-text>
+                        <lightning-input name="verif_Home_Address" style="margin-left: auto;order: 2;" class="checkboxmarin" type="checkbox" title={caseObj.verif_Home_Address}></lightning-input>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-grid slds-gutters">  
+                    <div class="slds-col slds-size_1-of-2 slds-border_bottom">
+                        <label style="margin-left: 10px;">Alamat Email</label> 
+                        <div style="display: flex">
+                            <lightning-formatted-text style="margin-left: 10px;" class="outputunderline" value={caseObj.verif_Email} ></lightning-formatted-text>
+                            <lightning-input name="verif_Email" style="margin-left: auto;order: 2;" onchange={handlecheckChange} class="checkboxmarin" type="checkbox" title={caseObj.verif_Email}></lightning-input>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-2 slds-border_bottom">
+                        <label>Kontak Darurat</label> 
+                        <div style="display: flex">
+                        <lightning-formatted-text class="outputunderline" value={caseObj.verif_Urgent_Contact}  ></lightning-formatted-text>
+                        <lightning-input name="verif_Urgent_Contact" style="margin-left: auto;order: 2;" class="checkboxmarin" type="checkbox" title={caseObj.verif_Urgent_Contact}></lightning-input>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-grid slds-gutters">  
+                    <div class="slds-col slds-size_1-of-2 slds-border_bottom">
+                        <label style="margin-left: 10px;">Limit Kartu Kredit</label> 
+                        <div style="display: flex">
+                            <lightning-formatted-text style="margin-left: 10px;" class="outputunderline" value={caseObj.verif_Credit_Card_Limit} ></lightning-formatted-text>
+                            <lightning-input name="verif_Credit_Card_Limit" style="margin-left: auto;order: 2;" onchange={handlecheckChange} class="checkboxmarin" type="checkbox" title={caseObj.verif_Credit_Card_Limit}></lightning-input>
+                        </div>
+                    </div>
+                    
+                </div>
+            </template>
+            <template if:true={creditNonIndividual}>
+                <div class="slds-grid slds-gutters">  
+                    <div class="slds-col slds-size_1-of-2 slds-border_bottom">
+                        <label style="margin-left: 10px;">Alamat Instansi</label> 
+                        <div style="display: flex">
+                            <lightning-formatted-text style="margin-left: 10px;" class="outputunderline" value={caseObj.verif_Office_Address} ></lightning-formatted-text>
+                            <lightning-input name="verif_Office_Address" style="margin-left: auto;order: 2;" onchange={handlecheckChange} class="checkboxmarin" type="checkbox" title={caseObj.verif_Office_Address}></lightning-input>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-2 slds-border_bottom">
+                        <label>No Telp Instansi</label> 
+                        <div style="display: flex">
+                        <lightning-formatted-text class="outputunderline" value={caseObj.verif_Office_Phone}  ></lightning-formatted-text>
+                        <lightning-input name="verif_Office_Phone" style="margin-left: auto;order: 2;" class="checkboxmarin" type="checkbox" title={caseObj.verif_Office_Phone}></lightning-input>
+                        </div>
+                    </div>
+                </div>
+                 <div class="slds-grid slds-gutters">  
+                    <div class="slds-col slds-size_1-of-2 slds-border_bottom">
+                        <label style="margin-left: 10px;">Expired Date</label> 
+                        <div style="display: flex">
+                            <lightning-formatted-text style="margin-left: 10px;" class="outputunderline" value={caseObj.verif_Expired_Date} ></lightning-formatted-text>
+                            <lightning-input name="verif_Expired_Date" style="margin-left: auto;order: 2;" onchange={handlecheckChange} class="checkboxmarin" type="checkbox" title={caseObj.verif_Expired_Date}></lightning-input>
+                        </div>
+                    </div>
+                    
+                </div>
+            </template>
+        </lightning-card>
+        <template if:false={showdata}>
+            <p style="color: red; margin-left: 10px;">Tidak ada data ditemukan.</p>
+            <lightning-card title="Primary" >
+                <template if:true={banking}>
+                    <div class="slds-grid slds-gutters">  
+                        <div class="slds-col slds-size_1-of-2 slds-border_bottom">
+                            <label style="margin-left: 10px;">Nama Nasabah</label>
+                            <div style="display: flex">
+                                <lightning-formatted-text style="margin-left: 10px;" class="outputunderline" value=""></lightning-formatted-text>
+                                <lightning-input name="verif_Customer_Name" style="margin-left: auto;order: 2;" title="" onchange={handlecheckChange} class="checkboxmarin" type="checkbox" ></lightning-input>
+                            </div>
+
+                        </div>
+                        <div class="slds-col slds-size_1-of-2 slds-border_bottom">
+                            <label>Tanggal Lahir</label>
+                            <div style="display: flex">
+                            <lightning-formatted-text class="outputunderline" value="" ></lightning-formatted-text>
+                            <lightning-input class="checkboxmarin" title="" style="margin-left: auto;order: 2;" name="verif_Birth_of_Date" type="checkbox"></lightning-input>
+                            </div>
+                        </div>
+                     </div>
+                    <div class="slds-grid slds-gutters">  
+                        <div class="slds-col slds-size_1-of-2 slds-border_bottom">
+                            <label style="margin-left: 10px;">Nama Gadis Ibu Kandung</label>
+                            <div style="display: flex">
+                                <lightning-formatted-text style="margin-left: 10px;" class="outputunderline" value="" ></lightning-formatted-text>
+                                <lightning-input name="verif_Mother_Name" style="margin-left: auto;order: 2;" onchange={handlecheckChange} class="checkboxmarin" type="checkbox" title=""></lightning-input>
+                            </div>
+                        </div>
+                        <template if:true={bankNonIndividual}>
+                            <div class="slds-col slds-size_1-of-2 slds-border_bottom">
+                                <label>NPWP</label>
+                                <div style="display: flex">
+                                    <lightning-formatted-text class="outputunderline" value="" ></lightning-formatted-text>
+                                    <lightning-input name="verif_NPWP" style="margin-left: auto;order: 2;" onchange={handlecheckChange} class="checkboxmarin" type="checkbox" title=""></lightning-input>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </template>
+                <template if:true={creditIndividual}>
+                    <div class="slds-grid slds-gutters">  
+                        <div class="slds-col slds-size_1-of-2 slds-border_bottom">
+                            <label style="margin-left: 10px;">Nama Nasabah</label>
+                            <div style="display: flex">
+                                <lightning-formatted-text style="margin-left: 10px;" class="outputunderline" value=""></lightning-formatted-text>
+                                <lightning-input name="verif_Customer_Name" style="margin-left: auto;order: 2;" onchange={handlecheckChange} class="checkboxmarin" type="checkbox" title=""></lightning-input>
+                            </div>
+
+                        </div>
+                        <div class="slds-col slds-size_1-of-2 slds-border_bottom">
+                            <label>Nama Gadis Ibu Kandung</label>
+                            <div style="display: flex">
+                            <lightning-formatted-text class="outputunderline" value="" ></lightning-formatted-text>
+                            <lightning-input class="checkboxmarin" style="margin-left: auto;order: 2;" name="verif_Mother_Name" type="checkbox" title=""></lightning-input>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </template>
+                <template if:true={creditNonIndividual}>
+                    <div class="slds-grid slds-gutters">  
+                        <div class="slds-col slds-size_1-of-2 slds-border_bottom">
+                            <label style="margin-left: 10px;">Nama PIC</label>
+                            <div style="display: flex">
+                                <lightning-formatted-text style="margin-left: 10px;" class="outputunderline" value="" ></lightning-formatted-text>
+                                <lightning-input name="verif_PIC_Name" style="margin-left: auto;order: 2;" onchange={handlecheckChange} class="checkboxmarin" type="checkbox" title=""></lightning-input>
+                            </div>
+
+                        </div>
+                        <div class="slds-col slds-size_1-of-2 slds-border_bottom">
+                            <label>No HP PIC</label>
+                            <div style="display: flex">
+                            <lightning-formatted-text class="outputunderline" value="" ></lightning-formatted-text>
+                            <lightning-input class="checkboxmarin" style="margin-left: auto;order: 2;" name="verif_PIC_Phone" type="checkbox" title=""></lightning-input>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </template>
+            </lightning-card>
+            <lightning-card title="Secondary">
+                <template if:true={bankIndividual}>
+                    <div class="slds-grid slds-gutters">  
+                        <div class="slds-col slds-size_1-of-2 slds-border_bottom">
+                            <label style="margin-left: 10px;">Phone (BRINets)</label>
+                            <div style="display: flex">
+                                <lightning-formatted-text style="margin-left: 10px;" class="outputunderline" value="" ></lightning-formatted-text>
+                                <lightning-input name="verif_Phone_BRINets" style="margin-left: auto;order: 2;" onchange={handlecheckChange} class="checkboxmarin" type="checkbox" title=""></lightning-input>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2 slds-border_bottom">
+                            <label>Phone (WBS)</label>
+                            <div style="display: flex">
+                            <lightning-formatted-text class="outputunderline" value="" ></lightning-formatted-text>
+                            <lightning-input name="verif_Phone_WBS" style="margin-left: auto;order: 2;" class="checkboxmarin" type="checkbox" title=""></lightning-input>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-grid slds-gutters">  
+                        <div class="slds-col slds-size_1-of-2 slds-border_bottom">
+                            <label style="margin-left: 10px;">NIK</label>
+                            <div style="display: flex">
+                                <lightning-formatted-text style="margin-left: 10px;" class="outputunderline" value=""></lightning-formatted-text>
+                                <lightning-input name="verif_NIK" style="margin-left: auto;order: 2;" onchange={handlecheckChange} class="checkboxmarin" type="checkbox" title=""></lightning-input>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2 slds-border_bottom">
+                            <label>Jenis Rekening</label>
+                            <div style="display: flex">
+                            <lightning-formatted-text class="outputunderline" value="" ></lightning-formatted-text>
+                            <lightning-input name="verif_Account_Type" style="margin-left: auto;order: 2;" class="checkboxmarin" type="checkbox" title=""></lightning-input>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-grid slds-gutters">  
+                        <div class="slds-col slds-size_1-of-2 slds-border_bottom">
+                            <label style="margin-left: 10px;">Kantor Pembuka Rekening</label>
+                            <div style="display: flex">
+                                <lightning-formatted-text style="margin-left: 10px;" class="outputunderline" value="" ></lightning-formatted-text>
+                                <lightning-input name="verif_Open_Account_Office" style="margin-left: auto;order: 2;" onchange={handlecheckChange} class="checkboxmarin" type="checkbox" title=""></lightning-input>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2 slds-border_bottom">
+                            <label>Alamat Rumah</label>
+                            <div style="display: flex">
+                            <lightning-formatted-text class="outputunderline" value="" ></lightning-formatted-text>
+                            <lightning-input name="verif_Home_Address" style="margin-left: auto;order: 2;" class="checkboxmarin" type="checkbox" title=""></lightning-input>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-grid slds-gutters">  
+                        <div class="slds-col slds-size_1-of-2 slds-border_bottom">
+                            <label style="margin-left: 10px;">Alamat Email</label>
+                            <div style="display: flex">
+                                <lightning-formatted-text style="margin-left: 10px;" class="outputunderline" value="" ></lightning-formatted-text>
+                                <lightning-input name="verif_Email" style="margin-left: auto;order: 2;" onchange={handlecheckChange} class="checkboxmarin" type="checkbox" title=""></lightning-input>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2 slds-border_bottom">
+                            <label>Kontak Darurat</label>   
+                            <div style="display: flex">
+                            <lightning-formatted-text class="outputunderline" value="" ></lightning-formatted-text>
+                            <lightning-input name="verif_Urgent_Contact" style="margin-left: auto;order: 2;" class="checkboxmarin" type="checkbox" title=""></lightning-input>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+                <template if:true={bankNonIndividual}>
+                    <div class="slds-grid slds-gutters">  
+                        <div class="slds-col slds-size_1-of-2 slds-border_bottom">
+                            <label style="margin-left: 10px;">Phone (BRINets)</label> 
+                            <div style="display: flex">
+                                <lightning-formatted-text style="margin-left: 10px;" class="outputunderline" value="" ></lightning-formatted-text>
+                                <lightning-input name="verif_Phone_BRINets" style="margin-left: auto;order: 2;" onchange={handlecheckChange} class="checkboxmarin" type="checkbox" title=""></lightning-input>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2 slds-border_bottom">
+                            <label>Nama PIC 1</label> 
+                            <div style="display: flex">
+                            <lightning-formatted-text class="outputunderline" value="" ></lightning-formatted-text>
+                            <lightning-input name="verif_PIC_Name_1" style="margin-left: auto;order: 2;" class="checkboxmarin" type="checkbox" title=""></lightning-input>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-grid slds-gutters">  
+                        <div class="slds-col slds-size_1-of-2 slds-border_bottom">
+                            <label style="margin-left: 10px;">Nama PIC 2</label> 
+                            <div style="display: flex">
+                                <lightning-formatted-text style="margin-left: 10px;" class="outputunderline" value="" ></lightning-formatted-text>
+                                <lightning-input name="verif_PIC_Name_2"  style="margin-left: auto;order: 2;" onchange={handlecheckChange} class="checkboxmarin" type="checkbox" title=""></lightning-input>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2 slds-border_bottom">
+                            <label>Nama PIC 3</label> 
+                            <div style="display: flex">
+                            <lightning-formatted-text class="outputunderline" value="" ></lightning-formatted-text>
+                            <lightning-input name="verif_PIC_Name_3" style="margin-left: auto;order: 2;" class="checkboxmarin" type="checkbox" title=""></lightning-input>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-grid slds-gutters">  
+                        <div class="slds-col slds-size_1-of-2 slds-border_bottom">
+                            <label style="margin-left: 10px;">Alamat Kantor</label> 
+                            <div style="display: flex">
+                                <lightning-formatted-text style="margin-left: 10px;" class="outputunderline" value="" ></lightning-formatted-text>
+                                <lightning-input name="verif_Office_Address" style="margin-left: auto;order: 2;" onchange={handlecheckChange} class="checkboxmarin" type="checkbox" title=""></lightning-input>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2 slds-border_bottom">
+                            <label>Jabatan 1</label> 
+                            <div style="display: flex">
+                            <lightning-formatted-text class="outputunderline" value="" ></lightning-formatted-text>
+                            <lightning-input name="verif_Position_1" style="margin-left: auto;order: 2;" class="checkboxmarin" type="checkbox" title=""></lightning-input>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-grid slds-gutters">  
+                        <div class="slds-col slds-size_1-of-2 slds-border_bottom">
+                            <label style="margin-left: 10px;">Jabatan 2</label> 
+                            <div style="display: flex">
+                                <lightning-formatted-text style="margin-left: 10px;" class="outputunderline" value="" ></lightning-formatted-text>
+                                <lightning-input name="verif_Position_2" style="margin-left: auto;order: 2;" onchange={handlecheckChange} class="checkboxmarin" type="checkbox" title=""></lightning-input>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2 slds-border_bottom">
+                            <label>Jabatan 3</label> 
+                            <div style="display: flex">
+                            <lightning-formatted-text class="outputunderline" value="" ></lightning-formatted-text>
+                            <lightning-input name="verif_Position_3" style="margin-left: auto;order: 2;" class="checkboxmarin" type="checkbox" title=""></lightning-input>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+                <template if:true={creditIndividual}>
+                    <div class="slds-grid slds-gutters">  
+                        <div class="slds-col slds-size_1-of-2 slds-border_bottom">
+                            <label style="margin-left: 10px;">Phone (BRINets)</label> 
+                            <div style="display: flex">
+                                <lightning-formatted-text style="margin-left: 10px;" class="outputunderline" value="" ></lightning-formatted-text>
+                                <lightning-input name="verif_Phone_BRINets" style="margin-left: auto;order: 2;" onchange={handlecheckChange} class="checkboxmarin" type="checkbox" title=""></lightning-input>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2 slds-border_bottom">
+                            <label>Phone (WBS)</label> 
+                            <div style="display: flex">
+                            <lightning-formatted-text class="outputunderline" value=""  ></lightning-formatted-text>
+                            <lightning-input name="verif_Phone_WBS" style="margin-left: auto;order: 2;" class="checkboxmarin" type="checkbox" title=""></lightning-input>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-grid slds-gutters">  
+                        <div class="slds-col slds-size_1-of-2 slds-border_bottom">
+                            <label style="margin-left: 10px;">NIK</label> 
+                            <div style="display: flex">
+                                <lightning-formatted-text style="margin-left: 10px;" class="outputunderline" value=""></lightning-formatted-text>
+                                <lightning-input name="verif_NIK" style="margin-left: auto;order: 2;" onchange={handlecheckChange} class="checkboxmarin" type="checkbox" title=""></lightning-input>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2 slds-border_bottom">
+                            <label>NPWP</label> 
+                            <div style="display: flex">
+                            <lightning-formatted-text class="outputunderline" value=""  ></lightning-formatted-text>
+                            <lightning-input name="verif_NPWP" style="margin-left: auto;order: 2;" class="checkboxmarin" type="checkbox" title=""></lightning-input>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-grid slds-gutters">  
+                        <div class="slds-col slds-size_1-of-2 slds-border_bottom">
+                            <label style="margin-left: 10px;">Expired Date Kartu</label> 
+                            <div style="display: flex">
+                                <lightning-formatted-text style="margin-left: 10px;" class="outputunderline" value="" ></lightning-formatted-text>
+                                <lightning-input name="verif_Expired_Date" style="margin-left: auto;order: 2;" onchange={handlecheckChange} class="checkboxmarin" type="checkbox" title=""></lightning-input>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2 slds-border_bottom">
+                            <label>Alamat Rumah</label> 
+                            <div style="display: flex">
+                            <lightning-formatted-text class="outputunderline" value=""  ></lightning-formatted-text>
+                            <lightning-input name="verif_Home_Address" style="margin-left: auto;order: 2;" class="checkboxmarin" type="checkbox" title=""></lightning-input>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-grid slds-gutters">  
+                        <div class="slds-col slds-size_1-of-2 slds-border_bottom">
+                            <label style="margin-left: 10px;">Alamat Email</label> 
+                            <div style="display: flex">
+                                <lightning-formatted-text style="margin-left: 10px;" class="outputunderline" value="" ></lightning-formatted-text>
+                                <lightning-input name="verif_Email" style="margin-left: auto;order: 2;" onchange={handlecheckChange} class="checkboxmarin" type="checkbox" title=""></lightning-input>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2 slds-border_bottom">
+                            <label>Kontak Darurat</label> 
+                            <div style="display: flex">
+                            <lightning-formatted-text class="outputunderline" value=""  ></lightning-formatted-text>
+                            <lightning-input name="verif_Urgent_Contact" style="margin-left: auto;order: 2;" class="checkboxmarin" type="checkbox" title=""></lightning-input>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-grid slds-gutters">  
+                        <div class="slds-col slds-size_1-of-2 slds-border_bottom">
+                            <label style="margin-left: 10px;">Limit Kartu Kredit</label> 
+                            <div style="display: flex">
+                                <lightning-formatted-text style="margin-left: 10px;" class="outputunderline" value="" ></lightning-formatted-text>
+                                <lightning-input name="verif_Credit_Card_Limit" style="margin-left: auto;order: 2;" onchange={handlecheckChange} class="checkboxmarin" type="checkbox" title=""></lightning-input>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </template>
+                <template if:true={creditNonIndividual}>
+                    <div class="slds-grid slds-gutters">  
+                        <div class="slds-col slds-size_1-of-2 slds-border_bottom">
+                            <label style="margin-left: 10px;">Alamat Instansi</label> 
+                            <div style="display: flex">
+                                <lightning-formatted-text style="margin-left: 10px;" class="outputunderline" value="" ></lightning-formatted-text>
+                                <lightning-input name="verif_Office_Address" style="margin-left: auto;order: 2;" onchange={handlecheckChange} class="checkboxmarin" type="checkbox" title=""></lightning-input>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2 slds-border_bottom">
+                            <label>No Telp Instansi</label> 
+                            <div style="display: flex">
+                            <lightning-formatted-text class="outputunderline" value=""  ></lightning-formatted-text>
+                            <lightning-input name="verif_Office_Phone" style="margin-left: auto;order: 2;" class="checkboxmarin" type="checkbox" title=""></lightning-input>
+                            </div>
+                        </div>
+                    </div>
+                     <div class="slds-grid slds-gutters">  
+                        <div class="slds-col slds-size_1-of-2 slds-border_bottom">
+                            <label style="margin-left: 10px;">Expired Date</label> 
+                            <div style="display: flex">
+                                <lightning-formatted-text style="margin-left: 10px;" class="outputunderline" value="" ></lightning-formatted-text>
+                                <lightning-input name="verif_Expired_Date" style="margin-left: auto;order: 2;" onchange={handlecheckChange} class="checkboxmarin" type="checkbox" title=""></lightning-input>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </template>
+            </lightning-card>
+        </template>
+    </lightning-card>
+</template>

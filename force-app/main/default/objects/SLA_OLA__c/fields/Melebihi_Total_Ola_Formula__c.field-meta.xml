@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Melebihi_Total_Ola_Formula__c</fullName>
+    <formula>AND(
+   NOT(ISBLANK(Tanggal_Total_Target_SLA__c)),
+   IF(
+       NOT(ISBLANK(Tanggal_Total_Penyelesaian_SLA__c)),
+       /* Jika ada tanggal penyelesaian, bandingkan tanggal penyelesaian dengan target */
+       DATETIMEVALUE(
+           MID(Tanggal_Total_Penyelesaian_SLA__c, 7, 4) &amp; &quot;-&quot; &amp;
+           MID(Tanggal_Total_Penyelesaian_SLA__c, 4, 2) &amp; &quot;-&quot; &amp;
+           MID(Tanggal_Total_Penyelesaian_SLA__c, 1, 2) &amp; &quot; &quot; &amp;
+           MID(Tanggal_Total_Penyelesaian_SLA__c, 12, 8)
+       ) &gt; DATETIMEVALUE(
+           MID(Tanggal_Total_Target_SLA__c, 7, 4) &amp; &quot;-&quot; &amp;
+           MID(Tanggal_Total_Target_SLA__c, 4, 2) &amp; &quot;-&quot; &amp;
+           MID(Tanggal_Total_Target_SLA__c, 1, 2) &amp; &quot; &quot; &amp;
+           MID(Tanggal_Total_Target_SLA__c, 12, 8)
+       ),
+       /* Jika tidak ada tanggal penyelesaian, cek flag Flag_Returned_Ticket__c */
+       IF(
+           flag_returned_ticket__c,
+           FALSE, /* Jika flag TRUE, return FALSE (tidak perlu cek waktu saat ini) */
+           /* Jika flag FALSE, bandingkan waktu saat ini dengan target */
+           NOW() &gt; DATETIMEVALUE(
+               MID(Tanggal_Total_Target_SLA__c, 7, 4) &amp; &quot;-&quot; &amp;
+               MID(Tanggal_Total_Target_SLA__c, 4, 2) &amp; &quot;-&quot; &amp;
+               MID(Tanggal_Total_Target_SLA__c, 1, 2) &amp; &quot; &quot; &amp;
+               MID(Tanggal_Total_Target_SLA__c, 12, 8)
+           )
+       )
+   )
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Melebihi Total SLA</label>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

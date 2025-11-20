@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>VA_or_Billing_Number_8433</fullName>
+    <active>true</active>
+    <description>without billing number</description>
+    <errorConditionFormula>AND(
+    TEXT(Status) = &apos;Escalated&apos;,
+    $Profile.Name != &apos;Salesforce API Only System Integrations&apos;,
+    !$Permission.By_Pass_Validation_for_Migration,
+    ISBLANK(scc_Billing_Number__c),
+    ISBLANK(SCC_Nomor_Briva_Tagihan__c),
+    SCC_Call_Type__r.External_Id__c = &apos;8433&apos;
+)</errorConditionFormula>
+    <errorMessage>Nomor Billing / Nomor BRIVA wajib diisi salah satu</errorMessage>
+</ValidationRule>

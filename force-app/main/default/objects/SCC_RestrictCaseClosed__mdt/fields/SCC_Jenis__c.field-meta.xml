@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>SCC_Jenis__c</fullName>
+    <businessStatus>Active</businessStatus>
+    <fieldManageability>DeveloperControlled</fieldManageability>
+    <label>Jenis</label>
+    <required>false</required>
+    <securityClassification>Public</securityClassification>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Field Restricted</fullName>
+                <default>false</default>
+                <label>Field Restricted</label>
+            </value>
+            <value>
+                <fullName>Field Bypass</fullName>
+                <default>false</default>
+                <label>Field Bypass</label>
+            </value>
+            <value>
+                <fullName>Data Bypass</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Data Bypass</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <columns>
+        <field>SurveyInvitation.NPS_Surveys__r$Survey_Question__c</field>
+    </columns>
+    <columns>
+        <field>SurveyInvitation.NPS_Surveys__r$Type_Question__c</field>
+    </columns>
+    <columns>
+        <field>SurveyInvitation.NPS_Surveys__r$CreatedDate</field>
+    </columns>
+    <currency>IDR</currency>
+    <filter>
+        <criteriaItems>
+            <column>SurveyInvitation.NPS_Surveys__r$Type_Question__c</column>
+            <columnToColumn>false</columnToColumn>
+            <isUnlocked>true</isUnlocked>
+            <operator>equals</operator>
+            <value>Rating</value>
+        </criteriaItems>
+        <language>en_US</language>
+    </filter>
+    <format>Summary</format>
+    <groupingsDown>
+        <dateGranularity>Day</dateGranularity>
+        <field>SurveyInvitation.NPS_Surveys__r$Hasil_Nilai_Survey__c</field>
+        <sortOrder>Asc</sortOrder>
+    </groupingsDown>
+    <name>Kualitas Layanan Customer Care</name>
+    <params>
+        <name>co</name>
+        <value>1</value>
+    </params>
+    <reportType>NPS_Invitation__c</reportType>
+    <scope>organization</scope>
+    <showDetails>true</showDetails>
+    <showGrandTotal>true</showGrandTotal>
+    <showSubTotals>true</showSubTotals>
+    <timeFrameFilter>
+        <dateColumn>SurveyInvitation$CreatedDate</dateColumn>
+        <interval>INTERVAL_CUSTOM</interval>
+    </timeFrameFilter>
+</Report>

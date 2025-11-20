@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Wajib_Kirim_Notifikasi</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+ISCHANGED(Status),
+ISPICKVAL(Status, &quot;Closed&quot;),
+ISPICKVAL(SCC_Resolution_Category__c, &quot;Tidak Mengirimkan Notifikasi&quot;),
+NOT(ISPICKVAL(SCC_Case_Category__c, &quot;Non Complaint&quot;)),
+NOT(ISPICKVAL(Approval_Status__c, &quot;Approved&quot;)),
+NOT(OR($Profile.Name = &apos;Salesforce API Only System Integrations&apos;,
+$Profile.Name = &apos;System Administrator&apos;,
+$Permission.BO_Signer))
+)</errorConditionFormula>
+    <errorMessage>Kategori Case bukan Non Complaint, tidak boleh memilih Tidak Mengirimkan Notifikasi.</errorMessage>
+</ValidationRule>

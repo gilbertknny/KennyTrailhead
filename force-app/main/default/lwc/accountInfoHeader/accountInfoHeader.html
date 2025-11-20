@@ -1,0 +1,29 @@
+<!-- tabExample.html -->
+<template>
+    <lightning-accordion allow-multiple-sections-open>
+        <lightning-accordion-section label="Account Information"  class="custom-section">
+            <div class="tab-content">
+                <lightning-tabset variant="scoped">
+                    <lightning-tab label={label.RegularBanking}>
+                     <c-regular-Banking record-id={recordId}></c-regular-Banking>
+                    </lightning-tab>
+                    <lightning-tab label={label.CreditDigitalLanding}>
+                     <c-credit-Card record-id={recordId}></c-credit-Card>
+                    </lightning-tab>
+                    <lightning-tab label={label.BRILink}>
+                        <c-bri-link-search></c-bri-link-search>
+                    </lightning-tab>
+                    <lightning-tab label={label.Merchant}>
+                        <c-merchant-Search></c-merchant-Search>
+                    </lightning-tab>
+                    <lightning-tab label={label.Wholesale}>
+                        <c-brimola-on-case></c-brimola-on-case>
+                    </lightning-tab>
+                    <lightning-tab label={label.DPLK}>
+                        Content for Tab 6
+                    </lightning-tab>
+                </lightning-tabset>
+            </div>
+        </lightning-accordion-section>
+    </lightning-accordion>
+</template>

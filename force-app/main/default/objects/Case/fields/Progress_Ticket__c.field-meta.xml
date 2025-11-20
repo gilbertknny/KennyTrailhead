@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Progress_Ticket__c</fullName>
+    <description>This field is used by Back Office Agent for stating that this Ticket is already worked before getting closed in 2 days.</description>
+    <inlineHelpText>Field ini digunakan untuk Agent Back Office menandai Ticket yang sudah dikerjakan sebelum di-Close dalam 2 hari.</inlineHelpText>
+    <label>Progress Ticket</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Belum Dikerjakan</fullName>
+                <default>false</default>
+                <label>Belum Dikerjakan</label>
+            </value>
+            <value>
+                <fullName>Sedang Dikerjakan</fullName>
+                <default>false</default>
+                <label>Sedang Dikerjakan</label>
+            </value>
+            <value>
+                <fullName>Sudah Dikerjakan</fullName>
+                <default>false</default>
+                <label>Sudah Dikerjakan</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

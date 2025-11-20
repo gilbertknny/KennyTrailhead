@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <columns>
+        <field>Cuti_Karyawan__c$Name</field>
+    </columns>
+    <columns>
+        <field>Cuti_Karyawan__c$Nama_Karyawan__c</field>
+    </columns>
+    <columns>
+        <aggregateTypes>Sum</aggregateTypes>
+        <field>Cuti_Karyawan__c$Quota_Cuti__c</field>
+    </columns>
+    <columns>
+        <aggregateTypes>Sum</aggregateTypes>
+        <field>Cuti_Karyawan__c$Cuti_Terpakai__c</field>
+    </columns>
+    <columns>
+        <aggregateTypes>Sum</aggregateTypes>
+        <field>Cuti_Karyawan__c$Sisa_Cuti__c</field>
+    </columns>
+    <filter>
+        <criteriaItems>
+            <column>Cuti_Karyawan__c$Tahun_Cuti__c</column>
+            <columnToColumn>false</columnToColumn>
+            <isUnlocked>true</isUnlocked>
+            <operator>equals</operator>
+            <value>Tahun Ini</value>
+        </criteriaItems>
+        <language>en_US</language>
+    </filter>
+    <format>Tabular</format>
+    <name>Sisa Cuti Karyawan [Tahun Ini]</name>
+    <params>
+        <name>co</name>
+        <value>1</value>
+    </params>
+    <reportType>Master_Cuti_Karyawan__c</reportType>
+    <scope>organization</scope>
+    <showDetails>true</showDetails>
+    <showGrandTotal>true</showGrandTotal>
+    <showSubTotals>true</showSubTotals>
+    <timeFrameFilter>
+        <dateColumn>Cuti_Karyawan__c$CreatedDate</dateColumn>
+        <interval>INTERVAL_CUSTOM</interval>
+    </timeFrameFilter>
+</Report>

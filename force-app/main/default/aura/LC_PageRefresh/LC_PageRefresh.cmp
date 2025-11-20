@@ -1,0 +1,5 @@
+<aura:component implements="lightning:availableForFlowScreens,force:hasRecordId" access="global">
+	<aura:attribute name="recordId" type="String" access="global"/>
+    <aura:handler name="init" value="{! this }" action="{! c.init }"/>
+    <div style="font-size:30px;font-weight:bold;text-align:center">Loading for delete data...</div>
+</aura:component>

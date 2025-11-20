@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Penyelesaian_Waiting_Document__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF(
+    AND(
+        NOT(ISBLANK(Tanggal_Penyelesaian_Waiting_Document__c)), 
+        NOT(ISBLANK(Tanggal_Penyelesaian_Agent_OLA__c))
+    ),
+    
+    IF(FLOOR(
+        (DATETIMEVALUE(
+            MID(Tanggal_Penyelesaian_Waiting_Document__c, 7, 4) &amp; &quot;-&quot; &amp; 
+            MID(Tanggal_Penyelesaian_Waiting_Document__c, 4, 2) &amp; &quot;-&quot; &amp; 
+            LEFT(Tanggal_Penyelesaian_Waiting_Document__c, 2) &amp; &quot; &quot; &amp; 
+            MID(Tanggal_Penyelesaian_Waiting_Document__c, 12, 8)
+        ) 
+        - 
+        DATETIMEVALUE(
+            MID(Tanggal_Penyelesaian_Agent_OLA__c, 7, 4) &amp; &quot;-&quot; &amp; 
+            MID(Tanggal_Penyelesaian_Agent_OLA__c, 4, 2) &amp; &quot;-&quot; &amp; 
+            LEFT(Tanggal_Penyelesaian_Agent_OLA__c, 2) &amp; &quot; &quot; &amp; 
+            MID(Tanggal_Penyelesaian_Agent_OLA__c, 12, 8)
+        )) * 1440 / 1440) &gt; 0, 
+        TEXT(FLOOR((DATETIMEVALUE(
+            MID(Tanggal_Penyelesaian_Waiting_Document__c, 7, 4) &amp; &quot;-&quot; &amp; 
+            MID(Tanggal_Penyelesaian_Waiting_Document__c, 4, 2) &amp; &quot;-&quot; &amp; 
+            LEFT(Tanggal_Penyelesaian_Waiting_Document__c, 2) &amp; &quot; &quot; &amp; 
+            MID(Tanggal_Penyelesaian_Waiting_Document__c, 12, 8)
+        ) 
+        - 
+        DATETIMEVALUE(
+            MID(Tanggal_Penyelesaian_Agent_OLA__c, 7, 4) &amp; &quot;-&quot; &amp; 
+            MID(Tanggal_Penyelesaian_Agent_OLA__c, 4, 2) &amp; &quot;-&quot; &amp; 
+            LEFT(Tanggal_Penyelesaian_Agent_OLA__c, 2) &amp; &quot; &quot; &amp; 
+            MID(Tanggal_Penyelesaian_Agent_OLA__c, 12, 8)
+        )) * 1440 / 1440)) &amp; &quot; hari &quot;, 
+        &quot;&quot;
+    ) &amp; 
+
+    IF(FLOOR(MOD((DATETIMEVALUE(
+        MID(Tanggal_Penyelesaian_Waiting_Document__c, 7, 4) &amp; &quot;-&quot; &amp; 
+        MID(Tanggal_Penyelesaian_Waiting_Document__c, 4, 2) &amp; &quot;-&quot; &amp; 
+        LEFT(Tanggal_Penyelesaian_Waiting_Document__c, 2) &amp; &quot; &quot; &amp; 
+        MID(Tanggal_Penyelesaian_Waiting_Document__c, 12, 8)
+    ) 
+    - 
+    DATETIMEVALUE(
+        MID(Tanggal_Penyelesaian_Agent_OLA__c, 7, 4) &amp; &quot;-&quot; &amp; 
+        MID(Tanggal_Penyelesaian_Agent_OLA__c, 4, 2) &amp; &quot;-&quot; &amp; 
+        LEFT(Tanggal_Penyelesaian_Agent_OLA__c, 2) &amp; &quot; &quot; &amp; 
+        MID(Tanggal_Penyelesaian_Agent_OLA__c, 12, 8)
+    )) * 1440, 1440) / 60) &gt; 0, 
+    TEXT(FLOOR(MOD((DATETIMEVALUE(
+        MID(Tanggal_Penyelesaian_Waiting_Document__c, 7, 4) &amp; &quot;-&quot; &amp; 
+        MID(Tanggal_Penyelesaian_Waiting_Document__c, 4, 2) &amp; &quot;-&quot; &amp; 
+        LEFT(Tanggal_Penyelesaian_Waiting_Document__c, 2) &amp; &quot; &quot; &amp; 
+        MID(Tanggal_Penyelesaian_Waiting_Document__c, 12, 8)
+    ) 
+    - 
+    DATETIMEVALUE(
+        MID(Tanggal_Penyelesaian_Agent_OLA__c, 7, 4) &amp; &quot;-&quot; &amp; 
+        MID(Tanggal_Penyelesaian_Agent_OLA__c, 4, 2) &amp; &quot;-&quot; &amp; 
+        LEFT(Tanggal_Penyelesaian_Agent_OLA__c, 2) &amp; &quot; &quot; &amp; 
+        MID(Tanggal_Penyelesaian_Agent_OLA__c, 12, 8)
+    )) * 1440, 1440) / 60)) &amp; &quot; jam &quot;, 
+    &quot;&quot; 
+    ) &amp; 
+
+    TEXT(FLOOR(MOD((DATETIMEVALUE(
+        MID(Tanggal_Penyelesaian_Waiting_Document__c, 7, 4) &amp; &quot;-&quot; &amp; 
+        MID(Tanggal_Penyelesaian_Waiting_Document__c, 4, 2) &amp; &quot;-&quot; &amp; 
+        LEFT(Tanggal_Penyelesaian_Waiting_Document__c, 2) &amp; &quot; &quot; &amp; 
+        MID(Tanggal_Penyelesaian_Waiting_Document__c, 12, 8)
+    ) 
+    - 
+    DATETIMEVALUE(
+        MID(Tanggal_Penyelesaian_Agent_OLA__c, 7, 4) &amp; &quot;-&quot; &amp; 
+        MID(Tanggal_Penyelesaian_Agent_OLA__c, 4, 2) &amp; &quot;-&quot; &amp; 
+        LEFT(Tanggal_Penyelesaian_Agent_OLA__c, 2) &amp; &quot; &quot; &amp; 
+        MID(Tanggal_Penyelesaian_Agent_OLA__c, 12, 8)
+    )) * 1440, 60))) &amp; &quot; menit&quot;,
+    
+    &quot;&quot;
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Penyelesaian Waiting Document</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

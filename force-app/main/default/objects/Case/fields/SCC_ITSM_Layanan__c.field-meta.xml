@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>SCC_ITSM_Layanan__c</fullName>
+    <externalId>false</externalId>
+    <formula>CASE(
+    TEXT(SCC_Channel_Transaksi__c),
+    &quot;ATM / CRM BRI&quot;, &quot;ATM Controller BRI&quot;,
+    &quot;ATM Bank Lain&quot;, &quot;ATM Controller MP&quot;,
+    &quot;QRIS BRI&quot;, &quot;QRIS Core System&quot;,
+    &quot;BRIMO&quot;, &quot;BRImo&quot;,
+    &quot;CERIA&quot;, &quot;Ceria&quot;, 
+    &quot;BRI Credit Card Mobile&quot;, &quot;BRI Credit Card Mobile&quot;,
+    &quot;IBBIZ&quot;, &quot;IBBIZ (Internet Banking Bisnis)&quot;,
+    &quot;QLOLA&quot;, &quot;Qlola&quot;,
+    &quot;Agen BRILink&quot;, &quot;BRILINK&quot;,
+    &quot;Not Yet Identified&quot;  
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>SCC_ITSM_Layanan</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

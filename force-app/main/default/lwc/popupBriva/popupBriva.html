@@ -1,0 +1,36 @@
+<template>
+    <template if:true={showConfirmDialog}>
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <h2 class="slds-text-heading_medium">Konfirmasi Pergantian Akun Briva</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium">
+                    <p>No rekening  {nomorRekening} berbeda  dengan nomor rekning briva {corpAccountNo}, apakah ingin di ganti?</p>
+                </div>
+                <footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral" onclick={handleCancelChange}>Tidak</button>
+                    <button class="slds-button slds-button_brand" onclick={handleConfirmChange}>Ya</button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+    <template if:true={showNext}>
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <h2 class="slds-text-heading_medium">Nomor Rekening Ditemukan</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium">
+                    <p>Nomor rekening {corpAccountNo} berhasil ditemukan dari pencarian nomor Briva</p>
+                </div>
+                <footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_brand" onclick={refreshPage}>Lanjut</button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+
+</template>

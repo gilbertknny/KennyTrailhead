@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ValidateThisYear</fullName>
+    <active>true</active>
+    <errorConditionFormula>OR(
+    AND(
+        ISNEW(), 
+        YEAR(Date_From__c) &lt;&gt; YEAR(TODAY())
+    ), 
+    AND(
+        NOT(ISNEW()), 
+        YEAR(Date_From__c) &lt;&gt; YEAR(DATEVALUE(CreatedDate))
+    )
+)</errorConditionFormula>
+    <errorDisplayField>Date_From__c</errorDisplayField>
+    <errorMessage>&quot;Date From&quot; tidak boleh lebih dari TAHUN INI</errorMessage>
+</ValidationRule>

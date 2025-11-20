@@ -1,0 +1,560 @@
+<!--
+    LWC Name           : lwcMerchantSearchComponent.html
+    Created Date       : 12 September 2024
+    @description       : This is class ..
+    @author            : Rakeyan Nuramria
+    Modification Log :
+    Ver   Date         Author                            Modification
+    1.0   12/09/2024   Rakeyan Nuramria                  Initial Version
+    1.0   25/09/2024   Rakeyan Nuramria                  Adjust UI
+    1.0   09/10/2024   Rakeyan Nuramria                  [FROM SIT] Adjust UI to scrollable horizontally
+    1.0   23/10/2024   Rakeyan Nuramria                  Adjust UI CSS bold for detail transaction
+    1.0   31/10/2024   Rakeyan Nuramria                  [FROM SIT] Adjust UI to show data
+    1.1   26/02/2025   Nabila Febri Viola                Change row index from TID to MID for Detail Merchant
+-->
+
+<template>
+    <!-- Search Section -->
+    <lightning-card title="" variant="base" class="custom-card slds-m-top_xx-small slds-card_boundary">
+
+        <div class="slds-grid slds-gutters slds-m-around_small">
+            <div class="slds-col">
+                <lightning-input label="TID" value={tid} onchange={handleTidChange}
+                    disabled={disableTidField}></lightning-input>
+            </div>
+            <div class="slds-col">
+                <lightning-input label="MID" value={mid} onchange={handleMidChange}
+                    disabled={disableMidField}></lightning-input>
+            </div>
+            <div class="slds-col" style="align-content: center; margin-top: 20px">
+                <lightning-button label="Cari" variant="brand" onclick={handleSearch}
+                    disabled={isHandleSearchDisabled}></lightning-button>
+            </div>
+        </div>
+
+        <template if:true={errorMessage}>
+            <div class="slds-text-color_error slds-m-left_small">
+                {errorMessage}
+            </div>
+        </template>
+    </lightning-card>
+    <!-- End Search Section -->
+
+    <template if:true={isLoading}>
+        <lightning-card class="custom-card slds-m-top_xx-small slds-card_boundary">
+            <div class="spinner-container" style="height:6rem;position:relative">
+                <div role="status" class="slds-spinner slds-spinner_small">
+                    <span class="slds-assistive-text">Loading</span>
+                    <div class="slds-spinner__dot-a"></div>
+                    <div class="slds-spinner__dot-b"></div>
+                </div>
+            </div>
+        </lightning-card>
+    </template>
+
+    <template if:true={hasError}>
+        <div class="slds-text-color_error slds-m-top_medium slds-text-align_center">
+            <b>{errorMsg}</b>
+        </div>
+    </template>
+
+    <!-- Result Data Section -->
+    <template if:true={showSearchResults}>
+        <lightning-card icon-name="" variant="base" class="custom-card slds-m-top_xx-small slds-card_boundary">
+            <div class="slds-p-around_small slds-m-top_xx-small">
+                <div class="slds-scrollable_y custom-scroll">
+                    <table class="slds-table slds-table_bordered slds-table_fixed-layout custom-table">
+                        <thead>
+                            <tr class="slds-line-height_reset">
+                                <th scope="col">
+                                    <div class="slds-truncate" title="MID Induk">MID Induk</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Merchant EDC">Merchant EDC</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Merchant QRIS">Merchant QRIS</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Alamat">Alamat</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="TID">TID</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Status">Status</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Kanwil">Kanwil</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Pemasang">Pemasang</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Tanggal Pasang">Tanggal Pasang</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Action">Action</div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template for:each={data} for:item="row">
+                                <tr key={row.alamat_merchant} class="slds-hint-parent">
+                                    <td>{row.mid}</td>
+                                    <td>{row.nama_merchant_edc}</td>
+                                    <td>{row.nama_merchant_qris}</td>
+                                    <td>{row.alamat_merchant}</td>
+                                    <td>{row.tid}</td>
+                                    <td>{row.status_pemasangan}</td>
+                                    <td>{row.kanwil}</td>
+                                    <td>{row.vendor_pemasang}</td>
+                                    <td>{row.tanggal_pasang}</td>
+                                    <td>
+                                        <div class="dropdown-container">
+                                            <lightning-button-menu alternative-text="Action" icon-name="utility:down"
+                                                class="slds-m-left_x-small custom-button-menu" menu-alignment="auto">
+                                                <lightning-menu-item label="Transaksi Merchant" value=""
+                                                    data-tid={row.tid} data-mid={row.mid}
+                                                    onclick={handleTransaksiAction} onclose={handleCloseTransaksi}
+                                                    is-close-hidden={isCloseHidden}></lightning-menu-item>
+                                                <!-- <lightning-menu-item label="Transaksi Merchant" value=""
+                                                    onclick={handleTransaksiAction}
+                                                    onclose={handleCloseTransaksi}></lightning-menu-item> -->
+                                                <lightning-menu-item label="Detail" value="" data-id={row.mid}
+                                                    onclose={handleCloseDetail}
+                                                    onclick={showDetail}></lightning-menu-item>
+                                            </lightning-button-menu>
+                                        </div>
+                                        <!-- <lightning-button data-id={data.alamat_merchant} label="Lihat"
+                                            onclick={showDetail}></lightning-button> -->
+                                    </td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </lightning-card>
+
+        <!-- Detail Section -->
+        <template for:each={data} for:item="data">
+            <template if:true={data.showSection}>
+                <lightning-card key={data.mid} title="Detail Merchant" variant="base"
+                    class="custom-card slds-m-top_small slds-card_boundary">
+                    <div slot="actions">
+                        <template if:false={isCloseHidden}>
+                            <lightning-button-icon data-id={data.mid} icon-name="utility:close" alternative-text="Close"
+                                title="Close" onclick={handleCloseMerchantDetail} class="cssClass" variant="bare">
+                            </lightning-button-icon>
+                        </template>
+                    </div>
+                    <div class="slds-m-around_medium" style="border: 1px solid #ccc;">
+                        <div class="slds-grid slds-wrap slds-m-around_medium">
+                            <div class="slds-col slds-size_1-of-2">
+                                <!-- Nama Merchant EDC -->
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="nama_merchant_edc">Nama Merchant
+                                        EDC</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input text-bold" type="text" id="nama_merchant_edc" readonly
+                                            value={currentDetailData.nama_merchant_edc} />
+                                    </div>
+                                </div>
+                                <!-- Nama Merchant QRIS -->
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="nama_merchant_qris">Nama Merchant
+                                        QRIS</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input text-bold" type="text" id="nama_merchant_qris" readonly
+                                            value={currentDetailData.nama_merchant_qris} />
+                                    </div>
+                                </div>
+                                <!-- Alamat Merchant -->
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="alamat_merchant">Alamat
+                                        Merchant</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input text-bold" type="text" id="alamat_merchant" readonly
+                                            value={currentDetailData.alamat_merchant} />
+                                    </div>
+                                </div>
+                                <!-- Regional Office Pengelola -->
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="regional_office_pengelola">Regional
+                                        Office
+                                        Pengelola</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input text-bold" type="text" id="regional_office_pengelola"
+                                            readonly value={currentDetailData.regional_office_pengelola} />
+                                    </div>
+                                </div>
+                                <!-- Vendor Pemasang -->
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="vendor_pemasang">Vendor
+                                        Pemasang</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input text-bold" type="text" id="vendor_pemasang" readonly
+                                            value={currentDetailData.vendor_pemasang} />
+                                    </div>
+                                </div>
+                                <!-- Nomor Telepon Merchant -->
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="nomor_telepon_merchant">Nomor Telepon
+                                        Merchant</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input text-bold" type="text" id="nomor_telepon_merchant"
+                                            readonly value={currentDetailData.nomor_telepon_merchant} />
+                                    </div>
+                                </div>
+                                <!-- Channel Merchant (EDC/QRIS) -->
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="channel_merchant">Channel Merchant
+                                        (EDC/QRIS)</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input text-bold" type="text" id="channel_merchant" readonly
+                                            value={currentDetailData.channel_merchant} />
+                                    </div>
+                                </div>
+                                <!-- Jenis Usaha Merchant -->
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="jenis_usaha_merchant">Jenis Usaha
+                                        Merchant</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input text-bold" type="text" id="jenis_usaha_merchant"
+                                            readonly value={currentDetailData.jenis_usaha_merchant} />
+                                    </div>
+                                </div>
+                                <!-- Tanggal Update Data -->
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="tanggal_update_data">Tanggal Update
+                                        Data</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input text-bold" type="text" id="tanggal_update_data"
+                                            readonly value={currentDetailData.tanggal_update_data} />
+                                    </div>
+                                </div>
+                                <!-- Status Pemasangan -->
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="status_pemasangan">Status
+                                        Pemasangan</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input text-bold" type="text" id="status_pemasangan" readonly
+                                            value={currentDetailData.status_pemasangan} />
+                                    </div>
+                                </div>
+                                <!-- Nomor Rekening Penampungan -->
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="nomor_rekening_penampungan">Nomor
+                                        Rekening
+                                        Penampungan</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input text-bold" type="text" id="nomor_rekening_penampungan"
+                                            readonly value={currentDetailData.nomor_rekening_penampungan} />
+                                    </div>
+                                </div>
+                                <!-- Jenis Merchant -->
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="jenis_merchant">Jenis Merchant</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input text-bold" type="text" id="jenis_merchant" readonly
+                                            value={currentDetailData.jenis_merchant} />
+                                    </div>
+                                </div>
+                                <!-- Kanwil -->
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="kanwil">Kanwil</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input text-bold" type="text" id="kanwil" readonly
+                                            value={currentDetailData.kanwil} />
+                                    </div>
+                                </div>
+                                <!-- Tanggal Pasang -->
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="tanggal_pasang">Tanggal Pasang</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input text-bold" type="text" id="tanggal_pasang" readonly
+                                            value={currentDetailData.tanggal_pasang} />
+                                    </div>
+                                </div>
+                                <!-- Kode Unit Kerja -->
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="kode_unit_kerja">Kode Unit
+                                        Kerja</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input text-bold" type="text" id="kode_unit_kerja" readonly
+                                            value={currentDetailData.kode_unit_kerja} />
+                                    </div>
+                                </div>
+                                <!-- Kantor Wilayah -->
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="kantor_wilayah">Kantor Wilayah</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input text-bold" type="text" id="kantor_wilayah" readonly
+                                            value={currentDetailData.kantor_wilayah} />
+                                    </div>
+                                </div>
+                                <!-- Nama PIC Unit Kerja -->
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="data.nama_pic_unit_kerja">Nama PIC Unit
+                                        Kerja</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input text-bold" type="text" id="data.nama_pic_unit_kerja"
+                                            readonly value={currentDetailData.nama_pic_unit_kerja} />
+                                    </div>
+                                </div>
+                                <!-- PN PIC Unit Kerja -->
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="pn_pic_unit_kerja">PN PIC Unit
+                                        Kerja</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input text-bold" type="text" id="pn_pic_unit_kerja" readonly
+                                            value={currentDetailData.pn_pic_unit_kerja} />
+                                    </div>
+                                </div>
+                                <!-- Tanggal Dibuat -->
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="tanggal_dibuat">Tanggal Dibuat</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input text-bold" type="text" id="tanggal_dibuat" readonly
+                                            value={currentDetailData.tanggal_dibuat} />
+                                    </div>
+                                </div>
+                                <!-- Tanggal Modifikasi Terakhir -->
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="tanggal_modifikasi_terakhir">Tanggal
+                                        Modifikasi Terakhir</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input text-bold" type="text" id="tanggal_modifikasi_terakhir"
+                                            readonly value={currentDetailData.tanggal_modifikasi_terakhir} />
+                                    </div>
+                                </div>
+                                <!-- Modifikasi Oleh -->
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="modifikasi_oleh">Modifikasi
+                                        Oleh</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input text-bold" type="text" id="modifikasi_oleh" readonly
+                                            value={currentDetailData.modifikasi_oleh} />
+                                    </div>
+                                </div>
+                                <!-- Data PROMO -->
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="data_promo">Data PROMO</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input text-bold" type="text" id="data_promo" readonly
+                                            value={currentDetailData.data_promo} />
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                            <!-- Column 2 -->
+                            <div class="slds-col slds-size_1-of-2">
+                                <!-- Detail -->
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="detail">Detail</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input text-bold" type="text" id="detail" readonly
+                                            value={currentDetailData.detail} />
+                                    </div>
+                                </div>
+                                <!-- Status Ticket -->
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="status_ticket">Status Ticket</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input text-bold" type="text" id="status_ticket" readonly
+                                            value={currentDetailData.status_ticket} />
+                                    </div>
+                                </div>
+                                <!-- Sub Channel (Uker Pemrakarsa) -->
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="user_pemrakarsa">Sub Channel (Uker
+                                        Pemrakarsa)</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input text-bold" type="text" id="user_pemrakarsa" readonly
+                                            value={currentDetailData.user_pemrakarsa} />
+                                    </div>
+                                </div>
+                                <!-- PIC Merchant -->
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="pic_merchant">PIC Merchant</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input text-bold" type="text" id="pic_merchant" readonly
+                                            value={currentDetailData.pic_merchant} />
+                                    </div>
+                                </div>
+                                <!-- Telepon -->
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="telpon">Telepon</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input text-bold" type="text" id="telpon" readonly
+                                            value={currentDetailData.telpon} />
+                                    </div>
+                                </div>
+                                <!-- Email -->
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="email">Email</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input text-bold" type="text" id="email" readonly
+                                            value={currentDetailData.email} />
+                                    </div>
+                                </div>
+                                <!-- Perangkat (SN EDC, SN CLR, SN SIMCARD) -->
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="perangkat">Perangkat (SN EDC, SN CLR,
+                                        SN
+                                        SIMCARD)</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input text-bold" type="text" id="perangkat" readonly
+                                            value={currentDetailData.perangkat} />
+                                    </div>
+                                </div>
+                                <!-- Detail EDC (Fitur : Debit atau Kredit) -->
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="detail_edc">Detail EDC (Fitur : Debit
+                                        atau
+                                        Kredit)</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input text-bold" type="text" id="detail_edc" readonly
+                                            value={currentDetailData.detail_edc} />
+                                    </div>
+                                </div>
+                                <!-- Tipe Merchant -->
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="tipe_merchant">Tipe Merchant</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input text-bold" type="text" id="tipe_merchant" readonly
+                                            value={currentDetailData.tipe_merchant} />
+                                    </div>
+                                </div>
+                                <!-- MDR On Us -->
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="mdr_onus">MDR On Us</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input text-bold" type="text" id="mdr_onus" readonly
+                                            value={currentDetailData.mdr_onus} />
+                                    </div>
+                                </div>
+                                <!-- MDR Off Us -->
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="mdr_offus">MDR Off Us</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input text-bold" type="text" id="mdr_offus" readonly
+                                            value={currentDetailData.mdr_offus} />
+                                    </div>
+                                </div>
+                                <!-- MDR Debit Mastercard -->
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="mdr_mastercard">MDR Debit
+                                        Mastercard</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input text-bold" type="text" id="mdr_mastercard" readonly
+                                            value={currentDetailData.mdr_mastercard} />
+                                    </div>
+                                </div>
+                                <!-- MDR Debit Private Label -->
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="mdr_debit_pl">MDR Debit Private
+                                        Label</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input text-bold" type="text" id="mdr_debit_pl" readonly
+                                            value={currentDetailData.mdr_debit_pl} />
+                                    </div>
+                                </div>
+                                <!-- MDR Debit NPG -->
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="mdr_debit_npg">MDR Debit NPG</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input text-bold" type="text" id="mdr_debit_npg" readonly
+                                            value={currentDetailData.mdr_debit_npg} />
+                                    </div>
+                                </div>
+                                <!-- MDR Unik -->
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="mdr_unik">MDR Unik</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input text-bold" type="text" id="mdr_unik" readonly
+                                            value={currentDetailData.mdr_unik} />
+                                    </div>
+                                </div>
+                                <!-- MCC Master -->
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="mcc_master">MCC Master</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input text-bold" type="text" id="mcc_master" readonly
+                                            value={currentDetailData.mcc_master} />
+                                    </div>
+                                </div>
+                                <!-- MCC Visa -->
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="mcc_visa">MCC Visa</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input text-bold" type="text" id="mcc_visa" readonly
+                                            value={currentDetailData.mcc_visa} />
+                                    </div>
+                                </div>
+                                <!-- MCC NPG -->
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="mcc_npg">MCC NPG</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input text-bold" type="text" id="mcc_npg" readonly
+                                            value={currentDetailData.mcc_npg} />
+                                    </div>
+                                </div>
+                                <!-- Code/Reff Num -->
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="code_reffnum">Code/Reff Num</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input text-bold" type="text" id="code_reffnum" readonly
+                                            value={currentDetailData.code_reffnum} />
+                                    </div>
+                                </div>
+                                <!-- No. Batch -->
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="no_batch">No. Batch</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input text-bold" type="text" id="no_batch" readonly
+                                            value={currentDetailData.no_batch} />
+                                    </div>
+                                </div>
+                                <!-- RC-->
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="rc">RC</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input text-bold" type="text" id="rc" readonly
+                                            value={currentDetailData.rc} />
+                                    </div>
+                                </div>
+                                <!-- Tipe -->
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="tipe">Tipe</label>
+                                    <div class="slds-form-element__control">
+                                        <input class="slds-input text-bold" type="text" id="tipe" readonly
+                                            value={currentDetailData.tipe} />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </lightning-card>
+            </template>
+            <!-- End Detail Section -->
+        </template>
+    </template>
+    <!-- End Result Data Section -->
+
+    <!-- Transaksi Merchant Section -->
+    <template if:true={showTransaksiMerchant}>
+        <!-- <lightning-card icon-name="" variant="base" class="custom-card slds-m-top_xx-small slds-card_boundary"> -->
+        <div class="scrollable-transaction-container">
+            <c-lwc-merchant-transaction-component class="transaksi-merchant-component" onclose={handleCloseTransaksi}
+                no-kartu={selectedNomorKartu} tid={selectedTID}
+                mid={selectedMID}></c-lwc-merchant-transaction-component>
+        </div>
+        <!-- </lightning-card> -->
+    </template>
+    <!-- End Transaksi Merchant Section -->
+
+</template>

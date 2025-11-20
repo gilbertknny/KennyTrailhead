@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>FinServ__RelatedAccountOrContactRequired</fullName>
+    <active>true</active>
+    <description>Enforce selection of the correct lookup relationship: either a Related Account or Related Contact.</description>
+    <errorConditionFormula>ISBLANK(FinServ__RelatedContact__c) &amp;&amp; ISBLANK( FinServ__RelatedAccount__c)</errorConditionFormula>
+    <errorMessage>Either Related Account or Related Contact is required.</errorMessage>
+</ValidationRule>

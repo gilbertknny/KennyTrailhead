@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Origin_Restrict</fullName>
+    <active>false</active>
+    <errorConditionFormula>$Profile.Name = &apos;Salesforce API Only System Integrations&apos; &amp;&amp;  (TEXT(Origin) != &apos;Email&apos; &amp;&amp; TEXT(Origin) != &apos;Phone&apos; &amp;&amp; TEXT(Origin) != &apos;WhatsApp&apos; &amp;&amp; TEXT(Origin) != &apos;Instagram&apos; &amp;&amp; TEXT(Origin) != &apos;X&apos; &amp;&amp; TEXT(Origin) != &apos;YouTube&apos; &amp;&amp; TEXT(Origin) != &apos;App Store&apos; &amp;&amp; TEXT(Origin) != &apos;Play Store&apos;)</errorConditionFormula>
+    <errorDisplayField>Origin</errorDisplayField>
+    <errorMessage>Origin tidak sesuai</errorMessage>
+</ValidationRule>

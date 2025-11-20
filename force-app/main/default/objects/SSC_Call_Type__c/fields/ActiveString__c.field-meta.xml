@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ActiveString__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF(Active__c == true &amp;&amp; Flagging_Sosmed__c == false &amp;&amp; (External_Id__c == &apos;8915&apos; || External_Id__c == &apos;8812&apos; || Send_to_Drone__c == true), &apos;1&apos;, &apos;0&apos;)</formula>
+    <label>ActiveString</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

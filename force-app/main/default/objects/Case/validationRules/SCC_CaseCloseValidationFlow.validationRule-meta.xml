@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>SCC_CaseCloseValidationFlow</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+    NOT(ISNEW()),
+    NOT($Permission.By_Pass_Validation_for_Migration),
+    NOT($Permission.by_pass_UserQA),
+    NOT($Permission.RPA),
+    TEXT(PRIORVALUE(Status)) = &apos;Closed&apos;,
+    NOT(ISCHANGED(SCC_Legacy_Ticket_ID__c)),
+    NOT(ISCHANGED(SCC_BRINotif_reffNumber__c)),
+    NOT(ISCHANGED(SCC_Remark__c)),
+    NOT(ISCHANGED(Done_Survey__c)),
+    NOT(ISCHANGED(Invitation_Link__c)),
+    NOT(ISCHANGED(Notification_13__c)),
+    NOT(ISCHANGED(SCC_ITSM_Closed__c)),
+    NOT(ISCHANGED(Notification_12__c)),
+    NOT(ISCHANGED(Notification_3__c)),
+    NOT(ISCHANGED(Notification_2__c)),
+    NOT(ISCHANGED(Waiting_Document_Duration__c)),
+    NOT(ISCHANGED(SCC_BRINotif_reffNumber__c)),
+    NOT(ISCHANGED(SCC_Result_Pembukuan__c)),
+    NOT(ISCHANGED(Date_Time_Answer__c)),
+    NOT(ISCHANGED(Priority)),
+    NOT(ISCHANGED(OwnerId)),
+    NOT(ISCHANGED(Status)),
+    NOT(ISCHANGED(SCC_Attachment_Done_Date__c)),
+    NOT(ISCHANGED(Pengisian_Form_APPK__c)),
+    NOT(ISCHANGED(Tanggal_Mediasi__c)),
+    NOT(ISCHANGED(Putusan_Mediasi__c)),
+    NOT(ISCHANGED(Keterangan_diterima_LAPS_Audiensi__c)),
+NOT(ISCHANGED(SCC_SL_Sosmed_Completed__c)),
+NOT(ISCHANGED(SCC_SL_Sosmed_Timer_Dimulai__c)),
+NOT(ISCHANGED(SCC_SL_Sosmed_Violation__c)),
+NOT(ISCHANGED(SCC_SL_Sosmed_Waktu_Stop__c)),
+NOT(ISCHANGED(SCC_Target_Response_Time_Non_Voice__c))
+)</errorConditionFormula>
+    <errorMessage>Anda tidak dapat mengubah field apapun pada Ticket yang sudah Closed</errorMessage>
+</ValidationRule>

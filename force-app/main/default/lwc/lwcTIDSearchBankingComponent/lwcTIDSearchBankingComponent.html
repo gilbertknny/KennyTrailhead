@@ -1,0 +1,88 @@
+<!--
+    LWC Name    : lwcTIDSearchBankingComponent.html
+    Created Date       : 11 September 2024
+    @description       : This is class ..
+    @author            : Rakeyan Nuramria
+    Modification Log :
+    Ver   Date         Author                            Modification
+    1.0   11/09/2024   Rakeyan Nuramria                  Initial Version
+    1.0   24/09/2024   Rakeyan Nuramria                  Adjust UI
+    1.0   09/10/2024   Ardyta Yudianto                   [FROM SIT] Adjust UI to scrollable horizontally
+
+-->
+
+<template>
+    <!-- Search Card Section -->
+    <lightning-card title="" variant="base" class="custom-card slds-m-top_xx-small slds-card_boundary">
+        <div class="slds-grid slds-gutters slds-m-around_small">
+            <div class="slds-col">
+                <lightning-input label="Alamat" value={address} onchange={handleAddressChange}
+                    placeholder="Cari..."></lightning-input>
+            </div>
+            <div class="slds-col" style="align-content: center; margin-top: 20px">
+                <lightning-button label="Cari" variant="brand" onclick={handleAddressSearch}
+                    disabled={isAddressCariButtonDisabled}></lightning-button>
+            </div>
+        </div>
+    </lightning-card>
+    <!-- End Search Card Section -->
+
+    <template if:true={isLoading}>
+        <div class="spinner-container" style="height:6rem;position:relative">
+            <div role="status" class="slds-spinner slds-spinner_small">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </template>
+
+    <!-- Result Card Section -->
+    <template if:false={isLoading}>
+        <template if:true={hasError}>
+            <div class="slds-text-color_error slds-m-top_medium slds-text-align_center">
+                <b>{errorMsg}</b>
+            </div>
+        </template>
+        <template if:true={data.length}>
+            <lightning-card icon-name="" variant="base" class="custom-card slds-m-top_xx-small slds-card_boundary">
+                <div class="slds-p-around_small slds-m-top_xx-small">
+                    <div class="slds-scrollable_y custom-scroll">
+                        <table class="slds-table slds-table_bordered slds-table_fixed-layout custom-table">
+                            <thead>
+                                <tr class="slds-line-height_reset">
+                                    <th scope="col" style="width: 50px;">
+
+                                        <div class="slds-truncate" title="No.">No.</div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="TID Mesin">TID Mesin</div>
+                                    </th>
+                                    <th scope="col" style="width: 150px;">
+                                        <div class="slds-truncate" title="Alamat Mesin">Alamat Mesin</div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Kontak PIC Mesin">Kontak PIC Mesin</div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                <template for:each={data} for:item="row" for:index="index">
+                                    <tr key={row.tid} class="slds-hint-parent">
+                                        <td>{row.no}</td>
+                                        <td>{row.tid}</td>
+                                        <td>{row.alamatMesin}</td>
+                                        <td>{row.kontakID}</td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </lightning-card>
+        </template>
+    </template>
+    <!-- End Result Card Section -->
+
+</template>

@@ -1,0 +1,14 @@
+<!--
+  @description       : 
+  @author            : Christian Vieri
+  @group             : 
+  @last modified on  : 15-07-2025
+  @last modified by  : Christian Vieri
+-->
+<aura:component implements="flexipage:availableForAllPageTypes,force:appHostable" access="global" >
+    <aura:attribute name="intervalId" type="Object"/>
+
+    <lightning:workspaceAPI aura:id="workspace" />
+
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+</aura:component>

@@ -1,0 +1,133 @@
+<!--
+  @description       : 
+  @author            : Ardyta Yudianto
+  @group             : 
+  @last modified on  : 03-06-2025
+  @last modified by  : Ardyta Yudianto
+-->
+<template>
+    <!-- Search Form Section -->
+    <lightning-card title="Search Campaign Detail">
+        <div class="slds-p-around_medium">
+            <lightning-layout multiple-rows vertical-align="end">
+                <lightning-layout-item size="4" padding="around-small">
+                    <lightning-input 
+                        type="date" 
+                        label="Created Date" 
+                        value={createdDate} 
+                        onchange={handleDateChange}>
+                    </lightning-input>
+                </lightning-layout-item>
+
+                <lightning-layout-item size="8" padding="around-small">
+                    <div class="slds-grid">
+                        <div class="slds-m-right_small">
+                            <lightning-button 
+                                label="Search" 
+                                variant="brand" 
+                                onclick={handleSearch}>
+                            </lightning-button>
+                        </div>
+                        <div class="slds-m-right_small">
+                            <lightning-button 
+                                label="Show My Campaign" 
+                                variant="brand-outline" 
+                                onclick={loadMyCampaignDetails}>
+                            </lightning-button>
+                        </div>
+                        <div>
+                            <lightning-button 
+                                label="Show All Campaign" 
+                                variant="brand-outline" 
+                                onclick={loadAllCampaignDetails}>
+                            </lightning-button>
+                        </div>
+                    </div>
+                </lightning-layout-item>
+            </lightning-layout>
+        </div>
+    </lightning-card>
+
+
+    <!-- Assign Maker Section -->
+    <lightning-card title="Assign Maker">
+        <div class="slds-p-around_medium">
+            <template if:true={telesalesMakers}>
+                <lightning-layout multiple-rows>
+                    <template for:each={telesalesMakers} for:item="maker">
+                        <lightning-layout-item key={maker.Id} size="4" padding="around-small">
+                            <lightning-input type="checkbox" 
+                                label={maker.Name}
+                                value={maker.Id}
+                                onchange={handleMakerSelection}>
+                            </lightning-input>
+                        </lightning-layout-item>
+                    </template>
+                </lightning-layout>
+                <div class="slds-p-top_medium">
+                    <lightning-button 
+                        label="Assign Selected" 
+                        variant="brand" 
+                        onclick={handleAssign}
+                        disabled={isAssignDisabled}>
+                    </lightning-button>
+                </div>
+            </template>
+        </div>
+
+        <template if:true={showSpinner}>
+                <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+        </template>
+
+    </lightning-card>
+
+    <!-- List Ticket Section -->
+    <lightning-card title="Campaign Details">
+        <div class="slds-p-around_medium">
+            <!-- Data Summary -->
+            <div class="slds-p-bottom_small">
+                <p>Selected: {selectedCount} of {totalRecords} records</p>
+                <p>Page {currentPage} of {totalPages}</p>
+            </div>
+
+            <!-- Select All Checkbox -->
+            <div class="slds-p-bottom_small">
+                <lightning-input type="checkbox" 
+                    label="Select All" 
+                    onchange={handleSelectAll}>
+                </lightning-input>
+            </div>
+
+            <!-- Table -->
+            <template if:true={showSpinner}>
+                <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+            </template>
+
+            <lightning-datatable
+                key-field="Id"
+                data={displayedCampaignDetails}
+                columns={columns}
+                onrowselection={handleRowSelection}
+                onrowaction={handleRowAction}
+                selected-rows={selectedRowIds}>
+            </lightning-datatable>
+            
+
+            <!-- Pagination -->
+            <div class="slds-p-top_medium slds-text-align_center">
+                <lightning-button-group>
+                    <lightning-button 
+                        label="Previous"
+                        onclick={handlePrevious}
+                        disabled={isPreviousDisabled}>
+                    </lightning-button>
+                    <lightning-button 
+                        label="Next"
+                        onclick={handleNext}
+                        disabled={isNextDisabled}>
+                    </lightning-button>
+                </lightning-button-group>
+            </div>
+        </div>
+    </lightning-card>
+</template>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AssignmentRules xmlns="http://soap.sforce.com/2006/04/metadata">
+    <assignmentRule>
+        <fullName>Case Creation API</fullName>
+        <active>false</active>
+        <ruleEntry>
+            <assignedTo>SCC_MMS</assignedTo>
+            <assignedToType>Queue</assignedToType>
+            <formula>AND(TEXT( Origin ) == &apos;MMS&apos;, ISNEW() )</formula>
+        </ruleEntry>
+        <ruleEntry>
+            <assignedTo>SCC_BRImo</assignedTo>
+            <assignedToType>Queue</assignedToType>
+            <formula>AND(TEXT( Origin ) == &apos;BRImo&apos;, ISNEW() )</formula>
+        </ruleEntry>
+        <ruleEntry>
+            <assignedTo>SCC_Brilink</assignedTo>
+            <assignedToType>Queue</assignedToType>
+            <criteriaItems>
+                <field>Case.Origin</field>
+                <operation>equals</operation>
+                <value>BRILINK</value>
+            </criteriaItems>
+        </ruleEntry>
+        <ruleEntry>
+            <assignedTo>SCC_Ceria</assignedTo>
+            <assignedToType>Queue</assignedToType>
+            <criteriaItems>
+                <field>Case.Origin</field>
+                <operation>equals</operation>
+                <value>Ceria</value>
+            </criteriaItems>
+        </ruleEntry>
+    </assignmentRule>
+</AssignmentRules>

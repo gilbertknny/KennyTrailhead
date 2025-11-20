@@ -1,0 +1,152 @@
+<!--
+    LWC Name    : lwcBlockedBankingInformationComponent.html
+    Created Date       : ?? September 2024
+    @description       : This is class ..
+    @author            : Rakeyan Nuramria
+    Modification Log :
+    Ver   Date         Author                            Modification
+    1.0   ??/09/2024   Rakeyan Nuramria                  Initial Version
+    1.0   ??/09/2024   Rakeyan Nuramria                  Adjust UI
+    1.0   09/10/2024   Ardyta Yudianto                   [FROM SIT] Adjust UI to scrollable horizontally
+    1.0   09/10/2024   Rakeyan Nuramria                  [FROM SIT] Add title card
+    release 3
+    1.0   16/01/2025   Rakeyan Nuramria                  Add UI to delete the blocked amount
+    1.0   31/01/2025   Rakeyan Nuramria                  Add UI to show toast & confirmation deletion
+    1.0   18/02/2025   Rakeyan Nuramria                  [FROM SIT] Adjust UI to action hapus based on custom permission
+    1.0   21/02/2025   Rakeyan Nuramria                  Add column to show Exp Date
+
+-->
+
+<template>
+    <lightning-card title="" icon-name="" variant="base" class="custom-card slds-m-around_small slds-card_boundary">
+
+        <div slot="title">Informasi Hold Rekening</div>
+
+        <div class="slds-m-right_small slds-text-align_right ">Nomor Rekening : <b>{selectedNomorRekening}</b></div>
+
+        <div class="slds-p-around_small slds-m-top_xx-small">
+
+            <template if:true={isLoading}>
+                <div class="spinner-container" style="height:6rem;position:relative">
+                    <div role="status" class="slds-spinner slds-spinner_small">
+                        <span class="slds-assistive-text">Loading</span>
+                        <div class="slds-spinner__dot-a"></div>
+                        <div class="slds-spinner__dot-b"></div>
+                    </div>
+                </div>
+            </template>
+
+            <template if:false={isLoading}>
+                <template if:true={hasError}>
+                    <div class="slds-text-color_error slds-text-align_center">
+                        <b>{errorMsg}</b>
+                    </div>
+                </template>
+
+                <template if:true={data.length}>
+                    <div class="slds-scrollable_y custom-scroll">
+                        <table class="slds-table slds-table_bordered slds-table_fixed-layout custom-table">
+                            <thead>
+                                <tr class="slds-line-height_reset">
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Status Blokir Saldo">Status Blokir Saldo</div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Nominal Blokir Saldo">Nominal Blokir Saldo
+                                        </div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Unit Kerja Blokir">Unit Kerja Blokir</div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Tanggal Blokir">Tanggal Blokir</div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Tanggal Blokir">Tanggal Jatuh Tempo</div>
+                                    </th>
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="Keterangan Blokir">Keterangan Blokir</div>
+                                    </th>
+                                    <template if:true={hasUnblockPermission}>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Actions">Actions</div>
+                                        </th>
+                                    </template>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={data} for:item="row">
+                                    <tr key={row.acctNo} class="slds-hint-parent" data-hold-seq={row.holdSeq}>
+                                        <td>{row.holdType}</td>
+                                        <td>{row.holdAmt}</td>
+                                        <td>{row.holdBranch}</td>
+                                        <td>{row.formattedHoldDate}</td>
+                                        <td>{row.formattedExpDate}</td>
+                                        <td>{row.holdRemark}</td>
+                                        <template if:true={hasUnblockPermission}>
+                                            <td>
+                                                <lightning-button variant="destructive" icon-name="utility:delete"
+                                                    label="‎ Hapus" onclick={handleConfirmDeletionModal}
+                                                    class="slds-m-left_x-small"></lightning-button>
+                                            </td>
+                                        </template>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </template>
+            </template>
+        </div>
+    </lightning-card>
+
+    <!-- Modal for confirming deletion -->
+    <template if:true={showConfirmationModal}>
+        <div class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                        onclick={handleCancelModal}>
+                        <lightning-icon icon-name="utility:close" alternative-text="close"
+                            size="small"></lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 class="slds-text-heading_medium">Konfirmasi Penghapusan</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium slds-text-align_center">
+                    <template if:false={isProcessing}>
+                        <p>Apakah anda yakin ingin melakukan penghapusan blokir saldo untuk nomor rekening
+                            <b> {noRekening}</b>, sebesar <b>{selectedHoldAmount}</b>?
+                        </p>
+                        <br>
+                        <p><span class="custom-asterisk">*</span><span class="reminder">REMINDER</span><b><i>: Data
+                                    penghapusan blokir akan diproses/hilang H+1 dari hari
+                                    penghapusan.</i></b></p>
+
+                    </template>
+
+                    <!-- SLDS Spinner: Show during deletion process -->
+                    <template if:true={isProcessing}>
+                        <div class="spinner-container" style="height:6rem;position:relative">
+                            <div role="status" class="slds-spinner slds-spinner_medium">
+                                <span class="slds-assistive-text">Loading</span>
+                                <div class="slds-spinner__dot-a"></div>
+                                <div class="slds-spinner__dot-b"></div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+                <footer class="slds-modal__footer slds-text-align_center">
+                    <!-- Disable buttons during deletion process -->
+                    <button class="slds-button slds-button_neutral" aria-label="Cancel and close"
+                        onclick={handleCancelModal} disabled={isProcessing}>Tidak</button>
+                    <button class="slds-button slds-button_brand" onclick={handleDeleteBlokir}
+                        disabled={isProcessing}>Ya</button>
+                </footer>
+            </div>
+        </div>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+    <!-- End Modal Delete Section -->
+
+</template>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>BRIVA</fullName>
+    <active>false</active>
+    <errorConditionFormula>SCC_Account_Number__c != null &amp;&amp;
+SCC_Nomor_Briva_Tagihan__c != null &amp;&amp;
+SCC_Account_Number__c = SCC_Nomor_Briva_Tagihan__c</errorConditionFormula>
+    <errorMessage>Nomor BRIVA dan Rekening tidak boleh sama</errorMessage>
+</ValidationRule>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>NFT</fullName>
+    <active>false</active>
+    <errorConditionFormula>( $Permission.BO_Signer = TRUE &amp;&amp;  $Permission.BO_Checker_NFT = TRUE )|| ( $Permission.BO_Signer = TRUE &amp;&amp; $Permission.BO_Maker_NFT  = TRUE )</errorConditionFormula>
+    <errorMessage>Hanya bisa satu permission</errorMessage>
+</ValidationRule>

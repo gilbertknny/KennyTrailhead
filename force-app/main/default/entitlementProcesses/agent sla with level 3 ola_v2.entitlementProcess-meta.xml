@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EntitlementProcess xmlns="http://soap.sforce.com/2006/04/metadata">
+    <SObjectType>Case</SObjectType>
+    <active>false</active>
+    <description>Agent SLA With Level 3 OLA</description>
+    <entryStartDateField>Case.CreatedDate</entryStartDateField>
+    <exitCriteriaFilterItems>
+        <field>Case.IsClosed</field>
+        <operation>equals</operation>
+        <value>true</value>
+    </exitCriteriaFilterItems>
+    <isVersionDefault>true</isVersionDefault>
+    <milestones>
+        <milestoneCriteriaFilterItems>
+            <field>Case.Status</field>
+            <operation>equals</operation>
+            <value>Working, New</value>
+        </milestoneCriteriaFilterItems>
+        <milestoneName>Agent OLA</milestoneName>
+        <minutesCustomClass>CaseAgentSLAMilestoneTimeCalculator</minutesCustomClass>
+        <useCriteriaStartTime>true</useCriteriaStartTime>
+    </milestones>
+    <milestones>
+        <milestoneCriteriaFilterItems>
+            <field>Case.SCC_Sub_Escalation_Level__c</field>
+            <operation>equals</operation>
+            <value>Escalation Level 1</value>
+        </milestoneCriteriaFilterItems>
+        <milestoneName>Level 1 OLA</milestoneName>
+        <minutesCustomClass>CaseLevel1MilestoneTimeCalculator</minutesCustomClass>
+        <useCriteriaStartTime>true</useCriteriaStartTime>
+    </milestones>
+    <milestones>
+        <milestoneCriteriaFilterItems>
+            <field>Case.SCC_Sub_Escalation_Level__c</field>
+            <operation>equals</operation>
+            <value>Escalation Level 2</value>
+        </milestoneCriteriaFilterItems>
+        <milestoneName>Level 2 OLA</milestoneName>
+        <minutesCustomClass>CaseLevel2MilestoneTimeCalculator</minutesCustomClass>
+        <useCriteriaStartTime>true</useCriteriaStartTime>
+    </milestones>
+    <milestones>
+        <milestoneCriteriaFilterItems>
+            <field>Case.SCC_Sub_Escalation_Level__c</field>
+            <operation>equals</operation>
+            <value>Escalation Level 3</value>
+        </milestoneCriteriaFilterItems>
+        <milestoneName>Level 3 OLA</milestoneName>
+        <minutesCustomClass>CaseLevel3MilestoneTimeCalculator</minutesCustomClass>
+        <useCriteriaStartTime>true</useCriteriaStartTime>
+    </milestones>
+    <name>agent sla with level 3 ola_v2</name>
+    <versionMaster>552MR0000008yjn</versionMaster>
+    <versionNumber>1</versionNumber>
+</EntitlementProcess>

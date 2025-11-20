@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ValidateHariCuti</fullName>
+    <active>true</active>
+    <errorConditionFormula>(Hari_Tahun_Depan__c +  Hari_Tahun_Ini__c) &gt; 8</errorConditionFormula>
+    <errorMessage>Tanggal cuti tidak boleh lebih dari 8 hari</errorMessage>
+</ValidationRule>

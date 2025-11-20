@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>SPV__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <label>SPV</label>
+    <lookupFilter>
+        <active>true</active>
+        <filterItems>
+            <field>User.User_Level__c</field>
+            <operation>equals</operation>
+            <value>SPV</value>
+        </filterItems>
+        <filterItems>
+            <field>User.SITE_CCT__c</field>
+            <operation>equals</operation>
+            <valueField>$User.SITE_CCT__c</valueField>
+        </filterItems>
+        <isOptional>true</isOptional>
+    </lookupFilter>
+    <referenceTo>User</referenceTo>
+    <relationshipName>Request_Cuti1</relationshipName>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

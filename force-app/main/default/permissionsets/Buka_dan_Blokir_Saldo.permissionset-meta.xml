@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <classAccesses>
+        <apexClass>ErrorLogRecord</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>SCC_API</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>SCC_CaseBRICare</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>SCC_CaseResoultion_DataHub</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>SCC_CaseResoultion_DataHub_Wrapper</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <customPermissions>
+        <enabled>true</enabled>
+        <name>Blokir_Saldo</name>
+    </customPermissions>
+    <customPermissions>
+        <enabled>true</enabled>
+        <name>Buka_Blokir_Saldo</name>
+    </customPermissions>
+    <hasActivationRequired>false</hasActivationRequired>
+    <label>Buka dan Blokir Saldo</label>
+    <license>Salesforce</license>
+</PermissionSet>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Drone_cannot_update_status_after_closed</fullName>
+    <active>true</active>
+    <errorConditionFormula>TEXT(PRIORVALUE(Status)) == &apos;Closed&apos; &amp;&amp; TEXT(Status) == &apos;Escalated&apos; &amp;&amp; $User.Full_Name__c == &apos;BRI Integration&apos;</errorConditionFormula>
+    <errorMessage>Drone cannot update status after case is closed</errorMessage>
+</ValidationRule>

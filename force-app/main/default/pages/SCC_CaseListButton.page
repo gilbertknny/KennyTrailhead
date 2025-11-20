@@ -1,0 +1,11 @@
+<apex:page standardController="Case" extensions="SCC_CaseListButtonController">
+    <apex:pageBlock title="">
+        <apex:pageBlockButtons >
+            <!-- Tidak ada tag form di sini -->
+            <!-- Button tidak diperlukan karena langsung menampilkan form -->
+        </apex:pageBlockButtons>
+        <apex:pageBlockSection rendered="{!redirectToForm}">
+            <apex:include pageName="SCC_CaseForm"/>
+        </apex:pageBlockSection>
+    </apex:pageBlock>
+</apex:page>

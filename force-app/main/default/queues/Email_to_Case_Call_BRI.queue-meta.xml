@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Queue xmlns="http://soap.sforce.com/2006/04/metadata">
+    <doesSendEmailToMembers>false</doesSendEmailToMembers>
+    <name>Email to Case - Call BRI</name>
+    <queueMembers>
+        <publicGroups>
+            <publicGroup>Email_to_Case_Call_BRI</publicGroup>
+        </publicGroups>
+        <users>
+            <user>90173596@dev.bri.co.id</user>
+            <user>agent01.cc@bri</user>
+        </users>
+    </queueMembers>
+    <queueRoutingConfig>BRI_Case_Routing</queueRoutingConfig>
+    <queueSobject>
+        <sobjectType>Case</sobjectType>
+    </queueSobject>
+</Queue>

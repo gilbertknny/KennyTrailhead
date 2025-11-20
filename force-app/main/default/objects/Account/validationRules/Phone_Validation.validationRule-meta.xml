@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Phone_Validation</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+    NOT(ISBLANK(Phone)),(ISBLANK( SCC_cifno__c )),
+    NOT(REGEX(Phone, &quot;^[0-9]{10,14}$&quot;))
+)&amp;&amp; !$Permission.By_Pass_Validation_for_Migration</errorConditionFormula>
+    <errorDisplayField>Phone</errorDisplayField>
+    <errorMessage>Nomor telepon harus angka dan 10-14 Digit</errorMessage>
+</ValidationRule>

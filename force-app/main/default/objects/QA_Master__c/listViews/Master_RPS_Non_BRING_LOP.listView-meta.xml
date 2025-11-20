@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Master_RPS_Non_BRING_LOP</fullName>
+    <columns>NAME</columns>
+    <columns>Bobot__c</columns>
+    <columns>Section__c</columns>
+    <columns>Section_Penilaian__c</columns>
+    <columns>RECORDTYPE</columns>
+    <columns>Active__c</columns>
+    <columns>CREATED_DATE</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>RECORDTYPE</field>
+        <operation>equals</operation>
+        <value>QA_Master__c.RPS_Non_BRING_LOP</value>
+    </filters>
+    <label>Master - RPS Non (BRING &amp; LOP)</label>
+</ListView>

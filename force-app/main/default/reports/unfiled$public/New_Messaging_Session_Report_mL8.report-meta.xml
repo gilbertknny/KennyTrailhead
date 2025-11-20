@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <columns>
+        <field>MessagingSession$Name</field>
+    </columns>
+    <columns>
+        <field>MessagingSession$AcceptTime</field>
+    </columns>
+    <columns>
+        <field>MessagingSession$Account</field>
+    </columns>
+    <columns>
+        <field>MessagingSession$ChannelEndUserFormula</field>
+    </columns>
+    <columns>
+        <field>MessagingSession$Status</field>
+    </columns>
+    <columns>
+        <field>MessagingSession$StartTime</field>
+    </columns>
+    <columns>
+        <field>MessagingSession$EndTime</field>
+    </columns>
+    <columns>
+        <field>MessagingSession$MessagingChannel</field>
+    </columns>
+    <currency>IDR</currency>
+    <format>Tabular</format>
+    <name>New Messaging Session Report</name>
+    <params>
+        <name>co</name>
+        <value>1</value>
+    </params>
+    <reportType>Messaging_Session__c</reportType>
+    <scope>organization</scope>
+    <showDetails>true</showDetails>
+    <showGrandTotal>true</showGrandTotal>
+    <showSubTotals>true</showSubTotals>
+    <sortColumn>MessagingSession$Status</sortColumn>
+    <sortOrder>Desc</sortOrder>
+    <timeFrameFilter>
+        <dateColumn>MessagingSession$CreatedDate</dateColumn>
+        <interval>INTERVAL_CUSTOM</interval>
+    </timeFrameFilter>
+</Report>

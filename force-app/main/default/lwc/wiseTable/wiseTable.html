@@ -1,0 +1,19 @@
+<template>
+    <div class="table-container">
+        <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+            <tbody>
+                <template for:each={processedData} for:item="row" for:index="rowIndex">
+                    <tr key={row.id}>
+                        <template for:each={row} for:item="cell">
+                            <td key={cell.key}
+                                rowspan={cell.row_span}
+                                colspan={cell.col_span}>
+                                {cell.value}
+                            </td>
+                        </template>
+                    </tr>
+                </template>
+            </tbody>
+        </table>
+    </div>
+</template>

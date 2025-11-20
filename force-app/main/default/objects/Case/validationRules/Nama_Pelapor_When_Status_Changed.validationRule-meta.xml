@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Nama_Pelapor_When_Status_Changed</fullName>
+    <active>true</active>
+    <description>Nama pelapor field is not filled in or blank and case status moved to Closed/Waiting Document/Escalated from New</description>
+    <errorConditionFormula>AND(NOT($Permission.By_Pass_Validation_for_Migration),
+    ISBLANK(SCC_Nama_Pelapor__c),
+    ISPICKVAL(PRIORVALUE(Status), &quot;New&quot;),
+    OR(
+        ISPICKVAL(Status, &quot;Waiting Document&quot;),
+        ISPICKVAL(Status, &quot;Escalated&quot;),
+        ISPICKVAL(Status, &quot;Closed&quot;)
+    )
+)&amp;&amp;
+Case_Cutoff__c == TRUE &amp;&amp; NOT( $Profile.Name = &apos;Salesforce API Only System Integrations&apos;)</errorConditionFormula>
+    <errorDisplayField>SCC_Nama_Pelapor__c</errorDisplayField>
+    <errorMessage>Silahkan mengisi Nama Pelapor jika tidak ada Nama Nasabah</errorMessage>
+</ValidationRule>

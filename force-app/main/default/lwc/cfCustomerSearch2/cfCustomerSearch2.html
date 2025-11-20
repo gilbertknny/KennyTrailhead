@@ -1,0 +1,680 @@
+<!--
+    LWC Name    : cfCustomerSearch2.html
+    Created Date       : 15 August 2024
+    @description       : This is class ..
+    @author            : Rakeyan Nuramria
+    Modification Log :
+    Ver   Date         Author                            Modification
+    1.0   15/08/2024   Ardyta Yudianto                   Initial Version
+    1.1   20/08/2024   Rakeyan Nuramria                  Adjust the UI
+    1.1   23/08/2024   Rakeyan Nuramria                  Adjust the UI
+    1.2   03/09/2024   Rakeyan Nuramria                  Adjust the UI for API banking
+    1.2   18/09/2024   Rakeyan Nuramria                  Adjust the UI for all API
+    1.2   21/11/2024   Rakeyan Nuramria                  [FROM SIT] Hide Search NIK & Phone in Cardlink (req by surrounding BRI team )
+    1.2   29/11/2024   Rakeyan Nuramria                  [FROM SIT] Adjust showing name for all category (Adjusting to the new logic)
+    //release 3
+    1.3   09/12/2024   Rakeyan Nuramria                  [FROM SIT] UST-042, Add capability Search by Phone Number in Banking
+    1.3   11/12/2024   Rakeyan Nuramria                  [FROM SIT] Unhide Search NIK & Phone in Cardlink (req by surrounding BRI team )
+    1.3   20/01/2025   Rakeyan Nuramria                  UST-017 - Add capability search by Id Outlet
+-->
+
+
+<template>
+
+    <lightning-card title="Pencarian Nasabah" icon-name="standard:account">
+        <!-- <template if:true={error}>
+            <div class="slds-text-color_error">
+                {error}
+            </div>
+        </template>
+
+        <template if:true={errorMsg}>
+            <div class="slds-text-color_error">
+                {errorMsg}
+            </div>
+        </template> -->
+
+        <!-- Tab Navigation -->
+        <lightning-tabset active-tab-value="1">
+            <!-- Banking Tab -->
+            <lightning-tab label="Banking" value="1" onactive={handleActive}>
+                <div class="slds-p-around_medium">
+                    <div>
+                        <lightning-input type="text" class="accountField" label="Nomor Rekening" value={accountNumber}
+                            onchange={handleAccountName} disabled={disableAccountField}></lightning-input>
+                        <div style="color: red;">{accountNumberError}</div>
+                    </div>
+                    <div>
+                        <lightning-input type="text" class="debitCreditField" label="Nomor Kartu Debit"
+                            value={debitNumber} onchange={handleDebitCreditNo}
+                            disabled={disableDebitCardField}></lightning-input>
+                        <div style="color: red;">{cardNumberError}</div>
+                    </div>
+                    <div>
+                        <lightning-input type="text" class="phoneNumberBanking" label="Nomor Handphone"
+                            value={phoneNumberBanking} onchange={handlePhoneNumberBanking}
+                            disabled={disablePhoneNumberBankingField}></lightning-input>
+                        <div style="color: red;">{phoneNumberBankingError}</div>
+                    </div>
+                    <lightning-layout>
+                        <lightning-layout-item size="4" class="padding-right">
+                            <lightning-combobox name="tipeId" label="Tipe ID" value={tipeId} placeholder="Pilih Tipe ID"
+                                options={tipeIdOptions} onchange={handleTipeId} disabled={disableTipeIdField}>
+                            </lightning-combobox>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="8">
+                            <lightning-input type="text" class="idField" label="Nomor ID" value={idValue}
+                                onchange={handleNIK} disabled={disableIdField}></lightning-input>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                </div>
+
+                <!-- Banking Search Button -->
+                <div class="slds-grid slds-grid_align-center">
+                    <lightning-layout>
+                        <lightning-layout-item size="6" small-device-size="2" medium-device-size="2"
+                            large-device-size="2" padding="around-small">
+                            <lightning-button label="Cari" variant="brand" onclick={handleSearchBanking}
+                                disabled={isSearchDisabled}></lightning-button>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                    <br />
+                </div>
+
+                <!-- Banking Search Result Card -->
+                <!-- <div class="slds-p-around_medium">
+                    <template if:true={searchData}>
+                        <lightning-card title="" class="slds-m-around_small">
+                            <div class="slds-m-top_medium table-container">
+                                <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col" class="small-column">No</th>
+                                            <th scope="col">Nama</th>
+                                            <th scope="col">Nomor Handphone</th>
+                                            <th scope="col">CIF</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <template for:each={formattedSearchData} for:item="record" for:index="index">
+                                            <tr key={record.accountId}>
+                                                <td>{record.columnNumber}</td>
+                                                <td>
+                                                    <a href="#" onclick={navigateToAccountDetail}
+                                                        data-accountid={record.accountId}>{record.demographicInfo}</a>
+                                                </td>
+                                                <td>{record.handphone}</td>
+                                                <td>{phoneNumber}</td>
+                                            </tr>
+                                        </template>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </lightning-card>
+                    </template>
+                </div> -->
+
+                <!-- Banking Search Result Card v2-->
+                <template if:true={isLoadingBanking}>
+                    <div class="spinner-container" style="height:6rem;position:relative">
+                        <div role="status" class="slds-spinner slds-spinner_medium">
+                            <span class="slds-assistive-text">Loading</span>
+                            <div class="slds-spinner__dot-a"></div>
+                            <div class="slds-spinner__dot-b"></div>
+                        </div>
+                    </div>
+                </template>
+
+                <template if:false={isLoadingBanking}>
+                    <template if:true={hasError}>
+                        <div class="slds-text-color_error slds-m-top_medium slds-text-align_center">
+                            <b>{errorMsg}</b>
+                        </div>
+                    </template>
+
+                    <div class="slds-p-around_medium">
+                        <template if:true={searchDataBanking.length}>
+                            <lightning-card title="Hasil Pencarian" class="slds-m-around_small">
+                                <div class="slds-m-top_medium table-container">
+                                    <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col" class="small-column th-base-color">No</th>
+                                                <th scope="col" class="th-base-color">Nama</th>
+                                                <th scope="col" class="th-base-color">Nomor Handphone</th>
+                                                <th scope="col" class="th-base-color">CIF</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <template for:each={formattedSearchDataBanking} for:item="record"
+                                                for:index="index">
+                                                <tr key={record.acc.Id}>
+                                                    <td class="slds-text-align_center">{record.columnNumber}</td>
+                                                    <!-- <td>
+                                                        <a href="#" onclick={navigateToAccountDetail}
+                                                            data-accountid={record.acc.Id}>{record.acc.Name}</a>
+                                                    </td> -->
+                                                    <td class="slds-text-align_center">
+                                                        <a href="#" onclick={navigateToAccountDetail}
+                                                            data-accountid={record.acc.Id}>{record.formattedName}</a>
+                                                    </td>
+                                                    <td class="slds-text-align_center">{record.acc.Phone}</td>
+                                                    <td class="slds-text-align_center">{record.acc.SCC_cifno__c}</td>
+                                                </tr>
+                                            </template>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </lightning-card>
+                        </template>
+                    </div>
+                </template>
+
+
+
+
+            </lightning-tab>
+
+            <!-- Kartu Kredit Tab -->
+            <lightning-tab label="Kartu Kredit" value="2" onactive={handleActive}>
+                <div class="slds-p-around_medium">
+                    <div>
+                        <lightning-input type="text" class="creditCardField" label="Nomor Kartu Kredit"
+                            value={creditCardNumber} onchange={handleCreditCardNo}
+                            disabled={disableCreditCardField}></lightning-input>
+                        <div style="color: red;">{creditCardNumberError}</div>
+                    </div>
+                    <div>
+                        <!-- <lightning-input type="text" class="creditCardField" label="Nomor ID (NIK)"
+                            value={creditCardNumber} onchange={handleCreditCardNo}
+                            disabled={disableCreditCardField}></lightning-input> -->
+
+                        <!-- Hide in 21/11/2024 -- uncomment this after API surrounding already fixed -->
+                        <lightning-input type="text" class="idField" label="Nomor ID (NIK)" value={idValue}
+                            onchange={handleNIK} disabled={disableIdField}></lightning-input>
+                        <div style="color: red;">{nikNumberError}</div>
+                    </div>
+                    <div>
+                        <lightning-input type="text" class="phoneField" label="Nomor Handphone" value={phoneNumber}
+                            onchange={handlePhone} disabled={disablePhoneField}></lightning-input>
+                        <div style="color: red;">{phoneNumberError}</div>
+                    </div>
+                    <!-- END Hide in 21/11/2024 -- uncomment this after API surrounding already fixed -->
+
+                </div>
+                <!-- Kartu Kredit Search Button -->
+                <div class="slds-grid slds-grid_align-center">
+                    <lightning-layout>
+                        <lightning-layout-item size="6" small-device-size="2" medium-device-size="2"
+                            large-device-size="2" padding="around-small">
+                            <lightning-button label="Cari" variant="brand" onclick={handleSearchKredit}
+                                disabled={isSearchDisabled}></lightning-button>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                    <br />
+                </div>
+
+                <!-- Kartu Kredit Search Result Card -->
+                <!-- <div class="slds-p-around_medium">
+                    <template if:true={searchData}>
+                        <lightning-card title="" class="slds-m-around_small">
+                            <div class="slds-m-top_medium table-container">
+                                <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col" class="small-column">No</th>
+                                            <th scope="col">Nama</th>
+                                            <th scope="col">Nomor Handphone</th>
+                                            <th scope="col">CIF/Nomor Kartu Kredit Utama</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <template for:each={formattedSearchData} for:item="record" for:index="index">
+                                            <tr key={record.accountId}>
+                                                <td>{record.columnNumber}</td>
+                                                <td>
+                                                    <a href="#" onclick={navigateToAccountDetail}
+                                                        data-accountid={record.accountId}>{record.demographicInfo}</a>
+                                                </td>
+                                                <td>{record.handphone}</td>
+                                                <td>{phoneNumber}</td>
+                                            </tr>
+                                        </template>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </lightning-card>
+                    </template>
+                </div> -->
+
+                <!-- Kartu Kredit Search Result Card v2 -->
+                <template if:true={isLoadingKredit}>
+                    <div class="spinner-container" style="height:6rem;position:relative">
+                        <div role="status" class="slds-spinner slds-spinner_medium">
+                            <span class="slds-assistive-text">Loading</span>
+                            <div class="slds-spinner__dot-a"></div>
+                            <div class="slds-spinner__dot-b"></div>
+                        </div>
+                    </div>
+                </template>
+
+                <template if:false={isLoadingKredit}>
+                    <template if:true={hasError}>
+                        <div class="slds-text-color_error slds-m-top_medium slds-text-align_center">
+                            <b>{errorMsg}</b>
+                        </div>
+                    </template>
+
+                    <div class="slds-p-around_medium">
+                        <template if:true={searchDataKredit.length}>
+                            <lightning-card title="Hasil Pencarian" class="slds-m-around_small">
+                                <div class="slds-m-top_medium table-container">
+                                    <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col" class="small-column th-base-color">No</th>
+                                                <th scope="col" class="th-base-color">Nama</th>
+                                                <th scope="col" class="th-base-color">Nomor Handphone</th>
+                                                <th scope="col" class="th-base-color">CIF/Nomor Kartu Kredit Utama</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <template for:each={formattedSearchDataKredit} for:item="record"
+                                                for:index="index">
+                                                <tr key={record.acc.Id}>
+                                                    <td>{record.columnNumber}</td>
+                                                    <!-- <td>
+                                                        <a href="#" onclick={navigateToAccountDetail}
+                                                            data-accountid={record.acc.Id}>{record.acc.Name}</a>
+                                                    </td> -->
+                                                    <td>
+                                                        <a href="#" onclick={navigateToAccountDetail}
+                                                            data-accountid={record.acc.Id}>{record.formattedName}</a>
+                                                    </td>
+                                                    <td>{record.acc.Phone}</td>
+                                                    <td>{record.acc.SCC_cifno__c}</td>
+                                                </tr>
+                                            </template>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </lightning-card>
+                        </template>
+                    </div>
+                </template>
+
+            </lightning-tab>
+
+            <!-- Brilink Tab -->
+            <lightning-tab label="BRILink" value="3" onactive={handleActive}>
+                <div class="slds-p-around_medium">
+                    <div>
+                        <lightning-input label="TID BRILink" value={brilinkTID} onchange={handleBrilinkID}
+                            disabled={disableBrilinkTIDField}></lightning-input>
+                    </div>
+                    <div>
+                        <!-- <lightning-input label="ID Outlet" value={outletID} onchange={handleOutletID}
+                            disabled={disableOutletIDField}></lightning-input> -->
+                        <lightning-input label="MID BRILink" value={brilinkMID} onchange={handleBrilinkMID}
+                            disabled={disableBrilinkMIDField}></lightning-input>
+                    </div>
+                    <div>
+                        <lightning-input label="ID Outlet" value={outletID} onchange={handleOutletID}
+                            disabled={disableOutletIDField}></lightning-input>
+                    </div>
+                </div>
+
+                <template if:true={outletIDError}>
+                    <p class="error">{outletIDError}</p>
+                </template>
+
+                <!-- Brilink Search Button -->
+                <div class="slds-grid slds-grid_align-center">
+                    <lightning-layout>
+                        <lightning-layout-item size="6" small-device-size="2" medium-device-size="2"
+                            large-device-size="2" padding="around-small">
+                            <lightning-button label="Cari" variant="brand" onclick={handleSearchBRILink}
+                                disabled={isSearchDisabled}></lightning-button>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                    <br />
+                </div>
+
+                <!-- Brilink Search Result Card -->
+                <!-- <div class="slds-p-around_medium">
+                    <template if:true={searchData}>
+                        <lightning-card title="" class="slds-m-around_small">
+                            <div class="slds-m-top_medium table-container">
+                                <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col" class="small-column">No</th>
+                                            <th scope="col">Nama Agen BRILink</th>
+                                            <th scope="col">Nomor Rekening</th>
+                                            <th scope="col">CIF</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <template for:each={formattedSearchData} for:item="record" for:index="index">
+                                            <tr key={record.accountId}>
+                                                <td>{record.columnNumber}</td>
+                                                <td>
+                                                    <a href="#" onclick={navigateToAccountDetail}
+                                                        data-accountid={record.accountId}>{record.demographicInfo}</a>
+                                                </td>
+                                                <td>{record.handphone}</td>
+                                                <td>{phoneNumber}</td>
+                                            </tr>
+                                        </template>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </lightning-card>
+                    </template>
+                </div> -->
+
+                <!-- Brilink Search Result Card v2-->
+                <template if:true={isLoadingBRILink}>
+                    <div class="spinner-container" style="height:6rem;position:relative">
+                        <div role="status" class="slds-spinner slds-spinner_medium">
+                            <span class="slds-assistive-text">Loading</span>
+                            <div class="slds-spinner__dot-a"></div>
+                            <div class="slds-spinner__dot-b"></div>
+                        </div>
+                    </div>
+                </template>
+
+                <template if:false={isLoadingBRILink}>
+                    <template if:true={hasError}>
+                        <div class="slds-text-color_error slds-m-top_medium slds-text-align_center">
+                            <b>{errorMsg}</b>
+                        </div>
+                    </template>
+
+                    <div class="slds-p-around_medium">
+                        <template if:true={searchDataBRILink.length}>
+                            <lightning-card title="" class="slds-m-around_small">
+                                <div class="slds-m-top_medium table-container">
+                                    <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col" class="small-column th-base-color">No</th>
+                                                <th scope="col" class="th-base-color">Nama Agen BRILink</th>
+                                                <th scope="col" class="th-base-color">Nomor Rekening</th>
+                                                <th scope="col" class="th-base-color">CIF</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <template for:each={formattedSearchDataBRILink} for:item="record"
+                                                for:index="index">
+                                                <tr key={record.acc.Id}>
+                                                    <td>{record.columnNumber}</td>
+                                                    <!-- <td>
+                                                        <a href="#" onclick={navigateToAccountDetail}
+                                                            data-accountid={record.acc.Id}>{record.acc.Name}</a>
+                                                    </td> -->
+                                                    <td>
+                                                        <a href="#" onclick={navigateToAccountDetail}
+                                                            data-accountid={record.acc.Id}>{record.formattedName}</a>
+                                                    </td>
+                                                    <td>{record.bp.nomor_rekening}</td>
+                                                    <td>{record.bp.cifno}</td>
+                                                </tr>
+                                            </template>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </lightning-card>
+                        </template>
+                    </div>
+                </template>
+
+            </lightning-tab>
+
+            <!-- Merchant Tab  -->
+            <lightning-tab label="Merchant" value="4" onactive={handleActive}>
+                <div class="slds-p-around_medium">
+                    <div>
+                        <lightning-input label="TID Merchant" value={merchantTID} onchange={handleMerchantTID}
+                            disabled={disableMerchantTIDField}></lightning-input>
+                    </div>
+                    <div>
+                        <lightning-input label="MID Merchant" value={merchantMID} onchange={handleMerchantMID}
+                            disabled={disableMerchantMIDField}></lightning-input>
+                    </div>
+                </div>
+                <template if:true={merchantMIDError}>
+                    <p class="error">{merchantMIDError}</p>
+                </template>
+
+                <!-- Merchant Search Button -->
+                <div class="slds-grid slds-grid_align-center">
+                    <lightning-layout>
+                        <lightning-layout-item size="6" small-device-size="2" medium-device-size="2"
+                            large-device-size="2" padding="around-small">
+                            <lightning-button label="Cari" variant="brand" onclick={handleSearchMerchant}
+                                disabled={isSearchDisabled}></lightning-button>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                    <br />
+                </div>
+
+                <!-- Merchant Search Result Card -->
+                <!-- <div class="slds-p-around_medium">
+                    <template if:true={searchData}>
+                        <lightning-card title="" class="slds-m-around_small">
+                            <div class="slds-m-top_medium table-container">
+                                <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col" class="small-column">No</th>
+                                            <th scope="col">Nama</th>
+                                            <th scope="col">Jenis Merchant</th>
+                                            <th scope="col">CIF</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <template for:each={formattedSearchData} for:item="record" for:index="index">
+                                            <tr key={record.accountId}>
+                                                <td>{record.columnNumber}</td>
+                                                <td>
+                                                    <a href="#" onclick={navigateToAccountDetail}
+                                                        data-accountid={record.accountId}>{record.demographicInfo}</a>
+                                                </td>
+                                                <td>{record.handphone}</td>
+                                                <td>{phoneNumber}</td>
+                                            </tr>
+                                        </template>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </lightning-card>
+                    </template>
+                </div> -->
+
+                <!-- Merchant Search Result Card v2-->
+
+                <template if:true={isLoadingMerchant}>
+                    <div class="spinner-container" style="height:6rem;position:relative">
+                        <div role="status" class="slds-spinner slds-spinner_medium">
+                            <span class="slds-assistive-text">Loading</span>
+                            <div class="slds-spinner__dot-a"></div>
+                            <div class="slds-spinner__dot-b"></div>
+                        </div>
+                    </div>
+                </template>
+
+                <template if:false={isLoadingMerchant}>
+                    <template if:true={hasError}>
+                        <div class="slds-text-color_error slds-m-top_medium slds-text-align_center">
+                            <b>{errorMsg}</b>
+                        </div>
+                    </template>
+
+                    <div class="slds-p-around_medium">
+                        <template if:true={searchDataMerchant.length}>
+                            <lightning-card title="Hasil Pencarian" class="slds-m-around_small">
+                                <div class="slds-m-top_medium table-container">
+                                    <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col" class="small-column th-base-color">No</th>
+                                                <th scope="col" class="th-base-color">Nama</th>
+                                                <th scope="col" class="th-base-color">Jenis Merchant</th>
+                                                <th scope="col" class="th-base-color">CIF</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <template for:each={formattedSearchDataMerchant} for:item="record"
+                                                for:index="index">
+                                                <tr key={record.acc.Id}>
+                                                    <td>{record.columnNumber}</td>
+                                                    <!-- <td>
+                                                        <a href="#" onclick={navigateToAccountDetail}
+                                                            data-accountid={record.acc.Id}>{record.acc.Name}</a>
+                                                    </td> -->
+                                                    <td>
+                                                        <a href="#" onclick={navigateToAccountDetail}
+                                                            data-accountid={record.acc.Id}>{record.formattedName}</a>
+                                                    </td>
+                                                    <td>{record.mp.jenis_merchant}</td>
+                                                    <td>{record.mp.cifno}</td>
+                                                </tr>
+                                            </template>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </lightning-card>
+                        </template>
+                    </div>
+                </template>
+            </lightning-tab>
+
+            <!-- DPLK Tab -->
+            <lightning-tab label="DPLK" value="5" onactive={handleActive}>
+                <div class="slds-p-around_medium">
+                    <div>
+                        <lightning-input label="Nomor DPLK" value={dplkNumber} onchange={handleDPLKNumber}
+                            disabled={disableDPLKNumberField}></lightning-input>
+                    </div>
+                </div>
+                <template if:true={dplkNumberError}>
+                    <p class="error">{dplkNumberError}</p>
+                </template>
+
+                <!-- DPLK Search Button -->
+                <div class="slds-grid slds-grid_align-center">
+                    <lightning-layout>
+                        <lightning-layout-item size="6" small-device-size="2" medium-device-size="2"
+                            large-device-size="2" padding="around-small">
+                            <lightning-button label="Cari" variant="brand" onclick={handleSearchDPLK}
+                                disabled={isSearchDisabled}></lightning-button>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                    <br />
+                </div>
+
+                <!-- DPLK Search Result Card -->
+                <template if:true={isLoadingDPLK}>
+                    <div class="spinner-container" style="height:6rem;position:relative">
+                        <div role="status" class="slds-spinner slds-spinner_medium">
+                            <span class="slds-assistive-text">Loading</span>
+                            <div class="slds-spinner__dot-a"></div>
+                            <div class="slds-spinner__dot-b"></div>
+                        </div>
+                    </div>
+                </template>
+
+                <template if:false={isLoadingDPLK}>
+                    <!-- Error Message -->
+                    <template if:true={hasError}>
+                        <div class="slds-text-color_error slds-m-top_medium slds-text-align_center">
+                            <b>{errorMsg}</b>
+                        </div>
+                    </template>
+
+                    <div class="slds-p-around_medium">
+                        <template if:true={searchDataDPLK.length}>
+                            <lightning-card title="Hasil Pencarian" class="slds-m-around_small">
+                                <div class="slds-m-top_medium table-container">
+                                    <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col" class="small-column th-base-color">No</th>
+                                                <th scope="col" class="th-base-color">Nama</th>
+                                                <th scope="col" class="th-base-color">Nomor DPLK</th>
+                                                <th scope="col" class="th-base-color">CIF</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <template for:each={formattedSearchDataDPLK} for:item="record"
+                                                for:index="index">
+                                                <tr key={record.acc.Id}>
+                                                    <td>{record.columnNumber}</td>
+                                                    <!-- <td>
+                                                        <a href="#" onclick={navigateToAccountDetail}
+                                                            data-accountid={record.acc.Id}>{record.si.nama_nasabah}</a>
+                                                    </td> -->
+                                                    <td>
+                                                        <a href="#" onclick={navigateToAccountDetail}
+                                                            data-accountid={record.acc.Id}>{record.formattedName}</a>
+                                                    </td>
+                                                    <td>{record.si.nomor_akun_dplk}</td>
+                                                    <td>{record.si.cifno}</td>
+                                                </tr>
+                                            </template>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </lightning-card>
+                        </template>
+                    </div>
+                </template>
+
+            </lightning-tab>
+        </lightning-tabset>
+
+        <!-- Search Button -->
+        <!-- <lightning-layout>
+            <lightning-layout-item size="6" small-device-size="2" medium-device-size="2" large-device-size="2"
+                padding="around-small">
+                <lightning-button label="Cari" variant="brand" onclick={handleSearch}
+                    disabled={isSearchDisabled}></lightning-button>
+            </lightning-layout-item>
+        </lightning-layout>
+        <br /> -->
+
+
+        <!-- Search Result Card -->
+        <!-- <template if:true={searchData}>
+            <lightning-card title="" class="slds-m-around_small">
+                <div class="slds-m-top_medium table-container">
+                    <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="small-column">No</th>
+                                <th scope="col">Nama</th>
+                                <th scope="col">Nomor Telepon</th>
+                                <th scope="col">CIF</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template for:each={formattedSearchData} for:item="record" for:index="index">
+                                <tr key={record.accountId}>
+                                    <td>{record.columnNumber}</td>
+                                    <td>
+                                        <a href="#" onclick={navigateToAccountDetail}
+                                            data-accountid={record.accountId}>{record.demographicInfo}</a>
+                                    </td>
+                                    <td>{record.handphone}</td>
+                                    <td>{phoneNumber}</td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </div>
+            </lightning-card>
+        </template> -->
+    </lightning-card>
+
+</template>

@@ -1,0 +1,417 @@
+<template>
+    <lightning-accordion allow-multiple-sections-open >
+        <lightning-accordion-section label="Merchant"  class="custom-section" >
+    <lightning-card>
+        <div class="slds-grid slds-gutters">
+            <div class="slds-col">
+                <lightning-input label="TID" value={tid} onchange={handleTidChange} disabled={disableTidField}></lightning-input>
+            </div>
+            <div class="slds-col">
+                <lightning-input label="MID" value={mid} onchange={handleMidChange} disabled={disableMidField}></lightning-input>
+            </div>
+            <div class="slds-col" style="align-content: end;">
+                <lightning-button  variant="brand" label="Cari" onclick={handleSearch} disabled={isHandleSearchDisabled}></lightning-button>
+            </div>
+            
+
+        </div>
+       
+        <template if:true={error1}>
+            <div  class="slds-text-color_error slds-m-top_medium">{error1}</div>
+        </template>
+        
+        <template if:true={dataexist}>
+            <template  for:each={listdata} for:item="data">
+            <div  key={data.alamat_merchant} style="overflow-x:auto;">
+            <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-m-top_medium" style="border-left: 1px solid #ccc; border-right: 1px solid #ccc;">
+               
+                <thead>
+                    <tr>
+                        <th>MID Induk</th>
+                        <th>MERCHANT EDC</th>
+                        <th>MERCHANT QRIS</th>
+                        <th>ALAMAT</th>
+                        <th>TID</th>
+                        <th>STATUS</th>
+                        <th>KANWIL</th>
+                        <th>PEMASANG</th>
+                        <th>TGL PASANG</th>
+                        <th>DETAIL</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                     
+                        <td>{data.mid}</td>
+                        <td>{data.nama_merchant_edc}</td>
+                        <td>{data.nama_merchant_qris}</td>
+                        <td>{data.alamat_merchant}</td>
+                        <td>{data.tid}</td>
+                        <td>{data.status_pemasangan}</td>
+                        <td>{data.kanwil}</td>
+                        <td>{data.vendor_pemasang}</td>
+                        <td>{data.tanggal_pasang}</td>
+                        <td>
+                            <lightning-button data-id={data.alamat_merchant} label="Lihat" onclick={showDetail}></lightning-button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+       
+        
+
+       
+        <template if:true={data.showSection}>
+            
+            <div key={data.alamat_merchant} class="slds-m-around_medium" style="border: 1px solid #ccc;">
+            <div class="slds-grid slds-wrap slds-m-top_medium">
+                <div class="slds-col slds-size_1-of-2">
+                    <div class="slds-text-title"><b>Nama Merchant EDC:</b></div>
+                    <div>{data.nama_merchant_edc}</div>
+                    <div class="slds-text-title"><b>Nama Merchant QRIS:</b></div>
+                    <div>{data.nama_merchant_qris}</div>
+                    <div class="slds-text-title"><b>Alamat Merchant:</b></div>
+                    <div>{data.alamat_merchant}</div>
+                    <div class="slds-text-title"><b>Regional Office Pengelola:</b></div>
+                    <div>{data.regional_office_pengelola}</div>
+                    <div class="slds-text-title"><b>Vendor Pemasang:</b></div>
+                    <div>{data.vendor_pemasang}</div>
+                    <div class="slds-text-title"><b>Nomor Telepon Merchant:</b></div>
+                    <div>{data.nomor_telepon_merchant}</div>
+                    <div class="slds-text-title"><b>Channel Merchant (EDC/QRIS):</b></div>
+                    <div>{data.channel_merchant}</div>
+                    <div class="slds-text-title"><b>Jenis Usaha Merchant:</b></div>
+                    <div>{data.jenis_usaha_merchant}</div>
+                    <div class="slds-text-title"><b>Tanggal Update Data:</b></div>
+                    <div>{data.tanggal_update_data}</div>
+                    <div class="slds-text-title"><b>Status Pemasangan:</b></div>
+                    <div>{data.status_pemasangan}</div>
+                    <div class="slds-text-title"><b>Nomor Rekening Penampungan:</b></div>
+                    <div>{data.nomor_rekening_penampungan}</div>
+                    <div class="slds-text-title"><b>Jenis Merchant:</b></div>
+                    <div>{data.jenis_merchant}</div>
+                    <div class="slds-text-title"><b>Kanwil:</b></div>
+                    <div>{data.kanwil}</div>
+                    <div class="slds-text-title"><b>Tanggal Pasang:</b></div>
+                    <div>{data.tanggal_pasang}</div>
+                    <div class="slds-text-title"><b>Kode Unit Kerja:</b></div>
+                    <div>{data.kode_unit_kerja}</div>
+                    <div class="slds-text-title"><b>Kantor Wilayah:</b></div>
+                    <div>{data.kantor_wilayah}</div>
+                    <div class="slds-text-title"><b>Nama PIC Unit Kerja:</b></div>
+                    <div>{data.nama_pic_unit_kerja}</div>
+                    <div class="slds-text-title"><b>PN PIC Unit Kerja:</b></div>
+                    <div>{data.pn_pic_unit_kerja}</div>
+                    <div class="slds-text-title"><b>Tanggal Dibuat:</b></div>
+                    <div>{data.tanggal_dibuat}</div>
+                    <div class="slds-text-title"><b>Tanggal Modifikasi Terakhir:</b></div>
+                    <div>{data.tanggal_modifikasi_terakhir}</div>
+                    <div class="slds-text-title"><b>Modifikasi Oleh:</b></div>
+                    <div>{data.modifikasi_oleh}</div>
+                    <div class="slds-text-title"><b>Data PROMO:</b></div>
+                    <div>{data.data_promo}</div>
+                    <!-- Add more fields with <b> tags for bold labels -->
+                </div>
+                <div class="slds-col slds-size_1-of-2">
+                   
+                    <div class="slds-text-title"><b>Detail:</b></div>
+                    <div>{data.detail}</div>
+                    <div class="slds-text-title"><b>Status Ticket:</b></div>
+                    <div>{data.status_ticket}</div>
+                    <div class="slds-text-title"><b>Sub Channel (Uker Pemrakarsa):</b></div>
+                    <div>{data.user_pemrakarsa}</div>
+                    <div class="slds-text-title"><b>PIC Merchant:</b></div>
+                    <div>{data.pic_merchant}</div>
+                    <div class="slds-text-title"><b>Telpon:</b></div>
+                    <div>{data.telpon}</div>
+                    <div class="slds-text-title"><b>Email:</b></div>
+                    <div>{data.email}</div>
+                    <div class="slds-text-title"><b>Perangkat (SN EDC, SN CLR, SN SIMCARD):</b></div>
+                    <div>{data.perangkat}</div>
+                    <div class="slds-text-title"><b>Detail EDC (Fitur : Debit atau Kredit):</b></div>
+                    <div>{data.detail_edc}</div>
+                    <div class="slds-text-title"><b>Tipe Merchant:</b></div>
+                    <div>{data.tipe_merchant}</div>
+                    <div class="slds-text-title"><b>MDR On Us:</b></div>
+                    <div>{data.mdr_onus}</div>
+                    <div class="slds-text-title"><b>MDR Off Us:</b></div>
+                    <div>{data.mdr_offus}</div>
+                    <div class="slds-text-title"><b>MDR Debit Mastercard:</b></div>
+                    <div>{data.mdr_mastercard}</div>
+                    <div class="slds-text-title"><b>MDR Debit Private Label:</b></div>
+                    <div>{data.mdr_debit_pl}</div>
+                    <div class="slds-text-title"><b>MDR Debit NPG:</b></div>
+                    <div>{data.mdr_debit_npg}</div>
+                    <div class="slds-text-title"><b>MDR Unik:</b></div>
+                    <div>{data.mdr_unik}</div>
+                    <div class="slds-text-title"><b>MCC Master:</b></div>
+                    <div>{data.mcc_master}</div>
+                    <div class="slds-text-title"><b>MCC Visa:</b></div>
+                    <div>{data.mcc_visa}</div>
+                    <div class="slds-text-title"><b>MCC NPG:</b></div>
+                    <div>{data.mcc_npg}</div>
+                    <div class="slds-text-title"><b>Code/Reff Num:</b></div>
+                    <div>{data.code_reffnum}</div>
+                    <div class="slds-text-title"><b>No. Batch:</b></div>
+                    <div>{data.no_batch}</div>
+                    <div class="slds-text-title"><b>RC</b></div>
+                    <div>{data.rc}</div>
+                    <div class="slds-text-title"><b>Tipe:</b></div>
+                    <div>{data.tipe}</div>
+                    <!-- Add corresponding fields for the right column -->
+                </div>
+            </div>
+            </div>
+            </template>
+            </template>
+        </template>
+     
+      
+    </lightning-card>
+    </lightning-accordion-section>
+    <lightning-accordion-section label="Transaksi Merchant"  class="custom-section">
+        <div class="slds-grid slds-gutters">
+            <div class="slds-col">
+                <lightning-input label="MID/ MPAN" value={midOrMpan}
+                    onchange={handleTextChange} required></lightning-input>
+            </div>
+            <div class="slds-col">
+                <lightning-input label="TID / Store ID" value={tidOrStoreId}
+                    onchange={handleText1Change} required></lightning-input>
+            </div>
+            <div class="slds-col">
+                <lightning-input type="date" label="Transaction Date"  value={trxDate} 
+                    date-style="short" onchange={handleEndDateChange} required></lightning-input>
+            </div>
+            <div class="slds-col" style="align-content: end;">
+                <lightning-button variant="brand" label="Cari" onclick={handleSearch1} disabled={isHandleSearch1Disabled}></lightning-button>
+            </div>
+        </div>
+    </br>
+    <template if:true={error}>
+        <!-- Show error message if 'error' is truthy -->
+        <div class="slds-text-color_error slds-m-top_medium">{error}</div>
+    </template>
+    <template if:true={hasParsedData}>
+        <lightning-card>
+            <div class="slds-m-around_medium">
+                <div style="overflow-x:auto;">
+                <table class="slds-table slds-table_bordered slds-table_cell-buffer slds-table_striped">
+                    <thead>
+                        <tr class="slds-line-height_reset">
+                            <th class="slds-cell-wrap" scope="col">
+                                <div class="slds-wrap" title="Transaction Date">Transaction Date</div>
+                            </th>
+                            <th class="slds-cell-wrap" scope="col">
+                                <div class="slds-wrap" title="Transaction Time">Transaction Time</div>
+                            </th>
+                            <th class="slds-cell-wrap" scope="col">
+                                <div class="slds-wrap" title="MID">MID</div>
+                            </th>
+                            <th class="slds-cell-wrap" scope="col">
+                                <div class="slds-wrap" title="TID">TID</div>
+                            </th>
+                            <th class="slds-cell-wrap" scope="col">
+                                <div class="slds-wrap" title="Reference Number">Reference Number</div>
+                            </th>
+                            <th class="slds-cell-wrap" scope="col">
+                                <div class="slds-wrap" title="Jenis Transaksi">Jenis Transaksi</div>
+                            </th>
+                            <th class="slds-cell-wrap" scope="col">
+                                <div class="slds-wrap" title="Amount">Amount</div>
+                            </th>
+                            <th class="slds-cell-wrap" scope="col">
+                                <div class="slds-wrap" title="Mti">Mti</div>
+                            </th>
+                            <th class="slds-cell-wrap" scope="col">
+                                <div class="slds-wrap" title="Nama Merchant">Nama Merchant</div>
+                            </th>
+                            <th class="slds-cell-wrap" scope="col">
+                                <div class="slds-wrap" title="DETAIL">DETAIL</div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={parsedData} for:item="item">
+                            <tr key={item.appCodeReffNum} data-id={item.appCodeReffNum}>
+                                <td>{item.trxDate}</td>
+                                <td>{item.trxTime}</td>
+                                <td>{item.midOrMpan}</td>
+                                <td>{item.tidOrStoreId}</td>
+                                <td>{item.appCodeReffNum}</td>
+                                <td>{item.jenisTrx}</td>
+                                <td>{item.trxAmount}</td>
+                                <td>{item.mti}</td>
+                                <td>{item.merchantName}</td>
+                                <td>
+                                <lightning-button label="Lihat" onclick={handleLihatClick} data-id={item.appCodeReffNum}></lightning-button>
+                            </td>
+                            </tr>
+                        </template>
+                        
+                        
+                    </tbody>
+                </table>
+                
+            </div>
+            </div>
+            <template if:true={parsedData1}>
+                <template for:each={parsedData1.data} for:item="transaction">
+                    <!-- Iterate over each item in parsedData1.data -->
+                    <li key={transaction.appCodeReffNum} class="field-container">
+                        <!-- Display transaction details -->
+                        <div class="slds-box slds-theme_default">
+                            <div class="slds-grid slds-wrap slds-gutters">
+                                <div class="slds-col slds-size_1-of-4 slds-p-around_medium">
+                                    <p class="slds-text-title"><b>Transaction Date:</b></p>
+                                    <p>{transaction.trxDate}</p>
+                                </div>
+                                <div class="slds-col slds-size_1-of-4 slds-p-around_medium">
+                                    <p class="slds-text-title"><b>Transaction Time:</b></p>
+                                    <p>{transaction.trxTime}</p>
+                                </div>
+                                <div class="slds-col slds-size_1-of-4 slds-p-around_medium">
+                                    <p class="slds-text-title"><b>Nomor Kartu:</b></p>
+                                    <p>{transaction.noKartuCpan}</p>
+                                </div>
+                                <div class="slds-col slds-size_1-of-4 slds-p-around_medium">
+                                    <p class="slds-text-title"><b>MID:</b></p>
+                                    <p>{transaction.midOrMpan}</p>
+                                </div>
+                                <div class="slds-col slds-size_1-of-4 slds-p-around_medium">
+                                    <p class="slds-text-title"><b>TID:</b></p>
+                                    <p>{transaction.tidOrStoreId}</p>
+                                </div>
+                                <div class="slds-col slds-size_1-of-4 slds-p-around_medium">
+                                    <p class="slds-text-title"><b>Nama Merchant:</b></p>
+                                    <p>{transaction.merchantName}</p>
+                                </div>
+                                <div class="slds-col slds-size_1-of-4 slds-p-around_medium">
+                                    <p class="slds-text-title"><b>App Code Reference Number:</b></p>
+                                    <p>{transaction.appCodeReffNum}</p>
+                                </div>
+                                <div class="slds-col slds-size_1-of-4 slds-p-around_medium">
+                                    <p class="slds-text-title"><b>Nomor Batch:</b></p>
+                                    <p>{transaction.batchNo}</p>
+                                </div>
+                                <div class="slds-col slds-size_1-of-4 slds-p-around_medium">
+                                    <p class="slds-text-title"><b>Jenis Transaksi:</b></p>
+                                    <p>{transaction.jenisTrx}</p>
+                                </div>
+                                <div class="slds-col slds-size_1-of-4 slds-p-around_medium">
+                                    <p class="slds-text-title"><b>Jumlah Transaksi:</b></p>
+                                    <p>Rp.{transaction.trxAmount}</p>
+                                </div>
+                                <div class="slds-col slds-size_1-of-4 slds-p-around_medium">
+                                    <p class="slds-text-title"><b>MDR:</b></p>
+                                    <p>{transaction.mdr}</p>
+                                </div>
+                                <div class="slds-col slds-size_1-of-4 slds-p-around_medium">
+                                    <p class="slds-text-title"><b>Channel:</b></p>
+                                    <p>{transaction.channelID}</p>
+                                </div>
+                                <div class="slds-col slds-size_1-of-4 slds-p-around_medium">
+                                    <p class="slds-text-title"><b>Proccode:</b></p>
+                                    <p>{transaction.proccode}</p>
+                                </div>
+                                <div class="slds-col slds-size_1-of-4 slds-p-around_medium">
+                                    <p class="slds-text-title"><b>Nama Fitur:</b></p>
+                                    <p>{transaction.namaFitur}</p>
+                                </div>
+                                <div class="slds-col slds-size_1-of-4 slds-p-around_medium">
+                                    <p class="slds-text-title"><b>Local Cross Border:</b></p>
+                                    <p>{transaction.localCrossBorder}</p>
+                                </div>
+                                <div class="slds-col slds-size_1-of-4 slds-p-around_medium">
+                                    <p class="slds-text-title"><b>On Us Not On Us:</b></p>
+                                    <p>{transaction.onUsNotOnUs}</p>
+                                </div>
+                                <div class="slds-col slds-size_1-of-4 slds-p-around_medium">
+                                    <p class="slds-text-title"><b>Tipe Kartu:</b></p>
+                                    <p>{transaction.cardType}</p>
+                                </div>
+                                <div class="slds-col slds-size_1-of-4 slds-p-around_medium">
+                                    <p class="slds-text-title"><b>RC:</b></p>
+                                    <p>{transaction.rc}</p>
+                                </div>
+                                <div class="slds-col slds-size_1-of-4 slds-p-around_medium">
+                                    <p class="slds-text-title"><b>Status:</b></p>
+                                    <p>{transaction.status}</p>
+                                </div>
+                                <div class="slds-col slds-size_1-of-4 slds-p-around_medium">
+                                    <p class="slds-text-title"><b>Status Transaksi:</b></p>
+                                    <p>{transaction.trxStatus}</p>
+                                </div>
+                                <div class="slds-col slds-size_1-of-4 slds-p-around_medium">
+                                    <p class="slds-text-title"><b>Tipe Transaksi:</b></p>
+                                    <p>{transaction.trxType}</p>
+                                </div>
+                                <div class="slds-col slds-size_1-of-4 slds-p-around_medium">
+                                    <p class="slds-text-title"><b>MTI:</b></p>
+                                    <p>{transaction.mti}</p>
+                                </div>
+                                <div class="slds-col slds-size_1-of-4 slds-p-around_medium">
+                                    <p class="slds-text-title"><b>Trace Number:</b></p>
+                                    <p>{transaction.traceNum}</p>
+                                </div>
+                                <div class="slds-col slds-size_1-of-4 slds-p-around_medium">
+                                    <p class="slds-text-title"><b>MCC:</b></p>
+                                    <p>{transaction.mcc}</p>
+                                </div>
+                                <div class="slds-col slds-size_1-of-4 slds-p-around_medium">
+                                    <p class="slds-text-title"><b>Lokasi:</b></p>
+                                    <p>{transaction.location}</p>
+                                </div>
+                                <div class="slds-col slds-size_1-of-4 slds-p-around_medium">
+                                    <p class="slds-text-title"><b>Alamat:</b></p>
+                                    <p>{transaction.address}</p>
+                                </div>
+                                <div class="slds-col slds-size_1-of-4 slds-p-around_medium">
+                                    <p class="slds-text-title"><b>Acq Bank:</b></p>
+                                    <p>{transaction.acqBank}</p>
+                                </div>
+                                <div class="slds-col slds-size_1-of-4 slds-p-around_medium">
+                                    <p class="slds-text-title"><b>Post Entry Mode:</b></p>
+                                    <p>{transaction.posEntryMode}</p>
+                                </div>
+                                <div class="slds-col slds-size_1-of-4 slds-p-around_medium">
+                                    <p class="slds-text-title"><b>Settle Amount:</b></p>
+                                    <p>Rp.{transaction.settleAmount}</p>
+                                </div>
+                                <div class="slds-col slds-size_1-of-4 slds-p-around_medium">
+                                    <p class="slds-text-title"><b>Settle Date:</b></p>
+                                    <p>{transaction.settleDate}</p>
+                                </div>
+                                <div class="slds-col slds-size_1-of-4 slds-p-around_medium">
+                                    <p class="slds-text-title"><b>Payment Date:</b></p>
+                                    <p>{transaction.paymentDate}</p>
+                                </div>
+                                <div class="slds-col slds-size_1-of-4 slds-p-around_medium">
+                                    <p class="slds-text-title"><b>Nomor Rekening Merchant:</b></p>
+                                    <p>{transaction.noRekMerchant}</p>
+                                </div>
+                                <div class="slds-col slds-size_1-of-4 slds-p-around_medium">
+                                    <p class="slds-text-title"><b>Payment Remark:</b></p>
+                                    <p>{transaction.paymentRemark}</p>
+                                </div>
+                                <div class="slds-col slds-size_1-of-4 slds-p-around_medium">
+                                    <p class="slds-text-title"><b>Switch :</b></p>
+                                    <p>{transaction.switchValue}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </template>
+               
+                
+            </template>
+            
+            
+            
+        </lightning-card>
+    </template>
+    
+    </lightning-accordion-section>
+    </lightning-accordion>
+</template>

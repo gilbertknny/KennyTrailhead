@@ -1,0 +1,26 @@
+<!--
+  @description       : 
+  @author            : Ardyta Yudianto
+  @group             : 
+  @last modified on  : 10-08-2024
+  @last modified by  : Ardyta Yudianto
+-->
+<template>
+    <lightning-card>
+        <div class="slds-form slds-var-m-around_small">
+            <div class="slds-form-element slds-form-element_horizontal">
+                <template if:true={errorCheck}>
+                    <div style="font-weight:bold;font-size:15px;text-align:center">{errorMessage} </div>
+                </template>
+                <template if:false={errorCheck}>
+                    <label class="slds-form-element__label" for="horizontal-input-id-01">Sub Case</label>
+                    <div class="slds-form-element__control">
+                        <lightning-combobox name="picklist" value={selectedValue} placeholder="Select an Option"
+                            options={picklistOptions} onchange={handlePicklistChange}>
+                        </lightning-combobox>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </lightning-card>
+</template>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Case_Type_MMS</fullName>
+    <booleanFilter>1 OR 2 OR 3</booleanFilter>
+    <columns>NAME</columns>
+    <columns>SCC_Case_Type_Detail__c</columns>
+    <columns>Active__c</columns>
+    <columns>Send_to_MMS__c</columns>
+    <columns>SSC_Level_1_Escalation_Team__c</columns>
+    <columns>Settlement__c</columns>
+    <columns>SCC_Level2_Escalation_team__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Send_to_MMS__c</field>
+        <operation>equals</operation>
+        <value>1</value>
+    </filters>
+    <filters>
+        <field>NAME</field>
+        <operation>equals</operation>
+        <value>8616</value>
+    </filters>
+    <filters>
+        <field>NAME</field>
+        <operation>equals</operation>
+        <value>8620</value>
+    </filters>
+    <label>Case Type MMS</label>
+</ListView>

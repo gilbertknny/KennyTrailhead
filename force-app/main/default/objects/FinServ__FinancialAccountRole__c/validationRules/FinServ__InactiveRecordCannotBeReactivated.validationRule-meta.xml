@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>FinServ__InactiveRecordCannotBeReactivated</fullName>
+    <active>true</active>
+    <description>Ensures that inactive records cannot be reactivated.</description>
+    <errorConditionFormula>1!=1</errorConditionFormula>
+    <errorMessage>Inactive Financial Roles cannot be reactivated.</errorMessage>
+</ValidationRule>

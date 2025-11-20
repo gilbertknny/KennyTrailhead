@@ -1,0 +1,7 @@
+<aura:component implements= "flexipage:availableForAllPageTypes,force:hasRecordId,force:lightningQuickAction,lightning:actionOverride,lightning:hasPageReference"
+                access="global" controller="SCC_IncidentHistory_UI" >
+                <aura:attribute name="recordId" type="String" />
+                <aura:attribute name="incident" type="Incident" default="{'sobjectType': 'Incident'}" />
+                <aura:handler name ="init" value ="{! this}" action = "{! c.init}"/>
+                <ui:inputTextArea aura:id="field" label="History Remark"  value="{!v.incident.Remark_History__c}" rows="7" cols="20" disabled="true"/>
+</aura:component>

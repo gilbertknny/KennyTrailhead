@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ConnectedApp xmlns="http://soap.sforce.com/2006/04/metadata">
+    <contactEmail>taufik.susanto@mii.co.id</contactEmail>
+    <label>bamboo-agent-v2-mii</label>
+    <oauthConfig>
+        <callbackUrl>http://localhost:1717/OauthRedirect</callbackUrl>
+        <certificate>MIID6TCCAtGgAwIBAgIUOiY2OiYARNj4PTUBUkrBkVfllgkwDQYJKoZIhvcNAQELBQAwgZwxCzAJBgNVBAYTAklEMRQwEgYDVQQIDAtES0kgSmFrYXJ0YTEYMBYGA1UEBwwPSmFrYXJ0YSBTZWxhdGFuMQwwCgYDVQQKDANCUkkxCzAJBgNVBAsMAklUMRQwEgYDVQQDDAsqLmJyaS5jby5pZDEsMCoGCSqGSIb3DQEJARYdbXVoYW1tYWQuZGphdGlAY29ycC5icmkuY28uaWQwHhcNMjUwNjE5MDQxODU1WhcNMjYwNjE5MDQxODU1WjCBnDELMAkGA1UEBhMCSUQxFDASBgNVBAgMC0RLSSBKYWthcnRhMRgwFgYDVQQHDA9KYWthcnRhIFNlbGF0YW4xDDAKBgNVBAoMA0JSSTELMAkGA1UECwwCSVQxFDASBgNVBAMMCyouYnJpLmNvLmlkMSwwKgYJKoZIhvcNAQkBFh1tdWhhbW1hZC5kamF0aUBjb3JwLmJyaS5jby5pZDCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBALqYVuLP4Q8NwJQGk+x93Yg4zQmvekBRnzM/mEtuYxS8urZ2VxliA27Zej4u0MjSnICPur/4aorCUSFmHdEdJK0SRLnWIZ7tMsvaZKGSjAU9FS3yDc7dnwzRV+EcYOyYnNvIGckOq0p+np+nbnMqy6qsv0Lewjdo+BloCyqqOULjJnZhUy19lhZpO2vVeC5F84356FA21+1L1qiwhA9oxk79MLas4wEr7PDalvnNseNf87EJSWirRJ+8yAedagwAYSBjnyMRsq09eLbqZh3GwdIomB1DncdssUi1Mc8MhG0K8Cs3FElzMkxqKe3OdSDGxUlPxFfrXtwmco84R5plI5kCAwEAAaMhMB8wHQYDVR0OBBYEFP23TliNM6WDte7jIbN6T/5aQdA4MA0GCSqGSIb3DQEBCwUAA4IBAQBgaFK/DQeQKfNblrLVSF2ILTY/gGC0mrck27jJo0NwnSKVizXvfaznLkXPALV8DzhyF+fCDQ+gkiAFVvc54fOtzqw2C0rv2r8Y8x6gGaR5qkkiCxF7vwt8i013CM6pO1XglT/6n0GfNmhMt+HHmoXf3/cS41bGwS1eLJoO0OCQjvp4WN+/NrxNeEViLT/qyO79oaD/ri351ubCQljMSAqDn+9rYWyeTGVqmGYfuXDYqPxWD3Xf3tcv9kfn6f6qJMXzZMEHgyC1gh9WzV14rQwV0Lioa4TPgUZ9uPtrCKikCtSKhDaqfNLMeBH6dowFfVWDSyqPlLGiiamoCLypqNfH</certificate>
+        <consumerKey>3MVG9Za5EbktTiWbnKaYMqjpETW_rIIz8cgdzQFmb90fNobdnGD8zbwaWIFNYtGN0TDNL7CREyql7zfCsu_mH</consumerKey>
+        <isAdminApproved>true</isAdminApproved>
+        <isClientCredentialEnabled>false</isClientCredentialEnabled>
+        <isCodeCredentialEnabled>false</isCodeCredentialEnabled>
+        <isCodeCredentialPostOnly>false</isCodeCredentialPostOnly>
+        <isConsumerSecretOptional>false</isConsumerSecretOptional>
+        <isIntrospectAllTokens>false</isIntrospectAllTokens>
+        <isNamedUserJwtEnabled>false</isNamedUserJwtEnabled>
+        <isPkceRequired>true</isPkceRequired>
+        <isRefreshTokenRotationEnabled>false</isRefreshTokenRotationEnabled>
+        <isSecretRequiredForRefreshToken>true</isSecretRequiredForRefreshToken>
+        <isSecretRequiredForTokenExchange>false</isSecretRequiredForTokenExchange>
+        <isTokenExchangeEnabled>false</isTokenExchangeEnabled>
+        <scopes>Api</scopes>
+        <scopes>Web</scopes>
+        <scopes>RefreshToken</scopes>
+    </oauthConfig>
+    <oauthPolicy>
+        <ipRelaxation>ENFORCE</ipRelaxation>
+        <isTokenExchangeFlowEnabled>false</isTokenExchangeFlowEnabled>
+        <refreshTokenPolicy>specific_lifetime:90:DAYS</refreshTokenPolicy>
+    </oauthPolicy>
+    <profileName>Support1st</profileName>
+    <profileName>System Administrators</profileName>
+    <profileName>System Administrator</profileName>
+</ConnectedApp>

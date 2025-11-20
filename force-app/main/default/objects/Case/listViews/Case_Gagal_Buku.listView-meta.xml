@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Case_Gagal_Buku</fullName>
+    <columns>CASES.CASE_NUMBER</columns>
+    <columns>CASES.STATUS</columns>
+    <columns>CASES.PRIORITY</columns>
+    <columns>CASES.CREATED_DATE_DATE_ONLY</columns>
+    <columns>SCC_Call_Type__c</columns>
+    <columns>SCC_Card_Number__c</columns>
+    <columns>SCC_Account_Number__c</columns>
+    <columns>SCC_Amount__c</columns>
+    <columns>SCC_Terminal_ID__c</columns>
+    <columns>SCC_Waktu_Transaksi__c</columns>
+    <columns>SCC_Case_Owner__c</columns>
+    <columns>SCC_Result_Pembukuan__c</columns>
+    <columns>SCC_BRINotif_reffNumber__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Approval_Status__c</field>
+        <operation>equals</operation>
+        <value>Approved</value>
+    </filters>
+    <filters>
+        <field>CASES.STATUS</field>
+        <operation>equals</operation>
+        <value>Escalated</value>
+    </filters>
+    <label>Case Gagal Buku</label>
+    <sharedTo>
+        <group>NFT_Signer</group>
+    </sharedTo>
+</ListView>

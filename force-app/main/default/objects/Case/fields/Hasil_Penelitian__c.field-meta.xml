@@ -1,0 +1,852 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Hasil_Penelitian__c</fullName>
+    <label>Hasil Penelitian</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <controllingField>Komplain__c</controllingField>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Agunan Berpindah Tangan</fullName>
+                <default>false</default>
+                <label>Agunan Berpindah Tangan</label>
+            </value>
+            <value>
+                <fullName>Agunan masih di Bank BRI</fullName>
+                <default>false</default>
+                <label>Agunan masih di Bank BRI</label>
+            </value>
+            <value>
+                <fullName>Agunan sudah diserahkan</fullName>
+                <default>false</default>
+                <label>Agunan sudah diserahkan</label>
+            </value>
+            <value>
+                <fullName>Asuransi Tidak Terdaftar</fullName>
+                <default>false</default>
+                <label>Asuransi Tidak Terdaftar</label>
+            </value>
+            <value>
+                <fullName>Belum Restrukturisasi</fullName>
+                <default>false</default>
+                <label>Belum Restrukturisasi</label>
+            </value>
+            <value>
+                <fullName>Capacity Repayment tidak terpenuhi</fullName>
+                <default>false</default>
+                <label>Capacity Repayment tidak terpenuhi</label>
+            </value>
+            <value>
+                <fullName>Card Trapping</fullName>
+                <default>false</default>
+                <label>Card Trapping</label>
+            </value>
+            <value>
+                <fullName>Data Belum Terupdate Kepada Kementrian Keuangan</fullName>
+                <default>false</default>
+                <label>Data Belum Terupdate Kepada Kementrian Keuangan</label>
+            </value>
+            <value>
+                <fullName>Data Keterangan iDeb SLIK sudah sesuai</fullName>
+                <default>false</default>
+                <label>Data Keterangan iDeb SLIK sudah sesuai</label>
+            </value>
+            <value>
+                <fullName>Debitur Tidak</fullName>
+                <default>false</default>
+                <label>Debitur Tidak</label>
+            </value>
+            <value>
+                <fullName>Kurang bayar (Pokok/Biaya/Denda/Bunga)</fullName>
+                <default>false</default>
+                <label>Kurang bayar (Pokok/Biaya/Denda/Bunga)</label>
+            </value>
+            <value>
+                <fullName>Dokumen Dokumen klaim kurang</fullName>
+                <default>false</default>
+                <label>Dokumen Dokumen klaim kurang</label>
+            </value>
+            <value>
+                <fullName>Dokumen sudah tidak tersedia</fullName>
+                <default>false</default>
+                <label>Dokumen sudah tidak tersedia</label>
+            </value>
+            <value>
+                <fullName>Dokumen telah diserahkan</fullName>
+                <default>false</default>
+                <label>Dokumen telah diserahkan</label>
+            </value>
+            <value>
+                <fullName>Double NIK (Pinjaman Valid- Debitur BRI blm e KTP)</fullName>
+                <default>false</default>
+                <label>Double NIK (Pinjaman Valid- Debitur BRI blm e KTP)</label>
+            </value>
+            <value>
+                <fullName>Fraud Eksternal</fullName>
+                <default>false</default>
+                <label>Fraud Eksternal</label>
+            </value>
+            <value>
+                <fullName>Fraud Internal</fullName>
+                <default>false</default>
+                <label>Fraud Internal</label>
+            </value>
+            <value>
+                <fullName>Hilang</fullName>
+                <default>false</default>
+                <label>Hilang</label>
+            </value>
+            <value>
+                <fullName>Keberatan Denda</fullName>
+                <default>false</default>
+                <label>Keberatan Denda</label>
+            </value>
+            <value>
+                <fullName>Kesalahan Pemblokiran</fullName>
+                <default>false</default>
+                <label>Kesalahan Pemblokiran</label>
+            </value>
+            <value>
+                <fullName>Kesalahan pencantuman data data program</fullName>
+                <default>false</default>
+                <label>Kesalahan pencantuman data data program</label>
+            </value>
+            <value>
+                <fullName>Kesalahan pencantuman NIK atau CIF di Unit kerja atau System</fullName>
+                <default>false</default>
+                <label>Kesalahan pencantuman NIK atau CIF di Unit kerja atau System</label>
+            </value>
+            <value>
+                <fullName>Kesalahan Penginputan Oleh Petugas</fullName>
+                <default>false</default>
+                <label>Kesalahan Penginputan Oleh Petugas</label>
+            </value>
+            <value>
+                <fullName>Kesalahan penginputan transcode</fullName>
+                <default>false</default>
+                <label>Kesalahan penginputan transcode</label>
+            </value>
+            <value>
+                <fullName>Kesalahan Sistem</fullName>
+                <default>false</default>
+                <label>Kesalahan Sistem</label>
+            </value>
+            <value>
+                <fullName>Klaim sesuai prosedur</fullName>
+                <default>false</default>
+                <label>Klaim sesuai prosedur</label>
+            </value>
+            <value>
+                <fullName>Kolektibiltas pinjaman tidak</fullName>
+                <default>false</default>
+                <label>Kolektibiltas pinjaman tidak</label>
+            </value>
+            <value>
+                <fullName>kurang lancar</fullName>
+                <default>false</default>
+                <label>kurang lancar</label>
+            </value>
+            <value>
+                <fullName>Laporan benefit</fullName>
+                <default>false</default>
+                <label>Laporan benefit</label>
+            </value>
+            <value>
+                <fullName>Laporan prosedur atau tata kerja</fullName>
+                <default>false</default>
+                <label>Laporan prosedur atau tata kerja</label>
+            </value>
+            <value>
+                <fullName>Melewati Batas Klaim</fullName>
+                <default>false</default>
+                <label>Melewati Batas Klaim</label>
+            </value>
+            <value>
+                <fullName>Memenuhi persyaratan</fullName>
+                <default>false</default>
+                <label>Memenuhi persyaratan</label>
+            </value>
+            <value>
+                <fullName>Memiliki Tagihan Pinjaman</fullName>
+                <default>false</default>
+                <label>Memiliki Tagihan Pinjaman</label>
+            </value>
+            <value>
+                <fullName>Nasabah Penerima Bersedia Refund</fullName>
+                <default>false</default>
+                <label>Nasabah Penerima Bersedia Refund</label>
+            </value>
+            <value>
+                <fullName>Nasabah Penerima Tidak Terkonfirmasi</fullName>
+                <default>false</default>
+                <label>Nasabah Penerima Tidak Terkonfirmasi</label>
+            </value>
+            <value>
+                <fullName>Pelapor keliru cara penarikan SLIK atau salah laporan</fullName>
+                <default>false</default>
+                <label>Pelapor keliru cara penarikan SLIK atau salah laporan</label>
+            </value>
+            <value>
+                <fullName>Pemakaian Pribadi</fullName>
+                <default>false</default>
+                <label>Pemakaian Pribadi</label>
+            </value>
+            <value>
+                <fullName>Pembayaran sesudah jatuh tempo</fullName>
+                <default>false</default>
+                <label>Pembayaran sesudah jatuh tempo</label>
+            </value>
+            <value>
+                <fullName>Pencairan pinjaman</fullName>
+                <default>false</default>
+                <label>Pencairan pinjaman</label>
+            </value>
+            <value>
+                <fullName>tidak sesuai permohonan</fullName>
+                <default>false</default>
+                <label>tidak sesuai permohonan</label>
+            </value>
+            <value>
+                <fullName>Pengajuan terkendala kekurangan dokumen</fullName>
+                <default>false</default>
+                <label>Pengajuan terkendala kekurangan dokumen</label>
+            </value>
+            <value>
+                <fullName>Penghapusan BAP</fullName>
+                <default>false</default>
+                <label>Penghapusan BAP</label>
+            </value>
+            <value>
+                <fullName>Penipuan Online</fullName>
+                <default>false</default>
+                <label>Penipuan Online</label>
+            </value>
+            <value>
+                <fullName>Dummy</fullName>
+                <default>false</default>
+                <label>Dummy</label>
+            </value>
+            <value>
+                <fullName>Sudah Sesuai SP</fullName>
+                <default>false</default>
+                <label>Sudah Sesuai SP</label>
+            </value>
+            <value>
+                <fullName>Belum Sesuai SP</fullName>
+                <default>false</default>
+                <label>Belum Sesuai SP</label>
+            </value>
+            <value>
+                <fullName>Terselip</fullName>
+                <default>false</default>
+                <label>Terselip</label>
+            </value>
+            <value>
+                <fullName>Tidak Menyerahkan Agunan</fullName>
+                <default>false</default>
+                <label>Tidak Menyerahkan Agunan</label>
+            </value>
+            <value>
+                <fullName>Agunan dipergunakan oknum internal untuk dijadikan agunan di tempat lain</fullName>
+                <default>false</default>
+                <label>Agunan dipergunakan oknum internal untuk dijadikan agunan di tempat lain</label>
+            </value>
+            <value>
+                <fullName>Sertifikat belum dipecah oleh developer</fullName>
+                <default>false</default>
+                <label>Sertifikat belum dipecah oleh developer</label>
+            </value>
+            <value>
+                <fullName>Double pencatatan sertifikat di BPN</fullName>
+                <default>false</default>
+                <label>Double pencatatan sertifikat di BPN</label>
+            </value>
+            <value>
+                <fullName>TakeOver ke Bank Lain</fullName>
+                <default>false</default>
+                <label>TakeOver ke Bank Lain</label>
+            </value>
+            <value>
+                <fullName>Sesuai kode etik</fullName>
+                <default>false</default>
+                <label>Sesuai kode etik</label>
+            </value>
+            <value>
+                <fullName>Tidak sesuai kode etik</fullName>
+                <default>false</default>
+                <label>Tidak sesuai kode etik</label>
+            </value>
+            <value>
+                <fullName>Salah Email</fullName>
+                <default>false</default>
+                <label>Salah Email</label>
+            </value>
+            <value>
+                <fullName>Salah Prosedur Klaim</fullName>
+                <default>false</default>
+                <label>Salah Prosedur Klaim</label>
+            </value>
+            <value>
+                <fullName>Brisurf error</fullName>
+                <default>false</default>
+                <label>Brisurf error</label>
+            </value>
+            <value>
+                <fullName>Melewati Masa Pertanggungan</fullName>
+                <default>false</default>
+                <label>Melewati Masa Pertanggungan</label>
+            </value>
+            <value>
+                <fullName>Pihak asuransi menolak klaim</fullName>
+                <default>false</default>
+                <label>Pihak asuransi menolak klaim</label>
+            </value>
+            <value>
+                <fullName>Nominal klaim</fullName>
+                <default>false</default>
+                <label>Nominal klaim</label>
+            </value>
+            <value>
+                <fullName>Permintaan Instansi/Lembaga</fullName>
+                <default>false</default>
+                <label>Permintaan Instansi/Lembaga</label>
+            </value>
+            <value>
+                <fullName>Terlapor Penipuan</fullName>
+                <default>false</default>
+                <label>Terlapor Penipuan</label>
+            </value>
+            <value>
+                <fullName>Terlapor Judi Online</fullName>
+                <default>false</default>
+                <label>Terlapor Judi Online</label>
+            </value>
+            <value>
+                <fullName>Pinjaman/iDebSLIK sudah sesuai / Data Valid</fullName>
+                <default>false</default>
+                <label>Pinjaman/iDebSLIK sudah sesuai / Data Valid</label>
+            </value>
+            <value>
+                <fullName>Kesalahan pencantuman NIK / CIF di Unit kerja /System</fullName>
+                <default>false</default>
+                <label>Kesalahan pencantuman NIK / CIF di Unit kerja /System</label>
+            </value>
+            <value>
+                <fullName>Pelapor keliru cara penarikan SLIK/ salah laporan</fullName>
+                <default>false</default>
+                <label>Pelapor keliru cara penarikan SLIK/ salah laporan</label>
+            </value>
+            <value>
+                <fullName>Sistem anomali pencatatan transaksi</fullName>
+                <default>false</default>
+                <label>Sistem anomali pencatatan transaksi</label>
+            </value>
+            <value>
+                <fullName>Debitur Tidak /Kurang bayar (Pokok/Biaya/Denda/Bunga)</fullName>
+                <default>false</default>
+                <label>Debitur Tidak /Kurang bayar (Pokok/Biaya/Denda/Bunga)</label>
+            </value>
+            <value>
+                <fullName>Sistem Autodebt Tidak Berjalan</fullName>
+                <default>false</default>
+                <label>Sistem Autodebt Tidak Berjalan</label>
+            </value>
+            <value>
+                <fullName>Salah setoran / pembukuan oleh petugas</fullName>
+                <default>false</default>
+                <label>Salah setoran / pembukuan oleh petugas</label>
+            </value>
+            <value>
+                <fullName>Kesalahan pencantuman data data debitur</fullName>
+                <default>false</default>
+                <label>Kesalahan pencantuman data data debitur</label>
+            </value>
+            <value>
+                <fullName>Konsumen salah lapor</fullName>
+                <default>false</default>
+                <label>Konsumen salah lapor</label>
+            </value>
+            <value>
+                <fullName>Komplain SIKP</fullName>
+                <default>false</default>
+                <label>Komplain SIKP</label>
+            </value>
+            <value>
+                <fullName>Soceng</fullName>
+                <default>false</default>
+                <label>Soceng</label>
+            </value>
+            <value>
+                <fullName>Skimming</fullName>
+                <default>false</default>
+                <label>Skimming</label>
+            </value>
+            <value>
+                <fullName>Take over Brimo</fullName>
+                <default>false</default>
+                <label>Take over Brimo</label>
+            </value>
+            <value>
+                <fullName>Laporan Penipuan</fullName>
+                <default>false</default>
+                <label>Laporan Penipuan</label>
+            </value>
+            <value>
+                <fullName>kredit fiktif dan account take over</fullName>
+                <default>false</default>
+                <label>kredit fiktif dan account take over</label>
+            </value>
+            <value>
+                <fullName>Genuine</fullName>
+                <default>false</default>
+                <label>Genuine</label>
+            </value>
+            <value>
+                <fullName>Sudah Sesuai</fullName>
+                <default>false</default>
+                <label>Sudah Sesuai</label>
+            </value>
+            <value>
+                <fullName>Penipuan Offline</fullName>
+                <default>false</default>
+                <label>Penipuan Offline</label>
+            </value>
+            <value>
+                <fullName>Sudah Restrukturisasi</fullName>
+                <default>false</default>
+                <label>Sudah Restrukturisasi</label>
+            </value>
+            <value>
+                <fullName>Terjadi kebocoran data oleh petugas</fullName>
+                <default>false</default>
+                <label>Terjadi kebocoran data oleh petugas</label>
+            </value>
+            <value>
+                <fullName>Kebocoran data oleh system</fullName>
+                <default>false</default>
+                <label>Kebocoran data oleh system</label>
+            </value>
+            <value>
+                <fullName>Tidak terjadi kebocoran data</fullName>
+                <default>false</default>
+                <label>Tidak terjadi kebocoran data</label>
+            </value>
+            <value>
+                <fullName>Pengajuan melebihi waktu SLA</fullName>
+                <default>false</default>
+                <label>Pengajuan melebihi waktu SLA</label>
+            </value>
+            <value>
+                <fullName>Tidak mengajukan pinjaman</fullName>
+                <default>false</default>
+                <label>Tidak mengajukan pinjaman</label>
+            </value>
+            <value>
+                <fullName>Prosedur Pengajuan</fullName>
+                <default>false</default>
+                <label>Prosedur Pengajuan</label>
+            </value>
+            <value>
+                <fullName>Kolektibiltas pinjaman tidak/ kurang lancar</fullName>
+                <default>false</default>
+                <label>Kolektibiltas pinjaman tidak/ kurang lancar</label>
+            </value>
+            <value>
+                <fullName>Tidak memenuhi persyaratan pengajuan</fullName>
+                <default>false</default>
+                <label>Tidak memenuhi persyaratan pengajuan</label>
+            </value>
+            <value>
+                <fullName>Pencairan pinjaman tidak sesuai permohonan</fullName>
+                <default>false</default>
+                <label>Pencairan pinjaman tidak sesuai permohonan</label>
+            </value>
+            <value>
+                <fullName>Pencairan pinjaman terkendala sistem</fullName>
+                <default>false</default>
+                <label>Pencairan pinjaman terkendala sistem</label>
+            </value>
+            <value>
+                <fullName>Pencairan pinjaman karena Nasabah menolak saldo</fullName>
+                <default>false</default>
+                <label>Pencairan pinjaman karena Nasabah menolak saldo</label>
+            </value>
+            <value>
+                <fullName>Bukan Nasabah</fullName>
+                <default>false</default>
+                <label>Bukan Nasabah</label>
+            </value>
+            <value>
+                <fullName>Gratifikasi / Suap /KKN</fullName>
+                <default>false</default>
+                <label>Gratifikasi / Suap /KKN</label>
+            </value>
+            <value>
+                <fullName>laporan Kesusilaan</fullName>
+                <default>false</default>
+                <label>laporan Kesusilaan</label>
+            </value>
+            <value>
+                <fullName>Laporan Beban Kerja/ Lingkungan kerja</fullName>
+                <default>false</default>
+                <label>Laporan Beban Kerja/ Lingkungan kerja</label>
+            </value>
+            <value>
+                <fullName>Laporan prosedur / tata kerja</fullName>
+                <default>false</default>
+                <label>Laporan prosedur / tata kerja</label>
+            </value>
+        </valueSetDefinition>
+        <valueSettings>
+            <controllingFieldValue>Keberatan Penagihan</controllingFieldValue>
+            <valueName>Sesuai kode etik</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Keberatan Penagihan</controllingFieldValue>
+            <valueName>Tidak sesuai kode etik</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Asuransi</controllingFieldValue>
+            <valueName>Asuransi Tidak Terdaftar</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Asuransi</controllingFieldValue>
+            <valueName>Dokumen Dokumen klaim kurang</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Asuransi</controllingFieldValue>
+            <valueName>Klaim sesuai prosedur</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Asuransi</controllingFieldValue>
+            <valueName>Melewati Batas Klaim</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Asuransi</controllingFieldValue>
+            <valueName>Salah Email</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Asuransi</controllingFieldValue>
+            <valueName>Salah Prosedur Klaim</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Asuransi</controllingFieldValue>
+            <valueName>Brisurf error</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Asuransi</controllingFieldValue>
+            <valueName>Melewati Masa Pertanggungan</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Asuransi</controllingFieldValue>
+            <valueName>Pihak asuransi menolak klaim</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Asuransi</controllingFieldValue>
+            <valueName>Nominal klaim</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Komplain Pemblokiran</controllingFieldValue>
+            <valueName>Kesalahan Pemblokiran</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Komplain Pemblokiran</controllingFieldValue>
+            <valueName>Memiliki Tagihan Pinjaman</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Komplain Pemblokiran</controllingFieldValue>
+            <valueName>Permintaan Instansi/Lembaga</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Komplain Pemblokiran</controllingFieldValue>
+            <valueName>Terlapor Penipuan</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Komplain Pemblokiran</controllingFieldValue>
+            <valueName>Terlapor Judi Online</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Salah Transfer</controllingFieldValue>
+            <valueName>Nasabah Penerima Bersedia Refund</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Salah Transfer</controllingFieldValue>
+            <valueName>Nasabah Penerima Tidak Terkonfirmasi</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Kebocoran Data</controllingFieldValue>
+            <valueName>Terjadi kebocoran data oleh petugas</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Kebocoran Data</controllingFieldValue>
+            <valueName>Kebocoran data oleh system</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Kebocoran Data</controllingFieldValue>
+            <valueName>Tidak terjadi kebocoran data</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Pengajuan Pinjaman</controllingFieldValue>
+            <valueName>Capacity Repayment tidak terpenuhi</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Pengajuan Pinjaman</controllingFieldValue>
+            <valueName>Pengajuan terkendala kekurangan dokumen</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Pengajuan Pinjaman</controllingFieldValue>
+            <valueName>Pengajuan melebihi waktu SLA</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Pengajuan Pinjaman</controllingFieldValue>
+            <valueName>Tidak mengajukan pinjaman</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Pengajuan Pinjaman</controllingFieldValue>
+            <valueName>Prosedur Pengajuan</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Pengajuan Pinjaman</controllingFieldValue>
+            <valueName>Kolektibiltas pinjaman tidak/ kurang lancar</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Permohonan Dokumen / Data Pinjaman</controllingFieldValue>
+            <valueName>Dokumen sudah tidak tersedia</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Permohonan Dokumen / Data Pinjaman</controllingFieldValue>
+            <valueName>Memenuhi persyaratan</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Permohonan Dokumen / Data Pinjaman</controllingFieldValue>
+            <valueName>Tidak memenuhi persyaratan pengajuan</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Pencairan Pinjaman</controllingFieldValue>
+            <valueName>Pencairan pinjaman tidak sesuai permohonan</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Pencairan Pinjaman</controllingFieldValue>
+            <valueName>Pencairan pinjaman terkendala sistem</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Pencairan Pinjaman</controllingFieldValue>
+            <valueName>Pencairan pinjaman karena Nasabah menolak saldo</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Lainnya</controllingFieldValue>
+            <valueName>Bukan Nasabah</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>iDeb SLIK</controllingFieldValue>
+            <valueName>Data Keterangan iDeb SLIK sudah sesuai</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>iDeb SLIK</controllingFieldValue>
+            <valueName>Double NIK (Pinjaman Valid- Debitur BRI blm e KTP)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>iDeb SLIK</controllingFieldValue>
+            <controllingFieldValue>Sanggahan Pinjaman/Kartu Kredit</controllingFieldValue>
+            <controllingFieldValue>Sanggahan Pembuatan Simpanan</controllingFieldValue>
+            <valueName>Fraud Eksternal</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>iDeb SLIK</controllingFieldValue>
+            <controllingFieldValue>Sanggahan Pinjaman/Kartu Kredit</controllingFieldValue>
+            <controllingFieldValue>Sanggahan Pembuatan Simpanan</controllingFieldValue>
+            <valueName>Fraud Internal</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>iDeb SLIK</controllingFieldValue>
+            <valueName>Kesalahan pencantuman data data program</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>iDeb SLIK</controllingFieldValue>
+            <valueName>Kesalahan penginputan transcode</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>iDeb SLIK</controllingFieldValue>
+            <valueName>Pembayaran sesudah jatuh tempo</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>iDeb SLIK</controllingFieldValue>
+            <valueName>Pinjaman/iDebSLIK sudah sesuai / Data Valid</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>iDeb SLIK</controllingFieldValue>
+            <valueName>Kesalahan pencantuman NIK / CIF di Unit kerja /System</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>iDeb SLIK</controllingFieldValue>
+            <valueName>Pelapor keliru cara penarikan SLIK/ salah laporan</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>iDeb SLIK</controllingFieldValue>
+            <valueName>Sistem anomali pencatatan transaksi</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>iDeb SLIK</controllingFieldValue>
+            <valueName>Debitur Tidak /Kurang bayar (Pokok/Biaya/Denda/Bunga)</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>iDeb SLIK</controllingFieldValue>
+            <valueName>Sistem Autodebt Tidak Berjalan</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>iDeb SLIK</controllingFieldValue>
+            <valueName>Salah setoran / pembukuan oleh petugas</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>iDeb SLIK</controllingFieldValue>
+            <valueName>Kesalahan pencantuman data data debitur</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>iDeb SLIK</controllingFieldValue>
+            <valueName>Konsumen salah lapor</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>iDeb SLIK</controllingFieldValue>
+            <valueName>Komplain SIKP</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Sanggahan Transaksi</controllingFieldValue>
+            <valueName>Card Trapping</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Sanggahan Transaksi</controllingFieldValue>
+            <valueName>Pemakaian Pribadi</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Sanggahan Transaksi</controllingFieldValue>
+            <valueName>Soceng</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Sanggahan Transaksi</controllingFieldValue>
+            <valueName>Skimming</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Sanggahan Transaksi</controllingFieldValue>
+            <valueName>Take over Brimo</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Sanggahan Transaksi</controllingFieldValue>
+            <valueName>Laporan Penipuan</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Sanggahan Transaksi</controllingFieldValue>
+            <valueName>kredit fiktif dan account take over</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Sanggahan Transaksi</controllingFieldValue>
+            <valueName>Genuine</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Sanggahan Pinjaman/Kartu Kredit</controllingFieldValue>
+            <controllingFieldValue>Sanggahan Pembuatan Simpanan</controllingFieldValue>
+            <valueName>Sudah Sesuai</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Laporan Penipuan</controllingFieldValue>
+            <valueName>Penipuan Online</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Laporan Penipuan</controllingFieldValue>
+            <valueName>Penipuan Offline</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Permohonan Keringanan</controllingFieldValue>
+            <valueName>Belum Restrukturisasi</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Permohonan Keringanan</controllingFieldValue>
+            <valueName>Penghapusan BAP</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Permohonan Keringanan</controllingFieldValue>
+            <valueName>Sudah Restrukturisasi</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Keberatan Lelang</controllingFieldValue>
+            <valueName>Sudah Sesuai SP</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Keberatan Lelang</controllingFieldValue>
+            <valueName>Belum Sesuai SP</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Pembayaran Tagihan Tidak Sesuai</controllingFieldValue>
+            <valueName>Kesalahan Penginputan Oleh Petugas</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Pembayaran Tagihan Tidak Sesuai</controllingFieldValue>
+            <valueName>Kesalahan Sistem</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Agunan</controllingFieldValue>
+            <valueName>Agunan Berpindah Tangan</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Agunan</controllingFieldValue>
+            <valueName>Agunan sudah diserahkan</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Agunan</controllingFieldValue>
+            <valueName>Hilang</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Agunan</controllingFieldValue>
+            <valueName>Terselip</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Agunan</controllingFieldValue>
+            <valueName>Tidak Menyerahkan Agunan</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Agunan</controllingFieldValue>
+            <valueName>Agunan dipergunakan oknum internal untuk dijadikan agunan di tempat lain</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Agunan</controllingFieldValue>
+            <valueName>Sertifikat belum dipecah oleh developer</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Agunan</controllingFieldValue>
+            <valueName>Double pencatatan sertifikat di BPN</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Laporan Pekerja / Keluarga BRI</controllingFieldValue>
+            <valueName>Laporan benefit</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Laporan Pekerja / Keluarga BRI</controllingFieldValue>
+            <valueName>Gratifikasi / Suap /KKN</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Laporan Pekerja / Keluarga BRI</controllingFieldValue>
+            <valueName>laporan Kesusilaan</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Laporan Pekerja / Keluarga BRI</controllingFieldValue>
+            <valueName>Laporan Beban Kerja/ Lingkungan kerja</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Laporan Pekerja / Keluarga BRI</controllingFieldValue>
+            <valueName>Laporan prosedur / tata kerja</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Pelunasan Maju</controllingFieldValue>
+            <valueName>Keberatan Denda</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Pelunasan Maju</controllingFieldValue>
+            <valueName>TakeOver ke Bank Lain</valueName>
+        </valueSettings>
+    </valueSet>
+</CustomField>

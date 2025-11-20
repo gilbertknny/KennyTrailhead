@@ -1,0 +1,30 @@
+<apex:page >
+<script type='text/javascript'>
+	function initEmbeddedMessaging() {
+		try {
+			embeddedservice_bootstrap.settings.language = 'en_US'; // For example, enter 'en' or 'en-US'
+						window.addEventListener("onEmbeddedMessagingReady", () => {
+            console.log("Prechat data");
+            embeddedservice_bootstrap.prechatAPI.setHiddenPrechatFields({
+              Company_Code: "peppp",
+              Username: "febrian",
+              Email: "gmail@febrian.com",
+              Platform_Code: "NEWBRICAMS",
+            });
+          });
+
+			embeddedservice_bootstrap.init(
+				'00DMR0000001rgb',
+				'MIAW_Qlola',
+				'https://bankbri--uat.sandbox.my.site.com/ESWMIAWQlola1725249733517',
+				{
+					scrt2URL: 'https://bankbri--uat.sandbox.my.salesforce-scrt.com'
+				}
+			);
+		} catch (err) {
+			console.error('Error loading Embedded Messaging: ', err);
+		}
+	};
+</script>
+<script type='text/javascript' src='https://bankbri--uat.sandbox.my.site.com/ESWMIAWQlola1725249733517/assets/js/bootstrap.min.js' onload='initEmbeddedMessaging()'></script>
+</apex:page>

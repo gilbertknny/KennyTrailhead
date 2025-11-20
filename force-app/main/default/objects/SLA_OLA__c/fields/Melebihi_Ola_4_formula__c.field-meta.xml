@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Melebihi_Ola_4_formula__c</fullName>
+    <formula>AND(
+    NOT(ISBLANK(Tanggal_Target_4__c)),
+    
+    IF(
+        NOT(ISBLANK(Tanggal_Penyelesaian_4__c)),
+        
+        DATETIMEVALUE(
+            MID(Tanggal_Penyelesaian_4__c, 7, 4) &amp; &quot;-&quot; &amp;
+            MID(Tanggal_Penyelesaian_4__c, 4, 2) &amp; &quot;-&quot; &amp;
+            MID(Tanggal_Penyelesaian_4__c, 1, 2) &amp; &quot; &quot; &amp;
+            &quot;00:00:00&quot;
+        ) &gt; 
+        DATETIMEVALUE(
+            MID(Tanggal_Target_4__c, 7, 4) &amp; &quot;-&quot; &amp;
+            MID(Tanggal_Target_4__c, 4, 2) &amp; &quot;-&quot; &amp;
+            MID(Tanggal_Target_4__c, 1, 2) &amp; &quot; &quot; &amp;
+            &quot;00:00:00&quot;
+        ),
+        
+        IF(
+            Case_Status__c = &quot;Working&quot;,
+            FALSE,
+            NOW() &gt; 
+            DATETIMEVALUE(
+                MID(Tanggal_Target_4__c, 7, 4) &amp; &quot;-&quot; &amp;
+                MID(Tanggal_Target_4__c, 4, 2) &amp; &quot;-&quot; &amp;
+                MID(Tanggal_Target_4__c, 1, 2) &amp; &quot; &quot; &amp;
+                &quot;00:00:00&quot;
+            )
+        )
+    )
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Melebihi OLA 4</label>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

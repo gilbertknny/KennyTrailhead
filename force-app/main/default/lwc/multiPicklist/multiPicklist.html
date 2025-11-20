@@ -1,0 +1,37 @@
+<template>
+    <lightning-card title="Sub Case Reference Selector">
+        <div class="slds-var-m-around_medium">
+            <div class="form-container">
+                <template if:true={showSelect}>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <lightning-combobox name="picklist" label={label}
+                                    placeholder="Select Sub Case Reference" value={selectedValues} options={options}
+                                    onchange={handleChange}>
+                                </lightning-combobox>
+                            </td>
+                            <td style="padding-top: 10px; text-align: center;">
+                                <lightning-button variant="brand" label="Save" onclick={handleSave}></lightning-button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </template>
+            </div>
+            
+            <template if:true={selectedValues2.length}>
+                <div class="selected-values">
+                    <template for:each={selectedValues2} for:item="value">
+                        <span key={value} class="pill">
+                            {value}
+                            <lightning-icon icon-name="utility:close" alternative-text="Remove" size="xx-small"
+                                class={iconClass} data-value={value} onclick={removeItem}></lightning-icon>
+                        </span>
+                    </template>
+                </div>
+            </template>
+        </div>
+    </lightning-card>
+</template>

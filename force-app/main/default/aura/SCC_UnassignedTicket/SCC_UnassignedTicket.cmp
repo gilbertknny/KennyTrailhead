@@ -1,0 +1,116 @@
+<aura:component controller="SCC_UnassignedTicketController" implements="force:appHostable,flexipage:availableForAllPageTypes" access="global">
+    <!-- Definisi atribut -->
+    <aura:attribute name="cases" type="Case[]" />
+    <aura:attribute name="pageNumber" type="Integer" default="1" />
+    <aura:attribute name="pageSize" type="Integer" default="10" />
+    <aura:attribute name="totalRecords" type="Integer" />
+    <aura:attribute name="totalPages" type="Integer" />
+    <aura:attribute name="searchCalltype" type="String" />
+    <aura:attribute name="searchNoTicket" type="String" />
+    <aura:attribute name="searchTanggalKomplain" type="String" />
+    <aura:attribute name="searchAgent" type="String" /> <!-- TBD -->
+    <aura:attribute name="backOfficeAgents" type="User[]" />
+    <aura:attribute name="allCaseIds" type="String[]" />
+    <aura:attribute name="selectedAgentIds" type="String[]" />
+    <aura:attribute name="selectedCaseIds" type="String[]" />
+    <aura:attribute name="isLoading" type="Boolean" default="false" />
+
+    <!-- Definisi handler -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+    <!-- Import Lightning Notifications Library -->
+    <lightning:notificationsLibrary aura:id="notifLib" />
+
+    <!-- Formulir Pencarian -->
+    <div class="slds-box slds-theme_default search-container">
+        <div class="slds-grid slds-gutters">
+            <div class="slds-col slds-size_1-of-3">
+                <lightning:input type="text" label="Case Type" value="{!v.searchCalltype}" placeholder="Cari dan pilih Case Type di sini." />
+            </div>
+            <div class="slds-col slds-size_1-of-3">
+                <lightning:input type="text" label="No Ticket" value="{!v.searchNoTicket}" placeholder="Masukkan No Ticket" />
+            </div>
+            <div class="slds-col slds-size_1-of-3">
+                <lightning:input type="date" label="Tanggal Komplain" value="{!v.searchTanggalKomplain}" placeholder="Masukkan Tanggal Komplain" />
+            </div>
+            <!-- <div class="slds-col slds-size_1-of-4">
+				<lightning:select name="selectAgent" label="Agent" aura:id="selectedAgent">
+                    <option value="">Pilih Agent</option>
+                    <aura:iteration items="{!v.backOfficeAgents}" var="agent">
+                        <option value="{!agent.Id}">{!agent.Name}</option>
+                    </aura:iteration>
+                </lightning:select>
+            </div> -->
+        </div>
+        <lightning:button label="Cari" onclick="{!c.searchCase}" class="slds-button slds-button_brand slds-m-top_small" />
+    </div>
+
+    <!-- Tabel Assign Maker -->
+    <div class="slds-box slds-theme_shade header">
+        <span class="header-title">Assign Maker</span>
+    </div>
+    <div class="slds-box slds-theme_default slds-m-top_small">
+        <aura:iteration items="{!v.backOfficeAgents}" var="agent">
+            <lightning:input type="checkbox" label="{!agent.Name}" value="{!agent.Id}" class="agent-checkbox" onchange="{!c.handleAgentChange}" />
+        </aura:iteration>
+        <lightning:button label="Assign" onclick="{!c.assignCases}" class="slds-button slds-button_brand slds-m-top_small" />
+    </div>
+    
+    <!-- Isi komponen -->
+    <div class="slds-box slds-theme_shade header">
+        <span class="header-title">LIST TICKET</span>
+    </div>
+    <div class="slds-box slds-theme_default slds-m-top_small" style="position:relative">
+        <aura:if isTrue="{!v.isLoading}">
+            <lightning:spinner alternativeText="Loading" size="large" />
+        </aura:if>
+        <table class="slds-table slds-table_bordered slds-table_cell-buffer slds-table_striped">
+            <thead>
+                <tr>
+                    <th scope="col">
+                        <lightning:input type="checkbox" aura:id="allCaseCheckbox" onchange="{!c.handleChecklistAllChange}" />
+                    </th>
+                    <th scope="col">No</th>
+                    <th scope="col">No Ticket</th>
+                    <th scope="col">Case Type</th>
+                    <th scope="col">Fitur ID</th>
+                    <th scope="col">No Kartu</th>
+                    <th scope="col">Tanggal Komplain</th>
+                    <th scope="col">Amount</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Case Owner</th>
+                    <th scope="col">Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                <aura:iteration items="{!v.cases}" var="case" indexVar="index">
+                    <tr>
+                        <td>
+                            <lightning:input type="checkbox" aura:id="caseCheckbox" value="{!case.Id}" onchange="{!c.handleCaseChange}" />
+                        </td>
+                        <td>{!index + 1 + (v.pageNumber - 1) * v.pageSize}</td>
+                        <td class="slds-truncate">{!case.CaseNumber}</td>
+                        <td class="slds-truncate">{!case.SCC_Call_Type__r.Name}</td>
+                        <td class="slds-truncate">{!case.SCC_Fitur__c}</td>
+                        <td class="slds-truncate">{!case.SCC_Card_Number__c}</td>
+                        <td class="slds-truncate">{!case.CreatedDate}</td>
+                        <td class="slds-truncate">{!case.SCC_Amount__c}</td>
+                        <td class="slds-truncate">{!case.Status}</td>
+                        <td class="slds-truncate">{!case.SCC_Case_Owner__c}</td>
+                        <td><button class="slds-button slds-button_neutral" data-id="{!case.Id}" onclick="{!c.goToCaseDetail}">Detail</button></td>
+                    </tr>
+                </aura:iteration>
+            </tbody>
+        </table>
+    </div>
+    <div class="slds-box slds-theme_default slds-m-top_small data-summary">
+        Data yang Dipilih: {!v.selectedCaseIds.length} dari {!v.totalRecords} Data
+    </div>
+    <div class="slds-box slds-theme_default data-summary">
+        Halaman {!v.pageNumber} dari {!v.totalPages} Halaman
+    </div>
+    <div class="slds-box slds-theme_default slds-m-top_small pagination">
+        <lightning:button label="Previous" onclick="{!c.previousPage}" disabled="{!v.pageNumber == 1}" />
+        <lightning:button label="Next" onclick="{!c.nextPage}" disabled="{!v.pageNumber == v.totalPages}" />
+    </div>
+</aura:component>

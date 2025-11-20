@@ -1,0 +1,67 @@
+.custom-dropdown {
+    position: absolute; /* Mengambang di atas elemen lain */
+    z-index: 10; /* Memastikan berada di atas elemen lainnya */
+    width: calc(100% - 16px); /* Agar dropdown menyesuaikan lebar input dengan margin padding */
+    max-width: 350px; /* Sedikit dikurangi untuk tampil lebih ramping */
+    border: 1px solid #dcdcdc;
+    border-radius: 6px; /* Lebih kecil untuk sudut yang ramping */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    background-color: white;
+    margin-top: 4px;
+    padding: 8px 8px 4px 8px; /* Padding atas/bawah lebih kecil untuk kesan minimalis */
+}
+
+.dropdown-header {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.close-button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+.icon-close {
+    color: #707070;
+    font-size: 18px; /* Sedikit diperbesar agar lebih mudah diklik */
+}
+
+.icon-close:hover {
+    color: #d71920;
+}
+
+.dropdown-list {
+    padding: 0;
+    list-style-type: none;
+    margin: 0;
+    max-height: 200px; /* Membatasi tinggi maksimal dropdown */
+    overflow-y: auto; /* Scroll jika melebihi batas */
+}
+
+.dropdown-item {
+    margin-bottom: 4px;
+}
+
+.dropdown-button {
+    background-color: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    width: 100%;
+    text-align: left;
+    padding: 6px; /* Padding dikurangi agar lebih ringkas */
+    font-size: 13px; /* Font-size lebih kecil */
+    cursor: pointer;
+}
+
+.dropdown-button:hover {
+    background-color: #f4f4f4;
+    border-color: #d1d1d1;
+}
+
+.dropdown-button:focus {
+    background-color: #e8f5ff;
+    outline: none;
+    border-color: #1b98e0;
+}

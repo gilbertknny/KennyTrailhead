@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>63.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <name>Assign_Total_SLA_OLA_Records</name>
+        <label>Assign Total SLA OLA Records</label>
+        <locationX>314</locationX>
+        <locationY>539</locationY>
+        <assignmentItems>
+            <assignToReference>SLAOLAsize</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <numberValue>1.0</numberValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_All_SLA_OLA</targetReference>
+        </connector>
+    </assignments>
+    <decisions>
+        <name>Check_apakah_saat_return_melebihi_sla_atau_tidak</name>
+        <label>Check apakah saat return melebihi sla atau tidak</label>
+        <locationX>402</locationX>
+        <locationY>839</locationY>
+        <defaultConnector>
+            <targetReference>Update_Flag_Returned</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>if_yes</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>tanggal_Target_totalSLA_formula</leftValueReference>
+                <operator>GreaterThan</operator>
+                <rightValue>
+                    <elementReference>TODAY</elementReference>
+                </rightValue>
+            </conditions>
+            <label>if yes</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_if_records_more_than_1</name>
+        <label>Check if records more than 1</label>
+        <locationX>226</locationX>
+        <locationY>731</locationY>
+        <defaultConnector>
+            <targetReference>Check_apakah_saat_return_melebihi_sla_atau_tidak</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>if_more_than_1</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>SLAOLAsize</leftValueReference>
+                <operator>GreaterThan</operator>
+                <rightValue>
+                    <numberValue>1.0</numberValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>get_all_records_does_not_equals</targetReference>
+            </connector>
+            <label>if more than 1</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Copy_1_of_Check_apakah_saat_return_melebihi_sla_atau_tidak</name>
+        <label>Copy 1 of Check apakah saat return melebihi sla atau tidak</label>
+        <locationX>226</locationX>
+        <locationY>1055</locationY>
+        <defaultConnector>
+            <targetReference>Update_Flag_Returned_Records</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Copy_1_of_if_yes</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>tanggal_Target_totalSLA_formula</leftValueReference>
+                <operator>GreaterThan</operator>
+                <rightValue>
+                    <elementReference>TODAY</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>loop_all_records</targetReference>
+            </connector>
+            <label>Copy 1 of if yes</label>
+        </rules>
+    </decisions>
+    <environments>Default</environments>
+    <formulas>
+        <name>tanggal_Target_totalSLA_formula</name>
+        <dataType>DateTime</dataType>
+        <expression>DATETIMEVALUE(
+    MID({!$Record__Prior.Tanggal_Total_Target_SLA__c}, 7, 4) &amp; &quot;-&quot; &amp;
+    MID({!$Record__Prior.Tanggal_Total_Target_SLA__c}, 4, 2) &amp; &quot;-&quot; &amp;
+    MID({!$Record__Prior.Tanggal_Total_Target_SLA__c}, 1, 2) &amp; &quot; &quot; &amp;
+    MID({!$Record__Prior.Tanggal_Total_Target_SLA__c}, 12, 8)
+)</expression>
+    </formulas>
+    <formulas>
+        <name>tanggal_target_totalSLA_Formula_Loops</name>
+        <dataType>DateTime</dataType>
+        <expression>DATETIMEVALUE(
+    MID({!loop_all_records.Tanggal_Total_Target_SLA__c}, 7, 4) &amp; &quot;-&quot; &amp;
+    MID({!loop_all_records.Tanggal_Total_Target_SLA__c}, 4, 2) &amp; &quot;-&quot; &amp;
+    MID({!loop_all_records.Tanggal_Total_Target_SLA__c}, 1, 2) &amp; &quot; &quot; &amp;
+    MID({!loop_all_records.Tanggal_Total_Target_SLA__c}, 12, 8)
+)</expression>
+    </formulas>
+    <formulas>
+        <name>TODAY</name>
+        <dataType>DateTime</dataType>
+        <expression>NOW()</expression>
+    </formulas>
+    <interviewLabel>[SLA OLA] - Update Returned Flag {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>[SLA OLA] - Update Returned Flag</label>
+    <loops>
+        <name>loop_all_records</name>
+        <label>loop all records</label>
+        <locationX>50</locationX>
+        <locationY>947</locationY>
+        <collectionReference>get_all_records_does_not_equals</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Copy_1_of_Check_apakah_saat_return_melebihi_sla_atau_tidak</targetReference>
+        </nextValueConnector>
+    </loops>
+    <loops>
+        <name>Loop_All_SLA_OLA</name>
+        <label>Loop All SLA OLA</label>
+        <locationX>226</locationX>
+        <locationY>431</locationY>
+        <collectionReference>Get_all_SLA_OLA_records</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Assign_Total_SLA_OLA_Records</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>Check_if_records_more_than_1</targetReference>
+        </noMoreValuesConnector>
+    </loops>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <name>get_all_records_does_not_equals</name>
+        <label>get all records does not equals</label>
+        <locationX>50</locationX>
+        <locationY>839</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>loop_all_records</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Case_Number__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Case_Number__r.CaseNumber</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>CreatedDate</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <elementReference>$Record.CreatedDate</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>SLA_OLA__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_all_SLA_OLA_records</name>
+        <label>Get all SLA OLA records</label>
+        <locationX>226</locationX>
+        <locationY>323</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Loop_All_SLA_OLA</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Case_Number__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Case_Number__r.CaseNumber</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>SLA_OLA__c</object>
+        <sortField>CreatedDate</sortField>
+        <sortOrder>Asc</sortOrder>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordUpdates>
+        <name>Update_Flag_Returned</name>
+        <label>Update Flag Returned</label>
+        <locationX>490</locationX>
+        <locationY>947</locationY>
+        <inputAssignments>
+            <field>flag_returned_ticket__c</field>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Flag_Returned_Records</name>
+        <label>Update Flag Returned Records</label>
+        <locationX>314</locationX>
+        <locationY>1163</locationY>
+        <connector>
+            <targetReference>loop_all_records</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Case_Number__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Case_Number__r.CaseNumber</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>CreatedDate</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <elementReference>$Record.CreatedDate</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>Case_Status__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Working</stringValue>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>flag_returned_ticket__c</field>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>100</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Get_all_SLA_OLA_records</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Case_Status__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Working</stringValue>
+            </value>
+        </filters>
+        <object>SLA_OLA__c</object>
+        <recordTriggerType>Update</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+    <variables>
+        <name>SLAOLAsize</name>
+        <dataType>Number</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <scale>0</scale>
+    </variables>
+</Flow>

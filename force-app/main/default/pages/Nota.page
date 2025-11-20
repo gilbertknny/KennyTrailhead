@@ -1,0 +1,228 @@
+<apex:page standardController="Case" extensions="SCC_NotaController"   applyHtmlTag="false" applyBodyTag="false" standardStylesheets="false" showHeader="false" sidebar="false" docType="html-5.0">
+    <head>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                font-size: 12px;
+            }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 10px;
+                margin-bottom: 10px;
+            }
+            th, td {
+                border: 1px solid #333;
+                padding: 5px;
+            }
+            th {
+                background-color: #f2f2f2;
+                font-weight: bold;
+            }
+            .header {
+                display: flex;
+                align-items: center;
+                background-color: rgb(12, 46, 109);
+                padding: 10px;
+                border-bottom: 1px solid #333;
+            }
+            .logo {
+                height: 50px;
+                margin-right: 10px;
+            }
+            .title {
+                font-size: 24px;
+                font-weight: bold;
+                color: #ffffff;
+            }
+            .ticket {
+                font-size: 18px;
+                font-weight: bold;
+                color: #333;
+                margin-left: auto;
+                margin-right: 10px;
+            }
+            .content {
+                padding: 10px;
+            }
+            .footer {
+                background-color: #f2f2f2;
+                color: #333;
+                padding: 10px;
+                text-align: center;
+                font-size: 10px;
+                border-top: 1px solid #333;
+            }
+            .table-blue {
+                background-color: #e6ffe6;
+            }
+            .table-green {
+                background-color: #e6ffe6;
+            }
+            .table-yellow {
+                background-color: #fffde6;
+            }
+            .table-red {
+                background-color: #ffe6e6;
+            }
+            .table-gray {
+                background-color: #f2f2f2;
+            }
+            .permasalahan-table th {
+                background-color: rgb(43, 114, 247);
+                color: white;
+              }
+              .table-blue {
+                color: black; 
+            }
+            
+        </style>
+    </head>
+    <body>
+      <div class="header">
+        <!-- <img src="https://w7.pngwing.com/pngs/602/892/png-transparent-book-computer-icons-open-book-rectangle-heart-monochrome.png" alt="Logo" class="logo" width="50" height="50" /> -->
+        <div class="title">Buat Nota</div>
+    </div>
+    <div class="content">
+        <table>
+            <tr>
+                <td rowspan="2"><img src="{!$Resource.BRI_2020svg1}" alt="Logo" class="logo" /></td>
+                <td>NOTA PENYELESAIAN TRANSAKSI E-BANKING BERMASALAH</td>
+                <td>TICKET:</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>{!NOTT}</td>
+            </tr>
+        </table>
+        <div style="font-size: 18px;color:rgb(0, 0, 0)">
+            <strong>INFORMASI</strong>
+        </div>
+        <table class="permasalahan-table" style="width: 100%;">
+            <tr>
+                <th style="color: black;">NOTT</th>
+                <th style="color: black;">JENIS TRX</th>
+                <th style="color: black;">KETERANGAN</th>
+                <th style="color: black;">UNIT KERJA</th>
+                <th style="color: black;">NOREK</th>
+                <th style="color: black;">NO. TELP</th>
+                <th style="color: black;">NAMA NASABAH</th>
+                <th style="color: black;">NOMOR KARTU</th>
+            </tr>
+            <tr>
+                <td>{!NOTT}</td>
+                <td>{!JENISTRX}</td>
+                <td>{!KETERANGAN3}</td>
+                <td>{!UNIT_KERJA}</td>
+                <td>{!NOREK}</td>
+                <td>{!NO_TELP}</td>
+                <td>{!NAMA_NASABAH}</td>
+                <td>{!NOMOR_KARTU}</td>
+            </tr>
+        </table>
+        <table class="permasalahan-table" style="width: 100%;">
+            <tr>
+                <th style="color: black;">PERMASALAHAN</th>
+            </tr>
+            <tr>
+                <td>{!KETERANGAN1}</td>
+            </tr>
+        </table>
+        <table class="permasalahan-table" style="width: 100%;">
+            <tr>
+                <th colspan="2" style="color: black;">ANALISA PERMASALAHAN</th>
+            </tr>
+            <tr>
+                <td>Branchcode</td>
+                <td>{!BRANCH_CODE}</td>
+            </tr>
+            <tr>
+                <td>Keterangan</td>
+                <td>{!KETERANGAN2}</td>   
+            </tr>
+        </table>
+        <div style="margin-top: 30px;"></div>
+        <div style="font-size: 18px; font-weight: bold; color:rgb(0, 0, 0)">
+            <strong>INSTRUKSI PEMBUKUAN</strong>
+        </div>
+        <table class="permasalahan-table" style="width: 100%;">
+            <tr>
+                <th style="color: black;">NAMA REKENING</th>
+                <th style="color: black;">NOMOR REKENING</th>
+                <th style="color: black;">NOMINAL DEBIT</th>
+                <th style="color: black;">NOMINAL KREDIT</th>
+            </tr>
+            <tr>
+                <td>Rekening Titipan</td>
+                <td>{!REKTITIPAN}</td>
+                <td style="width: 40%; text-align: right;"><apex:outputText value="{0, number, #,##0.00}">
+                    <apex:param value="{!AMOUNTDEBIT}" />
+                    </apex:outputText></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Rekening Fee</td>
+                <td>{!REKFEE}</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Rekening an {!NAMA_NASABAH}</td>
+                <td>{!NOREK}</td>
+                <td></td>
+                <td style="width: 40%; text-align: right;"><apex:outputText value="{0, number, #,##0.00}">
+                    <apex:param value="{!AMOUNTDEBIT}" />
+                    </apex:outputText></td>
+            </tr>
+            <tr>
+                <td>JUMLAH</td>        
+                <td></td>
+                <td style="width: 40%; text-align: right;"><apex:outputText value="{0, number, #,##0.00}">
+                    <apex:param value="{!TOTAL}" />
+                </apex:outputText></td>
+                <td style="width: 40%; text-align: right;"><apex:outputText value="{0, number, #,##0.00}">
+                    <apex:param value="{!TOTAL}" />
+                </apex:outputText></td>
+            </tr>
+        </table>
+        <table style="width: 40%; text-align: right;">
+            <tr>
+                <td>{!CreatedDate}</td>
+            </tr>
+        </table>
+        <table class="permasalahan-table" style="width: 40%;">
+            <tr>
+                <th style="color: black;">MAKER</th>
+                <th style="color: black;">CHECKER</th>
+                <th style="color: black;">SIGNER</th>
+            </tr>
+            <tr>
+                <td>
+                    <apex:outputField value="{!case.SCC_QR_Maker__c}" />
+                </td>
+                <td>
+                    <apex:outputField value="{!case.SCC_QR_Checker__c}" />
+                </td>
+                <td>
+                    <apex:outputField value="{!case.SCC_QR_Signer__c}" />
+                </td>
+            </tr>
+            <tr>
+                <td>{!Maker}</td>
+                <td>{!Checker}</td>
+                <td>{!Signer}</td>
+            </tr>
+            <tr>
+                <td>{!CreatedDate}</td>
+                <td>{!DateChecker}</td>
+                <td>{!DateSigner}</td>
+            </tr>
+        </table>
+        <div class="tindasan">
+            TINDASAN:<br />
+            1. Arsip Pembukuan<br />
+            2. Arsip Penyelesaian Transaksi Bermasalah
+        </div>
+    </div>
+    </body>
+</apex:page>

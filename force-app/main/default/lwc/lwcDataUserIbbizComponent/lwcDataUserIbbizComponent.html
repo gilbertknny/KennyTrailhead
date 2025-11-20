@@ -1,0 +1,260 @@
+<!--
+    LWC Name           : lwcDataUserIbizComponent.html
+    Created Date       : 25 November 2024
+    @description       : This is class ..
+    @author            : Rakeyan Nuramria
+    Modification Log :
+    Ver   Date         Author                            Modification
+    1.0   25/11/2024   Rakeyan Nuramria                  Initial Version
+    1.0   30/01/2025   Rakeyan Nuramria                  Revamp UI
+-->
+
+<template>
+    <lightning-card icon-name="" variant="base" class="custom-card slds-m-top_xx-small slds-card_boundary">
+        <div slot="title">Informasi Ibbiz</div>
+        <div slot="actions">
+            <template if:false={isCloseHidden}>
+                <lightning-button-icon icon-name="utility:close" alternative-text="Close" title="Close"
+                    onclick={handleCloseDataIbbiz} class="cssClass" variant="bare">
+                </lightning-button-icon>
+            </template>
+        </div>
+
+        <!-- Loading Spinner -->
+        <template if:true={isLoading}>
+            <div class="spinner-container" style="height:6rem;position:relative">
+                <div role="status" class="slds-spinner slds-spinner_small">
+                    <span class="slds-assistive-text">Loading</span>
+                    <div class="slds-spinner__dot-a"></div>
+                    <div class="slds-spinner__dot-b"></div>
+                </div>
+            </div>
+        </template>
+
+        <!-- Error Message -->
+        <template if:false={isLoading}>
+            <template if:true={hasError}>
+                <div class="slds-text-color_error slds-m-top_medium slds-text-align_center">
+                    <b>{errorMsg}</b>
+                </div>
+            </template>
+
+            <!-- If no error, display data -->
+            <template if:false={hasError}>
+                <!-- Client Data -->
+                <lightning-card icon-name="" variant="base" class="custom-card slds-m-around_small slds-card_boundary">
+                    <div class="slds-grid slds-wrap slds-m-around_medium">
+                        <!-- Column 1 -->
+                        <div class="slds-col slds-size_4-of-12 slds-medium-size_4-of-12 slds-large-size_4-of-12">
+                            <!-- Account Number -->
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label" for="nomor-rekening">Nomor Rekening</label>
+                                <div class="slds-form-element__control">
+                                    <input class="slds-input text-bold" type="text" id="nomor-rekening" readonly
+                                        value={clientData.accNumber} />
+                                </div>
+                            </div>
+                            <!-- Nomor Kartu -->
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label" for="nomor-kartu">Nomor Kartu</label>
+                                <div class="slds-form-element__control">
+                                    <input class="slds-input text-bold" type="text" id="nomor-kartu" readonly
+                                        value={clientData.cardNumber} />
+                                </div>
+                            </div>
+                            <!-- Corporate Id -->
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label" for="corporate-id">Corporate Id</label>
+                                <div class="slds-form-element__control">
+                                    <input class="slds-input text-bold" type="text" id="corporate-id" readonly
+                                        value={clientData.handle} />
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Column 2 -->
+                        <div class="slds-col slds-size_4-of-12 slds-medium-size_4-of-12 slds-large-size_4-of-12">
+                            <!-- Name -->
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label" for="nama-lengkap-client">Nama Lengkap</label>
+                                <div class="slds-form-element__control">
+                                    <input class="slds-input text-bold" type="text" id="nama-lengkap-client" readonly
+                                        value={clientData.name} />
+                                </div>
+                            </div>
+
+                            <!-- User ID -->
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label" for="user-id">User ID</label>
+                                <div class="slds-form-element__control">
+                                    <input class="slds-input text-bold" type="text" id="user-id" readonly
+                                        value={clientData.id} />
+                                </div>
+                            </div>
+
+                            <!-- Branch Code -->
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label" for="kode-branch">Kode Branch</label>
+                                <div class="slds-form-element__control">
+                                    <input class="slds-input text-bold" type="text" id="kode-branch" readonly
+                                        value={clientData.branchCode} />
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Column 3 -->
+                        <div class="slds-col slds-size_4-of-12 slds-medium-size_4-of-12 slds-large-size_4-of-12">
+                            <!-- Tanggal Terbuat -->
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label" for="tanggal-terbuat">Tanggal Terbuat</label>
+                                <div class="slds-form-element__control">
+                                    <input class="slds-input text-bold" type="text" id="tanggal-terbuat" readonly
+                                        value={clientData.createdAt} />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </lightning-card>
+
+                <!-- User Data Section -->
+                <lightning-card variant="base" class="custom-card slds-m-around_small slds-card_boundary">
+
+                    <template if:false={userDataError}>
+                        <div slot="title">Data User</div>
+                    </template>
+
+                    <template if:true={userDataError}>
+                        <div slot="title"></div>
+                    </template>
+
+                    <div slot="actions"></div>
+
+                    <template if:true={userDataError}>
+                        <div class="slds-text-color_error slds-m-top_medium slds-text-align_center">
+                            <b>Data User Kosong.</b>
+                        </div>
+                    </template>
+
+                    <template if:false={userDataError}>
+                        <div class="slds-m-around_small">
+                            <div class="slds-scrollable_y custom-scroll">
+                                <table class="slds-table slds-table_bordered slds-table_fixed-layout custom-table">
+                                    <thead>
+                                        <tr class="slds-line-height_reset">
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="User Id">User Id</div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="Nama User">Nama User</div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="Email">Email</div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="Nomor Telepon">Nomor Telepon</div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="Tipe User">Tipe User</div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="Login Terakhir">Login Terakhir</div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="Logout Terakhir">Logout Terakhir</div>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <template for:each={userData} for:item="user">
+                                            <tr key={user.id} class="slds-hint-parent">
+                                                <td>{user.id}</td>
+                                                <td>{user.name}</td>
+                                                <td>{user.email}</td>
+                                                <td>{user.handphone}</td>
+                                                <td>{user.userType}</td>
+                                                <td>{user.lastLogin}</td>
+                                                <td>{user.lastLogout}</td>
+                                            </tr>
+                                        </template>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </template>
+
+
+                </lightning-card>
+
+                <!-- Data Rekening Section -->
+                <lightning-card variant="base" class="custom-card slds-m-around_small slds-card_boundary">
+
+                    <template if:false={listRekeningError}>
+                        <div slot="title">Data Rekening</div>
+                    </template>
+
+                    <template if:true={listRekeningError}>
+                        <div slot="title"></div>
+                    </template>
+
+                    <div slot="actions"></div>
+
+                    <template if:true={listRekeningError}>
+                        <div class="slds-text-color_error slds-m-top_medium slds-text-align_center">
+                            <b>Data Rekening Kosong.</b>
+                        </div>
+                    </template>
+
+                    <template if:false={listRekeningError}>
+                        <div class="slds-m-around_small">
+                            <div class="slds-scrollable_y custom-scroll">
+                                <table class="slds-table slds-table_bordered slds-table_fixed-layout custom-table">
+                                    <thead>
+                                        <tr class="slds-line-height_reset">
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="No">No</div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="Nomor Rekening">Nomor Rekening</div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="Nama Pemilik">Nama Pemilik</div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="Tipe Akun">Tipe Akun</div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="Tipe Produk">Tipe Produk</div>
+                                            </th>
+                                            <th scope="col">
+                                                <div class="slds-truncate" title="Status">Status</div>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <template for:each={listRekening} for:item="rekening">
+                                            <tr key={rekening.accountNumber} class="slds-hint-parent">
+                                                <td>{rekening.no}</td>
+                                                <td>{rekening.accountNumber}</td>
+                                                <td>{rekening.accountName}</td>
+                                                <td>{rekening.accountType}</td>
+                                                <td>{rekening.productType}</td>
+                                                <!-- <td>{rekening.status}</td> -->
+                                                <td data-label="Status">
+                                                    <div class="slds-truncate slds-text-align_center slds-m-around_xx-small"
+                                                        title="">
+                                                        <span class={rekening.customStatus}>{rekening.status}</span>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </template>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </template>
+
+                </lightning-card>
+            </template>
+        </template>
+    </lightning-card>
+</template>

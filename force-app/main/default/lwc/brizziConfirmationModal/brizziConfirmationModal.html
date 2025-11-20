@@ -1,0 +1,31 @@
+<template>
+    <lightning-modal-header>
+        <h2>REPLACE CARD</h2>
+    </lightning-modal-header>
+    <lightning-modal-body>
+        <lightning-layout vertical-align="start">
+            <lightning-layout-item>
+                <div>
+                    <strong>NO. KARTU LAMA:</strong>
+                    <p>{oldCardNumber}</p>
+                </div>
+                <div>
+                    <strong>NO. KARTU BARU:</strong>
+                    <p>{newCardNumber}</p>
+                </div>
+                <div>
+                    <strong>SALDO KARTU:</strong>
+                    <p>{saldoKartu}</p>
+                </div>
+                <div>
+                    <strong>SALDO DEPOSIT:</strong>
+                    <p>{saldoDeposit}</p>
+                </div>
+            </lightning-layout-item>
+        </lightning-layout>
+    </lightning-modal-body>
+    <lightning-modal-footer>
+        <lightning-button variant="neutral" label="Cancel" onclick={handleCancel}></lightning-button>
+        <lightning-button variant="brand" label="Replace" onclick={handleConfirm}></lightning-button>
+    </lightning-modal-footer>
+</template>

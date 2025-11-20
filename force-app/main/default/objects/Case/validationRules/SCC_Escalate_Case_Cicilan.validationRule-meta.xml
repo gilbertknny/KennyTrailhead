@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>SCC_Escalate_Case_Cicilan</fullName>
+    <active>true</active>
+    <description>Validation Message jika Case Type merupakan Kredit (Cicilan)</description>
+    <errorConditionFormula>NOT($Permission.By_Pass_Validation_for_Migration) &amp;&amp; (TEXT(Status) = &apos;Escalated&apos; || TEXT(Status) = &apos; Waiting Document&apos; )
+&amp;&amp;
+($Profile.Name = &apos;Contact Center User&apos;)
+&amp;&amp;
+(flag_cicilan__c = TRUE)
+&amp;&amp;
+( ISBLANK(Tenor_bulan__c) || ISBLANK(Bunga__c) || ISBLANK(Cicilan_per_Bulan__c) || ISBLANK(Exp_Date_Kartu__c) || ISBLANK(AVL_Instalement__c) || ISBLANK(Biaya_Administrasi__c ) )</errorConditionFormula>
+    <errorMessage>1. Tenor (bulan),
+2. Bunga,
+3. Cicilan per Bulan,
+4. Exp Date Kartu,
+5. AVL Installment, &amp;
+6. Biaya Administrasi
+Wajib diisi sebelum eskalasi ke Back Office</errorMessage>
+</ValidationRule>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>NoDataFoundException</label>
+    <protected>false</protected>
+    <values>
+        <field>Description__c</field>
+        <value xsi:type="xsd:string">This exception is used with both Visualforce pages and Salesforce Functions.
+Visualforce
+The exception is thrown with data that doesn&apos;t exist, such as trying to access an sObject that has been deleted. For more information on Visualforce, see the Visualforce Developer&apos;s Guide.
+Salesforce Functions
+The exception is thrown when the project or function name provided in the functionName parameter to the Function.get() method can&apos;t be found. For more information on Salesforce functions, see Function.get().</value>
+    </values>
+    <values>
+        <field>Response_Code__c</field>
+        <value xsi:type="xsd:string">123</value>
+    </values>
+    <values>
+        <field>Type__c</field>
+        <value xsi:type="xsd:string">Failed</value>
+    </values>
+</CustomMetadata>

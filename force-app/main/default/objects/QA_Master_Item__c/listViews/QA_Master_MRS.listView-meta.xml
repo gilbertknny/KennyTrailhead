@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>QA_Master_MRS</fullName>
+    <columns>NAME</columns>
+    <columns>Aspek_Penilaian__c</columns>
+    <columns>Section_Penilaian__c</columns>
+    <columns>Record_Type__c</columns>
+    <columns>CREATED_DATE</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Record_Type__c</field>
+        <operation>equals</operation>
+        <value>Voice</value>
+    </filters>
+    <label>QA Master - Voice</label>
+</ListView>

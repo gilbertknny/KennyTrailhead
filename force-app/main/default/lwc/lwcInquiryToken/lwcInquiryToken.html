@@ -1,0 +1,122 @@
+<!--
+    LWC Name    : lwcInquiryToken.html
+    Created Date       : ?? ?? 2025
+    @description       : This is class ..
+    @author            : Dwiki
+    Modification Log :
+    Ver   Date         Author                            Modification
+    //release 3
+    1.0   ??/??/2025   Dwiki                             Initial Version
+    1.0   24/02/2025   Rakeyan Nuramria                  Adjust UI
+
+-->
+
+<template>
+    <!-- Search Section -->
+    <lightning-card title="" variant="base" class="custom-card slds-m-top_xx-small slds-card_boundary">
+        <div class="slds-grid slds-gutters slds-m-around_small">
+            <div class="slds-col">
+                <lightning-input required label="ID Pelanggan" value={nomorRekening}
+                    onchange={handleNomorRekeningChange} disabled={disableNomorRekeningField}></lightning-input>
+            </div>
+            <div class="slds-col">
+                <lightning-input type="date" required label="Tanggal Transaksi" value={trxDate}
+                    onchange={handleTrxDateChange} disabled={disableTrxDateField}></lightning-input>
+                <p></p>
+            </div>
+            <div class="slds-col" style="align-self: flex-start; margin-top: 22px;">
+                <lightning-button label="Cari" variant="brand" onclick={handleSearch}
+                    disabled={disableSearchButton}></lightning-button>
+            </div>
+        </div>
+
+        <!-- <template if:true={errorMsg}>
+            <div class="slds-text-color_error slds-m-left_small">
+                {errorMsg}
+            </div>
+        </template> -->
+    </lightning-card>
+    <!-- End Search Section -->
+
+    <template if:true={isLoading}>
+        <div class="spinner-container" style="height:6rem;position:relative">
+            <div role="status" class="slds-spinner slds-spinner_small">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </template>
+
+    <!-- Result Data Section -->
+     
+        <template if:true={hasError}>
+            <div class="slds-text-color_error slds-text-align_center slds-m-top_xx-small">
+                <b>{errorMessage}</b>
+            </div>
+        </template>
+
+        <template if:true={showSearchResults}>
+            <lightning-card title="" icon-name="" variant="base" class="custom-card slds-m-top_xx-small slds-card_boundary">
+                    <div class="slds-p-around_small slds-m-top_xx-small">
+                        <div class="slds-scrollable_y custom-scroll">
+                            <table class="slds-table slds-table_bordered slds-table_fixed-layout custom-table">
+                                <thead>
+                                    <tr class="slds-line-height_reset">
+                                        <th scope="col"></th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Id Transaksi">Id Transaksi</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Tanggal Transaksi">Tanggal Transaksi</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Nomor Rekening">Nomor Rekening</div>
+                                        </th>
+                                        <!-- <th scope="col">
+                                            <div class="slds-truncate" title="Nomor Kartu Kredit">Nomor Kartu Kredit</div>
+                                        </th> -->
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Nomor Token">Nomor Token</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Remark">Remark</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Status MCS">Status MCS</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Status Rekon">Status Rekon</div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <template for:each={data} for:item="row">
+                                      <tr key={row.ID} class="slds-hint-parent">
+                                        <td>
+                                          <lightning-input type="radio"
+                                                name="selectRow"
+                                                value={row.NoToken}
+                                                onchange={handleCheckboxChange}>
+                                            </lightning-input>
+                                        </td>
+                                        <td>{row.ID}</td>
+                                        <td>{row.TanggalTrans}</td>
+                                        <td>{row.RekDebet}</td>
+                                        <!-- <td>{row.RekKredit}</td> -->
+                                        <td>{row.NoToken}</td>
+                                        <td>{row.Remark}</td>
+                                        <td>{row.StatusMCS}</td>
+                                        <td>{row.StatusRecon}</td>
+                                     </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+                        </div>
+                        <template if:true={hasToken}>
+                             <button class="slds-button slds-button_brand slds-m-top_medium" onclick={handleClickSubmit}>Submit</button>
+                        </template>
+                    </div>
+            </lightning-card>
+        </template>
+</template>

@@ -1,0 +1,152 @@
+/* NEW USING SCROLLABLE HORIZONTALY */
+.custom-scroll {
+    max-height: 300px;
+    overflow-y: auto;
+    overflow-x: auto; /* Enable horizontal scrolling */
+}
+
+.custom-table {
+    width: 100%; /* Ensure the table takes full width */
+    table-layout: fixed; /* Fixed layout for equal column widths */
+    max-width: 800px; /* Set a maximum width for the table */
+}
+
+.custom-table thead th {
+    background-color: #0176D3; 
+    color: #ffffff;
+    width: 150px; /* Set a fixed width for each column */
+}
+
+.custom-table th, .custom-table td {
+    text-align: center;
+    vertical-align: middle;
+    padding: 5px;
+}
+
+.custom-table td {
+    position: relative;
+    overflow: visible; /* Allow overflow */
+    white-space: normal; /* Allow text to wrap */
+    word-wrap: break-word; /* Break long words onto the next line */
+}
+
+.custom-table th .slds-truncate {
+    overflow: visible; /* Allow overflow */
+    white-space: normal; /* Allow text to wrap */
+}
+
+.custom-table td .slds-truncate {
+    overflow: visible; /* Allow overflow */
+    white-space: normal; /* Allow text to wrap */
+    word-wrap: break-word; /* Break long words onto the next line */
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.custom-card {
+    display: block;
+}
+
+.custom-button-menu .slds-dropdown {
+    min-width: 150px; /* Adjust width of the dropdown menu */
+    text-align: center; /* Center text inside the menu */
+}
+
+
+/* END NEW USING SCROLLABLE HORIZONTALY */
+
+/* .custom-error-message {
+    max-width: 250px;
+    white-space: normal;
+    word-wrap: break-word;
+} */
+
+
+.fixed-width-input {
+    width: 300px; /* Adjust as needed */
+}
+
+.slds-has-error .fixed-width-input {
+    border: 1px solid red; /* Ensures error styling applies */
+}
+
+.input-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    position: relative;
+}
+
+.custom-error-message {
+    color: red;
+    font-size: 12px;
+    min-height: 16px; /* Ensures consistent space for error messages */
+    margin-top: 4px;
+    align-self: flex-start;
+    max-width: 250px;
+    white-space: normal;
+    word-wrap: break-word;
+}
+
+.slds-has-error .slds-input {
+    border: 1px solid red;
+}
+
+/* FOR INPUT SECTION */
+
+.form-container {
+    max-width: 570px;
+    margin: 0 auto;
+}
+
+.field-container {
+    display: block;
+}
+
+.custom-label, .custom-required-label {
+    display: block;
+    color: rgb(62, 62, 60);
+    font-size: .75rem;
+    line-height: 1;
+    margin-bottom: 5px;
+}
+
+.custom-required-label::before {
+    content: '*';
+    color: rgb(194, 57, 52);
+    margin-right: 2px;
+}
+
+/* Remove default Salesforce margins */
+lightning-input {
+    --slds-c-input-spacing-block-start: 0;
+    --slds-c-input-spacing-block-end: 0;
+}
+
+lightning-input.slds-form-element {
+    margin: 0;
+}
+
+/* Force label and input to be close together */
+:host {
+    --lwc-formLabelSpacing: 0;
+    /* --lwc-spacingXSmall: 0; */
+}
+
+/* Prevent any unexpected padding */
+.slds-form-element__control {
+    padding-top: 0 !important;
+}
+
+/* Error messages styling */
+.slds-text-color_error {
+    font-size: 12px;
+    margin-top: 2px;
+}
+
+/* END FOR INPUT SECTION */

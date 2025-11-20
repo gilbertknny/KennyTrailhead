@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Area__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF( BEGINS( OwnerId ,&apos;005&apos;) &amp;&amp; Branch_Code__c != &apos;0000&apos; &amp;&amp; Branch_Code__c != &apos;00229&apos;, Owner:User.SCC_Area__c,
+
+IF( BEGINS( OwnerId ,&apos;005&apos;) &amp;&amp; (Branch_Code__c == &apos;0000&apos; || Branch_Code__c == &apos;00229&apos;) &amp;&amp; Cost_Center__c != &apos;&apos;, &apos;KP00&apos;,
+
+IF( Branch_Code__c != &apos;00229&apos;, &apos;&apos;,
+
+IF( Cost_Center__c != &apos;&apos;, &apos;KP00&apos;,
+
+&apos;KP00&apos;) ) ))</formula>
+    <label>Area</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

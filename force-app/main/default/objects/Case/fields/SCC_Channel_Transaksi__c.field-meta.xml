@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>SCC_Channel_Transaksi__c</fullName>
+    <description>This field is used to capture Channel Transaksi (Transaction Channel) information on case.</description>
+    <label>Channel Transaksi</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>EDC BRI</fullName>
+                <default>false</default>
+                <label>EDC BRI</label>
+            </value>
+            <value>
+                <fullName>EDC Bank Lain</fullName>
+                <default>false</default>
+                <label>EDC Bank Lain</label>
+            </value>
+            <value>
+                <fullName>ATM / CRM BRI</fullName>
+                <default>false</default>
+                <label>ATM / CRM BRI</label>
+            </value>
+            <value>
+                <fullName>ATM Bank Lain</fullName>
+                <default>false</default>
+                <label>ATM Bank Lain</label>
+            </value>
+            <value>
+                <fullName>QRIS BRI</fullName>
+                <default>false</default>
+                <label>QRIS BRI</label>
+            </value>
+            <value>
+                <fullName>QRIS Bank Lain</fullName>
+                <default>false</default>
+                <label>QRIS Bank Lain</label>
+            </value>
+            <value>
+                <fullName>BRIMO</fullName>
+                <default>false</default>
+                <label>BRIMO</label>
+            </value>
+            <value>
+                <fullName>CERIA</fullName>
+                <default>false</default>
+                <label>CERIA</label>
+            </value>
+            <value>
+                <fullName>BRI Credit Card Mobile</fullName>
+                <default>false</default>
+                <label>BRI Credit Card Mobile</label>
+            </value>
+            <value>
+                <fullName>Branch / Kantor BRI</fullName>
+                <default>false</default>
+                <label>Branch / Kantor BRI</label>
+            </value>
+            <value>
+                <fullName>IBBIZ</fullName>
+                <default>false</default>
+                <label>IBBIZ</label>
+            </value>
+            <value>
+                <fullName>QLOLA</fullName>
+                <default>false</default>
+                <label>QLOLA</label>
+            </value>
+            <value>
+                <fullName>Agen BRILink</fullName>
+                <default>false</default>
+                <label>Agen BRILink</label>
+            </value>
+            <value>
+                <fullName>E-Commerce</fullName>
+                <default>false</default>
+                <label>E-Commerce</label>
+            </value>
+            <value>
+                <fullName>Non channel</fullName>
+                <default>false</default>
+                <label>Non channel</label>
+            </value>
+            <value>
+                <fullName>RPA</fullName>
+                <default>false</default>
+                <label>RPA</label>
+            </value>
+            <value>
+                <fullName>ATM JALIN</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>ATM JALIN</label>
+            </value>
+            <value>
+                <fullName>EDC BRILINK &amp; UKO</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>EDC BRILINK &amp; UKO</label>
+            </value>
+            <value>
+                <fullName>EDC Merchant</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>EDC Merchant</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

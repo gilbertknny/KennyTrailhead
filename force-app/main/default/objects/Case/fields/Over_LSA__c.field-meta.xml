@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Over_LSA__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF(OR( Over_Agent_OLA__c , Over_Level_1_OLA__c , Over_Level_2_OLA__c , Over_Level_3_OLA__c , Over_Level_4_OLA__c ), &apos;Melebihi SLA&apos;, &apos;Sesuai SLA&apos;)</formula>
+    <label>Status SLA</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

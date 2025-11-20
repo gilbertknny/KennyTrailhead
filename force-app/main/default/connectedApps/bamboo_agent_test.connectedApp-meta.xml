@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ConnectedApp xmlns="http://soap.sforce.com/2006/04/metadata">
+    <contactEmail>arif.w.w@gmail.com</contactEmail>
+    <ipRanges>
+        <description>Bamboo IP</description>
+        <end>172.16.194.254</end>
+        <start>172.16.194.1</start>
+    </ipRanges>
+    <label>bamboo-agent-test</label>
+    <oauthConfig>
+        <callbackUrl>https://login.salesforce.com/callback</callbackUrl>
+        <certificate>MIIDZTCCAk2gAwIBAgIUf++ocfDEXn6jrLA/6Ilf954/1cgwDQYJKoZIhvcNAQELBQAwQjELMAkGA1UEBhMCWFgxFTATBgNVBAcMDERlZmF1bHQgQ2l0eTEcMBoGA1UECgwTRGVmYXVsdCBDb21wYW55IEx0ZDAeFw0yNDExMDUwNDM2MjBaFw0yNTExMDUwNDM2MjBaMEIxCzAJBgNVBAYTAlhYMRUwEwYDVQQHDAxEZWZhdWx0IENpdHkxHDAaBgNVBAoME0RlZmF1bHQgQ29tcGFueSBMdGQwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDXVTW1PY2aJ6VKw2F8z86D02Fh9a9NRXLlRd9fUdzufEh0LCpiQDShRlg0/PBLtV75RQVrfu21BKIL9+7vrmyGADitynoeAbKu2q2zl2HhxcNK4L0t7pmOZXIPI+M0BF9Tk+NBPvAOYi/e1T5uVKeEoZEjU6+z1ZPK8wZQqW5fkLROsZzx3utXadUwM9qGZnOAHo7MxVItultSF1wQMW3M/50Sjlo7q4dP6GoJh99kgg/pPnhm0ZDOmryT2XjrJLZinwULfWbHML8FQEtqzwGCi0IBQtlmPy7SRNgjCOL7lcMN3VJMDtIrC2k/t3rv9Mbjt+LaQbP36Lw769NjLAIjAgMBAAGjUzBRMB0GA1UdDgQWBBRXJoMgR84qA4d6AvtqETn5lJ7+TjAfBgNVHSMEGDAWgBRXJoMgR84qA4d6AvtqETn5lJ7+TjAPBgNVHRMBAf8EBTADAQH/MA0GCSqGSIb3DQEBCwUAA4IBAQAGpbA95iNqvCC68wu8QSVz3+sh6HHomMVbkGn7a3exrTqNV4ktVaE2CVVmY6vvaEd0UdyqKk5CimcY1xWuoT87FnqahqsEhckf6yCu7z5BciafTBW8bEbp6+LULVqy4pKZMbxZRd5YnAk1hd8N2bzMALp+bkUK2H+5NdtjgMgRT+Q8oDScnHvkbEImnfFPFN8d4nAB66hC2TQdSqB+Dc+Afzyf7XcMoUMUBML/vtzlSvxYeAUc3pxNJ1eqQf+UakdCOSuFe806Njx/Nj+o90xhw/WLqh94v1dfzTHE+msWUD6SoDvwV89eLyFrinWrK8Wd4F0gVQTEw4kv+u3MNW/B</certificate>
+        <consumerKey>3MVG9Za5EbktTiWbnKaYMqjpETVDFrcs9sZ9Dr.0aY6srokrt7BioV08XoalVi0hdvOZGchVyAVTQGWOzQ2DN</consumerKey>
+        <isAdminApproved>false</isAdminApproved>
+        <isClientCredentialEnabled>true</isClientCredentialEnabled>
+        <isCodeCredentialEnabled>true</isCodeCredentialEnabled>
+        <isCodeCredentialPostOnly>true</isCodeCredentialPostOnly>
+        <isConsumerSecretOptional>false</isConsumerSecretOptional>
+        <isIntrospectAllTokens>true</isIntrospectAllTokens>
+        <isNamedUserJwtEnabled>true</isNamedUserJwtEnabled>
+        <isPkceRequired>true</isPkceRequired>
+        <isRefreshTokenRotationEnabled>true</isRefreshTokenRotationEnabled>
+        <isSecretRequiredForRefreshToken>true</isSecretRequiredForRefreshToken>
+        <isSecretRequiredForTokenExchange>true</isSecretRequiredForTokenExchange>
+        <isTokenExchangeEnabled>true</isTokenExchangeEnabled>
+        <scopes>Full</scopes>
+        <scopes>RefreshToken</scopes>
+    </oauthConfig>
+    <oauthPolicy>
+        <ipRelaxation>BYPASS</ipRelaxation>
+        <isTokenExchangeFlowEnabled>false</isTokenExchangeFlowEnabled>
+        <refreshTokenPolicy>specific_lifetime:1:DAYS</refreshTokenPolicy>
+    </oauthPolicy>
+</ConnectedApp>

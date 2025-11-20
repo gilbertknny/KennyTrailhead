@@ -1,0 +1,128 @@
+.THIS .container {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+.THIS .row {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.THIS .slds-form-element__control {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 150px 30px 1fr;
+    gap: 8px;
+    align-items: center;
+}
+
+.THIS .small-input {
+    width: 100%;
+    min-width: 0;
+}
+
+.THIS .custom-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f3f2f2;
+    color: #333;
+    padding: 6px;
+    border: 1px solid #d8d8d8;
+    border-radius: 3px;
+    font-weight: bold;
+    font-size: 15px;
+    width: 30px;
+}
+
+.THIS .slds-form-element__label.kartu-baru {
+    margin-top: 30px;
+    display: block;
+    margin-bottom: 15px;
+}
+
+.THIS .slds-form-element__label {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+    display: block;
+}
+
+/* Search row specific styling */
+.THIS .row:first-of-type .slds-form-element__control {
+    grid-template-columns: 1fr auto;
+}
+
+/* Adjust button icon alignment */
+.THIS .slds-button.slds-button_icon {
+    align-self: stretch;
+    height: 32px;
+}
+
+/* Modal specific styling */
+.THIS .slds-modal {
+    align-items: flex-start;
+    padding-top: 3rem;
+}
+
+.THIS .slds-modal__container {
+    width: 50% !important;
+    max-width: 600px !important;
+    min-width: 400px !important;
+    margin: 0 auto;
+}
+
+.THIS .slds-modal__header {
+    padding: 1rem;
+    background: white;
+    border-bottom: 1px solid #dddbda;
+}
+
+.THIS .slds-modal__header h2 {
+    font-size: 1.25rem;
+    color: #ff8c00 !important;
+}
+
+.THIS .slds-modal__content {
+    padding: 1rem 2rem;
+}
+
+.THIS .slds-modal__content .slds-grid {
+    margin: 0;
+}
+
+.THIS .slds-modal__content .slds-col {
+    padding: 0.5rem 0;
+}
+
+.THIS .slds-modal__content label {
+    font-weight: 600;
+    color: #444;
+    margin-bottom: 0.25rem;
+}
+
+.THIS .slds-modal__content lightning-input {
+    --slds-c-input-radius-border: 4px;
+}
+
+.THIS .slds-modal__footer {
+    padding: 0.75rem;
+    text-align: center;
+    border-top: 1px solid #dddbda;
+}
+
+.THIS .slds-backdrop {
+    background: rgba(0, 0, 0, 0.5);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .THIS .slds-modal__container {
+        width: 90% !important;
+        min-width: unset !important;
+    }
+}

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>BRIZZI</fullName>
+    <active>true</active>
+    <errorConditionFormula>NOT($Permission.By_Pass_Validation_for_Migration) &amp;&amp;
+SCC_Call_Type__r.External_Id__c = &apos;8713&apos; &amp;&amp; (TEXT(Status) != &apos;Working&apos; &amp;&amp; TEXT(Status) != &apos;New&apos;) &amp;&amp;
+( ISBLANK(SCC_Amount__c) || SCC_Account_Number__c = null || ISBLANK(SCC_Waktu_Transaksi__c) || SCC_Brizzi_Card_Number__c = null || SCC_Amount__c &gt; 10000000)</errorConditionFormula>
+    <errorMessage>Wajib isi Nomor Rekening, Kartu Brizzi, Waktu Transaksi &amp; Nominal ( Nominal tidak boleh lebih dari 10.000.000 )</errorMessage>
+</ValidationRule>

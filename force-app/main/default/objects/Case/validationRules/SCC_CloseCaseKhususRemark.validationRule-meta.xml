@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>SCC_CloseCaseKhususRemark</fullName>
+    <active>false</active>
+    <description>Engga kepakeeeeeeeeeeeeeeeee tlg jangan di-deploy</description>
+    <errorConditionFormula>(NOT(ISNEW())
+&amp;&amp;
+NOT($Permission.By_Pass_Validation_for_Migration)
+&amp;&amp;
+TEXT( PRIORVALUE(Status)) = &apos;Closed&apos;)
+||
+ISCHANGED (SCC_Remark__c)</errorConditionFormula>
+    <errorMessage>serah</errorMessage>
+</ValidationRule>

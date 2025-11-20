@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>61.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <name>Assign_Case_Type_Number_to_Variables</name>
+        <label>Assign Case Type Number to Variables</label>
+        <locationX>248</locationX>
+        <locationY>287</locationY>
+        <assignmentItems>
+            <assignToReference>Deleted_Case_Type_Number</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Record.Name</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>If_user_is_data_administrator</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Check_Case_Number</name>
+        <label>Check Case Number</label>
+        <locationX>446</locationX>
+        <locationY>611</locationY>
+        <assignmentItems>
+            <assignToReference>CaseNumber</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Case_Type_Number_from_Cases.Case_Number__c</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Cases_Found</targetReference>
+        </connector>
+    </assignments>
+    <customErrors>
+        <name>Cannot_Delete_Case_Type_Record</name>
+        <label>Cannot Delete Case Type Record</label>
+        <locationX>314</locationX>
+        <locationY>827</locationY>
+        <customErrorMessages>
+            <errorMessage>Case Type tidak dapat dihapus karena masih digunakan dalam Cases.</errorMessage>
+            <isFieldError>false</isFieldError>
+        </customErrorMessages>
+    </customErrors>
+    <customErrors>
+        <name>Cant_delete_case_type_record</name>
+        <label>Cant delete case type record</label>
+        <locationX>50</locationX>
+        <locationY>503</locationY>
+        <customErrorMessages>
+            <errorMessage>{!$Label.Data_admins_cant_delete_case_type_record}</errorMessage>
+            <isFieldError>false</isFieldError>
+        </customErrorMessages>
+    </customErrors>
+    <decisions>
+        <name>Cases_Found</name>
+        <label>Cases Found?</label>
+        <locationX>446</locationX>
+        <locationY>719</locationY>
+        <defaultConnectorLabel>Case Type is Not Used</defaultConnectorLabel>
+        <rules>
+            <name>Case_Type_is_Used</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Case_Type_Number_from_Cases</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Cannot_Delete_Case_Type_Record</targetReference>
+            </connector>
+            <label>Case Type is Used</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>If_user_is_data_administrator</name>
+        <label>If user is data administrator</label>
+        <locationX>248</locationX>
+        <locationY>395</locationY>
+        <defaultConnector>
+            <targetReference>Get_Case_Type_Number_from_Cases</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>To_check_if_user_is_data_administraor</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Profile.Name</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <elementReference>$Label.Data_Administrator</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Cant_delete_case_type_record</targetReference>
+            </connector>
+            <label>To check if user is data administraor</label>
+        </rules>
+    </decisions>
+    <description>Clone the previous existing flow to debugs.</description>
+    <environments>Default</environments>
+    <interviewLabel>Copy of Data Admins Can&apos;t Delete Case Type Record {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Copy of Data Admins Can&apos;t Delete Case Type Record</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <name>Get_Case_Type_Number_from_Cases</name>
+        <label>Get Case Type Number from Cases</label>
+        <locationX>446</locationX>
+        <locationY>503</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Check_Case_Number</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>SCC_Call_Type__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Case</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <start>
+        <locationX>122</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Assign_Case_Type_Number_to_Variables</targetReference>
+        </connector>
+        <object>SSC_Call_Type__c</object>
+        <recordTriggerType>Delete</recordTriggerType>
+        <triggerType>RecordBeforeDelete</triggerType>
+    </start>
+    <status>Obsolete</status>
+    <variables>
+        <name>Case_Type_Number_from_Cases</name>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>Case_Type_Number_From_Cases_Row1</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>CaseNumber</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>Deleted_Case_Type_Number</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

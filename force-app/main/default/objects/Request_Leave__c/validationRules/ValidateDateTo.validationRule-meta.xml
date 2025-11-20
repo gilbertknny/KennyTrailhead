@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ValidateDateTo</fullName>
+    <active>true</active>
+    <errorConditionFormula>OR(AND(ISNEW(),Date_To__c &lt;= TODAY()), AND(!ISNEW(),Date_To__c &lt;= DATEVALUE( CreatedDate ) ))</errorConditionFormula>
+    <errorDisplayField>Date_To__c</errorDisplayField>
+    <errorMessage>&quot;Date To&quot; tidak boleh lebih dari hari ini</errorMessage>
+</ValidationRule>

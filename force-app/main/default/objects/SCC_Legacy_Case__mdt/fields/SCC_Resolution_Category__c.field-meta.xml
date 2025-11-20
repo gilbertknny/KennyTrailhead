@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>SCC_Resolution_Category__c</fullName>
+    <fieldManageability>DeveloperControlled</fieldManageability>
+    <label>Resolution Category</label>
+    <required>false</required>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Transactional/Fraud without Refund</fullName>
+                <default>true</default>
+                <label>Transactional/Fraud without Refund</label>
+            </value>
+            <value>
+                <fullName>Transactional/Fraud with Refund</fullName>
+                <default>false</default>
+                <label>Transactional/Fraud with Refund</label>
+            </value>
+            <value>
+                <fullName>Non-Transactional</fullName>
+                <default>false</default>
+                <label>Non-Transactional</label>
+            </value>
+            <value>
+                <fullName>Dokumen Tidak Lengkap</fullName>
+                <default>false</default>
+                <label>Dokumen Tidak Lengkap</label>
+            </value>
+            <value>
+                <fullName>Tidak Mengirimkan Notifikasi</fullName>
+                <default>false</default>
+                <label>Tidak Mengirimkan Notifikasi</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

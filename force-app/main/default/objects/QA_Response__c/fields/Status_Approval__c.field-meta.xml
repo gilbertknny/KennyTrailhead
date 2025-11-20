@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Status_Approval__c</fullName>
+    <defaultValue>&apos;New&apos;</defaultValue>
+    <label>Status Approval</label>
+    <required>false</required>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>New</fullName>
+                <default>true</default>
+                <label>New</label>
+            </value>
+            <value>
+                <fullName>Open</fullName>
+                <default>false</default>
+                <label>Submit Sanggahan</label>
+            </value>
+            <value>
+                <fullName>Approve by Agent Leader</fullName>
+                <default>false</default>
+                <label>Approve by Agent Leader</label>
+            </value>
+            <value>
+                <fullName>Approve by QA</fullName>
+                <default>false</default>
+                <label>Approve by QA</label>
+            </value>
+            <value>
+                <fullName>Reject by Agent Leader</fullName>
+                <default>false</default>
+                <label>Reject by Agent Leader</label>
+            </value>
+            <value>
+                <fullName>Reject by QA</fullName>
+                <default>false</default>
+                <label>Reject by QA</label>
+            </value>
+            <value>
+                <fullName>In Progress</fullName>
+                <default>false</default>
+                <label>In Progress</label>
+            </value>
+            <value>
+                <fullName>Appeal Approve</fullName>
+                <default>false</default>
+                <label>Appeal Approve</label>
+            </value>
+            <value>
+                <fullName>Appeal Reject</fullName>
+                <default>false</default>
+                <label>Appeal Reject</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

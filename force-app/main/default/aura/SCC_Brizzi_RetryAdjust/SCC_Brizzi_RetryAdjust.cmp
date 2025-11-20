@@ -1,0 +1,33 @@
+<aura:component implements="flexipage:availableForAllPageTypes,force:hasRecordId,force:lightningQuickAction,lightning:actionOverride,lightning:hasPageReference" access="global" controller="SCC_Brizzi_AdjustDeposit_UI">
+    <aura:attribute name="recordId" type="String"/>
+    <aura:handler name="init" value="{! this }" action="{! c.doInit }"/>   
+    <!-- Case data -->
+    <aura:attribute name="caseRecord" type="Case" />
+    <aura:attribute name="loaded" type="Boolean" default="true" />
+    <lightning:messages />
+    <!--loading spinner start-->
+    <aura:if isTrue="{!v.loaded}">
+        <aura:set attribute="else">
+            <div aura:id="spinnerId" class="slds-spinner_container">
+                <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                    <span class="slds-assistive-text">Loading...</span>
+                    <div class="slds-spinner__dot-a"></div>
+                    <div class="slds-spinner__dot-b"></div>
+                </div>
+            </div>
+        </aura:set>
+    </aura:if>
+    <!-- Add a container div with text-align center -->
+    <div class="slds-align_absolute-center slds-p-around_medium">
+        <div class="slds-text-align_center">
+            <h1 class="slds-p-bottom_medium slds-text-heading_medium">
+                <lightning:formattedText value="Apakah anda yakin untuk Retry Adjust Deposit ?" />
+            </h1>
+            <div class="slds-align_absolute-center">
+                <lightning:button label="Ya" 
+                                variant="brand" 
+                                onclick="{!c.handleAdjust}" />
+            </div>
+        </div>
+    </div>
+</aura:component>

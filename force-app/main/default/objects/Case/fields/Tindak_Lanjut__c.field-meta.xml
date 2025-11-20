@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Tindak_Lanjut__c</fullName>
+    <description>Dalam Proses/Menunggu Info Pelapor/Menunggu tanggapan pelapor/Tuntas</description>
+    <label>Tindak Lanjut</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <controllingField>Komplain__c</controllingField>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Dalam Proses</fullName>
+                <default>false</default>
+                <label>Dalam Proses</label>
+            </value>
+            <value>
+                <fullName>Menunggu Info Pelapor</fullName>
+                <default>false</default>
+                <label>Menunggu Info Pelapor</label>
+            </value>
+            <value>
+                <fullName>Menunggu tanggapan pelapor</fullName>
+                <default>false</default>
+                <label>Menunggu tanggapan pelapor</label>
+            </value>
+            <value>
+                <fullName>Tuntas</fullName>
+                <default>false</default>
+                <label>Tuntas</label>
+            </value>
+            <value>
+                <fullName>Koreksi</fullName>
+                <default>false</default>
+                <label>Koreksi</label>
+            </value>
+            <value>
+                <fullName>Tidak dikoreksi</fullName>
+                <default>false</default>
+                <label>Tidak dikoreksi</label>
+            </value>
+            <value>
+                <fullName>Sudah dilakukan maintenance SIKP</fullName>
+                <default>false</default>
+                <label>Sudah dilakukan maintenance SIKP</label>
+            </value>
+            <value>
+                <fullName>Pinjaman sudah sesuai</fullName>
+                <default>false</default>
+                <label>Pinjaman sudah sesuai</label>
+            </value>
+            <value>
+                <fullName>Pinjaman Ditutup</fullName>
+                <default>false</default>
+                <label>Pinjaman Ditutup</label>
+            </value>
+            <value>
+                <fullName>Diganti</fullName>
+                <default>false</default>
+                <label>Diganti</label>
+            </value>
+            <value>
+                <fullName>Tidak Diganti</fullName>
+                <default>false</default>
+                <label>Tidak Diganti</label>
+            </value>
+            <value>
+                <fullName>Simpanan sesuai</fullName>
+                <default>false</default>
+                <label>Simpanan sesuai</label>
+            </value>
+            <value>
+                <fullName>Simpanan ditutup / frozen</fullName>
+                <default>false</default>
+                <label>Simpanan ditutup / frozen</label>
+            </value>
+            <value>
+                <fullName>Dikabulkan</fullName>
+                <default>false</default>
+                <label>Dikabulkan</label>
+            </value>
+            <value>
+                <fullName>Tidak dikabulkan</fullName>
+                <default>false</default>
+                <label>Tidak dikabulkan</label>
+            </value>
+            <value>
+                <fullName>Dikabulkan dengan syarat</fullName>
+                <default>false</default>
+                <label>Dikabulkan dengan syarat</label>
+            </value>
+            <value>
+                <fullName>Dikembalikan</fullName>
+                <default>false</default>
+                <label>Dikembalikan</label>
+            </value>
+            <value>
+                <fullName>Peneguran Kepada Petugas</fullName>
+                <default>false</default>
+                <label>Peneguran Kepada Petugas</label>
+            </value>
+            <value>
+                <fullName>Peneguran Terhadap Pihak Ketiga</fullName>
+                <default>false</default>
+                <label>Peneguran Terhadap Pihak Ketiga</label>
+            </value>
+            <value>
+                <fullName>Sudah Sesuai</fullName>
+                <default>false</default>
+                <label>Sudah Sesuai</label>
+            </value>
+            <value>
+                <fullName>Dichairkan</fullName>
+                <default>false</default>
+                <label>Dicairkan</label>
+            </value>
+            <value>
+                <fullName>Penyelesaian persuasif / kekeluargaan</fullName>
+                <default>false</default>
+                <label>Penyelesaian persuasif / kekeluargaan</label>
+            </value>
+            <value>
+                <fullName>Penyelesaian secara hukum</fullName>
+                <default>false</default>
+                <label>Penyelesaian secara hukum</label>
+            </value>
+            <value>
+                <fullName>Penjelasan kepada Pelapor</fullName>
+                <default>false</default>
+                <label>Penjelasan kepada Pelapor</label>
+            </value>
+            <value>
+                <fullName>Disetujui</fullName>
+                <default>false</default>
+                <label>Disetujui</label>
+            </value>
+            <value>
+                <fullName>Tidak disetujui</fullName>
+                <default>false</default>
+                <label>Tidak disetujui</label>
+            </value>
+            <value>
+                <fullName>Tidak sesuai</fullName>
+                <default>false</default>
+                <label>Tidak sesuai</label>
+            </value>
+            <value>
+                <fullName>Diberikan</fullName>
+                <default>false</default>
+                <label>Diberikan</label>
+            </value>
+            <value>
+                <fullName>Tidak diberikan</fullName>
+                <default>false</default>
+                <label>Tidak diberikan</label>
+            </value>
+            <value>
+                <fullName>Disampaikan ke SDM</fullName>
+                <default>false</default>
+                <label>Disampaikan ke SDM</label>
+            </value>
+            <value>
+                <fullName>Disarankan ke WBS</fullName>
+                <default>false</default>
+                <label>Disarankan ke WBS</label>
+            </value>
+            <value>
+                <fullName>Laporan tidak terkait ketentuan</fullName>
+                <default>false</default>
+                <label>Laporan tidak terkait ketentuan</label>
+            </value>
+            <value>
+                <fullName>Diselesaikan unit kerja/restoratif</fullName>
+                <default>false</default>
+                <label>Diselesaikan unit kerja/restoratif</label>
+            </value>
+            <value>
+                <fullName>Lainnya</fullName>
+                <default>false</default>
+                <label>Lainnya</label>
+            </value>
+            <value>
+                <fullName>Dibuka</fullName>
+                <default>false</default>
+                <label>Dibuka</label>
+            </value>
+            <value>
+                <fullName>Tidak Dibuka</fullName>
+                <default>false</default>
+                <label>Tidak Dibuka</label>
+            </value>
+            <value>
+                <fullName>Refund</fullName>
+                <default>false</default>
+                <label>Refund</label>
+            </value>
+            <value>
+                <fullName>No Refund</fullName>
+                <default>false</default>
+                <label>No Refund</label>
+            </value>
+        </valueSetDefinition>
+        <valueSettings>
+            <controllingFieldValue>Keberatan Penagihan</controllingFieldValue>
+            <valueName>Peneguran Kepada Petugas</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Keberatan Penagihan</controllingFieldValue>
+            <valueName>Peneguran Terhadap Pihak Ketiga</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Keberatan Penagihan</controllingFieldValue>
+            <controllingFieldValue>Pengajuan Pinjaman</controllingFieldValue>
+            <controllingFieldValue>Pencairan Pinjaman</controllingFieldValue>
+            <valueName>Sudah Sesuai</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Asuransi</controllingFieldValue>
+            <controllingFieldValue>Sanggahan Transaksi</controllingFieldValue>
+            <controllingFieldValue>Laporan Penipuan</controllingFieldValue>
+            <controllingFieldValue>Agunan</controllingFieldValue>
+            <valueName>Diganti</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Asuransi</controllingFieldValue>
+            <controllingFieldValue>Sanggahan Transaksi</controllingFieldValue>
+            <controllingFieldValue>Laporan Penipuan</controllingFieldValue>
+            <controllingFieldValue>Agunan</controllingFieldValue>
+            <valueName>Tidak Diganti</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Asuransi</controllingFieldValue>
+            <valueName>Dichairkan</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Komplain Pemblokiran</controllingFieldValue>
+            <valueName>Dibuka</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Komplain Pemblokiran</controllingFieldValue>
+            <valueName>Tidak Dibuka</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Salah Transfer</controllingFieldValue>
+            <valueName>Refund</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Salah Transfer</controllingFieldValue>
+            <valueName>No Refund</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Kebocoran Data</controllingFieldValue>
+            <valueName>Penyelesaian persuasif / kekeluargaan</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Kebocoran Data</controllingFieldValue>
+            <valueName>Penyelesaian secara hukum</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Kebocoran Data</controllingFieldValue>
+            <valueName>Penjelasan kepada Pelapor</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Pengajuan Pinjaman</controllingFieldValue>
+            <valueName>Disetujui</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Pengajuan Pinjaman</controllingFieldValue>
+            <valueName>Tidak disetujui</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Pengajuan Pinjaman</controllingFieldValue>
+            <controllingFieldValue>Pencairan Pinjaman</controllingFieldValue>
+            <valueName>Tidak sesuai</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Permohonan Dokumen / Data Pinjaman</controllingFieldValue>
+            <valueName>Diberikan</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Permohonan Dokumen / Data Pinjaman</controllingFieldValue>
+            <valueName>Tidak diberikan</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>iDeb SLIK</controllingFieldValue>
+            <controllingFieldValue>Pembayaran Tagihan Tidak Sesuai</controllingFieldValue>
+            <valueName>Koreksi</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>iDeb SLIK</controllingFieldValue>
+            <controllingFieldValue>Pembayaran Tagihan Tidak Sesuai</controllingFieldValue>
+            <valueName>Tidak dikoreksi</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>iDeb SLIK</controllingFieldValue>
+            <valueName>Sudah dilakukan maintenance SIKP</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Sanggahan Pinjaman/Kartu Kredit</controllingFieldValue>
+            <valueName>Pinjaman sudah sesuai</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Sanggahan Pinjaman/Kartu Kredit</controllingFieldValue>
+            <valueName>Pinjaman Ditutup</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Sanggahan Pembuatan Simpanan</controllingFieldValue>
+            <valueName>Simpanan sesuai</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Sanggahan Pembuatan Simpanan</controllingFieldValue>
+            <valueName>Simpanan ditutup / frozen</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Permohonan Keringanan</controllingFieldValue>
+            <controllingFieldValue>Keberatan Lelang</controllingFieldValue>
+            <controllingFieldValue>Pelunasan Maju</controllingFieldValue>
+            <valueName>Dikabulkan</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Permohonan Keringanan</controllingFieldValue>
+            <controllingFieldValue>Keberatan Lelang</controllingFieldValue>
+            <controllingFieldValue>Pelunasan Maju</controllingFieldValue>
+            <valueName>Tidak dikabulkan</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Permohonan Keringanan</controllingFieldValue>
+            <valueName>Dikabulkan dengan syarat</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Agunan</controllingFieldValue>
+            <valueName>Dikembalikan</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Laporan Pekerja / Keluarga BRI</controllingFieldValue>
+            <valueName>Disampaikan ke SDM</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Laporan Pekerja / Keluarga BRI</controllingFieldValue>
+            <valueName>Disarankan ke WBS</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Laporan Pekerja / Keluarga BRI</controllingFieldValue>
+            <valueName>Laporan tidak terkait ketentuan</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Laporan Pekerja / Keluarga BRI</controllingFieldValue>
+            <valueName>Diselesaikan unit kerja/restoratif</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Laporan Pekerja / Keluarga BRI</controllingFieldValue>
+            <valueName>Lainnya</valueName>
+        </valueSettings>
+    </valueSet>
+</CustomField>

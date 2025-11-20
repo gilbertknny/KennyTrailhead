@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ReportType xmlns="http://soap.sforce.com/2006/04/metadata">
+    <baseObject>SurveyInvitation</baseObject>
+    <category>other</category>
+    <deployed>true</deployed>
+    <description>Survey Question &amp; Response Detail v0.1</description>
+    <join>
+        <join>
+            <outerJoin>true</outerJoin>
+            <relationship>SurveyQuestionResponses</relationship>
+        </join>
+        <outerJoin>true</outerJoin>
+        <relationship>SurveyResponses</relationship>
+    </join>
+    <label>Survey Question &amp; Response Detail</label>
+    <sections>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Survey Invitation ID</displayNameOverride>
+            <field>Id</field>
+            <table>SurveyInvitation</table>
+        </columns>
+        <columns>
+            <checkedByDefault>true</checkedByDefault>
+            <displayNameOverride>Name</displayNameOverride>
+            <field>Name</field>
+            <table>SurveyInvitation</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Created Date</displayNameOverride>
+            <field>CreatedDate</field>
+            <table>SurveyInvitation</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Created By</displayNameOverride>
+            <field>CreatedBy</field>
+            <table>SurveyInvitation</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Last Modified Date</displayNameOverride>
+            <field>LastModifiedDate</field>
+            <table>SurveyInvitation</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Last Modified By</displayNameOverride>
+            <field>LastModifiedBy</field>
+            <table>SurveyInvitation</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Survey</displayNameOverride>
+            <field>Survey</field>
+            <table>SurveyInvitation</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Invitation Expires On</displayNameOverride>
+            <field>InviteExpiryDateTime</field>
+            <table>SurveyInvitation</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Network</displayNameOverride>
+            <field>Community</field>
+            <table>SurveyInvitation</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Is Default</displayNameOverride>
+            <field>IsDefault</field>
+            <table>SurveyInvitation</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>UUID</displayNameOverride>
+            <field>UUID</field>
+            <table>SurveyInvitation</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Response Status</displayNameOverride>
+            <field>ResponseStatus</field>
+            <table>SurveyInvitation</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>User</displayNameOverride>
+            <field>User</field>
+            <table>SurveyInvitation</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Lead</displayNameOverride>
+            <field>Lead</field>
+            <table>SurveyInvitation</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Kantor_Cabang__c</field>
+            <table>SurveyInvitation</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Contact</displayNameOverride>
+            <field>Contact</field>
+            <table>SurveyInvitation</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Case</displayNameOverride>
+            <field>Case__c</field>
+            <table>SurveyInvitation</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Response Value</displayNameOverride>
+            <field>Response_Value__c</field>
+            <table>SurveyInvitation</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Survey Question Response</displayNameOverride>
+            <field>Survey_Question_Response__c</field>
+            <table>SurveyInvitation</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Case Category</displayNameOverride>
+            <field>Case_Category__c</field>
+            <table>SurveyInvitation</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Responden</displayNameOverride>
+            <field>Responden__c</field>
+            <table>SurveyInvitation</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Region</displayNameOverride>
+            <field>Reigon__c</field>
+            <table>SurveyInvitation</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Branch</displayNameOverride>
+            <field>Branch__c</field>
+            <table>SurveyInvitation</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Count Response</displayNameOverride>
+            <field>Count_Response__c</field>
+            <table>SurveyInvitation</table>
+        </columns>
+        <masterLabel>Survey Invitations</masterLabel>
+    </sections>
+    <sections>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Survey Response ID</displayNameOverride>
+            <field>Id</field>
+            <table>SurveyInvitation.SurveyResponses</table>
+        </columns>
+        <columns>
+            <checkedByDefault>true</checkedByDefault>
+            <displayNameOverride>Response Name</displayNameOverride>
+            <field>Name</field>
+            <table>SurveyInvitation.SurveyResponses</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Created Date</displayNameOverride>
+            <field>CreatedDate</field>
+            <table>SurveyInvitation.SurveyResponses</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Created By</displayNameOverride>
+            <field>CreatedBy</field>
+            <table>SurveyInvitation.SurveyResponses</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Last Modified Date</displayNameOverride>
+            <field>LastModifiedDate</field>
+            <table>SurveyInvitation.SurveyResponses</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Last Modified By</displayNameOverride>
+            <field>LastModifiedBy</field>
+            <table>SurveyInvitation.SurveyResponses</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Interview GUID</displayNameOverride>
+            <field>InterviewGuid</field>
+            <table>SurveyInvitation.SurveyResponses</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Response Status</displayNameOverride>
+            <field>Status</field>
+            <table>SurveyInvitation.SurveyResponses</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Response Language</displayNameOverride>
+            <field>Language</field>
+            <table>SurveyInvitation.SurveyResponses</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Response Completion Date and Time</displayNameOverride>
+            <field>CompletionDateTime</field>
+            <table>SurveyInvitation.SurveyResponses</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Response IP Address</displayNameOverride>
+            <field>IpAddress</field>
+            <table>SurveyInvitation.SurveyResponses</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Response Latitude</displayNameOverride>
+            <field>Latitude</field>
+            <table>SurveyInvitation.SurveyResponses</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Response Longitude</displayNameOverride>
+            <field>Longitude</field>
+            <table>SurveyInvitation.SurveyResponses</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Survey Version</displayNameOverride>
+            <field>SurveyVersion</field>
+            <table>SurveyInvitation.SurveyResponses</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Survey</displayNameOverride>
+            <field>Survey</field>
+            <table>SurveyInvitation.SurveyResponses</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Data Mapper Execution Status</displayNameOverride>
+            <field>DataMapperExecutionStatus</field>
+            <table>SurveyInvitation.SurveyResponses</table>
+        </columns>
+        <masterLabel>Survey Responses</masterLabel>
+    </sections>
+    <sections>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Survey Question Response ID</displayNameOverride>
+            <field>Id</field>
+            <table>SurveyInvitation.SurveyResponses.SurveyQuestionResponses</table>
+        </columns>
+        <columns>
+            <checkedByDefault>true</checkedByDefault>
+            <displayNameOverride>Name</displayNameOverride>
+            <field>Name</field>
+            <table>SurveyInvitation.SurveyResponses.SurveyQuestionResponses</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Created Date</displayNameOverride>
+            <field>CreatedDate</field>
+            <table>SurveyInvitation.SurveyResponses.SurveyQuestionResponses</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Created By</displayNameOverride>
+            <field>CreatedBy</field>
+            <table>SurveyInvitation.SurveyResponses.SurveyQuestionResponses</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Last Modified Date</displayNameOverride>
+            <field>LastModifiedDate</field>
+            <table>SurveyInvitation.SurveyResponses.SurveyQuestionResponses</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Last Modified By</displayNameOverride>
+            <field>LastModifiedBy</field>
+            <table>SurveyInvitation.SurveyResponses.SurveyQuestionResponses</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Question</displayNameOverride>
+            <field>Question</field>
+            <table>SurveyInvitation.SurveyResponses.SurveyQuestionResponses</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Question Choice</displayNameOverride>
+            <field>QuestionChoice</field>
+            <table>SurveyInvitation.SurveyResponses.SurveyQuestionResponses</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Survey Version</displayNameOverride>
+            <field>SurveyVersion</field>
+            <table>SurveyInvitation.SurveyResponses.SurveyQuestionResponses</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Invitation</displayNameOverride>
+            <field>Invitation</field>
+            <table>SurveyInvitation.SurveyResponses.SurveyQuestionResponses</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Data Type</displayNameOverride>
+            <field>Datatype</field>
+            <table>SurveyInvitation.SurveyResponses.SurveyQuestionResponses</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Rank</displayNameOverride>
+            <field>Rank</field>
+            <table>SurveyInvitation.SurveyResponses.SurveyQuestionResponses</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Date Value</displayNameOverride>
+            <field>DateValue</field>
+            <table>SurveyInvitation.SurveyResponses.SurveyQuestionResponses</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Date Time Value</displayNameOverride>
+            <field>DateTimeValue</field>
+            <table>SurveyInvitation.SurveyResponses.SurveyQuestionResponses</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Choice Value</displayNameOverride>
+            <field>ChoiceValue</field>
+            <table>SurveyInvitation.SurveyResponses.SurveyQuestionResponses</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Response Value</displayNameOverride>
+            <field>ResponseValue</field>
+            <table>SurveyInvitation.SurveyResponses.SurveyQuestionResponses</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>True or False</displayNameOverride>
+            <field>IsTrueOrFalse</field>
+            <table>SurveyInvitation.SurveyResponses.SurveyQuestionResponses</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Number Value</displayNameOverride>
+            <field>NumberValue</field>
+            <table>SurveyInvitation.SurveyResponses.SurveyQuestionResponses</table>
+        </columns>
+        <masterLabel>Survey Question Responses</masterLabel>
+    </sections>
+</ReportType>

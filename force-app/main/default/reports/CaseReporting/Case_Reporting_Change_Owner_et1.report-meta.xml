@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <columns>
+        <field>CUST_OWNER_NAME</field>
+    </columns>
+    <columns>
+        <field>SCC_Case_Reporting__c.SCC_Date_Time_Perubahan_Owner__c</field>
+    </columns>
+    <columns>
+        <field>SCC_Case_Reporting__c.SCC_Jenis_Eskalasi_Perubahan__c</field>
+    </columns>
+    <columns>
+        <field>SCC_Case_Reporting__c.SCC_Jenis_Automasi__c</field>
+    </columns>
+    <columns>
+        <field>SCC_Case_Reporting__c.SCC_Owner_Lama__c</field>
+    </columns>
+    <columns>
+        <field>SCC_Case_Reporting__c.SCC_Owner_Baru__c</field>
+    </columns>
+    <currency>IDR</currency>
+    <format>Summary</format>
+    <groupingsDown>
+        <dateGranularity>Day</dateGranularity>
+        <field>FK_NAME</field>
+        <sortOrder>Asc</sortOrder>
+    </groupingsDown>
+    <name>[Case Reporting] Change Owner</name>
+    <params>
+        <name>co</name>
+        <value>1</value>
+    </params>
+    <reportType>CustomEntity$SCC_Case_Reporting__c@SCC_Case_Reporting__c.SCC_Tiket__c</reportType>
+    <scope>organization</scope>
+    <showDetails>true</showDetails>
+    <showGrandTotal>false</showGrandTotal>
+    <showSubTotals>false</showSubTotals>
+    <timeFrameFilter>
+        <dateColumn>SCC_Case_Reporting__c.SCC_Date_Time_Perubahan_Owner__c</dateColumn>
+        <interval>INTERVAL_CUSTOM</interval>
+    </timeFrameFilter>
+</Report>

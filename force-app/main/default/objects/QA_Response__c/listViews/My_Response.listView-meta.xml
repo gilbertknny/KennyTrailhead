@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>My_Response</fullName>
+    <columns>NAME</columns>
+    <columns>CREATED_DATE</columns>
+    <columns>Kategori_Penilaian__c</columns>
+    <columns>Nama_Agent__c</columns>
+    <columns>Nama_QA__c</columns>
+    <columns>No_Tiket_New__c</columns>
+    <columns>Status_Approval__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Agent_Lookup__c</field>
+        <operation>equals</operation>
+        <value>$USER</value>
+    </filters>
+    <filters>
+        <field>In_Periode__c</field>
+        <operation>equals</operation>
+        <value>1</value>
+    </filters>
+    <label>My Response</label>
+    <sharedTo>
+        <group>QA_User_Agent</group>
+    </sharedTo>
+</ListView>

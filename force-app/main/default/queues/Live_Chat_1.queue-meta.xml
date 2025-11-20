@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Queue xmlns="http://soap.sforce.com/2006/04/metadata">
+    <doesSendEmailToMembers>false</doesSendEmailToMembers>
+    <name>Live Chat 1</name>
+    <queueMembers>
+        <users>
+            <user>kurniati.rindu@mii.co.id</user>
+            <user>febrian.putra@mii.co.id</user>
+            <user>liveagent2@bri.co.id</user>
+            <user>liveagent3@bri.co.id</user>
+            <user>liveagent4@bri.co.id</user>
+            <user>liveagent5@bri.co.id</user>
+            <user>liveagentqa@bri.co.id</user>
+            <user>seria5472@gmail.com</user>
+            <user>mengmeng02111@gmail.com</user>
+        </users>
+    </queueMembers>
+    <queueRoutingConfig>cases_Routing_config</queueRoutingConfig>
+    <queueSobject>
+        <sobjectType>MessagingEndUser</sobjectType>
+    </queueSobject>
+    <queueSobject>
+        <sobjectType>MessagingSession</sobjectType>
+    </queueSobject>
+</Queue>

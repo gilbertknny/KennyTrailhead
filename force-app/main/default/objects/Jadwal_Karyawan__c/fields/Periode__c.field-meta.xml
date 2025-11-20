@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Periode__c</fullName>
+    <externalId>false</externalId>
+    <formula>CASE(MONTH( Tanggal__c ), 1, &apos;Januari&apos;, 2, &apos;Februari&apos;, 3, &apos;Maret&apos;, 4, &apos;April&apos;, 5, &apos;Mei&apos;, 6, &apos;Juni&apos;, 7, &apos;Juli&apos;, 8, &apos;Agustus&apos;, 9, &apos;September&apos;, 10, &apos;Oktober&apos;, 11, &apos;November&apos;, &apos;Desember&apos;) +  &apos; &apos; + TEXT(YEAR(Tanggal__c ))</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Periode</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

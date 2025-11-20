@@ -1,0 +1,118 @@
+<!--
+  @description       : 
+  @author            : Ardyta Yudianto
+  @group             : 
+  @last modified on  : 10-06-2025
+  @last modified by  : Ardyta Yudianto
+-->
+<template>        
+    <lightning-accordion allow-multiple-sections-open="false">        
+        <div class="slds-grid slds-gutters">        
+            <!-- <div class="slds-col">  
+                <lightning-combobox 
+                    name="kodePembayaran" 
+                    label="Kode Pembayaran" 
+                    value={kodePembayaran} 
+                    placeholder="Pilih Kode Pembayaran"  
+                    options={kodePembayaranOptions} 
+                    onchange={handleKodePembayaranChange}>  
+                </lightning-combobox>  
+            </div>         -->
+            <div class="slds-col">
+                <label class="slds-form-element__label">Kode Pembayaran</label>
+                <div class="slds-form-element__control">
+                    <span>RTGS</span>
+                </div>
+            </div> 
+            <div class="slds-col">        
+                <lightning-input     
+                    label="Id Transaksi"     
+                    value={idTransaksi}     
+                    onchange={handleIdTransaksiChange}     
+                    required>    
+                </lightning-input>        
+            </div>        
+            <div class="slds-col" style="align-content: end;">        
+                <lightning-button     
+                    variant="brand"     
+                    label="Cari"     
+                    onclick={handleSearch}  
+                    disabled={isSearchDisabled}>
+                </lightning-button>        
+            </div>        
+        </div>        
+
+        <template if:true={error}>        
+            <!-- <div class="slds-text-color_error slds-m-top_medium">{error}</div>  -->
+            <div class="slds-text-color_error slds-m-top_medium">Data tidak ditemukan</div> 
+        </template>
+
+        <template if:true={dataExist}>        
+            <div class="slds-m-around_medium rounded-border" style="border: 1px solid #ccc; border-radius: 5px; padding: 1rem;">        
+                <lightning-button-icon     
+                    icon-name="utility:close"     
+                    alternative-text="Close"     
+                    title="Close"    
+                    onclick={handleClose}     
+                    class="slds-float_right"     
+                    variant="bare">    
+                </lightning-button-icon>    
+
+                <div class="slds-grid slds-wrap slds-m-top_medium">        
+                    <div class="slds-col slds-size_1-of-2">        
+                        <div class="slds-text-title large-text slds-m-bottom_small"><b>Original Transaction:</b></div>        
+                        <div class="large-text slds-m-bottom_small">{transactionData.originalTransaction}</div>        
+                        <div class="slds-text-title large-text slds-m-bottom_small"><b>Reference Transaction:</b></div>        
+                        <div class="large-text slds-m-bottom_small">{transactionData.referenceTransaction}</div>       
+                        <div class="slds-text-title large-text slds-m-bottom_small"><b>MT:</b></div>        
+                        <div class="large-text slds-m-bottom_small">{transactionData.mt}</div>         
+                        <div class="slds-text-title large-text slds-m-bottom_small"><b>TTC:</b></div>        
+                        <div class="large-text slds-m-bottom_small">{transactionData.ttc}</div>         
+                        <div class="slds-text-title large-text slds-m-bottom_small"><b>Date:</b></div>        
+                        <div class="large-text slds-m-bottom_small">{transactionData.date}</div>         
+                        <div class="slds-text-title large-text slds-m-bottom_small"><b>Amount Debit:</b></div>        
+                        <div class="large-text slds-m-bottom_small">{transactionData.amountDebit}</div>         
+                        <div class="slds-text-title large-text slds-m-bottom_small"><b>Debit Currency:</b></div>        
+                        <div class="large-text slds-m-bottom_small">{transactionData.debitCurrency}</div>         
+                        <div class="slds-text-title large-text slds-m-bottom_small"><b>Amount Credit:</b></div>        
+                        <div class="large-text slds-m-bottom_small">{transactionData.amountCredit}</div>         
+                        <div class="slds-text-title large-text slds-m-bottom_small"><b>Credit Currency:</b></div>        
+                        <div class="large-text slds-m-bottom_small">{transactionData.creditCurrency}</div>   
+                        <div class="slds-text-title large-text slds-m-bottom_small"><b>Fee Amount:</b></div>        
+                        <div class="large-text slds-m-bottom_small">{transactionData.feeAmount}</div>        
+                        <div class="slds-text-title large-text slds-m-bottom_small"><b>Fee Currency:</b></div>        
+                        <div class="large-text slds-m-bottom_small">{transactionData.feeCurrency}</div>        
+                        <div class="slds-text-title large-text slds-m-bottom_small"><b>PPN:</b></div>        
+                        <div class="large-text slds-m-bottom_small">{transactionData.ppn}</div>            
+                    </div>
+                    <div class="slds-col slds-size_1-of-2">          
+                        <div class="slds-text-title large-text slds-m-bottom_small"><b>To Member BIC:</b></div>        
+                        <div class="large-text slds-m-bottom_small">{transactionData.toMemberBIC}</div>        
+                        <div class="slds-text-title large-text slds-m-bottom_small"><b>Remittance Information:</b></div>        
+                        <div class="large-text slds-m-bottom_small">{transactionData.remittanceInformation}</div>        
+                        <div class="slds-text-title large-text slds-m-bottom_small"><b>Is Not Pool:</b></div>        
+                        <div class="large-text slds-m-bottom_small">{transactionData.isNotPool}</div>        
+                        <div class="slds-text-title large-text slds-m-bottom_small"><b>Is WIC:</b></div>        
+                        <div class="large-text slds-m-bottom_small">{transactionData.isWic}</div>        
+                        <div class="slds-text-title large-text slds-m-bottom_small"><b>Channel:</b></div>        
+                        <div class="large-text slds-m-bottom_small">{transactionData.channel}</div>        
+                        <div class="slds-text-title large-text slds-m-bottom_small"><b>Insert Date:</b></div>        
+                        <div class="large-text slds-m-bottom_small">{transactionData.insertDate}</div>        
+                        <div class="slds-text-title large-text slds-m-bottom_small"><b>User Maker:</b></div>        
+                        <div class="large-text slds-m-bottom_small">{transactionData.userMaker}</div>        
+                        <div class="slds-text-title large-text slds-m-bottom_small"><b>Maker Date:</b></div>        
+                        <div class="large-text slds-m-bottom_small">{transactionData.makerDate}</div>        
+                        <div class="slds-text-title large-text slds-m-bottom_small"><b>User Approve:</b></div>        
+                        <div class="large-text slds-m-bottom_small">{transactionData.userApprove}</div>        
+                        <div class="slds-text-title large-text slds-m-bottom_small"><b>Approve Date:</b></div>        
+                        <div class="large-text slds-m-bottom_small">{transactionData.approveDate}</div>        
+                        <div class="slds-text-title large-text slds-m-bottom_small"><b>Status:</b></div>        
+                        <div class="large-text slds-m-bottom_small">{transactionData.status}</div>        
+                        <div class="slds-text-title large-text slds-m-bottom_small"><b>Status Description:</b></div>        
+                        <div class="large-text slds-m-bottom_small">{transactionData.statusDesc}</div>        
+                    </div>        
+                </div>    
+            </div>        
+        </template>        
+    </lightning-accordion>        
+</template>

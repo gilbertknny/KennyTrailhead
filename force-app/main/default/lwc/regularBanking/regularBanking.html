@@ -1,0 +1,649 @@
+<template>
+        <lightning-accordion allow-multiple-sections-open onsectiontoggle={handleAccordionSectionToggle}>
+            <lightning-accordion-section label="Customer Portfolio" name="customerPortfolio" class="custom-section">
+                <template if:true={error}>
+                    <div class="slds-text-color_error">
+                        {error}
+                    </div>
+                </template>
+                <template if:true={showCustomerData}>
+                    <div class="slds-m-top_medium slds-scrollable_x">
+                        <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Nomor Rekening</th>
+                                    <th scope="col">CIF</th>
+                                    <th scope="col">Product</th>
+                                    <th scope="col">Type Product</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Tanggal Buka Rekening</th>
+                                    <th scope="col">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={customerData} for:item="record">
+                                    <tr key={record.id}>
+                                        <td>{record.accountNumber}</td>
+                                        <td>{record.cifno}</td>
+                                        <td>{record.product}</td>
+                                        <td>{record.productType}</td>
+                                        <td>{record.status}</td>
+                                        <td>{record.openAccountDate}</td>
+                                        <td>
+                                            <div class="slds-p-around_medium lgc-bg">
+                                                <lightning-button-menu alternative-text="Show menu" menu-alignment="auto">
+                                                    <lightning-menu-item value={record.accountNumber} label="Mutasi Rekening" onclick={handleMutasiRekening} data-section="customerPortfolio"></lightning-menu-item>
+                                                    <lightning-menu-item value={record.accountNumber} label="Data Kartu" onclick={handleDataKartu} data-section="customerPortfolio"></lightning-menu-item>
+                                                </lightning-button-menu>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </template>
+
+                <!-- Mutasi Rekening Section for Customer Portfolio-->
+                <template if:true={showMutasiRekeningPortfolio}>
+                    <div class="slds-m-top_medium slds-box slds-theme_default">
+                        <div class="slds-grid slds-gutters">
+                            <div class="slds-col">
+                                <lightning-input type="date" label="Tanggal Awal" value={startDate} placeholder="mm/dd/yyyy"
+                                                 date-style="short" onchange={handleStartDateChange} required></lightning-input>
+                            </div>
+                            <div class="slds-col">
+                                <lightning-input type="date" label="Tanggal Akhir" value={endDate} placeholder="mm/dd/yyyy"
+                                                 date-style="short" onchange={handleEndDateChange} required></lightning-input>
+                            </div>
+                            <div class="slds-col" style="align-content: end;">
+                                <lightning-button label="Cari" 
+                                                  variant="brand"
+                                                  onclick={handleMutasiRekeningSearch}
+                                                  data-section="customerPortfolio"
+                                                  disabled={isMutasiCariButtonDisabled}></lightning-button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <template if:true={errormsgPortfolio}>
+                        <div class="slds-text-color_error">
+                            {errormsgPortfolio}
+                        </div>
+                    </template>    
+                
+                    <template if:true={showMutasiRekeningDataPortfolio}>
+                        <div class="slds-m-top_medium slds-scrollable_x">
+                            <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Nomor Rekening</th>
+                                        <th scope="col">Tanggal Transaksi</th>
+                                        <th scope="col">Jam Transaksi</th>
+                                        <th scope="col">Remark Transaksi</th>
+                                        <th scope="col">Jenis Transaksi</th>
+                                        <th scope="col">Mutasi Debit</th>
+                                        <th scope="col">Mutasi Kredit</th>
+                                        <!--th scope="col">Saldo Akhir</th-->
+                                        <th scope="col">User ID</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <template for:each={mutasiRekeningDataPortfolio} for:item="record">
+                                        <tr key={record.noRek}>
+                                            <td>{record.noRek}</td>
+                                            <td>{record.tglTran}</td>
+                                            <td>{record.jamTran}</td>
+                                            <td>{record.remarkCustom}</td>
+                                            <td>{record.glsign}</td>
+                                            <td>{record.mutasiDebet}</td>
+                                            <td>{record.mutasiKredit}</td>
+                                            <!--td>{record.saldoAkhirMutasi}</td-->
+                                            <td>{record.truser}</td>
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+                        </div>
+                    </template>
+                </template>
+
+                <template if:true={errorInquiryPortfolio}>
+                    <div class="slds-text-color_error">
+                        {errorInquiryPortfolio}
+                    </div>
+                </template>
+
+                <template if:true={inquiryStatusPortfolio}>
+                    <div class="slds-m-top_medium slds-scrollable_x">
+                        <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Status Blokir Saldo</th>
+                                    <th scope="col">Nominal Blokir Saldo</th>
+                                    <th scope="col">Tanggal Blokir</th>
+                                    <th scope="col">Keterangan Blokir</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>{inquiryStatusPortfolio.holdType}</td>
+                                    <td>{inquiryStatusPortfolio.holdAmt}</td>
+                                    <td>{inquiryStatusPortfolio.holdDate}</td>
+                                    <td>{inquiryStatusPortfolio.holdRemark}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </template>
+
+                <!-- Data Kartu Section for Customer Portfolio-->
+                <template if:true={showDataKartuPortfolio}>
+                    <div class="slds-m-top_medium slds-box slds-theme_default">
+                        <div class="slds-grid slds-gutters">
+                            <div class="slds-col">
+                                <lightning-input label="Kartu Debit" value={cardNumber} onchange={handleCardNumberChange} placeholder="Cari..." data-section="customerPortfolio"></lightning-input>
+                            </div>
+                            <div class="slds-col" style="align-content: end;">
+                                <lightning-button label="Cari" 
+                                                  variant="brand" 
+                                                  onclick={handleCardSearch}
+                                                  data-section="customerPortfolio"
+                                                  disabled={isCardCariButtonDisabled}></lightning-button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <template if:true={errorCardPortfolio}>
+                        <div class="slds-text-color_error">
+                            {errorCardPortfolio}
+                        </div>
+                    </template>
+    
+                    
+                    <template if:true={isFormPortfolioVisible}>
+                        <!-- Display card data here -->
+                        <div class="slds-m-top_medium slds-grid slds-wrap">
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3 slds-p-around_medium">
+                                <div class="slds-form-element">
+                                    <span class="slds-form-element__label">Card Number</span>
+                                    <div class="slds-form-element__control">
+                                        <span class="slds-form-element__static"><b>{dataKartuResultPortfolio.cardNo}</b></span>
+                                    </div>
+                                </div>
+                                <div class="slds-form-element">
+                                    <span class="slds-form-element__label">Card Type</span>
+                                    <div class="slds-form-element__control">
+                                        <span class="slds-form-element__static"><b>{dataKartuResultPortfolio.type}</b></span>
+                                    </div>
+                                </div>
+                                <div class="slds-form-element">
+                                    <span class="slds-form-element__label">Account Name</span>
+                                    <div class="slds-form-element__control">
+                                        <span class="slds-form-element__static"><b>{dataKartuResultPortfolio.name}</b></span>
+                                    </div>
+                                </div>
+                                <div class="slds-form-element">
+                                    <span class="slds-form-element__label">Issue Date</span>
+                                    <div class="slds-form-element__control">
+                                        <span class="slds-form-element__static"><b>{dataKartuResultPortfolio.issueDateCard}</b></span>
+                                    </div>
+                                </div>
+                                <div class="slds-form-element">
+                                    <span class="slds-form-element__label">Expired Date</span>
+                                    <div class="slds-form-element__control">
+                                        <span class="slds-form-element__static"><b>{dataKartuResultPortfolio.expDateCard}</b></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3 slds-p-around_medium">
+                                <div class="slds-form-element">
+                                    <span class="slds-form-element__label">Tanggal Aktivasi</span>
+                                    <div class="slds-form-element__control">
+                                        <span class="slds-form-element__static"><b>{dataKartuResultPortfolio.activeDateCard}</b></span>
+                                    </div>
+                                </div>
+                                <div class="slds-form-element">
+                                    <span class="slds-form-element__label">Card Status</span>
+                                    <div class="slds-form-element__control">
+                                        <span class="slds-form-element__static"><b>{dataKartuResultPortfolio.cardStatus}</b></span>
+                                    </div>
+                                </div>
+                                <div class="slds-form-element">
+                                    <span class="slds-form-element__label">Keterangan Status Kartu</span>
+                                    <div class="slds-form-element__control">
+                                        <span class="slds-form-element__static"><b>{dataKartuResultPortfolio.statusDesc}</b></span>
+                                    </div>
+                                </div>
+                                <div class="slds-form-element">
+                                    <span class="slds-form-element__label">Last Date Maintenance</span>
+                                    <div class="slds-form-element__control">
+                                        <span class="slds-form-element__static"><b>{dataKartuResultPortfolio.lastMaint}</b></span>
+                                    </div>
+                                </div>
+                                <div class="slds-form-element">
+                                    <span class="slds-form-element__label">Last Maintenance User</span>
+                                    <div class="slds-form-element__control">
+                                        <span class="slds-form-element__static"><b>{dataKartuResultPortfolio.userMaint}</b></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3 slds-p-around_medium">
+                                <div class="slds-form-element">
+                                    <span class="slds-form-element__label">History Update Kartu</span>
+                                    <div class="slds-form-element__control">
+                                        <span class="slds-form-element__static">
+                                            <lightning-button variant="base" label="History Update Kartu" data-section="customerPortfolio" onclick={handleHistorySearch}></lightning-button>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="slds-form-element">
+                                    <span class="slds-form-element__label">Tanggal blokir</span>
+                                    <div class="slds-form-element__control">
+                                        <span class="slds-form-element__static"><b>{dataKartuResultPortfolio.blockDate}</b></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+
+                    <template if:true={showHistoryKartuPortfolio}>
+                        <div class="slds-m-top_medium slds-scrollable_x">
+                            <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Work Unit</th>
+                                        <th scope="col">Card Number</th>
+                                        <th scope="col">Card Status</th>
+                                        <th scope="col">Issue Date</th>
+                                        <th scope="col">Activation Date</th>
+                                        <th scope="col">Last Maintenance</th>
+                                        <th scope="col">Type Code</th>
+                                        <th scope="col">Expired Date</th>
+                                        <th scope="col">Renewal Date</th>
+                                        <th scope="col">Blokir Date</th>
+                                        <th scope="col">User Blokir</th>
+                                        <th scope="col">No Rekening</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <template for:each={historyKartuPortfolio} for:item="history" for:index="index">
+                                        <tr key={history.cardNo}>
+                                            <td>{history.branchCode}</td>
+                                            <td>{history.cardNoHis}</td>
+                                            <td>{history.cardStatusHis}</td>
+                                            <td>{history.issueDate}</td>
+                                            <td>{history.activeDate}</td>
+                                            <td>{history.lastMaintHis}</td>
+                                            <td>{history.typeCode}</td>
+                                            <td>{history.expDate}</td>
+                                            <td>{history.renewalDate}</td>
+                                            <td>{history.blockDate}</td>
+                                            <td>{history.userBlock}</td>
+                                            <td>{history.accNo}</td>
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+                        </div>
+                    </template>
+                </template>
+            </lightning-accordion-section>
+            <lightning-accordion-section label="Customer Search" name="customerSearch" class="custom-section">
+                <div class="slds-grid slds-gutters">
+                    <div class="slds-col">
+                        <lightning-input label="Nomor Rekening"
+                                         value={accountNumber}
+                                         onchange={handleAccountName}
+                                         disabled={disableAccountField}></lightning-input>
+                    </div>
+                    <div class="slds-col">
+                        <lightning-input label="Kartu Debit" 
+                                         value={debitNumber}
+                                         onchange={handleDebitNo}
+                                         disabled={disableDebitField}></lightning-input>
+                    </div>
+                    <div class="slds-col" style="align-content: end;">
+                        <lightning-button label="Cari" 
+                                          variant="brand" 
+                                          onclick={handleSearch}
+                                          disabled={isCariButtonDisabled}></lightning-button>
+                    </div>
+                </div>  
+
+                <template if:true={errorMessage}>
+                    <div class="slds-text-color_error">
+                        {errorMessage}
+                    </div>
+                </template>
+
+                <template if:true={showSearchResults}>
+                    <div class="slds-m-top_medium slds-scrollable_x">
+                        <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Nomor Rekening</th>
+                                    <th scope="col">CIF</th>
+                                    <th scope="col">Product</th>
+                                    <th scope="col">Type Product</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Tanggal Buka Rekening</th>
+                                    <th scope="col">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={customerSearchData} for:item="record">
+                                    <tr key={record.id}>
+                                        <td>{record.accountNumber}</td>
+                                        <td>{record.cifno}</td>
+                                        <td>{record.product}</td>
+                                        <td>{record.productType}</td>
+                                        <td>{record.status}</td>
+                                        <td>{record.openAccountDate}</td>
+                                        <td>
+                                            <div class="slds-p-around_medium lgc-bg">
+                                                <lightning-button-menu alternative-text="Show menu" menu-alignment="auto">
+                                                    <lightning-menu-item value={record.accountNumber} label="Mutasi Rekening" onclick={handleMutasiRekening} data-section="customerSearch"></lightning-menu-item>
+                                                    <lightning-menu-item value={record.accountNumber} label="Data Kartu" onclick={handleDataKartu} data-section="customerSearch"></lightning-menu-item>
+                                                </lightning-button-menu>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </template>
+
+                
+                <!-- Mutasi Rekening Section -->
+                <template if:true={showMutasiRekening}>
+                    <div class="slds-m-top_medium slds-box slds-theme_default">
+                        <div class="slds-grid slds-gutters">
+                            <div class="slds-col">
+                                <lightning-input type="date" label="Tanggal Awal" value={startDate} placeholder="mm/dd/yyyy"
+                                                 date-style="short" onchange={handleStartDateChange} required></lightning-input>
+                            </div>
+                            <div class="slds-col">
+                                <lightning-input type="date" label="Tanggal Akhir" value={endDate} placeholder="mm/dd/yyyy"
+                                                 date-style="short" onchange={handleEndDateChange} required></lightning-input>
+                            </div>
+                            <div class="slds-col" style="align-content: end;">
+                                <lightning-button label="Cari" 
+                                                  variant="brand"
+                                                  onclick={handleMutasiRekeningSearch}
+                                                  data-section="customerSearch"
+                                                  disabled={isMutasiCariButtonDisabled}></lightning-button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <template if:true={errormsg}>
+                        <div class="slds-text-color_error">
+                            {errormsg}
+                        </div>
+                    </template>    
+                
+                    <template if:true={showMutasiRekeningData}>
+                        <div class="slds-m-top_medium slds-scrollable_x">
+                            <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Nomor Rekening</th>
+                                        <th scope="col">Tanggal Transaksi</th>
+                                        <th scope="col">Jam Transaksi</th>
+                                        <th scope="col">Remark Transaksi</th>
+                                        <th scope="col">Jenis Transaksi</th>
+                                        <th scope="col">Mutasi Debit</th>
+                                        <th scope="col">Mutasi Kredit</th>
+                                        <!--th scope="col">Saldo Akhir</th-->
+                                        <th scope="col">User ID</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <template for:each={mutasiRekeningData} for:item="record">
+                                        <tr key={record.noRek}>
+                                            <td>{record.noRek}</td>
+                                            <td>{record.tglTran}</td>
+                                            <td>{record.jamTran}</td>
+                                            <td>{record.remarkCustom}</td>
+                                            <td>{record.glsign}</td>
+                                            <td>{record.mutasiDebet}</td>
+                                            <td>{record.mutasiKredit}</td>
+                                            <!--td>{record.saldoAkhirMutasi}</td-->
+                                            <td>{record.truser}</td>
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+                        </div>
+                    </template>
+                </template>
+
+                <template if:true={errorInquiry}>
+                    <div class="slds-text-color_error">
+                        {errorInquiry}
+                    </div>
+                </template>
+
+                <template if:true={inquiryStatus}>
+                    <div class="slds-m-top_medium slds-scrollable_x">
+                        <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Status Blokir Saldo</th>
+                                    <th scope="col">Nominal Blokir Saldo</th>
+                                    <th scope="col">Tanggal Blokir</th>
+                                    <th scope="col">Keterangan Blokir</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>{inquiryStatus.holdType}</td>
+                                    <td>{inquiryStatus.holdAmt}</td>
+                                    <td>{inquiryStatus.holdDate}</td>
+                                    <td>{inquiryStatus.holdRemark}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </template>
+
+                <!-- Data Kartu Section -->
+                <template if:true={showDataKartu}>
+                    <div class="slds-m-top_medium slds-box slds-theme_default">
+                        <div class="slds-grid slds-gutters">
+                            <div class="slds-col">
+                                <lightning-input label="Kartu Debit" value={cardNumber} onchange={handleCardNumberChange} placeholder="Cari..." data-section="customerSearch"></lightning-input>
+                            </div>
+                            <div class="slds-col" style="align-content: end;">
+                                <lightning-button label="Cari" 
+                                                  variant="brand" 
+                                                  onclick={handleCardSearch}
+                                                  data-section="customerSearch"
+                                                  disabled={isCardCariButtonDisabled}></lightning-button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <template if:true={errorCard}>
+                        <div class="slds-text-color_error">
+                            {errorCard}
+                        </div>
+                    </template>
+    
+                    
+                    <template if:true={isFormSearchVisible}>
+                        <!-- Display card data here -->
+                        <div class="slds-m-top_medium slds-grid slds-wrap">
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3 slds-p-around_medium">
+                                <div class="slds-form-element">
+                                    <span class="slds-form-element__label">Card Number</span>
+                                    <div class="slds-form-element__control">
+                                        <span class="slds-form-element__static"><b>{dataKartuResult.cardNo}</b></span>
+                                    </div>
+                                </div>
+                                <div class="slds-form-element">
+                                    <span class="slds-form-element__label">Card Type</span>
+                                    <div class="slds-form-element__control">
+                                        <span class="slds-form-element__static"><b>{dataKartuResult.type}</b></span>
+                                    </div>
+                                </div>
+                                <div class="slds-form-element">
+                                    <span class="slds-form-element__label">Account Name</span>
+                                    <div class="slds-form-element__control">
+                                        <span class="slds-form-element__static"><b>{dataKartuResult.name}</b></span>
+                                    </div>
+                                </div>
+                                <div class="slds-form-element">
+                                    <span class="slds-form-element__label">Issue Date</span>
+                                    <div class="slds-form-element__control">
+                                        <span class="slds-form-element__static"><b>{dataKartuResult.issueDateCard}</b></span>
+                                    </div>
+                                </div>
+                                <div class="slds-form-element">
+                                    <span class="slds-form-element__label">Expired Date</span>
+                                    <div class="slds-form-element__control">
+                                        <span class="slds-form-element__static"><b>{dataKartuResult.expDateCard}</b></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3 slds-p-around_medium">
+                                <div class="slds-form-element">
+                                    <span class="slds-form-element__label">Tanggal Aktivasi</span>
+                                    <div class="slds-form-element__control">
+                                        <span class="slds-form-element__static"><b>{dataKartuResult.activeDateCard}</b></span>
+                                    </div>
+                                </div>
+                                <div class="slds-form-element">
+                                    <span class="slds-form-element__label">Card Status</span>
+                                    <div class="slds-form-element__control">
+                                        <span class="slds-form-element__static"><b>{dataKartuResult.cardStatus}</b></span>
+                                    </div>
+                                </div>
+                                <div class="slds-form-element">
+                                    <span class="slds-form-element__label">Keterangan Status Kartu</span>
+                                    <div class="slds-form-element__control">
+                                        <span class="slds-form-element__static"><b>{dataKartuResult.statusDesc}</b></span>
+                                    </div>
+                                </div>
+                                <div class="slds-form-element">
+                                    <span class="slds-form-element__label">Last Date Maintenance</span>
+                                    <div class="slds-form-element__control">
+                                        <span class="slds-form-element__static"><b>{dataKartuResult.lastMaint}</b></span>
+                                    </div>
+                                </div>
+                                <div class="slds-form-element">
+                                    <span class="slds-form-element__label">Last Maintenance User</span>
+                                    <div class="slds-form-element__control">
+                                        <span class="slds-form-element__static"><b>{dataKartuResult.userMaint}</b></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3 slds-p-around_medium">
+                                <div class="slds-form-element">
+                                    <span class="slds-form-element__label">History Update Kartu</span>
+                                    <div class="slds-form-element__control">
+                                        <span class="slds-form-element__static">
+                                            <a href="javascript:void(0);" onclick={handleHistorySearch} data-section="customerSearch">History Update Kartu</a>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="slds-form-element">
+                                    <span class="slds-form-element__label">Tanggal blokir</span>
+                                    <div class="slds-form-element__control">
+                                        <span class="slds-form-element__static"><b>{dataKartuResult.blockDate}</b></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+
+                    <template if:true={showHistoryKartu}>
+                        <div class="slds-m-top_medium slds-scrollable_x">
+                            <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Work Unit</th>
+                                        <th scope="col">Card Number</th>
+                                        <th scope="col">Card Status</th>
+                                        <th scope="col">Issue Date</th>
+                                        <th scope="col">Activation Date</th>
+                                        <th scope="col">Last Maintenance</th>
+                                        <th scope="col">Type Code</th>
+                                        <th scope="col">Expired Date</th>
+                                        <th scope="col">Renewal Date</th>
+                                        <th scope="col">Blokir Date</th>
+                                        <th scope="col">User Blokir</th>
+                                        <th scope="col">No Rekening</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <template for:each={historyKartu} for:item="history" for:index="index">
+                                        <tr key={history.cardNo}>
+                                            <td>{history.branchCode}</td>
+                                            <td>{history.cardNoHis}</td>
+                                            <td>{history.cardStatusHis}</td>
+                                            <td>{history.issueDate}</td>
+                                            <td>{history.activeDate}</td>
+                                            <td>{history.lastMaintHis}</td>
+                                            <td>{history.typeCode}</td>
+                                            <td>{history.expDate}</td>
+                                            <td>{history.renewalDate}</td>
+                                            <td>{history.blockDate}</td>
+                                            <td>{history.userBlock}</td>
+                                            <td>{history.accNo}</td>
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+                        </div>
+                    </template>
+                </template>
+            </lightning-accordion-section>
+            <lightning-accordion-section label="Pencarian TID CRM / ATM" name="dataMesin" class="custom-section">
+                <div class="slds-grid slds-gutters">
+                    <div class="slds-col">
+                        <lightning-input label="Alamat" value={address} onchange={handleAddressChange} placeholder="Cari..."></lightning-input>
+                    </div>
+                    <div class="slds-col" style="align-content: end;">
+                        <lightning-button label="Cari"
+                                          variant="brand" 
+                                          onclick={handleAddressSearch}
+                                          disabled={isAddressCariButtonDisabled}></lightning-button>
+                    </div>
+                </div>  
+
+                <template if:true={errorAddress}>
+                    <div class="slds-text-color_error">
+                        {errorAddress}
+                    </div>
+                </template>
+                
+                <template if:true={showaddressSuggestions}>
+                    <div class="slds-m-top_medium slds-scrollable_x">
+                        <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                            <thead>
+                                <tr>
+                                    <th scope="col">No.</th>
+                                    <th scope="col">TID Mesin</th>
+                                    <th scope="col">Alamat Mesin</th>
+                                    <th scope="col">Kontak PIC Mesin</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={addressSuggestions} for:item="record">
+                                    <tr key={record.rowNumber}>
+                                        <td>{record.rowNumber}</td>
+                                        <td>{record.tid}</td>
+                                        <td>{record.alamatMesin}</td>
+                                        <td>{record.kontakld}</td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </template>
+            </lightning-accordion-section>
+        </lightning-accordion>
+</template>

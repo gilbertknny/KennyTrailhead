@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Field_Wajib_TRB</fullName>
+    <active>false</active>
+    <errorConditionFormula>SCC_Call_Type__r.IsTRB__c &amp;&amp; OR(
+ISBLANK(Corporate_Name__c),
+ISBLANK(Client_ID__c),
+ISBLANK(TEXT(Sektor__c)),
+ISBLANK(TEXT(Channel_Transaksi_TRB__c)),
+AND(
+TEXT(Channel_Transaksi_TRB__c) != &apos;BRIVA&apos;,
+TEXT(Channel_Transaksi_TRB__c) != &apos;MT940&apos;,
+ISBLANK(TEXT(Type_Complain__c))
+)) &amp;&amp; TEXT(Status) != &apos;New&apos;</errorConditionFormula>
+    <errorMessage>Wajib isi Corporate Name, Client ID, Sektor, Channel Transaksi TRB, dan Type Complain</errorMessage>
+</ValidationRule>

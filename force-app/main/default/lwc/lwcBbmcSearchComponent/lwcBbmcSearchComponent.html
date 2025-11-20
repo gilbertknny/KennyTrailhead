@@ -1,0 +1,143 @@
+<!--
+    LWC Name           : lwcBbmcSearchComponent.html
+    Created Date       : 07 Januari 2025
+    @description       : This is class for UI BBMC
+    @author            : Rakeyan Nuramria
+    Modification Log :
+    Ver   Date         Author                            Modification
+    Release 3
+    1.0   07/01/2025   Rakeyan Nuramria                  Initial Version
+    1.0   20/01/2025   Rakeyan Nuramria                  Adjust UI to API
+    1.0   04/02/2025   Rakeyan Nuramria                  Hide search username & show validation
+-->
+
+<template>
+    <!-- Search Section -->
+    <lightning-card title="" variant="base" class="custom-card slds-m-top_xx-small slds-card_boundary">
+        <div class="slds-grid slds-gutters slds-m-around_small">
+            <div class="slds-col">
+                <lightning-input label="Nomor Kartu" value={nomorKartu} onchange={handleNomorKartuChange}
+                    disabled={disableNomorKartuField}></lightning-input>
+                <div style="color: red;">{nomorKartuError}</div>
+
+            </div>
+            <!-- <div class="slds-col">
+                <lightning-input label="Username" value={username} onchange={handleUsernameChange}
+                    disabled={disableUsernameField}></lightning-input>
+            </div> -->
+            <div class="slds-col">
+                <lightning-input label="Nomor Handphone" value={nomorHp} onchange={handleNomorHandphoneChange}
+                    disabled={disableNomorHandphoneField}></lightning-input>
+                <div style="color: red;">{nomorHpError}</div>
+            </div>
+            <div class="slds-col" style="align-self: flex-start; margin-top: 22px;">
+                <lightning-button label="Cari" variant="brand" onclick={handleSearch}
+                    disabled={disableSearchButton}></lightning-button>
+
+            </div>
+        </div>
+    </lightning-card>
+    <!-- End Search Section -->
+
+    <!-- Result Section - Only visible if search is performed -->
+    <template if:true={hasSearched}>
+        <lightning-card icon-name="" variant="base" class="custom-card slds-m-top_xx-small slds-card_boundary">
+            <div slot="title"></div>
+            <div slot="actions">
+                <!-- Close Button -->
+                <lightning-button-icon icon-name="utility:close" alternative-text="Close" title="Close"
+                    onclick={handleClose} class="cssClass" variant="bare">
+                </lightning-button-icon>
+            </div>
+
+            <!-- Loading Spinner -->
+            <template if:true={isLoading}>
+                <div class="spinner-container" style="height:6rem;position:relative">
+                    <div role="status" class="slds-spinner slds-spinner_small">
+                        <span class="slds-assistive-text">Loading</span>
+                        <div class="slds-spinner__dot-a"></div>
+                        <div class="slds-spinner__dot-b"></div>
+                    </div>
+                </div>
+            </template>
+
+            <!-- Error Message -->
+            <template if:true={hasError}>
+                <div class="slds-text-color_error slds-m-top_medium slds-text-align_center">
+                    <b>{errorMsg}</b>
+                </div>
+            </template>
+
+            <!-- Main Card Body -->
+            <template if:false={hasError}>
+                <template for:each={data} for:item="user">
+                    <div key={user.nomorKartuCC} class="slds-grid slds-wrap slds-m-around_medium">
+                        <!-- Column 1 -->
+                        <div class="slds-col slds-size_4-of-12 slds-medium-size_4-of-12 slds-large-size_4-of-12">
+                            <!-- Username -->
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label"
+                                    for="username-{user.nomorKartuCC}">Username</label>
+                                <div class="slds-form-element__control">
+                                    <input class="slds-input text-bold" type="text" id="username-{user.nomorKartuCC}"
+                                        readonly value={user.userName} />
+                                </div>
+                            </div>
+                            <!-- Security Question -->
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label"
+                                    for="security-question-{user.nomorKartuCC}">Security
+                                    Question</label>
+                                <div class="slds-form-element__control">
+                                    <input class="slds-input text-bold" type="text"
+                                        id="security-question-{user.nomorKartuCC}" readonly
+                                        value={user.securityQuestion} />
+                                </div>
+                            </div>
+                            <!-- Nomor Kartu CC -->
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label" for="nomor-kredit-{user.nomorKartuCC}">Nomor
+                                    Kartu CC</label>
+                                <div class="slds-form-element__control">
+                                    <input class="slds-input text-bold" type="text"
+                                        id="nomor-kredit-{user.nomorKartuCC}" readonly value={user.nomorKartuCC} />
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Column 2 -->
+                        <div class="slds-col slds-size_4-of-12 slds-medium-size_4-of-12 slds-large-size_4-of-12">
+                            <!-- Nomor Handphone -->
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label" for="nomor-handphone-{user.nomorKartuCC}">Nomor
+                                    Handphone</label>
+                                <div class="slds-form-element__control">
+                                    <input class="slds-input text-bold" type="text"
+                                        id="nomor-handphone-{user.nomorKartuCC}" readonly value={user.nomorHandphone} />
+                                </div>
+                            </div>
+                            <!-- Tanggal Registrasi -->
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label"
+                                    for="tanggal-registrasi-{user.nomorKartuCC}">Tanggal
+                                    Registrasi</label>
+                                <div class="slds-form-element__control">
+                                    <input class="slds-input text-bold" type="text"
+                                        id="tanggal-registrasi-{user.nomorKartuCC}" readonly
+                                        value={user.tanggalRegistrasi} />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Divider -->
+                    <div key={user.nomorKartuCC} class="slds-m-top_medium slds-text-align_center">
+                        <hr class="dashed-divider" />
+                    </div>
+                </template>
+            </template>
+        </lightning-card>
+    </template>
+    <!-- End Result Section -->
+
+</template>

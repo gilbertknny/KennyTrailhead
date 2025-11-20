@@ -1,0 +1,885 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Type_Complain__c</fullName>
+    <label>Type Complain</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <controllingField>Channel_Transaksi_TRB__c</controllingField>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Internal Fund Transfer</fullName>
+                <default>false</default>
+                <label>Internal Fund Transfer</label>
+            </value>
+            <value>
+                <fullName>Eksternal Fund Transfer</fullName>
+                <default>false</default>
+                <label>Eksternal Fund Transfer</label>
+            </value>
+            <value>
+                <fullName>Account Information</fullName>
+                <default>false</default>
+                <label>Account Information</label>
+            </value>
+            <value>
+                <fullName>Push Notification</fullName>
+                <default>false</default>
+                <label>Push Notification</label>
+            </value>
+            <value>
+                <fullName>Account Inquiry</fullName>
+                <default>false</default>
+                <label>Account Inquiry</label>
+            </value>
+            <value>
+                <fullName>Transaksi</fullName>
+                <default>false</default>
+                <label>Transaksi</label>
+            </value>
+            <value>
+                <fullName>Settlement Invoice</fullName>
+                <default>false</default>
+                <label>Settlement Invoice</label>
+            </value>
+            <value>
+                <fullName>Disbursement Invoice</fullName>
+                <default>false</default>
+                <label>Disbursement Invoice</label>
+            </value>
+            <value>
+                <fullName>Patching Status</fullName>
+                <default>false</default>
+                <label>Patching Status</label>
+            </value>
+            <value>
+                <fullName>Patching Rekening</fullName>
+                <default>false</default>
+                <label>Patching Rekening</label>
+            </value>
+            <value>
+                <fullName>Mass Approve</fullName>
+                <default>false</default>
+                <label>Mass Approve</label>
+            </value>
+            <value>
+                <fullName>Realease Hold</fullName>
+                <default>false</default>
+                <label>Realease Hold</label>
+            </value>
+            <value>
+                <fullName>Account Statement</fullName>
+                <default>false</default>
+                <label>Account Statement</label>
+            </value>
+            <value>
+                <fullName>Account Summary</fullName>
+                <default>false</default>
+                <label>Account Summary</label>
+            </value>
+            <value>
+                <fullName>Snap Statement</fullName>
+                <default>false</default>
+                <label>Snap Statement</label>
+            </value>
+            <value>
+                <fullName>Reporting</fullName>
+                <default>false</default>
+                <label>Reporting</label>
+            </value>
+            <value>
+                <fullName>Single FT</fullName>
+                <default>false</default>
+                <label>Single FT</label>
+            </value>
+            <value>
+                <fullName>Mass FT</fullName>
+                <default>false</default>
+                <label>Mass FT</label>
+            </value>
+            <value>
+                <fullName>Collective FT</fullName>
+                <default>false</default>
+                <label>Collective FT</label>
+            </value>
+            <value>
+                <fullName>CN</fullName>
+                <default>false</default>
+                <label>CN</label>
+            </value>
+            <value>
+                <fullName>Mass CN</fullName>
+                <default>false</default>
+                <label>Mass CN</label>
+            </value>
+            <value>
+                <fullName>RTGS</fullName>
+                <default>false</default>
+                <label>RTGS</label>
+            </value>
+            <value>
+                <fullName>Swift</fullName>
+                <default>false</default>
+                <label>Swift</label>
+            </value>
+            <value>
+                <fullName>Single Tax</fullName>
+                <default>false</default>
+                <label>Single Tax</label>
+            </value>
+            <value>
+                <fullName>Mass Tax</fullName>
+                <default>false</default>
+                <label>Mass Tax</label>
+            </value>
+            <value>
+                <fullName>MFC</fullName>
+                <default>false</default>
+                <label>MFC</label>
+            </value>
+            <value>
+                <fullName>E-Tax DKI</fullName>
+                <default>false</default>
+                <label>E-Tax DKI</label>
+            </value>
+            <value>
+                <fullName>E-Tax PLN</fullName>
+                <default>false</default>
+                <label>E-Tax PLN</label>
+            </value>
+            <value>
+                <fullName>Cash Pooling</fullName>
+                <default>false</default>
+                <label>Cash Pooling</label>
+            </value>
+            <value>
+                <fullName>Topup BRIZZI</fullName>
+                <default>false</default>
+                <label>Topup BRIZZI</label>
+            </value>
+            <value>
+                <fullName>BI FAST</fullName>
+                <default>false</default>
+                <label>BI FAST</label>
+            </value>
+            <value>
+                <fullName>Collective BI FAST</fullName>
+                <default>false</default>
+                <label>Collective BI FAST</label>
+            </value>
+            <value>
+                <fullName>Payment Priority</fullName>
+                <default>false</default>
+                <label>Payment Priority</label>
+            </value>
+            <value>
+                <fullName>DO Pertamina</fullName>
+                <default>false</default>
+                <label>DO Pertamina</label>
+            </value>
+            <value>
+                <fullName>PLN</fullName>
+                <default>false</default>
+                <label>PLN</label>
+            </value>
+            <value>
+                <fullName>TELKOM</fullName>
+                <default>false</default>
+                <label>TELKOM</label>
+            </value>
+            <value>
+                <fullName>Credit Card</fullName>
+                <default>false</default>
+                <label>Credit Card</label>
+            </value>
+            <value>
+                <fullName>Payroll</fullName>
+                <default>false</default>
+                <label>Payroll</label>
+            </value>
+            <value>
+                <fullName>Pungutan OJK</fullName>
+                <default>false</default>
+                <label>Pungutan OJK</label>
+            </value>
+            <value>
+                <fullName>RDN Transaction</fullName>
+                <default>false</default>
+                <label>RDN Transaction</label>
+            </value>
+            <value>
+                <fullName>BPJS TK</fullName>
+                <default>false</default>
+                <label>BPJS TK</label>
+            </value>
+            <value>
+                <fullName>BPJS KS</fullName>
+                <default>false</default>
+                <label>BPJS KS</label>
+            </value>
+            <value>
+                <fullName>DO Pupuk Indonesia</fullName>
+                <default>false</default>
+                <label>DO Pupuk Indonesia</label>
+            </value>
+            <value>
+                <fullName>DF Pupuk Indonesia</fullName>
+                <default>false</default>
+                <label>DF Pupuk Indonesia</label>
+            </value>
+            <value>
+                <fullName>Administration</fullName>
+                <default>false</default>
+                <label>Administration</label>
+            </value>
+            <value>
+                <fullName>Setting VA</fullName>
+                <default>false</default>
+                <label>Setting VA</label>
+            </value>
+            <value>
+                <fullName>Report Statement</fullName>
+                <default>false</default>
+                <label>Report Statement</label>
+            </value>
+            <value>
+                <fullName>Multiple FT</fullName>
+                <default>false</default>
+                <label>Multiple FT</label>
+            </value>
+            <value>
+                <fullName>Single Online Transfer</fullName>
+                <default>false</default>
+                <label>Single Online Transfer</label>
+            </value>
+            <value>
+                <fullName>Single Swift</fullName>
+                <default>false</default>
+                <label>Single Swift</label>
+            </value>
+            <value>
+                <fullName>Single BIFAST</fullName>
+                <default>false</default>
+                <label>Single BIFAST</label>
+            </value>
+            <value>
+                <fullName>Multiple RTGS</fullName>
+                <default>false</default>
+                <label>Multiple RTGS</label>
+            </value>
+            <value>
+                <fullName>Multiple Kliring</fullName>
+                <default>false</default>
+                <label>Multiple Kliring</label>
+            </value>
+            <value>
+                <fullName>Single PLN</fullName>
+                <default>false</default>
+                <label>Single PLN</label>
+            </value>
+            <value>
+                <fullName>Single MPN</fullName>
+                <default>false</default>
+                <label>Single MPN</label>
+            </value>
+            <value>
+                <fullName>Mass MPN</fullName>
+                <default>false</default>
+                <label>Mass MPN</label>
+            </value>
+            <value>
+                <fullName>Mass IFT</fullName>
+                <default>false</default>
+                <label>Mass IFT</label>
+            </value>
+            <value>
+                <fullName>Mass RTGS</fullName>
+                <default>false</default>
+                <label>Mass RTGS</label>
+            </value>
+            <value>
+                <fullName>Mass SWIFT</fullName>
+                <default>false</default>
+                <label>Mass SWIFT</label>
+            </value>
+            <value>
+                <fullName>Mass BIFAST</fullName>
+                <default>false</default>
+                <label>Mass BIFAST</label>
+            </value>
+            <value>
+                <fullName>Single Credit Card</fullName>
+                <default>false</default>
+                <label>Single Credit Card</label>
+            </value>
+            <value>
+                <fullName>Mass Credit Card</fullName>
+                <default>false</default>
+                <label>Mass Credit Card</label>
+            </value>
+            <value>
+                <fullName>Single BPDP Sawit</fullName>
+                <default>false</default>
+                <label>Single BPDP Sawit</label>
+            </value>
+            <value>
+                <fullName>Single BPJS KS</fullName>
+                <default>false</default>
+                <label>Single BPJS KS</label>
+            </value>
+            <value>
+                <fullName>Single BPJS TK</fullName>
+                <default>false</default>
+                <label>Single BPJS TK</label>
+            </value>
+            <value>
+                <fullName>Single BRIVA Payment</fullName>
+                <default>false</default>
+                <label>Single BRIVA Payment</label>
+            </value>
+            <value>
+                <fullName>Single Telkom</fullName>
+                <default>false</default>
+                <label>Single Telkom</label>
+            </value>
+            <value>
+                <fullName>Mass BPDP Sawit</fullName>
+                <default>false</default>
+                <label>Mass BPDP Sawit</label>
+            </value>
+            <value>
+                <fullName>Mass BRIVA Payment</fullName>
+                <default>false</default>
+                <label>Mass BRIVA Payment</label>
+            </value>
+            <value>
+                <fullName>Mass PLN</fullName>
+                <default>false</default>
+                <label>Mass PLN</label>
+            </value>
+            <value>
+                <fullName>BRIVA Invoice</fullName>
+                <default>false</default>
+                <label>BRIVA Invoice</label>
+            </value>
+            <value>
+                <fullName>Single Mandate Management</fullName>
+                <default>false</default>
+                <label>Single Mandate Management</label>
+            </value>
+            <value>
+                <fullName>Mass Mandate Management</fullName>
+                <default>false</default>
+                <label>Mass Mandate Management</label>
+            </value>
+            <value>
+                <fullName>Single Direct Debit</fullName>
+                <default>false</default>
+                <label>Single Direct Debit</label>
+            </value>
+            <value>
+                <fullName>Mass Direct Debit</fullName>
+                <default>false</default>
+                <label>Mass Direct Debit</label>
+            </value>
+            <value>
+                <fullName>Report Mandate</fullName>
+                <default>false</default>
+                <label>Report Mandate</label>
+            </value>
+            <value>
+                <fullName>Report Direct Debit</fullName>
+                <default>false</default>
+                <label>Report Direct Debit</label>
+            </value>
+            <value>
+                <fullName>Single DO Pertamia</fullName>
+                <default>false</default>
+                <label>Single DO Pertamia</label>
+            </value>
+            <value>
+                <fullName>Single DO Pupuk Indonesia</fullName>
+                <default>false</default>
+                <label>Single DO Pupuk Indonesia</label>
+            </value>
+            <value>
+                <fullName>Single DF Pupuk Indonesia</fullName>
+                <default>false</default>
+                <label>Single DF Pupuk Indonesia</label>
+            </value>
+            <value>
+                <fullName>BG Issuing</fullName>
+                <default>false</default>
+                <label>BG Issuing</label>
+            </value>
+            <value>
+                <fullName>BG History</fullName>
+                <default>false</default>
+                <label>BG History</label>
+            </value>
+            <value>
+                <fullName>BG Amendment</fullName>
+                <default>false</default>
+                <label>BG Amendment</label>
+            </value>
+            <value>
+                <fullName>BG Monitoring</fullName>
+                <default>false</default>
+                <label>BG Monitoring</label>
+            </value>
+            <value>
+                <fullName>BG Cancellation</fullName>
+                <default>false</default>
+                <label>BG Cancellation</label>
+            </value>
+            <value>
+                <fullName>Issuance LC</fullName>
+                <default>false</default>
+                <label>Issuance LC</label>
+            </value>
+            <value>
+                <fullName>Amendment &amp; Cancellation LC</fullName>
+                <default>false</default>
+                <label>Amendment &amp; Cancellation LC</label>
+            </value>
+            <value>
+                <fullName>Aktivasi</fullName>
+                <default>false</default>
+                <label>Aktivasi</label>
+            </value>
+            <value>
+                <fullName>Request</fullName>
+                <default>false</default>
+                <label>Request</label>
+            </value>
+            <value>
+                <fullName>Asistensi</fullName>
+                <default>false</default>
+                <label>Asistensi</label>
+            </value>
+            <value>
+                <fullName>Reset Admin dan Sysadmin</fullName>
+                <default>false</default>
+                <label>Reset Admin dan Sysadmin</label>
+            </value>
+            <value>
+                <fullName>Reset Token</fullName>
+                <default>false</default>
+                <label>Reset Token</label>
+            </value>
+            <value>
+                <fullName>Web Lambat</fullName>
+                <default>false</default>
+                <label>Web Lambat</label>
+            </value>
+            <value>
+                <fullName>Web Tidak Dapat Diakses</fullName>
+                <default>false</default>
+                <label>Web Tidak Dapat Diakses</label>
+            </value>
+            <value>
+                <fullName>Unhold User</fullName>
+                <default>false</default>
+                <label>Unhold User</label>
+            </value>
+            <value>
+                <fullName>Topun BRIZZI</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Topun BRIZZI</label>
+            </value>
+        </valueSetDefinition>
+        <valueSettings>
+            <controllingFieldValue>API</controllingFieldValue>
+            <valueName>Internal Fund Transfer</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>API</controllingFieldValue>
+            <valueName>Eksternal Fund Transfer</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>API</controllingFieldValue>
+            <valueName>Account Information</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>API</controllingFieldValue>
+            <valueName>Push Notification</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>API</controllingFieldValue>
+            <valueName>Account Inquiry</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Cashcard</controllingFieldValue>
+            <valueName>Transaksi</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>CBM</controllingFieldValue>
+            <valueName>Settlement Invoice</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>CBM</controllingFieldValue>
+            <valueName>Disbursement Invoice</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>CBM</controllingFieldValue>
+            <valueName>Patching Status</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>CBM</controllingFieldValue>
+            <valueName>Patching Rekening</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>CBM</controllingFieldValue>
+            <valueName>Mass Approve</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>CBM</controllingFieldValue>
+            <valueName>Realease Hold</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>CMS</controllingFieldValue>
+            <controllingFieldValue>Qlola</controllingFieldValue>
+            <valueName>Account Statement</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>CMS</controllingFieldValue>
+            <controllingFieldValue>Qlola</controllingFieldValue>
+            <valueName>Account Summary</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>CMS</controllingFieldValue>
+            <valueName>Snap Statement</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>CMS</controllingFieldValue>
+            <valueName>Reporting</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>CMS</controllingFieldValue>
+            <controllingFieldValue>Qlola</controllingFieldValue>
+            <valueName>Single FT</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>CMS</controllingFieldValue>
+            <valueName>Mass FT</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>CMS</controllingFieldValue>
+            <valueName>Collective FT</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>CMS</controllingFieldValue>
+            <valueName>CN</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>CMS</controllingFieldValue>
+            <controllingFieldValue>Qlola</controllingFieldValue>
+            <valueName>Mass CN</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>CMS</controllingFieldValue>
+            <valueName>RTGS</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>CMS</controllingFieldValue>
+            <valueName>Swift</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>CMS</controllingFieldValue>
+            <valueName>Single Tax</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>CMS</controllingFieldValue>
+            <valueName>Mass Tax</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>CMS</controllingFieldValue>
+            <valueName>MFC</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>CMS</controllingFieldValue>
+            <valueName>E-Tax DKI</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>CMS</controllingFieldValue>
+            <valueName>E-Tax PLN</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>CMS</controllingFieldValue>
+            <controllingFieldValue>Qlola</controllingFieldValue>
+            <valueName>Cash Pooling</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>CMS</controllingFieldValue>
+            <controllingFieldValue>Qlola</controllingFieldValue>
+            <valueName>Topup BRIZZI</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>CMS</controllingFieldValue>
+            <valueName>BI FAST</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>CMS</controllingFieldValue>
+            <valueName>Collective BI FAST</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>CMS</controllingFieldValue>
+            <valueName>Payment Priority</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>CMS</controllingFieldValue>
+            <valueName>DO Pertamina</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>CMS</controllingFieldValue>
+            <valueName>PLN</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>CMS</controllingFieldValue>
+            <valueName>TELKOM</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>CMS</controllingFieldValue>
+            <valueName>Credit Card</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>CMS</controllingFieldValue>
+            <valueName>Payroll</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>CMS</controllingFieldValue>
+            <valueName>Pungutan OJK</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>CMS</controllingFieldValue>
+            <valueName>RDN Transaction</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>CMS</controllingFieldValue>
+            <valueName>BPJS TK</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>CMS</controllingFieldValue>
+            <valueName>BPJS KS</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>CMS</controllingFieldValue>
+            <valueName>DO Pupuk Indonesia</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>CMS</controllingFieldValue>
+            <valueName>DF Pupuk Indonesia</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>CMS</controllingFieldValue>
+            <controllingFieldValue>Qlola</controllingFieldValue>
+            <valueName>Administration</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Dashboard VA</controllingFieldValue>
+            <valueName>Setting VA</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Qlola</controllingFieldValue>
+            <valueName>Report Statement</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Qlola</controllingFieldValue>
+            <valueName>Multiple FT</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Qlola</controllingFieldValue>
+            <valueName>Single Online Transfer</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Qlola</controllingFieldValue>
+            <valueName>Single Swift</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Qlola</controllingFieldValue>
+            <valueName>Single BIFAST</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Qlola</controllingFieldValue>
+            <valueName>Multiple RTGS</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Qlola</controllingFieldValue>
+            <valueName>Multiple Kliring</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Qlola</controllingFieldValue>
+            <valueName>Single PLN</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Qlola</controllingFieldValue>
+            <valueName>Single MPN</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Qlola</controllingFieldValue>
+            <valueName>Mass MPN</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Qlola</controllingFieldValue>
+            <valueName>Mass IFT</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Qlola</controllingFieldValue>
+            <valueName>Mass RTGS</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Qlola</controllingFieldValue>
+            <valueName>Mass SWIFT</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Qlola</controllingFieldValue>
+            <valueName>Mass BIFAST</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Qlola</controllingFieldValue>
+            <valueName>Single Credit Card</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Qlola</controllingFieldValue>
+            <valueName>Mass Credit Card</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Qlola</controllingFieldValue>
+            <valueName>Single BPDP Sawit</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Qlola</controllingFieldValue>
+            <valueName>Single BPJS KS</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Qlola</controllingFieldValue>
+            <valueName>Single BPJS TK</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Qlola</controllingFieldValue>
+            <valueName>Single BRIVA Payment</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Qlola</controllingFieldValue>
+            <valueName>Single Telkom</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Qlola</controllingFieldValue>
+            <valueName>Mass BPDP Sawit</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Qlola</controllingFieldValue>
+            <valueName>Mass BRIVA Payment</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Qlola</controllingFieldValue>
+            <valueName>Mass PLN</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Qlola</controllingFieldValue>
+            <valueName>BRIVA Invoice</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Qlola</controllingFieldValue>
+            <valueName>Single Mandate Management</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Qlola</controllingFieldValue>
+            <valueName>Mass Mandate Management</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Qlola</controllingFieldValue>
+            <valueName>Single Direct Debit</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Qlola</controllingFieldValue>
+            <valueName>Mass Direct Debit</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Qlola</controllingFieldValue>
+            <valueName>Report Mandate</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Qlola</controllingFieldValue>
+            <valueName>Report Direct Debit</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Qlola</controllingFieldValue>
+            <valueName>Single DO Pertamia</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Qlola</controllingFieldValue>
+            <valueName>Single DO Pupuk Indonesia</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Qlola</controllingFieldValue>
+            <valueName>Single DF Pupuk Indonesia</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Qlola</controllingFieldValue>
+            <valueName>BG Issuing</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Qlola</controllingFieldValue>
+            <valueName>BG History</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Qlola</controllingFieldValue>
+            <valueName>BG Amendment</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Qlola</controllingFieldValue>
+            <valueName>BG Monitoring</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Qlola</controllingFieldValue>
+            <valueName>BG Cancellation</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Qlola</controllingFieldValue>
+            <valueName>Issuance LC</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Qlola</controllingFieldValue>
+            <valueName>Amendment &amp; Cancellation LC</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Basic Complain</controllingFieldValue>
+            <valueName>Aktivasi</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Basic Complain</controllingFieldValue>
+            <valueName>Request</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Basic Complain</controllingFieldValue>
+            <valueName>Asistensi</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Basic Complain</controllingFieldValue>
+            <valueName>Reset Admin dan Sysadmin</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Basic Complain</controllingFieldValue>
+            <valueName>Reset Token</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Basic Complain</controllingFieldValue>
+            <valueName>Web Lambat</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Basic Complain</controllingFieldValue>
+            <valueName>Web Tidak Dapat Diakses</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Basic Complain</controllingFieldValue>
+            <valueName>Unhold User</valueName>
+        </valueSettings>
+    </valueSet>
+</CustomField>

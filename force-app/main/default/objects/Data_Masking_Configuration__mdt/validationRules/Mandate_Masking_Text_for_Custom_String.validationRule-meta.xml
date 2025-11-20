@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Mandate_Masking_Text_for_Custom_String</fullName>
+    <active>true</active>
+    <description>Rule to mandate entering a value in the custom string field whenever the masking rule is selected as Custom String</description>
+    <errorConditionFormula>AND(
+  ISPICKVAL(MaskingRule__c, &quot;Custom String&quot;),
+   ISBLANK( MaskingText__c ) 
+)</errorConditionFormula>
+    <errorDisplayField>MaskingText__c</errorDisplayField>
+    <errorMessage>A value is required for Masking Type &quot;Custom String&quot;</errorMessage>
+</ValidationRule>

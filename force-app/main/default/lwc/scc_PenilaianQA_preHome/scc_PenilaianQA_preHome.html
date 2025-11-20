@@ -1,0 +1,63 @@
+<!--
+  @description       : 
+  @author            : Christian Vieri
+  @group             : 
+  @last modified on  : 18-12-2024
+  @last modified by  : Ardyta Yudianto
+-->
+<template>
+    <lightning-card style="min-height: 100vh; display: flex; flex-direction: column; justify-content: space-between;">
+        <h3 style="text-align: center; font-size: 2rem; font-weight: bold; margin-bottom: 20px; color: #1d3557;">
+            Form Penilaian QA
+        </h3>        
+        <!-- Main Content -->
+        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; background-color: white;">
+            <!-- Kategori Picklist -->
+            <div if:true={showCategoryPicklist} style="width: 50%; margin-bottom: 20px;">
+                <lightning-combobox 
+                    label="Pilih salah satu kategori ini:"
+                    placeholder="Pilih kategori"
+                    options={recordTypeOptions}
+                    value={selectedValue}
+                    onchange={handleChange}>
+                </lightning-combobox>
+            </div>
+
+            <!-- Sub-Voice Picklist -->
+            <div if:true={isSubVoiceVisible} style="width: 50%; margin-bottom: 20px;">
+                <lightning-combobox 
+                    label="Pilih sub-voice:"
+                    placeholder="Pilih sub-voice"
+                    options={subVoiceOptions}
+                    value={selectedSubVoice}
+                    onchange={handleSubVoiceChange}>
+                </lightning-combobox>
+            </div>
+        </div>
+
+        <template if:true={redirect}>
+            <c-scc-penilaian-home record-type-name={selectedValue} record-id={recordId} sub-voice={selectedSubVoice}></c-scc-penilaian-home>
+        </template>
+
+        <!-- <template if:true={redirectLeader}>
+            <c-scc-penilaian-qa-leader record-type-name={selectedValue} record-id={recordId}></c-scc-penilaian-qa-leader>
+        </template> -->
+
+        <!-- Footer Section -->
+        <div style="background-color: #f4f6f9; padding: 10px; box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); text-align: center; display: flex; justify-content: flex-end; gap: 10px;">
+            <template if:true={showCategoryPicklist}>
+                <lightning-button label="Next" variant="brand" onclick={handleCategoryNext} style="width: 100px;"></lightning-button>
+            </template>
+            <template if:true={isSubVoiceVisible}>
+                <lightning-button label="Previous" variant="neutral" onclick={handleSubVoicePrevious} style="width: 100px;"></lightning-button>
+                <lightning-button label="Next" variant="brand" onclick={handleSubVoiceNext} style="width: 100px;"></lightning-button>
+            </template>
+            <template if:true={redirect}>
+                <lightning-button label="Previous" variant="neutral" onclick={handleRedirectPrevious} style="width: 100px;"></lightning-button>
+            </template>
+            <template if:true={redirectLeader}>
+                <lightning-button label="Previous" variant="neutral" onclick={handleRedirectPrevious} style="width: 100px;"></lightning-button>
+            </template>
+        </div>
+    </lightning-card>
+</template>

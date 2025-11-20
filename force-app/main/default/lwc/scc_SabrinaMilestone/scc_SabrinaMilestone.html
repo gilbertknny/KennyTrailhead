@@ -1,0 +1,30 @@
+<!--
+  @description       : 
+  @author            : Christian Vieri
+  @group             : 
+  @last modified on  : 08-01-2025
+  @last modified by  : Christian Vieri
+-->
+<template>
+    <lightning-card title="Milestone" icon-name="standard:case_milestone">
+        <div class="card-sabrina slds-p-around_medium">
+            <!-- Channel Messaging Session -->
+            <div class="card-sabrina-orgin">
+                <p class="card-sabrina-title-content">Channel Messaging Session:</p>
+                <p class="card-sabrina-content">Sabrina</p>
+            </div>
+
+            <!-- Timer Service Level -->
+            <div class="card-sabrina-target">
+                <p class="card-sabrina-title-content">Timer Service Level:</p>
+                <p class={timerClass}>{countdownTime}</p>
+            </div>
+
+            <!-- Target Penyelesaian -->
+            <div class="card-sabrina-target">
+                <p class="card-sabrina-title-content">Target Penyelesaian:</p>
+                <p class="card-sabrina-content">{targetTimeFormatted}</p>
+            </div>
+        </div>
+    </lightning-card>
+</template>

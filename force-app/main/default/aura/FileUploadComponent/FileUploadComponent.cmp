@@ -1,0 +1,25 @@
+<aura:component controller="FileUploadController" implements="flexipage:availableForAllPageTypes,force:hasRecordId,force:lightningQuickActionWithoutHeader,lightning:actionOverride,lightning:hasPageReference" access="global">
+    
+    <!-- Attribute untuk menyimpan file yang diupload -->
+    <aura:attribute name="uploadedFiles" type="List" />
+    
+    <!-- Komponen upload file Lightning -->
+    <lightning:fileUpload 
+        label="Upload Your Files"
+        recordId="{!v.recordId}" 
+        multiple="true" 
+        onuploadfinished="{!c.handleUploadFinished}" 
+        />
+    
+    <!-- Menampilkan daftar file yang telah diupload -->
+    <aura:if isTrue="{!not(empty(v.uploadedFiles))}">
+        <lightning:card title="Berhasil diupload">
+            <aura:iteration items="{!v.uploadedFiles}" var="file">
+                <div style="margin-top: 10px;">
+                    <li>{!file.name} </li>
+                </div>
+            </aura:iteration>
+        </lightning:card>
+    </aura:if>
+
+</aura:component>

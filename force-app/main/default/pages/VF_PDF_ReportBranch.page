@@ -1,0 +1,364 @@
+<apex:page renderAs="PDF" showHeader="false" applyHtmlTag="false" applyBodyTag="false" standardStylesheets="false" controller="Ctrl_PDF_ReportBranch">
+    <html xmlns="http://www.w3.org/1999/xhtml">
+        <head>
+            <style type="text/css">
+                @page {
+                    margin:0px;
+                    size: A4 portrait;
+                }
+
+                body {
+                    font-family: Arial, sans-serif;
+                    font-size: 12px;
+                    background-color: white;
+                    margin: 0;
+                    padding: 0;
+                }
+                .header {
+                    position: relative;
+                    width: 100%;
+                    height: 100px;
+                    background-color: #0072bc;
+                    padding: 0;
+                }
+                .header-left {
+                    position: absolute;
+                    left: 40px;
+                    top: 30px;
+                    height: 40px;
+                }
+                .header-right {
+                    position: absolute;
+                    right: 40px;
+                    top: 30px;
+                    height: 40px;
+                }
+                .content {
+                    background-color: #f2f2f2;
+                    margin: 5px;
+                    padding: 6px 20px 12px 20px;
+                    border-radius: 10px;
+                }
+                .form-title {
+                    margin: 0px 0px 0px 0px;
+                    text-align: center;
+                }
+                .text-title {
+                    color: #458ab8;
+                    font-weight: bold;
+                    font-size: 20px;
+                }
+                /* .info-section {
+                    margin-bottom: 20px;
+                } */
+                .info-header {
+                    background-color: #0072bc;
+                    margin: 0px 11px 0px 11px;
+                    /* margin: 20px 11px 0px 11px; */
+                }
+                .text-info-header{
+                    color: white;
+                    margin-left: 12px;
+                    font-weight: bold;
+                    font-size: 16px;
+                }
+                .info-table{
+                    width: 100%;
+                    border-collapse: separate;  
+                    border-spacing: 10px;
+                }
+                .info-table tr td{
+                    border: 0.1px solid black;
+                    text-align: left;
+                    padding: 5px 5px;
+                }
+                .info-table tr td:first-child {
+                    background-color: #e6f3ff;
+                    width: 200px;
+                    font-weight: bold;
+                }
+
+                .info-table .info-table-value{
+                    background-color: white;
+                }
+
+                .info-table tr:not(:last-child) td {
+                    border-bottom: 1px solid #e0e0e0;
+                } 
+                .detail-text {
+                min-height: 260px; 
+                max-height: 2000px; 
+                overflow-y: auto; 
+                display: block;
+                padding: 5px;
+                background-color: #f9f9f9; 
+                }
+                .signature-note {
+                    margin: 15px 12px 15px 12px;
+                    font-size: 12px;
+                    color: #333;
+                    text-align: center
+                }
+                .signature-table {
+                    width: 100%;
+                    margin-top: 20px;
+                    border-collapse: separate;
+                    border-spacing: 10px;
+                }
+                .signature-table td {
+                    width: 50%;
+                    padding: 10px;
+                    text-align: center;
+                    border: 0,1px solid #333;
+                    background-color: white
+                }
+                .signature-cell {
+                    height: 100px;
+                    vertical-align: top;
+                    font-weight: bold;
+                }
+
+                .content-footer {
+                    width: 100%;
+                    text-align: center;
+                    margin-top: 30px;
+                }
+
+                .content-footer img {
+                    width: 90%;
+                    max-width: 500px;
+                    margin-top: 20px
+                } 
+
+
+                 /*.footer {
+                    position: fixed;
+                    bottom: 0;
+                    width: 100%;
+                	page-break-after: avoid;
+                    padding: 20px 40px;
+                    background-color: white;
+                }
+                .footer img {
+                    width: 90%;
+                    max-width: 500px;
+                } */
+                .grid {
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin-bottom: 20px;
+                }
+                .grid th {
+                    background-color: #0072bc;
+                    color: white;
+                    padding: 10px;
+                    text-align: center;
+                    font-size: 18px;
+                }
+                .grid td {
+                    padding: 8px;
+                    border: 1px solid #ddd;
+                    background-color: white
+                }
+                .grid .top {
+                    vertical-align: top;
+                }
+                .grid .center {
+                    text-align: center;
+                }
+                .grid .left {
+                    text-align: left;
+                }
+                .grid .no-border,
+                .grid .no-border td {
+                    border: none;
+                }
+                .pgbreak {
+                    page-break-before: always;
+                }
+                .log-table {
+                    width: 100%;
+                    border-collapse: collapse;
+                }
+                .log-table td {
+                    padding: 8px;
+                    border-bottom: 1px solid #ddd;
+                }
+                .log-header {
+                    font-weight: bold;
+                    padding: 8px;
+                    border-bottom: 2px solid #ddd;
+                }
+                .page2-content {
+                    padding-top: 20px;
+                }
+                .detail-header {
+                    vertical-align: top !important; 
+                    padding-top: 5px; 
+                    font-weight: bold;
+				}
+            </style>
+        </head>
+        <body>
+            <!-- First Page Content -->
+            <div class="header">
+                <apex:image value="{!$Resource.BUMNPrintLogo}" styleClass="header-left"/>
+                <apex:image value="{!$Resource.BriLogoPrint}" styleClass="header-right"/>
+            </div>
+
+            <div class="content">
+                <div class="form-title">
+                    <p class="text-title">FORM PENERIMAAN PENGADUAN</p>
+                  </div>
+                  <div class="info-section">
+                    <div class="info-header">
+                        <p class="text-info-header">Informasi Tiket Pengaduan</p>
+                    </div>
+                    <table class="info-table">
+                        <tr>
+                            <td>Nomor Tiket</td>
+                            <td class="info-table-value">{!cs.Case_Number__c}</td>
+                        </tr>
+                        <tr>
+                            <td>Jenis Pengaduan</td>
+                            <td class="info-table-value">{!cs.SSC_Call_Type_Description__c}</td>
+                        </tr>
+                        <tr>
+                            <td>Tanggal/Waktu Pengaduan</td>
+                            <td class="info-table-value">{!tglbuat}</td>
+                        </tr>
+                        <tr>
+                            <td>Nama Nasabah</td>
+                            <td class="info-table-value">{!cs.Account.Name}</td>
+                        </tr>
+                        <tr>
+                            <td>Nomor Telepon</td>
+                            <td class="info-table-value">{!cs.SCC_Cust_Phone1__c}</td>
+                        </tr>
+                        <tr>
+                            <td>Email</td>
+                            <td class="info-table-value">{!cs.SCC_Email__c}</td>
+                        </tr>
+                        <tr>
+                            <td>Nomor Rekening</td>
+                            <td class="info-table-value">{!cs.SCC_Account_Number__c}</td>
+                        </tr>
+                        <tr>
+                            <td>Nomor Kartu</td>
+                            <td class="info-table-value">{!cs.SCC_Card_Number__c}</td>
+                        </tr>
+                        <tr>
+                            <td>Nominal</td>
+                            <td class="info-table-value">{!amount}</td>
+                        </tr>
+                        <tr>
+                            <td>Tanggal Transaksi</td>
+                            <td class="info-table-value">{!tgltransaksi}</td>
+                        </tr>
+                        <tr>
+                            <td class="detail-header">Detail Permasalahan</td>
+                            <td class="info-table-value">
+                                <div class="detail-text">
+                                    <apex:outputText value="{!cs.Description}" style="white-space:pre-line"/>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                  </div>
+                <div class="footer" style="margin-top:5px;margin-left:11px">
+                    <div class="signature-note">
+                        Kepada Nasabah/Perwakilan Nasabah, sudah dijelaskan oleh Petugas tentang tatacara penyelesaian Pengaduan serta jangka waktu penyelesaian Pengaduan. Nasabah/Perwakilan Nasabah dapat memahami penjelasan Petugas
+                    </div>
+                
+                    <table class="signature-table">
+                        <tr>
+                            <td class="signature-cell">Tanda Tangan Petugas BRI</td>
+                            <td class="signature-cell">Tanda Tangan Nasabah</td>
+                        </tr>
+                    </table>
+                
+                    <apex:image value="{!$Resource.FooterPrintLogo}" style="width: 90%; max-width: 500px;"/>
+                </div>
+            </div>
+            
+        <apex:outputLabel rendered="{!isBOUser}">
+              <!-- Second Page Content -->
+              <div class="pgbreak">
+                <!-- Repeat header for second page -->
+                <div class="header">
+                    <apex:image value="{!$Resource.BUMNPrintLogo}" styleClass="header-left"/>
+                    <apex:image value="{!$Resource.BriLogoPrint}" styleClass="header-right"/>
+                </div>
+                
+                <div class="content page2-content">
+                    <!-- GIC Section -->
+                    <table class="grid">
+                        <tr>
+                            <th colspan="3">GIC Pelaksana</th>
+                        </tr>
+                        <tr>
+                            <td style="width:170px;" class="top">GIC</td>
+                            <td class="center" style="width:10px;">:</td>
+                            <td>{!gic}</td>
+                        </tr>
+                        <tr>
+                            <td class="top">Agent Pelaksana</td>
+                            <td class="center">:</td>
+                            <td>{!agentname}</td>
+                        </tr>
+                    </table>
+                    
+                    <!-- Remark -->
+                	<table class="grid">
+                    <tr>
+                        <th colspan="2">Remark</th>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <table class="log-table">
+                                <tr>
+                                    <td class="log-header" style="width:170px;">Tanggal Remark</td>
+                                    <td class="log-header">Log Remark Tiket</td>
+                                </tr>
+                                <apex:repeat value="{!listremark}" var="item">
+                                    <tr>
+                                        <td class="left">{!item.tanggal}</td>
+                                        <td class="left">{!item.deskripsi}</td>
+                                    </tr>
+                                </apex:repeat>
+                            </table>
+                        </td>
+                    </tr>
+                	</table>
+
+                    <!-- Activity Log Section -->
+                    <table class="grid">
+                        <tr>
+                            <th colspan="2">Log Aktivitas</th>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <table class="log-table">
+                                    <tr>
+                                        <td class="log-header" style="width:170px;">Tanggal Log</td>
+                                        <td class="log-header">Log Aktivitas Tiket</td>
+                                    </tr>
+                                    <apex:repeat value="{!listhistory}" var="item">
+                                        <tr>
+                                            <td class="left">{!item.tanggal}</td>
+                                            <td class="left">{!item.deskripsi}</td>
+                                        </tr>
+                                    </apex:repeat>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </apex:outputLabel>  
+            <!-- <div class="footer">
+                <apex:image value="{!$Resource.FooterPrintLogo}"/>
+            </div> -->
+        </body>
+    </html>
+</apex:page>
