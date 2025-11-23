@@ -2,8 +2,8 @@
   @description       : DETAIL ASSETS
   @author            : Ahmad Yazid Munif
   @group             : 
-  @last modified on  : 10-22-2025
-  @last modified by  : Williams
+  @last modified on  : 11-19-2025
+  @last modified by  : Ahmad Yazid Munif
 -->
 <template>
     <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
@@ -77,26 +77,22 @@
                         </c-custom-lookup>
                     </div>
                 </div>
-                <template if:true={dynamicFieldShow1}>
-                    <div class="slds-m-top_medium">
-                        <lightning-card >    
+                <template for:each={sectionList} for:item="section">
+                    <div class="slds-m-top_medium" key={section.id}>
+                        <lightning-card>    
                             <div class="section-header" >
-                                <!-- Title + Icon -->
                                 <div class="section-title">
                                     <lightning-icon 
                                         icon-name="custom:custom27"
                                         size="small"
                                         class="slds-m-right_x-small">
                                     </lightning-icon>
-                                    <span>Section 1</span>
+                                    <span>{section.label}</span>
                                 </div>
-                                
                             </div>
-
-                            <!-- <template if:true={showSection}> -->
-                                <div class="slds-grid slds-wrap slds-gutters">
-                                    <template for:each={visibleFieldsSec1} for:item="field">
-                                        <!-- TEXT -->
+                            <div class="slds-grid slds-wrap slds-gutters">
+                                <template for:each={section.fields} for:item="field">
+                                    <!-- TEXT -->
                                         <template if:true={field.isText}>
                                             <div key={field.apiName} class="slds-col slds-size_1-of-2">
                                                 <lightning-input 
@@ -220,310 +216,8 @@
                                                 </template>
                                             </div>
                                         </template>
-
-                                    </template>
-                                </div>
-                            <!-- </template> -->
-                        </lightning-card>
-                    </div>
-                </template>
-                <template if:true={dynamicFieldShow2}>
-                    <div class="slds-m-top_medium">
-                        <lightning-card >    
-                            <div class="section-header" >
-                                <!-- Title + Icon -->
-                                <div class="section-title">
-                                    <lightning-icon 
-                                        icon-name="custom:custom27"
-                                        size="small"
-                                        class="slds-m-right_x-small">
-                                    </lightning-icon>
-                                    <span>Section 2</span>
-                                </div>
-                                
+                                </template>
                             </div>
-
-                            <!-- <template if:true={showSection}> -->
-                                <div class="slds-grid slds-wrap slds-gutters">
-                                    <template for:each={visibleFieldsSec2} for:item="field">
-                                        <!-- TEXT -->
-                                        <template if:true={field.isText}>
-                                            <div key={field.apiName} class="slds-col slds-size_1-of-2">
-                                                <lightning-input 
-                                                    type="text" 
-                                                    label={field.label} 
-                                                    name={field.apiName} 
-                                                    value={field.value}
-                                                    onchange={handleInputChange}>
-                                                </lightning-input>
-                                            </div>
-                                        </template>
-
-                                        <!-- TEXT AREA -->
-                                        <template if:true={field.isTextArea}>
-                                            <div key={field.apiName} class="slds-col slds-size_1-of-2">
-                                                <lightning-textarea
-                                                    label={field.label}
-                                                    name={field.apiName}
-                                                    value={field.value}
-                                                    onchange={handleInputChange}>
-                                                </lightning-textarea>
-                                            </div>
-                                        </template>
-
-                                        <!-- Read Only -->
-                                        <template if:true={field.isReadonly}>
-                                            <div key={field.apiName} class="slds-col slds-size_1-of-2">
-                                                <lightning-input 
-                                                    type="text" 
-                                                    label={field.label} 
-                                                    name={field.apiName} 
-                                                    value={field.value}
-                                                    onchange={handleInputChange} 
-                                                    disabled>
-                                                </lightning-input>
-                                            </div>
-                                        </template>
-
-                                        <!-- NUMBER -->
-                                        <template if:true={field.isNumber}>
-                                            <div key={field.apiName} class="slds-col slds-size_1-of-2">
-                                                <lightning-input 
-                                                    type="number" 
-                                                    label={field.label} 
-                                                    name={field.apiName} 
-                                                    value={field.value}
-                                                    onchange={handleInputChange}>
-                                                </lightning-input>
-                                            </div>
-                                        </template>
-
-                                        <!-- GEOLOCATION -->
-                                        <template if:true={field.isGeolocation}>
-                                            <div key={field.apiName} class="slds-col slds-size_1-of-2 slds-grid slds-wrap">
-                                                <div class="slds-col slds-size_1-of-2">
-                                                    <lightning-input
-                                                        type="number"
-                                                        step="0.000001"
-                                                        label={field.latitudeLabel}
-                                                        name={field.latitudeName}
-                                                        value={field.latitude}
-                                                        onchange={handleInputChange}>
-                                                    </lightning-input>
-                                                </div>
-                                                <div class="slds-col slds-size_1-of-2">
-                                                    <lightning-input
-                                                        type="number"
-                                                        step="0.000001"
-                                                        label={field.longitudeLabel}
-                                                        name={field.longitudeName}
-                                                        value={field.longitude}
-                                                        onchange={handleInputChange}>
-                                                    </lightning-input>
-                                                </div>
-                                            </div>
-                                        </template>
-
-                                        <!-- PICKLIST -->
-                                        <template if:true={field.isPicklist}>
-                                            <div key={field.apiName} class="slds-col slds-size_1-of-2">
-                                                <lightning-combobox
-                                                    label={field.label}
-                                                    name={field.apiName}
-                                                    value={field.value}
-                                                    placeholder="Select an option"
-                                                    options={field.options}
-                                                    onchange={handleInputChange}>
-                                                </lightning-combobox>
-                                            </div>
-                                        </template>
-
-                                        <!-- LOOKUP -->
-                                        <template if:true={field.isLookup}>
-                                            <div key={field.apiName}  class="slds-col slds-size_1-of-2 slds-p-horizontal_x-small slds-p-vertical_none">
-                                                <c-custom-lookup
-                                                    label={field.label}
-                                                    placeholder={field.label}
-                                                    icon-name="standard:location"
-                                                    object-api-name={field.lookupObject}
-                                                    fields={field.fieldsToQuery}
-                                                    record-type-name={field.filter}
-                                                    data-field={field.apiName}
-                                                    province-id={provinceId} 
-                                                    city-id={cityId}
-                                                    record-id={field.value}
-                                                    show-data={field.showData}
-                                                    onrecordselected={handleLookUpSelected}
-                                                    onrecordcleared={handleLookUpCleared}
-                                                    >
-                                                </c-custom-lookup>
-
-                                                <template if:true={field.isAddress}>
-                                                    <lightning-input 
-                                                        type="text" 
-                                                        label="Address Description"
-                                                        placeholder="Enter street / building details"
-                                                        value={addressDescription}
-                                                        name="Address_Description__c"
-                                                        onchange={handleInputChange}>
-                                                    </lightning-input>
-                                                </template>
-                                            </div>
-                                        </template>
-
-                                    </template>
-                                </div>
-                            <!-- </template> -->
-                        </lightning-card>
-                    </div>
-                </template>
-                <template if:true={dynamicFieldShow3}>
-                    <div class="slds-m-top_medium">
-                        <lightning-card >    
-                            <div class="section-header" >
-                                <!-- Title + Icon -->
-                                <div class="section-title">
-                                    <lightning-icon 
-                                        icon-name="custom:custom27"
-                                        size="small"
-                                        class="slds-m-right_x-small">
-                                    </lightning-icon>
-                                    <span>Section 3</span>
-                                </div>
-                                
-                            </div>
-
-                            <!-- <template if:true={showSection}> -->
-                                <div class="slds-grid slds-wrap slds-gutters">
-                                    <template for:each={visibleFieldsSec3} for:item="field">
-                                        <!-- TEXT -->
-                                        <template if:true={field.isText}>
-                                            <div key={field.apiName} class="slds-col slds-size_1-of-2">
-                                                <lightning-input 
-                                                    type="text" 
-                                                    label={field.label} 
-                                                    name={field.apiName} 
-                                                    value={field.value}
-                                                    onchange={handleInputChange}>
-                                                </lightning-input>
-                                            </div>
-                                        </template>
-
-                                        <!-- TEXT AREA -->
-                                        <template if:true={field.isTextArea}>
-                                            <div key={field.apiName} class="slds-col slds-size_1-of-2">
-                                                <lightning-textarea
-                                                    label={field.label}
-                                                    name={field.apiName}
-                                                    value={field.value}
-                                                    onchange={handleInputChange}>
-                                                </lightning-textarea>
-                                            </div>
-                                        </template>
-
-                                        <!-- Read Only -->
-                                        <template if:true={field.isReadonly}>
-                                            <div key={field.apiName} class="slds-col slds-size_1-of-2">
-                                                <lightning-input 
-                                                    type="text" 
-                                                    label={field.label} 
-                                                    name={field.apiName} 
-                                                    value={field.value}
-                                                    onchange={handleInputChange} 
-                                                    disabled>
-                                                </lightning-input>
-                                            </div>
-                                        </template>
-
-                                        <!-- NUMBER -->
-                                        <template if:true={field.isNumber}>
-                                            <div key={field.apiName} class="slds-col slds-size_1-of-2">
-                                                <lightning-input 
-                                                    type="number" 
-                                                    label={field.label} 
-                                                    name={field.apiName} 
-                                                    value={field.value}
-                                                    onchange={handleInputChange}>
-                                                </lightning-input>
-                                            </div>
-                                        </template>
-
-                                        <!-- GEOLOCATION -->
-                                        <template if:true={field.isGeolocation}>
-                                            <div key={field.apiName} class="slds-col slds-size_1-of-2 slds-grid slds-wrap">
-                                                <div class="slds-col slds-size_1-of-2">
-                                                    <lightning-input
-                                                        type="number"
-                                                        step="0.000001"
-                                                        label={field.latitudeLabel}
-                                                        name={field.latitudeName}
-                                                        value={field.latitude}
-                                                        onchange={handleInputChange}>
-                                                    </lightning-input>
-                                                </div>
-                                                <div class="slds-col slds-size_1-of-2">
-                                                    <lightning-input
-                                                        type="number"
-                                                        step="0.000001"
-                                                        label={field.longitudeLabel}
-                                                        name={field.longitudeName}
-                                                        value={field.longitude}
-                                                        onchange={handleInputChange}>
-                                                    </lightning-input>
-                                                </div>
-                                            </div>
-                                        </template>
-
-                                        <!-- PICKLIST -->
-                                        <template if:true={field.isPicklist}>
-                                            <div key={field.apiName} class="slds-col slds-size_1-of-2">
-                                                <lightning-combobox
-                                                    label={field.label}
-                                                    name={field.apiName}
-                                                    value={field.value}
-                                                    placeholder="Select an option"
-                                                    options={field.options}
-                                                    onchange={handleInputChange}>
-                                                </lightning-combobox>
-                                            </div>
-                                        </template>
-
-                                        <!-- LOOKUP -->
-                                        <template if:true={field.isLookup}>
-                                            <div key={field.apiName}  class="slds-col slds-size_1-of-2 slds-p-horizontal_x-small slds-p-vertical_none">
-                                                <c-custom-lookup
-                                                    label={field.label}
-                                                    placeholder={field.label}
-                                                    icon-name="standard:location"
-                                                    object-api-name={field.lookupObject}
-                                                    fields={field.fieldsToQuery}
-                                                    record-type-name={field.filter}
-                                                    data-field={field.apiName}
-                                                    province-id={provinceId} 
-                                                    city-id={cityId}
-                                                    record-id={field.value}
-                                                    show-data={field.showData}
-                                                    onrecordselected={handleLookUpSelected}
-                                                    onrecordcleared={handleLookUpCleared}
-                                                    >
-                                                </c-custom-lookup>
-
-                                                <template if:true={field.isAddress}>
-                                                    <lightning-input 
-                                                        type="text" 
-                                                        label="Address Description"
-                                                        placeholder="Enter street / building details"
-                                                        value={addressDescription}
-                                                        name="Address_Description__c"
-                                                        onchange={handleInputChange}>
-                                                    </lightning-input>
-                                                </template>
-                                            </div>
-                                        </template>
-
-                                    </template>
-                                </div>
-                            <!-- </template> -->
                         </lightning-card>
                     </div>
                 </template>

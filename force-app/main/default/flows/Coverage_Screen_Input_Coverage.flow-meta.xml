@@ -105,7 +105,7 @@
             <assignToReference>tempPolisName</assignToReference>
             <operator>Assign</operator>
             <value>
-                <stringValue>Temp Insurance Policy - {!Get_Asset.Opportunity__r.Name}</stringValue>
+                <stringValue>Insurance Policy - {!Get_Asset.Opportunity__r.Name}</stringValue>
             </value>
         </assignmentItems>
         <connector>
@@ -409,16 +409,16 @@
         <label>Error Screen</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
-        <allowBack>true</allowBack>
+        <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
-        <allowPause>true</allowPause>
+        <allowPause>false</allowPause>
         <connector>
             <isGoTo>true</isGoTo>
             <targetReference>Screen_Input_Coverage_Rebate</targetReference>
         </connector>
         <fields>
             <name>errorMessage</name>
-            <fieldText>&lt;p&gt;{!$Flow.FaultMessage}&lt;/p&gt;</fieldText>
+            <fieldText>&lt;p&gt;&lt;strong style=&quot;color: rgb(255, 13, 13); font-size: 14px;&quot;&gt;{!$Flow.FaultMessage}&lt;/strong&gt;&lt;/p&gt;</fieldText>
             <fieldType>DisplayText</fieldType>
             <styleProperties>
                 <verticalAlignment>
@@ -437,9 +437,9 @@
         <label>RecordSaved</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
-        <allowBack>true</allowBack>
+        <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
-        <allowPause>true</allowPause>
+        <allowPause>false</allowPause>
         <fields>
             <name>Copy_1_of_Copy_1_of_Copy_1_of_InputConfirm</name>
             <fieldText>&lt;p&gt;&lt;strong style=&quot;font-size: 16px; color: rgb(53, 212, 34);&quot;&gt;Your data has been successfully saved.&lt;/strong&gt;&lt;/p&gt;</fieldText>
@@ -570,12 +570,6 @@
                 </value>
             </inputParameters>
             <inputParameters>
-                <name>bsnId</name>
-                <value>
-                    <elementReference>Get_Asset.COB__c</elementReference>
-                </value>
-            </inputParameters>
-            <inputParameters>
                 <name>jsonString</name>
                 <value>
                     <elementReference>CoverageRateOutput</elementReference>
@@ -603,6 +597,12 @@
                 <name>amountInsurance</name>
                 <value>
                     <elementReference>Get_Asset.Amount_Insured__c</elementReference>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>bsnId</name>
+                <value>
+                    <elementReference>Get_Asset.COB__c</elementReference>
                 </value>
             </inputParameters>
             <inputsOnNextNavToAssocScrn>ResetValues</inputsOnNextNavToAssocScrn>
@@ -662,7 +662,7 @@
             <targetReference>Get_Asset</targetReference>
         </connector>
     </start>
-    <status>Active</status>
+    <status>Obsolete</status>
     <variables>
         <name>CollCoverage</name>
         <dataType>SObject</dataType>

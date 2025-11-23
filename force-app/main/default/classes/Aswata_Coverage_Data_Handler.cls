@@ -1,7 +1,7 @@
 /**
  * @description       : Generate Data for Insert Coverage
  * @author            : Ahmad Yazid Munif
- * @last modified on  : 11-13-2025
+ * @last modified on  : 11-21-2025
  * @last modified by  : Ahmad Yazid Munif
 **/
 public without sharing class Aswata_Coverage_Data_Handler {
@@ -46,6 +46,9 @@ public without sharing class Aswata_Coverage_Data_Handler {
             coverage.Profit_Sharing__c = wrapper.rebate.profitValue;
             coverage.Leasing_Fee__c = wrapper.rebate.leasingValue;
             coverage.Overdng_Comission__c = wrapper.rebate.overridingValue;
+            coverage.Agent_Comission__c = wrapper.rebate.agentCommissionValue;
+            coverage.Broker_Comission__c = wrapper.rebate.brokerCommissionValue;
+            coverage.Finance_Commision_PCT__c = wrapper.rebate.financialCommissionValue;
         }
         return coverage;
     }
@@ -57,16 +60,16 @@ public without sharing class Aswata_Coverage_Data_Handler {
      */
     public static InsurancePolicyCoverage wrapperDeductible(Aswata_Coverage_Data_Wrapper.CoverageDetailWrapper wrapper,Asset risk){
         InsurancePolicyCoverage coverage = new InsurancePolicyCoverage();
+        // System.debug('## AWT Deductible'+wrapper.deductible);
         if(wrapper.deductible!=null && wrapper.deductible.deductibleSetting!=null){
             coverage.Deductible_Type__c = wrapper.deductible.deductibleSetting;
             coverage.Deductible__c = wrapper.deductible.deductibleFlag;
+            coverage.Minimum_Cur_ID__c = wrapper.deductible.currencyName;
             if(wrapper.deductible.deductibleSetting=='FLAT'){
                 coverage.DeductibleAmount = wrapper.deductible.deductibleAmount;
-                coverage.Minimum_Cur_ID__c = wrapper.deductible.currencyName;
                 coverage.Deductible_PCT__c = null;
             }else{
-                coverage.DeductibleAmount = wrapper.deductible.deductibleAmount;
-                coverage.Minimum_Cur_ID__c = wrapper.deductible.currencyName;
+                coverage.DeductibleAmount = null;
                 coverage.Deductible_PCT__c = wrapper.deductible.deductibleAmount;
             }
             coverage.Description = wrapper.deductible.descriptionDeductible;
@@ -128,17 +131,25 @@ public without sharing class Aswata_Coverage_Data_Handler {
         }
 
         List<Aswata_Coverage_Data_Wrapper.DynamicFieldConfig> results = new List<Aswata_Coverage_Data_Wrapper.DynamicFieldConfig>();
-        // if (!Schema.sObjectType.Master_Data__c.isAccessible() && !Schema.sObjectType.RecordType.isAccessible()) {
-        //     throw new SecurityException(
-        //         'Insufficient permissions to access Master_Data__c'
-        //     );
-        // }
-        List<Master_Data__c> configs = [
-            SELECT Id,Name,COVERAGE_REF_ID__c
-            FROM Master_Data__c WHERE BSN_ID__c = :cob
-            AND RecordTypeId = :rtId AND PARENT_COVERAGE_ID__c != '0'
-            WITH SECURITY_ENFORCED
-        ];
+        List<Master_Data__c> configs = new List<Master_Data__c>();
+        if(cob == '301'){
+            configs = [
+                SELECT Id,Name,COVERAGE_REF_ID__c,PARENT_COVERAGE_ID__c
+                FROM Master_Data__c WHERE BSN_ID__c = :cob
+                AND RecordTypeId = :rtId AND Asset_Section__c = null
+                WITH SECURITY_ENFORCED
+            ];
+        }else{
+            configs = [
+                SELECT Id,Name,COVERAGE_REF_ID__c,PARENT_COVERAGE_ID__c
+                FROM Master_Data__c WHERE BSN_ID__c = :cob
+                AND RecordTypeId = :rtId AND PARENT_COVERAGE_ID__c != '0' AND Asset_Section__c = null
+                WITH SECURITY_ENFORCED
+            ];
+        }
+        if (configs.isEmpty()) {
+            return results;
+        }
         List<Id> covIds = new List<Id>();
         for (Master_Data__c cfg : configs) {
             covIds.add(cfg.Id);
@@ -167,15 +178,11 @@ public without sharing class Aswata_Coverage_Data_Handler {
             }
             Aswata_Coverage_Data_Wrapper.DynamicFieldConfig configField = new Aswata_Coverage_Data_Wrapper.DynamicFieldConfig();
             configField.coverageId = cfg.COVERAGE_REF_ID__c;
+            configField.parentCoverageId = cfg.PARENT_COVERAGE_ID__c;
             configField.coverageName = cfg.Name;
             configField.batasBawah = tarifBawahValue;
             configField.sectionList = sectionList;
             results.add(configField);
-            // results.add(new Aswata_Coverage_Data_Wrapper.DynamicFieldConfig(
-            //     cfg.COVERAGE_REF_ID__c,
-            //     cfg.Name,
-            //     tarifBawahValue
-            // ));
         }
         return results;
     }
@@ -188,27 +195,22 @@ public without sharing class Aswata_Coverage_Data_Handler {
         Aswata_Coverage_Data_Wrapper.PicklistWrapper results = new Aswata_Coverage_Data_Wrapper.PicklistWrapper();
         results.deductibleOptions = new List<Map<String, String>>();
         results.currencyOptions = new List<Map<String, String>>();
-        try {
-            Schema.DescribeFieldResult ddtibleField = InsurancePolicyCoverage.Deductible__c.getDescribe();
-            for (Schema.PicklistEntry f : ddtibleField.getPicklistValues()) {
-                Map<String, String> option = new Map<String, String>{
-                    'label' => f.getLabel(),
-                    'value' => f.getValue()
-                };
-                results.deductibleOptions.add(option);
-            }
-            Schema.DescribeFieldResult curField = Opportunity.Cur__c.getDescribe();
-            for (Schema.PicklistEntry f : curField.getPicklistValues()) {
-                Map<String, String> option = new Map<String, String>{
-                    'label' => f.getLabel(),
-                    'value' => f.getValue()
-                };
-                results.currencyOptions.add(option);
-            }
-        } catch (Exception e) {
-            throw new AuraHandledException(e.getMessage());
+        Schema.DescribeFieldResult ddtibleField = InsurancePolicyCoverage.Deductible__c.getDescribe();
+        for (Schema.PicklistEntry f : ddtibleField.getPicklistValues()) {
+            Map<String, String> option = new Map<String, String>{
+                'label' => f.getLabel(),
+                'value' => f.getValue()
+            };
+            results.deductibleOptions.add(option);
         }
-
+        Schema.DescribeFieldResult curField = Opportunity.Cur__c.getDescribe();
+        for (Schema.PicklistEntry f : curField.getPicklistValues()) {
+            Map<String, String> option = new Map<String, String>{
+                'label' => f.getLabel(),
+                'value' => f.getValue()
+            };
+            results.currencyOptions.add(option);
+        }
         return results;
     }
 }

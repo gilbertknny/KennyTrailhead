@@ -1,7 +1,7 @@
 /**
  * @description       : Data Handler for LWC Treaty Distribution
  * @author            : Ahmad Yazid Munif
- * @last modified on  : 11-07-2025
+ * @last modified on  : 11-14-2025
  * @last modified by  : Ahmad Yazid Munif
 **/
 public with sharing class Aswata_Treaty_Distribution {
@@ -12,6 +12,7 @@ public with sharing class Aswata_Treaty_Distribution {
      */
     @AuraEnabled(cacheable=true)
     public static Transaction_Data__c getTransactionDataOpp(String recordId) {
+        //012MS000000BWNyYAO
         RecordType rtTrxData = [
             SELECT Id, Name
             FROM RecordType where SobjectType = 'Transaction_Data__c'
@@ -40,6 +41,7 @@ public with sharing class Aswata_Treaty_Distribution {
      */
     @AuraEnabled
     public static List<QuoteOpptyRelated> getRelatedListRisk(String recordId) {
+        // 012MS000000BcI5YAK
         RecordType rtRisk = [
             SELECT id FROM RecordType 
             WHERE SobjectType = 'Asset' AND Name = 'RIsk'
