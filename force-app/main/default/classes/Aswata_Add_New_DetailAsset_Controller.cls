@@ -1,7 +1,7 @@
 /**
  * @description       : Controller for LWC Detail Asset
  * @author            : Ahmad Yazid Munif
- * @last modified on  : 11-10-2025
+ * @last modified on  : 11-21-2025
  * @last modified by  : Williams
 **/
 public with sharing class Aswata_Add_New_DetailAsset_Controller {
@@ -26,63 +26,6 @@ public with sharing class Aswata_Add_New_DetailAsset_Controller {
         record = mapFormDataToAsset(formData, record);
         // InsertorUpdate Asset
         return performDML(record, isUpdate);
-        // RecordType recordType;
-        // if (!isUpdate) {
-        //     recordType = [
-        //         SELECT Id
-        //         FROM RecordType
-        //         WHERE SobjectType = :RECORD_TYPE_NAME
-        //         AND Name = :RECORD_TYPE_NAME
-        //         WITH SECURITY_ENFORCED
-        //         LIMIT 1
-        //     ];
-        // }
-        // Asset record;
-        // if (isUpdate) {
-        //     record = [SELECT Id FROM Asset WHERE Id = :recordId WITH SECURITY_ENFORCED LIMIT 1];
-        // } else {
-        //     record = new Asset();
-        //     record.put('RecordTypeId', recordType.Id);
-        // }
-        // Map fields from formData
-        // for (String fieldApi : formData.keySet()) {
-        //     if (fieldApi == 'Id') {
-        //         continue; // Skip Id field
-        //     }
-        //     Object value = formData.get(fieldApi);
-        //     if (value == null) {
-        //         continue;
-        //     }
-        //     try {
-        //         // Handle numeric conversion for String values
-        //         if ((fieldApi == 'Exchange_Rate__c'
-        //             || fieldApi == 'Amount__c'
-        //             || fieldApi == 'Amount_IDR__c'
-        //             || fieldApi == 'Declare_Value__c'
-        //             || fieldApi == 'Amount_Insured__c')
-        //             && value instanceof String) {
-        //             record.put(fieldApi, Decimal.valueOf((String)value));
-        //         } else {
-        //             record.put(fieldApi, value);
-        //         }
-        //     } catch (Exception e) {
-        //         throw new AuraHandledException('Failed to set field: ' + fieldApi + ': ' + e.getMessage());
-        //     }
-        // }
-        
-        // try {
-        //     if (!Schema.sObjectType.Asset.isAccessible()) {
-        //         throw new SecurityException('Insufficient permissions to access Master_Data__c');
-        //     }
-        //     if (isUpdate) {
-        //         update record;
-        //     } else {
-        //         insert record;
-        //     }
-        //     return record.Id;
-        // } catch (Exception e) {
-        //     throw new AuraHandledException('Error saving Asset: ' + e.getMessage());
-        // }
     }
     /**
      * @description to get AssetRecord is Existing/New
@@ -92,7 +35,7 @@ public with sharing class Aswata_Add_New_DetailAsset_Controller {
      */
     private static Asset initializeAssetRecord(Map<String, Object> formData, Boolean isUpdate) {
         if (isUpdate) {
-            return [SELECT Id FROM Asset WHERE Id = :(String)formData.get('Id') WITH SECURITY_ENFORCED LIMIT 1]; // NCSS: 1
+            return [SELECT Id FROM Asset WHERE Id = :(String)formData.get('Id') WITH SECURITY_ENFORCED LIMIT 1];
         } else {
             RecordType rt = [
                 SELECT Id
@@ -102,17 +45,8 @@ public with sharing class Aswata_Add_New_DetailAsset_Controller {
                 WITH SECURITY_ENFORCED
                 LIMIT 1
             ];
-            String mdId = (String)formData.get('Section__c');
-            Master_Data__c getCategory = [
-                SELECT Id,name,Section__c,Asset_Category_Value__c
-                FROM Master_Data__c
-                WHERE id = :mdId
-                WITH SECURITY_ENFORCED
-                LIMIT 1
-            ];
             Asset newRecord = new Asset();
             newRecord.put('RecordTypeId', rt.Id);
-            newRecord.put('Risk_Detail_Flag__c', getCategory.Asset_Category_Value__c);
             return newRecord;
         }
     }
@@ -165,11 +99,31 @@ public with sharing class Aswata_Add_New_DetailAsset_Controller {
             if (isUpdate) {
                 Database.update(record, AccessLevel.USER_MODE);
             } else {
+                Decimal newRiskNumber = 1;
+                if(record.Opportunity__c != null){
+                    System.debug('record.Opportunity__c'+record.Opportunity__c);
+                    String policyId = Aswata_GlobalFunction.createInsurancePolicy(record.Opportunity__c);
+                    
+                    List<Asset> latestAssetList = [
+                        SELECT risk_detail_id__c
+                        FROM Asset WHERE Opportunity__c = :record.Opportunity__c
+                        AND risk_detail_id__c != null
+                        WITH SECURITY_ENFORCED 
+                        ORDER BY risk_detail_id__c DESC LIMIT 1
+                    ];
+                    if (!latestAssetList.isEmpty()) {
+                        Asset latestAsset = latestAssetList[0];
+                        newRiskNumber = latestAsset.risk_detail_id__c + 1;
+                    }
+                    record.insurance_policy__c = policyId;
+                }
+                record.risk_detail_id__c = newRiskNumber;
                 Database.insert(record, AccessLevel.USER_MODE);
             }
             return record.Id;
         } catch (Exception e) {
-            throw new AuraHandledException('An unexpected error occurred during save: ' + e.getMessage()); // NCSS: 14
+            System.debug('An unexpected error occurred during save: ' + e.getMessage());
+            throw new AuraHandledException('An unexpected error occurred during save: ' + e.getMessage());
         }
     }
     /**
@@ -180,57 +134,26 @@ public with sharing class Aswata_Add_New_DetailAsset_Controller {
      */
     @AuraEnabled(cacheable=true)
     public static List<String> getSections(String titleValue,String cobValue) {
-        String assetSection = 'Asset Section';
         RecordType rtSection = [
             SELECT Id FROM RecordType
-            WHERE SobjectType = 'Master_Data__c' AND Name = :assetSection
+            WHERE SobjectType = 'Master_Data__c' AND Name = 'Asset Section'
             WITH SECURITY_ENFORCED LIMIT 1
         ];
-        // Get Product2 Id COB
-        Product2 idProductCob = [SELECT Id, Name FROM product2 WHERE ProductCode = :cobValue WITH SECURITY_ENFORCED LIMIT 1];
-        System.debug('idProductCob'+idProductCob);
-        // Get AssetSection Id titleValue
-        Master_Data__c idAssetSection = [SELECT Id, Name FROM Master_Data__c WHERE Name = :titleValue WITH SECURITY_ENFORCED LIMIT 1];
-        System.debug('idAssetSection'+idAssetSection);
-        
-        // Master_Data__c Section Get
-        RecordType recordType = [SELECT Id, Name FROM RecordType where SobjectType = :MASTER_DATA_OBJECT_API and Name = :DETAIL_ASSET_NAME WITH SECURITY_ENFORCED LIMIT 1];
-        // List<DynamicFieldConfig> results = new List<DynamicFieldConfig>();
-        // List<Master_Data__c> listField = [
-        //     SELECT Name,Section__c,BSN_ID__c , Label__c, Data_Type__c, Lookup_Object__c, Filter__c,
-        //            Status__c, Object__c, Order__c, showData__c
-        //     FROM Master_Data__c
-        //     WHERE Status__c = 'Active'AND RecordTypeId = :recordType.Id
-        //     AND BSN_ID__c = :cobValue
-        //     WITH SECURITY_ENFORCED
-        //     ORDER BY Order__c ASC
-        // ];
-
         Set<String> results = new Set<String>();
         List<Master_Data__c> configs = [
             SELECT 
-            Section__c, Name, BSN__c,
-            Asset_Section__c, Asset_Section__r.Section__c
+            Name, Section__c, BSN__c,
+            Asset_Section__c, Asset_Section__r.Section__c, Section_Title__c, RecordType.Name
             FROM Master_Data__c
-            WHERE BSN__c = :idProductCob.Id AND  Asset_Section__c = :idAssetSection.Id
+            WHERE BSN__r.ProductCode = :cobValue AND Name  = :titleValue
+            AND RecordTypeId = :rtSection.Id
+            WITH SECURITY_ENFORCED
         ];
-        System.debug('configs'+configs[0].Asset_Section__r.Section__c);
         for (Master_Data__c master : configs) {
-            if (master.Asset_Section__r.Section__c != null) {
-                results.add(String.valueOf(master.Asset_Section__r.Section__c));
+            if (master.Section__c != null) {
+                results.add(String.valueOf(master.Section__c));
             }
         }
-        // List<Master_Data__c> configs = [
-        //     SELECT Section__c
-        //     FROM Master_Data__c
-        //     WHERE Section_Title__c = :titleValue AND BSN_ID__c = :cobValue
-        //     WITH SECURITY_ENFORCED
-        // ];
-        // for (Master_Data__c master : configs) {
-        //     if (master.Section__c != null) {
-        //         results.add(String.valueOf(master.Section__c));
-        //     }
-        // }
         List<String> uniqueNamesList = new List<String>(results);
         return uniqueNamesList;
     }
@@ -252,7 +175,6 @@ public with sharing class Aswata_Add_New_DetailAsset_Controller {
             WITH SECURITY_ENFORCED
             ORDER BY Order__c ASC
         ];
-        
         for (Master_Data__c cfg : configs) {
             DynamicFieldConfig dcf = new DynamicFieldConfig();
             dcf.apiName = cfg.Name;
@@ -329,7 +251,9 @@ public with sharing class Aswata_Add_New_DetailAsset_Controller {
                 Section__c,
                 Section__r.Name,
                 Section__r.Section__c,
-                Section__r.Section_Title__c
+                Section__r.Section_Title__c,
+                Deductible__c,
+                Maximum_Indemnity_Period__c
             FROM Asset
             WHERE Id = :detailAssetId
             WITH SECURITY_ENFORCED
@@ -349,16 +273,13 @@ public with sharing class Aswata_Add_New_DetailAsset_Controller {
         result.put('Declare_Value__c', detailAsset.Declare_Value__c);
         result.put('Indemnity_Type__c', detailAsset.Indemnity_Type__c);
         result.put('Amount_Insured__c', detailAsset.Amount_Insured__c);
-        result.put('ParentId', detailAsset.ParentId);
+        result.put('Parent_Asset__c', detailAsset.ParentId);
         result.put('COB__c', detailAsset.Parent.COB__c);
         result.put('Category__c', detailAsset.Category__c);
         result.put('Section__c', detailAsset.Section__c);
-
-        if (detailAsset.Section__c != null) {
-            result.put('Section_Name__c', detailAsset.Section__r.Name);
-            result.put('Section_Title__c', detailAsset.Section__r.Section_Title__c);
-        }
-        
+        result.put('Section_Name__c', detailAsset.Section__r.Name);
+        result.put('Deductible__c', detailAsset.Deductible__c);
+        result.put('Maximum_Indemnity_Period__c', detailAsset.Maximum_Indemnity_Period__c);
         return result;
     }
 }

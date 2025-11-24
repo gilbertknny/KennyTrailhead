@@ -10,6 +10,7 @@ export default class LwcTreatyDistribution extends LightningElement {
     @api recordIdTemp = '0Q0MS000000LEmL0AW';
     @track selectedBusreqId = '';
     @track currentRisk = {};
+    @track currentFormated = {};
     @track totalSumInsured;
     @track inputFacultative;
     @track insurancePeriod;
@@ -127,14 +128,19 @@ export default class LwcTreatyDistribution extends LightningElement {
         this.isLoading = true;
         console.log('recordId: ' + this.recordId);
         try {
+            this.aswataShare = 0;
             const dataTrxData = await getTransactionDataOpp({ recordId: this.recordId });
-            this.aswataShare = dataTrxData.Amount__c
+            if(dataTrxData){
+                console.log('dataTrxData',dataTrxData)
+                this.aswataShare = dataTrxData.Amount__c;
+            }
             console.log('Fetching Transaction Data:', dataTrxData);
             // fetch oppty
             const data = await getRelatedListRisk({ recordId: this.recordId });
             if (data) {
                 this.picklistMaster=data;
                 console.log('relatedList ',data);
+                this.totalSumInsured = 0;
                 this.totalSumInsured = data[0].oppTotalSumInsured;
                 const jsonString = data[0].treatyResponse;
                 const startDate = this.formattedDate(data[0].oppStartDatePeriode);
@@ -145,7 +151,7 @@ export default class LwcTreatyDistribution extends LightningElement {
                     // this.masterData = JSON.parse(jsonString);
                     this.masterData = JSON.parse(jsonString).map(item => ({
                         ...item,
-                        findId: item.busreq_id+item.riskNo
+                        findId: item.busreq_id+item.riskNo,
                     }));
                 }
                 console.log('modifiedTreatyArray',JSON.stringify(this.masterData));
@@ -179,7 +185,44 @@ export default class LwcTreatyDistribution extends LightningElement {
     get insurancePeriodDate() {
         return this.insurancePeriod;
     }
-    
+    formatNumber(value) {
+        if (value === null || value === undefined || value === '') {
+            return 0;
+        }
+        return new Intl.NumberFormat('id-ID', {
+            minimumFractionDigits: 2, 
+            maximumFractionDigits: 2,
+            useGrouping: true
+        }).format(Number(value));
+    }
+
+    cleanNumber(formattedString) {
+        if (formattedString === null || formattedString === undefined || formattedString === '') {
+            return 0;
+        }
+        let cleanValue = formattedString.toString().replace(/\./g, '');
+        cleanValue = cleanValue.replace(',', '.');
+        return parseFloat(cleanValue);
+    }
+
+    // Fungsi Helper untuk Deep Clone dan Format
+    formatDeepClone(sourceObject) {
+        let formattedClone = JSON.parse(JSON.stringify(sourceObject));
+        this.RISK_KEYS.forEach(key => {
+            const component = formattedClone[key];
+            let tempLimit = component?.limit ?? component.capacity - component.accumulation;
+            this.currentFormated = {
+                ...this.currentFormated,
+                [key]: {
+                    ...componentFormat,
+                    limit: this.formatNumber(tempLimit),
+                    accumulation: this.formatNumber(component?.accumulation ?? 0),
+                    capacity: this.formatNumber(component?.capacity ?? 0)
+                }
+            };
+        });
+        return formattedClone;
+    }
     initialDataTreaty(){
         if (this.masterData.length > 0) {
             // this.selectedBusreqId = this.masterData[0].busreq_id;
@@ -196,6 +239,7 @@ export default class LwcTreatyDistribution extends LightningElement {
             })
             this.RISK_KEYS.forEach(key => {
                 const component = this.currentRisk[key];
+                const componentFormat = this.currentFormated[key];
                 // let isFacultative = (this.currentRisk.setFacultative != null);
                 let tempLimit = component?.limit ?? component.capacity - component.accumulation;
                 this.currentRisk = {
@@ -205,6 +249,17 @@ export default class LwcTreatyDistribution extends LightningElement {
                         ...component,
                         limit: tempLimit
                     }
+                };
+                this.currentFormated = {
+                    ...this.currentFormated,
+                    // isSetFacultativeDisabled:isFacultative,
+                    [key]: {
+                        ...componentFormat,
+                        limit: this.formatNumber(tempLimit),
+                        accumulation: this.formatNumber(component?.accumulation ?? 0),
+                        capacity: this.formatNumber(component?.capacity ?? 0)
+                    },
+                    setFacultative: this.formatNumber(this.currentRisk.setFacultative ?? 0)
                 };
             });
         }
@@ -220,8 +275,10 @@ export default class LwcTreatyDistribution extends LightningElement {
         const selectedObject = this.masterData.find(item => item.findId === this.selectedBusreqId);
         if (selectedObject) {
             this.currentRisk = selectedObject;
+            this.currentFormated = this.formatDeepClone(selectedObject);
         } else {
             this.currentRisk = {};
+            this.currentFormated = {};
         }
     }
 
@@ -239,47 +296,109 @@ export default class LwcTreatyDistribution extends LightningElement {
         const tsi100 = this.totalSumInsured;
         if (!component) return '0';
         const value = this.calculatePercentageValue(component.limit, tsi100);
-        return value.toFixed(2);
+        const numericValue = Number(value);
+        return new Intl.NumberFormat('id-ID', {
+            useGrouping: false,
+            minimumFractionDigits: 1,
+            maximumFractionDigits: 2
+        }).format(numericValue);
+        // return value.toFixed(2);
     }
     getFacultative(componentName) {
         const component = this.currentRisk[componentName];
         const tsi100 = this.totalSumInsured;
         if (!component) return '0';
         const value = this.calculatePercentageValue(component, tsi100);
-        return value.toFixed(2);
+        const numericValue = Number(value);
+        return new Intl.NumberFormat('id-ID', {
+            useGrouping: false,
+            minimumFractionDigits: 1,
+            maximumFractionDigits: 2
+        }).format(numericValue);
+        // return value.toFixed(2);
     }
-    handleInputChange(event) {
+    handleNumericKeyDown(event) {
+        const key = event.key;
+        const value = event.target.value;
+        const allowedControlKeys = [
+            'Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 'ArrowLeft', 'ArrowRight'
+        ];
+        if (allowedControlKeys.includes(key)) {
+            return;
+        }
+        if (/[0-9]/.test(key)) {
+            return;
+        }
+        if (key === ',' && !value.includes(',')) {
+            return; 
+        }
+        event.preventDefault();
+    }
+    handleInputFocus(event) {
         const objectName = event.target.dataset.object;
         const field = event.target.dataset.field;
-        const value = event.detail.value;
-        console.log('objectName',objectName);
-        let updatedObject = { ...this.currentRisk[objectName] };
-        updatedObject[field] = parseFloat(value) || 0;
-        
+        const rawValue = this.currentRisk?.[objectName]?.[field];
+        let updatedFormattedObject = { ...this.currentFormated[objectName] };
+        let rawString = '';
+        if (rawValue !== null && rawValue !== undefined) {
+            rawString = rawValue.toString();
+            rawString = rawString.replace('.', ','); 
+        }
+        updatedFormattedObject[field] = rawString;
+        this.currentFormated = {
+            ...this.currentFormated,
+            [objectName]: updatedFormattedObject
+        };
+    }
+    handleInputBlur(event) {
+        const objectName = event.target.dataset.object;
+        const field = event.target.dataset.field;
+        const inputValue = event.target.value;
+        const numericValue = this.cleanNumber(inputValue);
+        let updatedRiskObject = { ...this.currentRisk[objectName] };
+        updatedRiskObject[field] = numericValue;
         this.currentRisk = {
             ...this.currentRisk,
-            [objectName]: updatedObject
+            [objectName]: updatedRiskObject
+        };
+        let updatedFormattedObject = { ...this.currentFormated[objectName] };
+        updatedFormattedObject[field] = this.formatNumber(numericValue);
+        this.currentFormated = {
+            ...this.currentFormated,
+            [objectName]: updatedFormattedObject
         };
         this.saveChanges();
-        // console.log(JSON.stringify(this.currentRisk));
     }
-    handleInputFacultative(event) {
+    handleInputFocusFacultative(event) {
         const field = event.target.dataset.field;
-        const value = event.detail.value;
-        console.log(field,value);
-        const numericValue = parseFloat(value) || 0;
-        this.inputFacultative = numericValue;
+        const rawValue = this.currentRisk?.[field]; 
+        this.currentFormated = {
+            ...this.currentFormated,
+            [field]: (rawValue !== null && rawValue !== undefined) ? rawValue.toString() : ''
+        };
+    }
+    handleInputBlurFacultative(event) {
+        const field = event.target.dataset.field;
+        const inputValue = event.target.value;
+        const numericValue = this.cleanNumber(inputValue);
         this.currentRisk = {
             ...this.currentRisk,
             [field]: numericValue
         };
+        this.currentFormated = {
+            ...this.currentFormated,
+            [field]: this.formatNumber(numericValue)
+        };
         this.masterData = this.masterData.map(item => {
-            return {
-                ...item,
-                [field]: numericValue
-            };
+            if (item.findId === this.currentRisk.findId) { 
+                return {
+                    ...item,
+                    [field]: numericValue
+                };
+            }
+            return item;
         });
-        // console.log(JSON.stringify(this.masterData));
+        this.saveChanges();
     }
     get bppdaLimitPercentage() { return this.getComponentLimitPercentage('bppda'); }
     get poolEqLimitPercentage() { return this.getComponentLimitPercentage('poolEq'); }
@@ -334,6 +453,7 @@ export default class LwcTreatyDistribution extends LightningElement {
         let updatedMasterData = [...this.masterData];
         updatedMasterData[indexToUpdate] = this.currentRisk;
         this.masterData = updatedMasterData;
+        console.log('updatedMasterData',JSON.stringify(this.masterData));
     }
 
     get totalRiskComponentValues() {
@@ -390,7 +510,7 @@ export default class LwcTreatyDistribution extends LightningElement {
     }
 
     get totalLimitDisplay() {
-        const total = this.totalRiskComponentValues.limit;
+        const total = this.formatNumber(this.totalRiskComponentValues.limit);
         return total;
     }
     
@@ -400,16 +520,16 @@ export default class LwcTreatyDistribution extends LightningElement {
     }
 
     get totalAccumulationDisplay() {
-        const total = this.totalRiskComponentValues.accumulation;
+        const total = this.formatNumber(this.totalRiskComponentValues.accumulation);
         return total;
     }
 
     get totalCapacityDisplay() {
-        const total = this.totalRiskComponentValues.capacity;
+        const total = this.formatNumber(this.totalRiskComponentValues.capacity);
         return total;
     }
     get totalExcessDisplay() {
-        const total = this.totalRiskComponentValues.excess;
+        const total = this.formatNumber(this.totalRiskComponentValues.excess);
         return total;
     }
     get totalexcessPercentDisplay() {
@@ -417,7 +537,7 @@ export default class LwcTreatyDistribution extends LightningElement {
         return total;
     }
     get totalShareDisplay() {
-        const total = this.totalRiskComponentValues.shareOffered;
+        const total = this.formatNumber(this.totalRiskComponentValues.shareOffered);
         return total;
     }
     get totalSharePercentDisplay() {
@@ -425,7 +545,7 @@ export default class LwcTreatyDistribution extends LightningElement {
         return total;
     }
     get totalAcceptedDisplay() {
-        const total = this.totalRiskComponentValues.accepted;
+        const total = this.formatNumber(this.totalRiskComponentValues.accepted);
         return total;
     }
     get totalAcceptedPercentDisplay() {
@@ -433,7 +553,7 @@ export default class LwcTreatyDistribution extends LightningElement {
         return total;
     }
     get totalBindingDisplay() {
-        const total = this.totalRiskComponentValues.binding;
+        const total = this.formatNumber(this.totalRiskComponentValues.binding);
         return total;
     }
     get totalBindingPercentDisplay() {
@@ -441,7 +561,7 @@ export default class LwcTreatyDistribution extends LightningElement {
         return total;
     }
     get totalPendingBindingDisplay() {
-        const total = this.totalRiskComponentValues.pendingBinding;
+        const total = this.formatNumber(this.totalRiskComponentValues.pendingBinding);
         return total;
     }
     get totalPendingBindingPercentDisplay() {
@@ -449,7 +569,7 @@ export default class LwcTreatyDistribution extends LightningElement {
         return total;
     }
     get totalShortfallDisplay() {
-        const total = this.totalRiskComponentValues.shortfall;
+        const total = this.formatNumber(this.totalRiskComponentValues.shortfall);
         return total;
     }
     get totalShortfallPercentDisplay() {
