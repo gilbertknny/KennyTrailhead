@@ -26,12 +26,6 @@ export default class AddNewPolicyDetailInsured extends LightningElement {
     @api parentAsset;
     
     @track dynamicFields = [];
-    @track dynamicFieldShow1 = false;
-    @track dynamicFieldShow2 = false;
-    @track dynamicFieldShow3 = false;
-    @track dynamicFieldsSec1 = [];
-    @track dynamicFieldsSec2 = [];
-    @track dynamicFieldsSec3 = [];
     @track formData = {};
     @track picklistValues; 
     @track transactionData = [];
@@ -52,8 +46,9 @@ export default class AddNewPolicyDetailInsured extends LightningElement {
     // @track firstLossAmount;
     @track showSectionFields = false; // controls Section & below visibility
     @track showDataTable = false;
-
+    @track groupedDynamicFields = {};
     controllingValue;
+
     recordTypeIdAsset;
     activeFieldData;
     picklistOptions;
@@ -123,6 +118,12 @@ export default class AddNewPolicyDetailInsured extends LightningElement {
             
             // ✅ Set section name untuk display
             this.section = this.formData?.Section_Name__c || '';
+
+            if (this.formData?.Indemnity_Type__c) {
+                this.controllingValue = this.formData.Indemnity_Type__c;
+                console.log('🔧 Initialized controllingValue:', this.controllingValue);
+
+            }
             
             console.log('🔍 Loaded values:');
             console.log('  Currency:', this.formData.Currency__c);
@@ -164,18 +165,6 @@ export default class AddNewPolicyDetailInsured extends LightningElement {
         return this.isEditMode ? 'Update' : 'Save';
     }
 
-    get visibleFieldsSec1() {
-        return this.getFilteredFields(this.dynamicFieldsSec1);
-    }
-
-    get visibleFieldsSec2() {
-        return this.getFilteredFields(this.dynamicFieldsSec2);
-    }
-
-    get visibleFieldsSec3() {
-        return this.getFilteredFields(this.dynamicFieldsSec3);
-    }
-
     getFilteredFields(sectionFields) {
         return sectionFields.filter(f => {
             // Apply visibility rule only to "Declare Value"
@@ -185,7 +174,34 @@ export default class AddNewPolicyDetailInsured extends LightningElement {
             return true; // other fields always visible
         });
     }
-
+    get sectionList() {
+        if (!this.groupedDynamicFields) return [];
+        const desiredSections = this.resultSection;
+        const sections = Object.keys(this.groupedDynamicFields)
+            .filter(key => desiredSections.includes(key))
+            .map(key => {
+                const sectionNumber = key;
+                const originalFields = this.groupedDynamicFields[sectionNumber];
+                const filteredFields = originalFields.filter(f => {
+                    if (f.label === 'Declare Value') {
+                        return this.controllingValue === 'First Loss' || this.controllingValue === 'Lost Limit';
+                    }
+                    return true; 
+                });
+                if (filteredFields.length === 0) {
+                    return null;
+                }
+                return {
+                    id: sectionNumber, 
+                    label: `Section ${sectionNumber}`,
+                    fields: filteredFields
+                };
+            })
+            .filter(section => section !== null) 
+            .sort((a, b) => a.id - b.id); 
+        console.log('sections',sections);
+        return sections;
+    }
     @wire(getDetailAssetData, { detailAssetId: '$currentId' })
         wiredCoverage({ error, data }) {
             if (data) {
@@ -283,13 +299,13 @@ export default class AddNewPolicyDetailInsured extends LightningElement {
                 };
             }
 
-            // // update formData
+            // update formData
             this.formData = {
                 ...this.formData,
                 [fieldName]: value
             };
 
-            // // also update fields so UI re-renders safely
+            // also update fields so UI re-renders safely
             this.dynamicFields = this.dynamicFields.map(f => {
                 if (f.latitudeName === fieldName) {
                     return { ...f, latitude: value };
@@ -313,25 +329,11 @@ export default class AddNewPolicyDetailInsured extends LightningElement {
             const fieldName = event.target.name;
             let value = Number(event.target.value);
             console.log(fieldName,value);
-            // // update formData
+            // update formData
             this.formData = {
                 ...this.formData,
                 [fieldName]: value
             };
-            // // also update fields so UI re-renders safely
-            // this.dynamicFields = this.dynamicFields.map(f => {
-            //     if (f.latitudeName === fieldName) {
-            //         return { ...f, latitude: value };
-            //     }
-            //     if (f.longitudeName === fieldName) {
-            //         return { ...f, longitude: value };
-            //     }
-            //     if (f.apiName === fieldName) {
-            //         return { ...f, value: value };
-            //     }
-            //     return f;
-            // });
-
             console.log('📝 formData updated:', JSON.stringify(this.formData));
         } catch (e) {
         console.error('💥 Error in handleInputChange:', e);
@@ -345,27 +347,11 @@ export default class AddNewPolicyDetailInsured extends LightningElement {
             .then(result => {
                 this.resultSection = result;
                 console.log('✅ Section Loaded:', this.resultSection);
-                this.mapFieldsToSections();
             })
             .catch(error => {
                 this.loading = false;
                 console.error('❌ Error fetching Section:', error);
             });
-    }
-    mapFieldsToSections() {
-        if (!this.dynamicFields || this.dynamicFields.length === 0) {
-            return;
-        }
-        this.resultSection.forEach(item =>{
-            console.log('Result Section: ', item);
-            if(item=='1' && this.dynamicFieldsSec1.length>0){
-                this.dynamicFieldShow1 = true;
-            }else if(item=='2' && this.dynamicFieldsSec2.length>0){
-                this.dynamicFieldShow2=true;
-            }else if(item=='3' && this.dynamicFieldsSec3.length>0){
-                this.dynamicFieldShow3=true;
-            }
-        })
     }
 
     /* LOGIC FOR CUSTOM LOOKUP COMPONENT */
@@ -413,10 +399,6 @@ export default class AddNewPolicyDetailInsured extends LightningElement {
 
     handleLookUpCleared(event) {
         const fieldApiName = event.target.dataset.field;
-
-        this.dynamicFieldShow1 = false;
-        this.dynamicFieldShow2 = false;
-        this.dynamicFieldShow3 = false;
         this.formData = {
             ...this.formData,
             [fieldApiName]: null
@@ -477,7 +459,7 @@ export default class AddNewPolicyDetailInsured extends LightningElement {
             
             const response = await saveDetailAsset({ formData : dataToSave });
             const newRecordId = response;
-            
+            console.log('Saved record Id : ', newRecordId);
             if (!newRecordId) {
                 throw new Error('Insert failed. Record ID is null.');
             }
@@ -495,7 +477,7 @@ export default class AddNewPolicyDetailInsured extends LightningElement {
             
             const recordUrl = `/lightning/r/Asset/${this.recordId}/view`;
             window.location.href = recordUrl;
-
+            // this.dispatchEvent(new CloseActionScreenEvent());
         } catch (error) {
             this.dispatchEvent(
                 new ShowToastEvent({
@@ -519,9 +501,7 @@ export default class AddNewPolicyDetailInsured extends LightningElement {
 
     buildFields() {
         console.log('Build Field', JSON.stringify(this.dynamicFields));
-        this.dynamicFieldsSec1 = [];
-        this.dynamicFieldsSec2 = [];
-        this.dynamicFieldsSec3 = [];
+        this.groupedDynamicFields = {};
         
         this.dynamicFields = this.dynamicFields.map(f => {
             const typeData = (f.dataType || '').toLowerCase().trim();
@@ -563,8 +543,8 @@ export default class AddNewPolicyDetailInsured extends LightningElement {
                 
                 // ✅ PENTING: Load value dari formData jika ada
                 value: (this.formData && this.formData[f.apiName] !== undefined)
-                    ? this.formData[f.apiName]
-                    : null
+                ? this.formData[f.apiName]
+                : null
             };
 
             // Picklist options
@@ -589,31 +569,19 @@ export default class AddNewPolicyDetailInsured extends LightningElement {
 
             return fieldObj;
         });
-
-        // Sort into sections
+        
+        const groupedData = {};
         this.dynamicFields.forEach((fieldConfig) => {
-            let sectionValue = fieldConfig.section;
-            if (sectionValue === 1) {
-                this.dynamicFieldsSec1.push(fieldConfig);
-            } else if (sectionValue === 2) {
-                this.dynamicFieldsSec2.push(fieldConfig);
-            } else if (sectionValue === 3) {
-                this.dynamicFieldsSec3.push(fieldConfig);
+            const sectionValue = fieldConfig.section;
+            if (sectionValue !== null && sectionValue !== undefined) {
+                if (!groupedData[sectionValue]) {
+                    groupedData[sectionValue] = [];
+                }
+                groupedData[sectionValue].push(fieldConfig);
             }
         });
-        
+        this.groupedDynamicFields = groupedData;
         console.log('⚡ Final mapped fields Complete', this.dynamicFields.length);
-        console.log('📦 Section 1 fields:', this.dynamicFieldsSec1.length);
-        console.log('📦 Section 2 fields:', this.dynamicFieldsSec2.length);
-        console.log('📦 Section 3 fields:', this.dynamicFieldsSec3.length);
+        // console.log('📦 Final Grouped Fields:', JSON.stringify(this.groupedDynamicFields));
     }
-
-
-    /*handleChangeDetailInsured(event) {
-        console.log('Field: ' + event.target.name);
-        console.log('value: ' + event.target.value);
-        const field = event.target.name;
-        this[field] = event.target.value;
-        console.log('📝 formData updated:', JSON.stringify(this.formData));
-    }*/
 }

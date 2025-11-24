@@ -13,7 +13,7 @@ export default class AddNewCoverageRate extends LightningElement {
     @api outputJsonString = '';
     @api groupMatrix = '0';
     @track coverageData = [];
-    @track coverageDataTemp = [ ];
+    @track coverageDataFormated = [];
     @track selectedCoverageNames = new Set();
     @track disableModeCoverage = false;
     @track hasSection1 = false;
@@ -23,9 +23,47 @@ export default class AddNewCoverageRate extends LightningElement {
     @track selectedMode = 'BREAKDOWN_DEDUCTIBLE';
     @api descriptionRate = '';
     @api buttonClickedValue;
-
+    @track searchTerm = '';
+    @track selectedCoverageId = '0';
     get settingCoverage(){
         return this.disableModeCoverage;
+    }
+    get filteredCoverageData() {
+        if (!this.searchTerm && this.selectedCoverageId == '0') {
+            if(this.bsnId == '301'){
+                return this.coverageDataFormated.filter(row =>
+                    row.parentCoverageId == '0'
+                );
+            }else{
+                return this.coverageDataFormated;
+            }
+        }
+        const lowerCaseSearch = this.searchTerm.toLowerCase();
+        let dataToFilter = this.coverageDataFormated;
+
+        if(this.bsnId == '301'){
+            if (this.selectedCoverageId) {
+                const currentCoverageId = this.selectedCoverageId;
+                dataToFilter = dataToFilter.filter(row => {
+                    const isSelectedRow = row.coverageId === currentCoverageId;
+                    const isChildOfSelected = row.parentCoverageId === currentCoverageId;
+                    return isSelectedRow || isChildOfSelected;
+                });
+            }
+            if (lowerCaseSearch) {
+                dataToFilter = dataToFilter.filter(row =>
+                    row.coverageName && row.coverageName.toLowerCase().includes(lowerCaseSearch)
+                );
+            }
+            return dataToFilter;
+        }else{
+            return this.coverageDataFormated.filter(row =>
+                row.coverageName && row.coverageName.toLowerCase().includes(lowerCaseSearch)
+            );
+        }
+    }
+    handleSearchChange(event) {
+        this.searchTerm = event.target.value;
     }
     get modeOptions() {
         return [
@@ -60,7 +98,7 @@ export default class AddNewCoverageRate extends LightningElement {
     @wire(getCoverageFields, { rtId: '$recordTypeIdCoverage', cob: '$bsnId',riskId:'$riskId'})
     wiredCoverages({ error, data }) {
         if (data) {
-            console.log('Data:', data);
+            console.log('Data Coverage: ', data.length);
             console.log('Policy:', this.policyId);
             this.setSectionAsset(data[0].sectionList);
             // const matrixBools = this.getMatrixBooleans(this.groupMatrix);
@@ -130,6 +168,14 @@ export default class AddNewCoverageRate extends LightningElement {
                 try {
                     let currentDataList = baseDataList;
                     this.setSectionAsset(parsedData[0].sectionList);
+                    if (this.bsnId === '301') {
+                        const selectedParent = parsedData.find(item => 
+                            item.parentCoverageId == '0' && item.isSelected == true
+                        );
+                        if (selectedParent) {
+                            this.selectedCoverageId = selectedParent.coverageId;
+                        }
+                    }
                     parsedData.forEach(newItem => {
                         this.descriptionRate = newItem.rate.descriptionRate;
                         const targetId = newItem.id;
@@ -154,9 +200,6 @@ export default class AddNewCoverageRate extends LightningElement {
                     console.error('❌ Error parsing or merging JSON string:', e);
                 }
                 this.finalizeData(baseDataList);
-                // this.coverageData = [...dynamicRows, singleRateRow];
-                // this.coverageDataTemp = [...dynamicRows, singleRateRow];
-                // this.applyDisableLogic(null);
             }else{
                 // this.getCoverageData()
                 // .then(existingResult => {
@@ -245,7 +288,7 @@ export default class AddNewCoverageRate extends LightningElement {
                 this.finalizeData(baseDataList);
             }
             // this.coverageData = [...dynamicRows, singleRateRow];
-            // this.coverageDataTemp = [...dynamicRows, singleRateRow];
+            // this.coverageDataFormated = [...dynamicRows, singleRateRow];
             // this.applyDisableLogic(null);
         } else if (error) {
             this.coverageData = undefined;
@@ -254,9 +297,26 @@ export default class AddNewCoverageRate extends LightningElement {
     }
     finalizeData(finalData) {
         this.coverageData = finalData; 
-        this.coverageDataTemp = JSON.parse(JSON.stringify(finalData));
         this.applyDisableLogic(null); 
-        console.log('✅ Data Coverage Final Diperbarui.',JSON.stringify(finalData));
+        // console.log('✅ Data Coverage Final Diperbarui.',JSON.stringify(finalData));
+    }
+    formatDeepClone(sourceObject) {
+        const fixedAmountKeys = ['fixedAmount', 'fixedAmount2', 'fixedAmount3', 'fixedAmount4'];
+        let formattedClone = sourceObject.map(item => {
+            let formattedItem = { ...item };
+            if (formattedItem.rate) {
+                let formattedRate = { ...formattedItem.rate };
+                for (const key of fixedAmountKeys) {
+                    const amount = formattedRate[key];
+                    if (amount !== null && amount !== undefined) {
+                        formattedRate[key] = this.formatNumber(amount);
+                    }
+                }
+                formattedItem.rate = formattedRate;
+            }
+            return formattedItem;
+        });
+        return formattedClone;
     }
     applyDisableLogic(event) {
         console.log('✅ Success Change Mode', event);
@@ -342,12 +402,14 @@ export default class AddNewCoverageRate extends LightningElement {
                 }
             };
         });
+        this.coverageDataFormated = this.formatDeepClone(JSON.parse(JSON.stringify(this.coverageData)));
+        
         this.handleChangeCoverageName(event);
         this.jsonString = JSON.stringify(this.coverageData.filter(item => item.isSelected));
         console.log('Selected New Data:', this.jsonString);
     }
     get thisCoverageData() {
-        return this.coverageData;
+        return this.coverageDataFormated;
     }
 
     handleInputChange(event) {
@@ -411,6 +473,8 @@ export default class AddNewCoverageRate extends LightningElement {
                 coverageAllRate: newAverageRate
             }));
         }
+        // formated Data
+        this.coverageDataFormated = this.formatDeepClone(JSON.parse(JSON.stringify(this.coverageData )));
         this.jsonString = JSON.stringify(this.coverageData.filter(item => item.isSelected));
         console.log('Final Data to Flow:', this.jsonString);
         // this.logFinalData();
@@ -456,6 +520,7 @@ export default class AddNewCoverageRate extends LightningElement {
             }
             return item;
         });
+        this.coverageDataFormated = this.formatDeepClone(JSON.parse(JSON.stringify(this.coverageData )));
         this.jsonString = JSON.stringify(this.coverageData.filter(item => item.isSelected));
         // console.log('Final Data to Flow:', this.jsonString);
         this.logFinalData();
@@ -472,6 +537,17 @@ export default class AddNewCoverageRate extends LightningElement {
             disabledInput = false;
         }else{
             disabledInput = true;
+        }
+        let shouldClearChildren = false;
+        if(this.bsnId == '301'){
+            if(selectedRow.parentCoverageId == '0'){
+                if (isChecked && selectedRow) {
+                    this.selectedCoverageId = selectedRow.coverageId; 
+                } else if (!isChecked && this.selectedCoverageId === selectedRow.coverageId) {
+                    this.selectedCoverageId = '0'; 
+                    shouldClearChildren = true;
+                }
+            }
         }
         this.coverageData = this.coverageData.map(item => {
             if (item.id === rowId) {
@@ -507,6 +583,15 @@ export default class AddNewCoverageRate extends LightningElement {
                 }
                 return updatedItem;
             }
+            if (shouldClearChildren) {
+                if (item.parentCoverageId === selectedRow.coverageId) {
+                    return {
+                        ...item,
+                        isSelected: false,
+                        isDisabledInput: true,
+                    };
+                }
+            }
             return item;
         });
         if (selectedRow && selectedRow.id !== 'SINGLE_RATE_ID') {
@@ -518,9 +603,10 @@ export default class AddNewCoverageRate extends LightningElement {
         }
         this.handleChangeCoverageName();
         console.log(`Baris ${rowId} dipilih: ${isChecked}`,event);
+        this.coverageDataFormated = this.formatDeepClone(JSON.parse(JSON.stringify(this.coverageData)));
         this.jsonString = JSON.stringify(this.coverageData.filter(item => item.isSelected));
         console.log('Selected New Data:', this.jsonString);
-        // this.changeSelectedDataOutput()
+
     }
     
     handleChangeCoverageName(){
@@ -567,8 +653,8 @@ export default class AddNewCoverageRate extends LightningElement {
             const rate = (item.isSelected && !item.isSingleRate)? Number(item.rate.fixedAmount) || 0:0;
             return accumulator + rate;
         }, 0);
-
-        return sum.toFixed(2); 
+        // return sum.toFixed(2); 
+        return this.formatNumber(sum);
     }
     get totalFixedAmount2() {
         if (!this.coverageData || this.coverageData.length === 0) {
@@ -578,8 +664,8 @@ export default class AddNewCoverageRate extends LightningElement {
             const rate = (item.isSelected && !item.isSingleRate)? Number(item.rate.fixedAmount2) || 0:0;
             return accumulator + rate;
         }, 0);
-
-        return sum.toFixed(2); 
+        // return sum.toFixed(2); 
+        return this.formatNumber(sum);
     }
     get totalFixedAmount3() {
         if (!this.coverageData || this.coverageData.length === 0) {
@@ -589,8 +675,8 @@ export default class AddNewCoverageRate extends LightningElement {
             const rate = (item.isSelected && !item.isSingleRate)? Number(item.rate.fixedAmount3) || 0:0;
             return accumulator + rate;
         }, 0);
-
-        return sum.toFixed(2); 
+        // return sum.toFixed(2); 
+        return this.formatNumber(sum);
     }
     get totalFixedAmount4() {
         if (!this.coverageData || this.coverageData.length === 0) {
@@ -600,8 +686,8 @@ export default class AddNewCoverageRate extends LightningElement {
             const rate = (item.isSelected && !item.isSingleRate)? Number(item.rate.fixedAmount4) || 0:0;
             return accumulator + rate;
         }, 0);
-
-        return sum.toFixed(2); 
+        // return sum.toFixed(2); 
+        return this.formatNumber(sum);
     }
     get totacoverageRate() {
         if (!this.coverageData || this.coverageData.length === 0) {
@@ -612,7 +698,8 @@ export default class AddNewCoverageRate extends LightningElement {
             return accumulator + rate;
         }, 0);
 
-        return sum.toFixed(2); 
+        // return sum.toFixed(2); 
+        return this.formatNumber(sum);
     }
     get totacoverageRate2() {
         if (!this.coverageData || this.coverageData.length === 0) {
@@ -623,7 +710,8 @@ export default class AddNewCoverageRate extends LightningElement {
             return accumulator + rate;
         }, 0);
 
-        return sum.toFixed(2); 
+        // return sum.toFixed(2); 
+        return this.formatNumber(sum);
     }
     get totacoverageRate3() {
         if (!this.coverageData || this.coverageData.length === 0) {
@@ -634,7 +722,8 @@ export default class AddNewCoverageRate extends LightningElement {
             return accumulator + rate;
         }, 0);
 
-        return sum.toFixed(2); 
+        // return sum.toFixed(2); 
+        return this.formatNumber(sum);
     }
     get totacoverageRate4() {
         if (!this.coverageData || this.coverageData.length === 0) {
@@ -645,7 +734,8 @@ export default class AddNewCoverageRate extends LightningElement {
             return accumulator + rate;
         }, 0);
 
-        return sum.toFixed(2); 
+        // return sum.toFixed(2); 
+        return this.formatNumber(sum);
     }
     get totalRateSum() {
         if (!this.coverageData || this.coverageData.length === 0) {
@@ -656,7 +746,8 @@ export default class AddNewCoverageRate extends LightningElement {
             return accumulator + rate;
         }, 0);
 
-        return sum.toFixed(2); 
+        // return sum.toFixed(2); 
+        return this.formatNumber(sum);
     }
 
     changeSelectedDataOutput() {
@@ -689,6 +780,24 @@ export default class AddNewCoverageRate extends LightningElement {
         }
         
         event.preventDefault();
+    }
+    formatNumber(value) {
+        if (value === null || value === undefined || value === '') {
+            return 0;
+        }
+        return new Intl.NumberFormat('id-ID', {
+            minimumFractionDigits: 2, 
+            maximumFractionDigits: 2,
+            useGrouping: true
+        }).format(Number(value));
+    }
+    cleanNumber(formattedString) {
+        if (formattedString === null || formattedString === undefined || formattedString === '') {
+            return 0;
+        }
+        let cleanValue = formattedString.toString().replace(/\./g, '');
+        cleanValue = cleanValue.replace(',', '.');
+        return parseFloat(cleanValue);
     }
     handleChangeDesc(event) {
         const newValue = event.detail.value;

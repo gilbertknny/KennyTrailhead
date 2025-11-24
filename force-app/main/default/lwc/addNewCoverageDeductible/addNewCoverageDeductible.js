@@ -10,7 +10,7 @@ export default class AddNewCoverageDeductible extends LightningElement {
     @api jsonString = '';
     @api descriptionDeductible = '';
     @track coverageData = [];
-    @track coverageDataTemp = [ ];
+    @track coverageDataFormated = [];
     @track selectedMode = 'BREAKDOWN_DEDUCTIBLE';
     @track exchangeRate = 1;
     @track disableModeCoverage = false;
@@ -245,8 +245,8 @@ export default class AddNewCoverageDeductible extends LightningElement {
                 };
             });
             this.jsonString = JSON.stringify(this.coverageData);
-            this.coverageDataTemp = JSON.parse(this.jsonString);
             this.applyDisableLogic(null);
+            this.coverageDataFormated = this.formatDeepClone(JSON.parse(JSON.stringify(this.coverageData)));
             console.log('✅ InitializeDeductibleData:', this.jsonString);
         } else {
             console.log('Waiting for all required data (picklist or json) to initialize.');
@@ -265,7 +265,57 @@ export default class AddNewCoverageDeductible extends LightningElement {
             { label: 'Percentage', value: 'Percentage' },
         ];
     }
-
+    handleInputFocus(event) {
+        const rowId = event.target.dataset.id;
+        const objectName = event.target.dataset.object;
+        const field = event.target.dataset.field;
+        const item = this.coverageData.find(i => i.id === rowId);
+        if (!item || !item[objectName]) return;
+        const rawValue = item[objectName][field];
+        const itemIndex = this.coverageDataFormated.findIndex(i => i.id === rowId);
+        let updatedFormattedData = [...this.coverageDataFormated];
+        let updatedFormattedItem = { ...updatedFormattedData[itemIndex] };
+        let updatedFormattedSubObject = { ...updatedFormattedItem[objectName] };
+        let displayString = '';
+        if (rawValue !== null && rawValue !== undefined) {
+            displayString = rawValue.toString();
+            displayString = displayString.replace('.', ','); 
+        }
+        updatedFormattedSubObject[field] = displayString;
+        updatedFormattedItem[objectName] = updatedFormattedSubObject;
+        updatedFormattedData[itemIndex] = updatedFormattedItem;
+        this.coverageDataFormated = updatedFormattedData;
+    }
+    handleInputBlur(event) {
+        const rowId = event.target.dataset.id;
+        const objectName = event.target.dataset.object;
+        const field = event.target.dataset.field;
+        const inputValue = event.target.value;
+        const numericValue = this.cleanNumber(inputValue);
+        this.coverageData = this.coverageData.map(item => {
+            if (item.id === rowId) {
+                let updatedItem = { ...item };
+                let updatedSubObject = { ...updatedItem[objectName] };
+                updatedSubObject[field] = numericValue; 
+                updatedItem[objectName] = updatedSubObject;
+                return updatedItem;
+            }
+            return item;
+        });
+        this.coverageDataFormated = this.formatDeepClone(JSON.parse(JSON.stringify(this.coverageData)));
+        // this.coverageDataFormated = this.coverageDataFormated.map(item => {
+        //     if (item.id === rowId) {
+        //         let updatedItem = { ...item };
+        //         let updatedSubObject = { ...updatedItem[objectName] };
+        //         updatedSubObject[field] = formattedString; 
+        //         updatedItem[objectName] = updatedSubObject;
+        //         return updatedItem;
+        //     }
+        //     return item;
+        // });
+        this.jsonString = JSON.stringify(this.coverageData);
+        console.log('Final Data to Flow (Numeric):', this.jsonString);
+    }
     handleChange(event) {
         const rowId = event.target.dataset.id;
         const fieldName = event.target.name;
@@ -299,6 +349,7 @@ export default class AddNewCoverageDeductible extends LightningElement {
             }
             return item;
         });
+        this.coverageDataFormated = this.formatDeepClone(JSON.parse(JSON.stringify(this.coverageData)));
         this.jsonString = JSON.stringify(this.coverageData);
         console.log('Final Data to Flow:', this.jsonString);
         // this.logFinalData();
@@ -338,6 +389,7 @@ export default class AddNewCoverageDeductible extends LightningElement {
             }
             return item;
         });
+        this.coverageDataFormated = this.formatDeepClone(JSON.parse(JSON.stringify(this.coverageData)));
         this.jsonString = JSON.stringify(this.coverageData);
         console.log('Final Data to Flow:', this.jsonString);
         // this.logFinalData();
@@ -356,6 +408,7 @@ export default class AddNewCoverageDeductible extends LightningElement {
             updatedItem.deductible = updatedDeductible;
             return updatedItem;
         });
+        this.coverageDataFormated = this.formatDeepClone(JSON.parse(JSON.stringify(this.coverageData)));
         this.jsonString = JSON.stringify(this.coverageData);
         console.log('Final Data to Flow:', this.jsonString);
     }
@@ -382,14 +435,15 @@ export default class AddNewCoverageDeductible extends LightningElement {
             }
             return updatedItem;
         });
+        this.coverageDataFormated = this.formatDeepClone(JSON.parse(JSON.stringify(this.coverageData)));
         this.jsonString = JSON.stringify(this.coverageData);
-        console.log('Final Data to Flow:', this.jsonString);
+        console.log('Final Data change Description:', this.jsonString);
     }
     handleInputChange(event) {
-        console.log('Change Data from Flow:');
         const rowId = event.target.dataset.id;
         const fieldName = event.target.dataset.fieldname;
         const value = event.detail.value;
+        console.log('Change Data from Flow:',fieldName,value);
 
         const textFields = ['descriptionValue'];
 
@@ -416,8 +470,9 @@ export default class AddNewCoverageDeductible extends LightningElement {
             }
             return item;
         });
+        this.coverageDataFormated = this.formatDeepClone(JSON.parse(JSON.stringify(this.coverageData)));
         this.jsonString = JSON.stringify(this.coverageData);
-        console.log('Final Data to Flow:', this.jsonString);
+        // console.log('Final Data to Flow:', this.jsonString);
         // this.logFinalData();
     }
     
@@ -452,6 +507,7 @@ export default class AddNewCoverageDeductible extends LightningElement {
             }
             return item;
         });
+        this.coverageDataFormated = this.formatDeepClone(JSON.parse(JSON.stringify(this.coverageData)));
         this.jsonString = JSON.stringify(this.coverageData);
         console.log('Final Data to Flow:', this.jsonString);
         // this.logFinalData();
@@ -484,22 +540,36 @@ export default class AddNewCoverageDeductible extends LightningElement {
         event.preventDefault();
     }
     handleNext() {
+        let validation = true;
         let validationResult = [];
+        let percentageResult = [];
         if(this.isModeBreakdown){
             validationResult = this.coverageData.filter(item => {
                 return (item.id != 'SINGLE_RATE_ID' && item.deductible.deductibleSetting == null)
                 || (item.id != 'SINGLE_RATE_ID' && (item.isPercent && item.deductible.deductibleFlag == null));
             });
+            percentageResult = this.coverageData.filter(item => {
+                return (item.id != 'SINGLE_RATE_ID' && (item.isPercent && item.deductible.deductibleAmount > 100));
+            });
         }else{
             validationResult = this.coverageData.filter(item => {
                 return (item.id == 'SINGLE_RATE_ID' && item.deductible.deductibleSetting == null)
-                || item.id == 'SINGLE_RATE_ID' && (item.isPercent && item.deductible.deductibleFlag == null);
+                || (item.id == 'SINGLE_RATE_ID' && (item.isPercent && item.deductible.deductibleFlag == null));
+            });
+            percentageResult = this.coverageData.filter(item => {
+                return (item.id != 'SINGLE_RATE_ID' && (item.isPercent && item.deductible.deductibleAmount > 100));
             });
         }
         if(validationResult.length > 0){
+            validation = false;
             this.showToast('Error', 'Please Select Type and Applied to/ of for type Percentage', 'error');
             return;
-        }else{
+        }else if(percentageResult.length > 0){
+            validation = false;
+            this.showToast('Error', 'Percentage greater than 100%', 'error');
+            return;
+        }
+        if(validation){
             this.showValidationMessage = false;
             this.buttonClickedValue = 'Next';
             const attributeChangeEvent = new FlowAttributeChangeEvent('buttonClickedValue', this.buttonClickedValue);
@@ -507,6 +577,45 @@ export default class AddNewCoverageDeductible extends LightningElement {
             const navigateNextEvent = new FlowNavigationNextEvent();
             this.dispatchEvent(navigateNextEvent);
         }
+    }
+    formatNumber(value) {
+        if (value === null || value === undefined || value === '') {
+            return '';
+        }
+        return new Intl.NumberFormat('id-ID', {
+            minimumFractionDigits: 2, 
+            maximumFractionDigits: 2,
+            useGrouping: true
+        }).format(Number(value));
+    }
+    cleanNumber(formattedString) {
+        if (formattedString === null || formattedString === undefined || formattedString === '') {
+            return 0;
+        }
+        let cleanValue = formattedString.toString().replace(/\./g, '');
+        cleanValue = cleanValue.replace(',', '.');
+        return parseFloat(cleanValue);
+    }
+    formatDeepClone(sourceObject) {
+        const fixedAmountKeys = ['deductibleAmount','minimumAmount'];
+        let formattedClone = sourceObject.map(item => {
+            let formattedItem = { ...item };
+            if (formattedItem.deductible) {
+                let formattedDeductible = { ...formattedItem.deductible };
+                for (const key of fixedAmountKeys) {
+                    const amount = formattedDeductible[key];
+                    if (amount !== null && amount !== undefined) {
+                        if(item.isPercent && key == 'deductibleAmount'){
+                        }else{
+                            formattedDeductible[key] = this.formatNumber(amount);
+                        }
+                    }
+                }
+                formattedItem.deductible = formattedDeductible;
+            }
+            return formattedItem;
+        });
+        return formattedClone;
     }
     handlePrevious() {
         this.buttonClickedValue = 'Previous';
