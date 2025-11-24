@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Commodity_Type</fullName>
+    <columns>ext_id__c</columns>
+    <columns>NAME</columns>
+    <columns>Description__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>RECORDTYPE</field>
+        <operation>equals</operation>
+        <value>Master_Data__c.Commodity_Type</value>
+    </filters>
+    <label>Commodity Type</label>
+</ListView>

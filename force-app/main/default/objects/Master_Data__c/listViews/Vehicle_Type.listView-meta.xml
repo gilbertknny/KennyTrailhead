@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Vehicle_Type</fullName>
+    <columns>VEHICLE_TYPE_ID__c</columns>
+    <columns>PARENT_VEHICLE_TYPE_ID__c</columns>
+    <columns>NAME</columns>
+    <columns>PARENT_BRAND_ID__c</columns>
+    <columns>ENGINE_CAPACITY__c</columns>
+    <columns>DEPKEU_TYPE_ID__c</columns>
+    <columns>ENGINE_TYPE__c</columns>
+    <columns>VEHICLE_SUB_TYPE__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>RECORDTYPE</field>
+        <operation>equals</operation>
+        <value>Master_Data__c.Vehicle_Type</value>
+    </filters>
+    <label>Vehicle Type</label>
+</ListView>
