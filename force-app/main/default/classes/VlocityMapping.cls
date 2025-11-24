@@ -127,9 +127,10 @@ global with sharing class VlocityMapping implements callable{
         List<Object> ldocumentclauses = (List<Object>) inputMap.get('document_clauses') ;
         Object documentPolicy = (Object) inputMap.get('documentPolicy');
         lasset = lasset == null ? new List<Object>() : lasset;
+        mapobjsp = (Map<String, Object>) documentPolicy;
+        String extid = mapobjsp.containsKey('policy_number') ? (String) mapobjsp.get('policy_number') : '';
         
         if(!lrisk.isEmpty()){
-            String extid = mapobjsp.containsKey('policy_number') ? (String) mapobjsp.get('policy_number') : '';
             SFAWT05 sfawt = new SFAWT05();
             sfawt.externalId = extid;
             sfawt.lobj = lrisk;
@@ -187,8 +188,6 @@ global with sharing class VlocityMapping implements callable{
         if(!lcoverages.isEmpty()){
             lasset = setAssetMatrix(lcoverages, lasset);
             Integer max1 = lcoverages.size() > 20 ? 20 : lcoverages.size();
-            mapobjsp = (Map<String, Object>) JSON.deserializeUntyped(JSON.serialize(documentPolicy));
-            String extid = mapobjsp.containsKey('policy_number') ? (String) mapobjsp.get('policy_number') : '';
             SFAWT05 sfawt = new SFAWT05();
             sfawt.externalId = extid;
             sfawt.lobj = lcoverages;
@@ -198,9 +197,10 @@ global with sharing class VlocityMapping implements callable{
             sfawt.varout = 'coverages';
             mapobj.putAll(setmapObjmap(sfawt));
         }
-        
+        system.debug('lasset : '+JSON.serialize(lasset));
+        system.debug('extid : '+extid);
+
         if(!lasset.isEmpty() ){
-            String extid = mapobjsp.containsKey('policy_number') ? (String) mapobjsp.get('policy_number') : '';
             SFAWT05 sfawt = new SFAWT05();
             sfawt.externalId = extid;
             sfawt.lobj = lasset;
@@ -208,6 +208,7 @@ global with sharing class VlocityMapping implements callable{
             sfawt.nameIP = 'SFAWT05Extend_RiskAssetCoverage';
             sfawt.rtId = SOQL_SOBJECT.getRecordTypeIdbyDevName('Asset', 'Asset');
             sfawt.varout = 'detail_insured';
+            system.debug('rtId : '+sfawt.rtId);
             mapobj.putAll(setmapObjmap(sfawt));
         }
         return mapobj;
@@ -228,6 +229,7 @@ global with sharing class VlocityMapping implements callable{
                 listcovid.add(mapobj2);
             }
         }
+        
         if(!listcovid.isEmpty()){
             mapobj3.put('covid',listcovid);
             md = callIP('Get_CoverageAsset', JSON.serialize(mapobj3));
@@ -239,6 +241,7 @@ global with sharing class VlocityMapping implements callable{
                 }
             }
         }
+        
         if(!mapobj5.isEmpty()){
             for(Object obj:lcoverages){
                 x++;
@@ -258,7 +261,7 @@ global with sharing class VlocityMapping implements callable{
                     mapast.put('detail_description',mac.get('Name')+' '+msc.get('Name'));
                     mapast.put('partitionCode',mapobj1.get('partitionCode'));
                     mapast.put('risk_detail_flag',null);
-                    mapast.put('riskDetailId',x);
+                    mapast.put('risk_detail_id',x);
                     mapast.put('amount_insured',mapobj1.get('amount_insured'));
                     mapast.put('m_coverage_ref_id',mapobj1.get('m_coverage_ref_id'));
                     lasset.add(mapast);
