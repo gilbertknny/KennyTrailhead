@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Pricebook</fullName>
+    <columns>PRODUCT2.NAME</columns>
+    <columns>Is_Package__c</columns>
+    <columns>Coverage__c</columns>
+    <columns>Rate_Class_1_Min__c</columns>
+    <columns>Rate_Class_1_Max__c</columns>
+    <columns>Rate_Class_2_Min__c</columns>
+    <columns>Rate_Class_2_Max__c</columns>
+    <columns>Rate_Class_3_Min__c</columns>
+    <columns>Rate_Class_3_Max__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>PRODUCT2.RECORD_TYPE</field>
+        <operation>equals</operation>
+        <value>Product2.Master_Data</value>
+    </filters>
+    <label>Master Data</label>
+</ListView>
