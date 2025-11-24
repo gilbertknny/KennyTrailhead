@@ -1,35 +1,41 @@
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
-<types>
-<members>EmailMessageTriggerHandler</members>
-<members>EmailMessageTriggerHandlerTest</members>
-<members>EmailMessageTriggerTest</members>
-<members>EmailServiceReceived</members>
-<members>EmailServiceReceivedTest</members>
-<name>ApexClass</name>
-</types>
-<types>
-<members>EmailMessageTrigger</members>
-<name>ApexTrigger</name>
-</types>
-<types>
-<members>Account.EmailThreadKey__c</members>
-<members>Account.Email__c</members>
-<members>EmailMessage.Thread_ID__c</members>
-<members>InsurancePolicy.EmailThreadKey__c</members>
-<members>InsurancePolicy.Email__c</members>
-<members>Opportunity.EmailThreadKey__c</members>
-<members>Opportunity.Email__c</members>
-<name>CustomField</name>
-</types>
-<types>
-<members>unfiled$public/Account_Email_with_ThreadID</members>
-<members>unfiled$public/Opportunity_Email_with_ThreadID</members>
-<members>unfiled$public/Policy_Email_with_ThreadID</members>
-<name>EmailTemplate</name>
-</types>
-<types>
-<members>Email_Notification</members>
-<name>Flow</name>
-</types>
+    <types>
+        <members>EmailMessageTriggerHandler</members>
+        <members>EmailMessageTriggerHandlerTest</members>
+        <members>EmailMessageTriggerTest</members>
+        <members>EmailServiceReceived</members>
+        <members>EmailServiceReceivedTest</members>
+        <name>ApexClass</name>
+    </types>
+    <types>
+        <members>EmailMessageTrigger</members>
+        <name>ApexTrigger</name>
+    </types>
+    <types>
+        <members>Account.EmailThreadKey__c</members>
+        <members>Account.Email__c</members>
+        <members>EmailMessage.Thread_ID__c</members>
+        <members>InsurancePolicy.EmailThreadKey__c</members>
+        <members>InsurancePolicy.Email__c</members>
+        <members>Opportunity.EmailThreadKey__c</members>
+        <members>Opportunity.Email__c</members>
+        <name>CustomField</name>
+    </types>
+    <types>
+        <members>unfiled$public/Account_Email_with_ThreadID</members>
+        <members>unfiled$public/Opportunity_Email_with_ThreadID</members>
+        <members>unfiled$public/Policy_Email_with_ThreadID</members>
+        <name>EmailTemplate</name>
+    </types>
+    <types>
+        <members>Email_Notification</members>
+        <name>Flow</name>
+    </types>
+    <types>
+		<members>Account.AccountEmail</members>
+		<members>InsurancePolicy.SendEmail</members>
+		<members>Opportunity.OpportunityEmail</members>
+		<name>QuickAction</name>
+	</types>
 <version>65.0</version>
 </Package>
