@@ -167,7 +167,7 @@
         <connector>
             <targetReference>Get_Underwriting_ID</targetReference>
         </connector>
-        <filterFormula>AND(NOT(ISBLANK(TEXT({!$Record.Status_Notice__c}))),ISBLANK(TEXT({!$Record.Status_Renewal__c})),ISCHANGED({!$Record.Status_Notice__c}),{!$Record.TotalSumInsured}&gt;0)</filterFormula>
+        <filterFormula>AND(NOT(ISBLANK(TEXT({!$Record.Status_Notice__c}))),ISBLANK(TEXT({!$Record.Status_Renewal__c})),{!$Record.TotalSumInsured}&gt;0)</filterFormula>
         <object>InsurancePolicy</object>
         <recordTriggerType>Update</recordTriggerType>
         <triggerType>RecordAfterSave</triggerType>

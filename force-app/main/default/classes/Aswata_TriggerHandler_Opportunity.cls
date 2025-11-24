@@ -3,7 +3,7 @@
 * TC : GS
 * DATE : 03/11/25
 */
-
+ 
 public class Aswata_TriggerHandler_Opportunity extends TriggerHandler {
     public override void beforeUpdate(){ 
         Map<String,Master_Data__c> mapMd = getPolicyDistribution();
@@ -13,7 +13,9 @@ public class Aswata_TriggerHandler_Opportunity extends TriggerHandler {
             listrecordid.add(data.id);
         }
         
-        List<OpportunityLineItem> listOpl = [SELECT Id,OpportunityId,Product2Id FROM OpportunityLineItem WHERE OpportunityId IN:listrecordid];
+        List<OpportunityLineItem> listOpl = [SELECT Id,OpportunityId,Product2Id 
+                                             FROM OpportunityLineItem 
+                                             WHERE OpportunityId IN:listrecordid];
         Map<String,String> mapOpl = new Map<String,String>();
         for(OpportunityLineItem opl:listOpl){
             mapOpl.put(opl.OpportunityId,opl.Product2Id);
@@ -31,8 +33,7 @@ public class Aswata_TriggerHandler_Opportunity extends TriggerHandler {
                                        FROM Master_Data__c 
                                        WHERE RecordType.Name = 'Policy Distribution'
                                        AND Status__c = 'Approved' 
-                                       AND USER_PIC__c != NULL
-                                       WITH SECURITY_ENFORCED];
+                                       AND USER_PIC__c != NULL];
         for(Master_Data__c md : listmd){
             //Product_Segment__c-Product_Line__c-Product_Type__c-Branch_Name__c (Master Data)
             String strMDExtId = md.Product_Segment__c+'-'+md.Product_Line__c+'-'+md.Product_Type__c+'-'+md.Branch_Name__c;

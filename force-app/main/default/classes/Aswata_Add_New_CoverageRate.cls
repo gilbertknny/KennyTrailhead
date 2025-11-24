@@ -1,7 +1,7 @@
 /**
  * @description       : Controller LWC Input Coverage
  * @author            : Ahmad Yazid Munif
- * @last modified on  : 11-11-2025
+ * @last modified on  : 11-21-2025
  * @last modified by  : Ahmad Yazid Munif
 **/
 public with sharing class Aswata_Add_New_CoverageRate {
@@ -20,7 +20,6 @@ public with sharing class Aswata_Add_New_CoverageRate {
         List<Master_Data__c> configs = [
             SELECT Id,Name,COVERAGE_REF_ID__c
             FROM Master_Data__c WHERE COVERAGE_REF_ID__c IN :coverageIds
-            AND PARENT_COVERAGE_ID__c != '0'
             WITH SECURITY_ENFORCED
         ];
         Map<String, Master_Data__c> coverageRefMap = new Map<String, Master_Data__c>();
@@ -74,6 +73,7 @@ public with sharing class Aswata_Add_New_CoverageRate {
         try{
             String selectedCoverageId = selectedCoverageId(coverageWrappers);
             String riskId = coverageWrappers[0].riskId;
+            String policyId = coverageWrappers[0].policyId;
             if (!checkPermission()) {
                 throw new SecurityException(
                     'Insufficient permissions to access Asset or InsurancePolicyCoverage'
@@ -86,10 +86,15 @@ public with sharing class Aswata_Add_New_CoverageRate {
                 exchangeMapFull.put(md.Name, md.Id);
             }
             Boolean composite = (coverageWrappers[0].coverageSetting == 'COMPOSITE');
-            Asset risk = [SELECT Id, Amount_Insured__c, Opportunity__c FROM Asset WHERE Id = :riskId];
+            Asset risk = [SELECT Id, Amount_Insured__c, Opportunity__c,COB__c,Opportunity__r.Busreq_ID__c FROM Asset WHERE Id = :riskId];
             List<InsurancePolicyCoverage> coverageList = new List<InsurancePolicyCoverage>();
+            List<String> coverageParentId = new List<String>();
+            // System.debug('### AWT : exchangeMapFull');
+            // System.debug('### AWT : coverageRefIdMap'+coverageRefIdMap);
+            // System.debug('### AWT : to looping');
             for (Aswata_Coverage_Data_Wrapper.CoverageDetailWrapper wrapper : coverageWrappers) {
                 if(composite){
+                    // System.debug('### AWT : in looping composite'+wrapper.coverageId);
                     if (wrapper.id == 'SINGLE_RATE_ID') {
                         InsurancePolicyCoverage generateDataCoverage = Aswata_Coverage_Data_Handler.coverageBreakdown(wrapper,coverageRefIdMap,risk);
                         generateDataCoverage.Coverage_Id__c = wrapper.coverageId;
@@ -98,44 +103,51 @@ public with sharing class Aswata_Add_New_CoverageRate {
                         generateDataCoverage.Opportunity__c = risk.Opportunity__c;
                         String idCurrency = exchangeMapFull.get(generateDataCoverage.Minimum_Cur_ID__c);
                         generateDataCoverage.Deductible_Currency__c = idCurrency;
-                        generateDataCoverage.Minimum_Cur_ID__c = null;
                         generateDataCoverage.Selected_Coverages_ID__c = selectedCoverageId;
                         coverageList.add(generateDataCoverage);
                         risk.Rate_All_Coverages__c  = wrapper.rate.coverageRate;
                         risk.Commission_All_Coverages__c = wrapper.rebate.commissionValue;
+                    }else if(wrapper.id != 'SINGLE_RATE_ID' && wrapper.parentCoverageId == '0'){
+                        Master_Data__c getData = coverageRefIdMap.get(wrapper.coverageId);
+                        // System.debug('### AWT getData : '+getData);
+                        coverageParentId.add(getData.Id);
                     }
                 }else{
                     if (wrapper.id != 'SINGLE_RATE_ID') {
+                        // System.debug('### AWT : in looping breakdown'+wrapper.coverageId);
                         InsurancePolicyCoverage generateDataCoverage = Aswata_Coverage_Data_Handler.coverageBreakdown(wrapper,coverageRefIdMap,risk);
-                        System.debug('Description : '+generateDataCoverage.Description + ' - '+generateDataCoverage.Description__c);
+                        // System.debug('('### AWT Description : '+generateDataCoverage.Description + ' - '+generateDataCoverage.Description__c);
                         generateDataCoverage.Coverage_Id__c = wrapper.coverageId;
                         generateDataCoverage.InsurancePolicyId = wrapper.policyId;
                         generateDataCoverage.Risk_ID__c = riskId;
                         generateDataCoverage.Opportunity__c = risk.Opportunity__c;
                         String idCurrency = exchangeMapFull.get(generateDataCoverage.Minimum_Cur_ID__c);
                         generateDataCoverage.Deductible_Currency__c = idCurrency;
-                        generateDataCoverage.Minimum_Cur_ID__c = null;
                         coverageList.add(generateDataCoverage);
                         risk.Rate_All_Coverages__c  = wrapper.commisionAllRate;
                         risk.Commission_All_Coverages__c = wrapper.commisionAllRate;
                     }
                 }
             }
+            // System.debug('### AWT : to function coverageByAssetCategory');
+            coverageList = Aswata_Coverage_Data_301.coverageByAssetCategory(coverageList,risk,coverageParentId);
+            // System.debug('### AWT coverageList : '+coverageList.size());
             List<Database.SaveResult> saveResults;
             if(coverageList.size() > 0) {
                 saveResults = Database.insert(coverageList, true);
                 update risk;
             }
-            system.debug('coverageList'+coverageList);
+            // system.debug('### AWT coverageList :'+coverageList);
             Set<Id> newIds = new Set<Id>();
             for (Database.SaveResult sr : saveResults) {
                 newIds.add(sr.getId());
             }
             if (!newIds.isEmpty()) {
                 Aswata_Async_PremiCalculation.aswataPremiCalculation(risk.Opportunity__c);
-                System.debug('Semua insert sukses dan Future class berhasil dipanggil.');
+                // System.debug('Semua insert sukses dan Future class berhasil dipanggil.');
             }
         }catch (Exception e) {
+            // System.debug('#ErrorLog - '+e.getMessage());
             throw e;
         }
     }
@@ -155,7 +167,7 @@ public with sharing class Aswata_Add_New_CoverageRate {
             Map<String, Master_Data__c> coverageRefIdMap = generateData(coverageWrappers);
             insertCoverageData(coverageWrappers,coverageRefIdMap);
         } catch (Exception e){
-            throw new AuraHandledException(e.getMessage());
+            throw e;
         }
     }
     /**

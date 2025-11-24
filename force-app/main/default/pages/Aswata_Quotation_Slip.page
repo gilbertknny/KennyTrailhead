@@ -1,0 +1,555 @@
+<!--
+  @description       : PDF Quotation COB 301
+  @author            : Ahmad Yazid Munif
+  @last modified on  : 11-22-2025
+  @last modified by  : Ahmad Yazid Munif
+-->
+<apex:page controller="Aswata_QuotationSlip_Controller" renderAs="pdf" showHeader="false" applyBodyTag="false" cache="true">
+    <head>
+        <style>
+            @page {
+                size: A4 portrait;
+                margin: 1.5cm 1cm 2.5cm 1cm;
+
+                @bottom-left {
+                    content: element(footer_left);
+                    vertical-align: top;
+                    padding-top: 10px;
+                }
+                @bottom-right {
+                    content: element(footer_right);
+                    vertical-align: top;
+                    padding-top: 10px;
+                }
+            }
+
+            .footer-left { position: running(footer_left); }
+            .footer-right { position: running(footer_right); }
+            
+            .page-number::after {
+                content: "Halaman " counter(page) " dari " counter(pages);
+            }
+
+            body {
+                font-family: "Helvetica", "Arial", sans-serif;
+                font-size: 10pt;
+                color: #000;
+            }
+
+            .page {
+                /* page-break-after: always; */
+            }
+           .page:not(:last-of-type) {
+                page-break-after: always;
+            }
+            .footer-text {
+                font-size: 8pt;
+                color: #333;
+                line-height: 1.3;
+            }
+
+            .main-title {
+                font-weight: bold;
+                text-align: center;
+                font-size: 12pt;
+                margin-top: 10px;
+                margin-bottom: 25px;
+            }
+            
+            .info-table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+            .info-table td {
+                padding: 2px;
+                vertical-align: top;
+            }
+
+            .section-table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 15px;
+                border: 1px solid #000;
+            }
+            .section-table th, .section-table td {
+                border: 1px solid #000;
+                padding: 5px;
+                vertical-align: top;
+                text-align: left;
+            }
+            .section-table th {
+                background-color: #E0E0E0; 
+                font-weight: bold;
+            }
+            
+            .clauses-list {
+                margin: 0;
+                padding-left: 20px;
+                list-style-type: disc;
+            }
+            .clauses-list li {
+                margin-bottom: 3px;
+                font-size: 9.5pt;
+            }
+
+            .clause-title {
+                font-weight: bold;
+                margin-top: 15px;
+                margin-bottom: 5px;
+                font-size: 9.5pt;
+            }
+            .clause-content {
+                font-size: 9.5pt;
+                text-align: justify;
+                line-height: 1.4;
+            }
+
+            table, tr, td, th, p { 
+                page-break-inside: avoid;
+            }
+            .spaced-table td {
+                padding-top: 10px;
+                padding-bottom: 10px;
+            }
+           .policyTable {
+                width: 100%;
+                border-collapse: collapse;
+                font-size: 7pt;
+            }
+            .policyTable th, .policyTable td {
+                border: 1px solid black;
+                padding: 4px 6px;
+                text-align: left;
+                vertical-align: top;
+            }
+            .policyTable th {
+                background-color: #f2f2f2;
+                text-align: center;
+            }
+            
+            /* Gaya khusus untuk baris total */
+            .totalRow td {
+                border-top: none !important;
+                border-bottom: none !important;
+                border-left: none !important;
+            }
+            .totalRow .totalLabel {
+                text-align: right;
+                border: none !important;
+            }
+            .totalRow .borderedCell {
+                border: 1px solid black !important;
+                font-weight: bold;
+            }
+            .borderless{
+                border-right: none !important;
+                border-left:none !important;
+            }
+        </style>
+    </head>
+    
+    <body>
+        <div class="footer-left">
+            <div class="footer-text">
+                PT.ASURANSI WAHANA TATA CABANG JAKARTA RASUNA <br/>
+                JL. H.R. RASUNA SAID KAV. C-4 TLP NO. 021-5202665. FAX NO. 021-5220466
+            </div>
+        </div>
+        <div class="footer-right">
+            <div class="footer-text" style="text-align: right;">
+                <span class="page-number"></span> <br/>
+                {!quotationDetailSingle.opportunityData.Busreq_ID__c}
+            </div>
+        </div>
+
+
+        <div class="page">
+            <table style="width:100%;">
+                <tr>
+                    <td style="width: 70%; vertical-align:top;">
+                    </td>
+                    <td style="width: 30%; text-align: right;">
+                        <img src="{!$Resource.AswataLogo}" alt="Logo" width="150"/>
+                    </td>
+                </tr>
+            </table>
+
+            <div class="main-title">
+                IKHTISAR PERTANGGUNGAN <br/>
+                Polis Standar Asuransi Kendaraan Bermotor Indonesia (PSAKBI)
+            </div>
+
+            <apex:outputPanel rendered="{!multiRisk == false}">
+                <table class="info-table">
+                    <tr>
+                        <td style="width:38%;">NOMOR POLIS</td>
+                        <td style="width:2%;">:</td>
+                        <td style="width:60%;">{!quotationDetailSingle.opportunityData.Busreq_ID__c}</td>
+                    </tr>
+                    <tr>
+                        <td>NAMA TERTANGGUNG</td>
+                        <td>:</td>
+                        <td><b>{!quotationDetailSingle.insuredName}</b></td>
+                    </tr>
+                    <tr>
+                        <td>ALAMAT TERTANGGUNG</td>
+                        <td>:</td>
+                        <td>{!quotationDetailSingle.opportunityData.The_Insured_Address__c}</td>
+                    </tr>
+                    <tr>
+                        <td>JANGKA WAKTU PERTANGGUNGAN</td>
+                        <td>:</td>
+                        <td>
+                            {!quotationDetailSingle.monthsDiff} Bulan <br/>
+                            Mulai Dari Tanggal <apex:outputText value="{0, date, dd MMMM yyyy}"><apex:param value="{!quotationDetailSingle.opportunityData.Start_Date_Periode__c}"/></apex:outputText> 
+                            Sampai Dengan Tanggal <apex:outputText value="{0, date, dd MMMM yyyy}"><apex:param value="{!quotationDetailSingle.opportunityData.End_Date_Periode__c}"/></apex:outputText>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>OBYEK PERTANGGUNGAN</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style="padding-left:12px">a. NOMOR POLISI</td>
+                        <td>:</td>
+                        <td>{!quotationDetailSingle.platNomorPolisi}</td>
+                    </tr>
+                    <tr>
+                        <td style="padding-left:12px">b. MEREK/TYPE/TAHUN/WARNA</td>
+                        <td>:</td>
+                        <td>{!quotationDetailSingle.merkTypeKendaraan}</td>
+                    </tr>
+                    <tr>
+                        <td style="padding-left:12px">c. NOMOR MESIN / NOMOR RANGKA</td>
+                        <td>:</td>
+                        <td>{!quotationDetailSingle.noMesinRangkaKendaraan}</td>
+                    </tr>
+                    <tr>
+                        <td style="padding-left:12px">d. JENIS KENDARAAN</td>
+                        <td>:</td>
+                        <td>{!quotationDetailSingle.jenisKendaraan}</td>
+                    </tr>
+                    <tr>
+                        <td>PERLENGKAPAN TAMBAHAN</td>
+                        <td>:</td>
+                        <td>
+                            <table style="margin-left: -5px;width:100%">
+                                <apex:repeat value="{!quotationDetailSingle.perlengkapan}" var="tambahan">
+                                    <tr>
+                                        <td>{!tambahan.merk}</td>
+                                        <td>{!tambahan.curId}</td>
+                                        <td>{!tambahan.value}</td>
+                                    </tr>
+                                </apex:repeat>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>PENGGUNAAN KENDARAAN BERMOTOR</td>
+                        <td>:</td>
+                        <td>{!quotationDetailSingle.tipePenggunaan}</td>
+                    </tr>
+                </table>
+
+                <table class="section-table">
+                    <tr>
+                        <th style="width: 75%;">JAMINAN TAMBAHAN</th>
+                        <th style="width: 25%;">Suku Premi (promil) pa</th>
+                    </tr>
+                    <apex:repeat value="{!quotationDetailSingle.policyCoverage}" var="coverage">
+                        <tr>
+                            <td>{!coverage.CoverageName}</td>
+                            <td style="text-align:center;">
+                                <apex:outputField value="{!coverage.Proposed_Fixed_Amount__c}"/>
+                            </td>
+                        </tr>
+                    </apex:repeat>
+                </table>
+                
+                <table class="section-table" style="margin-top: 10px;">
+                    <tr>
+                        <th style="width: 75%;">DEDUCTIBLE</th>
+                        <th style="width: 25%;"></th>
+                    </tr>
+                    <apex:repeat value="{!quotationDetailSingle.policyCoverage}" var="coverage">
+                        <tr>
+                            <td>{!coverage.CoverageName}</td>
+                            <td>
+                                <apex:outputPanel rendered="{! NOT(ISBLANK(coverage.Deductible_PCT__c)) }">
+                                    <apex:outputField value="{!coverage.Deductible_PCT__c}"/> dari Claim Paid
+                                </apex:outputPanel>
+
+                                <apex:outputPanel rendered="{! ISBLANK(coverage.Deductible_PCT__c) }">
+                                    <apex:outputField value="{!coverage.DeductibleAmount}"/> dari Claim Paid
+                                </apex:outputPanel>
+                            </td>
+                        </tr>
+                    </apex:repeat>
+                </table>
+
+                <table class="section-table" style="margin-top: 10px;">
+                    <thead>
+                        <tr>
+                            <th colspan="4">PREMI</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="2" style="width: 30%;">Suku Premi Total</td>
+                            <td style="width: 5%;border-right: none !important;"></td>
+                            <td style="width: 60%; text-align:right;border-left: none !important;">
+                                <apex:outputText value="{0, number, #,##0.000}">
+                                    <apex:param value="{!quotationDetailSingle.totalAllRate}" />
+                                </apex:outputText> ‰
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">Premi Non Stock</td>
+                            <td style="text-align:center;width: 5%;border-right: none !important;">IDR</td>
+                            <td style="text-align:right;border-left: none !important;">
+                                <apex:outputText value="{0, number, #,##0.00}">
+                                    <apex:param value="{!quotationDetailSingle.premiNonStockCalculated}" />
+                                </apex:outputText>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">Biaya Administrasi</td>
+                            <td style="text-align:center;width: 5%;border-right: none !important;">IDR</td>
+                            <td style="text-align:right;border-left: none !important;">
+                                <apex:outputText value="{!quotationDetailSingle.adminCost}" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">Biaya Meterai</td>
+                            <td style="text-align:center;width: 5%;border-right: none !important;">IDR</td>
+                            <td style="text-align:right;border-left: none !important;">
+                                <apex:outputText value="{!quotationDetailSingle.stampDuty}" />
+                            </td>
+                        </tr>
+                        <tr style="font-weight:bold; background-color: #E0E0E0;">
+                            <td colspan="2">JUMLAH</td>
+                            <td style="text-align:center;width: 5%;border-right: none !important;">IDR</td>
+                            <td style="text-align:right; border-left: none !important;">
+                                <apex:outputText value="{0, number, #,##0.00}">
+                                    <apex:param value="{!quotationDetailSingle.totalPremi}" />
+                                </apex:outputText>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">DENGAN HURUF</td>
+                            <td colspan="2" style="font-style:italic;">{!quotationDetailSingle.nominalTerbilang}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="page">
+                    <table class="section-table">
+                        <thead>
+                            <tr>
+                                <th style="width:10%;">NO.</th>
+                                <th style="width:60%;">HARTA BENDA DAN ATAU KEPENTINGAN YANG DIPERTANGGUNGKAN</th>
+                                <th style="width:30%;" colspan="2">JUMLAH PERTANGGUNGAN</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="text-align:center;">1</td>
+                                <td>{!quotationDetailSingle.uraianPertanggungan}</td> 
+                                <td style="width:10%;text-align:center;border-right: none !important;">IDR</td>
+                                <td style="text-align:right;border-left: none !important;">
+                                    <apex:outputText value="{0, number, #,##0.00}">
+                                        <apex:param value="{!quotationDetailSingle.amountPertanggungan}" />
+                                    </apex:outputText>
+                                </td>
+                            </tr>
+                            <tr style="font-weight:bold;">
+                                <td colspan="2" style="text-align:right; background-color: #E0E0E0;">SUB TOTAL</td>
+                                <td style="text-align:center;border-right: none !important;">IDR</td>
+                                <td style="text-align:right;border-left: none !important;">
+                                    <apex:outputText value="{0, number, #,##0.00}">
+                                        <apex:param value="{!quotationDetailSingle.amountPertanggungan}" />
+                                    </apex:outputText>
+                                </td>
+                            </tr>
+                            <tr style="font-weight:bold;">
+                                <td colspan="2" style="text-align:right; background-color: #E0E0E0;">TOTAL</td>
+                                <td style="text-align:center;border-right: none !important;">IDR</td>
+                                <td style="text-align:right;border-left: none !important;">
+                                    <apex:outputText value="{0, number, #,##0.00}">
+                                        <apex:param value="{!quotationDetailSingle.amountPertanggungan}" />
+                                    </apex:outputText>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <div>
+                        <div style="font-weight:bold;margin-top: 30px;">TERLEKAT KLAUSULA:</div>
+                        <ul class="clauses-list">
+                            <apex:repeat value="{!quotationDetailSingle.trxDataList}" var="transaction">
+                                <li>{!transaction.Clauses_Name__c}</li>
+                            </apex:repeat>
+                        </ul>
+                    </div>
+                    
+                    <div style="bottom:5px; left:0; width:100%; page-break-inside:avoid;">
+                        <div style="font-size:12px; font-weight:bold; text-align:right; padding:5px 14px;" class="font">
+                            Dibuat di Jakarta Selatan, tanggal <apex:outputText value="{0, date, dd MMMM yyyy}"><apex:param value="{!TODAY()}"/></apex:outputText>    
+                        </div>
+                        <table class="standard-table" style="width:100%">
+                            <tr style="height:30px">
+                                <td style="width:50%"></td>
+                                <td style="width:50%; text-align:center; padding-top: 70px;">
+                                    <b><u>AUTHORIZED SIGNATURE</u></b>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!multiRisk == true}">
+                <table class="info-table spaced-table">
+                    <tr>
+                        <td style="width:28%;">NOMOR POLIS</td>
+                        <td style="width:2%;">:</td>
+                        <td style="width:70%;">{!quotationDetailSingle.opportunityData.Busreq_ID__c}</td>
+                    </tr>
+                    <tr>
+                        <td>NAMA TERTANGGUNG</td>
+                        <td>:</td>
+                        <td><b>{!quotationDetailSingle.insuredName}</b></td>
+                    </tr>
+                    <tr>
+                        <td>ALAMAT TERTANGGUNG</td>
+                        <td>:</td>
+                        <td>{!quotationDetailSingle.opportunityData.The_Insured_Address__c}</td>
+                    </tr>
+                    <tr>
+                        <td>JANGKA WAKTU PERTANGGUNGAN</td>
+                        <td>:</td>
+                        <td>
+                            {!quotationDetailSingle.monthsDiff} Bulan <br/>
+                            Mulai Dari Tanggal <apex:outputText value="{0, date, dd MMMM yyyy}"><apex:param value="{!quotationDetailSingle.opportunityData.Start_Date_Periode__c}"/></apex:outputText> 
+                            Sampai Dengan Tanggal <apex:outputText value="{0, date, dd MMMM yyyy}"><apex:param value="{!quotationDetailSingle.opportunityData.End_Date_Periode__c}"/></apex:outputText>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>KELAS KONSTRUKSI</td>
+                        <td>:</td>
+                        <td>Terlampir</td>
+                    </tr>
+                    <tr>
+                        <td>JAMINAN TAMBAHAN</td>
+                        <td>:</td>
+                        <td>Terlampir</td>
+                    </tr>
+                    <tr>
+                        <td>JAMINAN TAMBAHAN</td>
+                        <td>:</td>
+                        <td>Terlampir</td>
+                    </tr>
+                    <tr>
+                        <td>DEDUCTIBLE</td>
+                        <td>:</td>
+                        <td>Terlampir</td>
+                    </tr>
+                </table>
+                <table class="section-table" style="margin-top: 10px;">
+                    <thead>
+                        <tr>
+                            <th colspan="4">PREMI</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="2" style="width: 30%;">Suku Premi Total</td>
+                            <td style="width: 5%;border-right: none !important;"></td>
+                            <td style="width: 60%; text-align:right;border-left: none !important;">
+                                <apex:outputText value="{0, number, #,##0.000}">
+                                    <apex:param value="{!quotationDetailSingle.totalAllRate}" />
+                                </apex:outputText> ‰
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">Premi Non Stock</td>
+                            <td style="text-align:center;width: 5%;border-right: none !important;">IDR</td>
+                            <td style="text-align:right;border-left: none !important;">
+                                <apex:outputText value="{0, number, #,##0.00}">
+                                    <apex:param value="{!quotationDetailSingle.premiNonStockCalculated}" />
+                                </apex:outputText>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">Biaya Administrasi</td>
+                            <td style="text-align:center;width: 5%;border-right: none !important;">IDR</td>
+                            <td style="text-align:right;border-left: none !important;">
+                                <apex:outputText value="{!quotationDetailSingle.adminCost}" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">Biaya Meterai</td>
+                            <td style="text-align:center;width: 5%;border-right: none !important;">IDR</td>
+                            <td style="text-align:right;border-left: none !important;">
+                                <apex:outputText value="{!quotationDetailSingle.stampDuty}" />
+                            </td>
+                        </tr>
+                        <tr style="font-weight:bold; background-color: #E0E0E0;">
+                            <td colspan="2">JUMLAH</td>
+                            <td style="text-align:center;width: 5%;border-right: none !important;">IDR</td>
+                            <td style="text-align:right; border-left: none !important;">
+                                <apex:outputText value="{0, number, #,##0.00}">
+                                    <apex:param value="{!quotationDetailSingle.totalPremi}" />
+                                </apex:outputText>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">DENGAN HURUF</td>
+                            <td colspan="2" style="font-style:italic;">{!quotationDetailSingle.nominalTerbilang}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div>
+                    <div style="margin-bottom: 10px; margin-top:20px; font-weight:bold;">TERLEKAT KLAUSULA:</div>
+                    <ul class="clauses-list">
+                        <apex:repeat value="{!quotationDetailSingle.trxDataList}" var="transaction">
+                            <li>{!transaction.Clauses_Name__c}</li>
+                        </apex:repeat>
+                    </ul>
+                </div>
+                <div style="bottom:5px; left:0; width:100%; page-break-inside:avoid;">
+                    <div style="font-size:12px; font-weight:bold; text-align:right; padding:5px 14px;" class="font">
+                        Dibuat di Jakarta Selatan, tanggal <apex:outputText value="{0, date, dd MMMM yyyy}"><apex:param value="{!TODAY()}"/></apex:outputText>    
+                    </div>
+                    <table class="standard-table" style="width:100%">
+                        <tr style="height:30px">
+                            <td style="width:50%"></td>
+                            <td style="width:50%; text-align:center; padding-top: 70px;">
+                                <b><u>AUTHORIZED SIGNATURE</u></b>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </apex:outputPanel>
+        </div>
+        <div class="page" style="page-break-before: always;">
+             <div style="text-align:center; font-weight:bold;">
+                KLAUSULA KLAUSULA YANG MENJADI BAGIAN DAN TIDAK TERPISAHKAN DARI
+                <br/>REQUEST NO: {!quotationDetailSingle.opportunityData.Busreq_ID__c}
+                <p class="clause-content" style="margin-top: 25px">
+                    {!quotationDetailSingle.opportunityData.Warranty__c}
+                </p>
+             </div>
+        </div>
+        <apex:outputPanel rendered="{!multiRisk == true}">
+            <div class="page" style="page-break-before: always;">
+                <div style="text-align:center; font-weight:bold;">
+                    DAFTAR PERINCIAN YANG TERLEKAT DAN MENJADI BAGIAN YANG TIDAK TERPISAHKAN PADA
+                    <br/>POLIS NO : {!quotationDetailSingle.opportunityData.Busreq_ID__c}
+                    
+                </div>
+            </div>
+        </apex:outputPanel>
+    </body>
+</apex:page>

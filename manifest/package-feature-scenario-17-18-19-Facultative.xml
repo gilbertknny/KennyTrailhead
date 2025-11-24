@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
 	<types>
-		<members>Aswata_Trigger_Account</members>
 		<members>Aswata_Trigger_Asset</members>
 		<members>Aswata_Trigger_Lead</members>
 		<members>Aswata_Trigger_Opportunity</members>
@@ -14,7 +13,110 @@
 		<members>addNewRisk</members>
 		<members>editLeadAccountInformation</members>
 		<members>editRisk</members>
+		<members>fsc_drawLine</members>
+		<members>fsc_flowButtonBar</members>
+		<members>fsc_flowButtonBarCPE</members>
+		<members>fsc_drawLineCPE</members>
 		<name>LightningComponentBundle</name>
+	</types>
+	<types>
+		<members>Aswata_ApprovalProcess_Logic</members>
+		<members>Aswata_ApprovalProcess_Logic_Test</members>
+		<members>InvocableClass</members>
+		<members>InvocableClass_Test</members>
+		<members>ListTotalAmountPerCurrency_Controller</members>
+		<members>ListTotalAmount_Controller_Test</members>
+		<members>Aswata_ApprovalProcess_Logic_Test</members>
+		<members>Aswata_TriggerHandler_Opportunity</members>
+		<members>Aswata_TriggerHandler_Opportunity_Test</members>
+		<name>ApexClass</name>
+	</types>
+	<types>
+		<members>InsurancePolicy.IP_Renewal_Underwriting</members>
+		<name>ApprovalProcess</name>
+	</types>
+	<types>
+		<members>Opportunity.Opportunity Facultative</members>
+		<name>BusinessProcess</name>
+	</types>
+	<types>
+		<members>Aswata_Survey__c.Opportunity__c</members>
+		<members>InsurancePolicy.Approval_Status__c</members>
+		<members>InsurancePolicy.Email__c</members>
+		<members>InsurancePolicy.Set_Notif_1__c</members>
+		<members>InsurancePolicy.Set_Notif_2__c</members>
+		<members>InsurancePolicy.Set_Notif_3__c</members>
+		<members>InsurancePolicy.Set_Task__c</members>
+		<members>InsurancePolicy.Status_Notice__c</members>
+		<members>InsurancePolicy.Status_Renewal__c</members>
+		<members>InsurancePolicy.Underwriting_User__c</members>
+		<members>Quote.isNeedSurvey__c</members>
+		<name>CustomField</name>
+	</types>
+	<types>
+		<members>Aswata_Sales/Renewal_Email</members>
+		<name>EmailTemplate</name>
+	</types>
+	<types>
+		<members>Coverage_Screen_Input_Coverage</members>
+		<members>InsurancePolicy_Approval</members>
+		<members>InsurnacePolicy_Schedule_Renewal_Notice_Email</members>
+		<members>Opportunity_Closed_Lost</members>
+		<members>Opportunity_Upload_Document_Approve_Hold_Binding</members>
+		<members>Policy_Endorsement</members>
+		<members>Oppty_Clause_Input</members>
+		<members>Quote_Autolaunched_Survey_Underwriting</members>
+		<name>Flow</name>
+	</types>
+	<types>
+		<members>Coverage_Screen_Input_Coverage</members>
+		<members>InsurancePolicy_Approval</members>
+		<members>InsurnacePolicy_Schedule_Renewal_Notice_Email</members>
+		<members>Opportunity_Upload_Document_Approve_Hold_Binding</members>
+		<members>Quote_Autolaunched_Survey_Underwriting</members>
+		<name>FlowDefinition</name>
+	</types>
+	<types>
+		<members>Asset.Input_Coverage2</members>
+		<members>Opportunity.Add_Clause</members>
+		<members>Opportunity.Upload_Document</members>
+		<members>Quote.Create_Survey</members>
+		<name>QuickAction</name>
+	</types>
+	<types>
+		<members>Aswata_Survey__c.Underwriting_Survey</members>
+		<name>RecordType</name>
+	</types>
+	<types>
+		<members>Quote.Assign_Surveyor</members>
+		<members>Quote.Print</members>
+		<members>Transaction_Data__c.Add_Co_Insurer</members>
+		<members>Transaction_Data__c.Add_Consignee_Beneficiary</members>
+		<name>WebLink</name>
+	</types>
+	<types>
+		<members>InsurancePolicy.EA_Insurance_Policy_Renewal_Notice</members>
+		<name>WorkflowAlert</name>
+	</types>
+	<types>
+		<members>InsurancePolicy.IP_Decision_Underwriting_Submitted</members>
+		<members>InsurancePolicy.Reject_Update_Status</members>
+		<members>InsurancePolicy.Update_Status_Approve</members>
+		<members>Quote.Quote_Status_Approved</members>
+		<members>Quote.Quote_Status_Contra_Quote</members>
+		<members>Quote.Quote_Status_Rejected</members>
+		<members>Quote.Quote_Status_Waiting_Approval</members>
+		<name>WorkflowFieldUpdate</name>
+	</types>
+	<types>
+		<members>Aswata_Claim_App</members>
+		<members>Aswata_Sales_App</members>
+		<members>Aswata_Sales_App_Console</members>
+		<name>CustomApplication</name>
+	</types>
+	<types>
+		<members>New_Opportunity</members>
+		<name>CustomTab</name>
 	</types>
 	<version>65.0</version>
 </Package>

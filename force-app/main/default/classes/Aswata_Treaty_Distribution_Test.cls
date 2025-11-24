@@ -1,7 +1,7 @@
 /**
  * @description       : Test Class for Aswata_Treaty_Distribution
  * @author            : Ahmad Yazid Munif
- * @last modified on  : 11-12-2025
+ * @last modified on  : 11-19-2025
  * @last modified by  : Ahmad Yazid Munif
 **/
 
@@ -53,7 +53,7 @@ private class Aswata_Treaty_Distribution_Test {
             Name = 'Rumah',
             Opportunity__c = opp.Id,
             ParentId = risk.Id,
-            COB__c = '201',
+            // COB__c = '201',
             RecordTypeId = rt.Id,
             Accumulation__c = acc.Id
         );

@@ -1,11 +1,11 @@
 <template>
-  <!-- Full-page background -->
-  <div class="page-container">
+  <!-- Full-page background with direct static resource path -->
+  <div class="page-container" style={backgroundStyle}>
 
     <!-- Logo header -->
     <div class="logo-container">
       <img
-        src="https://www.aswata.co.id/images/logo.png"
+        src={aswataLogo}
         alt="Aswata Logo"
         class="logo"
       />
@@ -139,7 +139,7 @@
 
           <lightning-textarea
             name="User_Description__c"
-            label="Apa yang Anda Ingin Asuransikan?"
+            label="Apa yang ingin Anda tanyakan?"
             onchange={handleInputChange}
           ></lightning-textarea>
 
@@ -157,12 +157,12 @@
         <template if:true={isSubmitted}>
           <div class="thank-you-container">
             <img
-              src="https://www.aswata.co.id/images/logo.png"
+              src={aswataLogo}
               alt="Aswata Logo"
               class="logo-small"
             />
             <p class="thank-you-text">
-              ✅ Terima kasih! Data Anda telah kami terima. Kami akan menghubungi Anda dalam waktu dekat.
+              ✅ Terima kasih! Data Anda telah kami terima dan akan segera menghubungi Anda dalam waktu dekat.
             </p>
           </div>
         </template>

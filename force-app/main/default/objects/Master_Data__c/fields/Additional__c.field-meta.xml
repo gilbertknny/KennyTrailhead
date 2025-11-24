@@ -4,6 +4,7 @@
     <externalId>false</externalId>
     <formula>CASE(RecordType.Name,
 &apos;Market&apos;,&apos;[&apos;+ ADDRESS_ID__r.Name+&apos;][&apos;+TEXT(Rate__c)+&apos;]&apos;,
+&apos;Vessel Name&apos;,TYPE__c,
 Description__c)</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
     <label>Additional</label>

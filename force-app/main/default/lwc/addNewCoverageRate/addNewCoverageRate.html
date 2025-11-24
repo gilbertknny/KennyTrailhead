@@ -2,7 +2,7 @@
   @description       : 
   @author            : Ahmad Yazid Munif
   @group             : 
-  @last modified on  : 11-06-2025
+  @last modified on  : 11-19-2025
   @last modified by  : Ahmad Yazid Munif
 -->
 <template>
@@ -16,7 +16,15 @@
             class="slds-m-bottom_medium"
             disabled={settingCoverage}>
         </lightning-radio-group>
-        
+        <div style="padding: 10px;">
+            <lightning-input
+                type="search"
+                label="Cari Coverage"
+                value={searchTerm}
+                onchange={handleSearchChange}
+                placeholder="Masukkan Nama Coverage..."
+            ></lightning-input>
+        </div>
         <template if:true={coverageData}>
             <table class="slds-table slds-table_cell-buffer slds-table_bordered"
                 style="width:max-content">
@@ -76,7 +84,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <template for:each={thisCoverageData} for:item="row">
+                    <template for:each={filteredCoverageData} for:item="row">
                         <template if:false={row.isSingleRate}> 
                             <tr key={row.id}> 
                                 <td class="slds-text-align_center">
@@ -93,7 +101,21 @@
                                 <td data-label="ID Coverage">{row.coverageId}</td>
                                 <td data-label="Coverage Name" class="slds-cell-wrap">{row.coverageName}</td>
                                 <td data-label="Batas Bawah">
-                                    <lightning-input
+                                    <lightning-input 
+                                        type="number"
+                                        value={row.batasBawah}
+                                        data-id={row.id}
+                                        data-fieldname="batasBawah"
+                                        onchange={handleInputChange}
+                                        placeholder="%"
+                                        min="0"
+                                        max="100"
+                                        step="0.01"
+                                        class="full-width-input"
+                                        disabled=true
+                                        variant="label-hidden">
+                                    </lightning-input>
+                                    <!-- <lightning-input
                                         type="text"
                                         onkeydown={handleNumericKeyDown}
                                         value={row.batasBawah}
@@ -104,11 +126,25 @@
                                         label=""
                                         disabled=true
                                         variant="label-hidden">
-                                    </lightning-input>
+                                    </lightning-input> -->
                                 </td>
                                 <!-- <template if:true={hasSection1}> -->
                                     <td data-label="Coverage Rate">
-                                        <lightning-input
+                                        <lightning-input 
+                                            type="number"
+                                            value={row.rate.coverageRate}
+                                            data-id={row.id}
+                                            data-fieldname="coverageRate"
+                                            onchange={handleInputChange}
+                                            disabled={row.isDisabledInput}
+                                            placeholder="%"
+                                            min="0"
+                                            max="100"
+                                            step="0.01"
+                                            class="full-width-input"
+                                            variant="label-hidden">
+                                        </lightning-input>
+                                        <!-- <lightning-input
                                             type="text"
                                             onkeydown={handleNumericKeyDown}
                                             value={row.rate.coverageRate}
@@ -119,7 +155,7 @@
                                             label=""
                                             disabled={row.isDisabledInput}
                                             variant="label-hidden">
-                                        </lightning-input>
+                                        </lightning-input> -->
                                     </td>
                                     <td data-label="Premi Amount">
                                         <lightning-input
@@ -138,7 +174,21 @@
                                 <!-- </template> -->
                                 <template if:true={hasSection2}>
                                     <td data-label="Coverage Rate">
-                                        <lightning-input
+                                        <lightning-input 
+                                            type="number"
+                                            value={row.rate.coverageRate2}
+                                            data-id={row.id}
+                                            data-fieldname="coverageRate2"
+                                            onchange={handleInputChange}
+                                            disabled={row.isDisabledInput}
+                                            placeholder="%"
+                                            min="0"
+                                            max="100"
+                                            step="0.01"
+                                            class="full-width-input"
+                                            variant="label-hidden">
+                                        </lightning-input>
+                                        <!-- <lightning-input
                                             type="text"
                                             onkeydown={handleNumericKeyDown}
                                             value={row.rate.coverageRate2}
@@ -149,7 +199,7 @@
                                             label=""
                                             disabled={row.isDisabledInput}
                                             variant="label-hidden">
-                                        </lightning-input>
+                                        </lightning-input> -->
                                     </td>
                                     <td data-label="Premi Amount">
                                         <lightning-input
@@ -168,7 +218,21 @@
                                 </template>
                                 <template if:true={hasSection3}>
                                     <td data-label="Coverage Rate">
-                                        <lightning-input
+                                        <lightning-input 
+                                            type="number"
+                                            value={row.rate.coverageRate3}
+                                            data-id={row.id}
+                                            data-fieldname="coverageRate3"
+                                            onchange={handleInputChange}
+                                            disabled={row.isDisabledInput}
+                                            placeholder="%"
+                                            min="0"
+                                            max="100"
+                                            step="0.01"
+                                            class="full-width-input"
+                                            variant="label-hidden">
+                                        </lightning-input>
+                                        <!-- <lightning-input
                                             type="text"
                                             onkeydown={handleNumericKeyDown}
                                             value={row.rate.coverageRate3}
@@ -179,7 +243,7 @@
                                             label=""
                                             disabled={row.isDisabledInput}
                                             variant="label-hidden">
-                                        </lightning-input>
+                                        </lightning-input> -->
                                     </td>
                                     <td data-label="Premi Amount">
                                         <lightning-input
@@ -198,7 +262,21 @@
                                 </template>
                                 <template if:true={hasSection4}>
                                     <td data-label="Coverage Rate">
-                                        <lightning-input
+                                        <lightning-input 
+                                            type="number"
+                                            value={row.rate.coverageRate4}
+                                            data-id={row.id}
+                                            data-fieldname="coverageRate4"
+                                            onchange={handleInputChange}
+                                            disabled={row.isDisabledInput}
+                                            placeholder="%"
+                                            min="0"
+                                            max="100"
+                                            step="0.01"
+                                            class="full-width-input"
+                                            variant="label-hidden">
+                                        </lightning-input>
+                                        <!-- <lightning-input
                                             type="text"
                                             onkeydown={handleNumericKeyDown}
                                             value={row.rate.coverageRate4}
@@ -209,7 +287,7 @@
                                             label=""
                                             disabled={row.isDisabledInput}
                                             variant="label-hidden">
-                                        </lightning-input>
+                                        </lightning-input> -->
                                     </td>
                                     <td data-label="Premi Amount">
                                         <lightning-input
@@ -247,7 +325,21 @@
                                     <td data-label="ID Coverage">{row.coverageId}</td>
                                     <td data-label="Coverage Name" class="slds-text-title_bold">{row.coverageName}</td>
                                     <td data-label="Batas Bawah">
-                                        <lightning-input
+                                        <lightning-input 
+                                            type="number"
+                                            value={row.batasBawah}
+                                            data-id={row.id}
+                                            data-fieldname="batasBawah"
+                                            onchange={handleInputChange}
+                                            placeholder="%"
+                                            min="0"
+                                            max="100"
+                                            step="0.01"
+                                            class="full-width-input"
+                                            variant="label-hidden"
+                                            disabled=true>
+                                        </lightning-input>
+                                        <!-- <lightning-input
                                             type="text"
                                             onkeydown={handleNumericKeyDown}
                                             value={row.batasBawah}
@@ -258,11 +350,25 @@
                                             label=""
                                             disabled=true
                                             variant="label-hidden">
-                                        </lightning-input>
+                                        </lightning-input> -->
                                     </td>
                                     <!-- <template if:true={hasSection1}> -->
                                         <td data-label="Coverage Rate">
-                                            <lightning-input
+                                            <lightning-input 
+                                                type="number"
+                                                value={row.rate.coverageRate}
+                                                data-id={row.id}
+                                                data-fieldname="coverageRate"
+                                                onchange={handleInputChange}
+                                                disabled={row.isDisabledInput}
+                                                placeholder="%"
+                                                min="0"
+                                                max="100"
+                                                step="0.01"
+                                                class="full-width-input"
+                                                variant="label-hidden">
+                                            </lightning-input>
+                                            <!-- <lightning-input
                                                 type="text"
                                                 onkeydown={handleNumericKeyDown}
                                                 value={row.rate.coverageRate}
@@ -273,7 +379,7 @@
                                                 label=""
                                                 disabled={row.isDisabledInput}
                                                 variant="label-hidden">
-                                            </lightning-input>
+                                            </lightning-input> -->
                                         </td>
                                         <td data-label="Premi Amount">
                                             <lightning-input
@@ -292,7 +398,21 @@
                                     <!-- </template> -->
                                     <template if:true={hasSection2}>
                                         <td>
-                                            <lightning-input
+                                            <lightning-input 
+                                                type="number"
+                                                value={row.rate.coverageRate2}
+                                                data-id={row.id}
+                                                data-fieldname="coverageRate2"
+                                                onchange={handleInputChange}
+                                                disabled={row.isDisabledInput}
+                                                placeholder="%"
+                                                min="0"
+                                                max="100"
+                                                step="0.01"
+                                                class="full-width-input"
+                                                variant="label-hidden">
+                                            </lightning-input>
+                                            <!-- <lightning-input
                                                 type="text"
                                                 onkeydown={handleNumericKeyDown}
                                                 value={row.rate.coverageRate2}
@@ -303,7 +423,7 @@
                                                 label=""
                                                 disabled={row.isDisabledInput}
                                                 variant="label-hidden">
-                                            </lightning-input>
+                                            </lightning-input> -->
                                         </td>
                                         <td data-label="Premi Amount Section 2">
                                             <lightning-input
@@ -322,7 +442,21 @@
                                     </template>
                                     <template if:true={hasSection3}>
                                         <td>
-                                            <lightning-input
+                                            <lightning-input 
+                                                type="number"
+                                                value={row.rate.coverageRate3}
+                                                data-id={row.id}
+                                                data-fieldname="coverageRate3"
+                                                onchange={handleInputChange}
+                                                disabled={row.isDisabledInput}
+                                                placeholder="%"
+                                                min="0"
+                                                max="100"
+                                                step="0.01"
+                                                class="full-width-input"
+                                                variant="label-hidden">
+                                            </lightning-input>
+                                            <!-- <lightning-input
                                                 type="text"
                                                 onkeydown={handleNumericKeyDown}
                                                 value={row.rate.coverageRate3}
@@ -333,7 +467,7 @@
                                                 label=""
                                                 disabled={row.isDisabledInput}
                                                 variant="label-hidden">
-                                            </lightning-input>
+                                            </lightning-input> -->
                                         </td>
                                         <td data-label="Premi Amount Section 3">
                                             <lightning-input
@@ -352,7 +486,21 @@
                                     </template>
                                     <template if:true={hasSection4}>
                                         <td>
-                                            <lightning-input
+                                            <lightning-input 
+                                                type="number"
+                                                value={row.rate.coverageRate4}
+                                                data-id={row.id}
+                                                data-fieldname="coverageRate4"
+                                                onchange={handleInputChange}
+                                                disabled={row.isDisabledInput}
+                                                placeholder="%"
+                                                min="0"
+                                                max="100"
+                                                step="0.01"
+                                                class="full-width-input"
+                                                variant="label-hidden">
+                                            </lightning-input>
+                                            <!-- <lightning-input
                                                 type="text"
                                                 onkeydown={handleNumericKeyDown}
                                                 value={row.rate.coverageRate4}
@@ -363,7 +511,7 @@
                                                 label=""
                                                 disabled={row.isDisabledInput}
                                                 variant="label-hidden">
-                                            </lightning-input>
+                                            </lightning-input> -->
                                         </td>
                                         <td data-label="Premi Amount Section 4">
                                             <lightning-input

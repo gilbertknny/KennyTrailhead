@@ -15,7 +15,7 @@ private class LeadUpdateUnqualifiedTest {
     @IsTest
     static void testMarkUnqualifiedSuccess() {
         // Create test user
-        Profile p = [SELECT Id FROM Profile WHERE Name = 'Standard User' LIMIT 1];
+        Profile p = [SELECT Id FROM Profile WHERE Name = 'System Administrator' LIMIT 1];
         User testUser = new User(
             Alias = 'tuser',
             Email = 'tuser@example.com',
@@ -48,7 +48,7 @@ private class LeadUpdateUnqualifiedTest {
      */
     @IsTest
     static void testMarkUnqualifiedNoAccess() {
-        Profile p = [SELECT Id FROM Profile WHERE Name = 'Standard User' LIMIT 1];
+        Profile p = [SELECT Id FROM Profile WHERE Name = 'System Administrator' LIMIT 1];
         User restrictedUser = new User(
             Alias = 'ruser',
             Email = 'ruser@example.com',
