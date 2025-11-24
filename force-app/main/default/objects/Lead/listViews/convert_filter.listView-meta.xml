@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>convert_filter</fullName>
+    <columns>FULL_NAME</columns>
+    <columns>LEAD.SALUTATION</columns>
+    <columns>City__c</columns>
+    <columns>LEAD.COMPANY</columns>
+    <columns>LEAD.PHONE</columns>
+    <columns>LEAD.EMAIL</columns>
+    <columns>Lead_scoring__c</columns>
+    <columns>LEAD.STATUS</columns>
+    <columns>LEAD.CREATED_DATE</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>LEAD.STATUS</field>
+        <operation>notEqual</operation>
+        <value>Unqualified</value>
+    </filters>
+    <filters>
+        <field>Lead_scoring__c</field>
+        <operation>contains</operation>
+        <value>stars_500</value>
+    </filters>
+    <label>convert filter</label>
+</ListView>

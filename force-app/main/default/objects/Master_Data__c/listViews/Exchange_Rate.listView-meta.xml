@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Exchange_Rate</fullName>
+    <columns>RI_PARAM_YEAR__c</columns>
+    <columns>NAME</columns>
+    <columns>Exchange_Rate__c</columns>
+    <columns>CREATED_DATE__c</columns>
+    <columns>DEST_CUR_CODE__c</columns>
+    <columns>External_ID__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>RECORDTYPE</field>
+        <operation>equals</operation>
+        <value>Master_Data__c.Exchange_Rate</value>
+    </filters>
+    <label>Exchange Rate</label>
+</ListView>
