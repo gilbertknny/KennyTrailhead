@@ -60,6 +60,8 @@
 		<members>FinServ__BankingBusinessAccountPage</members>
 		<members>FinServ__BankingInstitutionAccountPage</members>
 		<members>FinServ__FinancialAccount</members>
+        <members>Case_Record_Page</members>
+		<members>Claim_Record_Page</members>
 		<name>FlexiPage</name>
 	</types>
 	<types>
@@ -135,7 +137,12 @@
 		<members>Transaction_Data__c.Transhipment</members>
 		<name>RecordType</name>
 	</types>
-    	<types>
+	<types>
+		<members>Account.AccountEmail</members>
+		<members>Opportunity.OpportunityEmail</members>
+		<name>QuickAction</name>
+	</types>
+    <types>
 		<members>Lead.Unqualified</members>
 		<name>WebLink</name>
 	</types>
