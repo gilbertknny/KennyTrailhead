@@ -197,9 +197,7 @@ global with sharing class VlocityMapping implements callable{
             sfawt.varout = 'coverages';
             mapobj.putAll(setmapObjmap(sfawt));
         }
-        system.debug('lasset : '+JSON.serialize(lasset));
-        system.debug('extid : '+extid);
-
+        
         if(!lasset.isEmpty() ){
             SFAWT05 sfawt = new SFAWT05();
             sfawt.externalId = extid;
@@ -208,7 +206,6 @@ global with sharing class VlocityMapping implements callable{
             sfawt.nameIP = 'SFAWT05Extend_RiskAssetCoverage';
             sfawt.rtId = SOQL_SOBJECT.getRecordTypeIdbyDevName('Asset', 'Asset');
             sfawt.varout = 'detail_insured';
-            system.debug('rtId : '+sfawt.rtId);
             mapobj.putAll(setmapObjmap(sfawt));
         }
         return mapobj;
