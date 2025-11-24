@@ -118,12 +118,6 @@ export default class AddNewPolicyDetailInsured extends LightningElement {
             
             // ✅ Set section name untuk display
             this.section = this.formData?.Section_Name__c || '';
-
-            if (this.formData?.Indemnity_Type__c) {
-                this.controllingValue = this.formData.Indemnity_Type__c;
-                console.log('🔧 Initialized controllingValue:', this.controllingValue);
-
-            }
             
             console.log('🔍 Loaded values:');
             console.log('  Currency:', this.formData.Currency__c);
