@@ -1,11 +1,10 @@
 /**
  * @description       : Wrapper Coverage
  * @author            : Ahmad Yazid Munif
- * @last modified on  : 11-07-2025
+ * @last modified on  : 11-20-2025
  * @last modified by  : Ahmad Yazid Munif
 **/
 public with sharing class Aswata_Coverage_Data_Wrapper {
-    
     /**
      * @description The wrapper for mapping dynamic fields need for input coverage
      */
@@ -47,6 +46,10 @@ public with sharing class Aswata_Coverage_Data_Wrapper {
          */
         @AuraEnabled public String coverageId {get;set;}
         /**
+         * @description ID referensi (PARENT_COVERAGE_ID__c) from coverage data
+         */
+        @AuraEnabled public String parentCoverageId {get;set;}
+        /**
          * @description Name coverage from Master_Data__c
          */
         @AuraEnabled public String coverageName {get;set;}
@@ -75,6 +78,7 @@ public with sharing class Aswata_Coverage_Data_Wrapper {
         public String policyId;
         public String riskId;
         public String coverageId;
+        public String parentCoverageId;
         public String coverageName;
         public String rowType;
         public Decimal batasBawah;
@@ -193,9 +197,21 @@ public with sharing class Aswata_Coverage_Data_Wrapper {
          */
         @AuraEnabled public Decimal bankFeeValue {get;set;}
         /**
-         * @description commisino
+         * @description commision
          */
         @AuraEnabled public Decimal commissionValue {get;set;}
+        /**
+         * @description agentCommissionValue
+         */
+        @AuraEnabled public Decimal agentCommissionValue {get;set;}
+        /**
+         * @description brokerCommissionValue
+         */
+        @AuraEnabled public Decimal brokerCommissionValue {get;set;}
+        /**
+         * @description financialCommissionValue
+         */
+        @AuraEnabled public Decimal financialCommissionValue {get;set;}
         /**
          * @description discount
          */

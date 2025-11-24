@@ -1,7 +1,7 @@
 <!--
   @description       : LWC Treaty
   @author            : Ahmad Yazid Munif
-  @last modified on  : 11-14-2025
+  @last modified on  : 11-17-2025
   @last modified by  : Ahmad Yazid Munif
 -->
 <template>
@@ -37,7 +37,7 @@
                         <div class="slds-form-element share-row">
                             <label class="slds-form-element__label">Date Opportunity Created</label>
                             <div class="slds-form-element__control">
-                                <span class="slds-form-element__static">{currentRisk.dateOpportunity}</span>
+                                <span class="slds-form-element__static">{currentFormated.dateOpportunity}</span>
                             </div>
                         </div>
                     </div>
@@ -46,7 +46,7 @@
                         <div class="slds-form-element share-row">
                             <label class="slds-form-element__label">Date Quotation Request</label>
                             <div class="slds-form-element__control">
-                                <span class="slds-form-element__static">{currentRisk.dateQuoteRequest}</span>
+                                <span class="slds-form-element__static">{currentFormated.dateQuoteRequest}</span>
                             </div>
                         </div>
                     </div>
@@ -201,25 +201,31 @@
                                     <lightning-input 
                                         label="Remaining (Amount)"
                                         class="slds-hide_large"
-                                        value={currentRisk.bppda.limit} 
+                                        value={currentFormated.bppda.limit} 
                                         data-object="bppda"
                                         data-field="limit" 
-                                        onchange={handleInputChange}>
+                                        onkeydown={handleNumericKeyDown}
+                                        onfocus={handleInputFocus}
+                                        onblur={handleInputBlur}>
                                     </lightning-input>
                                     <lightning-input 
                                         class="slds-show_large"
-                                        value={currentRisk.bppda.limit} 
+                                        value={currentFormated.bppda.limit} 
                                         data-object="bppda"
                                         data-field="limit" 
                                         style="margin-top: -10px;"
-                                        onchange={handleInputChange}>
+                                        onkeydown={handleNumericKeyDown}
+                                        onfocus={handleInputFocus}
+                                        onblur={handleInputBlur}>
                                     </lightning-input>
                                 </div>
                                 <div class="slds-col slds-size_12-of-12 slds-large-size_3-of-12 slds-p-horizontal_x-small">
                                     <div class="slds-form-element"> 
                                         <label class="slds-form-element__label slds-hide_large">% (Of TSI)</label>
                                         <div class="slds-form-element__control slds-hide_large">
-                                            <span class="slds-form-element__static slds-text-body_regular">{bppdaLimitPercentage}</span>
+                                            <span class="slds-form-element__static slds-text-body_regular">
+                                                {bppdaLimitPercentage}
+                                            </span>
                                         </div>
                                         <div class="slds-text-align_center slds-form-element__control slds-show_large slds-grid_vertical-align-center custom-static-control">
                                             {bppdaLimitPercentage}
@@ -230,10 +236,12 @@
                                     <div class="slds-form-element"> 
                                         <label class="slds-form-element__label slds-hide_large">Absorbed - Accumulated</label>
                                         <div class="slds-form-element__control slds-hide_large">
-                                            <span class="slds-form-element__static slds-text-body_regular">{currentRisk.bppda.accumulation}</span>
+                                            <span class="slds-form-element__static slds-text-body_regular">
+                                                {currentFormated.bppda.accumulation}
+                                            </span>
                                         </div>
                                         <div class="slds-text-align_center slds-form-element__control slds-show_large slds-grid_vertical-align-center custom-static-control">
-                                            {currentRisk.bppda.accumulation}
+                                            {currentFormated.bppda.accumulation}
                                         </div>
                                     </div>
                                 </div>
@@ -241,10 +249,12 @@
                                     <div class="slds-form-element"> 
                                         <label class="slds-form-element__label slds-hide_large">Maximum Capacity</label>
                                         <div class="slds-form-element__control slds-hide_large">
-                                            <span class="slds-form-element__static slds-text-body_regular">{currentRisk.bppda.capacity}</span>
+                                            <span class="slds-form-element__static slds-text-body_regular">
+                                                {currentFormated.bppda.capacity}
+                                            </span>
                                         </div>
                                         <div class="slds-text-align_center slds-form-element__control slds-show_large slds-grid_vertical-align-center custom-static-control">
-                                            {currentRisk.bppda.capacity}
+                                            {currentFormated.bppda.capacity}
                                         </div>
                                     </div>
                                 </div>
@@ -263,18 +273,22 @@
                                     <lightning-input 
                                         label="Remaining (Amount)"
                                         class="slds-hide_large"
-                                        value={currentRisk.poolEq.limit}
+                                        value={currentFormated.poolEq.limit}
                                         data-object="poolEq"
                                         data-field="limit" 
-                                        onchange={handleInputChange}>
+                                        onkeydown={handleNumericKeyDown}
+                                        onfocus={handleInputFocus}
+                                        onblur={handleInputBlur}>
                                     </lightning-input>
                                     <lightning-input 
                                         class="slds-show_large"
-                                        value={currentRisk.poolEq.limit}
+                                        value={currentFormated.poolEq.limit}
                                         data-object="poolEq"
                                         data-field="limit" 
                                         style="margin-top: -10px;"
-                                        onchange={handleInputChange}>
+                                        onkeydown={handleNumericKeyDown}
+                                        onfocus={handleInputFocus}
+                                        onblur={handleInputBlur}>
                                     </lightning-input>
                                 </div>
                                 <div class="slds-col slds-size_12-of-12 slds-large-size_3-of-12 slds-p-horizontal_x-small">
@@ -292,10 +306,10 @@
                                     <div class="slds-form-element"> 
                                         <label class="slds-form-element__label slds-hide_large">Absorbed - Accumulated</label>
                                         <div class="slds-form-element__control slds-hide_large">
-                                            <span class="slds-form-element__static slds-text-body_regular">{currentRisk.poolEq.accumulation}</span>
+                                            <span class="slds-form-element__static slds-text-body_regular">{currentFormated.poolEq.accumulation}</span>
                                         </div>
                                         <div class="slds-text-align_center slds-form-element__control slds-show_large slds-grid_vertical-align-center custom-static-control">
-                                            {currentRisk.poolEq.accumulation}
+                                            {currentFormated.poolEq.accumulation}
                                         </div>
                                     </div>
                                 </div>
@@ -303,10 +317,10 @@
                                     <div class="slds-form-element"> 
                                         <label class="slds-form-element__label slds-hide_large">Maximum Capacity</label>
                                         <div class="slds-form-element__control slds-hide_large">
-                                            <span class="slds-form-element__static slds-text-body_regular">{currentRisk.poolEq.capacity}</span>
+                                            <span class="slds-form-element__static slds-text-body_regular">{currentFormated.poolEq.capacity}</span>
                                         </div>
                                         <div class="slds-text-align_center slds-form-element__control slds-show_large slds-grid_vertical-align-center custom-static-control">
-                                            {currentRisk.poolEq.capacity}
+                                            {currentFormated.poolEq.capacity}
                                         </div>
                                     </div>
                                 </div>
@@ -325,18 +339,22 @@
                                     <lightning-input 
                                         label="Remaining (Amount)"
                                         class="slds-hide_large"
-                                        value={currentRisk.poolCustomBond.limit}
+                                        value={currentFormated.poolCustomBond.limit}
                                         data-object="poolCustomBond"
                                         data-field="limit" 
-                                        onchange={handleInputChange}>
+                                        onkeydown={handleNumericKeyDown}
+                                        onfocus={handleInputFocus}
+                                        onblur={handleInputBlur}>
                                     </lightning-input>
                                     <lightning-input 
                                         class="slds-show_large"
-                                        value={currentRisk.poolCustomBond.limit}
+                                        value={currentFormated.poolCustomBond.limit}
                                         data-object="poolCustomBond"
                                         data-field="limit" 
                                         style="margin-top: -10px;"
-                                        onchange={handleInputChange}>
+                                        onkeydown={handleNumericKeyDown}
+                                        onfocus={handleInputFocus}
+                                        onblur={handleInputBlur}>
                                     </lightning-input>
                                 </div>
                                 <div class="slds-col slds-size_12-of-12 slds-large-size_3-of-12 slds-p-horizontal_x-small">
@@ -354,10 +372,10 @@
                                     <div class="slds-form-element"> 
                                         <label class="slds-form-element__label slds-hide_large">Absorbed - Accumulated</label>
                                         <div class="slds-form-element__control slds-hide_large">
-                                            <span class="slds-form-element__static slds-text-body_regular">{currentRisk.poolCustomBond.accumulation}</span>
+                                            <span class="slds-form-element__static slds-text-body_regular">{currentFormated.poolCustomBond.accumulation}</span>
                                         </div>
                                         <div class="slds-text-align_center slds-form-element__control slds-show_large slds-grid_vertical-align-center custom-static-control">
-                                            {currentRisk.poolCustomBond.accumulation}
+                                            {currentFormated.poolCustomBond.accumulation}
                                         </div>
                                     </div>
                                 </div>
@@ -365,10 +383,10 @@
                                     <div class="slds-form-element"> 
                                         <label class="slds-form-element__label slds-hide_large">Maximum Capacity</label>
                                         <div class="slds-form-element__control slds-hide_large">
-                                            <span class="slds-form-element__static slds-text-body_regular">{currentRisk.poolCustomBond.capacity}</span>
+                                            <span class="slds-form-element__static slds-text-body_regular">{currentFormated.poolCustomBond.capacity}</span>
                                         </div>
                                         <div class="slds-text-align_center slds-form-element__control slds-show_large slds-grid_vertical-align-center custom-static-control">
-                                            {currentRisk.poolCustomBond.capacity}
+                                            {currentFormated.poolCustomBond.capacity}
                                         </div>
                                     </div>
                                 </div>
@@ -387,18 +405,22 @@
                                     <lightning-input 
                                         label="Remaining (Amount)"
                                         class="slds-hide_large"
-                                        value={currentRisk.kark.limit}
+                                        value={currentFormated.kark.limit}
                                         data-object="kark"
                                         data-field="limit" 
-                                        onchange={handleInputChange}>
+                                        onkeydown={handleNumericKeyDown}
+                                        onfocus={handleInputFocus}
+                                        onblur={handleInputBlur}>
                                     </lightning-input>
                                     <lightning-input 
                                         class="slds-show_large"
-                                        value={currentRisk.kark.limit}
+                                        value={currentFormated.kark.limit}
                                         data-object="kark"
                                         data-field="limit" 
                                         style="margin-top: -10px;"
-                                        onchange={handleInputChange}>
+                                        onkeydown={handleNumericKeyDown}
+                                        onfocus={handleInputFocus}
+                                        onblur={handleInputBlur}>
                                     </lightning-input>
                                 </div>
                                 <div class="slds-col slds-size_12-of-12 slds-large-size_3-of-12 slds-p-horizontal_x-small">
@@ -416,10 +438,10 @@
                                     <div class="slds-form-element"> 
                                         <label class="slds-form-element__label slds-hide_large">Absorbed - Accumulated</label>
                                         <div class="slds-form-element__control slds-hide_large">
-                                            <span class="slds-form-element__static slds-text-body_regular">{currentRisk.kark.accumulation}</span>
+                                            <span class="slds-form-element__static slds-text-body_regular">{currentFormated.kark.accumulation}</span>
                                         </div>
                                         <div class="slds-text-align_center slds-form-element__control slds-show_large slds-grid_vertical-align-center custom-static-control">
-                                            {currentRisk.kark.accumulation}
+                                            {currentFormated.kark.accumulation}
                                         </div>
                                     </div>
                                 </div>
@@ -427,10 +449,10 @@
                                     <div class="slds-form-element"> 
                                         <label class="slds-form-element__label slds-hide_large">Maximum Capacity</label>
                                         <div class="slds-form-element__control slds-hide_large">
-                                            <span class="slds-form-element__static slds-text-body_regular">{currentRisk.kark.capacity}</span>
+                                            <span class="slds-form-element__static slds-text-body_regular">{currentFormated.kark.capacity}</span>
                                         </div>
                                         <div class="slds-text-align_center slds-form-element__control slds-show_large slds-grid_vertical-align-center custom-static-control">
-                                            {currentRisk.kark.capacity}
+                                            {currentFormated.kark.capacity}
                                         </div>
                                     </div>
                                 </div>
@@ -449,18 +471,22 @@
                                     <lightning-input 
                                         label="Remaining (Amount)"
                                         class="slds-hide_large"
-                                        value={currentRisk.underlying.limit}
+                                        value={currentFormated.underlying.limit}
                                         data-object="underlying"
                                         data-field="limit" 
-                                        onchange={handleInputChange}>
+                                        onkeydown={handleNumericKeyDown}
+                                        onfocus={handleInputFocus}
+                                        onblur={handleInputBlur}>
                                     </lightning-input>
                                     <lightning-input 
                                         class="slds-show_large"
-                                        value={currentRisk.underlying.limit}
+                                        value={currentFormated.underlying.limit}
                                         data-object="underlying"
                                         data-field="limit" 
                                         style="margin-top: -10px;"
-                                        onchange={handleInputChange}>
+                                        onkeydown={handleNumericKeyDown}
+                                        onfocus={handleInputFocus}
+                                        onblur={handleInputBlur}>
                                     </lightning-input>
                                 </div>
                                 <div class="slds-col slds-size_12-of-12 slds-large-size_3-of-12 slds-p-horizontal_x-small">
@@ -478,10 +504,10 @@
                                     <div class="slds-form-element"> 
                                         <label class="slds-form-element__label slds-hide_large">Absorbed - Accumulated</label>
                                         <div class="slds-form-element__control slds-hide_large">
-                                            <span class="slds-form-element__static slds-text-body_regular">{currentRisk.underlying.accumulation}</span>
+                                            <span class="slds-form-element__static slds-text-body_regular">{currentFormated.underlying.accumulation}</span>
                                         </div>
                                         <div class="slds-text-align_center slds-form-element__control slds-show_large slds-grid_vertical-align-center custom-static-control">
-                                            {currentRisk.underlying.accumulation}
+                                            {currentFormated.underlying.accumulation}
                                         </div>
                                     </div>
                                 </div>
@@ -489,10 +515,10 @@
                                     <div class="slds-form-element"> 
                                         <label class="slds-form-element__label slds-hide_large">Maximum Capacity</label>
                                         <div class="slds-form-element__control slds-hide_large">
-                                            <span class="slds-form-element__static slds-text-body_regular">{currentRisk.underlying.capacity}</span>
+                                            <span class="slds-form-element__static slds-text-body_regular">{currentFormated.underlying.capacity}</span>
                                         </div>
                                         <div class="slds-text-align_center slds-form-element__control slds-show_large slds-grid_vertical-align-center custom-static-control">
-                                            {currentRisk.underlying.capacity}
+                                            {currentFormated.underlying.capacity}
                                         </div>
                                     </div>
                                 </div>
@@ -511,18 +537,22 @@
                                     <lightning-input 
                                         label="Remaining (Amount)"
                                         class="slds-hide_large"
-                                        value={currentRisk.excessLoss.limit}
+                                        value={currentFormated.excessLoss.limit}
                                         data-object="excessLoss"
                                         data-field="limit" 
-                                        onchange={handleInputChange}>
+                                        onkeydown={handleNumericKeyDown}
+                                        onfocus={handleInputFocus}
+                                        onblur={handleInputBlur}>
                                     </lightning-input>
                                     <lightning-input 
                                         class="slds-show_large"
-                                        value={currentRisk.excessLoss.limit}
+                                        value={currentFormated.excessLoss.limit}
                                         data-object="excessLoss"
                                         data-field="limit" 
                                         style="margin-top: -10px;"
-                                        onchange={handleInputChange}>
+                                        onkeydown={handleNumericKeyDown}
+                                        onfocus={handleInputFocus}
+                                        onblur={handleInputBlur}>
                                     </lightning-input>
                                 </div>
                                 <div class="slds-col slds-size_12-of-12 slds-large-size_3-of-12 slds-p-horizontal_x-small">
@@ -540,10 +570,10 @@
                                     <div class="slds-form-element"> 
                                         <label class="slds-form-element__label slds-hide_large">Absorbed - Accumulated</label>
                                         <div class="slds-form-element__control slds-hide_large">
-                                            <span class="slds-form-element__static slds-text-body_regular">{currentRisk.excessLoss.accumulation}</span>
+                                            <span class="slds-form-element__static slds-text-body_regular">{currentFormated.excessLoss.accumulation}</span>
                                         </div>
                                         <div class="slds-text-align_center slds-form-element__control slds-show_large slds-grid_vertical-align-center custom-static-control">
-                                            {currentRisk.excessLoss.accumulation}
+                                            {currentFormated.excessLoss.accumulation}
                                         </div>
                                     </div>
                                 </div>
@@ -551,10 +581,10 @@
                                     <div class="slds-form-element"> 
                                         <label class="slds-form-element__label slds-hide_large">Maximum Capacity</label>
                                         <div class="slds-form-element__control slds-hide_large">
-                                            <span class="slds-form-element__static slds-text-body_regular">{currentRisk.excessLoss.capacity}</span>
+                                            <span class="slds-form-element__static slds-text-body_regular">{currentFormated.excessLoss.capacity}</span>
                                         </div>
                                         <div class="slds-text-align_center slds-form-element__control slds-show_large slds-grid_vertical-align-center custom-static-control">
-                                            {currentRisk.excessLoss.capacity}
+                                            {currentFormated.excessLoss.capacity}
                                         </div>
                                     </div>
                                 </div>
@@ -573,18 +603,22 @@
                                     <lightning-input 
                                         label="Remaining (Amount)"
                                         class="slds-hide_large"
-                                        value={currentRisk.grossRetention.limit}
+                                        value={currentFormated.grossRetention.limit}
                                         data-object="grossRetention"
                                         data-field="limit" 
-                                        onchange={handleInputChange}>
+                                        onkeydown={handleNumericKeyDown}
+                                        onfocus={handleInputFocus}
+                                        onblur={handleInputBlur}>
                                     </lightning-input>
                                     <lightning-input 
                                         class="slds-show_large"
-                                        value={currentRisk.grossRetention.limit}
+                                        value={currentFormated.grossRetention.limit}
                                         data-object="grossRetention"
                                         data-field="limit" 
                                         style="margin-top: -10px;"
-                                        onchange={handleInputChange}>
+                                        onkeydown={handleNumericKeyDown}
+                                        onfocus={handleInputFocus}
+                                        onblur={handleInputBlur}>
                                     </lightning-input>
                                 </div>
                                 <div class="slds-col slds-size_12-of-12 slds-large-size_3-of-12 slds-p-horizontal_x-small">
@@ -602,10 +636,10 @@
                                     <div class="slds-form-element"> 
                                         <label class="slds-form-element__label slds-hide_large">Absorbed - Accumulated</label>
                                         <div class="slds-form-element__control slds-hide_large">
-                                            <span class="slds-form-element__static slds-text-body_regular">{currentRisk.grossRetention.accumulation}</span>
+                                            <span class="slds-form-element__static slds-text-body_regular">{currentFormated.grossRetention.accumulation}</span>
                                         </div>
                                         <div class="slds-text-align_center slds-form-element__control slds-show_large slds-grid_vertical-align-center custom-static-control">
-                                            {currentRisk.grossRetention.accumulation}
+                                            {currentFormated.grossRetention.accumulation}
                                         </div>
                                     </div>
                                 </div>
@@ -613,10 +647,10 @@
                                     <div class="slds-form-element"> 
                                         <label class="slds-form-element__label slds-hide_large">Maximum Capacity</label>
                                         <div class="slds-form-element__control slds-hide_large">
-                                            <span class="slds-form-element__static slds-text-body_regular">{currentRisk.grossRetention.capacity}</span>
+                                            <span class="slds-form-element__static slds-text-body_regular">{currentFormated.grossRetention.capacity}</span>
                                         </div>
                                         <div class="slds-text-align_center slds-form-element__control slds-show_large slds-grid_vertical-align-center custom-static-control">
-                                            {currentRisk.grossRetention.capacity}
+                                            {currentFormated.grossRetention.capacity}
                                         </div>
                                     </div>
                                 </div>
@@ -635,18 +669,22 @@
                                     <lightning-input 
                                         label="Remaining (Amount)"
                                         class="slds-hide_large"
-                                        value={currentRisk.quotaShare.limit}
+                                        value={currentFormated.quotaShare.limit}
                                         data-object="quotaShare"
                                         data-field="limit" 
-                                        onchange={handleInputChange}>
+                                        onkeydown={handleNumericKeyDown}
+                                        onfocus={handleInputFocus}
+                                        onblur={handleInputBlur}>
                                     </lightning-input>
                                     <lightning-input 
                                         class="slds-show_large"
-                                        value={currentRisk.quotaShare.limit}
+                                        value={currentFormated.quotaShare.limit}
                                         data-object="quotaShare"
                                         data-field="limit" 
                                         style="margin-top: -10px;"
-                                        onchange={handleInputChange}>
+                                        onkeydown={handleNumericKeyDown}
+                                        onfocus={handleInputFocus}
+                                        onblur={handleInputBlur}>
                                     </lightning-input>
                                 </div>
                                 <div class="slds-col slds-size_12-of-12 slds-large-size_3-of-12 slds-p-horizontal_x-small">
@@ -664,10 +702,10 @@
                                     <div class="slds-form-element"> 
                                         <label class="slds-form-element__label slds-hide_large">Absorbed - Accumulated</label>
                                         <div class="slds-form-element__control slds-hide_large">
-                                            <span class="slds-form-element__static slds-text-body_regular">{currentRisk.quotaShare.accumulation}</span>
+                                            <span class="slds-form-element__static slds-text-body_regular">{currentFormated.quotaShare.accumulation}</span>
                                         </div>
                                         <div class="slds-text-align_center slds-form-element__control slds-show_large slds-grid_vertical-align-center custom-static-control">
-                                            {currentRisk.quotaShare.accumulation}
+                                            {currentFormated.quotaShare.accumulation}
                                         </div>
                                     </div>
                                 </div>
@@ -675,10 +713,10 @@
                                     <div class="slds-form-element"> 
                                         <label class="slds-form-element__label slds-hide_large">Maximum Capacity</label>
                                         <div class="slds-form-element__control slds-hide_large">
-                                            <span class="slds-form-element__static slds-text-body_regular">{currentRisk.quotaShare.capacity}</span>
+                                            <span class="slds-form-element__static slds-text-body_regular">{currentFormated.quotaShare.capacity}</span>
                                         </div>
                                         <div class="slds-text-align_center slds-form-element__control slds-show_large slds-grid_vertical-align-center custom-static-control">
-                                            {currentRisk.quotaShare.capacity}
+                                            {currentFormated.quotaShare.capacity}
                                         </div>
                                     </div>
                                 </div>
@@ -697,18 +735,22 @@
                                     <lightning-input 
                                         label="Remaining (Amount)"
                                         class="slds-hide_large"
-                                        value={currentRisk.surplus.limit}
+                                        value={currentFormated.surplus.limit}
                                         data-object="surplus"
                                         data-field="limit" 
-                                        onchange={handleInputChange}>
+                                        onkeydown={handleNumericKeyDown}
+                                        onfocus={handleInputFocus}
+                                        onblur={handleInputBlur}>
                                     </lightning-input>
                                     <lightning-input 
                                         class="slds-show_large"
-                                        value={currentRisk.surplus.limit}
+                                        value={currentFormated.surplus.limit}
                                         data-object="surplus"
                                         data-field="limit" 
                                         style="margin-top: -10px;"
-                                        onchange={handleInputChange}>
+                                        onkeydown={handleNumericKeyDown}
+                                        onfocus={handleInputFocus}
+                                        onblur={handleInputBlur}>
                                     </lightning-input>
                                 </div>
                                 <div class="slds-col slds-size_12-of-12 slds-large-size_3-of-12 slds-p-horizontal_x-small">
@@ -726,10 +768,10 @@
                                     <div class="slds-form-element"> 
                                         <label class="slds-form-element__label slds-hide_large">Absorbed - Accumulated</label>
                                         <div class="slds-form-element__control slds-hide_large">
-                                            <span class="slds-form-element__static slds-text-body_regular">{currentRisk.surplus.accumulation}</span>
+                                            <span class="slds-form-element__static slds-text-body_regular">{currentFormated.surplus.accumulation}</span>
                                         </div>
                                         <div class="slds-text-align_center slds-form-element__control slds-show_large slds-grid_vertical-align-center custom-static-control">
-                                            {currentRisk.surplus.accumulation}
+                                            {currentFormated.surplus.accumulation}
                                         </div>
                                     </div>
                                 </div>
@@ -737,10 +779,10 @@
                                     <div class="slds-form-element"> 
                                         <label class="slds-form-element__label slds-hide_large">Maximum Capacity</label>
                                         <div class="slds-form-element__control slds-hide_large">
-                                            <span class="slds-form-element__static slds-text-body_regular">{currentRisk.surplus.capacity}</span>
+                                            <span class="slds-form-element__static slds-text-body_regular">{currentFormated.surplus.capacity}</span>
                                         </div>
                                         <div class="slds-text-align_center slds-form-element__control slds-show_large slds-grid_vertical-align-center custom-static-control">
-                                            {currentRisk.surplus.capacity}
+                                            {currentFormated.surplus.capacity}
                                         </div>
                                     </div>
                                 </div>
@@ -759,18 +801,22 @@
                                     <lightning-input 
                                         label="Remaining (Amount)"
                                         class="slds-hide_large"
-                                        value={currentRisk.facoblig.limit}
+                                        value={currentFormated.facoblig.limit}
                                         data-object="facoblig"
                                         data-field="limit" 
-                                        onchange={handleInputChange}>
+                                        onkeydown={handleNumericKeyDown}
+                                        onfocus={handleInputFocus}
+                                        onblur={handleInputBlur}>
                                     </lightning-input>
                                     <lightning-input 
                                         class="slds-show_large"
-                                        value={currentRisk.facoblig.limit}
+                                        value={currentFormated.facoblig.limit}
                                         data-object="facoblig"
                                         data-field="limit" 
                                         style="margin-top: -10px;"
-                                        onchange={handleInputChange}>
+                                        onkeydown={handleNumericKeyDown}
+                                        onfocus={handleInputFocus}
+                                        onblur={handleInputBlur}>
                                     </lightning-input>
                                 </div>
                                 <div class="slds-col slds-size_12-of-12 slds-large-size_3-of-12 slds-p-horizontal_x-small">
@@ -788,10 +834,10 @@
                                     <div class="slds-form-element"> 
                                         <label class="slds-form-element__label slds-hide_large">Absorbed - Accumulated</label>
                                         <div class="slds-form-element__control slds-hide_large">
-                                            <span class="slds-form-element__static slds-text-body_regular">{currentRisk.facoblig.accumulation}</span>
+                                            <span class="slds-form-element__static slds-text-body_regular">{currentFormated.facoblig.accumulation}</span>
                                         </div>
                                         <div class="slds-text-align_center slds-form-element__control slds-show_large slds-grid_vertical-align-center custom-static-control">
-                                            {currentRisk.facoblig.accumulation}
+                                            {currentFormated.facoblig.accumulation}
                                         </div>
                                     </div>
                                 </div>
@@ -799,10 +845,10 @@
                                     <div class="slds-form-element"> 
                                         <label class="slds-form-element__label slds-hide_large">Maximum Capacity</label>
                                         <div class="slds-form-element__control slds-hide_large">
-                                            <span class="slds-form-element__static slds-text-body_regular">{currentRisk.facoblig.capacity}</span>
+                                            <span class="slds-form-element__static slds-text-body_regular">{currentFormated.facoblig.capacity}</span>
                                         </div>
                                         <div class="slds-text-align_center slds-form-element__control slds-show_large slds-grid_vertical-align-center custom-static-control">
-                                            {currentRisk.facoblig.capacity}
+                                            {currentFormated.facoblig.capacity}
                                         </div>
                                     </div>
                                 </div>
@@ -912,18 +958,20 @@
                                     <lightning-input 
                                         label="Remaining (Amount)"
                                         class="slds-hide_large"
-                                        value={currentRisk.setFacultative}
-                                        data-object="setFacultative"
+                                        value={currentFormated.setFacultative}
                                         data-field="setFacultative" 
-                                        onchange={handleInputFacultative}>
+                                        onkeydown={handleNumericKeyDown}
+                                        onfocus={handleInputFocusFacultative}
+                                        onblur={handleInputBlurFacultative}>
                                     </lightning-input>
                                     <lightning-input 
                                         class="slds-show_large"
-                                        value={currentRisk.setFacultative}
-                                        data-object="setFacultative"
+                                        value={currentFormated.setFacultative}
                                         data-field="setFacultative" 
                                         style="margin-top: -10px;"
-                                        onchange={handleInputFacultative}>
+                                        onkeydown={handleNumericKeyDown}
+                                        onfocus={handleInputFocusFacultative}
+                                        onblur={handleInputBlurFacultative}>
                                     </lightning-input>
                                 </div>
                                 <div class="slds-col slds-size_12-of-12 slds-large-size_3-of-12 slds-p-horizontal_x-small">

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WebLink xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Unqualified</fullName>
+    <availability>online</availability>
+    <displayType>button</displayType>
+    <linkType>javascript</linkType>
+    <masterLabel>Unqualified</masterLabel>
+    <openType>onClickJavaScript</openType>
+    <protected>false</protected>
+    <url>{!REQUIRESCRIPT(&quot;/soap/ajax/43.0/connection.js&quot;)} // Load AJAX toolkit
+
+var lead = new sforce.SObject(&quot;Lead&quot;);
+lead.Id = &quot;{!Lead.Id}&quot;;
+lead.Status = &quot;Unqualified&quot;;
+
+var result = sforce.connection.update([lead]);
+
+if (result[0].success == &quot;true&quot;) {
+    alert(&quot;Lead status updated to Unqualified.&quot;);
+    location.reload();
+} else {
+    alert(&quot;Error: &quot; + result[0].errors.message);
+}</url>
+</WebLink>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Vessel_Aircraft_Carrier_Name__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <label>Vessel/Aircraft/Carrier Name</label>
+    <lookupFilter>
+        <active>true</active>
+        <filterItems>
+            <field>Master_Data__c.RecordType.Name</field>
+            <operation>equals</operation>
+            <value>Vessel Name</value>
+        </filterItems>
+        <isOptional>false</isOptional>
+    </lookupFilter>
+    <referenceTo>Master_Data__c</referenceTo>
+    <relationshipLabel>Transactions Data (Vessel/Aircraft/Carrier Name)</relationshipLabel>
+    <relationshipName>Transactions_Data3</relationshipName>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

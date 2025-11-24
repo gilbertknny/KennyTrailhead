@@ -17,6 +17,9 @@ export default class AddNewCoverageRebate extends LightningElement {
     @track showOverriding= true;
     @track showBSP= true;
     @track showProfit= true;
+    @track showAgentCommission = true;
+    @track showBrokerCommission = true;
+    @track showFinancialCommission = true;
     @track descriptionRate= '';
     @track disableModeCoverage = false;
     @api buttonClickedValue;
@@ -44,6 +47,9 @@ export default class AddNewCoverageRebate extends LightningElement {
                     updateItem.rebate = {
                         discountValue: null,
                         commissionValue: null,
+                        agentCommissionValue: null,
+                        brokerCommissionValue: null,
+                        financialCommissionValue: null,
                         leasingValue: null,
                         bankFeeValue: null,
                         overridingValue: null,
@@ -59,6 +65,9 @@ export default class AddNewCoverageRebate extends LightningElement {
                     updateItem.rebate = {
                         discountValue: null,
                         commissionValue: null,
+                        agentCommissionValue: null,
+                        brokerCommissionValue: null,
+                        financialCommissionValue: null,
                         leasingValue: null,
                         bankFeeValue: null,
                         overridingValue: null,
@@ -108,6 +117,9 @@ export default class AddNewCoverageRebate extends LightningElement {
                         leasingValue:rebateData.leasingValue,
                         bankFeeValue:rebateData.bankFeeValue,
                         commissionValue:rebateData.commissionValue,
+                        agentCommissionValue:rebateData.agentCommissionValue,
+                        brokerCommissionValue:rebateData.brokerCommissionValue,
+                        financialCommissionValue:rebateData.financialCommissionValue,
                         discountValue:rebateData.discountValue
                     }
                 }
@@ -228,12 +240,15 @@ export default class AddNewCoverageRebate extends LightningElement {
 
                 const bankFee = Number(updatedItem.rebate.bankFeeValue) || 0;
                 const commission = Number(updatedItem.rebate.commissionValue) || 0;
+                const agentCommissionValue = Number(updatedItem.rebate.agentCommissionValue) || 0;
+                const brokerCommissionValue = Number(updatedItem.rebate.brokerCommissionValue) || 0;
+                const financialCommissionValue = Number(updatedItem.rebate.financialCommissionValue) || 0;
                 const discount = Number(updatedItem.rebate.discountValue) || 0;
                 const leasing = Number(updatedItem.rebate.leasingValue) || 0;
                 const overriding = Number(updatedItem.rebate.overridingValue) || 0;
                 const bsp = Number(updatedItem.rebate.bspValue) || 0;
                 const profit = Number(updatedItem.rebate.profitValue) || 0;
-                let total = bankFee + commission + discount + leasing + overriding + bsp + profit;
+                let total = agentCommissionValue+ brokerCommissionValue + financialCommissionValue + bankFee + commission + discount + leasing + overriding + bsp + profit;
                 // updatedItem.totalRebate = total;
                 updatedItem.rebate={
                     ...updatedItem.rebate,
@@ -287,12 +302,15 @@ export default class AddNewCoverageRebate extends LightningElement {
 
                 const bankFee = Number(updatedItem.rebate.bankFeeValue) || 0;
                 const commission = Number(updatedItem.rebate.commissionValue) || 0;
+                const agentCommissionValue = Number(updatedItem.rebate.agentCommissionValue) || 0;
+                const brokerCommissionValue = Number(updatedItem.rebate.brokerCommissionValue) || 0;
+                const financialCommissionValue = Number(updatedItem.rebate.financialCommissionValue) || 0;
                 const discount = Number(updatedItem.rebate.discountValue) || 0;
                 const leasing = Number(updatedItem.rebate.leasingValue) || 0;
                 const overriding = Number(updatedItem.rebate.overridingValue) || 0;
                 const bsp = Number(updatedItem.rebate.bspValue) || 0;
                 const profit = Number(updatedItem.rebate.profitValue) || 0;
-                let total = bankFee + commission + discount + leasing + overriding + bsp + profit;
+                let total = agentCommissionValue+ brokerCommissionValue + financialCommissionValue + bankFee + commission + discount + leasing + overriding + bsp + profit;
                 // updatedItem.totalRebate = total;
                 updatedItem.rebate={
                     ...updatedItem.rebate,
@@ -306,95 +324,6 @@ export default class AddNewCoverageRebate extends LightningElement {
         this.coverageDataFinal = this.coverageData.filter(item => item.Id !== 'SINGLE_RATE_ID');
         console.log('Final Data to Flow:', this.jsonString);
     }
-    // get discountSum() {
-    //     if (!this.coverageData || this.coverageData.length === 0) {
-    //         return 0;
-    //     }
-    //     const sum = this.coverageData.reduce((accumulator, item) => {
-    //         const deductible = Number(item.rebate.discountValue) || 0;
-    //         return accumulator + deductible;
-    //     }, 0);
-
-    //     return sum.toFixed(2); 
-    // }
-    // get commisionSum() {
-    //     if (!this.coverageData || this.coverageData.length === 0) {
-    //         return 0;
-    //     }
-    //     const sum = this.coverageData.reduce((accumulator, item) => {
-    //         const deductible = Number(item.rebate.commissionValue) || 0;
-    //         return accumulator + deductible;
-    //     }, 0);
-
-    //     return sum.toFixed(2); 
-    // }
-    // get bankFeeSum() {
-    //     if (!this.coverageData || this.coverageData.length === 0) {
-    //         return 0;
-    //     }
-    //     const sum = this.coverageData.reduce((accumulator, item) => {
-    //         const deductible = Number(item.rebate.bankFeeValue) || 0;
-    //         return accumulator + deductible;
-    //     }, 0);
-
-    //     return sum.toFixed(2); 
-    // }
-    // get leasingSum() {
-    //     if (!this.coverageData || this.coverageData.length === 0) {
-    //         return 0;
-    //     }
-    //     const sum = this.coverageData.reduce((accumulator, item) => {
-    //         const deductible = Number(item.rebate.leasingValue) || 0;
-    //         return accumulator + deductible;
-    //     }, 0);
-
-    //     return sum.toFixed(2); 
-    // }
-    // get overridingSum() {
-    //     if (!this.coverageData || this.coverageData.length === 0) {
-    //         return 0;
-    //     }
-    //     const sum = this.coverageData.reduce((accumulator, item) => {
-    //         const deductible = Number(item.rebate.overridingValue) || 0;
-    //         return accumulator + deductible;
-    //     }, 0);
-
-    //     return sum.toFixed(2); 
-    // }
-    // get riskBSPSum() {
-    //     if (!this.coverageData || this.coverageData.length === 0) {
-    //         return 0;
-    //     }
-    //     const sum = this.coverageData.reduce((accumulator, item) => {
-    //         const deductible = Number(item.rebate.bspValue) || 0;
-    //         return accumulator + deductible;
-    //     }, 0);
-
-    //     return sum.toFixed(2); 
-    // }
-    // get totalRebateSum() {
-    //     if (!this.coverageData || this.coverageData.length === 0) {
-    //         return 0;
-    //     }
-    //     const sum = this.coverageData.reduce((accumulator, item) => {
-    //         const deductible = Number(item.rebate.totalRebate) || 0;
-    //         return accumulator + deductible;
-    //     }, 0);
-
-    //     return sum.toFixed(2); 
-    // }
-    // get deductibleSum() {
-    //     if (!this.coverageData || this.coverageData.length === 0) {
-    //         return 0;
-    //     }
-    //     const sum = this.coverageData.reduce((accumulator, item) => {
-    //         const deductible = Number(item.deductibleRate) || 0;
-    //         return accumulator + deductible;
-    //     }, 0);
-
-    //     return sum.toFixed(2); 
-    // }
-
     logFinalData() {
         let finalData = this.coverageData.filter(item => {
             return item.id !== 'SINGLE_RATE_ID' && item.isSelected;;
@@ -405,38 +334,57 @@ export default class AddNewCoverageRebate extends LightningElement {
     
     getMatrixBooleans() {
         const matrixValue = this.groupMatrix;
-        let discount, commission, bankFee, leasing, overriding, BSP, profit;
+        let agentCommission, brokerCommission, financialCommission, discount, commission, bankFee, leasing, overriding, BSP, profit;
 
         switch (matrixValue) {
             case '1':
+                agentCommission = false; brokerCommission = false; financialCommission = false;
                 discount = true; commission = true; bankFee = false; 
                 leasing = false; overriding = false; BSP = false;
                 profit = false;
                 break;
             case '2':
-            case '5':
+                agentCommission = false; brokerCommission = false; financialCommission = false;
                 discount = true; commission = true; bankFee = false;
                 leasing = false; overriding = true; BSP = true;
                 profit = true;
                 break;
+            case '5':
+                agentCommission = false; brokerCommission = true; financialCommission = false;
+                discount = true; commission = false; bankFee = false;
+                leasing = false; overriding = true; BSP = true;
+                profit = true;
+                break;
             case '3':
+                agentCommission = false; brokerCommission = false; financialCommission = false;
                 discount = false; commission = false; bankFee = true;
                 leasing = false; overriding = true; BSP = true;
                 profit = true;
                 break;
             case '4':
+                agentCommission = false; brokerCommission = false; financialCommission = true;
                 discount = false; commission = false; bankFee = false;
                 leasing = true; overriding = true; BSP = true;
                 profit = true;
                 break;
+            case '6':
+                agentCommission = true; brokerCommission = false; financialCommission = false;
+                discount = true; commission = false; bankFee = false; 
+                leasing = false; overriding = false; BSP = false;
+                profit = false;
+                break;
             default:
+                agentCommission = false; brokerCommission = false; financialCommission = false;
                 discount = false; commission = false; bankFee = false;
                 leasing = false; overriding = false; BSP = false;
                 profit = false;
                 break;
         }
-        this.showDiscount = discount;
         this.showCommission = commission;
+        this.showAgentCommission = agentCommission;
+        this.showBrokerCommission = brokerCommission;
+        this.showFinancialCommission = financialCommission;
+        this.showDiscount = discount;
         this.showBankFeeBool = bankFee;
         this.showLeasing = leasing;
         this.showOverriding = overriding;
@@ -496,21 +444,6 @@ export default class AddNewCoverageRebate extends LightningElement {
         const navigateNextEvent = new FlowNavigationNextEvent();
         this.dispatchEvent(navigateNextEvent);
     }
-    // async insertCoverageData() {
-    //     this.jsonString = JSON.stringify(this.coverageData.filter(item => item.isSelected));
-    //     const result = await insertCoverageJson({ jsonStringList: this.jsonString });
-    //     console.log('Coverage Successfully Inserted:', result);
-    //     if (result == 'Success') {
-    //         // this.showToast('Success', 'Coverage Successfully Insert!', 'success');
-    //         this.buttonClickedValue = 'Next';
-    //         const attributeChangeEvent = new FlowAttributeChangeEvent('buttonClickedValue', this.buttonClickedValue);
-    //         this.dispatchEvent(attributeChangeEvent);
-    //         const navigateNextEvent = new FlowNavigationNextEvent();
-    //         this.dispatchEvent(navigateNextEvent);
-    //     } else {
-    //         this.showToast('Error', 'Failed to Insert Coverage', result);
-    //     }
-    // }
     showToast(title, message, variant) {
         const evt = new ShowToastEvent({
             title: title,

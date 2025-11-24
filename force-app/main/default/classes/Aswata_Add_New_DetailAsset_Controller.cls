@@ -1,8 +1,8 @@
 /**
  * @description       : Controller for LWC Detail Asset
  * @author            : Ahmad Yazid Munif
- * @last modified on  : 11-10-2025
- * @last modified by  : Williams
+ * @last modified on  : 11-24-2025
+ * @last modified by  : Ahmad Yazid Munif
 **/
 public with sharing class Aswata_Add_New_DetailAsset_Controller {
     private static final String MASTER_DATA_OBJECT_API = 'Master_Data__c';
