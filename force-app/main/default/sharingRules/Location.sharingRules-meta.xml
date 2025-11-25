@@ -5,12 +5,26 @@
         <accessLevel>Read</accessLevel>
         <label>LocationGuest</label>
         <sharedTo>
-            <guestUser>Web_to_Lead_UAT</guestUser>
+            <guestUser>Web_to_Lead</guestUser>
         </sharedTo>
         <criteriaItems>
             <field>Name</field>
             <operation>notEqual</operation>
             <value></value>
+        </criteriaItems>
+        <includeHVUOwnedRecords>false</includeHVUOwnedRecords>
+    </sharingGuestRules>
+    <sharingGuestRules>
+        <fullName>Omni_Location_Guest_User</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>Omni Location Guest User</label>
+        <sharedTo>
+            <guestUser>Claim_Registration1</guestUser>
+        </sharedTo>
+        <criteriaItems>
+            <field>CreatedById</field>
+            <operation>startsWith</operation>
+            <value>005</value>
         </criteriaItems>
         <includeHVUOwnedRecords>false</includeHVUOwnedRecords>
     </sharingGuestRules>
