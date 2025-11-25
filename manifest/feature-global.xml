@@ -30,10 +30,16 @@
 		<members>LEXTHEMINGAswata</members>
 		<name>BrandingSet</name>
 	</types>
+	<!--
 	<types>
 		<members>*</members>
 		<name>Certificate</name>
 	</types>
+	<types>
+		<members>Lintaswata</members>
+		<name>ConnectedApp</name>
+	</types>
+	-->
 	<types>
 		<members>LogoAswata1</members>
 		<members>X2PTAsuransiWahanaTataAswata</members>
@@ -44,10 +50,6 @@
 		<members>Aswata_Sales_App</members>
 		<members>Aswata_Sales_App_Console</members>
 		<name>CustomApplication</name>
-	</types>
-	<types>
-		<members>Lintaswata</members>
-		<name>ConnectedApp</name>
 	</types>
 	<types>
 		<members>Endpoint_Header_List__mdt.Additional_Value__c</members>
@@ -172,9 +174,9 @@
 	<types>
 		<members>Accumulation__c</members>
 		<members>Aswata_Survey__c</members>
+		<members>Error_Log__c</members>
 		<members>Facultative_Share__c</members>
 		<members>Transaction_Data__c</members>
-		<members>Error_Log__c</members>
 		<name>CustomTab</name>
 	</types>
 	<types>
@@ -182,18 +184,20 @@
 		<name>ExternalCredential</name>
 	</types>
 	<types>
+		<members>Aswata_Claim_App_UtilityBar</members>
+		<members>Aswata_Sales_App_UtilityBar</members>
+		<members>Aswata_Sales_App_clone_UtilityBar</members>
 		<members>ClientRecordPage4</members>
 		<members>Product_Record_Page</members>
 		<members>Quote_Facultative</members>
 		<members>Aswata_Claim_App_UtilityBar</members>
 		<members>Aswata_Sales_App_clone_UtilityBar</members>
 		<members>Aswata_Sales_App_UtilityBar</members>
+		<members>Insurance_Policy_Record_Page1</members>
 		<name>FlexiPage</name>
 	</types>
 	<types>
 		<members>Opportunity_Screen_Create_Oppty</members>
-		<members>Account_Set_Location</members>
-		<members>Location_Auto_Launched_map_Location_to_Standard_Location</members>
 		<name>Flow</name>
 	</types>
 	<types>
@@ -202,6 +206,7 @@
 		<members>Endpoint__mdt-Endpoint Layout</members>
 		<members>Error_Log__c-Error Log Layout</members>
 		<members>Upload_File_Mapping__mdt-Upload File Mapping Layout</members>
+		<members>InsurancePolicy-Insurance Policy Layout</members>
 		<name>Layout</name>
 	</types>
 	<types>
@@ -211,6 +216,12 @@
 	<types>
 		<members>Aswata</members>
 		<name>LightningExperienceTheme</name>
+	</types>
+	<types>
+		<members>Lintaswata</members>
+		<members>Recaptcha_NC</members>
+		<members>Salesforce</members>
+		<name>NamedCredential</name>
 	</types>
 	<types>
 		<members>*</members>
@@ -231,15 +242,13 @@
 		<name>RecordType</name>
 	</types>
 	<types>
+		<members>*</members>
+		<name>SharingRules</name>
+	</types>
+	<types>
 		<members>Account.Edit</members>
 		<members>Account.Send_to_Lintaswata</members>
 		<name>WebLink</name>
-	</types>
-	<types>
-		<members>Lintaswata</members>
-		<members>Recaptcha_NC</members>
-		<members>Salesforce</members>
-		<name>NamedCredential</name>
 	</types>
 	<version>65.0</version>
 </Package>
