@@ -1,4 +1,5 @@
 @IsTest
+@SuppressWarnings('PMD.MethodNamingConventions')
 public class RiskCloneOrchestratorTest {
     
     @TestSetup
@@ -42,8 +43,8 @@ public class RiskCloneOrchestratorTest {
     
     @IsTest
     static void testRiskCloneOrchestrator_ExceptionHandling() {
-        // Test with invalid ID to trigger exception
-        String invalidId = '001000000000000';
+        // Test with invalid ID to trigger exception - using Account prefix instead of hardcoded
+        String invalidId = Account.sObjectType.getDescribe().getKeyPrefix() + '000000000000000';
         
         Test.startTest();
         
