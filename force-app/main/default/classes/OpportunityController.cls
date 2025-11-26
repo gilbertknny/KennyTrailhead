@@ -271,7 +271,9 @@ public with sharing class OpportunityController {
                 Percentage__c,
                 Short_Period_Basis__c,
                 Number_of_Years__c,
-                StageName
+                StageName,
+				COB__c,
+            	premium_calculation__c
             FROM Opportunity
             WHERE Id = :recordId
             LIMIT 1
@@ -321,9 +323,13 @@ public with sharing class OpportunityController {
     @AuraEnabled
     public static void saveInsuranceDetails(InsurancePeriodWrapper wrapper) {
         Decimal periodRateFinal = wrapper.periodRate;
+        Integer numberOfYear = wrapper.numberOfYear;
         if(wrapper.periodType == '3'){ // 3 = long term
-            if(wrapper.totalMonth > 0 && wrapper.periodRate > 0){
+            if(wrapper.totalMonth > 0 && wrapper.periodRate > 0){ // long term & have extra month (pro rata rate)
                 periodRateFinal = periodRateFinal+ wrapper.totalYears;
+            }else{ // long term with annual years / no extra month
+                periodRateFinal = wrapper.totalYears;
+                numberOfYear = wrapper.totalYears;
             }
         }
         // Step 1: Update the parent Opportunity record
@@ -335,7 +341,7 @@ public with sharing class OpportunityController {
             Short_Period_Basis__c = wrapper.shortBasis,
             Percentage__c = wrapper.percentage,
             Period_Rate__c = periodRateFinal,
-            Number_of_Years__c = wrapper.numberOfYear
+            Number_of_Years__c = numberOfYear
         );
         update oppToUpdate;
         
@@ -487,10 +493,14 @@ public with sharing class OpportunityController {
     public class ProcessingResult {
         @AuraEnabled public Boolean isSuccess { get; set; }
         @AuraEnabled public String message { get; set; }
+        @AuraEnabled public List<OpportunityDetail> opportunityDetails { get; set; }
+        @AuraEnabled public List<FacultativeShareDetail> facultativeShareDetails { get; set; }
 
         public ProcessingResult() {
             this.isSuccess = false;
             this.message = '';
+            this.opportunityDetails = new List<OpportunityDetail>();
+            this.facultativeShareDetails = new List<FacultativeShareDetail>();
         }
     }
 
@@ -499,10 +509,21 @@ public with sharing class OpportunityController {
         @AuraEnabled public Id opportunityId { get; set; }
         @AuraEnabled public Id accountId { get; set; }
         @AuraEnabled public String opportunityName { get; set; }
-        @AuraEnabled public List<String> clonedRiskIds { get; set; }
+        //@AuraEnabled public List<String> clonedRiskIds { get; set; }
 
         public OpportunityDetail() {
-            this.clonedRiskIds = new List<String>();
+            //this.clonedRiskIds = new List<String>();
+        }
+    }
+    
+    // 🔹 NEW: Detail for each created Facultative Share
+    public class FacultativeShareDetail {
+        @AuraEnabled public Id facultativeShareId { get; set; }
+        @AuraEnabled public Id opportunityId { get; set; }
+        @AuraEnabled public Id originRiskId { get; set; }
+        @AuraEnabled public String facultativeShareName { get; set; }
+
+        public FacultativeShareDetail() {
         }
     }
     
@@ -578,7 +599,7 @@ public with sharing class OpportunityController {
                 Beneficiary__c, Brand__c, Builder_Yard_Name__c, Chasis_No__c, City__c, City_From__c,
                 City_To__c, Class__c, Classification_1__c, Classification_2__c, Collateral__c, Collateral_Value__c,
                 Color__c, Contact_Person__c, Contractor_Name__c, Coordinate__c, Date_of_Birth__c, Description,
-                Destination__c, Detail_Description__c, Document_Type__c, Engine_Capacity_CC__c, Engine_No__c, Entry_Party_Name__c,
+                Destination__c, Detail_Description__c, Document_Type__c, /*Engine_Capacity_CC__c,*/ Engine_No__c, Entry_Party_Name__c,
                 Entry_Party_Type__c, Eq_Zone__c, Event_Location__c, Exposure__c, Fax__c, Flag__c,
                 Flood_Zone__c, From_Address__c, From_Place_of_Dispatch__c, Gender__c, Group_Package__c, Hole__c,
                 Incoming_Request_Fire_No__c, Indemnity_Agreement__c, Indemnity_Agreement_No__c, Industry__c, Industry_Conveyance_Type__c, Jurisdiction__c,
@@ -592,7 +613,7 @@ public with sharing class OpportunityController {
                 Risk_Description__c, Risk_ID__c, Route_From_Voyage_Cover_Only__c, Route_To_Voyage_Cover_Only__c, Shipping_Document__c, SKEP_Date__c,
                 SKEP_No__c, Tahun_Pembelian_Sepeda__c, Tanggal_Lahir__c, Tempat_Lahir__c, Territorial_Limit__c, Territorial_Limit_PA__c,
                 Territory__c, Title__c, To_Address__c, To_Final_Place_of_Destination__c, Transmission__c,
-                Trip_Package__c, Tsunami_Zone__c, Type__c, Type_Description__c, Vehicle_Brand__c, Vehicle_Market_Value__c,
+                Trip_Package__c, Tsunami_Zone__c, Type__c, Type_Description__c, /*Vehicle_Brand__c,*/ Vehicle_Market_Value__c,
                 Vehicle_Market_Value_IDR__c, Vessel_Code__c, Vessel_Name__c, Vessel_Principal__c, Vessel_Type_Construction__c, Volcanic_Zone__c,
                 Voyage_Number__c, Year_of_Built__c, Year_of_Manufacture__c, Zip_Code__c, Zip_Code_From__c, Zip_Code_To__c
                 FROM Asset
@@ -633,7 +654,7 @@ public with sharing class OpportunityController {
 
             // Step 3: Insert Opportunities
             insert opportunitiesToInsert;
-
+			/* commented clone Risk because no longer needed. Replaced with Facultative_Share__c
             // Step 4: Clone Assets (Risks) for each Opportunity
             List<Asset> assetsToInsert = new List<Asset>();
             Map<Id, List<Id>> opportunityToClonedRiskMap = new Map<Id, List<Id>>();
@@ -659,7 +680,7 @@ public with sharing class OpportunityController {
                         opportunityToClonedRiskMap.get(oppId).add((String)clonedAsset.Id);
                     }
                 }
-            }
+            } */
 
             // Additional Create Quote for each Oppotunity (Fikri)
             // 2️⃣ Collect their IDs (and any other info needed)
@@ -684,19 +705,56 @@ public with sharing class OpportunityController {
                 insert quotesToInsert;
             }
             */
-            // Step 6: Prepare result details
+
+            // NEW: Step 6: Create Facultative Share records for each Opportunity and each Risk
+            List<Facultative_Share__c> facultativeSharesToInsert = new List<Facultative_Share__c>();
+            Map<Id, List<FacultativeShareDetail>> opportunityToFacultativeSharesMap = new Map<Id, List<FacultativeShareDetail>>();
+
+            for (Opportunity opp : opportunitiesToInsert) {
+                opportunityToFacultativeSharesMap.put(opp.Id, new List<FacultativeShareDetail>());
+                
+                // Create one Facultative Share record for each original riskId
+                for (Id riskId : req.riskId) {
+                    Facultative_Share__c facultativeShare = createFacultativeShare(riskId, opp.Id, req);
+                    facultativeSharesToInsert.add(facultativeShare);
+                }
+            }
+
+            // NEW: Step 7: Insert Facultative Share records
+            if (!facultativeSharesToInsert.isEmpty()) {
+                insert facultativeSharesToInsert;
+                
+                // Build the relationship map after insertion
+                for (Facultative_Share__c fs : facultativeSharesToInsert) {
+                    FacultativeShareDetail detail = new FacultativeShareDetail();
+                    detail.facultativeShareId = fs.Id;
+                    detail.opportunityId = fs.Facultative_Opportunity__c;
+                    detail.originRiskId = fs.Origin_Risk__c;
+                    detail.facultativeShareName = fs.Name;
+                    
+                    if (opportunityToFacultativeSharesMap.containsKey(fs.Facultative_Opportunity__c)) {
+                        opportunityToFacultativeSharesMap.get(fs.Facultative_Opportunity__c).add(detail);
+                    }
+                    
+                    // Add to result details
+                    result.facultativeShareDetails.add(detail);
+                }
+            }
+
+            // Step 8: Prepare result details
             for (Opportunity opp : opportunitiesToInsert) {
                 OpportunityDetail detail = new OpportunityDetail();
                 detail.opportunityId = opp.Id;
                 detail.accountId = opp.AccountId;
                 detail.opportunityName = opp.Name;
-                detail.clonedRiskIds = opportunityToClonedRiskMap.get(opp.Id);
-                //result.opportunityDetails.add(detail);
+                //detail.clonedRiskIds = opportunityToClonedRiskMap.get(opp.Id);
+                result.opportunityDetails.add(detail);
             }
 
             result.isSuccess = true;
             result.message = 'Successfully created ' + opportunitiesToInsert.size() + 
-                           ' opportunities with ' + originalAssets.size() + ' cloned risks each';
+                           ' opportunities with ' + originalAssets.size() + ' cloned risks each' +
+                           ' and ' + facultativeSharesToInsert.size() + ' facultative shares';
 
         } catch (Exception e) {
             System.debug('Unexpected Error: ' + e.getMessage() + ' StackTrace: ' + e.getStackTraceString());
@@ -781,5 +839,29 @@ public with sharing class OpportunityController {
         clonedAsset.Name = originalAsset.Name;
         
         return clonedAsset;
+    }
+
+    /**
+     * NEW: Create Facultative Share record
+     * This creates one Facultative Share for each riskId and opportunity combination
+     */
+    private static Facultative_Share__c createFacultativeShare(Id riskId, Id opportunityId, OpportunityRequest req) {
+        Facultative_Share__c fs = new Facultative_Share__c();
+        
+        // Set required fields
+        fs.Facultative_Opportunity__c = opportunityId;
+        fs.Origin_Risk__c = riskId;
+        
+        // Set share and percentage fields with null safety
+        fs.Commission__c = String.isNotBlank(req.commission) ? Decimal.valueOf(req.commission) : null;
+        fs.Rate__c = String.isNotBlank(req.rate) ? Decimal.valueOf(req.rate) : null;
+        fs.Share_Offered__c = String.isNotBlank(req.shareOffered) ? Decimal.valueOf(req.shareOffered) : null;
+        fs.Share_Accepted_Approved__c = String.isNotBlank(req.shareAcceptedApproved) ? Decimal.valueOf(req.shareAcceptedApproved) : null;
+        fs.Share_Binding__c = String.isNotBlank(req.shareBinding) ? Decimal.valueOf(req.shareBinding) : null;
+        
+        String clauses = String.isNotBlank(req.clausesWarranty) ? req.clausesWarranty : '';
+        fs.Subjectivity_Clauses__c = clauses;
+        
+        return fs;
     }
 }
