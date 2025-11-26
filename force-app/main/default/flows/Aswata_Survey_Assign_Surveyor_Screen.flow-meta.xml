@@ -153,6 +153,7 @@
             <label>Quote Found</label>
         </rules>
     </decisions>
+    <description>add validation survey date must be greater than current datetime</description>
     <dynamicChoiceSets>
         <name>SurveyorUserCollections</name>
         <collectionReference>Get_All_User_for_Survey_Underwriting</collectionReference>
@@ -514,6 +515,10 @@
                     <stringValue>12</stringValue>
                 </width>
             </styleProperties>
+            <validationRule>
+                <errorMessage>&lt;p&gt;Survey Date harus lebih besar dari waktu saat ini&lt;/p&gt;</errorMessage>
+                <formulaExpression>{!Survey_Date} &gt;= {!$Flow.CurrentDateTime}</formulaExpression>
+            </validationRule>
         </fields>
         <nextOrFinishButtonLabel>Berikutnya</nextOrFinishButtonLabel>
         <showFooter>true</showFooter>

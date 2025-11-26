@@ -8,11 +8,16 @@
     <columns>LocationType</columns>
     <columns>Province_ID_F__c</columns>
     <columns>Branch_ID__c</columns>
+    <columns>Address_Name__c</columns>
     <filterScope>Everything</filterScope>
     <filters>
         <field>LocationType</field>
         <operation>equals</operation>
         <value>Zip Code</value>
+    </filters>
+    <filters>
+        <field>ADDRESS_ID__c</field>
+        <operation>equals</operation>
     </filters>
     <label>Zip Code</label>
 </ListView>

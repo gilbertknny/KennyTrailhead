@@ -114,31 +114,56 @@
     </actionOverrides>
     <actionOverrides>
         <actionName>View</actionName>
-        <type>Default</type>
-    </actionOverrides>
-    <actionOverrides>
-        <actionName>View</actionName>
-        <formFactor>Large</formFactor>
-        <type>Default</type>
-    </actionOverrides>
-    <actionOverrides>
-        <actionName>View</actionName>
+        <comment>Action override created by Lightning App Builder during activation.</comment>
+        <content>Location_Record_Page1</content>
         <formFactor>Small</formFactor>
+        <skipRecordTypeSelect>false</skipRecordTypeSelect>
+        <type>Flexipage</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <comment>Action override created by Lightning App Builder during activation.</comment>
+        <content>Location_Record_Page1</content>
+        <formFactor>Large</formFactor>
+        <skipRecordTypeSelect>false</skipRecordTypeSelect>
+        <type>Flexipage</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
         <type>Default</type>
-    </actionOverrides> -->
-    <!-- <compactLayoutAssignment>SYSTEM</compactLayoutAssignment> -->
-    <enableFeeds>false</enableFeeds>
-    <externalSharingModel>Private</externalSharingModel>
-    <recordTypeTrackHistory>false</recordTypeTrackHistory>
+    </actionOverrides>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <enableFeeds>false</enableFeeds> -->
+    <externalSharingModel>Read</externalSharingModel>
+    <!-- <recordTypeTrackHistory>false</recordTypeTrackHistory>
     <searchLayouts>
         <customTabListAdditionalFields>LocationType</customTabListAdditionalFields>
         <customTabListAdditionalFields>VisitorAddress</customTabListAdditionalFields>
+        <customTabListAdditionalFields>City__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Village__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Location__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Province__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Zip_Code__c</customTabListAdditionalFields>
         <lookupDialogsAdditionalFields>LocationType</lookupDialogsAdditionalFields>
         <lookupDialogsAdditionalFields>VisitorAddress</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Village__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>City__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Province__c</lookupDialogsAdditionalFields>
         <lookupPhoneDialogsAdditionalFields>LocationType</lookupPhoneDialogsAdditionalFields>
         <lookupPhoneDialogsAdditionalFields>VisitorAddress</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>City__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Village__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Location__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Province__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Zip_Code__c</lookupPhoneDialogsAdditionalFields>
+        <searchFilterFields>Name</searchFilterFields>
+        <searchFilterFields>City__c</searchFilterFields>
+        <searchFilterFields>Village__c</searchFilterFields>
+        <searchFilterFields>Location__c</searchFilterFields>
+        <searchFilterFields>Province__c</searchFilterFields>
         <searchResultsAdditionalFields>LocationType</searchResultsAdditionalFields>
-        <searchResultsAdditionalFields>VisitorAddress</searchResultsAdditionalFields>
-    </searchLayouts>
+        <searchResultsAdditionalFields>Province__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Zip_Code__c</searchResultsAdditionalFields>
+    </searchLayouts> -->
     <sharingModel>ReadWrite</sharingModel>
 </CustomObject>
