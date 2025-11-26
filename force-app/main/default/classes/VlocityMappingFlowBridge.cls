@@ -38,6 +38,7 @@ public with sharing class VlocityMappingFlowBridge {
         // Default empty JSON to object if caller passes blank
         String inputJson = String.isBlank(r.jsonInput) ? '{}' : r.jsonInput;
 
+        System.debug('inputJson: ' + inputJson);
         try {
             // Call the existing static method that expects (String, String)
             Map<String, Object> outMap = VlocityMapping.callIP(r.ipName, inputJson);
