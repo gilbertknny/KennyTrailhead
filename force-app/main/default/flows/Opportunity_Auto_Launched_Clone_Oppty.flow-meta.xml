@@ -15,6 +15,12 @@
             </value>
         </inputParameters>
         <inputParameters>
+            <name>LintaswataSync</name>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
             <name>newoptyId</name>
             <value>
                 <elementReference>OpportunityResult.Id</elementReference>
@@ -800,13 +806,6 @@
                 </value>
             </transformValueActions>
             <transformValueActions>
-                <outputFieldApiName>Premium__c</outputFieldApiName>
-                <transformType>Map</transformType>
-                <value>
-                    <elementReference>Get_Opportunity.Premium__c</elementReference>
-                </value>
-            </transformValueActions>
-            <transformValueActions>
                 <outputFieldApiName>Pricebook2Id</outputFieldApiName>
                 <transformType>Map</transformType>
                 <value>
@@ -1087,13 +1086,6 @@
                 </value>
             </transformValueActions>
             <transformValueActions>
-                <outputFieldApiName>Total_Sum_Insured__c</outputFieldApiName>
-                <transformType>Map</transformType>
-                <value>
-                    <elementReference>Get_Opportunity.Total_Sum_Insured__c</elementReference>
-                </value>
-            </transformValueActions>
-            <transformValueActions>
                 <outputFieldApiName>Treaty_Type_Id__c</outputFieldApiName>
                 <transformType>Map</transformType>
                 <value>
@@ -1219,6 +1211,20 @@
                 <value>
                     <formulaDataType>Boolean</formulaDataType>
                     <formulaExpression>{!OpportunityType} = &quot;ED&quot;</formulaExpression>
+                </value>
+            </transformValueActions>
+            <transformValueActions>
+                <outputFieldApiName>Premium__c</outputFieldApiName>
+                <transformType>Map</transformType>
+                <value>
+                    <elementReference>Get_Opportunity.Lintaswata_Premium__c</elementReference>
+                </value>
+            </transformValueActions>
+            <transformValueActions>
+                <outputFieldApiName>Total_Sum_Insured__c</outputFieldApiName>
+                <transformType>Map</transformType>
+                <value>
+                    <elementReference>Get_Opportunity.Lintaswata_Sum_Insured__c</elementReference>
                 </value>
             </transformValueActions>
         </transformValues>
