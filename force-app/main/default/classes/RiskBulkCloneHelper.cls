@@ -1,3 +1,48 @@
+/**
+ * @author [Marco Lie]
+ * @date [2025-11-26]
+ * @description Helper class for bulk risk cloning operations that initiates asynchronous
+ * cloning processes for multiple risk records. This class is designed to be called
+ * from Flows to handle mass risk cloning operations in a governor-limit aware manner.
+ */
+public class RiskBulkCloneHelper {
+    
+    /**
+     * @description Invocable method that starts bulk asynchronous risk cloning processes
+     * @param clonedRiskIds List of risk record IDs that need child records cloned
+     */
+    @InvocableMethod(label='Start Bulk Async Risk Cloning' 
+                    description='Starts async process to clone multiple Risks with children via Flow')
+    public static void startBulkAsyncRiskCloning(List<Id> clonedRiskIds) {
+        if (clonedRiskIds == null || clonedRiskIds.isEmpty()) {
+            return; // Exit if no IDs provided
+        }
+        
+        // Check governor limits before processing
+        Integer availableQueueableJobs = Limits.getLimitQueueableJobs() - Limits.getQueueableJobs();
+        if (availableQueueableJobs <= 0) {
+            return; // No available queueable jobs, exit gracefully
+        }
+        
+        // Process only up to available queueable jobs
+        Integer jobsToProcess = Math.min(clonedRiskIds.size(), availableQueueableJobs);
+        processRiskCloning(clonedRiskIds, jobsToProcess);
+    }
+    
+    /**
+     * @description Processes risk cloning within governor limits
+     * @param clonedRiskIds List of risk record IDs to process
+     * @param jobsToProcess Number of jobs that can be processed within limits
+     */
+    private static void processRiskCloning(List<Id> clonedRiskIds, Integer jobsToProcess) {
+        // Process only the number of jobs we can handle within limits
+        for (Integer i = 0; i < jobsToProcess; i++) {
+            System.enqueueJob(new RiskCloneOrchestrator(clonedRiskIds[i]));
+        }
+    }
+}
+// Before PMD
+/*
 public class RiskBulkCloneHelper {
     
     @InvocableMethod(label='Start Bulk Async Risk Cloning' 
@@ -14,7 +59,7 @@ public class RiskBulkCloneHelper {
         
         System.debug('Enqueued ' + clonedRiskIds.size() + ' async cloning jobs');
     }
-}
+} */
 /*
 public class RiskBulkCloneHelper {
     

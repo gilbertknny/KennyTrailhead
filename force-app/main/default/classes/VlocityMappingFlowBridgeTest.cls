@@ -1,12 +1,9 @@
 @IsTest
 public with sharing class VlocityMappingFlowBridgeTest {
     
-    // Test data setup method
-    @TestSetup
-    static void setupTestData() {
-        // This class doesn't require specific test data since it's a bridge class
-        // but we can create any necessary records if VlocityMapping has dependencies
-    }
+    // Test data setup method - removed empty block
+    // This class doesn't require specific test data since it's a bridge class
+    // but we can create any necessary records if VlocityMapping has dependencies
     
     // Test successful IP call with valid input
     @IsTest
