@@ -38,7 +38,7 @@ export default class AddNewPolicyDetailInsured extends LightningElement {
     @track category;
     @track section;
     @track categoryID;
-    @track sectionID;
+    @track sectionId;
     @track resultSection = [];
     @track showSection = false;
     // @track descriptionDetailInsured;
@@ -118,6 +118,13 @@ export default class AddNewPolicyDetailInsured extends LightningElement {
             
             // ✅ Set section name untuk display
             this.section = this.formData?.Section_Name__c || '';
+            this.sectionId = this.formData?.Section__c || '';
+
+            if (this.formData?.Indemnity_Type__c) {
+                this.controllingValue = this.formData.Indemnity_Type__c;
+                console.log('🔧 Initialized controllingValue:', this.controllingValue);
+
+            }
             
             console.log('🔍 Loaded values:');
             console.log('  Currency:', this.formData.Currency__c);
@@ -367,11 +374,13 @@ export default class AddNewPolicyDetailInsured extends LightningElement {
             };
         } else if(fieldApiName === 'Section__c'){
             this.section = recordName;
+            this.sectionId = recordId;
             this.formData = {
                 ...this.formData,
                 //Section_ID__c : recordId,
                 [fieldApiName]: recordId
             };
+            console.log('Select Section__c: ' + recordId);
             this.fetchSection(this.section,this.cobValue)
         } /*else if(fieldApiName === 'Category__c'){
             this.formData = {
@@ -393,11 +402,22 @@ export default class AddNewPolicyDetailInsured extends LightningElement {
 
     handleLookUpCleared(event) {
         const fieldApiName = event.target.dataset.field;
-        this.formData = {
-            ...this.formData,
-            [fieldApiName]: null
-        };
-
+        console.log('fieldApiName: ' + fieldApiName)
+        if(fieldApiName === 'Section__c'){
+            this.section = '';
+            this.sectionId = '';
+            this.resultSection = [];
+            this.formData = {
+                ...this.formData,
+                'Section__c': null,
+                'Category__c': null,
+            };
+        }else{
+            this.formData = {
+                ...this.formData,
+                [fieldApiName]: null
+            };
+        }        
         console.log('📝 formData clearance:', JSON.stringify(this.formData));
     }
     
