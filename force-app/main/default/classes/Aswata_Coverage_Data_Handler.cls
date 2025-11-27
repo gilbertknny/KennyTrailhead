@@ -1,7 +1,7 @@
 /**
  * @description       : Generate Data for Insert Coverage
  * @author            : Ahmad Yazid Munif
- * @last modified on  : 11-21-2025
+ * @last modified on  : 11-25-2025
  * @last modified by  : Ahmad Yazid Munif
 **/
 public without sharing class Aswata_Coverage_Data_Handler {
@@ -212,5 +212,21 @@ public without sharing class Aswata_Coverage_Data_Handler {
             results.currencyOptions.add(option);
         }
         return results;
+    }
+    /**
+     * @description function for checkPermission Access
+     * @return boolean accessible
+     */
+    public static Boolean checkPermission(){
+        Boolean access = true;
+        if (!Schema.sObjectType.RecordType.isAccessible() &&
+            !Schema.sObjectType.Asset.isAccessible() &&
+            !Schema.sObjectType.Master_Data__c.isAccessible() &&
+            !Schema.sObjectType.InsurancePolicyCoverage.isCreateable() &&
+            !Schema.sObjectType.Asset.isUpdateable()
+        ){
+            access = false;
+        }
+        return access;
     }
 }

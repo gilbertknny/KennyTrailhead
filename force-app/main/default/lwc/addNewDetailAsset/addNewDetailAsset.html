@@ -54,10 +54,10 @@
                             object-api-name="Master_Data__c"
                             fields="Name, Section__c, Section_Title__c, BSN_ID__c, BSN__r.Name"
                             record-type-name="Asset Section"
+                            cob-field={cobValue}
                             onrecordselected={handleLookUpSelected}
                             onrecordcleared={handleLookUpCleared}
-                            record-id={formData.Section__c}
-                            display-text={section}>
+                            record-id={formData.Section__c}>
                         </c-custom-lookup>
                     </div>
                     <div class="slds-col slds-size_1-of-2">
@@ -70,9 +70,11 @@
                             fields="Name, Section__c, Section_Title__c, BSN_ID__c, BSN__r.Name"
                             record-type-name="Asset Category"
                             section-name={section}
+                            province-id={sectionId}
                             record-id={formData.Category__c}
+                            cob-field={cobValue}
                             onrecordselected={handleLookUpSelected}
-                            display-text={detailInsuredName}
+                            onrecordcleared={handleLookUpCleared}
                             >
                         </c-custom-lookup>
                     </div>

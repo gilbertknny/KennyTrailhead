@@ -1,7 +1,7 @@
 /**
  * @description       : Test Class for Aswata_Add_New_DetailAsset_Controller
  * @author            : Ahmad Yazid Munif
- * @last modified on  : 11-11-2025
+ * @last modified on  : 11-25-2025
  * @last modified by  : Ahmad Yazid Munif
 **/
 @isTest
@@ -10,8 +10,9 @@ private class Aswata_Add_New_DetailAsset_Test {
 
     @testSetup
     static void setupTestData() {
-        RecordType recordType = [SELECT Id, Name FROM RecordType where SobjectType = 'Master_Data__c' and Name = 'Detail Asset' LIMIT 1];
+        RecordType rtDetailAsset = [SELECT Id, Name FROM RecordType where SobjectType = 'Master_Data__c' and Name = 'Detail Asset' LIMIT 1];
         RecordType recordTypeCategory = [SELECT Id, Name FROM RecordType where SobjectType = 'Master_Data__c' and Name = 'Asset Category' LIMIT 1];
+        RecordType rtAssetSection = [SELECT Id, Name FROM RecordType where SobjectType = 'Master_Data__c' and Name = 'Asset Section' LIMIT 1];
 
         Product2 cob301 = new Product2();
         cob301.Name = 'Motor Vehicle';
@@ -24,7 +25,7 @@ private class Aswata_Add_New_DetailAsset_Test {
             Name = 'Indemnity_Type__c',
             BSN_ID__c = TEST_COB,
             Section__c = 4,
-            RecordTypeId = recordType.Id,
+            RecordTypeId = rtDetailAsset.Id,
             Status__c = 'Active',
             Label__c='Indemnity Type',
             Data_Type__c = 'Picklist'
@@ -33,7 +34,7 @@ private class Aswata_Add_New_DetailAsset_Test {
             Name = 'Interest_Insured_Detail_Description__c',
             BSN_ID__c = TEST_COB,
             Section__c = 4,
-            RecordTypeId = recordType.Id,
+            RecordTypeId = rtDetailAsset.Id,
             Status__c = 'Active',
             Label__c='Interest Insured Detail Description',
             Data_Type__c = 'Text'
@@ -43,21 +44,22 @@ private class Aswata_Add_New_DetailAsset_Test {
         Master_Data__c personAsset = new Master_Data__c(
             Name = 'Physical / Persons',
             Section__c = 4,
-            RecordTypeId = recordTypeCategory.Id
+            BSN__c = cob301.Id,
+            RecordTypeId = rtAssetSection.Id
         );
         insert personAsset;
 
         // Section Get
         List<Master_Data__c> masterDataList2 = new List<Master_Data__c>();
         masterDataList2.add(new Master_Data__c(
-            Name = 'Driver Personal Accident',
-            RecordTypeId = recordType.Id,
+            Name = 'Other Material Damage',
+            RecordTypeId = recordTypeCategory.Id,
             Asset_Section__c = personAsset.Id,
             BSN__c = cob301.Id
         ));
         masterDataList2.add(new Master_Data__c(
             Name = 'Passangers Personal Accident',
-            RecordTypeId = recordType.Id,
+            RecordTypeId = recordTypeCategory.Id,
             Asset_Section__c = personAsset.Id,
             BSN__c = cob301.Id
         ));
@@ -91,17 +93,18 @@ private class Aswata_Add_New_DetailAsset_Test {
         Opportunity opp = Aswata_TestDataFactory.createOpportunity(insertAcc,'OPPTY-01');
         Asset risk = Aswata_TestDataFactory.createRisk(opp,'RISK TEST');
         Aswata_TestDataFactory.createAsset(opp,risk,'RUMAH');
-        Asset idAsset = [SELECT Id FROM ASSET WHERE Name = 'RUMAH' LIMIT 1];
+        // Asset idAsset = [SELECT Id FROM ASSET WHERE Name = 'RUMAH' LIMIT 1];
         Master_Data__c persons = [SELECT Id, Name FROM Master_Data__c WHERE Name = 'Physical / Persons'];
         Map<String, Object> newFormData = new Map<String, Object>{
             'Name' => 'New Building Asset',
             'SerialNumber' => 'SN-12345',
             'Amount_Insured__c' => '500000.00',
             'Exchange_Rate__c' => '1.0',
-            'Section__c' => persons.Id
+            'Section__c' => persons.Id,
+            'Opportunity__c'=> opp.Id
         };
         Map<String, Object> updateFormData = new Map<String, Object>{
-            'Id' => idAsset.Id,
+            'Id' => risk.Id,
             'Name' => 'Updated Existing Asset Name',
             'SerialNumber' => 'SN-UPDATED',
             'Amount_Insured__c' => '750000.50',
@@ -110,12 +113,14 @@ private class Aswata_Add_New_DetailAsset_Test {
         Map<String,Object> results;
         Test.startTest();
         System.runAs(adminUser) {
-            System.debug('updateFormData'+updateFormData);
-            results = Aswata_Add_New_DetailAsset_Controller.getDetailAssetData(idAsset.Id);
+            // System.debug('updateFormData'+updateFormData);
+            results = Aswata_Add_New_DetailAsset_Controller.getDetailAssetData(risk.Id);
+            Aswata_Add_New_DetailAsset_Controller.getDetailAssetData(null);
         }
         try {
-            String newAssetId = Aswata_Add_New_DetailAsset_Controller.saveDetailAsset(newFormData);
-            String updatedAssetId = Aswata_Add_New_DetailAsset_Controller.saveDetailAsset(updateFormData);
+            Aswata_Add_New_DetailAsset_Controller.saveDetailAsset(newFormData);
+            Aswata_Add_New_DetailAsset_Controller.saveDetailAsset(newFormData);
+            Aswata_Add_New_DetailAsset_Controller.saveDetailAsset(updateFormData);
         } catch (Exception e) {
             System.assertEquals('Script-thrown exception', e.getMessage(), 'Return Error.');
         }
