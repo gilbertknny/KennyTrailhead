@@ -1,5 +1,15 @@
+/**
+ * @author [Your Name/Team]
+ * @date [Creation Date]
+ * @description Bridge class that connects Flow to Vlocity Integration Procedures (IP)
+ * by providing an invocable method that calls VlocityMapping.callIP. This class handles
+ * the serialization/deserialization between Flow and Vlocity IPs.
+ */
 public with sharing class VlocityMappingFlowBridge {
-    // Flow input wrapper (Flow passes a List of these)
+    
+    /**
+     * @description Flow input wrapper for Vlocity IP requests
+     */
     public class Request {
         @InvocableVariable(label='Integration Procedure Name' description='IP name, e.g. SFAWT15')
         public String ipName;
@@ -8,7 +18,9 @@ public with sharing class VlocityMappingFlowBridge {
         public String jsonInput;
     }
 
-    // Flow output wrapper (one Response returned)
+    /**
+     * @description Flow output wrapper for Vlocity IP responses
+     */
     public class Response {
         @InvocableVariable(label='Result JSON' description='Serialized JSON result returned from the IP')
         public String resultJson;
@@ -17,6 +29,11 @@ public with sharing class VlocityMappingFlowBridge {
         public String errorMessage;
     }
 
+    /**
+     * @description Invocable method that bridges Flow to Vlocity Integration Procedures
+     * @param requests List of Request objects containing IP name and input JSON
+     * @return List of Response objects with result JSON or error message
+     */
     @InvocableMethod(label='Call VlocityMapping.callIP' description='Bridges Flow to VlocityMapping.callIP using the first item from the Flow list')
     public static List<Response> invoke(List<Request> requests) {
         List<Response> results = new List<Response>();
@@ -38,7 +55,6 @@ public with sharing class VlocityMappingFlowBridge {
         // Default empty JSON to object if caller passes blank
         String inputJson = String.isBlank(r.jsonInput) ? '{}' : r.jsonInput;
 
-        System.debug('inputJson: ' + inputJson);
         try {
             // Call the existing static method that expects (String, String)
             Map<String, Object> outMap = VlocityMapping.callIP(r.ipName, inputJson);

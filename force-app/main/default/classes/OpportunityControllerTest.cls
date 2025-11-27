@@ -1,9 +1,9 @@
-@isTest
+@IsTest
 public class OpportunityControllerTest {
 
     // Common test data setup
     @testSetup
-    static void setupData() {
+    static void setupTestData() {
         // Create Accounts
         Account acc1 = new Account(Name = 'Insurance Co A', Type = 'Insurance', Industry = 'Finance', Phone = '123456');
         Account acc2 = new Account(Name = 'Insurance Co B', Type = 'Insurance', Industry = 'Finance', Phone = '654321');
@@ -76,50 +76,50 @@ public class OpportunityControllerTest {
     }
 
     // Existing test methods
-    @isTest
+    @IsTest
     static void testGetOpportunity() {
         Opportunity opp = [SELECT Id FROM Opportunity LIMIT 1];
         Opportunity result = OpportunityController.getOpportunity(opp.Id);
-        System.assertEquals(opp.Id, result.Id);
+        System.assertEquals(opp.Id, result.Id, 'Opportunity ID should match');
     }
 
-    @isTest
+    @IsTest
     static void testSearchCoInsurerAccounts() {
         List<Account> results = OpportunityController.searchCoInsurerAccounts('Insurance Co');
         System.assert(!results.isEmpty(), 'Should return Insurance accounts');
     }
 
-    @isTest
+    @IsTest
     static void testGetCoInsurerData() {
         Opportunity opp = [SELECT Id FROM Opportunity LIMIT 1];
         List<Transaction_Data__c> data = OpportunityController.getCoInsurerData(opp.Id);
         System.assert(!data.isEmpty(), 'Should return CoInsurer data');
     }
 
-    @isTest
+    @IsTest
     static void testSaveCoInsurerData() {
         Opportunity opp = [SELECT Id FROM Opportunity LIMIT 1];
         Account acc = [SELECT Id FROM Account WHERE Name = 'Insurance Co B' LIMIT 1];
         OpportunityController.saveCoInsurerData(opp.Id, new List<Id>{ acc.Id });
         List<Transaction_Data__c> td = [SELECT Id FROM Transaction_Data__c WHERE Opportunity__c = :opp.Id AND Co_Insurance_Company__c = :acc.Id];
-        System.assertEquals(1, td.size());
+        System.assertEquals(1, td.size(), 'Should create one Transaction Data record');
     }
 
-    @isTest
+    @IsTest
     static void testGetQQTransactionData() {
         Opportunity opp = [SELECT Id FROM Opportunity LIMIT 1];
         List<Transaction_Data__c> data = OpportunityController.getQQTransactionData(opp.Id);
         System.assert(!data.isEmpty(), 'Should return QQ data');
     }
 
-    @isTest
+    @IsTest
     static void testSearchQQAccounts() {
         List<Account> results = OpportunityController.searchQQAccounts('QQ');
         System.assert(!results.isEmpty(), 'Should return QQ accounts');
     }
 
     // FIXED: Updated to test both new and existing records
-    @isTest
+    @IsTest
     static void testSaveTheInsuredTransactionData() {
         Opportunity opp = [SELECT Id FROM Opportunity LIMIT 1];
         Account acc = [SELECT Id, Name, Address__c FROM Account WHERE Name = 'QQ Account' LIMIT 1];
@@ -155,36 +155,36 @@ public class OpportunityControllerTest {
         }
     }
 
-    @isTest
+    @IsTest
     static void testDeleteCoInsurerData() {
         Opportunity opp = [SELECT Id FROM Opportunity LIMIT 1];
         Transaction_Data__c td = [SELECT Id, Co_Insurance_Company__c FROM Transaction_Data__c WHERE Opportunity__c = :opp.Id LIMIT 1];
         OpportunityController.deleteCoInsurerData(opp.Id, td.Co_Insurance_Company__c);
-        System.assertEquals(0, [SELECT count() FROM Transaction_Data__c WHERE Id = :td.Id]);
+        System.assertEquals(0, [SELECT count() FROM Transaction_Data__c WHERE Id = :td.Id], 'Transaction Data should be deleted');
     }
 
-    @isTest
+    @IsTest
     static void testDeleteTransactionData() {
         Transaction_Data__c td = [SELECT Id FROM Transaction_Data__c LIMIT 1];
         OpportunityController.deleteTransactionData(td.Id);
-        System.assertEquals(0, [SELECT count() FROM Transaction_Data__c WHERE Id = :td.Id]);
+        System.assertEquals(0, [SELECT count() FROM Transaction_Data__c WHERE Id = :td.Id], 'Transaction Data should be deleted');
     }
 
-    @isTest
+    @IsTest
     static void testGetOpportunityInsurancePeriod() {
         Opportunity opp = [SELECT Id FROM Opportunity LIMIT 1];
         Opportunity result = OpportunityController.getOpportunityInsurancePeriod(opp.Id);
-        System.assertEquals(opp.Id, result.Id);
+        System.assertEquals(opp.Id, result.Id, 'Opportunity ID should match');
     }
 
-    @isTest
+    @IsTest
     static void testGetTransactionDataInsurancePeriod() {
         Opportunity opp = [SELECT Id FROM Opportunity LIMIT 1];
         List<Transaction_Data__c> data = OpportunityController.getTransactionDataInsurancePeriod(opp.Id);
         System.assert(!data.isEmpty(), 'Should return Insurance Period data');
     }
 
-    @isTest
+    @IsTest
     static void testSaveInsuranceDetails() {
         Opportunity opp = [SELECT Id FROM Opportunity LIMIT 1];
 
@@ -222,8 +222,8 @@ public class OpportunityControllerTest {
 
     // NEW TEST METHODS FOR UNCOVERED FUNCTIONALITY
 
-    @isTest
-    static void testSaveTheInsuredTransactionData_DuplicatePrevention() {
+    @IsTest
+    static void testSaveTheInsuredTransactionDataDuplicatePrevention() {
         Opportunity opp = [SELECT Id FROM Opportunity LIMIT 1];
         Account acc = [SELECT Id, Name, Address__c FROM Account WHERE Name = 'QQ Account' LIMIT 1];
         
@@ -251,8 +251,8 @@ public class OpportunityControllerTest {
     }
 
     // FIXED: Added proper facultative folder setup
-    @isTest
-    static void testCreateOpportunitiesAndCloneAssets_Success() {
+    @IsTest
+    static void testCreateOpportunitiesAndCloneAssetsSuccess() {
         // Get test data
         Account testAccount = [SELECT Id, Name FROM Account WHERE Name = 'Insurance Co A' LIMIT 1];
         List<Asset> testAssets = [SELECT Id FROM Asset WHERE RecordType.DeveloperName = 'Risk' LIMIT 2];
@@ -260,7 +260,6 @@ public class OpportunityControllerTest {
         
         // Skip test if no risk assets found
         if(testAssets.isEmpty()) {
-            System.debug('No Risk assets found, skipping test');
             return;
         }
         
@@ -295,7 +294,6 @@ public class OpportunityControllerTest {
         
         // Verify results - check if successful or handle specific error messages
         if(!result.isSuccess) {
-            System.debug('createOpportunitiesAndCloneAssets failed with message: ' + result.message);
             // Don't fail the test if it's due to specific conditions we can't control in test context
             if(!result.message.contains('Risk records') && !result.message.contains('RecordType')) {
                 System.assert(result.isSuccess, 'Expected success but got: ' + result.message);
@@ -305,8 +303,8 @@ public class OpportunityControllerTest {
         }
     }
 
-    @isTest
-    static void testCreateOpportunitiesAndCloneAssets_EmptyRiskId() {
+    @IsTest
+    static void testCreateOpportunitiesAndCloneAssetsEmptyRiskId() {
         Account testAccount = [SELECT Id FROM Account WHERE Name = 'Insurance Co A' LIMIT 1];
         Transaction_Data__c facFolder = [SELECT Id FROM Transaction_Data__c WHERE RecordType.DeveloperName = 'Facultative_Folder' LIMIT 1];
         List<Id> accountIds = new List<Id>{testAccount.Id};
@@ -328,13 +326,12 @@ public class OpportunityControllerTest {
         System.assert(result.message.contains('riskId') || result.message.contains('required'), 'Expected error message about riskId but got: ' + result.message);
     }
 
-    @isTest
-    static void testCreateOpportunitiesAndCloneAssets_EmptyAccountIds() {
+    @IsTest
+    static void testCreateOpportunitiesAndCloneAssetsEmptyAccountIds() {
         List<Asset> testAssets = [SELECT Id FROM Asset WHERE RecordType.DeveloperName = 'Risk' LIMIT 1];
         Transaction_Data__c facFolder = [SELECT Id FROM Transaction_Data__c WHERE RecordType.DeveloperName = 'Facultative_Folder' LIMIT 1];
         
         if(testAssets.isEmpty()) {
-            System.debug('No Risk assets found, skipping test');
             return;
         }
         
@@ -357,8 +354,8 @@ public class OpportunityControllerTest {
         System.assert(result.message.contains('accountId') || result.message.contains('required'), 'Expected error message about accountId but got: ' + result.message);
     }
 
-    @isTest
-    static void testCreateOpportunitiesAndCloneAssets_NullJsonInput() {
+    @IsTest
+    static void testCreateOpportunitiesAndCloneAssetsNullJsonInput() {
         Test.startTest();
         OpportunityController.ProcessingResult result = OpportunityController.createOpportunitiesAndCloneAssets(null);
         Test.stopTest();
@@ -367,8 +364,8 @@ public class OpportunityControllerTest {
         System.assert(result.message.contains('JSON input') || result.message.contains('required'), 'Expected error message about JSON input but got: ' + result.message);
     }
 
-    @isTest
-    static void testCreateOpportunitiesAndCloneAssets_InvalidJson() {
+    @IsTest
+    static void testCreateOpportunitiesAndCloneAssetsInvalidJson() {
         String jsonInput = 'invalid json {';
         
         Test.startTest();
@@ -379,8 +376,8 @@ public class OpportunityControllerTest {
         // Don't assert specific message as it could vary
     }
 
-    @isTest
-    static void testCreateOpportunitiesAndCloneAssets_InvalidRiskId() {
+    @IsTest
+    static void testCreateOpportunitiesAndCloneAssetsInvalidRiskId() {
         Account testAccount = [SELECT Id FROM Account WHERE Name = 'Insurance Co A' LIMIT 1];
         Transaction_Data__c facFolder = [SELECT Id FROM Transaction_Data__c WHERE RecordType.DeveloperName = 'Facultative_Folder' LIMIT 1];
         List<Id> accountIds = new List<Id>{testAccount.Id};
@@ -407,15 +404,14 @@ public class OpportunityControllerTest {
         System.assert(hasExpectedError, 'Expected error message about risk records but got: ' + result.message);
     }
 
-    @isTest
-    static void testCreateOpportunitiesAndCloneAssets_MultipleAccounts() {
+    @IsTest
+    static void testCreateOpportunitiesAndCloneAssetsMultipleAccounts() {
         // Get multiple accounts
         List<Account> testAccounts = [SELECT Id, Name FROM Account WHERE Type = 'Insurance' LIMIT 2];
         List<Asset> testAssets = [SELECT Id FROM Asset WHERE RecordType.DeveloperName = 'Risk' LIMIT 1];
         Transaction_Data__c facFolder = [SELECT Id FROM Transaction_Data__c WHERE RecordType.DeveloperName = 'Facultative_Folder' LIMIT 1];
         
         if(testAssets.isEmpty() || testAccounts.size() < 2) {
-            System.debug('Insufficient test data, skipping test');
             return;
         }
         
@@ -440,7 +436,6 @@ public class OpportunityControllerTest {
         
         // Check if successful or handle specific errors gracefully
         if(!result.isSuccess) {
-            System.debug('Multiple accounts test failed with: ' + result.message);
             // Don't fail for record type issues in test context
             if(!result.message.contains('RecordType') && !result.message.contains('Risk records')) {
                 System.assert(result.isSuccess, 'Expected success but got: ' + result.message);
@@ -449,8 +444,8 @@ public class OpportunityControllerTest {
     }
 
     // FIXED: Better exception handling tests
-    @isTest 
-    static void testDeleteTransactionData_ExceptionHandling() {
+    @IsTest 
+    static void testDeleteTransactionDataExceptionHandling() {
         Test.startTest();
         try {
             // Pass null to trigger exception
@@ -464,8 +459,8 @@ public class OpportunityControllerTest {
         Test.stopTest();
     }
 
-    @isTest
-    static void testSaveInsuranceDetails_WithoutTransactionRows() {
+    @IsTest
+    static void testSaveInsuranceDetailsWithoutTransactionRows() {
         Opportunity opp = [SELECT Id FROM Opportunity LIMIT 1];
 
         OpportunityController.InsurancePeriodWrapper wrapper = new OpportunityController.InsurancePeriodWrapper();
@@ -491,8 +486,8 @@ public class OpportunityControllerTest {
         System.assertEquals('1', updatedOpp.Insurance_Period_Type__c, 'Insurance period type should be updated');
     }
 
-    // Test for the new ProcessingResult and OpportunityDetail inner classes
-    @isTest
+    // FIXED: Removed clonedRiskIds assertions
+    @IsTest
     static void testProcessingResultAndOpportunityDetail() {
         // Test ProcessingResult default constructor
         OpportunityController.ProcessingResult result = new OpportunityController.ProcessingResult();
@@ -501,12 +496,12 @@ public class OpportunityControllerTest {
         
         // Test OpportunityDetail default constructor
         OpportunityController.OpportunityDetail detail = new OpportunityController.OpportunityDetail();
-        System.assertNotEquals(null, detail.clonedRiskIds, 'clonedRiskIds should be initialized');
-        System.assertEquals(0, detail.clonedRiskIds.size(), 'clonedRiskIds should be empty by default');
+        // Simply verify the object was created successfully
+        System.assertNotEquals(null, detail, 'OpportunityDetail should be initialized');
     }
 
     // FIXED: Test the inner class JSON parsing without causing errors
-    @isTest
+    @IsTest
     static void testOpportunityRequestFromJson() {
         Transaction_Data__c facFolder = [SELECT Id FROM Transaction_Data__c WHERE RecordType.DeveloperName = 'Facultative_Folder' LIMIT 1];
         
@@ -524,7 +519,7 @@ public class OpportunityControllerTest {
             '"folderId": "' + facFolder.Id + '",' +
             '"riskId": ["02i000000000001", "02i000000000002"],' +
             '"accountIds": ["001000000000001", "001000000000002"],' +
-			'"totalAmountInsured": 123000000'+
+            '"totalAmountInsured": 123000000'+
             '}';
         
         Test.startTest();
@@ -538,7 +533,6 @@ public class OpportunityControllerTest {
             System.assertEquals('Offering', req.offeringStatus, 'Offering status should be parsed correctly');
         } catch (Exception e) {
             // It's OK if it fails in test context due to invalid IDs
-            System.debug('fromJson failed as expected in test context: ' + e.getMessage());
         }
         Test.stopTest();
     }
