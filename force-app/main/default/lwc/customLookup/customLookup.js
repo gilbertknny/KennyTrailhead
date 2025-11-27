@@ -18,6 +18,7 @@ export default class CustomLookup extends LightningElement {
     @track selectedRecord;
     @api displayText;
     @api showData; 
+    @api cobField; 
     @api readOnly = false;
 
     _recordId;
@@ -52,7 +53,18 @@ export default class CustomLookup extends LightningElement {
             console.log('provinceId: ' + this.provinceId);
             console.log('sectionName: ' + this.sectionName);
             console.log('CL.showData: ' + this.showData);
-            searchRecords({ objectApiName: this.objectApiName, fields: this.fields, searchKey: this.searchKey, recordTypeName: this.recordTypeName, provinceId: this.provinceId, cityId: this.cityId, sectionName: this.sectionName, showData: this.showData })
+            console.log('COB: ' + this.cobField);
+            searchRecords({ 
+                objectApiName: this.objectApiName, 
+                fields: this.fields, 
+                searchKey: this.searchKey, 
+                recordTypeName: this.recordTypeName, 
+                provinceId: this.provinceId, 
+                cityId: this.cityId, 
+                sectionName: this.sectionName, 
+                showData: this.showData,
+                cobId:this.cobField
+            })
                 .then(data => {
                     this.results = data.map(rec => ({
                         Id: rec.Id,
