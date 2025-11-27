@@ -1,11 +1,29 @@
+/**
+ * @author [Marco Lie]
+ * @date [2025-11-26]
+ * @description Controller class for Lead management operations including location lookup,
+ * customer type options, and lead creation functionality for web-to-lead processes
+ */
 public with sharing class LeadController {
 
+  /**
+   * @description Wrapper class to hold location data for Aura-enabled response
+   */
+  @SuppressWarnings('PMD.PropertyNamingConventions')
   public class LocationWrapper {
-    @AuraEnabled public String Id   { get; set; }
+    @AuraEnabled public String Id { get; set; }
     @AuraEnabled public String Name { get; set; }
     @AuraEnabled public String Province { get; set; }
     @AuraEnabled public String Village { get; set; }
-    public LocationWrapper(Id id, String name, String province, String Village) {
+    
+    /**
+     * @description Constructor for LocationWrapper class
+     * @param id Location record Id
+     * @param name Location name
+     * @param province Province name
+     * @param village Village name
+     */
+    public LocationWrapper(Id id, String name, String province, String village) {
       this.Id   = String.valueOf(id);
       this.Name = name;
       this.Province = province;
@@ -13,9 +31,27 @@ public with sharing class LeadController {
     }
   }
     
-    @AuraEnabled(cacheable=true)
+  /**
+   * @description Searches for cities based on search key pattern
+   * @param searchKey Search term for city name lookup
+   * @return List of LocationWrapper objects containing city information
+   * @throws AuraHandledException if query fails or CRUD/FLS violation occurs
+   */
+  @AuraEnabled(cacheable=true)
   public static List<LocationWrapper> findCities(String searchKey) {
-      List<LocationWrapper> results = new List<LocationWrapper>();
+    // Check CRUD permission for Location object
+    if (!Schema.sObjectType.Location.isAccessible()) {
+      throw new AuraHandledException('Insufficient access to Location object');
+    }
+    
+    // Check FLS permission for specific fields
+    if (!Schema.sObjectType.Location.fields.Id.isAccessible() ||
+        !Schema.sObjectType.Location.fields.Name.isAccessible() ||
+        !Schema.sObjectType.Location.fields.Province__c.isAccessible()) {
+      throw new AuraHandledException('Insufficient field-level access to Location fields');
+    }
+
+    List<LocationWrapper> results = new List<LocationWrapper>();
     String pattern = '%' + String.escapeSingleQuotes(searchKey) + '%';
     try {
       List<SObject> rows = [
@@ -35,15 +71,32 @@ public with sharing class LeadController {
             null
         ));
       }
-        system.debug('result City='+results);
       return results;
     } catch (Exception e) {
       throw new AuraHandledException(e.getMessage());
     }
   }
 
+  /**
+   * @description Retrieves zip codes for a given city ID
+   * @param cityId The ID of the city to get zip codes for
+   * @return List of LocationWrapper objects containing zip code information
+   * @throws AuraHandledException if query fails or CRUD/FLS violation occurs
+   */
   @AuraEnabled(cacheable=true)
   public static List<LocationWrapper> getZipCodes(String cityId) {
+    // Check CRUD permission for Location object
+    if (!Schema.sObjectType.Location.isAccessible()) {
+      throw new AuraHandledException('Insufficient access to Location object');
+    }
+    
+    // Check FLS permission for specific fields
+    if (!Schema.sObjectType.Location.fields.Id.isAccessible() ||
+        !Schema.sObjectType.Location.fields.Name.isAccessible() ||
+        !Schema.sObjectType.Location.fields.Village__c.isAccessible()) {
+      throw new AuraHandledException('Insufficient field-level access to Location fields');
+    }
+
     List<LocationWrapper> results = new List<LocationWrapper>();
     try {
       List<SObject> rows = [
@@ -62,15 +115,28 @@ public with sharing class LeadController {
             (String)row.get('Village__c')
         ));
       }
-        system.debug('result Zip Code='+results);
       return results;
     } catch (Exception e) {
       throw new AuraHandledException(e.getMessage());
     }
   }
 
+  /**
+   * @description Retrieves customer type options from Lead Account_Segment__c picklist
+   * @return List of Maps containing label-value pairs for customer type options
+   */
   @AuraEnabled(cacheable=true)
   public static List<Map<String,String>> getCustomerTypeOptions() {
+    // Check if Lead object is accessible
+    if (!Schema.sObjectType.Lead.isAccessible()) {
+      return new List<Map<String,String>>();
+    }
+    
+    // Check if Account_Segment__c field is accessible
+    if (!Schema.sObjectType.Lead.fields.Account_Segment__c.isAccessible()) {
+      return new List<Map<String,String>>();
+    }
+
     List<Map<String,String>> options = new List<Map<String,String>>();
     for (Schema.PicklistEntry ple 
          : Lead.Account_Segment__c.getDescribe().getPicklistValues()) {
@@ -84,12 +150,27 @@ public with sharing class LeadController {
             'value' => ple.getValue()
         });
     }
-      
-      system.debug('result Customer Type='+options);
     return options;
   }
 
+  /**
+   * @description Creates a new Lead record with the provided information
+   * @param firstName Lead's first name
+   * @param lastName Lead's last name
+   * @param email Lead's email address
+   * @param phone Lead's phone number
+   * @param company Lead's company name
+   * @param provinceId Province location ID
+   * @param cityId City location ID
+   * @param zipCodeId Zip code location ID
+   * @param villageId Village location ID
+   * @param customerType Customer segment type
+   * @param userDescription User-provided description
+   * @return Id of the newly created Lead record
+   * @throws AuraHandledException if lead creation fails or CRUD/FLS violation occurs
+   */
   @AuraEnabled
+  @SuppressWarnings('PMD.ExcessiveParameterList')
   public static Id createLead(
       String firstName,
       String lastName,
@@ -103,6 +184,25 @@ public with sharing class LeadController {
       String customerType,
       String userDescription
   ) {
+    // Check CRUD permission for Lead object - create access
+    if (!Schema.sObjectType.Lead.isCreateable()) {
+      throw new AuraHandledException('Insufficient access to create Lead records');
+    }
+    
+    // Check FLS permission for each field being created
+    String[] fieldsToCheck = new String[]{
+      'FirstName', 'LastName', 'Email', 'Phone', 'Company', 
+      'City__c', 'Province__c', 'Zip__c', 'Village__c', 
+      'Account_Type__c', 'Account_Segment__c', 'Status', 
+      'LeadSource', 'Account_Pipeline_Status__c', 'User_Description__c'
+    };
+    
+    for (String fieldName : fieldsToCheck) {
+      if (!Schema.sObjectType.Lead.fields.getMap().get(fieldName).getDescribe().isCreateable()) {
+        throw new AuraHandledException('Insufficient field-level access to create Lead field: ' + fieldName);
+      }
+    }
+
     try {
       Lead newLead = new Lead(
         FirstName        = firstName,
@@ -122,7 +222,6 @@ public with sharing class LeadController {
         Account_Pipeline_Status__c = 'Direct',
         User_Description__c = userDescription
       );
-        system.debug('created Data='+newLead);
       insert newLead;
       return newLead.Id;
     } catch (Exception e) {
