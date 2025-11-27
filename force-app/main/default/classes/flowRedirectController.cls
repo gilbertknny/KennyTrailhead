@@ -1,3 +1,7 @@
+/**
+ * @description for redirect code
+ * Ensures URL generation logic behaves correctly for valid and invalid inputs.
+ */
 public with sharing class flowRedirectController {
     
     public class InputParam {
