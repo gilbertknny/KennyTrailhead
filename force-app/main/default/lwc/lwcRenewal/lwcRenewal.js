@@ -3,6 +3,7 @@ import { track } from 'lwc';
 import saveData from '@salesforce/apex/ClsRenewal.saveData';
 import LightningAlert from 'lightning/alert';
 import getPicklistSTD from '@salesforce/apex/ClsRenewal.getPicklist';
+import getUserId from '@salesforce/apex/ClsRenewal.getUserId';
 
 export default class LwcRenewal extends LightningModal {
     @track refPolNumberId;
@@ -17,6 +18,7 @@ export default class LwcRenewal extends LightningModal {
     @track endorseNoteChange = [];
     @track endorseNoteChangeId;
     @track endorsementDescription;
+    @track filter;
 
     get opportunityType() {
         return [
@@ -33,6 +35,23 @@ export default class LwcRenewal extends LightningModal {
     matchingInfoPolicy = {
         primaryField: { fieldPath: 'Name', mode: 'startsWith' },
     };
+
+    connectedCallback() {
+        getUserId({})
+        .then(result => {
+            if(result != ''){
+                this.filter = {
+                    criteria: [
+                        { fieldPath: 'OwnerId',operator: 'eq',value: result },
+                    ],
+                    filterLogic: '1'
+                };
+            }
+        })
+        .catch(error => {
+            console.log('error-getUserId:'+ error.message);
+        });
+    }
 
     getPicklistStatusRenewal(){
         getPicklistSTD({

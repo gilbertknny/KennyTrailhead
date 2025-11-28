@@ -8,7 +8,7 @@ public without sharing class InvocableClass {
             for(InputVariable iv: inputVariable){
                 OutputVariable ov = new OutputVariable();
                 if(iv.param == 'BatchRiskAssetCoverage') {
-                    String query = 'SELECT Id from Asset where Opportunity__c = '+'\''+iv.oldoptyId+'\' and Recordtype.Name = '+'\'Risk'+'\'';
+                    String query = 'SELECT Id from Asset where Opportunity__c = '+'\''+iv.oldoptyId+'\' and Recordtype.Name = '+'\'Risk'+'\' and Lintaswata_Sync__c = '+iv.LintaswataSync;
                     BatchRiskAssetCoverage batch = new BatchRiskAssetCoverage(query,iv.newoptyId,iv.accountId);
                     Database.executeBatch(batch,1);
                 }
@@ -37,6 +37,10 @@ public without sharing class InvocableClass {
         /** @description newoptyId */  
         @InvocableVariable
         public Decimal sumInsured;
+
+        @InvocableVariable
+        public Boolean LintaswataSync;
+
         /** @description param */
         @InvocableVariable
         public String param;

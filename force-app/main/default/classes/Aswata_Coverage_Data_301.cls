@@ -1,7 +1,7 @@
 /**
  * @description       : Class for create new Coverage 301
  * @author            : Ahmad Yazid Munif
- * @last modified on  : 11-21-2025
+ * @last modified on  : 11-27-2025
  * @last modified by  : Ahmad Yazid Munif
 **/
 public without sharing class Aswata_Coverage_Data_301 {
@@ -18,6 +18,8 @@ public without sharing class Aswata_Coverage_Data_301 {
      */
     public static List<InsurancePolicyCoverage> coverageByAssetCategory(List<InsurancePolicyCoverage> listCoverage,Asset risk,List<String> idParentCoverage){
         // System.debug('### AWT risk.COB__c : '+risk.COB__c);
+        Integer lastIndex = listCoverage.size() - 1;
+        Decimal counter = listCoverage[lastIndex].cov_tahun_id__c;
         if((String)risk.COB__c != '301'){
             return listCoverage;
         }
@@ -65,6 +67,8 @@ public without sharing class Aswata_Coverage_Data_301 {
                 newCov.Coverage_Name__c = matchingMasterData.Id;
                 newCov.Coverage_Id__c = matchingMasterData.COVERAGE_REF_ID__c;
                 newCov.amount_insured__c = assetItem.Amount_IDR_new__c;
+                counter+=1;
+                newCov.cov_tahun_id__c = counter;
                 newListCoverage.add(newCov);
             }
         }
