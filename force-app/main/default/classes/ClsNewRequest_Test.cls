@@ -112,6 +112,20 @@ public class ClsNewRequest_Test {
         ClsNewRequest.getRate('USD');
         ClsNewRequest.getAssetSection(cob);
         ClsNewRequest.getAssetCategory(cob,null);
+        ClsNewRequest.getMasterDataSection(cob,null);
+        ClsNewRequest.getCurrency();
+        ClsNewRequest.getContract(acc.Id);
+        ClsNewRequest.getAssetSectionMOU(null);
+        ClsNewRequest.getAssetCategoryMOU(null,null);
+        ClsNewRequest.getCoverage(null);
+        ClsNewRequest.getCoverageDetail(null,null);
+        ClsNewRequest.saveDataMOU(null);
+        
+        List<String> listdata1 = new List<String>();
+        listdata1.add('Name');
+        Asset ass = new Asset();
+        ass.Name = 'Test';
+        ClsNewRequest.setData(listdata1, ass);
         
         
         String situation1 = '{';
@@ -178,6 +192,7 @@ public class ClsNewRequest_Test {
         data += ',"filesurvey2":[{"documentId":"'+cd.Id+'","name":"Test"}]';
         
         data += '}';
+        ClsNewRequest.getValidateDouble(data);
         string result = ClsNewRequest.saveData(data);
         system.debug('result:'+result);
         system.assertNotEquals(result,null);
