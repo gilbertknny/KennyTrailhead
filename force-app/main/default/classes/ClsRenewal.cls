@@ -6,6 +6,16 @@
 
 public without sharing class ClsRenewal {
     @AuraEnabled(cacheable=false)
+    public static String getUserId() {
+        String result = '';
+        User u = [SELECT Id,Profile.Name FROM User WHERE Id=:UserInfo.getUserId()];
+        if(u.Profile.Name != 'System Administrator'){
+            result = u.Id;
+        } 
+        return result;
+    }
+    
+    @AuraEnabled(cacheable=false)
     public static Map<String, String> getPicklist(String objectName, String fieldName) {
         Map<String, String> values = new Map<String, String>{};
       	List<Schema.DescribeSobjectResult> results = Schema.describeSObjects(new List<String>{objectName});

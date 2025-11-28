@@ -1,8 +1,8 @@
 /**
- * Controller for LWC "lwcNewRequest"
- * TC : GS
- * DATE : 10/10/25
- */
+* Controller for LWC "lwcNewRequest"
+* TC : GS
+* DATE : 10/10/25
+*/
 
 public without sharing class ClsNewRequest {
     @AuraEnabled(cacheable=false)
@@ -10,7 +10,7 @@ public without sharing class ClsNewRequest {
         Opportunity result = new Opportunity();
         if(recordId != null){
             result = [SELECT Id,Opportunity_Type__c,Name,AccountId,COB__c,Description,The_Insured_Name__c,
-                      	Product_Type_Id__c,Product_Type__c
+                      Product_Type_Id__c,Product_Type__c
                       FROM Opportunity 
                       WHERE Id =:recordId WITH SECURITY_ENFORCED];
         }
@@ -59,14 +59,14 @@ public without sharing class ClsNewRequest {
                                        ORDER BY Order__c ASC];
         if(listmd.size()==0){
             listmd = [SELECT Id,Name,Object__c,Label__c,Data_Type__c,Lookup_Object__c,
-                                       Filter__c,ShowData__c,Required__c 
-                                       FROM Master_Data__c 
-                                       WHERE BSN_ID__c =:cob
-                                       AND RecordType.DeveloperName = 'Field_COB'
-                                       AND Status__c = 'Active'
-                                       AND Contract_Type__c = NULL 
-                                       AND Description__c =:description WITH SECURITY_ENFORCED
-                                       ORDER BY Order__c ASC];
+                      Filter__c,ShowData__c,Required__c 
+                      FROM Master_Data__c 
+                      WHERE BSN_ID__c =:cob
+                      AND RecordType.DeveloperName = 'Field_COB'
+                      AND Status__c = 'Active'
+                      AND Contract_Type__c = NULL 
+                      AND Description__c =:description WITH SECURITY_ENFORCED
+                      ORDER BY Order__c ASC];
         }
         for(Master_Data__c md : listmd){
             Data d = new Data();
@@ -84,6 +84,72 @@ public without sharing class ClsNewRequest {
         return listdata;
     }
     
+    @AuraEnabled(cacheable=false)
+    public static List<section> getMasterDataSection(String cob, String contracttype) {
+        List<section> listsection = new List<section>();
+        List<AggregateResult> listar = [SELECT Description__c Section FROM Master_Data__c
+                                        WHERE BSN_ID__c =:cob
+                                        AND RecordType.DeveloperName = 'Field_COB'
+                                        AND Status__c = 'Active'
+                                        AND Contract_Type__c =:contracttype
+                                        GROUP BY Description__c
+                                        ORDER BY Description__c ASC];
+        if(listar.size()==0){
+            listar = [SELECT Description__c Section FROM Master_Data__c
+                      WHERE BSN_ID__c =:cob
+                      AND RecordType.DeveloperName = 'Field_COB'
+                      AND Status__c = 'Active'
+                      AND Contract_Type__c = NULL
+                      GROUP BY Description__c
+                      ORDER BY Description__c ASC];
+        }
+        for(AggregateResult ar : listar){
+            String strName = (String)ar.get('Section');
+            if(strName != null){
+                section sc = new section();
+                sc.name = strName; 
+                List<data> listdata = new List<data>();
+                if(contracttype == NULL || contracttype == ''){ contracttype = NULL; }
+                List<Master_Data__c> listmd = [SELECT Id,Name,Object__c,Label__c,Data_Type__c,Lookup_Object__c,
+                                               Filter__c,ShowData__c,Required__c 
+                                               FROM Master_Data__c 
+                                               WHERE BSN_ID__c =:cob
+                                               AND RecordType.DeveloperName = 'Field_COB'
+                                               AND Status__c = 'Active'
+                                               AND Contract_Type__c =:contracttype 
+                                               AND Description__c =:strName WITH SECURITY_ENFORCED
+                                               ORDER BY Order__c ASC];
+                if(listmd.size()==0){
+                    listmd = [SELECT Id,Name,Object__c,Label__c,Data_Type__c,Lookup_Object__c,
+                              Filter__c,ShowData__c,Required__c 
+                              FROM Master_Data__c 
+                              WHERE BSN_ID__c =:cob
+                              AND RecordType.DeveloperName = 'Field_COB'
+                              AND Status__c = 'Active'
+                              AND Contract_Type__c = NULL
+                              AND Description__c =:strName WITH SECURITY_ENFORCED
+                              ORDER BY Order__c ASC];
+                }
+                for(Master_Data__c md : listmd){
+                    Data d = new Data();
+                    d.dataobject = md.Object__c;
+                    d.datafield = md.Name;
+                    d.datatype = md.Data_Type__c;
+                    d.datalabel = md.Label__c;
+                    d.datalookup = md.Lookup_Object__c;
+                    d.datafilter = md.Filter__c;
+                    d.showdata = md.ShowData__c;
+                    d.datarequired = md.Required__c;
+                    listdata.add(d);
+                }
+                sc.data = listdata;
+                listsection.add(sc);
+                system.debug(LoggingLevel.WARN,listdata);
+            }
+        }
+        return listsection;
+    }
+
     @AuraEnabled(cacheable=false) 
     public static Object getObject(String fieldname,String cob,String recordId){
         String query = '';
@@ -172,7 +238,7 @@ public without sharing class ClsNewRequest {
                                        FROM Master_Data__c
                                        WHERE RecordType.DeveloperName = 'Asset_Section'
                                        AND BSN__r.ProductCode =:cob WITH SECURITY_ENFORCED
-                                      ORDER BY Section__c ASC];
+                                       ORDER BY Section__c ASC];
         for(Master_Data__c md : listmd){
             values.put(md.Id,md.Name);
         }
@@ -188,7 +254,7 @@ public without sharing class ClsNewRequest {
                                        WHERE RecordType.DeveloperName = 'Asset_Category'
                                        AND BSN__r.ProductCode =:cob 
                                        AND Asset_Section__c =:assetsection WITH SECURITY_ENFORCED
-                                      ORDER BY Name ASC];
+                                       ORDER BY Name ASC];
         for(Master_Data__c md : listmd){
             values.put(md.Id,md.Name);
         }
@@ -237,7 +303,7 @@ public without sharing class ClsNewRequest {
     @AuraEnabled(cacheable=false)
     public static Map<String, String> getPicklist(String objectName, String fieldName) {
         Map<String, String> values = new Map<String, String>{};
-      	List<Schema.DescribeSobjectResult> results = Schema.describeSObjects(new List<String>{objectName});
+        List<Schema.DescribeSobjectResult> results = Schema.describeSObjects(new List<String>{objectName});
         for(Schema.DescribeSobjectResult res : results) {
             for (Schema.PicklistEntry entry : res.fields.getMap().get(fieldName).getDescribe().getPicklistValues()) {
                 if (entry.isActive()) {  
@@ -267,8 +333,199 @@ public without sharing class ClsNewRequest {
         return result;
     }
     
+    @AuraEnabled(cacheable=false)
+    public static Map<String, String> getCurrency(){
+        Map<String, String> values = new Map<String, String>{};
+        List<AggregateResult> listar = [SELECT Name,Id 
+                                        FROM Master_Data__c 
+                                        WHERE RecordType.Name = 'Exchange Rate'
+                                        GROUP BY Name,Id 
+                                        ORDER BY Name ASC];
+        for(AggregateResult ar : listar){
+            values.put((String)ar.get('Id'),(String)ar.get('Name'));
+        }
+        system.debug(LoggingLevel.WARN,'values:'+values);
+        return values;
+    }
+    
+    @AuraEnabled(cacheable=false)
+    public static Boolean getValidateDouble(String data){
+        Boolean result = false;
+        Map<String, Object> dataMap = (Map<String, Object>) JSON.deserializeUntyped(data);
+        String strRisk1 = (String)dataMap.get('risksituation1');
+        String riskName = (String)dataMap.get('riskName');
+        String lineCOB;
+        Asset ass = new Asset();
+        if(strRisk1 != null){
+            ass.Name = riskName;
+            Map<String,Object> mapRisk1 = (Map<String,Object>)JSON.deserializeUntyped(strRisk1);
+            Set<String> setRisk1 = mapRisk1.keySet();
+            for(String key:setRisk1){
+                String value = String.valueOf(mapRisk1.get(key));
+                if(key == 'COB__c'){
+                    lineCOB = value;
+                    //ass.COB__c = value;
+                }else{
+                    if(value.indexOf('{')!=-1){
+                        String sKey = key.substringBefore('__c');
+                        Map<String,Object> mapObj = (Map<String,Object>)mapRisk1.get(key);
+                        Set<String> setObj = mapObj.keySet();
+                        for(String key2:setObj){
+                            String value2 = (String)mapObj.get(key2);
+                            if(key2 == 'latitude'){ ass.put(sKey+'__Latitude__s',Integer.ValueOf(value2)); }
+                            else if(key2 == 'longitude'){ ass.put(sKey+'__Longitude__s',Integer.ValueOf(value2)); }
+                        }
+                    }else{
+                        if(value != ''){ 
+                            String strType = getFieldType('Asset', key);
+                            if(strType == 'DOUBLE'){ ass.put(key,DOUBLE.valueOf(value)); }
+                            else{ ass.put(key,value); }
+                            if(key == 'Address__c'){
+                                Schema.Location lc = [SELECT Id,Name FROM Location WHERE Id=:value LIMIT 1];
+                                ass.Address_Description__c = lc.Name;
+                            }
+                        }
+                    }    
+                }
+            }
+        }
+        String strDescription,strSituation;
+        List<String> listDescription = new List<String>();
+        List<String> listSituation = new List<String>();
+        //GET MASTER VALIDATE
+        List<Master_Data__c> listmd = [SELECT Risk_Description__c,Risk_Situation__c FROM Master_Data__c 
+                                       WHERE BSN_Id__c =:lineCOB 
+                                       AND RecordType.Name = 'Double Prospect' WITH SECURITY_ENFORCED  
+                                       LIMIT 1];
+        if(listmd.size()>0){
+            Master_Data__c md = listmd[0];
+            strDescription = md.Risk_Description__c;
+            strSituation = md.Risk_Situation__c;
+            listDescription = strDescription.split(',');
+            listSituation = strSituation.split(',');
+            
+            Map<String,List<dataDuplicate>> mapDuplicate = new Map<String,List<dataDuplicate>>();
+            String sQueryValidate = 'SELECT Id,COB__c';
+            if(strDescription != null) sQueryValidate += ','+strDescription;
+            if(strSituation != null) sQueryValidate += ','+strSituation;
+            sQueryValidate += ' FROM Asset WHERE COB__c=:lineCOB ';
+            List<Asset> listValidate = Database.query(sQueryValidate);
+            if(listValidate.size()>0){
+                List<dataDuplicate> listdd = new List<dataDuplicate>();
+                for(Asset at : listValidate){
+                    dataDuplicate dd = new dataDuplicate();
+                    dd.cob= lineCOB;
+                    dd.description = setData(listDescription,at);
+                    dd.situation = setData(listSituation,at);
+                    listdd.add(dd);
+                }
+                mapDuplicate.put(lineCOB,listdd);
+            }
+            String riskDescription = setData(listDescription,ass);
+            String riskSituation = setData(listSituation,ass);
+            List<dataDuplicate> listnewdd = mapDuplicate.get(lineCOB);
+            if(listnewdd.size()>0){
+                for(dataDuplicate dd : listnewdd){
+                    if(dd.description == riskDescription && dd.description != ''){result=true; break;}
+                    else if(dd.situation == riskSituation && dd.situation != ''){result=true; break;}
+                }
+            }
+        }
+        return result;
+    }
+    
+    @AuraEnabled(cacheable=false)
+    public static Boolean getContract(String recordId){
+        Boolean result = false;
+        List<Contract> listcontract = [SELECT Id FROM Contract WHERE AccountId=:recordId];
+        if(listcontract.size()>0){result = true;}
+        return result;
+    }
+    
+    @AuraEnabled(cacheable=false)
+    public static Map<String, String> getAssetSectionMOU(string contractid) {
+        Map<String, String> values = new Map<String, String>();
+        String opptyId;
+        List<Contract> listct = [SELECT Id,SourceOpportunityId FROM Contract WHERE Id=:contractid];
+        if(listct.size()>0){opptyId = listct[0].SourceOpportunityId; }
+        
+        List<AggregateResult> listar = [SELECT Section__c Id,Section__r.name Name FROM Asset 
+                                        WHERE Opportunity__c =: opptyId 
+                                        AND Opportunity__c != NULL
+                                        AND RecordType.Name = 'Asset' WITH SECURITY_ENFORCED
+                                        GROUP BY Section__c,Section__r.name
+                                       ORDER BY Section__c ASC];
+        for(AggregateResult ar : listar){
+            values.put((String)ar.get('Id'),(String)ar.get('Name'));
+        }
+        system.debug(LoggingLevel.WARN,'values:'+values);
+        return values;
+    }
+    
+    @AuraEnabled(cacheable=false)
+    public static Map<String, String> getAssetCategoryMOU(string contractid,string assetsection) {
+        Map<String, String> values = new Map<String, String>();
+        String opptyId;
+        List<Contract> listct = [SELECT Id,SourceOpportunityId FROM Contract WHERE Id=:contractid];
+        if(listct.size()>0){opptyId = listct[0].SourceOpportunityId; }
+        
+        List<AggregateResult> listar = [SELECT Category__c Id,Category__r.name Name FROM Asset 
+                                        WHERE Opportunity__c =: opptyId 
+                                        AND Opportunity__c != NULL
+                                        AND Section__c =:assetsection
+                                        AND RecordType.Name = 'Asset' WITH SECURITY_ENFORCED
+                                        GROUP BY Category__c,Category__r.name
+                                       ORDER BY Category__c ASC];
+        for(AggregateResult ar : listar){
+            values.put((String)ar.get('Id'),(String)ar.get('Name'));
+        }
+        system.debug(LoggingLevel.WARN,'values:'+values);
+        return values;
+    }
+    
+    @AuraEnabled(cacheable=false)
+    public static Map<String, String> getCoverage(string contractid){
+        Map<String, String> values = new Map<String, String>();
+        String opptyId;
+        List<Contract> listct = [SELECT Id,SourceOpportunityId FROM Contract WHERE Id=:contractid];
+        if(listct.size()>0){opptyId = listct[0].SourceOpportunityId; }
+        List<AggregateResult> listar = [SELECT Coverage_Name__c Id,Coverage_Name__r.Name Name
+                                        FROM InsurancePolicyCoverage 
+                                        WHERE Opportunity__c =: opptyId
+                                        AND Opportunity__c != NULL
+                                        AND Coverage_Name__r.Name != 'CASCO' WITH SECURITY_ENFORCED
+                                        GROUP BY Coverage_Name__r.Name,Coverage_Name__c 
+                                        ORDER BY Coverage_Name__r.Name ASC];
+        for(AggregateResult ar : listar){
+            values.put((String)ar.get('Id'),(String)ar.get('Name'));
+        }
+        system.debug(LoggingLevel.WARN,'values:'+values);
+        return values;
+    }
+    
+    @AuraEnabled(cacheable=false)
+    public static Object getCoverageDetail(string contractid,string coverageid){
+        InsurancePolicyCoverage result = new InsurancePolicyCoverage();
+        String opptyId;
+        List<Contract> listct = [SELECT Id,SourceOpportunityId FROM Contract WHERE Id=:contractid];
+        if(listct.size()>0){opptyId = listct[0].SourceOpportunityId; }
+        List<InsurancePolicyCoverage> listipc = [SELECT Id,Proposed_Fixed_Amount__c, 
+                                                 Deductible_PCT__c, Deductible__c, Minimum_Cur_ID__c, Minimum_Amount__c, 
+                                                 Banks_Fee__c, Agent_Comission__c, Broker_Comission__c, 
+                                                 General_RPremium_PCT__c,Overdng_Comission__c,Max_Person__c 
+                                                 FROM InsurancePolicyCoverage
+                                                WHERE Opportunity__c =: opptyId
+                                                 AND Opportunity__c != null
+                                                 AND Coverage_Name__c =:coverageid
+                                                LIMIT 1];
+        if(listipc.size()>0){
+        	result = listipc[0];
+        }
+        return result;
+    }
+    
     @AuraEnabled
-    public static string saveData(String data) {
+    public static string saveData(String data){
         String result = '';
         Savepoint sp = Database.setSavepoint();
         system.debug(LoggingLevel.WARN,'data:'+data);
@@ -303,24 +560,27 @@ public without sharing class ClsNewRequest {
                     opty.policywording = md.Id__c;
                 }
             }
+            opty.premiumcalculation = (String)dataMap.get('premiumcalculation');
             opty.policywordingname = (String)dataMap.get('policywording');
             opty.firetype = (String)dataMap.get('firetype');
             opty.wording = (String)dataMap.get('wording');
+            opty.wordingname = (String)dataMap.get('wordingname');
             opty.insuranceperiod = (String)dataMap.get('insuranceperiod');
             opty.startdateperiod = isDate((String)dataMap.get('startdateperiod'));
             opty.enddateperiod = isDate((String)dataMap.get('enddateperiod'));
             opty.yearperiod = Integer.valueOf(dataMap.get('yearperiod'));
-            opty.annualperiod = Integer.valueOf(dataMap.get('annualperiod'));
             opty.shortperiod = (String)dataMap.get('shortperiod');
             opty.percentageperiod = Integer.valueOf(dataMap.get('percentageperiod'));
-            //opty.rateperiod = Integer.valueOf(dataMap.get('rateperiod'));
             opty.rateperiod = (Decimal)dataMap.get('rateperiod');
+            opty.totalyear = (Integer)dataMap.get('totalyear');
+            opty.totalmonth = (Integer)dataMap.get('totalmonth');
             String schematype = (String)dataMap.get('schematype');
             String strRisk1 = (String)dataMap.get('risksituation1');
             opty.producttype = (String)dataMap.get('producttype');
             opty.producttypename = (String)dataMap.get('producttypename');
             opty.description = (String)dataMap.get('description');
             opty.format = (String)dataMap.get('format1');
+            opty.curr = (String)dataMap.get('currency');
             String lineCOB;
             //RISK
             Asset at1 = new Asset();
@@ -335,7 +595,7 @@ public without sharing class ClsNewRequest {
                     String value = String.valueOf(mapRisk1.get(key));
                     if(key == 'COB__c'){
                         lineCOB = value;
-                        at1.COB__c = value;
+                        //at1.COB__c = value;
                     }else{
                         if(value.indexOf('{')!=-1){
                             String sKey = key.substringBefore('__c');
@@ -354,24 +614,25 @@ public without sharing class ClsNewRequest {
                                 if(key == 'Address__c'){
                                     Schema.Location lc = [SELECT Id,Name FROM Location WHERE Id=:value LIMIT 1];
                                     at1.Address_Description__c = lc.Name;
-                                    
                                 }
                             }
                         }    
                     }
                     system.debug(key+':'+value);
                 }
+                if(opty.curr != null && lineCOB == '301'){at1.Currency__c = opty.curr;}
             }
             opty.lineCOB = lineCOB;
             String assetSection = (String)dataMap.get('assetsection');
             String assetCategory = (String)dataMap.get('assetcategory');
-            opty.curr = (String)dataMap.get('currency');
             Decimal rate = Decimal.valueOf((Long)dataMap.get('rate'));
-            opty.sumInsured = Integer.valueOf(dataMap.get('sumInsured'));
+            String strSumInsured = (String)dataMap.get('sumInsured');
+            if(strSumInsured != null){opty.sumInsured = Long.valueOf(strSumInsured);}
             opty.sumInsuredIDR = Decimal.valueOf((Long)dataMap.get('sumInsuredIDR'));
-            //system.debug(sumInsuredIDR);
-            Integer premium = Integer.valueOf(dataMap.get('premium'));
-            opty.premiumIDR = Integer.valueOf(dataMap.get('premiumIDR'));
+            String strPremium = (String)dataMap.get('premium');
+            Long premium;
+            if(strPremium != null){ premium = Long.valueOf(strPremium);}
+            opty.premiumIDR = (Long)dataMap.get('premiumIDR');
             String strSummary1 = (String)dataMap.get('summary1');
             if(strSummary1 != null){
                 Map<String,Object> mapSummary1 = (Map<String,Object>)JSON.deserializeUntyped(strSummary1);
@@ -400,6 +661,7 @@ public without sharing class ClsNewRequest {
             if(opp.Id == null){ Database.SaveResult sr = Database.insert(opp); }
             else{ Database.SaveResult sr = Database.update(opp); }
             
+            //PERIOD
             List<Object> listtransRow = (List<Object>) dataMap.get('transactionRows');
             Id insurancePeriodRecordTypeId = Schema.SObjectType.Transaction_Data__c.getRecordTypeInfosByDeveloperName().get('Insurance_Period').getRecordTypeId();
             List<Transaction_Data__c> transactionsToInsert = new List<Transaction_Data__c>();
@@ -409,8 +671,9 @@ public without sharing class ClsNewRequest {
                 Map<String,Object> mapTrans = (Map<String, Object>)trans;
                 String transactionPeriodType;
                 Integer iYear = (Integer)mapTrans.get('year');
-                String sPercentage = (String)mapTrans.get('percentage');
+                //String sPercentage = (String)mapTrans.get('percentage');
                 String sType = (String)mapTrans.get('type');
+                String sPercentage = String.valueOf(mapTrans.get('percentage'));
                 
                 if('3'.equals(opty.insuranceperiod)) {
                     if (i == listtransRow.size() - 1){ transactionPeriodType = '2'; }
@@ -421,6 +684,7 @@ public without sharing class ClsNewRequest {
             }
             if (!transactionsToInsert.isEmpty()){ List<Database.SaveResult> sr = Database.insert(transactionsToInsert); }
             
+            //QQ
             List<Transaction_Data__c> listtrans = new List<Transaction_Data__c>();
             List<Object> listQQ = (List<Object>) dataMap.get('qqmember');
             for(Object qq : listQQ){
@@ -433,15 +697,16 @@ public without sharing class ClsNewRequest {
             }
             if(listtrans.size()>0){ List<Database.SaveResult> sr = Database.insert(listtrans); }
             
+            //PRODUCT
             List<OpportunityLineItem> listopl = new List<OpportunityLineItem>();
             List<OpportunityLineItem> listoplupdate = new List<OpportunityLineItem>();
             if(lineCOB != NULL && opty.producttype != NULL){
                 Product2 pd = [SELECT Id,Name FROM Product2 WHERE Id =:opty.producttype WITH SECURITY_ENFORCED LIMIT 1];
                 List<PricebookEntry> listpbe = [SELECT Id FROM PricebookEntry 
-                                      WHERE Pricebook2Id =:pb.Id 
-                                      AND Product2Id =:pd.Id 
-                                      AND isActive = TRUE WITH SECURITY_ENFORCED
-                                      LIMIT 1];
+                                                WHERE Pricebook2Id =:pb.Id 
+                                                AND Product2Id =:pd.Id 
+                                                AND isActive = TRUE WITH SECURITY_ENFORCED
+                                                LIMIT 1];
                 if(listpbe.size() == 0){
                     return 'Pricebook must be mantain to this product - ' + pd.Name + '!';
                 }else{
@@ -449,8 +714,8 @@ public without sharing class ClsNewRequest {
                     OpportunityLineItem opl = createOpportunityLineItem(opp.Id,premium,opty.premiumIDR,pd.Id,pbe.Id);
                     List<OpportunityLineItem> checkOPL = [SELECT Id FROM OpportunityLineItem 
                                                           WHERE OpportunityId =:opl.OpportunityId
-                                                         AND Product2Id =:opl.Product2Id WITH SECURITY_ENFORCED
-                                                         LIMIT 1];
+                                                          AND Product2Id =:opl.Product2Id WITH SECURITY_ENFORCED
+                                                          LIMIT 1];
                     if(checkOPL.size()==0){listopl.add(opl);}
                     else{listoplupdate.add(opl);}
                 }
@@ -460,7 +725,7 @@ public without sharing class ClsNewRequest {
             
             //RISK
             if(lineCOB != NULL && opp.Id != null){
-                at1.Opportunity__c = opp.Id;
+                at1.Opportunity__c = opp.Id; 
                 List<Asset> checkAT = [SELECT Id FROM Asset 
                                        WHERE Name =:at1.Name 
                                        AND RecordTypeId =:strRTRisk
@@ -469,12 +734,10 @@ public without sharing class ClsNewRequest {
                 if(checkAT.size()>0){
                     at1.Id = checkAT[0].Id;
                     Database.SaveResult sr = Database.update(at1);
-                }else{ Database.SaveResult sr = Database.insert(at1);}
+                }else{Database.SaveResult sr = Database.insert(at1);}
             }
             
             //ASSET
-            //system.debug('assetSection:'+assetSection);
-            //system.debug('opty.curr:'+opty.curr);
             if(assetSection != null){
                 Asset asset1 = new Asset();
                 asset1.RecordTypeId = strRTAsset;
@@ -483,13 +746,7 @@ public without sharing class ClsNewRequest {
                 asset1.Risk_ID__c = '1';
                 asset1.ParentId = at1.Id;
                 if(rate != null){asset1.Exchange_Rate__c = rate;}
-                if(opty.curr != null){
-                    List<Master_Data__c> listcurr = [SELECT Id FROM Master_Data__c 
-                                             WHERE RecordType.DeveloperName = 'Exchange_Rate' 
-                                             AND Name =:opty.curr WITH SECURITY_ENFORCED
-                                             LIMIT 1];
-                    if(listcurr.size()>0){ asset1.Currency__c = listcurr[0].Id; }
-                }
+                if(opty.curr != null){ asset1.Currency__c = opty.curr; }
                 if(opty.sumInsured != null){ asset1.Amount__c = opty.sumInsured; }
                 if(opty.sumInsuredIDR != null){ asset1.Amount_Insured__c = opty.sumInsuredIDR; }
                 asset1.Section__c = assetSection;
@@ -506,6 +763,7 @@ public without sharing class ClsNewRequest {
                 }else{ Database.SaveResult sr = Database.insert(asset1);}
             }
             
+            //FILE 
             List<ContentDocument> listcd = new List<ContentDocument>();
             List<ContentDocumentLink> listcdl = new List<ContentDocumentLink>();
             List<Object> listFileQuote1 = (List<Object>) dataMap.get('filequote1');
@@ -544,6 +802,7 @@ public without sharing class ClsNewRequest {
                 if(listnewcdl.size()>0){ List<Database.SaveResult> sr = Database.insert(listnewcdl);}
             }
             
+            //MULTIPLE
             if(risk == 'multiple'){
                 String riskName2 = (String)dataMap.get('riskName2');
                 opty.contractType = (String)dataMap.get('contracttype2');
@@ -558,24 +817,26 @@ public without sharing class ClsNewRequest {
                         opty.policywording = md.Id__c;
                     }
                 }
+                opty.premiumcalculation = (String)dataMap.get('premiumcalculation2');
                 opty.policywordingname = (String)dataMap.get('policywording2');
                 opty.firetype = (String)dataMap.get('firetype2');
                 opty.wording = (String)dataMap.get('wording2');
+                opty.wordingname = (String)dataMap.get('wordingname2');
                 opty.insuranceperiod = (String)dataMap.get('insuranceperiod2');
                 opty.startdateperiod = isDate((String)dataMap.get('startdateperiod2'));
                 opty.enddateperiod = isDate((String)dataMap.get('enddateperiod2'));
                 opty.yearperiod = Integer.valueOf(dataMap.get('yearperiod2'));
-                opty.annualperiod = Integer.valueOf(dataMap.get('annualperiod2'));
                 opty.shortperiod = (String)dataMap.get('shortperiod2');
                 opty.percentageperiod = Integer.valueOf(dataMap.get('percentageperiod2'));
                 //opty.rateperiod = Integer.valueOf(dataMap.get('rateperiod2'));
-				opty.rateperiod = (Decimal)dataMap.get('rateperiod2');
+                opty.rateperiod = (Decimal)dataMap.get('rateperiod2');
                 String schematype2 = (String)dataMap.get('schematype2');
                 String strRisk2 = (String)dataMap.get('risksituation2');
                 String productType2 = (String)dataMap.get('producttype2');
                 opty.producttypename = (String)dataMap.get('producttypename2');
                 opty.description = (String)dataMap.get('description2');
                 opty.format = (String)dataMap.get('format2');
+                opty.curr = (String)dataMap.get('currency2');
                 String lineCOB2;
                 Asset at2 = new Asset();
                 if(strRisk2 != null){
@@ -589,7 +850,7 @@ public without sharing class ClsNewRequest {
                         String value = String.valueOf(mapRisk2.get(key));
                         if(key == 'COB__c'){
                             lineCOB2 = value;
-                            at2.COB__c = value;
+                            //at2.COB__c = value;
                         }else{
                             if(value.indexOf('{')!=-1){
                                 String sKey = key.substringBefore('__c');
@@ -602,7 +863,7 @@ public without sharing class ClsNewRequest {
                                 }
                             }else{
                                 if(value != ''){
-                                	String strType = getFieldType('Asset', key);
+                                    String strType = getFieldType('Asset', key);
                                     if(strType != null){
                                         if(strType == 'DOUBLE'){ at2.put(key,DOUBLE.valueOf(value)); }
                                         else{ at2.put(key,value); }
@@ -615,16 +876,21 @@ public without sharing class ClsNewRequest {
                             }    
                         }
                     }
+                    if(opty.curr != null && lineCOB2 == '301'){ at2.Currency__c = opty.curr; }
                 }
                 opty.lineCOB = lineCOB2;
                 String assetSection2 = (String)dataMap.get('assetsection2');
-            	String assetCategory2 = (String)dataMap.get('assetcategory2');
-                opty.curr = (String)dataMap.get('currency2');
+                String assetCategory2 = (String)dataMap.get('assetcategory2');
+                
                 Decimal rate2 = Decimal.valueOf((Long)dataMap.get('rate2'));
-                opty.sumInsured = Integer.valueOf(dataMap.get('sumInsured2'));
+                opty.sumInsured = null;
+                String strSumInsured2 = (String)dataMap.get('sumInsured2');
+                if(strSumInsured2 != null) opty.sumInsured = Long.valueOf(strSumInsured2);
                 opty.sumInsuredIDR = Decimal.valueOf((Long)dataMap.get('sumInsuredIDR2'));
-                Integer premium2 = Integer.valueOf(dataMap.get('premium2'));
-                opty.premiumIDR = Integer.valueOf(dataMap.get('premiumIDR2'));
+                String strPremium2 = (String)dataMap.get('premium2');
+                Long premium2;
+                if(strPremium2 != null) premium2 = Long.valueOf(strPremium2);
+                opty.premiumIDR = (Long)dataMap.get('premiumIDR2');
                 String strSummary2 = (String)dataMap.get('summary2');
                 if(strSummary2 != null){
                     Map<String,Object> mapSummary2 = (Map<String,Object>)JSON.deserializeUntyped(strSummary2);
@@ -646,7 +912,7 @@ public without sharing class ClsNewRequest {
                 
                 Opportunity opp2 = createOpportunity(opty);
                 if(opp2 != null){ Database.SaveResult sr = Database.insert(opp2);}
- 
+                
                 List<Object> listtransRow2 = (List<Object>) dataMap.get('transactionRows2');
                 transactionsToInsert = new List<Transaction_Data__c>();
                 i = 0;
@@ -681,10 +947,10 @@ public without sharing class ClsNewRequest {
                 if(lineCOB2 != NULL && productType2 != NULL){
                     Product2 pd = [SELECT Id FROM Product2 WHERE Id =:productType2 WITH SECURITY_ENFORCED LIMIT 1];
                     List<PricebookEntry> listpbe = [SELECT Id FROM PricebookEntry 
-                                          WHERE Pricebook2Id =:pb.Id 
-                                          AND Product2Id =:pd.Id 
-                                          AND isActive = TRUE WITH SECURITY_ENFORCED
-                                          LIMIT 1];
+                                                    WHERE Pricebook2Id =:pb.Id 
+                                                    AND Product2Id =:pd.Id 
+                                                    AND isActive = TRUE WITH SECURITY_ENFORCED
+                                                    LIMIT 1];
                     if(listpbe.size() == 0){
                         return 'Pricebook must be mantain to this product - ' + pd.Name + '!';
                     }else{
@@ -708,13 +974,7 @@ public without sharing class ClsNewRequest {
                     asset2.Name = riskName2;
                     asset2.ParentId = at2.Id;
                     if(rate2 != null){asset2.Exchange_Rate__c = rate2;}
-                    if(opty.curr != null){
-                        List<Master_Data__c> listcurr = [SELECT Id FROM Master_Data__c 
-                                                 WHERE RecordType.DeveloperName = 'Exchange_Rate' 
-                                                 AND Name =:opty.curr WITH SECURITY_ENFORCED
-                                                 LIMIT 1];
-                        if(listcurr.size()>0){ asset2.Currency__c = listcurr[0].Id; }
-                    }
+                    if(opty.curr != null){ asset2.Currency__c = opty.curr;}
                     if(opty.sumInsured != null){ asset2.Amount__c = opty.sumInsured; }
                     if(opty.sumInsuredIDR != null){ asset2.Amount_Insured__c = opty.sumInsuredIDR; }
                     asset2.Section__c = assetSection2;
@@ -769,8 +1029,213 @@ public without sharing class ClsNewRequest {
         return result;
     }
     
+    @AuraEnabled
+    public static string saveDataMOU(string data){
+    	String result = '';
+        Savepoint sp = Database.setSavepoint();
+        system.debug(LoggingLevel.WARN,'data:'+data);
+        /*try{
+            String strRTAsset = Schema.SObjectType.Asset.getRecordTypeInfosByName().get('Asset').getRecordTypeId();
+            String strRTRisk = Schema.SObjectType.Asset.getRecordTypeInfosByName().get('Risk').getRecordTypeId();
+            Map<String, Object> dataMap = (Map<String, Object>) JSON.deserializeUntyped(data);
+            opty opty = new opty();
+            opty.Id = (String)dataMap.get('id');
+            opty.opportunityType = (String)dataMap.get('opportunitytype');
+            opty.accountId = (String)dataMap.get('accountId');
+            opty.requestorTypeId = (String)dataMap.get('requestorTypeId');
+            opty.requestorSegmentId = (String)dataMap.get('requestorSegmentId');
+            opty.requestorSubSegmentId = (String)dataMap.get('requestorSubSegmentId');
+            opty.requestorBusinessSegmentationId = (String)dataMap.get('requestorBusinessSegmentationId');
+            opty.requestorPipelineStatusId = (String)dataMap.get('requestorPipelineStatusId');
+            opty.requestorChannelId = (String)dataMap.get('requestorChannelId');
+            opty.requestorAddress = (String)dataMap.get('requestorAddress');
+            opty.insuredId = (String)dataMap.get('insuredId');
+            opty.insuredAddress = (String)dataMap.get('insuredAddress');
+            opty.lineCOB = (String)dataMap.get('cob');
+            String riskName = (String)dataMap.get('riskName');
+            opty.contractType = (String)dataMap.get('contracttype');
+            String policywordingId = (String)dataMap.get('policywordingId');
+			if(policywordingId != null){
+                List<Master_Data__c> listmd = [SELECT Id,Id__c FROM Master_Data__c 
+                                               WHERE Id=:policywordingId 
+                                               AND Id__c != null WITH SECURITY_ENFORCED];
+                if(listmd.size()>0){
+                    Master_Data__c md = listmd[0];
+                    opty.policywording = md.Id__c;
+                }
+            }
+            opty.premiumcalculation = (String)dataMap.get('premiumcalculation');
+            opty.policywordingname = (String)dataMap.get('policywording');
+            opty.wording = (String)dataMap.get('wording');
+            opty.wordingname = (String)dataMap.get('wordingname');
+            opty.insuranceperiod = (String)dataMap.get('insuranceperiod');
+            opty.startdateperiod = isDate((String)dataMap.get('startdateperiod'));
+            opty.enddateperiod = isDate((String)dataMap.get('enddateperiod'));
+            opty.yearperiod = Integer.valueOf(dataMap.get('yearperiod'));
+            opty.shortperiod = (String)dataMap.get('shortperiod');
+            opty.percentageperiod = Integer.valueOf(dataMap.get('percentageperiod'));
+            opty.rateperiod = (Decimal)dataMap.get('rateperiod');
+            opty.totalyear = (Integer)dataMap.get('totalyear');
+            opty.totalmonth = (Integer)dataMap.get('totalmonth');
+            String schematype = (String)dataMap.get('schematype');
+            opty.producttype = (String)dataMap.get('producttype');
+            opty.producttypename = (String)dataMap.get('producttypename');
+            String strRisk1 = (String)dataMap.get('risk1');
+            opty.curr = (String)dataMap.get('currency');
+            String assetSection = (String)dataMap.get('assetsection');
+            String assetCategory = (String)dataMap.get('assetcategory');
+            Decimal rate = Decimal.valueOf((Long)dataMap.get('rate'));
+            String strSumInsured = (String)dataMap.get('sumInsured');
+            if(strSumInsured != null){opty.sumInsured = Long.valueOf(strSumInsured);}
+            opty.sumInsuredIDR = Decimal.valueOf((Long)dataMap.get('sumInsuredIDR'));
+            if(opty.accountId != null && riskName != null){
+                Account acc = [SELECT Id,Name FROM Account WHERE Id=:opty.accountId WITH SECURITY_ENFORCED];
+                opty.oppName = acc.Name + ' - ' + riskName;
+            }
+            PriceBook2 pb = [SELECT Id FROM PriceBook2 WHERE isActive = TRUE WITH SECURITY_ENFORCED LIMIT 1];
+            opty.recTypeIdOpt = Schema.SObjectType.Opportunity.getRecordTypeInfosByName().get('General').getRecordTypeId();
+            Opportunity opp = createOpportunity(opty);
+            if(opp.Id == null){ Database.SaveResult sr = Database.insert(opp); }
+            else{ Database.SaveResult sr = Database.update(opp); }
+            
+            if(opp.Id != null){
+                //RISK
+                Asset at1 = new Asset();
+                if(strRisk1 != null){
+                    at1.RecordTypeId = strRTRisk;
+                    at1.Name = riskName;
+                    at1.Risk_ID__c = '1';
+                    if(opty.sumInsuredIDR != null){ at1.Amount_Insured__c = opty.sumInsuredIDR; }
+                    Map<String,Object> mapRisk1 = (Map<String,Object>)JSON.deserializeUntyped(strRisk1);
+                    Set<String> setRisk1 = mapRisk1.keySet();
+                    for(String key:setRisk1){
+                        String value = String.valueOf(mapRisk1.get(key));
+                        if(value.indexOf('{')!=-1){
+                            String sKey = key.substringBefore('__c');
+                            Map<String,Object> mapObj = (Map<String,Object>)mapRisk1.get(key);
+                            Set<String> setObj = mapObj.keySet();
+                            for(String key2:setObj){
+                                String value2 = (String)mapObj.get(key2);
+                                if(key2 == 'latitude'){ at1.put(sKey+'__Latitude__s',Integer.ValueOf(value2)); }
+                                else if(key2 == 'longitude'){ at1.put(sKey+'__Longitude__s',Integer.ValueOf(value2)); }
+                            }
+                        }else{
+                            if(value != ''){ 
+                                String strType = getFieldType('Asset', key);
+                                if(strType == 'DOUBLE'){ at1.put(key,DOUBLE.valueOf(value)); }
+                                else{ at1.put(key,value); }
+                                if(key == 'Address__c'){
+                                    Schema.Location lc = [SELECT Id,Name FROM Location WHERE Id=:value LIMIT 1];
+                                    at1.Address_Description__c = lc.Name;
+                                }
+                            }
+                        }   
+                    }
+                    if(opty.curr != null && opty.lineCOB == '301'){ at1.Currency__c = opty.curr;}
+                    at1.Opportunity__c = opp.Id; 
+                    List<Asset> checkAT = [SELECT Id FROM Asset 
+                                           WHERE Name =:at1.Name 
+                                           AND RecordTypeId =:strRTRisk
+                                           AND Opportunity__c =:at1.Opportunity__c WITH SECURITY_ENFORCED 
+                                           LIMIT 1];
+                    if(checkAT.size()>0){
+                        at1.Id = checkAT[0].Id;
+                        Database.SaveResult sr = Database.update(at1);
+                    }else{Database.SaveResult sr = Database.insert(at1);}
+                }
+                
+                //PERIOD
+                List<Object> listtransRow = (List<Object>) dataMap.get('transactionRows');
+                Id insurancePeriodRecordTypeId = Schema.SObjectType.Transaction_Data__c.getRecordTypeInfosByDeveloperName().get('Insurance_Period').getRecordTypeId();
+                List<Transaction_Data__c> transactionsToInsert = new List<Transaction_Data__c>();
+                Integer i = 0;
+                system.debug(LoggingLevel.WARN,'listtransRow:'+listtransRow);
+                for(Object trans : listtransRow){
+                    Map<String,Object> mapTrans = (Map<String, Object>)trans;
+                    String transactionPeriodType;
+                    Integer iYear = (Integer)mapTrans.get('year');
+                    String sType = (String)mapTrans.get('type');
+                    String sPercentage = String.valueOf(mapTrans.get('percentage'));
+                    
+                    if('3'.equals(opty.insuranceperiod)) {
+                        if (i == listtransRow.size() - 1){ transactionPeriodType = '2'; }
+                        else{ transactionPeriodType = '1'; }
+                    }else{ transactionPeriodType = opty.insuranceperiod; }
+                    transactionsToInsert.add(createPeriod(opp.Id,insurancePeriodRecordTypeId,schematype,iYear,sPercentage,sType,transactionPeriodType));
+                    i++;
+                }
+                if (!transactionsToInsert.isEmpty()){ List<Database.SaveResult> sr = Database.insert(transactionsToInsert); }
+                
+                //QQ
+                List<Transaction_Data__c> listtrans = new List<Transaction_Data__c>();
+                List<Object> listQQ = (List<Object>) dataMap.get('qqmember');
+                for(Object qq : listQQ){
+                    Map<String,Object> mapQQ = (Map<String, Object>)qq;
+                    String qqId = (String)mapQQ.get('Id');
+                    if(qqId != NULL){
+                        Transaction_Data__c td = createQQ(qqId,opp.Id);
+                        listtrans.add(td);
+                    }
+                }
+                if(listtrans.size()>0){ List<Database.SaveResult> sr = Database.insert(listtrans); }
+                
+                //ASSET
+                if(assetSection != null){
+                    Asset asset1 = new Asset();
+                    asset1.RecordTypeId = strRTAsset;
+                    asset1.Opportunity__c = opp.Id;
+                    asset1.Name = riskName;
+                    asset1.Risk_ID__c = '1';
+                    asset1.ParentId = at1.Id;
+                    if(rate != null){asset1.Exchange_Rate__c = rate;}
+                    if(opty.curr != null){ asset1.Currency__c = opty.curr;}
+                    if(opty.sumInsured != null){ asset1.Amount__c = opty.sumInsured; }
+                    if(opty.sumInsuredIDR != null){ asset1.Amount_Insured__c = opty.sumInsuredIDR; }
+                    asset1.Section__c = assetSection;
+                    if(assetCategory != null){ asset1.Category__c = assetCategory; }
+                    system.debug('asset1:'+asset1);
+                    List<Asset> checkAT = [SELECT Id FROM Asset 
+                                           WHERE Name =:asset1.Name 
+                                           AND RecordTypeId =:strRTAsset
+                                           AND Opportunity__c =:opp.Id WITH SECURITY_ENFORCED 
+                                           LIMIT 1];
+                    if(checkAT.size()>0){
+                        asset1.Id = checkAT[0].Id;
+                        Database.SaveResult sr = Database.update(asset1);
+                    }else{ Database.SaveResult sr = Database.insert(asset1);}
+                }
+                
+                //COVERAGE
+                List<Object> listCoverage = (List<Object>) dataMap.get('coverage1');
+                system.debug(LoggingLevel.WARN,'listCoverage:'+listCoverage);
+                for(Object obj : listCoverage){
+                    Map<String,Object> mapObj = (Map<String, Object>)obj;
+                    String coverageId = (String)mapObj.get('coverageId');
+                }
+            }
+            result = opp.Id;
+                
+        }catch(Exception e){
+            Database.rollback(sp); 
+            result = e.getMessage();
+        }*/
+        system.debug(LoggingLevel.WARN,'result:'+result);
+        return result;
+    }
+    
     public static Opportunity createOpportunity(opty opty)
     {
+        Decimal periodRateFinal = opty.rateperiod;
+        Integer numberOfYear = opty.yearperiod;
+        if(opty.insuranceperiod == '3'){
+            if(opty.totalmonth > 0 && opty.rateperiod > 0){
+                periodRateFinal += opty.totalyear;
+            }else{
+                periodRateFinal = opty.totalyear;
+                numberOfYear = opty.totalyear;
+            }
+        }
+        
         Opportunity opp = new Opportunity();
         if(opty.id != null){ opp.Id = opty.id; }
         if(opp.Id == null){
@@ -791,6 +1256,7 @@ public without sharing class ClsNewRequest {
         if(opty.policywordingname != null){opp.Wording_Name__c = opty.policywordingname;}
         if(opty.firetype != null){opp.FIRE_TYPE__c = opty.firetype;}
         if(opty.wording != null){opp.Policy_Wording__c = opty.wording;}
+        if(opty.wordingname != null){opp.Policy_Wording_Name__c = opty.wordingname;} //WORDING NAME
         if(opty.contractType == null){ opty.contractType = '1'; } //DEFAULT CONTRACT TYPE IF NONE
         if(opty.contractType != null){opp.Policy_Closing_Type__c = opty.contractType;}
         if(opty.insuredId != null){opp.The_Insured_Name__c = opty.insuredId;}
@@ -799,13 +1265,11 @@ public without sharing class ClsNewRequest {
         if(opty.insuranceperiod != null){opp.Insurance_Period_Type__c = opty.insuranceperiod;}
         if(opty.startdateperiod != null){opp.Start_Date_Periode__c = opty.startdateperiod;}
         if(opty.enddateperiod != null){opp.End_Date_Periode__c = opty.enddateperiod;}
-        if(opty.yearperiod != null){opp.Number_of_Years__c = opty.yearperiod;}
-        //if(opty.annualperiod != null) opp.Period_Annual__c = opty.annualperiod; -> commented by Marco. Field not used, changed to Number_of_Years__c
-        if(opty.annualperiod != null){opp.Number_of_Years__c = opty.annualperiod;}
+        if(numberOfYear != null){opp.Number_of_Years__c = numberOfYear;}
         if(opty.shortperiod != null){opp.Short_Period_Basis__c = opty.shortperiod;}
         if(opty.percentageperiod != null){opp.Percentage__c = opty.percentageperiod;}
-        if(opty.rateperiod != null){opp.Period_Rate__c = opty.rateperiod;}
-        if(opty.curr != null){opp.cur__c = opty.curr;}
+        if(periodRateFinal != null){opp.Period_Rate__c = periodRateFinal;}
+        if(opty.curr != null){opp.Currency__c = opty.curr;} //curr__c -> Currency__c
         if(opty.sumInsured != null){opp.Sum_Insured__c = opty.sumInsured;}
         if(opty.sumInsuredIDR != null){opp.Total_Sum_Insured__c = opty.sumInsuredIDR;}
         if(opty.numberOfRisk != null){opp.Number_Of_Risk__c = opty.numberOfRisk;}
@@ -822,9 +1286,13 @@ public without sharing class ClsNewRequest {
         opp.Pricebook2Id = opty.idPb;
         if(opty.producttype != null){opp.Product_Type_Id__c = opty.producttype;}
         if(opty.producttypename != null){opp.Product_Type__c = opty.producttypename;}
+        if(opty.premiumcalculation != null){opp.premium_calculation__c = opty.premiumcalculation;}
+        //DEFAULT
+        opp.Closing_Class__c = '1'; //Non MOU
+        opp.Type_Of_Business__c = 'D'; //Direct
         return opp;
     }
-
+    
     public static Transaction_Data__c createPeriod(String oppId,String insurancePeriodRecordTypeId,String schematype,
                                                    Integer iYear,String sPercentage,String sType,String transactionPeriodType)
     {
@@ -838,11 +1306,12 @@ public without sharing class ClsNewRequest {
         trans.Insurance_Period_Type__c = transactionPeriodType;
         return trans;
     }
-
+    
     public static Transaction_Data__c createQQ(String qqId,String optId){
-        Account acc = [SELECT Id,Address__c FROM Account WHERE Id=:qqId WITH SECURITY_ENFORCED];
+        Account acc = [SELECT Id,Address__c,Name FROM Account WHERE Id=:qqId WITH SECURITY_ENFORCED];
         String recTypeIdQQ = Schema.SObjectType.Transaction_Data__c.getRecordTypeInfosByName().get('Member of QQ').getRecordTypeId();
         Transaction_Data__c td = new Transaction_Data__c();
+        td.Name = acc.Name;
         td.QQ_Name__c = acc.Id;
         td.QQ_Address__c = acc.Address__c;
         td.Opportunity__c = optId;
@@ -850,7 +1319,7 @@ public without sharing class ClsNewRequest {
         return td;
     }
     
-    public static OpportunityLineItem createOpportunityLineItem(String optId,Integer premium,Integer premiumIDR,String pdId,String pbeId){
+    public static OpportunityLineItem createOpportunityLineItem(String optId,Long premium,Long premiumIDR,String pdId,String pbeId){
         OpportunityLineItem opl = new OpportunityLineItem();
         opl.OpportunityId = optId;
         if(premiumIDR == null){opl.UnitPrice = 0;}
@@ -899,21 +1368,21 @@ public without sharing class ClsNewRequest {
                 System.debug('Object ' + objectName + ' not found.');
                 return result;
             }
-
+            
             DescribeSObjectResult objectDescribe = objectType.getDescribe();
             Map<String, Schema.SObjectField> fieldMap = objectDescribe.fields.getMap();
-
+            
             Schema.SObjectField sObjectField = fieldMap.get(fieldName);
             if (sObjectField == null) {
                 System.debug('Field ' + fieldName + ' not found on object ' + objectName + '.');
                 return result;
             }
-
+            
             DescribeFieldResult fieldDescribe = sObjectField.getDescribe();
             Schema.DisplayType fieldDataType = fieldDescribe.getType();
-			result = String.valueOf(fieldDataType);
+            result = String.valueOf(fieldDataType);
             //System.debug('Data type of ' + objectName + '.' + fieldName + ': ' + fieldDataType);
-
+            
         } catch (Exception e) {
             System.debug('An error occurred: ' + e.getMessage());
         }
@@ -933,6 +1402,22 @@ public without sharing class ClsNewRequest {
         return myDate;
     }
     
+    public static String setData(List<String> listdata,Asset ass){
+        String result = '';
+        if(listdata.size()>0){
+            for(String str : listdata){
+                String value = (String)ass.get(str);
+                if(value != null){result += value;}
+            }
+        }
+        return result;
+    }
+    
+    public class section{
+        @AuraEnabled public string name;
+        @AuraEnabled public List<Data> data;
+    }
+    
     public class Data{
         @AuraEnabled public string dataobject;
         @AuraEnabled public string datafield;
@@ -947,6 +1432,12 @@ public without sharing class ClsNewRequest {
     public class Listfile{
         public List<ContentDocument> listcd;
         public List<ContentDocumentLink> listcdl;
+    }
+    
+    private class dataDuplicate{
+        private string cob;
+        private string description;
+        private string situation;
     }
     
     private class Opty{
@@ -972,13 +1463,13 @@ public without sharing class ClsNewRequest {
         private Date startdateperiod; 
         private Date enddateperiod;
         private Integer yearperiod;
-        private Integer annualperiod; 
         private String shortperiod;
         private Integer percentageperiod;
-        //public Integer rateperiod;
         private Decimal rateperiod; 
+        private Integer totalyear;
+        private Integer totalmonth;
         private String curr;
-        private Integer sumInsured;
+        private Long sumInsured;
         private Decimal sumInsuredIDR;
         private Integer numberOfRisk;
         private Date closedDate;
@@ -986,9 +1477,11 @@ public without sharing class ClsNewRequest {
         private String description;
         private String firetype;
         private String wording;
-        private Integer premiumIDR;
+        private String wordingname;
+        private Long premiumIDR;
         private String format;
         private String producttypename;
         private String producttype;
+        private String premiumcalculation;
     }
 }
