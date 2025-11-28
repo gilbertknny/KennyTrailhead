@@ -33,6 +33,7 @@ public class ClsRenewal_Test {
             InsurancePolicy ip = [SELECT Id FROM InsurancePolicy WHERE Name = 'Test' LIMIT 1];
             InsurancePolicy ip2 = [SELECT Id FROM InsurancePolicy WHERE Name = 'Test2' LIMIT 1];
             Test.startTest();
+            ClsRenewal.getUserId();
             ClsRenewal.getPicklist('InsurancePolicy','Status_Renewal__c');
             string result = ClsRenewal.saveData('RN',ip.Id,null,null,null,null);
             result = ClsRenewal.saveData('ED',ip.Id,null,null,'2025-01-01',null);
