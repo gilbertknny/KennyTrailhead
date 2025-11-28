@@ -6,11 +6,13 @@ Change String value {Annual, Short, Long-Term} into {1, 2, 3}. And {Percentage, 
 import { LightningElement,api,track,wire } from 'lwc';
 import getOpportunity from '@salesforce/apex/ClsNewRequest.getOpportunity';
 import getMasterData from '@salesforce/apex/ClsNewRequest.getMasterData';
+import getMasterDataSection from '@salesforce/apex/ClsNewRequest.getMasterDataSection';
 import getAccountDetail from '@salesforce/apex/ClsNewRequest.getAccountDetail';
 import searchAccounts from '@salesforce/apex/ClsNewRequest.searchQQAccounts';
 import deleteFile from '@salesforce/apex/ClsNewRequest.deleteFile';
 import deleteFiles from '@salesforce/apex/ClsNewRequest.deleteFiles';
 import saveData from '@salesforce/apex/ClsNewRequest.saveData';
+import saveDataMOU from '@salesforce/apex/ClsNewRequest.saveDataMOU';
 import getPicklistSTD from '@salesforce/apex/ClsNewRequest.getPicklist';
 import getProductType from '@salesforce/apex/ClsNewRequest.getProductType';
 import getPolicyWording from '@salesforce/apex/ClsNewRequest.getPolicyWording';
@@ -18,6 +20,11 @@ import getAssetSection from '@salesforce/apex/ClsNewRequest.getAssetSection';
 import getAssetCategory from '@salesforce/apex/ClsNewRequest.getAssetCategory';
 import getObject from '@salesforce/apex/ClsNewRequest.getObject';
 import getRate from '@salesforce/apex/ClsNewRequest.getRate';
+import getValidateDouble from '@salesforce/apex/ClsNewRequest.getValidateDouble';
+import getContract from '@salesforce/apex/ClsNewRequest.getContract';
+import getAssetSectionMOU from '@salesforce/apex/ClsNewRequest.getAssetSectionMOU';
+import getAssetCategoryMOU from '@salesforce/apex/ClsNewRequest.getAssetCategoryMOU';
+import getCurrency from '@salesforce/apex/ClsNewRequest.getCurrency';
 import { getFocusedTabInfo,setTabLabel,closeTab,setTabIcon,refreshTab} from 'lightning/platformWorkspaceApi';
 import { NavigationMixin,CurrentPageReference } from "lightning/navigation";
 import urlCreateAccount from '@salesforce/label/c.URL_Create_Account';
@@ -26,18 +33,20 @@ import getWording from '@salesforce/apex/ClsNewRequest.getWording';
 import LightningAlert from 'lightning/alert';
 import { CloseActionScreenEvent } from 'lightning/actions';
 import myModal from 'c/lwcRenewal';
+import LightningConfirm from 'lightning/confirm';
+import modalMOU from 'c/lwcNewRequestMOU';
 
 export default class LwcNewRequest extends NavigationMixin(LightningElement) {
     activeSections = [];//['A'];
     activeSectionsMessage = '';
 
     // public inputs
-    periodType     = '';
+    periodType     = null;
     years          = null;
-    shortBasis     = '';
+    shortBasis     = null;
     percentage     = null;
-    startDate      = '';
-    endDate        = '';
+    startDate      = null;
+    endDate        = null;
     calculatedRate = null;
     @track schemaType = null;
 
@@ -56,7 +65,7 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
     get isShort()           { return this.periodType === '2'; }
     get isPercentageBasis() { return this.shortBasis === '1'; }
     get isProRataBasis()    { return this.shortBasis === '2'; }
-    get showInfo()          { return !this.isAnnual && this.dayCount !== null; }
+    get showInfo() { return !this.isAnnual; }
 
     // public inputs 2
     periodType2     = '';
@@ -83,7 +92,7 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
     get isShort2()           { return this.periodType2 === '2'; }
     get isPercentageBasis2() { return this.shortBasis2 === '1'; }
     get isProRataBasis2()    { return this.shortBasis2 === '2'; }
-    get showInfo2()          { return !this.isAnnual2 && this.dayCount2 !== null; }
+    get showInfo2() { return !this.isAnnual2; }
 
     @api recordId;
     @api account;
@@ -101,6 +110,9 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
     @track opportunityTypeId;
     @track disabledAccount = false;
     @track showFull = false;
+    @track showDouble = false;
+    @track showMOU = false;
+    @track showFieldMOU = false;
     
     //REQUESTOR
     @track requestorType;
@@ -158,21 +170,42 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
     @track fireTypeId;
     @track wording;
     @track wordingId;
+    @track wordingName;
     @track showIAR2;
     @track fireType2;
     @track fireTypeId2;
     @track wording2;
     @track wordingId2;
+    @track wordingName2;
     @track dataDescription1 = [];
     @track dataDescription2 = [];
+    @track premiumCalculation;
+    @track premiumCalculation2;
+    @track premiumCalculationId;
+    @track premiumCalculationId2;
+    @track showPremium;
+    @track showPremium2;
+
+    //MOU
+    @track datafieldMOU1 = [];
+    @track mapInputMOU1 = new Map();
+    @track filterMOU1;
+    @track mouId1;
+    @track assetSection1MOU;
+    @track assetCategory1MOU;
+    @track assetSectionId1MOU;
+    @track assetCategoryId1MOU;
+    @track coverage1 = [];
 
     //SUMMARY
     @track rate;
     @track rate2;
     @track currency;
     @track currencyId;
+    @track currencyName;
     @track currency2;
     @track currencyId2;
+    @track currencyName2;
     @track showIDR;
     @track showIDR2;
     @track sumInsured;
@@ -219,14 +252,35 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
         { label: 'Address',fieldName: 'address', type: 'text' },
         { label: 'Account Type',fieldName: 'type',    type: 'text' },
         {
-        type: 'button-icon',
-        fixedWidth: 40,
-        typeAttributes: {
-            iconName: 'utility:close',
-            name:     'remove',
-            alternativeText: 'Remove'
+            type: 'button-icon',
+            fixedWidth: 40,
+            typeAttributes: {
+                iconName: 'utility:close',
+                name:     'remove',
+                alternativeText: 'Remove'
+            }
         }
-        }
+    ];
+
+    actions = [
+        { label: 'Show details', name: 'show_details' },
+        { label: 'Delete', name: 'delete' }
+    ];
+
+    columnscoverage1 = [
+        {type: 'action', typeAttributes: { rowActions: this.actions} },
+        {label:'Coverage',fieldName:'coverageName',type:'text'},
+        {label:'Proposed Rate',fieldName:'proposedFixedAmount',type:'number'},
+        {label:'Deductible PCT',fieldName:'deductiblePCT',type:'percent'},
+        {label:'Deductible Flag',fieldName:'deductibleName',type:'text'},
+        {label:'Minimum Curr',fieldName:'minimumCurName',type:'text'},
+        {label:'Minimum Amount',fieldName:'minimumAmount',type:'number'},
+        {label:'Banks Fee',fieldName:'banksFee',type:'percent'},
+        {label:'Agent Comission',fieldName:'agentComission',type:'percent'},
+        {label:'Broker Comission',fieldName:'brokerComission',type:'percent'},
+        {label:'Commision',fieldName:'generalRPremiumPCT',type:'percent'},
+        {label:'Overiding',fieldName:'overdngComission',type:'percent'},
+        {label:'Max Person',fieldName:'maxPerson',type:'number'}
     ];
 
     get options() {
@@ -260,6 +314,16 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
         additionalFields: [{ fieldPath: 'Phone' }],
     };
 
+    displayInfoMOU = {
+        primaryField: 'ContractNumber',
+        additionalFields: ['Additional__c'],
+    };
+
+    matchingInfoMOU = {
+        primaryField: { fieldPath: 'ContractNumber', mode: 'contains' },
+        additionalFields: [{ fieldPath: 'Additional__c' }],
+    };
+
     get insuranceTypeOptions() {
         return [
         { label: 'Annual',       value: '1' },
@@ -276,12 +340,21 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
     }
 
     schemaOptions = [
+        { label: '--None--', value: null },
         { label: 'Sum Insured Adjustment', value: 'Sum Insured Adjustment' },
         { label: 'Discounted Premium', value: 'Discounted Premium' }
     ];
 
     get displayRows() {
         return this.adjustmentRows.filter(r => r.year !== 1);
+    }
+
+    get hasSchemaType() {
+        return this.schemaType !== null && this.schemaType !== undefined && String(this.schemaType).trim() !== '';
+    }
+
+    get hasSchemaType2() {
+        return this.schemaType2 !== null && this.schemaType2 !== undefined && String(this.schemaType2).trim() !== '';
     }
 
     currentPageReference = null;
@@ -322,10 +395,9 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
             if(this.accountId != undefined) this.disabledAccount = true;
             this.showFull = false;
         }
-        console.log('recordId:'+this.recordId);
-        console.log('account:'+this.account);
-        const currentDate = new Date();
-        console.log(currentDate);
+        //console.log('recordId:'+this.recordId);
+        //console.log('account:'+this.account);
+        console.log('Gerry3');
     }
 
     disconnectedCallback(){
@@ -521,6 +593,9 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
 
     handleOpportunityType(event){
         this.opportunityTypeId = event.detail.value;
+        if(this.opportunityTypeId == 'NB' && this.accountId != undefined){
+                this.getContractData(this.accountId);
+            }
     }
 
     handleRequestorType(event){
@@ -569,8 +644,13 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
     handleChangeCOB1(event) {
         let value = event.detail.value;
         this.cob1 = value;
+        this.showPremium = false;
         if(value != '' && value != undefined){
             this.changeCOB(value,'change');
+            if(value == '301'){
+                this.showPremium = true;
+                this.getPremiumCalculation();
+            }
         }
     }
 
@@ -591,13 +671,20 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
             this.policyWording = [];
             this.getPicklist(this.cob1,1);
         }
-        this.mapInput = new Map();
-        this.mapInput.set('COB__C',value);
-        this.datafield1 = [];
-        this.dataDescription1 = [];
-        this.getDescription(value);
-        this.getSituation(value);
-        this.getPicklistAssetSection(value);
+        if(this.showMOU == false){
+            this.mapInput = new Map();
+            this.mapInput.set('COB__C',value);
+            this.datafield1 = [];
+            this.dataDescription1 = [];
+            this.getDescription(value);
+            this.getSituation(value);
+            this.getPicklistAssetSection(value);
+        }else{
+            this.mapInputMOU1 = new Map();
+            this.mapInputMOU1.set('COB__C',value);
+            this.datafieldMOU1 = [];
+            this.getRisk1();
+        }
     }
 
     async getSituation(value){
@@ -665,11 +752,42 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
         }); 
     }
 
+    async getRisk1(){
+        let value = this.cob1;
+        if(value!= '' && value != undefined){
+            await getMasterDataSection({
+                cob: value,
+                contracttype : this.contractTypeId
+            })
+            .then(result => {
+                this.isLoading = false;
+                let field1 = [];
+                for(let i=0; i<result.length; i++){
+                    field1.push({
+                        name : result[i].name,
+                        data : result[i].data
+                    });
+                }
+                this.datafieldMOU1 = field1;
+                console.log('this.datafieldMOU1:'+JSON.stringify(this.datafieldMOU1));
+            })
+            .catch(error => {
+                this.isLoading = false;
+                console.log('error-getRisk1:'+ error.message);
+            }); 
+        }
+    }
+
     handleChangeCOB2(event) {
         let value = event.detail.value;
         this.cob2 = value;
+        this.showPremium2 = false;
         if(value != '' && value != undefined){
             this.changeCOB2(value,'change');
+            if(value == '301'){
+                this.showPremium2 = true;
+                this.getPremiumCalculation2();
+            }
         }
     }
 
@@ -760,7 +878,41 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
         this.accountId = event.detail.recordId;
         if(this.accountId){
             this.getAccountDetail(this.accountId);
+            if(this.opportunityTypeId == 'NB'){
+                this.getContractData(this.accountId);
+            }
         }
+    }
+
+    getContractData(recordId){
+        this.isLoading = true;
+        getContract ({
+            recordId: recordId
+        }).then(result =>{
+            this.isLoading = false;
+            this.showFieldMOU = result;
+            if(result == true){
+                this.filterMOU1 = {
+                    criteria : [
+                        {
+                            fieldPath : 'AccountId',
+                            operator : 'eq',
+                            value : this.accountId
+                        },
+                        {
+                            fieldPath : 'Status',
+                            operator : 'eq',
+                            value : 'Activated'
+                        }
+                    ],
+                    filterLogic: '1 AND 2', 
+                    orderBy: [{fieldPath: 'Name', direction: 'asc'}]
+                };
+            }
+        }).catch(error => {
+            this.isLoading = false;
+            console.error('Error - getContractData:', error.message);
+        });
     }
 
     getOpportunityDetail(recordid){
@@ -914,6 +1066,7 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
         this.showIAR = false;
         this.fireTypeId = undefined;
         this.wordingId = undefined;
+        this.wordingName = undefined;
         if(this.policyWordingName == 'IAR/PAR'){
             this.showIAR = true;
             //this.getPicklistFireType();
@@ -927,6 +1080,7 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
 
     handleWording(event){
         this.wordingId = event.detail.value;
+        this.wordingName = this.wording.find(opt => opt.value === this.wordingId).label;
     }
 
     handlePolicyWording2(event){
@@ -935,6 +1089,7 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
         this.showIAR2 = false;
         this.fireTypeId2 = undefined;
         this.wordingId2 = undefined;
+        this.wordingName2 = undefined;
         if(this.policyWordingName2 == 'IAR/PAR'){
             this.showIAR2 = true;
             //this.getPicklistFireType2();
@@ -948,6 +1103,7 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
 
     handleWording2(event){
         this.wordingId2 = event.detail.value;
+        this.wordingName2 = this.wording2.find(opt => opt.value === this.wordingId2).label;
     }
 
     handleCInput(event){
@@ -1106,6 +1262,199 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
         this.setCInput(result,cob,fieldName,value,mapIn,'4');
     }
 
+    //MOU
+    handleInputMOU1(event){
+        let value = event.detail.value;
+        let fieldName = event.target.fieldName;
+        let cob = this.cob1;
+        let result = this.datafieldMOU1;
+        let mapIn = this.mapInputMOU1;
+        this.setCInputMOU(result,cob,fieldName,value,mapIn,'1');
+    }
+
+    setCInputMOU(result,cob,fieldName,value,mapIn,type){
+        let field,resultdata;
+        for(let x=0;x<result.length;x++){
+            resultdata = result[x].data;
+            field = resultdata.find(item => item.datafield === fieldName);
+            if(field != undefined) break;
+        }
+        if(value == undefined && fieldName != undefined && field.showdata != undefined){
+            let resultid = mapIn.get(fieldName);
+            let mapData = new Map();
+            for(let i=0; i<resultdata.length; i++){
+                if(resultdata[i].datafield == fieldName){
+                    let showdata = resultdata[i].showdata;
+                    let data = JSON.parse(showdata);
+                    for(let j=0;j<data.length;j++){
+                        mapData.set(data[j].param1,data[j].param2);
+                    }
+                    break;
+                }
+            }
+            if(resultid != undefined && resultid != ''){
+                const childCmp = this.template.querySelectorAll('c-input');
+                if (childCmp) {
+                    for(let i=0;i<childCmp.length;i++){
+                        let fieldName = childCmp[i].getName();
+                        let fieldDepend = mapData.get(fieldName);
+                        if(fieldDepend == ''){
+                            childCmp[i].setFilter(resultid);
+                        }
+                    }
+                }
+                getObject({
+                    fieldname: fieldName,
+                    cob : cob,
+                    recordId : resultid
+                })
+                .then(obj => {
+                    let mapObj = new Map(Object.entries(obj[0]));
+                    for(let i=0; i<resultdata.length; i++){
+                        let fKey = resultdata[i].datafield;
+                        let fName = mapData.get(fKey);
+                        if(fName != undefined){
+                            let fValue = mapObj.get(fName);
+                            if(fValue == undefined) fValue = '';
+                            resultdata[i].value = fValue;
+                            if(type == '1') this.mapInputMOU1.set(fKey,fValue);
+                        }
+                    }
+                    //console.log('resultdata:'+JSON.stringify(resultdata));
+                })
+                .catch(error => {
+                    console.log('error-getObject:'+ error.message);
+                });
+            }else{
+                console.log('clear');
+                for(let i=0; i<resultdata.length; i++){
+                    let fKey = resultdata[i].datafield;
+                    let fName = mapData.get(fKey);
+                    //console.log(fKey+':'+fName);
+                    if(fName != undefined){
+                        //console.log(fName);
+                        resultdata[i].value = '';
+                        if(type == '1') this.mapInputMOU1.set(fKey,'');
+                    }
+                }
+                const childCmp = this.template.querySelectorAll('c-input');
+                if (childCmp) {
+                    for(let i=0;i<childCmp.length;i++){
+                        let fieldName = childCmp[i].getName();
+                        let fieldDepend = mapData.get(fieldName);
+                        if(fieldDepend == ''){
+                            childCmp[i].clearLookup();
+                        }
+                    }
+                }
+                console.log('resultdata:'+JSON.stringify(resultdata));
+            }
+        }
+    }
+
+    handleMOUSelected1(event){
+        console.log('handleMOUSelected1');
+        this.mouId1 = event.detail.recordId;
+        console.log('mouId1:'+this.mouId1);
+        this.showMOU = false;
+        if(this.mouId1 != undefined && this.mouId1 != ''){
+            this.showMOU = true;
+            this.getRisk1();
+            this.getPicklistCurrency();
+            this.getPicklistAssetSection1MOU(this.mouId1);
+        }
+    }
+
+    handleAssetSection1MOU(event){
+        this.assetSectionId1MOU = event.detail.value;
+        if(this.assetSectionId1MOU){
+            this.getPicklistAssetCategory1MOU(this.mouId1,this.assetSectionId1MOU);
+        }
+    }
+
+    handleAssetCategory1MOU(event){
+        this.assetCategoryId1MOU = event.detail.value;
+    }
+
+
+    getPicklistAssetSection1MOU(contractid){
+        this.assetSectionId1MOU = undefined;
+        getAssetSectionMOU({
+            contractid : contractid
+        })
+        .then(result => {
+            this.assetSection1MOU = [];
+            for (var key in result) {
+                this.assetSection1MOU.push({label:result[key], value:key});
+            }
+            return this.assetSection1MOU;
+        })
+        .catch(error => {
+            console.log('error-getPicklistAssetSection1MOU:'+ error.message);
+        });
+    }
+
+    getPicklistAssetCategory1MOU(contractid,assetsection){
+        this.assetCategoryId1MOU = undefined;
+        getAssetCategoryMOU({
+            contractid : contractid,
+            assetsection : assetsection
+        })
+        .then(result => {
+            this.assetCategory1MOU = [];
+            for (var key in result) {
+                this.assetCategory1MOU.push({label:result[key], value:key});
+            }
+            return this.assetCategory1MOU;
+        })
+        .catch(error => {
+            console.log('error-getPicklistAssetCategory1MOU:'+ error.message);
+        });
+    }
+
+    handleAddCoverage1(event){
+        console.log('handleAddCoverage1');
+        this.showModalMOU(undefined);
+    }
+
+    handleRowActionMOU(event) {
+        //console.log('handleRowActionMOU');
+        const action = event.detail.action;
+        const row = event.detail.row;
+        //console.log('row:'+JSON.stringify(row));
+        switch (action.name) {
+            case 'show_details':
+                this.showModalMOU(row);
+                break;
+            case 'delete':
+                LightningConfirm.open({
+                    message: 'Are your sure want to delete this coverage?',
+                    label: 'Warning', 
+                    variant : 'headerless'
+                }).then((result) => {
+                    if(result == true){
+                        const rowIndex = this.coverage1.findIndex(r => r.Id === row.Id);
+                        this.coverage1.splice(rowIndex, 1);
+                        this.coverage1 = [...this.coverage1];
+                    }
+                });
+                break;
+        }
+    }
+
+    async showModalMOU(row){
+        const result = await modalMOU.open({
+            records : this.coverage1,
+            record : row,
+            contractId : this.mouId1
+        });
+        console.log('result:'+JSON.stringify(result));
+        if(result != 'cancel' && result != undefined){
+            this.coverage1 = result;
+        }
+        console.log('this.coverage1:'+JSON.stringify(this.coverage1));
+    }
+
     handleProductType(event){
         this.policyWording = [];
         this.policyWordingId = undefined;
@@ -1130,14 +1479,14 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
 
     handleContractType(event){
         this.contractTypeId = event.detail.value;
-        if(this.cob1 != undefined || this.cob1 != ''){
+        if(this.cob1 != undefined && this.cob1 != ''){
             this.changeCOB(this.cob1,'contract');
         }
     }
 
     handleContractType2(event){
         this.contractTypeId2 = event.detail.value;
-        if(this.cob2 != undefined || this.cob2 != ''){
+        if(this.cob2 != undefined && this.cob2 != ''){
             this.changeCOB2(this.cob2,'contract');
         }
     }
@@ -1166,34 +1515,44 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
 
     handleCurrency(event){
         this.currencyId = event.detail.value;
+        this.currencyName = this.currency.find(item => item.value === this.currencyId).label;
         this.showIDR = false;
         this.sumInsuredIDR = undefined;
         this.premiumIDR = undefined;
         this.rate = undefined;
-        if(this.currencyId == 'IDR'){
+        if(this.currencyName == 'IDR'){
             this.rate = 1;
             if(this.sumInsured) this.sumInsuredIDR = this.sumInsured;
             if(this.premium) this.premiumIDR = this.premium;
-        }else if(this.currencyId != 'IDR'){
+        }else if(this.currencyName != 'IDR'){
             this.showIDR = true;
-            this.getAmountRate(this.currencyId,'1');
+            this.getAmountRate(this.currencyName,'1');
         }
     }
 
     handleCurrency2(event){
         this.currencyId2 = event.detail.value;
+        this.currencyName2 = this.currency2.find(item => item.value === this.currencyId2).label;
         this.showIDR2 = false;
         this.sumInsuredIDR2 = undefined;
         this.premiumIDR2 = undefined;
         this.rate2 = undefined;
-        if(this.currencyId2 == 'IDR'){
+        if(this.currencyName2 == 'IDR'){
             this.rate2 = 1;
             if(this.sumInsured2) this.sumInsuredIDR2 = this.sumInsured2;
             if(this.premium2) this.premiumIDR2 = this.premium2;
-        }else if(this.currencyId2 != 'IDR'){
+        }else if(this.currencyName2 != 'IDR'){
             this.showIDR2 = true;
-            this.getAmountRate(this.currencyId2,'2');
+            this.getAmountRate(this.currencyName2,'2');
         }
+    }
+
+    handlePremiumCalculation(event){
+        this.premiumCalculationId = event.detail.value;
+    }
+
+    handlePremiumCalculation2(event){
+        this.premiumCalculationId2 = event.detail.value;
     }
 
     getPicklist(cob,type){
@@ -1460,15 +1819,14 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
 
     getPicklistCurrency(){
         this.currencyId = undefined;
-        getPicklistSTD({
-            objectName : 'Opportunity',
-            fieldName : 'CUR__c'
-        })
+        this.currencyName = undefined;
+        getCurrency({})
         .then(result => {
             this.currency = [];
             for (var key in result) {
                 this.currency.push({label:result[key], value:key});
             }
+            //console.log('this.currency:'+JSON.stringify(this.currency));
             return this.currency;
         })
         .catch(error => {
@@ -1478,10 +1836,8 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
 
     getPicklistCurrency2(){
         this.currencyId2 = undefined;
-        getPicklistSTD({
-            objectName : 'Opportunity',
-            fieldName : 'CUR__c'
-        })
+        this.currencyName2 = undefined;
+        getCurrency({})
         .then(result => {
             this.currency2 = [];
             for (var key in result) {
@@ -1560,6 +1916,42 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
         });
     }
 
+    getPremiumCalculation(){
+        this.premiumCalculationId = undefined;
+        getPicklistSTD({
+            objectName : 'Opportunity',
+            fieldName : 'premium_calculation__c'
+        })
+        .then(result => {
+            this.premiumCalculation = [];
+            for (var key in result) {
+                this.premiumCalculation.push({label:result[key], value:key});
+            }
+            return this.premiumCalculation;
+        })
+        .catch(error => {
+            console.log('error-getPremiumCalculation:'+ error.message);
+        });
+    }
+
+    getPremiumCalculation2(){
+        this.premiumCalculationId2 = undefined;
+        getPicklistSTD({
+            objectName : 'Opportunity',
+            fieldName : 'premium_calculation__c'
+        })
+        .then(result => {
+            this.premiumCalculation2 = [];
+            for (var key in result) {
+                this.premiumCalculation2.push({label:result[key], value:key});
+            }
+            return this.premiumCalculation2;
+        })
+        .catch(error => {
+            console.log('error-getPremiumCalculation2:'+ error.message);
+        });
+    }
+
     getAmountRate(curr,type){
         getRate({
             curr : curr
@@ -1580,169 +1972,206 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
         });
     }
 
-    handleSchemaChange(event) { this.schemaType = event.detail.value; }
-
+    //INSURANCE PERIOD
+    handleSchemaChange(event) { this.schemaType = event.detail.value; this.calculateDuration(); }
     handleInsurance(event) {
         const newType = event.detail.value;
         this.periodType = newType;
-        this.shortBasis = null; this.percentage = null; this.startDate = null; this.endDate = null;
+        if (newType === '2') {this.shortBasis = '2'; }
+        else { this.shortBasis = null; }
+        this.percentage = null; this.startDate = null; this.endDate = null;
         this.calculatedRate = null; this.adjustmentRows = []; this.dayCount = null; this.yearsMonthsInfo = null;
         this.years = (newType === '1') ? 1 : null;
-    }
-    
-    handleYearsChange(event) {
-        // Annual always uses 1
-        if (this.isAnnual) {
-            this.years = 1;
-        } else {
-            this.years = event.detail.value;
-        }
         this.calculateDuration();
     }
-
-    handleShortBasisChange(event) {
-        this.shortBasis = event.detail.value;
-        this.calculateDuration();
-    }
-
-    handlePercentageChange(event) {
-        this.percentage = event.detail.value;
-        this.calculateDuration();
-    }
-
+    handleYearsChange(event) { this.years = this.isAnnual ? 1 : event.detail.value; this.calculateDuration(); }
+    handleShortBasisChange(event) { this.shortBasis = event.detail.value; this.calculateDuration(); }
+    handlePercentageChange(event) { this.percentage = event.detail.value; this.calculateDuration(); }
     handleStartDateChange(event) {
         this.startDate = event.detail.value;
-
-        // auto‐fill endDate for Annual
         if (this.isAnnual && this.startDate) {
             const dt = new Date(this.startDate);
             dt.setFullYear(dt.getFullYear() + 1);
             this.endDate = dt.toISOString().slice(0, 10);
         }
-
         this.calculateDuration();
     }
-
-    handleEndDateChange(event) {
-        this.endDate = event.detail.value;
-        this.calculateDuration();
-    }
-
+    handleEndDateChange(event) { this.endDate = event.detail.value; this.calculateDuration(); }
     handleRowTypeChange(event) {
         const year = parseInt(event.target.dataset.year, 10);
         const type = event.detail.value;
         this.adjustmentRows = this.adjustmentRows.map(r => {
             if (r.year === year) {
                 let newPct = (type === '2') ? this.calculatedRate : r.percentage;
-                return { ...r, type, percentage: newPct.toString() };
+                return { ...r, type, percentage: newPct };
             }
             return r;
         });
         this.updateYearsMonthsInfo();
     }
+    sanitizePercentageString(raw) {
+        if (raw == null) return '';
+        let s = String(raw);
+        s = s.replace(/,/g, '.');
+        s = s.replace(/[^0-9.]/g, '');
+        const parts = s.split('.');
+        if (parts.length > 1) { s = parts.shift() + (parts.length ? '.' + parts.join('') : ''); }
+        if (s.startsWith('.')) {s = '0' + s;}
+        return s;
+    }
+    handleRowPercentageInput(event) {
+        const input = event.target;
+        const original = input.value;
+        const sanitized = this.sanitizePercentageString(original);
 
-    handleRowPercentageChange(event) {
-        const year       = parseInt(event.target.dataset.year, 10);
-        const percentage = event.detail.value;
+        if (sanitized !== original) {input.value = sanitized;}
+
+        // Keep local model in sync while typing
+        const year = parseInt(input.dataset.year, 10);
+        const percentage = sanitized;
         this.adjustmentRows = this.adjustmentRows.map(r =>
             r.year === year ? { ...r, percentage } : r
         );
-        console.log('this.adjustmentRows:'+JSON.stringify(this.adjustmentRows));
-
-        this.updateYearsMonthsInfo();
     }
-
-    handleDescription(event){
-        this.description = event.detail.value;
+    handleRowPercentagePaste(event) {
+        event.preventDefault();
+        const paste = (event.clipboardData || window.clipboardData).getData('text') || '';
+        const sanitized = this.sanitizePercentageString(paste);
+        const input = event.target;
+        input.value = sanitized;
+        const year = parseInt(input.dataset.year, 10);
+        this.adjustmentRows = this.adjustmentRows.map(r =>
+            r.year === year ? { ...r, percentage: sanitized } : r
+        );
     }
-
-    handleDescription2(event){
-        this.description2 = event.detail.value;
-    }
-
-    // ------ Core calculation ------
-    calculateDuration() {
-        if (!this.startDate || !this.endDate) {
-            this.dayCount        = null;
-            this._computedYears  = 0;
-            this._computedMonths = 0;
-            this.yearsMonthsInfo = '';
-            this.calculatedRate  = null;
-            this.adjustmentRows  = [];
+    handleRowPercentageKeyDown(event) {
+        const key = event.key;
+        if (
+            key === 'Backspace' || key === 'Delete' ||
+            key === 'ArrowLeft' || key === 'ArrowRight' ||
+            key === 'Home' || key === 'End' ||
+            event.ctrlKey || event.metaKey || event.altKey
+        ) {
             return;
         }
 
+        // we only care about inserting a dot character
+        if (key !== '.' && key !== ',') return;
+
+        const input = event.target;
+        const value = input.value || '';
+        const selStart = input.selectionStart ?? value.length;
+        const selEnd = input.selectionEnd ?? value.length;
+
+        // compute what the value would become after inserting the key
+        const before = value.slice(0, selStart);
+        const after = value.slice(selEnd);
+        const wouldBe = before + '.' + after;
+
+        // allow if resulting value contains at most one dot; otherwise block
+        const dotCount = (wouldBe.match(/\./g) || []).length;
+        if (dotCount > 1) {
+            event.preventDefault();
+        } else {
+            // if user typed comma, convert it to dot for immediate insertion
+            if (key === ',') {
+            event.preventDefault();
+            const newValue = wouldBe; // already uses dot above
+            input.value = newValue;
+            // move caret after inserted dot
+            const newPos = before.length + 1;
+            input.setSelectionRange(newPos, newPos);
+
+            // sync model immediately
+            const year = parseInt(input.dataset.year, 10);
+            const percentage = this.sanitizePercentageString(newValue);
+            this.adjustmentRows = this.adjustmentRows.map(r =>
+                r.year === year ? { ...r, percentage } : r
+            );
+            }
+        }
+    }
+    handleRowPercentageChange(event) {
+        const year = parseInt(event.target.dataset.year, 10);
+        const raw = event?.detail?.value ?? event.target.value;
+        const percentage = this.sanitizePercentageString(raw);
+        try { event.target.value = percentage; }
+        catch (e) {}
+        this.adjustmentRows = this.adjustmentRows.map(r =>
+            r.year === year ? { ...r, percentage } : r
+        );
+        this.updateYearsMonthsInfo();
+    }
+    // ------ Core calculation ------
+    calculateDuration() {
+        if (!this.startDate || !this.endDate) {
+            this.dayCount = null; this.yearsMonthsInfo = null; this.calculatedRate = null; this.adjustmentRows = [];
+            return;
+        }
         const start  = new Date(this.startDate);
         const end    = new Date(this.endDate);
-        const msDiff = end - start;
-        this.dayCount = Math.floor(msDiff / (1000 * 60 * 60 * 24));
-
+        this.dayCount = Math.floor((end - start) / (1000 * 60 * 60 * 24));
         let y = end.getFullYear()  - start.getFullYear();
         let m = end.getMonth()     - start.getMonth();
         let d = end.getDate()      - start.getDate();
-
-        if (d < 0) {
-            m--;
-            d += new Date(end.getFullYear(), end.getMonth(), 0).getDate();
-        }
-        if (m < 0) {
-            y--;
-            m += 12;
-        }
-
+        if (d < 0) { m--; }
+        if (d >= 30) { m++; }
+        if (m < 0) { y--; m += 12; }
         this._computedYears  = y;
         this._computedMonths = m;
 
-        if (this.isLongTerm) {
-            const hasExtra = m > 0;
-            const rowCount = y + (hasExtra ? 1 : 0);
-            const oldRows  = this.adjustmentRows || [];
-            const newRows  = [];
-
-            for (let i = 0; i < rowCount; i++) {
-                const yearNum    = i + 1;
-                const isExtraRow = hasExtra && i === rowCount - 1;
-
-                newRows.push({
-                    year: yearNum,
-                    percentage:
-                        i === 0
-                        ? "100"
-                        : oldRows.find(r => r.year === yearNum)?.percentage ?? null,
-                    type: isExtraRow
-                        ? oldRows.find(r => r.year === yearNum)?.type || '1' // percentage
-                        : null
-                });
-            }
-            this.adjustmentRows = newRows;
-        } else {
-            this.adjustmentRows = [];
-        }
-
-        // ─── rate calculation ───
-        if (this.isShort) {
-            if (this.isProRataBasis) {
-                this.calculatedRate = parseFloat((this.dayCount / 365).toFixed(6));
-            } else if (this.isPercentageBasis) {
-                this.calculatedRate = parseFloat(this.percentage) || null;
-            }
+        if (this.isShort && this.isProRataBasis) {
+            this.calculatedRate = parseFloat((this.dayCount / 365).toFixed(6));
         } else if (this.isLongTerm && y >= 1) {
-            const twoYearsLater = new Date(start);
-            twoYearsLater.setFullYear(start.getFullYear() + 1);
-            const extraMs   = end - twoYearsLater;
-            const extraDays = Math.floor(extraMs / (1000 * 60 * 60 * 24));
-            let countExtraDays;
-            if (y >= 2) {
-                countExtraDays = extraDays - ((y - 1) * 365);
-            } else {
-                countExtraDays = extraDays;
-            }
-            this.calculatedRate =
-                countExtraDays > 1
-                ? parseFloat((countExtraDays / 365).toFixed(6))
-                : 0;
+            const fullYearsLater = new Date(start);
+            fullYearsLater.setFullYear(start.getFullYear() + y);
+            const extraMs = end - fullYearsLater;
+            const extraDays = Math.floor(extraMs / (1000 * 60 * 60 * 24)) + 1; 
+            this.calculatedRate = extraDays > 0 ? parseFloat((extraDays / 365).toFixed(6)) : 0;
         } else {
             this.calculatedRate = null;
+        }
+
+        if (this.isLongTerm && this.schemaType != null) {
+            const hasExtra = m > 0 || d > 0;
+            const rowCount = y + (hasExtra ? 1 : 0);
+            const newRows = [];
+            const oldUiRows = [...this.adjustmentRows];
+
+            for (let i = 0; i < rowCount; i++) {
+                const yearNum = i + 1;
+                const isExtraRow = hasExtra && i === rowCount - 1;
+                const oldUiRow = oldUiRows.find(row => row.year === yearNum);
+
+                let rowType = null;
+                let rowPercentage = null;
+                
+                if (i === 0) {
+                    rowPercentage = 100;
+                    rowType = null; // First row doesn't need type
+                } else if (isExtraRow) {
+                    // Ensure type always has a value, default to '2'
+                    rowType = oldUiRow?.type || '2';
+                    if (rowType === '2') {
+                        rowPercentage = this.calculatedRate; 
+                    } else {
+                        rowPercentage = oldUiRow?.percentage ?? null;
+                    }
+                } else {
+                    // For other rows, ensure type has a value
+                    rowType = oldUiRow?.type || '2';
+                    rowPercentage = oldUiRow?.percentage ?? null;
+                }
+
+                newRows.push({ 
+                    year: yearNum, 
+                    percentage: rowPercentage, 
+                    type: rowType  // This ensures every row has a type (except first row)
+                });
+            }
+            this.adjustmentRows = [...newRows];
+        } else {
+            this.adjustmentRows = [];
         }
 
         this.updateYearsMonthsInfo();
@@ -1757,191 +2186,215 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
         }
         const y = this._computedYears;
         const m = this._computedMonths;
-        const base = `${y} Year${y !== 1 ? 's' : ''}`;
+        let base = `${y} Year${y !== 1 ? 's' : ''}`;
+        if (m > 0) {
+            base += ` and ${m} Month${m !== 1 ? 's' : ''}`;
+        }
         if (m === 0 && this._computedDays === 0) { this.yearsMonthsInfo = base; return; }
         const lastRow = this.adjustmentRows[this.adjustmentRows.length - 1];
-        if (lastRow && lastRow.type === '1') { this.yearsMonthsInfo = `${base} and Percentage ${lastRow.percentage || 0}%`; }
-        else if (lastRow) { this.yearsMonthsInfo = `${base} and Rate ${this.calculatedRate}`; }
-        else { this.yearsMonthsInfo = base; }
+        if(lastRow){
+            if (lastRow.type === '1') { this.yearsMonthsInfo = `${base} | Percentage ${lastRow.percentage || 0}%`; }
+            else if (lastRow.type === '2') { this.yearsMonthsInfo = `${base} | Total Rate ${ (this._computedYears + this.calculatedRate) }`; }
+            else { this.yearsMonthsInfo = base; }
+        }else{
+            if(this._computedYears >= 1 && this._computedMonths > 0){
+                this.yearsMonthsInfo = `${base} | Total Rate ${ (this._computedYears + this.calculatedRate) }`;
+            }else{
+                this.yearsMonthsInfo = base;
+            }
+        }
     }
 
     // PERIOD 2
-
-    handleSchemaChange2(event) { this.schemaType2 = event.detail.value; }
-
+    handleSchemaChange2(event) { this.schemaType2 = event.detail.value; this.calculateDuration2(); }
     handleInsurance2(event) {
         const newType = event.detail.value;
         this.periodType2 = newType;
-
-        // reset all dependent inputs
-        this.shortBasis2    = '';
-        this.percentage2    = null;
-        this.startDate2     = '';
-        this.endDate2       = '';
-        this.calculatedRate2 = null;
-        this.adjustmentRows2 = [];
-        this.dayCount2       = null;
-        this.yearsMonthsInfo2 = '';
-
-        // enforce Annual = exactly 1 year
-        if (newType === '1') {
-            this.years2 = 1;
-        } else {
-            this.years2 = null;
-        }
-    }
-    
-    handleYearsChange2(event) {
-        // Annual always uses 1
-        if (this.isAnnual2) {
-            this.years2 = 1;
-        } else {
-            this.years2 = event.detail.value;
-        }
+        if (newType === '2') {this.shortBasis2 = '2'; }
+        else { this.shortBasis2 = null; }
+        this.percentage2 = null; this.startDate2 = null; this.endDate2 = null;
+        this.calculatedRate2 = null; this.adjustmentRows2 = []; this.dayCount2 = null; this.yearsMonthsInfo2 = null;
+        this.years2 = (newType === '1') ? 1 : null;
         this.calculateDuration2();
     }
-
-    handleShortBasisChange2(event) {
-        this.shortBasis2 = event.detail.value;
-        this.calculateDuration2();
-    }
-
-    handlePercentageChange2(event) {
-        this.percentage2 = event.detail.value;
-        this.calculateDuration2();
-    }
-
+    handleYearsChange2(event) { this.years2 = this.isAnnual2 ? 1 : event.detail.value; this.calculateDuration2(); }
+    handleShortBasisChange2(event) { this.shortBasis2 = event.detail.value; this.calculateDuration2(); }
+    handlePercentageChange2(event) { this.percentage2 = event.detail.value; this.calculateDuration2(); }
     handleStartDateChange2(event) {
         this.startDate2 = event.detail.value;
-
-        // auto‐fill endDate for Annual
         if (this.isAnnual2 && this.startDate2) {
             const dt = new Date(this.startDate2);
             dt.setFullYear(dt.getFullYear() + 1);
             this.endDate2 = dt.toISOString().slice(0, 10);
         }
-
         this.calculateDuration2();
     }
-
-    handleEndDateChange2(event) {
-        this.endDate2 = event.detail.value;
-        this.calculateDuration2();
-    }
-
+    handleEndDateChange2(event) { this.endDate2 = event.detail.value; this.calculateDuration2(); }
     handleRowTypeChange2(event) {
         const year = parseInt(event.target.dataset.year, 10);
         const type = event.detail.value;
-
         this.adjustmentRows2 = this.adjustmentRows2.map(r => {
-        if (r.year === year) {
-            let newPct = null;
-            if (type === '2') {
-            newPct = this.calculatedRate2;
+            if (r.year === year) {
+                let newPct = (type === '2') ? this.calculatedRate2 : r.percentage;
+                return { ...r, type, percentage: newPct };
             }
-            return { ...r, type, percentage: newPct.toString() };
-        }
-        return r;
+            return r;
         });
-
         this.updateYearsMonthsInfo2();
     }
+    handleRowPercentageInput2(event) {
+        const input = event.target;
+        const original = input.value;
+        const sanitized = this.sanitizePercentageString(original);
 
-    handleRowPercentageChange2(event) {
-        const year       = parseInt(event.target.dataset.year, 10);
-        const percentage = event.detail.value;
+        if (sanitized !== original) {input.value = sanitized;}
 
-        this.adjustmentRows = this.adjustmentRows.map(r =>
+        // Keep local model in sync while typing
+        const year = parseInt(input.dataset.year, 10);
+        const percentage = sanitized;
+        this.adjustmentRows2 = this.adjustmentRows2.map(r =>
             r.year === year ? { ...r, percentage } : r
         );
-
-        this.updateYearsMonthsInfo2();
     }
-
-    // ------ Core calculation ------
-    calculateDuration2() {
-        if (!this.startDate2 || !this.endDate2) {
-            this.dayCount2        = null;
-            this._computedYears2  = 0;
-            this._computedMonths2 = 0;
-            this.yearsMonthsInfo2 = '';
-            this.calculatedRate2  = null;
-            this.adjustmentRows2  = [];
+    handleRowPercentagePaste2(event) {
+        event.preventDefault();
+        const paste = (event.clipboardData || window.clipboardData).getData('text') || '';
+        const sanitized = this.sanitizePercentageString(paste);
+        const input = event.target;
+        input.value = sanitized;
+        const year = parseInt(input.dataset.year, 10);
+        this.adjustmentRows2 = this.adjustmentRows2.map(r =>
+            r.year === year ? { ...r, percentage: sanitized } : r
+        );
+    }
+    handleRowPercentageKeyDown2(event) {
+        const key = event.key;
+        if (
+            key === 'Backspace' || key === 'Delete' ||
+            key === 'ArrowLeft' || key === 'ArrowRight' ||
+            key === 'Home' || key === 'End' ||
+            event.ctrlKey || event.metaKey || event.altKey
+        ) {
             return;
         }
 
+        // we only care about inserting a dot character
+        if (key !== '.' && key !== ',') return;
+
+        const input = event.target;
+        const value = input.value || '';
+        const selStart = input.selectionStart ?? value.length;
+        const selEnd = input.selectionEnd ?? value.length;
+
+        // compute what the value would become after inserting the key
+        const before = value.slice(0, selStart);
+        const after = value.slice(selEnd);
+        const wouldBe = before + '.' + after;
+
+        // allow if resulting value contains at most one dot; otherwise block
+        const dotCount = (wouldBe.match(/\./g) || []).length;
+        if (dotCount > 1) {
+            event.preventDefault();
+        } else {
+            // if user typed comma, convert it to dot for immediate insertion
+            if (key === ',') {
+            event.preventDefault();
+            const newValue = wouldBe; // already uses dot above
+            input.value = newValue;
+            // move caret after inserted dot
+            const newPos = before.length + 1;
+            input.setSelectionRange(newPos, newPos);
+
+            // sync model immediately
+            const year = parseInt(input.dataset.year, 10);
+            const percentage = this.sanitizePercentageString(newValue);
+            this.adjustmentRows2 = this.adjustmentRows2.map(r =>
+                r.year === year ? { ...r, percentage } : r
+            );
+            }
+        }
+    }
+    handleRowPercentageChange2(event) {
+        const year = parseInt(event.target.dataset.year, 10);
+        const raw = event?.detail?.value ?? event.target.value;
+        const percentage = this.sanitizePercentageString(raw);
+        try { event.target.value = percentage; }
+        catch (e) {}
+        this.adjustmentRows2 = this.adjustmentRows2.map(r =>
+            r.year === year ? { ...r, percentage } : r
+        );
+        this.updateYearsMonthsInfo2();
+    }
+    // ------ Core calculation ------
+    calculateDuration2() {
+        if (!this.startDate2 || !this.endDate2) {
+            this.dayCount2 = null; this.yearsMonthsInfo2 = null; this.calculatedRate2 = null; this.adjustmentRows2 = [];
+            return;
+        }
         const start  = new Date(this.startDate2);
         const end    = new Date(this.endDate2);
-        const msDiff = end - start;
-        this.dayCount2 = Math.floor(msDiff / (1000 * 60 * 60 * 24));
-
+        this.dayCount = Math.floor((end - start) / (1000 * 60 * 60 * 24));
         let y = end.getFullYear()  - start.getFullYear();
         let m = end.getMonth()     - start.getMonth();
         let d = end.getDate()      - start.getDate();
-
-        if (d < 0) {
-            m--;
-            d += new Date(end.getFullYear(), end.getMonth(), 0).getDate();
-        }
-        if (m < 0) {
-            y--;
-            m += 12;
-        }
-
+        if (d < 0) { m--; }
+        if (d >= 30) { m++; }
+        if (m < 0) { y--; m += 12; }
         this._computedYears2  = y;
         this._computedMonths2 = m;
 
-        if (this.isLongTerm2) {
-            const hasExtra = m > 0;
-            const rowCount = y + (hasExtra ? 1 : 0);
-            const oldRows  = this.adjustmentRows2 || [];
-            const newRows  = [];
-
-            for (let i = 0; i < rowCount; i++) {
-                const yearNum    = i + 1;
-                const isExtraRow = hasExtra && i === rowCount - 1;
-
-                newRows.push({
-                year: yearNum,
-                percentage:
-                    i === 0
-                    ? "100"
-                    : oldRows.find(r => r.year === yearNum)?.percentage ?? null,
-                type: isExtraRow
-                    ? oldRows.find(r => r.year === yearNum)?.type || '1'
-                    : null
-                });
-            }
-            this.adjustmentRows2 = newRows;
-        } else {
-            this.adjustmentRows2 = [];
-        }
-
-        // ─── rate calculation ───
-        if (this.isShort2) {
-        if (this.isProRataBasis2) {
+        if (this.isShort2 && this.isProRataBasis2) {
             this.calculatedRate2 = parseFloat((this.dayCount2 / 365).toFixed(6));
-        } else if (this.isPercentageBasis2) {
-            this.calculatedRate2 = parseFloat(this.percentage2) || null;
-        }
         } else if (this.isLongTerm2 && y >= 1) {
-            const twoYearsLater = new Date(start);
-            twoYearsLater.setFullYear(start.getFullYear() + 1);
-            const extraMs   = end - twoYearsLater;
-            const extraDays = Math.floor(extraMs / (1000 * 60 * 60 * 24));
-            let countExtraDays;
-
-        if (y >= 2) {
-            countExtraDays = extraDays - ((y - 1) * 365);
-        } else {
-            countExtraDays = extraDays;
-        }
-        this.calculatedRate =
-            countExtraDays > 1
-            ? parseFloat((countExtraDays / 365).toFixed(6))
-            : 0;
+            const fullYearsLater = new Date(start);
+            fullYearsLater.setFullYear(start.getFullYear() + y);
+            const extraMs = end - fullYearsLater;
+            const extraDays = Math.floor(extraMs / (1000 * 60 * 60 * 24)) + 1; 
+            this.calculatedRate2 = extraDays > 0 ? parseFloat((extraDays / 365).toFixed(6)) : 0;
         } else {
             this.calculatedRate2 = null;
+        }
+
+        if (this.isLongTerm2 && this.schemaType2 != null) {
+            const hasExtra = m > 0 || d > 0;
+            const rowCount = y + (hasExtra ? 1 : 0);
+            const newRows = [];
+            const oldUiRows = [...this.adjustmentRows2];
+
+            for (let i = 0; i < rowCount; i++) {
+                const yearNum = i + 1;
+                const isExtraRow = hasExtra && i === rowCount - 1;
+                const oldUiRow = oldUiRows.find(row => row.year === yearNum);
+
+                let rowType = null;
+                let rowPercentage = null;
+                
+                if (i === 0) {
+                    rowPercentage = 100;
+                    rowType = null; // First row doesn't need type
+                } else if (isExtraRow) {
+                    // Ensure type always has a value, default to '2'
+                    rowType = oldUiRow?.type || '2';
+                    if (rowType === '2') {
+                        rowPercentage = this.calculatedRate2; 
+                    } else {
+                        rowPercentage = oldUiRow?.percentage ?? null;
+                    }
+                } else {
+                    // For other rows, ensure type has a value
+                    rowType = oldUiRow?.type || '2';
+                    rowPercentage = oldUiRow?.percentage ?? null;
+                }
+
+                newRows.push({ 
+                    year: yearNum, 
+                    percentage: rowPercentage, 
+                    type: rowType  // This ensures every row has a type (except first row)
+                });
+            }
+            this.adjustmentRows2 = [...newRows];
+        } else {
+            this.adjustmentRows2 = [];
         }
 
         this.updateYearsMonthsInfo2();
@@ -1956,16 +2409,35 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
         }
         const y = this._computedYears2;
         const m = this._computedMonths2;
-        const base = `${y} Year${y !== 1 ? 's' : ''}`;
+        let base = `${y} Year${y !== 1 ? 's' : ''}`;
+        if (m > 0) {
+            base += ` and ${m} Month${m !== 1 ? 's' : ''}`;
+        }
         if (m === 0 && this._computedDays2 === 0) { this.yearsMonthsInfo2 = base; return; }
         const lastRow = this.adjustmentRows2[this.adjustmentRows2.length - 1];
-        if (lastRow && lastRow.type === '1') { this.yearsMonthsInfo2 = `${base} and Percentage ${lastRow.percentage || 0}%`; }
-        else if (lastRow) { this.yearsMonthsInfo2 = `${base} and Rate ${this.calculatedRate2}`; }
-        else { this.yearsMonthsInfo2 = base; }
+        if(lastRow){
+            if (lastRow.type === '1') { this.yearsMonthsInfo2 = `${base} | Percentage ${lastRow.percentage || 0}%`; }
+            else if (lastRow.type === '2') { this.yearsMonthsInfo2 = `${base} | Total Rate ${ (this._computedYears2 + this.calculatedRate2) }`; }
+            else { this.yearsMonthsInfo2 = base; }
+        }else{
+            if(this._computedYears2 >= 1 && this._computedMonths2 > 0){
+                this.yearsMonthsInfo2 = `${base} | Total Rate ${ (this._computedYears2 + this.calculatedRate2) }`;
+            }else{
+                this.yearsMonthsInfo2 = base;
+            }
+        }
     }
 
     handleInsuredAddress(event){
         this.accountAddress = event.detail.value;
+    }
+
+    handleDescription(event){
+        this.description = event.detail.value;
+    }
+
+    handleDescription2(event){
+        this.description2 = event.detail.value;
     }
 
     //SUMMARY
@@ -2151,7 +2623,7 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
                 this.isLoading = false;
                 console.log('error:'+error.body.message);
             });
-    }
+    }   
 
     handleSubmit(event){
         const qqmember = [];
@@ -2227,6 +2699,8 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
         data.policywordingId = this.policyWordingId;
         data.firetype = this.fireTypeId;
         data.wording = this.wordingId;
+        data.wordingname = this.wordingName;
+        data.premiumcalculation = this.premiumCalculationId;
         data.riskName = this.riskName;
         data.insuranceperiod = this.periodType;
         data.startdateperiod = this.startDate;
@@ -2234,9 +2708,10 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
         data.schematype = this.schemaType;
         data.transactionRows = this.adjustmentRows;
         data.description = this.description;
+        data.totalyear = this._computedYears;
+        data.totalmonth = this._computedMonths;
         if(data.insuranceperiod == '1'){
             data.yearperiod = this.years;
-            data.annualperiod = 1;
         }else{
             data.shortperiod = this.shortBasis;
             data.percentageperiod = this.isPercentageBasis ? this.percentage : undefined;
@@ -2270,6 +2745,8 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
             data.policywordingId2 = this.policyWordingId2;
             data.firetype2 = this.fireTypeId2;
             data.wording2 = this.wordingId2;
+            data.wordingname2 = this.wordingName2;
+            data.premiumcalculation2 = this.premiumCalculationId2;
             data.riskName2 = this.riskName2;
             data.insuranceperiod2 = this.periodType2;
             data.startdateperiod2 = this.startDate2;
@@ -2277,9 +2754,10 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
             data.schematype2 = this.schemaType2;
             data.transactionRows2 = this.adjustmentRows2;
             data.description2 = this.description2;
+            data.totalyear2 = this._computedYears2;
+            data.totalmonth2 = this._computedMonths2;
             if(data.insuranceperiod2 == '1'){
                 data.yearperiod2 = this.years2;
-                data.annualperiod2 = 1;
             }else{
                 data.shortperiod2 = this.shortBasis2;
                 data.percentageperiod2 = this.isPercentageBasis2 ? this.percentage2 : undefined;
@@ -2522,38 +3000,334 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
         //    this.errorMessage('Please Upload Survey Report (2)!');
         }else{
             // data validation before submit
-            if(data.insuranceperiod == '2' && data.shortperiod == '1'){ // short & percentage
+            if(data.insuranceperiod  == '2' && data.shortperiod == '1'){ // Short & Percentage
                 data.rateperiod = null;
-            }else if(data.insuranceperiod == '2' && data.shortperiod == '2'){ // short & pro-rata basis
+                data.yearperiod = null;
+                data.totalyear = null;
+            }else if(data.insuranceperiod == '2' && data.shortperiod == '2'){ // Short & Pro-Rata Basis
                 data.percentageperiod = null;
+                data.yearperiod = null;
+                data.totalyear = null;
+            }else if(this.periodType == '1'){
+                data.rateperiod = null;
             }
-            console.log('data (after validation):'+JSON.stringify(data));
-            console.log('do save-data');
-            this.isLoading = true;
-            saveData({ data: JSON.stringify(data)})
-                .then(result => {
-                    this.isLoading = false;
-                    console.log('result:'+result);
 
-                    if(result.indexOf('006')!=-1){
-                        this.actionsave = 'yes';
-                        this.successMessage('Opportunity has been saved!');
-                        this.refreshTabPage();
-                        if(this.recordId != undefined) this.dispatchEvent(new CloseActionScreenEvent());
-                        else{
-                            if(this.accountId != undefined) window.location.href = "/"+result;
-                            this.navigateToRecordViewPage(result);
-                        }
-                    }else{
-                        this.errorMessage('Error: '+result);
-                    }
-                })
-                .catch(error => {
-                    this.isLoading = false;
-                    console.log('Error:'+error.body.message);
-                    this.errorMessage('Error: '+error.body.message);
-                });
+            if(data.risk == 'multiple'){
+                if(data.insuranceperiod2  == '2' && data.shortperiod2 == '1'){ // Short & Percentage
+                    data.rateperiod2 = null;
+                    data.yearperiod2 = null;
+                    data.totalyear2 = null;
+                }else if(data.insuranceperiod2 == '2' && data.shortperiod2 == '2'){ // Short & Pro-Rata Basis
+                    data.percentageperiod2 = null;
+                    data.yearperiod2 = null;
+                    data.totalyear2 = null;
+                }else if(this.periodType2 == '1'){
+                    data.rateperiod2 = null;
+                }
+            }
+
+            if(this.recordId != undefined){
+                this.submitSaveData(data);
+            }else{
+                this.submitIsValidateDouble(data);
+            }
         }
+    }
+
+    handleSubmitMOU(event){
+        console.log('handleSubmitMOU');
+        const qqmember = [];
+        let risk1 = "";
+        let i = 0;
+        for(const item of this.originalMemberIds){
+            qqmember.push({Id:item});
+        }
+        risk1 += "{";
+        i = 0;
+        this.mapInputMOU1.forEach((value, key) => {
+            if(i > 0) risk1 += ',';
+            let cValue = '"'+value+'"';
+            if(value.indexOf('{')!=-1) cValue = value;
+            risk1 += '"'+key+'":'+cValue;
+            i++;
+        });
+        risk1 += "}";
+
+        const data = {};
+        data.id = this.recordId;
+        data.opportunitytype = this.opportunityTypeId;
+        data.accountId = this.accountId;
+        data.requestorTypeId = this.requestorTypeId;
+        data.requestorSegmentId = this.requestorSegmentId;
+        data.requestorSubSegmentId = this.requestorSubSegmentId;
+        data.requestorBusinessSegmentationId = this.requestorBusinessSegmentationId;
+        data.requestorPipelineStatusId = this.requestorPipelineStatusId;
+        data.requestorChannelId = this.requestorChannelId;
+        data.requestorAddress = this.requestorAddress;
+        data.insuredId = this.insuredId;
+        data.insuredAddress = this.accountAddress;
+        data.qqmember = qqmember;
+        data.cob = this.cob1;
+        data.policywording = this.policyWordingName;
+        data.policywordingId = this.policyWordingId;
+        data.firetype = this.fireTypeId;
+        data.wording = this.wordingId;
+        data.wordingname = this.wordingName;
+        data.premiumcalculation = this.premiumCalculationId;
+        data.riskName = this.riskName;
+        data.insuranceperiod = this.periodType;
+        data.startdateperiod = this.startDate;
+        data.enddateperiod = this.endDate;
+        data.schematype = this.schemaType;
+        data.transactionRows = this.adjustmentRows;
+        data.totalyear = this._computedYears;
+        data.totalmonth = this._computedMonths;
+        if(data.insuranceperiod == '1'){
+            data.yearperiod = this.years;
+        }else{
+            data.shortperiod = this.shortBasis;
+            data.percentageperiod = this.isPercentageBasis ? this.percentage : undefined;
+            data.rateperiod = this.calculatedRate;
+        }
+        data.producttype = this.productTypeId;
+        data.producttypename = this.productTypeName;
+        data.contracttype = this.contractTypeId;
+        data.assetsection = this.assetSectionId1MOU;
+        data.assetcategory = this.assetCategoryId1MOU;
+        data.currency = this.currencyId;
+        data.rate = this.rate;
+        data.sumInsured = this.sumInsured;
+        data.sumInsuredIDR = this.sumInsuredIDR;
+        if(this.showMultiple == true) data.risk = 'multiple';
+        else if(this.showSingle == true) data.risk = 'single';
+        data.risk1 = risk1;
+        data.coverage1 = this.coverage1;
+        /*if(data.risk == 'multiple'){
+            data.policywording2 = this.policyWordingName2;
+            data.policywordingId2 = this.policyWordingId2;
+            data.firetype2 = this.fireTypeId2;
+            data.wording2 = this.wordingId2;
+            data.wordingname2 = this.wordingName2;
+            data.premiumcalculation2 = this.premiumCalculationId2;
+            data.riskName2 = this.riskName2;
+            data.insuranceperiod2 = this.periodType2;
+            data.startdateperiod2 = this.startDate2;
+            data.enddateperiod2 = this.endDate2;
+            data.schematype2 = this.schemaType2;
+            data.transactionRows2 = this.adjustmentRows2;
+            data.totalyear2 = this._computedYears2;
+            data.totalmonth2 = this._computedMonths2;
+            if(data.insuranceperiod2 == '1'){
+                data.yearperiod2 = this.years2;
+            }else{
+                data.shortperiod2 = this.shortBasis2;
+                data.percentageperiod2 = this.isPercentageBasis2 ? this.percentage2 : undefined;
+                data.rateperiod2 = this.calculatedRate2;
+            }
+            data.producttype2 = this.productTypeId2;
+            data.producttypename2 = this.productTypeName2;
+            data.contracttype2 = this.contractTypeId2;
+            data.assetsection2 = this.assetSectionId2;
+            data.assetcategory2 = this.assetCategoryId2;
+            data.currency2 = this.currencyId2;
+            data.rate2 = this.rate2;
+            data.sumInsured2 = this.sumInsured2;
+            data.sumInsuredIDR2 = this.sumInsuredIDR2;
+        }*/
+
+        let msg1 = '';
+        if(data.risk1 != '{}'){
+            this.mapInputMOU1.forEach((value, key) => {
+                if(value == undefined || value == ''){
+                    for(let j=0;j<this.datafieldMOU1.length;j++){
+                        let field = this.datafieldMOU1[j].data;
+                        for(let i=0;i<field.length;i++){
+                            if(field[i].datafield == key && field[i].datatype != 'Readonly' && field[i].datarequired == true) msg1 += '['+field[i].datalabel+']';
+                        } 
+                    }
+                }else if(value.indexOf('{')!=-1){
+                    let mapData = JSON.parse(value);
+                    if(mapData.latitude == undefined || mapData.latitude == '' 
+                        || mapData.longitude == undefined || mapData.longitude == ''
+                        || mapData.latitude > 90 || mapData.latitude < -90
+                        || mapData.longitude > 180 || mapData.longitude < -180){
+                        for(let j=0;j<this.datafieldMOU1.length;j++){
+                            let field = this.datafieldMOU1[j].data;
+                            for(let i=0;i<field.length;i++){
+                                if(field[i].datafield == key) msg1 += '['+field[i].datalabel+']';
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        if(data.opportunitytype === undefined || data.opportunitytype === ''){
+            this.errorMessage('Please Select Opportunity Type!');
+        }else if(data.accountId === undefined || data.accountId === ''){
+            this.errorMessage('Please Select Account Name!');
+        }else if(data.requestorTypeId === undefined || data.requestorTypeId === ''){
+            this.errorMessage('Please Select Account Type!');
+        }else if(data.requestorSegmentId === undefined || data.requestorSegmentId === ''){
+            this.errorMessage('Please Select Account Segment!');
+        }else if(data.requestorSubSegmentId === undefined || data.requestorSubSegmentId === ''){
+            this.errorMessage('Please Select Account Sub Segment!');
+        }else if(data.requestorBusinessSegmentationId === undefined || data.requestorBusinessSegmentationId === ''){
+            this.errorMessage('Please Select Account Business Segmentation!');
+        }else if(data.requestorPipelineStatusId === undefined || data.requestorPipelineStatusId === ''){
+            this.errorMessage('Please Select Account Pipeline Status!');
+        }else if(data.requestorPipelineStatusId == 'Channel' && (data.requestorChannelId === undefined || data.requestorChannelId === '')){
+            this.errorMessage('Please Select Account Channel!');
+        }else if(data.requestorAddress === undefined || data.requestorAddress === ''){
+            this.errorMessage('Please Select Account Address!');
+        }else if(data.insuredId === undefined || data.insuredId === ''){
+            this.errorMessage('Please Select The Insured Name!');
+        }else if(data.insuredAddress === undefined || data.insuredAddress === ''){
+            this.errorMessage('Please input The Insured Address!');
+        }else if(data.cob === undefined || data.cob === ''){
+            this.errorMessage('Please Select Line (COB)!');
+        }else if(data.producttype === undefined || data.producttype === ''){
+            this.errorMessage('Please Select Product Type!');
+        }else if(data.policywording === undefined || data.policywording === ''){
+            this.errorMessage('Please input Wording Type!');
+        }else if(this.showIAR === true && (data.wording === undefined || data.wording === '')){
+            this.errorMessage('Please input Wording Standard!');
+        }else if(data.insuranceperiod === undefined || data.insuranceperiod === ''){
+            this.errorMessage('Please input Insurance Period!');
+        }else if(data.insuranceperiod == '1' && (data.yearperiod === undefined || data.yearperiod === '' || data.yearperiod === null)){ // Annual
+            this.errorMessage('Please input Number of Years!');
+        }else if(data.insuranceperiod == '2' && (data.shortperiod === undefined || data.shortperiod === '' || data.shortperiod === null)){ // Short
+            this.errorMessage('Please input Short-Period Basis!');
+        }else if(data.insuranceperiod == '2' && data.shortperiod === '1' && (data.percentageperiod === undefined || data.percentageperiod === '' || data.percentageperiod === null)){ // Short & Percentage
+            this.errorMessage('Please input Percentage (%)!');
+        }else if(data.startdateperiod === undefined || data.startdateperiod === '' || data.startdateperiod === null){
+            this.errorMessage('Please input Start Date Period!');
+        }else if(data.enddateperiod === undefined || data.enddateperiod === '' || data.enddateperiod === null){
+            this.errorMessage('Please input End Date Period!');
+        }else if(data.riskName === undefined || data.riskName === ''){
+            this.errorMessage('Please input Risk Name!');
+        }else if(msg1 != ''){
+            this.errorMessage('Please Input Risk : '+ msg1 +'!');
+        }else if(data.assetsection === '' || data.assetsection === undefined){
+            this.errorMessage('Please Input Asset Section!'); 
+        }else if(data.currency === '' || data.currency === undefined){
+            this.errorMessage('Please Input Currency!'); 
+        }else if(data.sumInsured === '' || data.sumInsured === undefined){
+            this.errorMessage('Please Input Sum Insured!');  
+        }else if(data.coverage1.length === 0){
+            this.errorMessage('Please Add Coverage!'); 
+        }else{
+            if(data.insuranceperiod  == '2' && data.shortperiod == '1'){ // Short & Percentage
+                data.rateperiod = null;
+                data.yearperiod = null;
+                data.totalyear = null;
+            }else if(data.insuranceperiod == '2' && data.shortperiod == '2'){ // Short & Pro-Rata Basis
+                data.percentageperiod = null;
+                data.yearperiod = null;
+                data.totalyear = null;
+            }else if(this.periodType == '1'){
+                data.rateperiod = null;
+            }
+
+            /*if(data.risk == 'multiple'){
+                if(data.insuranceperiod2  == '2' && data.shortperiod2 == '1'){ // Short & Percentage
+                    data.rateperiod2 = null;
+                    data.yearperiod2 = null;
+                    data.totalyear2 = null;
+                }else if(data.insuranceperiod2 == '2' && data.shortperiod2 == '2'){ // Short & Pro-Rata Basis
+                    data.percentageperiod2 = null;
+                    data.yearperiod2 = null;
+                    data.totalyear2 = null;
+                }else if(this.periodType2 == '1'){
+                    data.rateperiod2 = null;
+                }
+            }*/
+            console.log('saveMOU');
+            console.log('data:'+JSON.stringify(data));
+            this.isLoading = true;
+            saveDataMOU({ data: JSON.stringify(data)})
+            .then(result => {
+                this.isLoading = false;
+                console.log('result:'+result);
+
+                if(result.indexOf('006')!=-1){
+                    this.actionsave = 'yes';
+                    this.successMessage('Opportunity has been saved!');
+                    this.refreshTabPage();
+                    if(this.recordId != undefined) this.dispatchEvent(new CloseActionScreenEvent());
+                    else{
+                        if(this.accountId != undefined) window.location.href = "/"+result;
+                        this.navigateToRecordViewPage(result);
+                    }
+                }else{
+                    this.errorMessage('Error: '+result);
+                }
+            })
+            .catch(error => {
+                this.isLoading = false;
+                console.log('Error:'+error.body.message);
+                this.errorMessage('Error: '+error.body.message);
+            });
+        }
+    }
+
+    submitIsValidateDouble(data){
+        this.isLoading = true;
+        getValidateDouble({ data: JSON.stringify(data)})
+            .then(result => {
+                this.isLoading = false;
+                this.showDouble = result;
+                if(this.showDouble == false){
+                    this.submitSaveData(data);
+                }else{
+                    LightningConfirm.open({
+                        message: 'This new opportunity has double prospect. Do you still want to proceed ?',
+                        //theme defaults to "default"
+                        label: 'Warning', // this is the header text
+                        variant : 'headerless'
+                    }).then((result) => {
+                        //result is true if OK was clicked
+                        if(result == true){
+                            console.log('yes');
+                            this.submitSaveData(data);
+                        }
+                    });
+                }
+            })
+            .catch(error => {
+                this.isLoading = false;
+                console.log('Error-submitIsValidateDouble:'+error.body.message);
+                this.errorMessage('Error: '+error.body.message);
+            });
+    }
+
+    submitSaveData(data){
+        console.log('data (after validation):'+JSON.stringify(data));
+        console.log('do save-data');
+        this.isLoading = true;
+        saveData({ data: JSON.stringify(data)})
+            .then(result => {
+                this.isLoading = false;
+                console.log('result:'+result);
+
+                if(result.indexOf('006')!=-1){
+                    this.actionsave = 'yes';
+                    this.successMessage('Opportunity has been saved!');
+                    this.refreshTabPage();
+                    if(this.recordId != undefined) this.dispatchEvent(new CloseActionScreenEvent());
+                    else{
+                        if(this.accountId != undefined) window.location.href = "/"+result;
+                        this.navigateToRecordViewPage(result);
+                    }
+                }else{
+                    this.errorMessage('Error: '+result);
+                }
+            })
+            .catch(error => {
+                this.isLoading = false;
+                console.log('Error:'+error.body.message);
+                this.errorMessage('Error: '+error.body.message);
+            });
     }
 
     errorMessage(msg){

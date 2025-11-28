@@ -1,3 +1,9 @@
+/**
+ * @description       : Custom Lookup Test
+ * @author            : Fikri
+ * @last modified on  : 11-28-2025
+ * @last modified by  : Ahmad Yazid Munif
+**/
 @IsTest (seeAllData=false)
 private class customLookup_Controller_Test {
 
@@ -32,7 +38,8 @@ private class customLookup_Controller_Test {
             province.Id,
             null,
             null,
-            showData
+            showData,
+            null
         );
         Test.stopTest();
 
@@ -53,7 +60,8 @@ private class customLookup_Controller_Test {
             null,
             null,
             null,
-            showData
+            showData,
+            null
         );
         Test.stopTest();
 
@@ -75,7 +83,8 @@ private class customLookup_Controller_Test {
             null,
             city.Id,
             null,
-            showData
+            showData,
+            null
         );
         Test.stopTest();
 
@@ -95,7 +104,8 @@ private class customLookup_Controller_Test {
             null,
             null,
             null,
-            showData
+            showData,
+            null
         );
         Test.stopTest();
 
@@ -111,6 +121,7 @@ private class customLookup_Controller_Test {
             'Name, City__r.Name',
             'Setiabudi',
             'Village',
+            null,
             null,
             null,
             null,
@@ -132,6 +143,7 @@ private class customLookup_Controller_Test {
             'Name, COVERAGE_REF_ID__c',
             'Coverage',
             'Coverage',
+            null,
             null,
             null,
             null,
