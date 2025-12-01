@@ -1034,7 +1034,7 @@ public without sharing class ClsNewRequest {
     	String result = '';
         Savepoint sp = Database.setSavepoint();
         system.debug(LoggingLevel.WARN,'data:'+data);
-        /*try{
+        try{
             String strRTAsset = Schema.SObjectType.Asset.getRecordTypeInfosByName().get('Asset').getRecordTypeId();
             String strRTRisk = Schema.SObjectType.Asset.getRecordTypeInfosByName().get('Risk').getRecordTypeId();
             Map<String, Object> dataMap = (Map<String, Object>) JSON.deserializeUntyped(data);
@@ -1052,6 +1052,7 @@ public without sharing class ClsNewRequest {
             opty.insuredId = (String)dataMap.get('insuredId');
             opty.insuredAddress = (String)dataMap.get('insuredAddress');
             opty.lineCOB = (String)dataMap.get('cob');
+            opty.mouId = (String)dataMap.get('mouId1');
             String riskName = (String)dataMap.get('riskName');
             opty.contractType = (String)dataMap.get('contracttype');
             String policywordingId = (String)dataMap.get('policywordingId');
@@ -1193,7 +1194,6 @@ public without sharing class ClsNewRequest {
                     if(opty.sumInsuredIDR != null){ asset1.Amount_Insured__c = opty.sumInsuredIDR; }
                     asset1.Section__c = assetSection;
                     if(assetCategory != null){ asset1.Category__c = assetCategory; }
-                    system.debug('asset1:'+asset1);
                     List<Asset> checkAT = [SELECT Id FROM Asset 
                                            WHERE Name =:asset1.Name 
                                            AND RecordTypeId =:strRTAsset
@@ -1206,11 +1206,18 @@ public without sharing class ClsNewRequest {
                 }
                 
                 //COVERAGE
-                List<Object> listCoverage = (List<Object>) dataMap.get('coverage1');
-                system.debug(LoggingLevel.WARN,'listCoverage:'+listCoverage);
-                for(Object obj : listCoverage){
-                    Map<String,Object> mapObj = (Map<String, Object>)obj;
-                    String coverageId = (String)mapObj.get('coverageId');
+                String recordIP = Aswata_GlobalFunction.createInsurancePolicy(opp.Id);
+                if(recordIP != null){
+                    List<InsurancePolicyCoverage> listISP = new List<InsurancePolicyCoverage>();
+                    List<Object> listCoverage = (List<Object>) dataMap.get('coverage1');
+                    for(Object obj : listCoverage){
+                        Map<String,Object> mapObj = (Map<String, Object>)obj;
+                        InsurancePolicyCoverage iSP = createCoverage(mapObj);
+                        iSP.InsurancePolicyId = recordIP;
+                        iSP.Opportunity__c = opp.Id;
+                        listISP.add(iSP);
+                    }
+                    if(listISP.size()>0){ List<Database.SaveResult> listsr = Database.insert(listISP); }
                 }
             }
             result = opp.Id;
@@ -1218,7 +1225,7 @@ public without sharing class ClsNewRequest {
         }catch(Exception e){
             Database.rollback(sp); 
             result = e.getMessage();
-        }*/
+        }
         system.debug(LoggingLevel.WARN,'result:'+result);
         return result;
     }
@@ -1330,6 +1337,35 @@ public without sharing class ClsNewRequest {
         opl.Product2Id = pdId;
         opl.PricebookEntryId = pbeId;
         return opl;
+    }
+
+    public static InsurancePolicyCoverage createCoverage(Map<String,Object> mapObj ){
+        InsurancePolicyCoverage result = new InsurancePolicyCoverage();
+        String coverageId = (String)mapObj.get('coverageId');
+        Decimal proposedFixedAmount = (Decimal)mapObj.get('proposedFixedAmount');
+        Decimal deductiblePCT = (Decimal)mapObj.get('deductiblePCT');
+        String deductibleId = (String)mapObj.get('deductibleId');
+        String minimumCurId = (String)mapObj.get('minimumCurId');
+        Decimal minimumAmount = (Decimal)mapObj.get('minimumAmount');
+        Decimal banksFee = Decimal.valueOf((String)mapObj.get('banksFee'));
+        Decimal agentComission = Decimal.valueOf((String)mapObj.get('agentComission'));
+        Decimal brokerComission = Decimal.valueOf((String)mapObj.get('brokerComission'));
+        Decimal generalRPremiumPCT = Decimal.valueOf((String)mapObj.get('generalRPremiumPCT'));
+        Decimal overdngComission = Decimal.valueOf((String)mapObj.get('overdngComission'));
+        Decimal maxPerson = Decimal.valueOf((String)mapObj.get('maxPerson'));
+        result.Coverage_Name__c = coverageId;
+        result.Proposed_Fixed_Amount__c = proposedFixedAmount;
+        result.Deductible_PCT__c = deductiblePCT;
+        result.Deductible__c = deductibleId;
+        result.Minimum_Cur_ID__c = minimumCurId;
+        result.Minimum_Amount__c = minimumAmount;
+        result.Banks_Fee__c = banksFee;
+        result.Agent_Comission__c = agentComission;
+        result.Broker_Comission__c = brokerComission;
+        result.General_RPremium_PCT__c = generalRPremiumPCT;
+        result.Overdng_Comission__c = overdngComission;
+        result.Max_Person__c = maxPerson;
+        return result;
     }
     
     public static listfile createFile(List<Object> objFile,String title,String oppId){
@@ -1483,5 +1519,6 @@ public without sharing class ClsNewRequest {
         private String producttypename;
         private String producttype;
         private String premiumcalculation;
+        private String mouId;
     }
 }

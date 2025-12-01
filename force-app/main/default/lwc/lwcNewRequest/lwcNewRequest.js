@@ -685,6 +685,9 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
             this.datafieldMOU1 = [];
             this.getRisk1();
         }
+        if(value != '101'){
+            this.contractTypeId = '1';
+        }
     }
 
     async getSituation(value){
@@ -810,6 +813,9 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
         this.getDescription2(value);
         this.getSituation2(value);
         this.getPicklistAssetSection2(value);
+        if(value != '101'){
+            this.contractTypeId2 = '1';
+        }
     }
 
     async getSituation2(value){
@@ -1480,14 +1486,18 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
     handleContractType(event){
         this.contractTypeId = event.detail.value;
         if(this.cob1 != undefined && this.cob1 != ''){
-            this.changeCOB(this.cob1,'contract');
+            if(this.cob1 == '101'){
+                this.changeCOB(this.cob1,'contract');
+            }
         }
     }
 
     handleContractType2(event){
         this.contractTypeId2 = event.detail.value;
         if(this.cob2 != undefined && this.cob2 != ''){
-            this.changeCOB2(this.cob2,'contract');
+            if(this.cob2 == '101'){
+                this.changeCOB2(this.cob2,'contract');
+            }
         }
     }
 
@@ -3102,6 +3112,7 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
         else if(this.showSingle == true) data.risk = 'single';
         data.risk1 = risk1;
         data.coverage1 = this.coverage1;
+        data.mouId1 = this.mouId1;
         /*if(data.risk == 'multiple'){
             data.policywording2 = this.policyWordingName2;
             data.policywordingId2 = this.policyWordingId2;
