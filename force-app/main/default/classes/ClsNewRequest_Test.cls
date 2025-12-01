@@ -119,7 +119,7 @@ public class ClsNewRequest_Test {
         ClsNewRequest.getAssetCategoryMOU(null,null);
         ClsNewRequest.getCoverage(null);
         ClsNewRequest.getCoverageDetail(null,null);
-        ClsNewRequest.saveDataMOU(null);
+        
         
         List<String> listdata1 = new List<String>();
         listdata1.add('Name');
@@ -196,6 +196,7 @@ public class ClsNewRequest_Test {
         string result = ClsNewRequest.saveData(data);
         system.debug('result:'+result);
         system.assertNotEquals(result,null);
+        ClsNewRequest.saveDataMOU(data);
         ClsNewRequest.deleteFile(cd.Id);
         ClsNewRequest.getOpportunity(result);
     }
