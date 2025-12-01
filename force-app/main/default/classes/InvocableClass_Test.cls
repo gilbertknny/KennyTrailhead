@@ -1,5 +1,5 @@
 /*** @description InvocableClass_Test */
-@isTest
+@IsTest
 private class InvocableClass_Test {
 
     @TestSetup
@@ -39,21 +39,25 @@ private class InvocableClass_Test {
     @IsTest
     static void testInvocableMethod_BatchExecution() {
         // Retrieve setup data
-        Account acc = [SELECT Id FROM Account LIMIT 1];
-        Opportunity oldOpp = [SELECT Id FROM Opportunity WHERE Name = 'Old Opty' LIMIT 1];
-        Opportunity newOpp = [SELECT Id FROM Opportunity WHERE Name = 'New Opty' LIMIT 1];
+        User currentUser = [SELECT Id FROM User WHERE Id = :UserInfo.getUserId()];
+        
+        System.runAs(currentUser) {
+            Account acc = [SELECT Id FROM Account LIMIT 1];
+            Opportunity oldOpp = [SELECT Id FROM Opportunity WHERE Name = 'Old Opty' LIMIT 1];
+            Opportunity newOpp = [SELECT Id FROM Opportunity WHERE Name = 'New Opty' LIMIT 1];
 
-        // Prepare input for Invocable class
-        InvocableClass.InputVariable input = new InvocableClass.InputVariable();
-        input.accountId = acc.Id;
-        input.oldoptyId = oldOpp.Id;
-        input.newoptyId = newOpp.Id;
-        input.param = 'BatchRiskAssetCoverage';
-        input.LintaswataSync = false;
+            // Prepare input for Invocable class
+            InvocableClass.InputVariable input = new InvocableClass.InputVariable();
+            input.accountId = acc.Id;
+            input.oldoptyId = oldOpp.Id;
+            input.newoptyId = newOpp.Id;
+            input.param = 'BatchRiskAssetCoverage';
+            input.LintaswataSync = false;
 
-        Test.startTest();
-        InvocableClass.Invocablevoid(new List<InvocableClass.InputVariable>{ input });
-        Test.stopTest();
+            Test.startTest();
+            InvocableClass.Invocablevoid(new List<InvocableClass.InputVariable>{ input });
+            Test.stopTest();
+        }
         System.assert(true, 'Batch executed successfully without exception.');
     }
 
@@ -61,43 +65,53 @@ private class InvocableClass_Test {
     static void testInvocableMethod_UnderwritingApproval() {
         
         // Prepare input for Invocable class
-        InvocableClass.InputVariable input = new InvocableClass.InputVariable();
-        input.param = 'UnderwritingApproval';
-        input.sumInsured = 100000;
+        User currentUser = [SELECT Id FROM User WHERE Id = :UserInfo.getUserId()];
+        
+        System.runAs(currentUser) {
+            InvocableClass.InputVariable input = new InvocableClass.InputVariable();
+            input.param = 'UnderwritingApproval';
+            input.sumInsured = 100000;
 
-        Test.startTest();
-        InvocableClass.Invocablevoid(new List<InvocableClass.InputVariable>{ input });
-        Test.stopTest();
+            Test.startTest();
+            InvocableClass.Invocablevoid(new List<InvocableClass.InputVariable>{ input });
+            Test.stopTest();
+        }
         System.assert(true, 'executed successfully.');
     }
 
     @IsTest
     static void testInvocableMethod_WithInvalidParam() {
-        Account acc = [SELECT Id FROM Account LIMIT 1];
-        Opportunity oldOpp = [SELECT Id FROM Opportunity WHERE Name = 'Old Opty' LIMIT 1];
-        Opportunity newOpp = [SELECT Id FROM Opportunity WHERE Name = 'New Opty' LIMIT 1];
+        User currentUser = [SELECT Id FROM User WHERE Id = :UserInfo.getUserId()];
+        
+        System.runAs(currentUser) {
+            Account acc = [SELECT Id FROM Account LIMIT 1];
+            Opportunity oldOpp = [SELECT Id FROM Opportunity WHERE Name = 'Old Opty' LIMIT 1];
+            Opportunity newOpp = [SELECT Id FROM Opportunity WHERE Name = 'New Opty' LIMIT 1];
 
-        // Input with invalid param - should skip batch
-        InvocableClass.InputVariable input = new InvocableClass.InputVariable();
-        input.accountId = acc.Id;
-        input.oldoptyId = oldOpp.Id;
-        input.newoptyId = newOpp.Id;
-        input.param = 'InvalidParam';
+            // Input with invalid param - should skip batch
+            InvocableClass.InputVariable input = new InvocableClass.InputVariable();
+            input.accountId = acc.Id;
+            input.oldoptyId = oldOpp.Id;
+            input.newoptyId = newOpp.Id;
+            input.param = 'InvalidParam';
 
-        Test.startTest();
-        InvocableClass.Invocablevoid(new List<InvocableClass.InputVariable>{ input });
-        Test.stopTest();
-
+            Test.startTest();
+            InvocableClass.Invocablevoid(new List<InvocableClass.InputVariable>{ input });
+            Test.stopTest();
+        }
         // No batch should have been executed; just verify no exception
         System.assert(true, 'Handled invalid param without errors.');
     }
 
     @IsTest
     static void testInvocableMethod_WithEmptyList() {
-        Test.startTest();
-        InvocableClass.Invocablevoid(new List<InvocableClass.InputVariable>());
-        Test.stopTest();
-
+        User currentUser = [SELECT Id FROM User WHERE Id = :UserInfo.getUserId()];
+        
+        System.runAs(currentUser) {
+            Test.startTest();
+            InvocableClass.Invocablevoid(new List<InvocableClass.InputVariable>());
+            Test.stopTest();
+        }
         System.assert(true, 'Empty input list handled gracefully.');
     }
 }
