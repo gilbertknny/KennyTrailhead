@@ -243,7 +243,8 @@
                                     <lightning-combobox 
                                             label="Contract Type"
                                             options={contractType}
-                                            onchange={handleContractType}>
+                                            onchange={handleContractType}
+                                            value={contractTypeId}>
                                     </lightning-combobox>
                                     </div>
                                     <template if:true={showIAR}>
@@ -833,7 +834,8 @@
                                 <lightning-combobox 
                                         label="Contract Type"
                                         options={contractType2}
-                                        onchange={handleContractType2}>
+                                        onchange={handleContractType2}
+                                        value={contractTypeId2}>
                                 </lightning-combobox> 
                             </div>
                             <template if:true={showIAR2}>
