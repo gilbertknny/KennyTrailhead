@@ -49,6 +49,7 @@ private class InvocableClass_Test {
         input.oldoptyId = oldOpp.Id;
         input.newoptyId = newOpp.Id;
         input.param = 'BatchRiskAssetCoverage';
+        input.LintaswataSync = false;
 
         Test.startTest();
         InvocableClass.Invocablevoid(new List<InvocableClass.InputVariable>{ input });
