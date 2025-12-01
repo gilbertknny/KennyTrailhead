@@ -1,7 +1,7 @@
 /**
  * @description       : Test Class for Aswata_Treaty_Distribution
  * @author            : Ahmad Yazid Munif
- * @last modified on  : 11-19-2025
+ * @last modified on  : 12-01-2025
  * @last modified by  : Ahmad Yazid Munif
 **/
 
@@ -18,6 +18,7 @@ private class Aswata_Treaty_Distribution_Test {
             LanguageLocaleKey = 'en_US',
             LocaleSidKey = 'en_US',
             ProfileId = adminProfile.Id,
+            IsActive = true,
             TimeZoneSidKey = 'America/Los_Angeles',
             UserName = 'test.admin.' + System.currentTimeMillis() + '@testorg.com' // Unique Username
         );
@@ -84,7 +85,7 @@ private class Aswata_Treaty_Distribution_Test {
     @isTest
     static void relatedOpptyTest() {
         Quote quoteRecord = [SELECT Id FROM Quote LIMIT 1];
-        User adminUser = [SELECT Id FROM User WHERE Profile.Name = 'System Administrator' LIMIT 1];
+        User adminUser = [SELECT Id FROM User WHERE Alias = 'testad' LIMIT 1];
         System.runAs(adminUser) {
             Test.startTest();
             List<Aswata_Treaty_Distribution.QuoteOpptyRelated> resultQuote = Aswata_Treaty_Distribution.getRelatedListRisk(quoteRecord.Id);
@@ -98,7 +99,7 @@ private class Aswata_Treaty_Distribution_Test {
         Id quoteId = testQuote.Id;
 
         Transaction_Data__c result;
-        User adminUser = [SELECT Id FROM User WHERE Profile.Name = 'System Administrator' LIMIT 1];
+        User adminUser = [SELECT Id FROM User WHERE Alias = 'testad' LIMIT 1];
         System.runAs(adminUser) {
             Test.startTest();
             result = Aswata_Treaty_Distribution.getTransactionDataOpp(quoteId);
@@ -111,7 +112,7 @@ private class Aswata_Treaty_Distribution_Test {
     static void testProcessAssetUpdates() {
         List<Asset> assetsToUpdate = [SELECT Id FROM Asset LIMIT 1];
         Decimal setFacultativeValue = 0;
-        User adminUser = [SELECT Id FROM User WHERE Profile.Name = 'System Administrator' LIMIT 1];
+        User adminUser = [SELECT Id FROM User WHERE Alias = 'testad' LIMIT 1];
         System.runAs(adminUser) {
             Test.startTest();
             Aswata_Treaty_Distribution.processAssetUpdates(assetsToUpdate, setFacultativeValue);
@@ -157,7 +158,7 @@ private class Aswata_Treaty_Distribution_Test {
         idList.add(list1Wrapper);
         idList.add(list1Wrapper2);
         String idListString = JSON.serialize(idList);
-        User adminUser = [SELECT Id FROM User WHERE Profile.Name = 'System Administrator' LIMIT 1];
+        User adminUser = [SELECT Id FROM User WHERE Alias = 'testad' LIMIT 1];
         String result;
         System.runAs(adminUser) {
             Test.startTest();
