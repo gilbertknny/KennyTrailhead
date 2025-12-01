@@ -558,6 +558,16 @@
                 <identifier>RecordInterest_COB__cField</identifier>
             </fieldInstance>
         </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Master_Duplicate_data__c</fieldItem>
+                <identifier>RecordMaster_Duplicate_data__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
         <name>Facet-574dfa74-c30d-45dd-ac11-51f742e0ee17</name>
         <type>Facet</type>
     </flexiPageRegions>
@@ -829,16 +839,6 @@
                         <rightValue>Salvage Buyer</rightValue>
                     </criteria>
                 </visibilityRule>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>readonly</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Address__c</fieldItem>
-                <identifier>RecordAddress_cField2</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
@@ -1176,6 +1176,26 @@
                         <rightValue>Y</rightValue>
                     </criteria>
                 </visibilityRule>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>readonly</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Address__c</fieldItem>
+                <identifier>RecordAddress_cField2</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>readonly</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.BillingAddress</fieldItem>
+                <identifier>RecordBillingAddressField</identifier>
             </fieldInstance>
         </itemInstances>
         <name>Facet-37df01d4-b1ab-4460-a764-736242865cd8</name>
@@ -2039,27 +2059,38 @@
         <itemInstances>
             <componentInstance>
                 <componentInstanceProperties>
-                    <name>dir</name>
+                    <name>direction</name>
                     <value>ltr</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
-                    <name>inline</name>
-                    <value>false</value>
+                    <name>display</name>
+                    <value>Display OmniScript on page</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>inlineLabel</name>
-                    <value>Launch undefined/undefined</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>inlineVariant</name>
                     <value>brand</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
-                    <name>layout</name>
+                    <name>language</name>
+                    <value>English</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>subType</name>
+                    <value>KYC</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>theme</name>
                     <value>lightning</value>
                 </componentInstanceProperties>
-                <componentName>accountKYCEnglish</componentName>
-                <identifier>c_accountKYCEnglish</identifier>
+                <componentInstanceProperties>
+                    <name>type</name>
+                    <value>Account</value>
+                </componentInstanceProperties>
+                <componentName>runtime_omnistudio:omniscript</componentName>
+                <identifier>runtime_omnistudio_omniscript</identifier>
             </componentInstance>
         </itemInstances>
         <name>Facet-02a21695-0f34-4d94-8767-d26b2b98a205</name>
@@ -2201,6 +2232,24 @@
         <itemInstances>
             <componentInstance>
                 <componentInstanceProperties>
+                    <name>timelineConfigs</name>
+                    <valueList>
+                        <valueListItems>
+                            <value>Account_360</value>
+                        </valueListItems>
+                    </valueList>
+                </componentInstanceProperties>
+                <componentName>industries_common:timeline</componentName>
+                <identifier>industries_common_timeline</identifier>
+            </componentInstance>
+        </itemInstances>
+        <name>Facet-06c8cb60-cc97-4862-88be-c11c8a7d2248</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
                     <name>active</name>
                     <value>true</value>
                 </componentInstanceProperties>
@@ -2214,6 +2263,20 @@
                 </componentInstanceProperties>
                 <componentName>flexipage:tab</componentName>
                 <identifier>flexipage_tab4</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>body</name>
+                    <value>Facet-06c8cb60-cc97-4862-88be-c11c8a7d2248</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>title</name>
+                    <value>Timeline</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:tab</componentName>
+                <identifier>flexipage_tab3</identifier>
             </componentInstance>
         </itemInstances>
         <name>Facet-abb969b0-ce23-4f28-a293-721553395cee</name>
