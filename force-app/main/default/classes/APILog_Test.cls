@@ -21,10 +21,10 @@
  * 
  * @description APILog_Test
  */
-@isTest
+@IsTest
 private class APILog_Test {
 
-    @isTest
+    @IsTest
     static void getResponseAPITokenTest() {
         User currentUser = [SELECT Id FROM User WHERE Id = :UserInfo.getUserId()];
         
@@ -44,7 +44,7 @@ private class APILog_Test {
         }
     }
     
-    @isTest
+    @IsTest
     static void getResponseAPIBlobTest() {
         String x = '1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890';
         Integer i = x.length();
@@ -70,7 +70,7 @@ private class APILog_Test {
         }
     }
 
-    @isTest
+    @IsTest
     static void getResponseAPITextTest() {
         String x = '1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890';
         Integer i = x.length();
@@ -96,7 +96,7 @@ private class APILog_Test {
         }
     }
 
-    @isTest
+    @IsTest
     static void insertErrorLogTest() {
         User currentUser = [SELECT Id FROM User WHERE Id = :UserInfo.getUserId()];
         
@@ -123,7 +123,7 @@ private class APILog_Test {
         }
     }
 
-    @isTest
+    @IsTest
     static void insertErrorLogTest2() {
         User currentUser = [SELECT Id FROM User WHERE Id = :UserInfo.getUserId()];
         

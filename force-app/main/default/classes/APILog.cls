@@ -1,6 +1,7 @@
 /**
  *  @description APILog
  */
+@SuppressWarnings('PMD.AvoidGlobalModifier, PMD.StdCyclomaticComplexity, PMD.CyclomaticComplexity')
 public with sharing class APILog {
     /**
      * @description getResponseAPI
