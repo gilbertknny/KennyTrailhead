@@ -20,9 +20,9 @@
  * See the Apex Language Reference for more information about Testing and Code Coverage.
  * @description ScheduleSFAWT17_Test
  */
-@isTest
+@IsTest
 private class ScheduleSFAWT17_Test {
-    @testSetup
+    @TestSetup
     static void setupData() {
         // TO DO: implement unit test setup
         Id rtId = Schema.getGlobalDescribe().get('Account').getDescribe().getRecordTypeInfosByName().get('Business').getRecordTypeId();
@@ -36,7 +36,7 @@ private class ScheduleSFAWT17_Test {
         insert mysc;
     }
     
-    @isTest
+    @IsTest
     static void myUnitTest() {
         User currentUser = [SELECT Id FROM User WHERE Id = :UserInfo.getUserId()];
         

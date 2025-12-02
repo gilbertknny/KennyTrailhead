@@ -18,14 +18,17 @@
 		<members>VlocityMapping_Test</members>
 		<members>WebserviceAPI</members>
 		<members>WebserviceAPI_Test</members>
+		<!--
 		<members>flowRedirectController</members>
 		<members>flowRedirectControllerTest</members>
+		-->
 		<name>ApexClass</name>
 	</types>
 	<types>
 		<members>EventErrorLog</members>
 		<name>ApexTrigger</name>
 	</types>
+	<!--
 	<types>
 		<members>LEXTHEMINGAswata</members>
 		<name>BrandingSet</name>
@@ -41,6 +44,7 @@
 		<members>Aswata_Sales_App_Console</members>
 		<name>CustomApplication</name>
 	</types>
+	-->
 	<types>
 		<members>Endpoint_Header_List__mdt.Additional_Value__c</members>
 		<members>Endpoint_Header_List__mdt.Algorithms2__c</members>
@@ -116,6 +120,8 @@
 		<members>Endpoint.LintaswataSFAWT06</members>
 		<members>Endpoint.LintaswataSFAWT15</members>
 		<members>Endpoint.LintaswataSFAWT17</members>
+		<members>Endpoint.LintaswataSFAWT27</members>
+		<members>Endpoint.LintaswataSFAWT27A</members>
 		<members>Endpoint.SFAWT03_RenewalNotice</members>
 		<members>Endpoint.SFAWT04_RenewalNoticeAgreement</members>
 		<members>Endpoint.SFAWT05_Internal</members>
@@ -145,6 +151,9 @@
 		<members>Endpoint_Header_List.LintaswataSFAWT17_2</members>
 		<members>Endpoint_Header_List.LintaswataSFAWT17_3</members>
 		<members>Endpoint_Header_List.LintaswataSFAWT17_4</members>
+		<members>Endpoint_Header_List.LintaswataSFAWT17_5</members>
+		<members>Endpoint_Header_List.SalesforceComposite1</members>
+		<members>Endpoint_Header_List.SalesforceComposite2</members>
 		<members>Upload_File_Mapping.Client_ID</members>
 		<members>Upload_File_Mapping.Insurance_ID</members>
 		<members>Upload_File_Mapping.Loss_Adjuster_ID</members>
@@ -162,17 +171,20 @@
 		<name>CustomObject</name>
 	</types>
 	<types>
-		<members>Accumulation__c</members>
-		<members>Aswata_Survey__c</members>
-		<members>Error_Log__c</members>
+		<!-- 
+		<members>Accumulation__c</members> 
 		<members>Facultative_Share__c</members>
+		<members>Aswata_Survey__c</members>
 		<members>Transaction_Data__c</members>
+		-->
+		<members>Error_Log__c</members>
 		<name>CustomTab</name>
 	</types>
 	<types>
 		<members>Recaptcha_NC</members>
 		<name>ExternalCredential</name>
 	</types>
+	<!--
 	<types>
 		<members>Aswata_Claim_App_UtilityBar</members>
 		<members>Aswata_Claim_App_UtilityBar</members>
@@ -186,6 +198,7 @@
 		<members>Quote_Facultative</members>
 		<name>FlexiPage</name>
 	</types>
+	-->
 	<types>
 		<members>Opportunity_Auto_Launched_Clone_Oppty</members>
 		<members>Risk_Asset_Clone</members>
@@ -203,10 +216,11 @@
 		<members>Endpoint_Header__mdt-Endpoint Header Layout</members>
 		<members>Endpoint__mdt-Endpoint Layout</members>
 		<members>Error_Log__c-Error Log Layout</members>
-		<members>InsurancePolicy-Insurance Policy Layout</members>
+		<!-- <members>InsurancePolicy-Insurance Policy Layout</members> -->
 		<members>Upload_File_Mapping__mdt-Upload File Mapping Layout</members>
 		<name>Layout</name>
 	</types>
+	<!--
 	<types>
 		<members>redirectToUrl</members>
 		<name>LightningComponentBundle</name>
@@ -239,18 +253,19 @@
 		<members>Quote.General</members>
 		<name>RecordType</name>
 	</types>
+	-->
 	<types>
 		<members>*</members>
 		<name>SharingRules</name>
 	</types>
+	<!--
 	<types>
 		<members>Account.Edit</members>
 		<members>Account.Send_to_Lintaswata</members>
 		<name>WebLink</name>
 	</types>
-	<version>65.0</version>
-</Package>
-<!--
+	-->
+	<!--
 	<types>
 		<members>*</members>
 		<name>Certificate</name>
@@ -260,3 +275,5 @@
 		<name>ConnectedApp</name>
 	</types>
 	-->
+	<version>65.0</version>
+</Package>
