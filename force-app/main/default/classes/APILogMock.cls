@@ -1,7 +1,7 @@
 /**
  *  @description APILogMock
  */
-@isTest
+@IsTest
 public with sharing class APILogMock {
     /**
      *  @description ResponseAPILog

@@ -1,9 +1,9 @@
 /**
  * @description SOQL_SOBJECT_Test
  */
-@istest
+@IsTest
 private class SOQL_SOBJECT_Test {
-    @istest
+    @IsTest
     private static void testgan(){
         User currentUser = [SELECT Id FROM User WHERE Id = :UserInfo.getUserId()];
         
