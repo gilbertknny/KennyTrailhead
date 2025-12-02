@@ -1,7 +1,7 @@
 /**
  * @description ContentVersion_Test
  */
-@isTest
+@IsTest
 private class ContentVersion_Test {
 
     @IsTest
