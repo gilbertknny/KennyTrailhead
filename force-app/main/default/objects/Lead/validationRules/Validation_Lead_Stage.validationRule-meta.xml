@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Validation_Lead_Stage</fullName>
+    <active>false</active>
+    <description>prevent skipping stage in t</description>
+    <errorConditionFormula>AND(
+  ISCHANGED(Status),
+  
+  OR(
+CASE(Status,
+  &quot;New&quot;, 1,
+  &quot;Working&quot;, 2,
+  &quot;Contacted&quot;, 3,
+  &quot;Qualified&quot;, 4,
+  &quot;Unqualified&quot;, 5,
+  0
+) &lt;= 
+CASE(PRIORVALUE(Status),
+  &quot;New&quot;, 1,
+  &quot;Working&quot;, 2,
+  &quot;Contacted&quot;, 3,
+  &quot;Qualified&quot;, 4,
+  &quot;Unqualified&quot;, 5,
+  0
+)
+||
+CASE(Status,
+  &quot;New&quot;, 1,
+  &quot;Working&quot;, 2,
+  &quot;Contacted&quot;, 3,
+  &quot;Qualified&quot;, 4,
+  &quot;Unqualified&quot;, 5,
+  0
+) - 
+CASE(PRIORVALUE(Status),
+  &quot;New&quot;, 1,
+  &quot;Working&quot;, 2,
+  &quot;Contacted&quot;, 3,
+  &quot;Qualified&quot;, 4,
+  &quot;Unqualified&quot;, 5,
+  0
+) &gt; 1))</errorConditionFormula>
+    <errorMessage>You can only move foward and cannot skipping status</errorMessage>
+</ValidationRule>
