@@ -1,5 +1,5 @@
 /*** @description BatchRiskAssetCoverage_Test */
-@isTest
+@IsTest
 private class BatchRiskAssetCoverage_Test {
 
     @TestSetup
@@ -28,17 +28,20 @@ private class BatchRiskAssetCoverage_Test {
         insert newOpp;
     }
 
-    @isTest
+    @IsTest
     static void myUnitTest() {
         // TO DO: implement unit test
+        User currentUser = [SELECT Id FROM User WHERE Id = :UserInfo.getUserId()];
         Test.startTest();
-        Account acc = [SELECT Id FROM Account LIMIT 1];
-        Opportunity oldOpp = [SELECT Id FROM Opportunity WHERE Name = 'Old Opty' LIMIT 1];
-        Opportunity newOpp = [SELECT Id FROM Opportunity WHERE Name = 'New Opty' LIMIT 1];
-        String query = 'SELECT Id from Asset where Opportunity__c = '+'\''+oldOpp.Id+'\' and Recordtype.Name = '+'\'Risk'+'\'';
-        BatchRiskAssetCoverage batch = new BatchRiskAssetCoverage(query,newOpp.Id,acc.Id);
-        Database.executeBatch(batch,1);
-        BatchRiskAssetCoverage.insertErrorLog(null);
+        System.runAs(currentUser){
+            Account acc = [SELECT Id FROM Account LIMIT 1];
+            Opportunity oldOpp = [SELECT Id FROM Opportunity WHERE Name = 'Old Opty' LIMIT 1];
+            Opportunity newOpp = [SELECT Id FROM Opportunity WHERE Name = 'New Opty' LIMIT 1];
+            String query = 'SELECT Id from Asset where Opportunity__c = '+'\''+oldOpp.Id+'\' and Recordtype.Name = '+'\'Risk'+'\'';
+            BatchRiskAssetCoverage batch = new BatchRiskAssetCoverage(query,newOpp.Id,acc.Id);
+            Database.executeBatch(batch,1);
+            BatchRiskAssetCoverage.insertErrorLog(null);
+        }
         Test.stopTest();
         System.assert(true, 'Batch executed without unhandled exception.');
     }
