@@ -46,10 +46,10 @@ public class Aswata_TriggerHandler_Opportunity_Test {
     static void setTestMethod(){
         User u = [SELECT Id FROM User WHERE Id=:UserInfo.getUserId()];
         System.runAs(u){
-        	Opportunity opp = [SELECT Id FROM Opportunity LIMIT 1];
+        	Opportunity opp = [SELECT Id,StageName FROM Opportunity LIMIT 1];
             Test.startTest();
             update opp;
-            system.assertNotEquals(opp,null);
+            system.assertEquals('Proposal',opp.StageName,'Opportunity stage same');
             Test.stopTest();
         }
         

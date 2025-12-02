@@ -1,0 +1,42 @@
+<template>
+    <lightning-card>
+        <div style="text-align:center;font-size:large;"><b>Approval Master Data</b></div>
+        <template if:true={showData}> 
+        <div><lightning-button label="Approve" onclick={handleApprove} variant="brand"></lightning-button>&nbsp;
+            <lightning-button label="Reject" onclick={handleReject} variant="destructive"></lightning-button>
+        </div>
+        <lightning-combobox
+                name="type"
+                label="Type"
+                value={typevalue}
+                options={options}
+                onchange={handleChange} >
+            </lightning-combobox>
+            <div style="height: 300px;">
+                <lightning-datatable
+                        key-field="id"
+                        data={paginatedData}
+                        columns={columns}
+                        hide-checkbox-column
+                        column-widths-mode="auto">
+                </lightning-datatable>
+                <div class="slds-m-top_medium slds-align_absolute-center">
+                    <lightning-button label="Previous"
+                        onclick={handlePrevious}
+                        disabled={_disablePrevious}>
+                    </lightning-button>
+                    <span class="slds-m-horizontal_medium">Page {page} of {totalPages}</span>
+                    <lightning-button label="Next"
+                        onclick={handleNext}
+                        disabled={_disableNext}>
+                    </lightning-button>
+                </div>
+            </div>
+        </template>
+        <template if:false={showData}>
+            <div class="slds-p-around_large" style="height: 200px !important;border:1px solid gray;">
+                <b>This System only used for System Administrator!</b>
+            </div>
+        </template>
+    </lightning-card>
+</template>
