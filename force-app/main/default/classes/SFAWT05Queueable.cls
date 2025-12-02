@@ -18,7 +18,7 @@ public with sharing class SFAWT05Queueable implements Queueable, Database.Allows
         mapin.put(qp.varout,listobj);
         mapin.put('recordtypeId',qp.recordtypeId);
         mapin.put('externalId',qp.externalId);
-        system.debug(JSON.serialize(mapin));
+        
         VlocityMapping.callIP(qp.ipname,JSON.serialize(mapin));
         if(qp.mapobj.size()>i){
             qp.start = i;

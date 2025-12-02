@@ -54,7 +54,7 @@ private class WebserviceAPI_Test {
     
     @isTest
     static void testUploadFileCase() {
-        User currentUser = [SELECT Id FROM User WHERE Id = :UserInfo.getUserId()];
+        User currentUser = setUser();
         
         System.runAs(currentUser) {
             Id rtId = Schema.getGlobalDescribe().get('Account').getDescribe().getRecordTypeInfosByName().get('Business').getRecordTypeId();
@@ -88,15 +88,15 @@ private class WebserviceAPI_Test {
             WebserviceAPI.ActionData();
             Test.stopTest();
             
-            System.assertEquals(400, RestContext.response.statusCode);
+            System.assertEquals(200, RestContext.response.statusCode);
             //System.assert(RestContext.response.responseBody.toString().contains('Upload Success'));
         }
     }
 
     @isTest
     static void testUploadFileCase2() {
-        User currentUser = [SELECT Id FROM User WHERE Id = :UserInfo.getUserId()];
-        
+        //User currentUser = [SELECT Id FROM User WHERE Id = :UserInfo.getUserId()];
+        User currentUser = setUser();
         System.runAs(currentUser) {
             Id rtId = Schema.getGlobalDescribe().get('Account').getDescribe().getRecordTypeInfosByName().get('Business').getRecordTypeId();
             // Arrange
@@ -129,7 +129,48 @@ private class WebserviceAPI_Test {
             WebserviceAPI.ActionData();
             Test.stopTest();
             
-            System.assertEquals(400, RestContext.response.statusCode);
+            System.assertEquals(200, RestContext.response.statusCode);
+            //System.assert(RestContext.response.responseBody.toString().contains('Upload Success'));
+        }
+    }
+
+    @isTest
+    static void testUploadFileCaseSIDia() {
+        //User currentUser = [SELECT Id FROM User WHERE Id = :UserInfo.getUserId()];
+        User currentUser = setUser();
+        System.runAs(currentUser) {
+            Id rtId = Schema.getGlobalDescribe().get('Account').getDescribe().getRecordTypeInfosByName().get('Business').getRecordTypeId();
+            Account acc = new Account(Name='Test Account',RecordtypeId = rtId,Client_id__c = 'CLIENT123');
+            insert acc;
+            Case cs = new Case(Origin='Web',AccountId=acc.Id,Status='New');
+            insert cs;
+            Claim cl = new Claim(Name='Sidia',AccountId=acc.Id,CaseId=cs.Id);
+            insert cl;
+            String fileContent = EncodingUtil.base64Encode(Blob.valueOf('Test File Content'));
+            
+            Map<String, Object> fileData = new Map<String, Object>{
+                'claim_number' => cl.Id,
+                'document_name' => 'Test File',
+                'file' => fileContent,
+                'mime_type' => 'txt'
+            };
+            
+            RestRequest req = new RestRequest();
+            req.requestUri = '/services/apexrest/webserviceAPI/';
+            req.httpMethod = 'POST';
+            req.params.put('meta', 'SFAWT06_UploadFileSIDIA');
+            req.requestBody = Blob.valueOf(JSON.serialize(fileData));
+            
+            RestResponse res = new RestResponse();
+            
+            Test.startTest();
+            RestContext.request = req;
+            RestContext.response = res;
+            
+            WebserviceAPI.ActionData();
+            Test.stopTest();
+            
+            System.assertEquals(200, RestContext.response.statusCode);
             //System.assert(RestContext.response.responseBody.toString().contains('Upload Success'));
         }
     }
@@ -181,5 +222,14 @@ private class WebserviceAPI_Test {
             System.assertEquals(400, RestContext.response.statusCode);
             System.assert(RestContext.response.responseBody.toString().contains('success'));
         }
+    }
+
+    public static User setUser(){
+        Profile p = [SELECT Id FROM Profile WHERE Name='Integration']; 
+        User currentUser = new User(Alias = 'standt', Email='standarduser@testorg.com', 
+            EmailEncodingKey='UTF-8', LastName='Lintaswata', LanguageLocaleKey='en_US', 
+            LocaleSidKey='en_US', ProfileId = p.Id, 
+            TimeZoneSidKey='America/Los_Angeles', UserName='standarduser@aswata.co.id');
+            return currentUser;
     }
 }

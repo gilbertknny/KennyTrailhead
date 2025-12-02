@@ -19,9 +19,9 @@
  *
  * See the Apex Language Reference for more information about Testing and Code Coverage.
  */
-@istest
+@IsTest
 private class ErrorLogRecord_Test {
-    @istest
+    @IsTest
     static void errorrecord(){
         String uniqueUserName = 'standarduser' + DateTime.now().getTime() + '@bri.co.id';
         User u = new User(Alias = 'stdad', Email='testadmin@bri.co.id',
@@ -67,7 +67,7 @@ private class ErrorLogRecord_Test {
         }   
     }
 
-    @istest
+    @IsTest
     static void errorAPI(){
         User currentUser = [SELECT Id FROM User WHERE Id = :UserInfo.getUserId()];
         
@@ -90,7 +90,7 @@ private class ErrorLogRecord_Test {
         }
     }
     
-    @istest
+    @IsTest
     static void errorAPI2(){
     	User currentUser = [SELECT Id FROM User WHERE Id = :UserInfo.getUserId()];
         
