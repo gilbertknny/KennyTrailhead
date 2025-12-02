@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Lead_Convert</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+    NOT(IsConverted),
+    OR(
+        NOT(Task__c), 
+        ISBLANK(City__c),
+        ISBLANK(Email),
+        ISBLANK(Interest_COB__c),
+        ISBLANK(Address__c)
+    )
+)</errorConditionFormula>
+    <errorMessage>Field berikut harus diisi 
+1. Task (Minimal 3)
+2. Email 
+3. Cities
+4. Interest COB
+5. Address</errorMessage>
+</ValidationRule>
