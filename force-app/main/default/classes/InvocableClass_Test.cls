@@ -112,6 +112,6 @@ private class InvocableClass_Test {
             InvocableClass.Invocablevoid(new List<InvocableClass.InputVariable>());
             Test.stopTest();
         }
-        System.assert(true, 'Empty input list handled gracefully.');
+        System.assert(true, 'Empty input list handled gracefully. ');
     }
 }

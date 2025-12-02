@@ -223,7 +223,7 @@ private class WebserviceAPI_Test {
             System.assert(RestContext.response.responseBody.toString().contains('success'));
         }
     }
-
+    /** @description setUser @return currentUser */
     public static User setUser(){
         Profile p = [SELECT Id FROM Profile WHERE Name='Integration']; 
         User currentUser = new User(Alias = 'standt', Email='standarduser@testorg.com', 
