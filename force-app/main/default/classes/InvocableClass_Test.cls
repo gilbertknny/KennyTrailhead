@@ -37,7 +37,7 @@ private class InvocableClass_Test {
     }
 
     @IsTest
-    static void testInvocableMethod_BatchExecution() {
+    static void testInvocableMethodBatchExecution() {
         // Retrieve setup data
         User currentUser = [SELECT Id FROM User WHERE Id = :UserInfo.getUserId()];
         
@@ -62,7 +62,7 @@ private class InvocableClass_Test {
     }
 
     @IsTest
-    static void testInvocableMethod_UnderwritingApproval() {
+    static void testInvocableMethodUnderwritingApproval() {
         
         // Prepare input for Invocable class
         User currentUser = [SELECT Id FROM User WHERE Id = :UserInfo.getUserId()];
@@ -80,7 +80,7 @@ private class InvocableClass_Test {
     }
 
     @IsTest
-    static void testInvocableMethod_WithInvalidParam() {
+    static void testInvocableMethodWithInvalidParam() {
         User currentUser = [SELECT Id FROM User WHERE Id = :UserInfo.getUserId()];
         
         System.runAs(currentUser) {
@@ -104,7 +104,7 @@ private class InvocableClass_Test {
     }
 
     @IsTest
-    static void testInvocableMethod_WithEmptyList() {
+    static void testInvocableMethodWithEmptyList() {
         User currentUser = [SELECT Id FROM User WHERE Id = :UserInfo.getUserId()];
         
         System.runAs(currentUser) {
