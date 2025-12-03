@@ -13,7 +13,7 @@ public class ClsChangeOwner_Test {
         
         String strRTIndividual = Schema.SObjectType.Account.getRecordTypeInfosByName().get('Insurance').getRecordTypeId();
         Account acc = new Account();
-        acc.Name = 'ACC12345';
+        acc.Name = 'ACCOUNTA';
         acc.RecordTypeId = strRTIndividual;
         acc.OwnerId = userId;
         insert acc;      
