@@ -461,6 +461,7 @@ public with sharing class OpportunityController {
         @AuraEnabled public Date startDate { get; set; }
         @AuraEnabled public Date endDate { get; set; }
         @AuraEnabled public String shortBasis { get; set; }
+        @AuraEnabled public String premiumCalculation { get; set; }
         @AuraEnabled public Decimal percentage { get; set; }
         @AuraEnabled public String schemaType { get; set; }
         @AuraEnabled public Decimal periodRate { get; set; }
@@ -495,7 +496,7 @@ public with sharing class OpportunityController {
         // Check FLS permission for insurance period fields
         String[] insuranceFields = new String[]{
             'Insurance_Period_Type__c', 'Start_Date_Periode__c', 'End_Date_Periode__c',
-            'Short_Period_Basis__c', 'Percentage__c', 'Period_Rate__c', 'Number_of_Years__c'
+            'Short_Period_Basis__c', 'premium_calculation__c', 'Percentage__c', 'Period_Rate__c', 'Number_of_Years__c'
         };
         for (String fieldName : insuranceFields) {
             if (!Schema.sObjectType.Opportunity.fields.getMap().get(fieldName).getDescribe().isUpdateable()) {
@@ -523,7 +524,8 @@ public with sharing class OpportunityController {
             Short_Period_Basis__c = wrapper.shortBasis,
             Percentage__c = wrapper.percentage,
             Period_Rate__c = periodRateFinal,
-            Number_of_Years__c = numberOfYear
+            Number_of_Years__c = numberOfYear,
+            premium_calculation__c = wrapper.premiumCalculation
         );
         update oppToUpdate;
     }
