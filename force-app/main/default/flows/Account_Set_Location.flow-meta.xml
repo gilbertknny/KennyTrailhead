@@ -18,7 +18,34 @@
             <targetReference>Update_Location</targetReference>
         </connector>
     </assignments>
+    <decisions>
+        <name>Check_Condition</name>
+        <label>Check Condition</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Its_Insert</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>IsInsert</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Run_Duplicate</targetReference>
+            </connector>
+            <label>Its Insert</label>
+        </rules>
+    </decisions>
     <environments>Default</environments>
+    <formulas>
+        <name>IsInsert</name>
+        <dataType>Boolean</dataType>
+        <expression>ISNEW()</expression>
+    </formulas>
     <interviewLabel>[Account]Set Location {!$Flow.CurrentDateTime}</interviewLabel>
     <label>[Account]Set Location</label>
     <processMetadataValues>
@@ -45,6 +72,9 @@
         <label>Update Location</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
+        <connector>
+            <targetReference>Check_Condition</targetReference>
+        </connector>
         <inputReference>$Record</inputReference>
     </recordUpdates>
     <start>
@@ -53,19 +83,12 @@
         <connector>
             <targetReference>Call_Flow</targetReference>
         </connector>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>Address_LU__c</field>
-            <operator>IsNull</operator>
-            <value>
-                <booleanValue>false</booleanValue>
-            </value>
-        </filters>
+        <filterFormula>NOT {!$Permission.ByPassFlow} &amp;&amp; ISNULL({!$Record.Address_LU__c})</filterFormula>
         <object>Account</object>
         <recordTriggerType>CreateAndUpdate</recordTriggerType>
         <triggerType>RecordAfterSave</triggerType>
     </start>
-    <status>Active</status>
+    <status>Obsolete</status>
     <subflows>
         <name>Call_Flow</name>
         <label>Call Flow</label>
@@ -97,5 +120,43 @@
             <assignToReference>$Record.BillingPostalCode</assignToReference>
             <name>ZipCodeName</name>
         </outputAssignments>
+    </subflows>
+    <subflows>
+        <name>Run_Duplicate</name>
+        <label>Run Duplicate</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <flowName>Account_Duplicate_Check</flowName>
+        <inputAssignments>
+            <name>AccountName</name>
+            <value>
+                <elementReference>$Record.Name</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>Address</name>
+            <value>
+                <elementReference>$Record.BillingStreet</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>Email</name>
+            <value>
+                <elementReference>$Record.Email__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>Phone</name>
+            <value>
+                <elementReference>$Record.Phone</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>ZipCode</name>
+            <value>
+                <elementReference>$Record.Zip__r.Zip_Code_Name__c</elementReference>
+            </value>
+        </inputAssignments>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
     </subflows>
 </Flow>
