@@ -196,6 +196,13 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
     @track assetSectionId1MOU;
     @track assetCategoryId1MOU;
     @track coverage1 = [];
+    @track dataAsset1 = [
+        {
+            id : '1',
+            assetCategory : [],
+            coverage : []
+        }
+    ];
 
     //SUMMARY
     @track rate;
@@ -271,15 +278,15 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
         {type: 'action', typeAttributes: { rowActions: this.actions} },
         {label:'Coverage',fieldName:'coverageName',type:'text'},
         {label:'Proposed Rate',fieldName:'proposedFixedAmount',type:'number'},
-        {label:'Deductible PCT',fieldName:'deductiblePCT',type:'percent'},
+        {label:'Deductible PCT (%)',fieldName:'deductiblePCT',type:'number' },
         {label:'Deductible Flag',fieldName:'deductibleName',type:'text'},
-        {label:'Minimum Curr',fieldName:'minimumCurName',type:'text'},
+        {label:'Minimum Curr',fieldName:'minimumCurId',type:'text'},
         {label:'Minimum Amount',fieldName:'minimumAmount',type:'number'},
-        {label:'Banks Fee',fieldName:'banksFee',type:'percent'},
-        {label:'Agent Comission',fieldName:'agentComission',type:'percent'},
-        {label:'Broker Comission',fieldName:'brokerComission',type:'percent'},
-        {label:'Commision',fieldName:'generalRPremiumPCT',type:'percent'},
-        {label:'Overiding',fieldName:'overdngComission',type:'percent'},
+        {label:'Banks Fee (%)',fieldName:'banksFee',type:'number'},
+        {label:'Agent Comission (%)',fieldName:'agentComission',type:'number'},
+        {label:'Broker Comission (%)',fieldName:'brokerComission',type:'number'},
+        {label:'Commision (%)',fieldName:'generalRPremiumPCT',type:'number'},
+        {label:'Overiding (%)',fieldName:'overdngComission',type:'number'},
         {label:'Max Person',fieldName:'maxPerson',type:'number'}
     ];
 
@@ -506,6 +513,18 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
             this.dataFormat1 = 'Summary';
             this.showSummary = true;
             this.getPicklistCurrency();
+            this.assetSectionId = undefined;
+            this.assetCategoryId = undefined;
+            this.currencyId = undefined;
+            this.rate = undefined;
+            this.showIDR = false;
+            this.sumInsured = undefined;
+            this.sumInsuredIDR = undefined;
+            this.premium = undefined;
+            this.premiumIDR = undefined;
+            this.numberOfRisk = undefined;
+            this.closedDate = undefined;
+            this.description = undefined;
         }else if(specific.checked == true){
             this.showSummary = false;
             this.dataSummary1 = [];
@@ -552,6 +571,18 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
             this.showSummary2 = true;
             this.dataFormat2 = 'Summary';
             this.getPicklistCurrency2();
+            this.assetSectionId2 = undefined;
+            this.assetCategoryId2 = undefined;
+            this.currencyId2 = undefined;
+            this.rate2 = undefined;
+            this.showIDR2 = false;
+            this.sumInsured2 = undefined;
+            this.sumInsuredIDR2 = undefined;
+            this.premium2 = undefined;
+            this.premiumIDR2 = undefined;
+            this.numberOfRisk2 = undefined;
+            this.closedDate2 = undefined;
+            this.description2 = undefined;
         }else if(specific.checked == true){
             this.showSummary2 = false;
             this.dataSummary2 = [];
@@ -647,7 +678,7 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
         this.showPremium = false;
         if(value != '' && value != undefined){
             this.changeCOB(value,'change');
-            if(value == '301'){
+            if(value == '301' || value == '302' || value == '303'){
                 this.showPremium = true;
                 this.getPremiumCalculation();
             }
@@ -683,6 +714,7 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
             this.mapInputMOU1 = new Map();
             this.mapInputMOU1.set('COB__C',value);
             this.datafieldMOU1 = [];
+            this.dataAsset1 = [];
             this.getRisk1();
         }
         if(value != '101'){
@@ -787,7 +819,7 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
         this.showPremium2 = false;
         if(value != '' && value != undefined){
             this.changeCOB2(value,'change');
-            if(value == '301'){
+            if(value == '301' || value == '302' || value == '303'){
                 this.showPremium2 = true;
                 this.getPremiumCalculation2();
             }
@@ -1382,7 +1414,6 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
         this.assetCategoryId1MOU = event.detail.value;
     }
 
-
     getPicklistAssetSection1MOU(contractid){
         this.assetSectionId1MOU = undefined;
         getAssetSectionMOU({
@@ -1420,7 +1451,7 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
 
     handleAddCoverage1(event){
         console.log('handleAddCoverage1');
-        this.showModalMOU(undefined);
+        this.coverage1 = this.showModalMOU(undefined,this.coverage1);
     }
 
     handleRowActionMOU(event) {
@@ -1430,7 +1461,7 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
         //console.log('row:'+JSON.stringify(row));
         switch (action.name) {
             case 'show_details':
-                this.showModalMOU(row);
+                this.coverage1 = this.showModalMOU(row,this.coverage1);
                 break;
             case 'delete':
                 LightningConfirm.open({
@@ -1448,18 +1479,217 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
         }
     }
 
-    async showModalMOU(row){
+    async showModalMOU(row,records){
+        let data = [];
         const result = await modalMOU.open({
-            records : this.coverage1,
+            records : records,
             record : row,
             contractId : this.mouId1
         });
         console.log('result:'+JSON.stringify(result));
         if(result != 'cancel' && result != undefined){
-            this.coverage1 = result;
+            data = result;
         }
-        console.log('this.coverage1:'+JSON.stringify(this.coverage1));
+        return data;
     }
+
+    handleAddAsset1(event){
+        let records = this.dataAsset1;
+        let i = records.length;
+        let id = '1';
+        if(i>0){
+            id = parseInt(records[i-1].id,10)+1;
+        }
+
+        let data = {
+                id:id,
+                assetCategory : [],
+                coverage : []
+            };
+        this.dataAsset1 = [...this.dataAsset1,data];
+        console.log('this.dataAsset1:'+JSON.stringify(this.dataAsset1));
+    }
+
+    handleDeleteAsset1(event){
+        let id = event.target.dataset.id;
+        const rowIndex = this.dataAsset1.findIndex(r => r.id === id);
+        this.dataAsset1.splice(rowIndex, 1);
+        this.dataAsset1 = [...this.dataAsset1];
+        console.log('this.dataAsset1:'+JSON.stringify(this.dataAsset1));
+    }
+
+    handleDataAsset(event){
+        let id = event.target.dataset.id;
+        let name = event.target.dataset.name;
+        let value = event.detail.value;
+        this.setDatasetValue(id,name,value);
+    }
+
+    setDatasetValue(id,name,value){
+        let records = this.dataAsset1;
+        let newrecords = [];
+        let record = {};
+        for(let i=0;i<records.length;i++){
+            if(records[i].id == id){
+                record = {};
+                record.id = id;
+                record.assetSectionId = this.setDataValue(name,'assetSection',value,records[i].assetSectionId);
+                if(name=='assetSection'){
+                    record.assetCategoryId = undefined;
+                    record.assetCategory = [];
+                }else{
+                    record.assetCategoryId = this.setDataValue(name,'assetCategory',value,records[i].assetCategoryId);
+                    record.assetCategory = records[i].assetCategory;
+                }
+                record.currencyId = this.setDataValue(name,'currency',value,records[i].currencyId);
+                if(record.currencyId != undefined) record.currencyName = this.currency.find(item => item.value === record.currencyId).label;
+                record.sumInsured = this.setDataValue(name,'sumInsured',value,records[i].sumInsured);
+                record.showIDR = false;
+                if(record.currencyName == 'IDR'){
+                    record.rate = 1;
+                    record.sumInsuredIDR = record.sumInsured;
+                }else if(record.currencyName != 'IDR' && record.currencyName != undefined){
+                    record.showIDR = true;
+                }
+                record.coverage = records[i].coverage;
+                newrecords = [...newrecords,record];
+            }else{
+                newrecords = [...newrecords,records[i]];
+            }
+        }
+        this.dataAsset1 = newrecords;
+        console.log('dataAsset1:'+JSON.stringify(this.dataAsset1));
+        if(name=='assetSection'){
+            this.getPicklistDataAssetCategory(this.mouId1,value,record);
+        }else if((name == 'currency' || name == 'sumInsured') && record.currencyName != 'IDR' && record.currencyName != undefined){
+            this.getDataAmountRate(record.currencyName,record);
+        }
+    }
+
+    setDataValue(name1,name2,value,record){
+        let newrecord;
+        if(name1 == name2) newrecord = value;
+        else newrecord = record;
+        return newrecord;
+    }
+
+    getPicklistDataAssetCategory(contractid,assetsection,record){
+        getAssetCategoryMOU({
+            contractid : contractid,
+            assetsection : assetsection
+        })
+        .then(result => {
+            let data = [];
+            for (var key in result) {
+                data.push({label:result[key], value:key});
+            }
+            let newrecords = [];
+            let records = this.dataAsset1;
+            for(let i=0;i<records.length;i++){
+                if(records[i].id == record.id){
+                    record.assetCategory = data;
+                    newrecords = [...newrecords,record];
+                }else{
+                    newrecords = [...newrecords,records[i]];
+                }
+            }
+            this.dataAsset1 = newrecords;
+            console.log('dataAsset1:'+JSON.stringify(this.dataAsset1));
+        })
+        .catch(error => {
+            console.log('error-getPicklistDataAssetCategory:'+ error.message);
+        });
+    }
+
+    getDataAmountRate(curr,record){
+        getRate({
+            curr : curr
+        })
+        .then(result => {
+            let newrecords = [];
+            let records = this.dataAsset1;
+            for(let i=0;i<records.length;i++){
+                if(records[i].id == record.id){
+                    record.currencyName = this.currency.find(item => item.value === record.currencyId).label;
+                    record.rate = result;
+                    if(record.sumInsured) record.sumInsuredIDR = record.sumInsured * record.rate;
+                    newrecords = [...newrecords,record];
+                }else{
+                    newrecords = [...newrecords,records[i]];
+                }
+            }
+            this.dataAsset1 = newrecords;
+            console.log('dataAsset1:'+JSON.stringify(this.dataAsset1));
+        })
+        .catch(error => {
+            console.log('error-getAmountRate:'+ error.message);
+        });
+    }
+
+    handleAddAssetCoverage1(event){
+        console.log('handleAddAssetCoverage1');
+        let id = event.target.dataset.id;
+        let records = this.dataAsset1;
+        const rowIndex = records.findIndex(r => r.id === id);
+        let record = records[rowIndex];
+        this.showModalCoverage(undefined,records,record);
+    }
+
+    async showModalCoverage(row,records,record){
+        const result = await modalMOU.open({
+            records : record.coverage,
+            record : row,
+            contractId : this.mouId1
+        });
+        console.log('result:'+JSON.stringify(result));
+        if(result != 'cancel' && result != undefined){
+            try{
+                let newrecords = [];
+                for(let i=0;i<records.length;i++){
+                    if(records[i].id == record.id){
+                        record.coverage = result;
+                        newrecords = [...newrecords,record];
+                    }else{
+                        newrecords = [...newrecords,records[i]];
+                    }
+                }
+                this.dataAsset1 = newrecords;
+                console.log('dataAsset1:'+JSON.stringify(this.dataAsset1));
+            }catch(e){
+                console.log('error-showModalCoverage:'+e);
+            }
+        }
+    }
+
+    handleRowActionCoverage(event){
+        const action = event.detail.action;
+        const row = event.detail.row;
+        let id = event.target.dataset.id;
+        let records = this.dataAsset1;
+        const rowIndex = records.findIndex(r => r.id === id);
+        let record = records[rowIndex];
+        console.log('id:'+id);
+        switch (action.name) {
+            case 'show_details':
+                this.showModalCoverage(row,records,record);
+                break;
+            case 'delete':
+                LightningConfirm.open({
+                    message: 'Are your sure want to delete this coverage?',
+                    label: 'Warning', 
+                    variant : 'headerless'
+                }).then((result) => {
+                    if(result == true){
+                        const rowIndex = record.coverage.findIndex(r => r.Id === row.Id);
+                        record.coverage.splice(rowIndex, 1);
+                        record.coverage = [...record.coverage];
+                        console.log('record:'+JSON.stringify(this.dataAsset1));
+                    }
+                });
+                break;
+        }
+    }
+
 
     handleProductType(event){
         this.policyWording = [];
@@ -2343,7 +2573,7 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
         }
         const start  = new Date(this.startDate2);
         const end    = new Date(this.endDate2);
-        this.dayCount = Math.floor((end - start) / (1000 * 60 * 60 * 24));
+        this.dayCount2 = Math.floor((end - start) / (1000 * 60 * 60 * 24));
         let y = end.getFullYear()  - start.getFullYear();
         let m = end.getMonth()     - start.getMonth();
         let d = end.getDate()      - start.getDate();
@@ -2945,11 +3175,11 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
         }else if(data.format1 === 'Summary' && (data.currency === '' || data.currency === undefined)){
             this.errorMessage('Please Input Currency!'); 
         }else if(data.format1 === 'Summary' && (data.sumInsured === '' || data.sumInsured === undefined)){
-            this.errorMessage('Please Input Sum Insured!');  
-        }else if(msgSummary1 != ''){
-            this.errorMessage('Please Input Format : '+ msgSummary1 +'!');
+            this.errorMessage('Please Input Top Risk Sum Insured!');  
         }else if(data.format1 === 'Summary' && (data.premium === '' || data.premium === undefined)){
-            this.errorMessage('Please Input Premium!'); 
+            this.errorMessage('Please Input Top Gross Premium!'); 
+        }else if(msgSummary1 != ''){
+            this.errorMessage('Please Input Opportunity Format : '+ msgSummary1 +'!');
         }else if(data.format1 === 'Summary' && (data.numberOfRisk === '' || data.numberOfRisk === undefined)){
             this.errorMessage('Please Input Quantity Of Risk!');
         }else if(data.format1 === 'Summary' && (data.closedDate === '' || data.closedDate === undefined)){
@@ -2993,11 +3223,11 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
         }else if(data.risk == 'multiple' && (data.format2 === 'Summary' && (data.currency2 === '' || data.currency2 === undefined))){
             this.errorMessage('Please Input Currency (2)!'); 
         }else if(data.risk == 'multiple' && (data.format2 === 'Summary' && (data.sumInsured2 === '' || data.sumInsured2 === undefined))){
-            this.errorMessage('Please Input Sum Insured (2)!');  
-        }else if(data.risk == 'multiple' && (msgSummary2 != '')){
-            this.errorMessage('Please Input Format (2): '+ msgSummary2 +'!');
+            this.errorMessage('Please Input Top Risk Sum Insured (2)!');  
         }else if(data.risk == 'multiple' && (data.format2 === 'Summary' && (data.premium2 === '' || data.premium2 === undefined))){
-            this.errorMessage('Please Input Premium (2)!'); 
+            this.errorMessage('Please Input Top Gross Premium (2)!'); 
+        }else if(data.risk == 'multiple' && (msgSummary2 != '')){
+            this.errorMessage('Please Input Opportunity Format (2): '+ msgSummary2 +'!');
         }else if(data.risk == 'multiple' && (data.format2 === 'Summary' && (data.numberOfRisk2 === '' || data.numberOfRisk2 === undefined))){
             this.errorMessage('Please Input Quantity Of Risk (2)!');
         }else if(data.risk == 'multiple' && (data.format2 === 'Summary' && (data.closedDate2 === '' || data.closedDate2 === undefined))){
@@ -3102,16 +3332,17 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
         data.producttype = this.productTypeId;
         data.producttypename = this.productTypeName;
         data.contracttype = this.contractTypeId;
-        data.assetsection = this.assetSectionId1MOU;
+        data.asset1 = this.dataAsset1;
+        /*data.assetsection = this.assetSectionId1MOU;
         data.assetcategory = this.assetCategoryId1MOU;
         data.currency = this.currencyId;
         data.rate = this.rate;
         data.sumInsured = this.sumInsured;
-        data.sumInsuredIDR = this.sumInsuredIDR;
+        data.sumInsuredIDR = this.sumInsuredIDR;*/
         if(this.showMultiple == true) data.risk = 'multiple';
         else if(this.showSingle == true) data.risk = 'single';
         data.risk1 = risk1;
-        data.coverage1 = this.coverage1;
+        //data.coverage1 = this.coverage1;
         data.mouId1 = this.mouId1;
         /*if(data.risk == 'multiple'){
             data.policywording2 = this.policyWordingName2;
@@ -3173,6 +3404,24 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
             });
         }
 
+        let msgAsset1 = '';
+        for(let i=0;i<data.asset1.length;i++){
+            if(data.asset1[i].assetSectionId === undefined || data.asset1[i].assetSectionId === ''){
+                msgAsset1 = 'Please Select Asset Section!';
+                break;
+            }else if(data.asset1[i].currencyId === undefined || data.asset1[i].currencyId === ''){
+                msgAsset1 = 'Please Select Currency!';
+                break;
+            }else if(data.asset1[i].sumInsured === undefined || data.asset1[i].sumInsured === ''){
+                msgAsset1 = 'Please Input Sum Insured!';
+                break;
+            }else if(data.asset1[i].coverage.length == 0){
+                msgAsset1 = 'Please Add Coverage!';
+                break;
+            }
+        }
+        
+
         if(data.opportunitytype === undefined || data.opportunitytype === ''){
             this.errorMessage('Please Select Opportunity Type!');
         }else if(data.accountId === undefined || data.accountId === ''){
@@ -3219,14 +3468,18 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
             this.errorMessage('Please input Risk Name!');
         }else if(msg1 != ''){
             this.errorMessage('Please Input Risk : '+ msg1 +'!');
-        }else if(data.assetsection === '' || data.assetsection === undefined){
+        }else if(data.asset1.length == 0){
+            this.errorMessage('Please Add Asset!');
+        }else if(msgAsset1 != ''){
+            this.errorMessage(msgAsset1);
+        /*}else if(data.assetsection === '' || data.assetsection === undefined){
             this.errorMessage('Please Input Asset Section!'); 
         }else if(data.currency === '' || data.currency === undefined){
             this.errorMessage('Please Input Currency!'); 
         }else if(data.sumInsured === '' || data.sumInsured === undefined){
             this.errorMessage('Please Input Sum Insured!');  
         }else if(data.coverage1.length === 0){
-            this.errorMessage('Please Add Coverage!'); 
+            this.errorMessage('Please Add Coverage!');*/ 
         }else{
             if(data.insuranceperiod  == '2' && data.shortperiod == '1'){ // Short & Percentage
                 data.rateperiod = null;
