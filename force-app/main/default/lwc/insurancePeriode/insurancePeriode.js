@@ -24,6 +24,7 @@ export default class InsurancePeriode extends NavigationMixin(LightningElement) 
     @track schemaType = null;
     @track stage = null;
     @track cob = null;
+    premiumCalculation = null; // NEW: Added for Premium Calculation
 
     // State management
     @track oppRecord;
@@ -57,6 +58,17 @@ export default class InsurancePeriode extends NavigationMixin(LightningElement) 
     get isPercentageBasis() { return this.shortBasis === '1'; }
     get isProRataBasis() { return this.shortBasis === '2'; }
     get showInfo() { return !this.isAnnual; }
+    
+    // NEW: Getter for limited form (only show dates)
+    get isLimitedForm() {
+        return ['101', '602', '851', '852'].includes(this.cob);
+    }
+    
+    // NEW: Getter to check if end date is required
+    get isEndDateRequired() {
+        return this.cob !== '101';
+    }
+    
     get insuranceTypeOptions() {
         return [
             { label: 'Annual', value: '1' },
@@ -70,6 +82,103 @@ export default class InsurancePeriode extends NavigationMixin(LightningElement) 
             { label: 'Percentage', value: '1' }
         ];
     }
+    // NEW: Premium Calculation Options
+    get premiumCalculationOptions() {
+        return [
+            { label: 'Flat', value: '1' },                         // Only for exactly 1 year
+            { label: 'Decreasing Sum Insured', value: '2' },      // For more than 1 year
+            { label: 'Discount Rate', value: '3' },               // For more than 1 year
+            { label: 'Pro Rata', value: '4' },                    // For less than 1 year (default)
+            { label: 'Percentage', value: '5' },                  // For less than 1 year
+            { label: 'Long Period', value: '6' }                  // For more than 1 year (default)
+        ];
+    }
+    
+    // NEW: Restricted Premium Calculation Options based on duration
+        // ------ NEW: Premium Calculation Restriction Logic ------
+    get allowedPremiumCalculationOptions() {
+        // If we don't have dates, return all options
+        if (!this.startDate || !this.endDate) {
+            return this.premiumCalculationOptions;
+        }
+        
+        // Calculate duration
+        const start = new Date(this.startDate);
+        const end = new Date(this.endDate);
+        const yearDiff = end.getFullYear() - start.getFullYear();
+        const monthDiff = end.getMonth() - start.getMonth();
+        const dayDiff = end.getDate() - start.getDate();
+        
+        let actualYearDiff = yearDiff;
+        if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
+            actualYearDiff--;
+        }
+        
+        // Filter options based on duration
+        if (actualYearDiff === 0) {
+            // Less than 1 year - Allow "Pro Rata" (value: '4') and "Percentage" (value: '5')
+            return this.premiumCalculationOptions.filter(option => 
+                option.value === '4' || option.value === '5'
+            );
+        } else if (actualYearDiff === 1 && monthDiff === 0 && dayDiff === 0) {
+            // Exactly 1 year - Only allow "Flat" (value: '1')
+            return this.premiumCalculationOptions.filter(option => option.value === '1');
+        } else {
+            // More than 1 year - Allow "Long Period" (value: '6'), "Decreasing Sum Insured" (value: '2'), 
+            // and "Discount Rate" (value: '3')
+            return this.premiumCalculationOptions.filter(option => 
+                option.value === '6' || option.value === '2' || option.value === '3'
+            );
+        }
+    }
+    
+    // Method to adjust premium calculation value when dates change
+    adjustPremiumCalculationBasedOnDuration() {
+        if (!this.showPremiumCalculation || !this.startDate || !this.endDate) {
+            return;
+        }
+        
+        const start = new Date(this.startDate);
+        const end = new Date(this.endDate);
+        const yearDiff = end.getFullYear() - start.getFullYear();
+        const monthDiff = end.getMonth() - start.getMonth();
+        const dayDiff = end.getDate() - start.getDate();
+        
+        let actualYearDiff = yearDiff;
+        if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
+            actualYearDiff--;
+        }
+        
+        let newPremiumCalculation = null;
+        
+        if (actualYearDiff === 0) {
+            // Less than 1 year - Default to "Pro Rata" (4), but user can also select "Percentage" (5)
+            // Only set default if not already set to one of the allowed options
+            if (!this.premiumCalculation || 
+                (this.premiumCalculation !== '4' && this.premiumCalculation !== '5')) {
+                newPremiumCalculation = '4';
+            }
+        } else if (actualYearDiff === 1 && monthDiff === 0 && dayDiff === 0) {
+            // Exactly 1 year - Set to "Flat" (1)
+            newPremiumCalculation = '1';
+        } else {
+            // More than 1 year - Default to "Long Period" (6), but user can also select 
+            // "Decreasing Sum Insured" (2) or "Discount Rate" (3)
+            // Only set default if not already set to one of the allowed options
+            if (!this.premiumCalculation || 
+                (this.premiumCalculation !== '6' && 
+                 this.premiumCalculation !== '2' && 
+                 this.premiumCalculation !== '3')) {
+                newPremiumCalculation = '6';
+            }
+        }
+        
+        // Only update if we have a new value to set
+        if (newPremiumCalculation !== null && this.premiumCalculation !== newPremiumCalculation) {
+            this.premiumCalculation = newPremiumCalculation;
+        }
+    }
+    
     schemaOptions = [
         { label: '--None--', value: null },
         { label: 'Sum Insured Adjustment', value: 'Sum Insured Adjustment' },
@@ -93,8 +202,12 @@ export default class InsurancePeriode extends NavigationMixin(LightningElement) 
         return [];
     }
 
+    get showPremiumCalculation() {
+        return this.cob === '301' || this.cob === '302' || this.cob === '303';
+    }
+
     connectedCallback() {
-        console.log('last update 26/11/2025 10.39');
+        console.log('last update 02/12/2025 14.48');
         console.log('opptyId: ' + this.recordId);
     }
 
@@ -114,18 +227,23 @@ export default class InsurancePeriode extends NavigationMixin(LightningElement) 
                 this.percentage = data.Percentage__c;
                 this.stage = data.StageName;
                 this.cob = data.COB__c;
+                this.premiumCalculation = data.premium_calculation__c; // NEW: Load premium calculation
                 this.calculateDuration();
                 this.calculateExpectedPeriodType();
+                // NEW: Adjust premium calculation on load
+                this.adjustPremiumCalculationBasedOnDuration();
                 this.originalForm = {
                     periodType: this.periodType,
                     years: this.years,
                     shortBasis: this.shortBasis,
                     startDate: this.startDate,
                     endDate: this.endDate,
-                    percentage: this.percentage
+                    percentage: this.percentage,
+                    premiumCalculation: this.premiumCalculation // NEW: Include in original form
                 };
                 this.isTypeLocked = true;
                 console.log('COB='+this.cob);
+                console.log('premiumCalculation='+this.premiumCalculation);
             } else if (error) {
                 this.error = error;
                 this.isLoading = false;
@@ -166,6 +284,47 @@ export default class InsurancePeriode extends NavigationMixin(LightningElement) 
         return this.stage === 'Closed Won' || this.stage === 'Closed Lost' || this.stage === 'Cancel' || this.isEditing == false;
     }
 
+    // ------ NEW: Premium Calculation Handler ------
+    handlePremiumCalculationChange(event) {
+        this.premiumCalculation = event.detail.value;
+    }
+
+    // ------ NEW: Premium Calculation Restriction Logic ------
+    adjustPremiumCalculationBasedOnDuration() {
+        if (!this.showPremiumCalculation || !this.startDate || !this.endDate) {
+            return;
+        }
+        
+        const start = new Date(this.startDate);
+        const end = new Date(this.endDate);
+        const yearDiff = end.getFullYear() - start.getFullYear();
+        const monthDiff = end.getMonth() - start.getMonth();
+        const dayDiff = end.getDate() - start.getDate();
+        
+        let actualYearDiff = yearDiff;
+        if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
+            actualYearDiff--;
+        }
+        
+        let newPremiumCalculation = null;
+        
+        if (actualYearDiff === 0) {
+            // Less than 1 year - Set to "Pro Rata"
+            newPremiumCalculation = '4';
+        } else if (actualYearDiff === 1 && monthDiff === 0 && dayDiff === 0) {
+            // Exactly 1 year - Set to "Flat"
+            newPremiumCalculation = '1';
+        } else {
+            // More than 1 year - Set to "Long Period"
+            newPremiumCalculation = '6';
+        }
+        
+        // Only update if the value is different
+        if (this.premiumCalculation !== newPremiumCalculation) {
+            this.premiumCalculation = newPremiumCalculation;
+        }
+    }
+
     // ------ Period Type Validation Methods ------
     calculateExpectedPeriodType() {
         if (!this.startDate || !this.endDate) {
@@ -200,6 +359,12 @@ export default class InsurancePeriode extends NavigationMixin(LightningElement) 
     }
 
     validatePeriodType() {
+        // Skip validation if premium calculation is shown (COB 301, 302, 303)
+        if (this.showPremiumCalculation) {
+            this.showPeriodTypeValidationError = false;
+            return;
+        }
+        
         if (!this.expectedPeriodType || !this.periodType) {
             this.showPeriodTypeValidationError = false;
             return;
@@ -231,6 +396,8 @@ export default class InsurancePeriode extends NavigationMixin(LightningElement) 
             resolve(userConfirmed);
         });
     }
+    
+    // Keep the existing handleSave method, but we need to adjust one part:
 
     // ------ Event handlers ------
     handleEdit() {
@@ -251,7 +418,9 @@ export default class InsurancePeriode extends NavigationMixin(LightningElement) 
     }
 
     handleTypeChange(event) {
-        const newType = event.detail.value;
+        // Handle both lightning-radio-group and custom HTML radio buttons
+        const newType = event.detail ? event.detail.value : event.target.value;
+        
         if (this.originalForm?.periodType === newType) {
             Object.assign(this, this.originalForm);
             this.calculateDuration();
@@ -299,12 +468,16 @@ export default class InsurancePeriode extends NavigationMixin(LightningElement) 
         }
         this.calculateDuration();
         this.calculateExpectedPeriodType();
+        // NEW: Adjust premium calculation based on new dates
+        this.adjustPremiumCalculationBasedOnDuration();
     }
 
     handleEndDateChange(event) { 
         this.endDate = event.detail.value; 
         this.calculateDuration();
         this.calculateExpectedPeriodType();
+        // NEW: Adjust premium calculation based on new dates
+        this.adjustPremiumCalculationBasedOnDuration();
     }
 
     handleRowTypeChange(event) {
@@ -313,7 +486,12 @@ export default class InsurancePeriode extends NavigationMixin(LightningElement) 
         this.adjustmentRows = this.adjustmentRows.map(r => {
             if (r.year === year) {
                 let newPct = (type === '2') ? this.calculatedRate : r.percentage;
-                return { ...r, type, percentage: newPct };
+                return { 
+                    ...r, 
+                    type, 
+                    percentage: newPct,
+                    showBasisPicklist: r.showBasisPicklist // Preserve the showBasisPicklist property
+                };
             }
             return r;
         });
@@ -504,31 +682,36 @@ export default class InsurancePeriode extends NavigationMixin(LightningElement) 
 
                 let rowType = null;
                 let rowPercentage = null;
+                let showBasisPicklist = false;
                 
                 let recordId = oldUiRow?.recordId || existingTxn?.Id || null;
                 
                 if (i === 0) {
                     rowPercentage = 100;
                     rowType = null; // First row doesn't need type
+                    showBasisPicklist = false; // First row never shows basis
                 } else if (isExtraRow) {
-                    // Ensure type always has a value, default to '2'
+                    // Last row with extra months shows basis picklist
                     rowType = oldUiRow?.type || existingTxn?.Short_Period_Type__c || '2';
                     if (rowType === '2') {
                         rowPercentage = this.calculatedRate; 
                     } else {
                         rowPercentage = oldUiRow?.percentage ?? existingTxn?.Value__c ?? null;
                     }
+                    showBasisPicklist = true; // Only the last row with extra months shows basis
                 } else {
-                    // For other rows, ensure type has a value
+                    // Middle rows don't show basis picklist
                     rowType = oldUiRow?.type || existingTxn?.Short_Period_Type__c || '2';
                     rowPercentage = oldUiRow?.percentage ?? existingTxn?.Value__c ?? null;
+                    showBasisPicklist = false;
                 }
 
                 newRows.push({ 
                     recordId: recordId, 
                     year: yearNum, 
                     percentage: rowPercentage, 
-                    type: rowType
+                    type: rowType,
+                    showBasisPicklist: showBasisPicklist // Add this property
                 });
             }
             this.adjustmentRows = [...newRows];
@@ -607,32 +790,59 @@ export default class InsurancePeriode extends NavigationMixin(LightningElement) 
     }
     
     async handleSave() {
-        // basic required-field validation
-        if (!this.startDate || !this.endDate) {
-            this.isLoading = false;
-            this.dispatchEvent(new ShowToastEvent({
-                title: 'Validation Error',
-                message: 'Start Date and End Date are required.',
-                variant: 'error'
-            }));
-            return;
+        // NEW: Different validation for limited form
+        if (this.isLimitedForm) {
+            // For limited form, only validate start date
+            if (!this.startDate) {
+                this.isLoading = false;
+                this.dispatchEvent(new ShowToastEvent({
+                    title: 'Validation Error',
+                    message: 'Start Date is required.',
+                    variant: 'error'
+                }));
+                return;
+            }
+            
+            // For COB 101, end date is optional, for others it's required
+            if (this.isEndDateRequired && !this.endDate) {
+                this.isLoading = false;
+                this.dispatchEvent(new ShowToastEvent({
+                    title: 'Validation Error',
+                    message: 'End Date is required.',
+                    variant: 'error'
+                }));
+                return;
+            }
+        } else {
+            // Original validation for non-limited forms
+            if (!this.startDate || !this.endDate) {
+                this.isLoading = false;
+                this.dispatchEvent(new ShowToastEvent({
+                    title: 'Validation Error',
+                    message: 'Start Date and End Date are required.',
+                    variant: 'error'
+                }));
+                return;
+            }
         }
 
-        // optional: ensure startDate <= endDate
-        const start = new Date(this.startDate);
-        const end = new Date(this.endDate);
-        if (isNaN(start.getTime()) || isNaN(end.getTime()) || start > end) {
-            this.isLoading = false;
-            this.dispatchEvent(new ShowToastEvent({
-                title: 'Validation Error',
-                message: 'Start Date must be before or equal to End Date.',
-                variant: 'error'
-            }));
-            return;
+        // Date order validation (only if both dates are provided)
+        if (this.startDate && this.endDate) {
+            const start = new Date(this.startDate);
+            const end = new Date(this.endDate);
+            if (isNaN(start.getTime()) || isNaN(end.getTime()) || start > end) {
+                this.isLoading = false;
+                this.dispatchEvent(new ShowToastEvent({
+                    title: 'Validation Error',
+                    message: 'Start Date must be before or equal to End Date.',
+                    variant: 'error'
+                }));
+                return;
+            }
         }
 
-        // NEW: Check for period type validation and get user confirmation if needed
-        if (this.showPeriodTypeValidationError) {
+        // Skip period type validation for limited form
+        if (!this.isLimitedForm && this.showPeriodTypeValidationError) {
             const userConfirmed = await this.confirmSaveWithValidationError();
             if (!userConfirmed) {
                 this.isLoading = false;
@@ -641,23 +851,34 @@ export default class InsurancePeriode extends NavigationMixin(LightningElement) 
         }
 
         // data validation when switching between Percentage & Pro-Rata Basis in type Short
-        if(this.periodType == '2' && this.shortBasis == '1'){ // Short & Percentage
-            this.calculatedRate = null;
-            this.years = null;
-            this._computedYears = null;
-        }else if(this.periodType == '2' && this.shortBasis == '2'){ // Short & Pro-Rata Basis
-            this.percentage = null;
-            this.years = null;
-            this._computedYears = null;
-        }else if(this.periodType == '1'){
-            this.calculatedRate = null;
+        if (!this.isLimitedForm) {
+            if(this.periodType == '2' && this.shortBasis == '1'){ // Short & Percentage
+                this.calculatedRate = null;
+                this.years = null;
+                this._computedYears = null;
+            }else if(this.periodType == '2' && this.shortBasis == '2'){ // Short & Pro-Rata Basis
+                this.percentage = null;
+                this.years = null;
+                this._computedYears = null;
+            }else if(this.periodType == '1'){
+                this.calculatedRate = null;
+            }
         }
 
         this.isLoading = true;
         const dataToSave = {
-            opportunityId: this.recordId, periodType: this.periodType, startDate: this.startDate, endDate: this.endDate,
-            shortBasis: this.shortBasis, percentage: this.percentage, schemaType: this.schemaType, numberOfYear: this.years,
-            totalYears: this._computedYears, totalMonth: this._computedMonths, periodRate: this.calculatedRate,
+            opportunityId: this.recordId, 
+            periodType: this.periodType, 
+            startDate: this.startDate, 
+            endDate: this.endDate,
+            shortBasis: this.shortBasis, 
+            percentage: this.percentage, 
+            schemaType: this.schemaType, 
+            numberOfYear: this.years,
+            totalYears: this._computedYears, 
+            totalMonth: this._computedMonths, 
+            periodRate: this.calculatedRate,
+            premiumCalculation: this.premiumCalculation, // NEW: Include premium calculation
             transactionRows: this.adjustmentRows
         };
         console.log('dataToSave: '+JSON.stringify(dataToSave, null, 2));
