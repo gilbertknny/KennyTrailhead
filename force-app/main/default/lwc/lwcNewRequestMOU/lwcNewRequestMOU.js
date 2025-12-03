@@ -115,6 +115,7 @@ export default class LwcNewRequestMOU extends LightningModal {
         })
         .then(result => {
             if(result != null){
+                console.log('result:'+JSON.stringify(result));
                 this.proposedFixedAmountOld = result.Proposed_Fixed_Amount__c;
                 this.proposedFixedAmount = result.Proposed_Fixed_Amount__c;
                 this.deductiblePCT = result.Deductible_PCT__c;
@@ -128,11 +129,11 @@ export default class LwcNewRequestMOU extends LightningModal {
                 }
                 this.minimumAmount = result.Minimum_Amount__c;
                 this.banksFee = result.Banks_Fee__c;
-                this.agentComission = result.Agent_Commission__c;
-                this.brokerComission = result.Broker_Commission__c;
+                this.agentComission = result.Agent_Comission__c;
+                this.brokerComission = result.Broker_Comission__c;
                 this.generalRPremiumPCT = result.General_RPremium_PCT__c;
                 this.overdngComission = result.Overdng_Comission__c;
-                this.maxPerson = result.Max_Person__c; 
+                this.maxPerson = result.max_person__c; 
             }
         })
         .catch(error => {
@@ -302,6 +303,7 @@ export default class LwcNewRequestMOU extends LightningModal {
                     ...this.records,
                     data
                 ];
+                //console.log('this.records:'+JSON.stringify(this.records));
                 this.close(this.records);
             }
         }

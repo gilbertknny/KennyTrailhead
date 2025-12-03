@@ -42,141 +42,162 @@
         </div>
       </div>
 
-      <!-- Period Type Validation Error -->
-      <template if:true={showPeriodTypeValidationError}>
-        <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_warning slds-m-bottom_small">
-          <span class="slds-assistive-text">Warning</span>
-          <span class="slds-icon_container slds-icon-utility-warning slds-m-right_x-small" title="Warning">
-            <lightning-icon icon-name="utility:warning" size="x-small"></lightning-icon>
-          </span>
-          <h2>{periodTypeValidationMessage}</h2>
-        </div>
-      </template>
+      <!-- Show full form only for non-limited COBs -->
+      <template if:false={isLimitedForm}>
+        <!-- Period Type Validation Error -->
+        <template if:true={showPeriodTypeValidationError}>
+          <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_warning slds-m-bottom_small">
+            <span class="slds-assistive-text">Warning</span>
+            <span class="slds-icon_container slds-icon-utility-warning slds-m-right_x-small" title="Warning">
+              <lightning-icon icon-name="utility:warning" size="x-small"></lightning-icon>
+            </span>
+            <h2>{periodTypeValidationMessage}</h2>
+          </div>
+        </template>
 
-      <!-- Insurance Type -->
-      <lightning-radio-group
-        name="periodType"
-        label="Insurance Type"
-        options={insuranceTypeOptions}
-        value={periodType}
-        onchange={handleTypeChange}
-        disabled={isReadOnly}>
-      </lightning-radio-group>
+        <!-- Insurance Type - Horizontal Layout -->
+        <template if:false={showPremiumCalculation}>
+        <div class="slds-m-vertical_small">
+          <lightning-radio-group
+            name="periodType"
+            label="Insurance Type"
+            options={insuranceTypeOptions}
+            value={periodType}
+            onchange={handleTypeChange}
+            type="button"
+            disabled={isReadOnly}
+            class="slds-radio_button-group">
+          </lightning-radio-group>
+        </div></template>
 
-      <!-- Annual -->
-      <template if:true={isAnnual}>
-        <lightning-input
-          name="years"
-          type="number"
-          label="Number of Years"
-          value={years}
-          onchange={handleYearsChange}
-          style="display: none;">
-        </lightning-input>
-      </template>
+        <!-- Premium Calculation -->
+        <template if:true={showPremiumCalculation}>
+        <lightning-combobox
+          name="premiumCalculation"
+          label="Premium Calculation"
+          value={premiumCalculation}
+          options={allowedPremiumCalculationOptions}
+          onchange={handlePremiumCalculationChange}
+          disabled={isReadOnly}
+          class="slds-m-vertical_small">
+        </lightning-combobox>
+        </template>
 
-      <!-- Short-Period -->
-      <template if:true={isShort}>
-        <lightning-radio-group
-          name="shortBasis"
-          label="Short-Period Basis"
-          options={shortBasisOptions}
-          value={shortBasis}
-          onchange={handleShortBasisChange}
-          disabled={isReadOnly}>
-        </lightning-radio-group>
-
-        <template if:true={isPercentageBasis}>
+        <!-- Annual -->
+        <template if:true={isAnnual}>
           <lightning-input
-            name="percentage"
-            label="Percentage (%)"
+            name="years"
             type="number"
-            min="0"
-            max="99.99"
-            step="0.01"
-            value={percentage}
-            onchange={handlePercentageChange}
-            disabled={isReadOnly}>
+            label="Number of Years"
+            value={years}
+            onchange={handleYearsChange}
+            style="display: none;">
           </lightning-input>
         </template>
-      </template>
 
-      <!-- Information: Days & Rate -->
-      <template if:true={showInfo}>
-        <div class="slds-box slds-theme_shade slds-p-around_small slds-m-vertical_small">
-          <template if:true={isProRataBasis}>
-            <p>Number of Days: {dayCount}</p>
-            <p>Rate: {calculatedRate}</p>
-          </template>
+        <!-- Short-Period -->
+        <template if:true={isShort}>
+          <lightning-radio-group
+            name="shortBasis"
+            label="Short-Period Basis"
+            options={shortBasisOptions}
+            value={shortBasis}
+            onchange={handleShortBasisChange}
+            disabled={isReadOnly}>
+          </lightning-radio-group>
+
           <template if:true={isPercentageBasis}>
-            <p>Number of Days: {dayCount}</p>
-            <p>Percentage: {percentage}%</p>
+            <lightning-input
+              name="percentage"
+              label="Percentage (%)"
+              type="number"
+              min="0"
+              max="99.99"
+              step="0.01"
+              value={percentage}
+              onchange={handlePercentageChange}
+              disabled={isReadOnly}>
+            </lightning-input>
           </template>
-          
-          <template if:true={isLongTerm}>
-            <p class="slds-m-vertical_small">
-              Duration: {yearsMonthsInfo}
-            </p>
-          </template>
-        </div>
-      </template>
+        </template>
 
-      <template if:true={isLongTerm}>
-        <lightning-card title="Schema">
-            <lightning-combobox
-                name="schema"
-                placeholder="--Select Schema--"
-                label="Select Schema"
-                options={schemaOptions}
-                value={schemaType}
-                onchange={handleSchemaChange}
-                disabled={isReadOnly}>
-            </lightning-combobox>
-            <template if:true={hasSchemaType}>
-            <table class="slds-table slds-table_cell-buffer slds-table_bordered"
-                   style="margin-top: 10px !important;">
-                <thead>
-                    <tr>
-                        <th scope="col">Tahun ke-</th>
-                        <th scope="col">Value</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <template for:each={displayRows} for:item="row">
-                    <tr key={row.year}>
-                        <td>{row.year}</td>
-                        <td>
-                            <template if:true={row.type}>
-                                <lightning-combobox
-                                    name="rowType"
-                                    data-year={row.year}
-                                    label="Basis"
-                                    options={shortBasisOptions}
-                                    value={row.type}
-                                    onchange={handleRowTypeChange}
-                                    disabled={isReadOnly}>
-                                </lightning-combobox>
-                            </template>
-                            <lightning-input
-                                type="text"
-                                name="rowPercentage"
-                                data-year={row.year}
-                                value={row.percentage}
-                                inputmode="decimal"
-                                onkeydown={handleRowPercentageKeyDown}
-                                oninput={handleRowPercentageInput}
-                                onpaste={handleRowPercentagePaste}
-                                onchange={handleRowPercentageChange}
-                                disabled={isReadOnly}>
-                            </lightning-input>
-                        </td>
-                    </tr>
-                </template>
-                </tbody>
-            </table>
+        <!-- Information: Days & Rate -->
+        <template if:true={showInfo}>
+          <div class="slds-box slds-theme_shade slds-p-around_small slds-m-vertical_small">
+            <template if:true={isProRataBasis}>
+              <p>Number of Days: {dayCount}</p>
+              <p>Rate: {calculatedRate}</p>
             </template>
-        </lightning-card>
-    </template>
+            <template if:true={isPercentageBasis}>
+              <p>Number of Days: {dayCount}</p>
+              <p>Percentage: {percentage}%</p>
+            </template>
+            
+            <template if:true={isLongTerm}>
+              <p class="slds-m-vertical_small">
+                Duration: {yearsMonthsInfo}
+              </p>
+            </template>
+          </div>
+        </template>
+
+        <template if:true={isLongTerm}>
+          <lightning-card title="Schema">
+              <lightning-combobox
+                  name="schema"
+                  placeholder="--Select Schema--"
+                  label="Select Schema"
+                  options={schemaOptions}
+                  value={schemaType}
+                  onchange={handleSchemaChange}
+                  disabled={isReadOnly}>
+              </lightning-combobox>
+              <template if:true={hasSchemaType}>
+              <table class="slds-table slds-table_cell-buffer slds-table_bordered"
+                     style="margin-top: 10px !important;">
+                  <thead>
+                      <tr>
+                          <th scope="col">Tahun ke-</th>
+                          <th scope="col">Value</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <template for:each={displayRows} for:item="row">
+                      <tr key={row.year}>
+                          <td>{row.year}</td>
+                          <td>
+                              <template if:true={row.showBasisPicklist}>
+                                  <lightning-combobox
+                                      name="rowType"
+                                      data-year={row.year}
+                                      label="Basis"
+                                      options={shortBasisOptions}
+                                      value={row.type}
+                                      onchange={handleRowTypeChange}
+                                      disabled={isReadOnly}>
+                                  </lightning-combobox>
+                              </template>
+                              <lightning-input
+                                  type="text"
+                                  name="rowPercentage"
+                                  data-year={row.year}
+                                  value={row.percentage}
+                                  inputmode="decimal"
+                                  onkeydown={handleRowPercentageKeyDown}
+                                  oninput={handleRowPercentageInput}
+                                  onpaste={handleRowPercentagePaste}
+                                  onchange={handleRowPercentageChange}
+                                  disabled={isReadOnly}>
+                              </lightning-input>
+                          </td>
+                      </tr>
+                  </template>
+                  </tbody>
+              </table>
+              </template>
+          </lightning-card>
+        </template>
+      </template>
 
       <!-- Buttons -->
       <div class="slds-m-top_medium">

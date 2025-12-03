@@ -20,10 +20,10 @@
  * See the Apex Language Reference for more information about Testing and Code Coverage.
  * @description WebserviceAPI_Test
  */
-@isTest
+@IsTest
 private class WebserviceAPI_Test {
 
-    @isTest
+    @IsTest
     static void testIntegrationProcedureCase() {
         User currentUser = [SELECT Id FROM User WHERE Id = :UserInfo.getUserId()];
         
@@ -52,7 +52,7 @@ private class WebserviceAPI_Test {
         }
     }
     
-    @isTest
+    @IsTest
     static void testUploadFileCase() {
         User currentUser = setUser();
         
@@ -93,7 +93,7 @@ private class WebserviceAPI_Test {
         }
     }
 
-    @isTest
+    @IsTest
     static void testUploadFileCase2() {
         //User currentUser = [SELECT Id FROM User WHERE Id = :UserInfo.getUserId()];
         User currentUser = setUser();
@@ -134,7 +134,7 @@ private class WebserviceAPI_Test {
         }
     }
 
-    @isTest
+    @IsTest
     static void testUploadFileCaseSIDia() {
         //User currentUser = [SELECT Id FROM User WHERE Id = :UserInfo.getUserId()];
         User currentUser = setUser();
@@ -175,7 +175,7 @@ private class WebserviceAPI_Test {
         }
     }
     
-    @isTest
+    @IsTest
     static void testDefaultCase() {
         User currentUser = [SELECT Id FROM User WHERE Id = :UserInfo.getUserId()];
         
@@ -199,7 +199,7 @@ private class WebserviceAPI_Test {
         }
     }
     
-    @isTest
+    @IsTest
     static void testErrorCase() {
         User currentUser = [SELECT Id FROM User WHERE Id = :UserInfo.getUserId()];
         
@@ -223,7 +223,7 @@ private class WebserviceAPI_Test {
             System.assert(RestContext.response.responseBody.toString().contains('success'));
         }
     }
-
+    /** @description setUser @return currentUser */
     public static User setUser(){
         Profile p = [SELECT Id FROM Profile WHERE Name='Integration']; 
         User currentUser = new User(Alias = 'standt', Email='standarduser@testorg.com', 
