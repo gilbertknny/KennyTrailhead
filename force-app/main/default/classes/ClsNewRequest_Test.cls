@@ -77,6 +77,22 @@ public class ClsNewRequest_Test {
         md4.Exchange_Rate__c = 15000;
         insert md4;
         
+        String RT4 = Schema.SObjectType.Master_Data__c.getRecordTypeInfosByName().get('Double Prospect').getRecordTypeId();
+        Master_Data__c md5 = new Master_Data__c();
+        md5.RecordTypeId = RT4;
+        md5.Name = 'Test';
+        md5.Risk_Description__c = 'Name';
+        md5.Risk_Situation__c = 'Address__c,City__c,Zip_Code__c,N_K_R__c';
+        md5.BSN_ID__c = '201';
+        insert md5;
+        
+        String RT5 = Schema.SObjectType.Master_Data__c.getRecordTypeInfosByName().get('Asset Section').getRecordTypeId();
+        Master_Data__c md6 = new Master_Data__c();
+        md6.RecordTypeId = RT5;
+        md6.Name = 'Test';
+        md6.BSN_Id__c = '201';
+        insert md6;
+        
         ContentVersion contentVersion = new ContentVersion(
             Title          = 'a picture',
             PathOnClient   = 'Pic.jpg',
@@ -110,7 +126,8 @@ public class ClsNewRequest_Test {
         ClsNewRequest.getObject('Address__c',cob,l.Id);
         ClsNewRequest.getWording(md.Id);
         ClsNewRequest.getRate('USD');
-        ClsNewRequest.getAssetSection(cob);
+        Map<String, String> mapAssetSection = ClsNewRequest.getAssetSection(cob);
+        List<String> keysAssetSection = new List<String>(mapAssetSection.keySet());
         ClsNewRequest.getAssetCategory(cob,null);
         ClsNewRequest.getMasterDataSection(cob,null);
         ClsNewRequest.getCurrency();
@@ -119,14 +136,12 @@ public class ClsNewRequest_Test {
         ClsNewRequest.getAssetCategoryMOU(null,null);
         ClsNewRequest.getCoverage(null);
         ClsNewRequest.getCoverageDetail(null,null);
-        
-        
+
         List<String> listdata1 = new List<String>();
         listdata1.add('Name');
         Asset ass = new Asset();
         ass.Name = 'Test';
-        ClsNewRequest.setData(listdata1, ass);
-        
+        ClsNewRequest.setData(listdata1, ass);        
         
         String situation1 = '{';
         situation1 += '"COB__c":"'+cob+'"';
@@ -158,7 +173,10 @@ public class ClsNewRequest_Test {
         data += ',"percentageperiod":"1"';
         data += ',"rateperiod":1';
         data += ',"risksituation1":' + JSON.serialize(situation1);
+        data += ',"risk1":' + JSON.serialize(situation1);
         data += ',"producttype":"'+pd.Id+'"';
+        data += ',"assetsection":"'+keysAssetSection.get(0)+'"';
+        data += ',"asset1":[{"assetSectionId":"'+keysAssetSection.get(0)+'","coverage":[{"proposedFixedAmount":10000,"agentComission":"0","brokerComission":"0","maxPerson":"0"}]}]';
         data += ',"sumInsured":"1"';
         data += ',"premium":"1"';
         data += ',"summary1":' + JSON.serialize(summary1);
@@ -182,6 +200,7 @@ public class ClsNewRequest_Test {
         data += ',"rateperiod2":1';
         data += ',"risksituation2":' + JSON.serialize(situation1);
         data += ',"producttype2":"'+pd.Id+'"';
+        data += ',"assetsection2":"'+keysAssetSection.get(0)+'"';
         data += ',"sumInsured2":"1"';
         data += ',"premium2":"1"';
         data += ',"summary2":' + JSON.serialize(summary1);

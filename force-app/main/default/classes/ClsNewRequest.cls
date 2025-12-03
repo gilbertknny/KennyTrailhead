@@ -237,7 +237,7 @@ public without sharing class ClsNewRequest {
         List<Master_Data__c> listmd = [SELECT Id,Name 
                                        FROM Master_Data__c
                                        WHERE RecordType.DeveloperName = 'Asset_Section'
-                                       AND BSN__r.ProductCode =:cob WITH SECURITY_ENFORCED
+                                       AND (BSN__r.ProductCode =:cob OR BSN_Id__c =:cob) WITH SECURITY_ENFORCED
                                        ORDER BY Section__c ASC];
         for(Master_Data__c md : listmd){
             values.put(md.Id,md.Name);
@@ -424,10 +424,12 @@ public without sharing class ClsNewRequest {
             String riskDescription = setData(listDescription,ass);
             String riskSituation = setData(listSituation,ass);
             List<dataDuplicate> listnewdd = mapDuplicate.get(lineCOB);
-            if(listnewdd.size()>0){
-                for(dataDuplicate dd : listnewdd){
-                    if(dd.description == riskDescription && dd.description != ''){result=true; break;}
-                    else if(dd.situation == riskSituation && dd.situation != ''){result=true; break;}
+            if(listnewdd != null){
+                if(listnewdd.size()>0){
+                    for(dataDuplicate dd : listnewdd){
+                        if(dd.description == riskDescription && dd.description != ''){result=true; break;}
+                        else if(dd.situation == riskSituation && dd.situation != ''){result=true; break;}
+                    }
                 }
             }
         }
@@ -588,7 +590,6 @@ public without sharing class ClsNewRequest {
                 at1.RecordTypeId = strRTRisk;
                 at1.Name = riskName;
                 at1.Risk_ID__c = '1';
-                if(opty.sumInsuredIDR != null){ at1.Amount_Insured__c = opty.sumInsuredIDR; }
                 Map<String,Object> mapRisk1 = (Map<String,Object>)JSON.deserializeUntyped(strRisk1);
                 Set<String> setRisk1 = mapRisk1.keySet();
                 for(String key:setRisk1){
@@ -725,6 +726,7 @@ public without sharing class ClsNewRequest {
             
             //RISK
             if(lineCOB != NULL && opp.Id != null){
+                if(opty.sumInsuredIDR != null){ at1.Amount_Insured__c = opty.sumInsuredIDR; }
                 at1.Opportunity__c = opp.Id; 
                 List<Asset> checkAT = [SELECT Id FROM Asset 
                                        WHERE Name =:at1.Name 
@@ -838,12 +840,12 @@ public without sharing class ClsNewRequest {
                 opty.format = (String)dataMap.get('format2');
                 opty.curr = (String)dataMap.get('currency2');
                 String lineCOB2;
+                //RISK
                 Asset at2 = new Asset();
                 if(strRisk2 != null){
                     at2.RecordTypeId = strRTRisk;
                     at2.Name = riskName2;
                     at2.Risk_ID__c = '1';
-                    if(opty.sumInsuredIDR != null){ at2.Amount_Insured__c = opty.sumInsuredIDR; }
                     Map<String,Object> mapRisk2 = (Map<String,Object>)JSON.deserializeUntyped(strRisk2);
                     Set<String> setRisk2 = mapRisk2.keySet();
                     for(String key:setRisk2){
@@ -963,6 +965,7 @@ public without sharing class ClsNewRequest {
                 
                 //RISK -->PARENT
                 if(lineCOB2 != NULL && opp2.Id != null){
+                    if(opty.sumInsuredIDR != null){ at2.Amount_Insured__c = opty.sumInsuredIDR; }
                     at2.Opportunity__c = opp2.Id;
                     Database.SaveResult sr = Database.insert(at2);
                 }
@@ -970,8 +973,10 @@ public without sharing class ClsNewRequest {
                 //ASSET 2
                 if(assetSection2 != null && opp2.Id != null){
                     Asset asset2 = new Asset();
+                    asset2.RecordTypeId = strRTAsset;
                     asset2.Opportunity__c = opp2.Id;
                     asset2.Name = riskName2;
+                    asset2.Risk_ID__c = '1';
                     asset2.ParentId = at2.Id;
                     if(rate2 != null){asset2.Exchange_Rate__c = rate2;}
                     if(opty.curr != null){ asset2.Currency__c = opty.curr;}
@@ -1082,13 +1087,13 @@ public without sharing class ClsNewRequest {
             opty.producttype = (String)dataMap.get('producttype');
             opty.producttypename = (String)dataMap.get('producttypename');
             String strRisk1 = (String)dataMap.get('risk1');
-            opty.curr = (String)dataMap.get('currency');
+            /*opty.curr = (String)dataMap.get('currency');
             String assetSection = (String)dataMap.get('assetsection');
             String assetCategory = (String)dataMap.get('assetcategory');
             Decimal rate = Decimal.valueOf((Long)dataMap.get('rate'));
             String strSumInsured = (String)dataMap.get('sumInsured');
             if(strSumInsured != null){opty.sumInsured = Long.valueOf(strSumInsured);}
-            opty.sumInsuredIDR = Decimal.valueOf((Long)dataMap.get('sumInsuredIDR'));
+            opty.sumInsuredIDR = Decimal.valueOf((Long)dataMap.get('sumInsuredIDR'));*/
             if(opty.accountId != null && riskName != null){
                 Account acc = [SELECT Id,Name FROM Account WHERE Id=:opty.accountId WITH SECURITY_ENFORCED];
                 opty.oppName = acc.Name + ' - ' + riskName;
@@ -1121,10 +1126,10 @@ public without sharing class ClsNewRequest {
                                 else if(key2 == 'longitude'){ at1.put(sKey+'__Longitude__s',Integer.ValueOf(value2)); }
                             }
                         }else{
-                            if(value != ''){ 
+                            if(value != '' && value != null){ 
                                 String strType = getFieldType('Asset', key);
                                 if(strType == 'DOUBLE'){ at1.put(key,DOUBLE.valueOf(value)); }
-                                else{ at1.put(key,value); }
+                                else if(key != 'COB__c') { at1.put(key,value); }
                                 if(key == 'Address__c'){
                                     Schema.Location lc = [SELECT Id,Name FROM Location WHERE Id=:value LIMIT 1];
                                     at1.Address_Description__c = lc.Name;
@@ -1181,41 +1186,24 @@ public without sharing class ClsNewRequest {
                 if(listtrans.size()>0){ List<Database.SaveResult> sr = Database.insert(listtrans); }
                 
                 //ASSET
-                if(assetSection != null){
-                    Asset asset1 = new Asset();
-                    asset1.RecordTypeId = strRTAsset;
-                    asset1.Opportunity__c = opp.Id;
-                    asset1.Name = riskName;
-                    asset1.Risk_ID__c = '1';
-                    asset1.ParentId = at1.Id;
-                    if(rate != null){asset1.Exchange_Rate__c = rate;}
-                    if(opty.curr != null){ asset1.Currency__c = opty.curr;}
-                    if(opty.sumInsured != null){ asset1.Amount__c = opty.sumInsured; }
-                    if(opty.sumInsuredIDR != null){ asset1.Amount_Insured__c = opty.sumInsuredIDR; }
-                    asset1.Section__c = assetSection;
-                    if(assetCategory != null){ asset1.Category__c = assetCategory; }
-                    List<Asset> checkAT = [SELECT Id FROM Asset 
-                                           WHERE Name =:asset1.Name 
-                                           AND RecordTypeId =:strRTAsset
-                                           AND Opportunity__c =:opp.Id WITH SECURITY_ENFORCED 
-                                           LIMIT 1];
-                    if(checkAT.size()>0){
-                        asset1.Id = checkAT[0].Id;
-                        Database.SaveResult sr = Database.update(asset1);
-                    }else{ Database.SaveResult sr = Database.insert(asset1);}
-                }
-                
-                //COVERAGE
                 String recordIP = Aswata_GlobalFunction.createInsurancePolicy(opp.Id);
                 if(recordIP != null){
                     List<InsurancePolicyCoverage> listISP = new List<InsurancePolicyCoverage>();
-                    List<Object> listCoverage = (List<Object>) dataMap.get('coverage1');
-                    for(Object obj : listCoverage){
+                    List<Object> listAsset = (List<Object>) dataMap.get('asset1');
+                    for(Object obj : listAsset){
                         Map<String,Object> mapObj = (Map<String, Object>)obj;
-                        InsurancePolicyCoverage iSP = createCoverage(mapObj);
-                        iSP.InsurancePolicyId = recordIP;
-                        iSP.Opportunity__c = opp.Id;
-                        listISP.add(iSP);
+                        Asset at = createAsset(mapObj,strRTAsset,opp.Id,riskName,at1.Id);
+                        Database.SaveResult sr = Database.insert(at);
+                        //COVERAGE
+                        List<Object> listCoverage = (List<Object>)mapObj.get('coverage');
+                        for(Object objCoverage : listCoverage){
+                            Map<String,Object> mapObjCoverage = (Map<String, Object>)objCoverage;
+                            InsurancePolicyCoverage iSP = createCoverage(mapObjCoverage);
+                            iSP.Asset__c = sr.id;
+                            iSP.InsurancePolicyId = recordIP;
+                            iSP.Opportunity__c = opp.Id;
+                            listISP.add(iSP);
+                        }
                     }
                     if(listISP.size()>0){ List<Database.SaveResult> listsr = Database.insert(listISP); }
                 }
@@ -1339,7 +1327,7 @@ public without sharing class ClsNewRequest {
         return opl;
     }
 
-    public static InsurancePolicyCoverage createCoverage(Map<String,Object> mapObj ){
+    public static InsurancePolicyCoverage createCoverage(Map<String,Object> mapObj){
         InsurancePolicyCoverage result = new InsurancePolicyCoverage();
         String coverageId = (String)mapObj.get('coverageId');
         Decimal proposedFixedAmount = (Decimal)mapObj.get('proposedFixedAmount');
@@ -1347,11 +1335,11 @@ public without sharing class ClsNewRequest {
         String deductibleId = (String)mapObj.get('deductibleId');
         String minimumCurId = (String)mapObj.get('minimumCurId');
         Decimal minimumAmount = (Decimal)mapObj.get('minimumAmount');
-        Decimal banksFee = Decimal.valueOf((String)mapObj.get('banksFee'));
+        Decimal banksFee = (Decimal)mapObj.get('banksFee');
         Decimal agentComission = Decimal.valueOf((String)mapObj.get('agentComission'));
         Decimal brokerComission = Decimal.valueOf((String)mapObj.get('brokerComission'));
-        Decimal generalRPremiumPCT = Decimal.valueOf((String)mapObj.get('generalRPremiumPCT'));
-        Decimal overdngComission = Decimal.valueOf((String)mapObj.get('overdngComission'));
+        Decimal generalRPremiumPCT = (Decimal)mapObj.get('generalRPremiumPCT');
+        Decimal overdngComission = (Decimal)mapObj.get('overdngComission');
         Decimal maxPerson = Decimal.valueOf((String)mapObj.get('maxPerson'));
         result.Coverage_Name__c = coverageId;
         result.Proposed_Fixed_Amount__c = proposedFixedAmount;
@@ -1366,6 +1354,30 @@ public without sharing class ClsNewRequest {
         result.Overdng_Comission__c = overdngComission;
         result.Max_Person__c = maxPerson;
         return result;
+    }
+    
+    public static Asset createAsset(Map<String,Object> mapObj,String strRTAsset,String oppId,String riskName,String parentId){
+        system.debug('mapObj:'+mapObj);
+        String assetSectionId = (String)mapObj.get('assetSectionId');
+        String assetCategoryId = (String)mapObj.get('assetCategoryId');
+        String currencyId = (String)mapObj.get('currencyId');
+        Decimal rate = Decimal.valueOf((Long)mapObj.get('rate'));
+        String strSumInsured = String.valueOf(mapObj.get('sumInsured'));
+        String sumInsuredIDR = String.valueOf(mapObj.get('sumInsuredIDR'));
+        
+        Asset at = new Asset();
+        at.RecordTypeId = strRTAsset;
+        at.Opportunity__c = oppId;
+        at.Name = riskName;
+        at.Risk_ID__c = '1';
+        at.ParentId = parentId;
+        if(rate != null){at.Exchange_Rate__c = rate;}
+        if(currencyId != null){ at.Currency__c = currencyId;}
+        if(strSumInsured != null){ at.Amount__c = Long.valueOf(strSumInsured); }
+        if(sumInsuredIDR != null){ at.Amount_Insured__c = Long.valueOf(sumInsuredIDR); }
+        at.Section__c = assetSectionId;
+        if(assetCategoryId != null){ at.Category__c = assetCategoryId; }
+        return at;
     }
     
     public static listfile createFile(List<Object> objFile,String title,String oppId){
