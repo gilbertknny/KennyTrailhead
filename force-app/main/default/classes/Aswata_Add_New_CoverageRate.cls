@@ -1,7 +1,7 @@
 /**
  * @description       : Controller LWC Input Coverage
  * @author            : Ahmad Yazid Munif
- * @last modified on  : 11-27-2025
+ * @last modified on  : 12-03-2025
  * @last modified by  : Ahmad Yazid Munif
 **/
 public with sharing class Aswata_Add_New_CoverageRate {
@@ -130,16 +130,18 @@ public with sharing class Aswata_Add_New_CoverageRate {
             //     exchangeMapFull.put(md.Name, md.Id);
             // }
             Asset risk = [
-                SELECT Id, Amount_Insured__c, Opportunity__c,COB__c,Opportunity__r.Busreq_ID__c
+                SELECT Id, Amount_Insured__c, Opportunity__c,COB__c,Opportunity__r.Busreq_ID__c,Model__c,
+                Opportunity__r.Start_Date_Periode__c, Opportunity__r.End_Date_Periode__c
                 FROM Asset
                 WHERE Id = :riskId
                 WITH SECURITY_ENFORCED
             ];
-            Decimal counter = getLastestId(risk);
+            Decimal counter = 1;
+            // Decimal counter = getLastestId(risk);
             List<InsurancePolicyCoverage> coverageList = new List<InsurancePolicyCoverage>();
             List<String> coverageParentId = new List<String>();
             // System.debug('### AWT : exchangeMapFull');
-            // System.debug('### AWT : coverageRefIdMap'+coverageRefIdMap);
+            System.debug('### AWT : coverageRefIdMap'+coverageRefIdMap);
             // System.debug('### AWT : to looping');
             for (Aswata_Coverage_Data_Wrapper.CoverageDetailWrapper wrapper : coverageWrappers) {
                 if(composite == 'COMPOSITE'){
@@ -153,7 +155,7 @@ public with sharing class Aswata_Add_New_CoverageRate {
                         String idCurrency = exchangeMapFull.get(generateDataCoverage.Minimum_Cur_ID__c);
                         generateDataCoverage.Deductible_Currency__c = idCurrency;
                         generateDataCoverage.Selected_Coverages_ID__c = selectedCoverageId;
-                        counter+=1;
+                        // counter+=1;
                         generateDataCoverage.cov_tahun_id__c = counter;
                         coverageList.add(generateDataCoverage);
                         risk.Rate_All_Coverages__c  = wrapper.rate.coverageRate;
@@ -174,7 +176,7 @@ public with sharing class Aswata_Add_New_CoverageRate {
                         generateDataCoverage.Opportunity__c = risk.Opportunity__c;
                         String idCurrency = exchangeMapFull.get(generateDataCoverage.Minimum_Cur_ID__c);
                         generateDataCoverage.Deductible_Currency__c = idCurrency;
-                        counter+=1;
+                        // counter+=1;
                         generateDataCoverage.cov_tahun_id__c = counter;
                         coverageList.add(generateDataCoverage);
                         risk.Rate_All_Coverages__c  = wrapper.commisionAllRate;
@@ -182,6 +184,7 @@ public with sharing class Aswata_Add_New_CoverageRate {
                     }
                 }
             }
+            System.debug('### AWT : coverageParentId'+coverageParentId);
             performInsertUpdate(coverageList,risk,coverageParentId);
             // coverageList = Aswata_Coverage_Data_301.coverageByAssetCategory(coverageList,risk,coverageParentId);
             // List<Database.SaveResult> saveResults;
@@ -216,10 +219,13 @@ public with sharing class Aswata_Add_New_CoverageRate {
                 );
             }
             coverageList = Aswata_Coverage_Data_301.coverageByAssetCategory(coverageList,risk,coverageParentId);
+            coverageList = Aswata_Coverage_Data_301.calculateDurationInYears(coverageList,risk);
+            System.debug('### AWT coverageList : '+coverageList.size());
             List<Database.SaveResult> saveResults;
             if(coverageList.size() > 0) {
                 saveResults = Database.insert(coverageList, true);
-                update risk;
+                Asset riskUpdate = Aswata_Coverage_Data_301.calculateAllRate(coverageList,risk);
+                update riskUpdate;
             }
             Set<Id> newIds = new Set<Id>();
             for (Database.SaveResult sr : saveResults) {
@@ -228,7 +234,6 @@ public with sharing class Aswata_Add_New_CoverageRate {
             if (!newIds.isEmpty()) {
                 Aswata_Async_PremiCalculation.aswataPremiCalculation(risk.Opportunity__c);
             }
-            // return 'Succes';
         } catch (Exception e){
             throw e;
         }
