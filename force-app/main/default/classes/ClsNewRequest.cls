@@ -1256,13 +1256,6 @@ public without sharing class ClsNewRequest {
             opty.producttype = (String)dataMap.get('producttype');
             opty.producttypename = (String)dataMap.get('producttypename');
             String strRisk1 = (String)dataMap.get('risk1');
-            /*opty.curr = (String)dataMap.get('currency');
-String assetSection = (String)dataMap.get('assetsection');
-String assetCategory = (String)dataMap.get('assetcategory');
-Decimal rate = Decimal.valueOf((Long)dataMap.get('rate'));
-String strSumInsured = (String)dataMap.get('sumInsured');
-if(strSumInsured != null){opty.sumInsured = Long.valueOf(strSumInsured);}
-opty.sumInsuredIDR = Decimal.valueOf((Long)dataMap.get('sumInsuredIDR'));*/
             if(opty.accountId != null && riskName != null){
                 Account acc = [SELECT Id,Name FROM Account WHERE Id=:opty.accountId WITH SECURITY_ENFORCED];
                 opty.oppName = acc.Name + ' - ' + riskName;
