@@ -10,6 +10,7 @@ export default class LwcNewRequestMOU extends LightningModal {
     @api records;
     @api record;
     @api contractId;
+    @api data;
     @track labelAdd = 'Add';
     @track isLoading;
     @track coverageId;
@@ -62,8 +63,14 @@ export default class LwcNewRequestMOU extends LightningModal {
     }
 
     getPicklistCoverage(){
+        let assetSection = this.data.assetSectionId;
+        let assetCategory = this.data.assetCategoryId;
+        let sumInsuredIDR = this.data.sumInsuredIDR;
         getCoverage({
-            contractid : this.contractId
+            contractid : this.contractId,
+            assetsection : assetSection,
+            assetcategory : assetCategory,
+            suminsured : sumInsuredIDR
         })
         .then(result => {
             this.coverage = [];
@@ -200,13 +207,13 @@ export default class LwcNewRequestMOU extends LightningModal {
     }
 
     handleAdd(e){
-        let rateold = this.proposedFixedAmountOld;
-        let rate = this.proposedFixedAmount;
-        console.log('rateold:'+rateold);
-        console.log('rate:'+rate);
+        //let rateold = this.proposedFixedAmountOld;
+        //let rate = this.proposedFixedAmount;
+        //console.log('rateold:'+rateold);
+        //console.log('rate:'+rate);
         if(this.coverageId === undefined || this.coverageId === ''){
             LightningAlert.open({message: 'Please Select Coverage!',theme: 'error',label: 'Error!'});
-        }else if(this.proposedFixedAmount === undefined || this.proposedFixedAmount === ''){
+        /*}else if(this.proposedFixedAmount === undefined || this.proposedFixedAmount === ''){
             LightningAlert.open({message: 'Please Fill Proposed Rate!',theme: 'error',label: 'Error!'});
         }else if(rate < rateold && rateold != undefined){
             LightningAlert.open({message: 'Please Change the Proposed Rate min '+rateold +'!',theme: 'error',label: 'Error!'});
@@ -229,7 +236,7 @@ export default class LwcNewRequestMOU extends LightningModal {
         }else if(this.overdngComission === undefined || this.overdngComission === ''){
             LightningAlert.open({message: 'Please Fill Overiding!',theme: 'error',label: 'Error!'});
         }else if(this.maxPerson === undefined || this.maxPerson === ''){
-            LightningAlert.open({message: 'Please Fill Max Person!',theme: 'error',label: 'Error!'});
+            LightningAlert.open({message: 'Please Fill Max Person!',theme: 'error',label: 'Error!'});*/
         }else{
             console.log('record:'+JSON.stringify(this.record));
             if(this.record != undefined){

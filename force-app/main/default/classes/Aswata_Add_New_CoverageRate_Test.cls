@@ -1,14 +1,14 @@
 /**
  * @description       : Test Class for Aswata_Add_New_CoverageRate
  * @author            : Ahmad Yazid Munif
- * @last modified on  : 11-21-2025
+ * @last modified on  : 12-04-2025
  * @last modified by  : Ahmad Yazid Munif
 **/
 
-@isTest
+@IsTest
 private class Aswata_Add_New_CoverageRate_Test {
 
-    @testSetup
+    @TestSetup
     static void makeData() {
         Id standardRtId = Schema.SObjectType.Master_Data__c.getRecordTypeInfosByName().get('Coverage').getRecordTypeId();
         RecordType rtCovRate = [SELECT Id FROM RecordType WHERE SobjectType = 'Master_Data__c' AND Name = 'Coverage Rate' LIMIT 1];
@@ -116,6 +116,7 @@ private class Aswata_Add_New_CoverageRate_Test {
         System.runAs(adminUser) {
             results = Aswata_Coverage_Data_Handler.getCoverageFields(testRtId, testCob,risk.Id);
             results2 = Aswata_Coverage_Data_Handler.getCoverageFields(testRtId, '201',risk.Id);
+            Decimal resultLastId = Aswata_Add_New_CoverageRate.getLastestId(risk);
         }
         Test.stopTest();
         System.assertNotEquals(null, results, 'Results list should not be null.');

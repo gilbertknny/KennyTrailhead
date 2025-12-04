@@ -1,7 +1,7 @@
 /**
  * @description       : PDF Quotation
  * @author            : Febrian
- * @last modified on  : 11-23-2025
+ * @last modified on  : 12-03-2025
  * @last modified by  : Ahmad Yazid Munif
 **/
 public without sharing class QuotationVFPController {
@@ -145,9 +145,10 @@ public without sharing class QuotationVFPController {
         this.multiRisk = false;
         this.risk = assetOppty[0];
         quotationDetailSingle.detailAsset = listDetailAsset;
-        if(risk.Address__c != null){
-            quotationDetailSingle.letakRisiko = risk.Address__r.Name + ', '+ risk.Address__r.City__r.Name+ ', '+ risk.Address__r.Country__r.Name+', '+ risk.Address__r.Zip_Code__r.Name;
-        }
+        // if(risk.Address__c != null){
+        //     quotationDetailSingle.letakRisiko = risk.Address__r.Name + ', '+ risk.Address__r.City__r.Name+ ', '+ risk.Address__r.Country__r.Name+', '+ risk.Address__r.Zip_Code__r.Name;
+        // }
+        quotationDetailSingle.letakRisiko = Aswata_Treaty_Distribution.generateFormattedAddress(risk);
         quotationDetailSingle.kelasKonstruksi = risk.Class__c;
         quotationDetailSingle.jenisResiko = risk.Occupation_Description__c;
         quotationDetailSingle.noKode = risk.Occupation_Code__r.Occupy_Id__c;
