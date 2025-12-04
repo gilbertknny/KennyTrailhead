@@ -1,7 +1,7 @@
 /**
  * @description       : PDF Quotation
  * @author            : Febrian
- * @last modified on  : 12-03-2025
+ * @last modified on  : 12-04-2025
  * @last modified by  : Ahmad Yazid Munif
 **/
 public without sharing class QuotationVFPController {
@@ -148,7 +148,7 @@ public without sharing class QuotationVFPController {
         // if(risk.Address__c != null){
         //     quotationDetailSingle.letakRisiko = risk.Address__r.Name + ', '+ risk.Address__r.City__r.Name+ ', '+ risk.Address__r.Country__r.Name+', '+ risk.Address__r.Zip_Code__r.Name;
         // }
-        quotationDetailSingle.letakRisiko = Aswata_Treaty_Distribution.generateFormattedAddress(risk);
+        quotationDetailSingle.letakRisiko = generateFormattedAddress(risk);
         quotationDetailSingle.kelasKonstruksi = risk.Class__c;
         quotationDetailSingle.jenisResiko = risk.Occupation_Description__c;
         quotationDetailSingle.noKode = risk.Occupation_Code__r.Occupy_Id__c;
@@ -168,5 +168,32 @@ public without sharing class QuotationVFPController {
         quotationDetailSingle.adminCost = calcTotalPremi.adminCost;
         quotationDetailSingle.totalPremi = calcTotalPremi.totalPremi;
         quotationDetailSingle.nominalTerbilang = calcTotalPremi.nominalTerbilang;
+    }
+    /**
+     * @description Menggabungkan komponen alamat dari record Asset menjadi satu string
+     * @param risk Record Asset yang memiliki lookup ke Address__c
+     * @return String Alamat lengkap
+     */
+    public static String generateFormattedAddress(Asset risk) {
+        if (risk == null || risk.Address__c == null) {
+            return '';
+        }
+        List<String> addressComponents = new List<String>();
+        if (String.isNotBlank(risk.Address__r.Name)) {
+            addressComponents.add(risk.Address__r.Name);
+        }
+        if (String.isNotBlank(risk.Address__r.City__r.Name)) {
+            addressComponents.add(risk.Address__r.City__r.Name);
+        }
+        if (String.isNotBlank(risk.Address__r.Country__r.Name)) {
+            addressComponents.add(risk.Address__r.Country__r.Name);
+        }
+        if (String.isNotBlank(risk.Address__r.Zip_Code__r.Name)) {
+            addressComponents.add(risk.Address__r.Zip_Code__r.Name);
+        }
+        if (addressComponents.isEmpty()) {
+            return '';
+        }
+        return String.join(addressComponents, ', ');
     }
 }
