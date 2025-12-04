@@ -1,14 +1,14 @@
 /**
  * @description       : Test Class for Aswata_Add_New_DetailAsset_Controller
  * @author            : Ahmad Yazid Munif
- * @last modified on  : 11-25-2025
+ * @last modified on  : 12-02-2025
  * @last modified by  : Ahmad Yazid Munif
 **/
-@isTest
+@IsTest
 private class Aswata_Add_New_DetailAsset_Test {
     private static final String TEST_COB = '301';
 
-    @testSetup
+    @TestSetup
     static void setupTestData() {
         RecordType rtDetailAsset = [SELECT Id, Name FROM RecordType where SobjectType = 'Master_Data__c' and Name = 'Detail Asset' LIMIT 1];
         RecordType recordTypeCategory = [SELECT Id, Name FROM RecordType where SobjectType = 'Master_Data__c' and Name = 'Asset Category' LIMIT 1];
@@ -75,7 +75,7 @@ private class Aswata_Add_New_DetailAsset_Test {
         insert policy;
     }
 
-    @isTest
+    @IsTest
     static void getSectionTest() {
         User adminUser = createUser();
         Test.startTest();
@@ -86,7 +86,7 @@ private class Aswata_Add_New_DetailAsset_Test {
         Test.stopTest();
         System.assertEquals('4', results.get(0), 'First section title should match the expected value.');
     }
-    @isTest
+    @IsTest
     static void getDetailAssetDataTest() {
         User adminUser = createUser();
         Account insertAcc = [SELECT Id,Name FROM Account WHERE Name = 'Jhon'];
@@ -131,7 +131,7 @@ private class Aswata_Add_New_DetailAsset_Test {
         // System.assertEquals(idAsset.Id, (String)results.get('Id'), 'The returned Id must match the queried Asset Id.');
         // System.assertEquals('Updated Existing Asset Name', updatedAsset.Name, 'Asset Name must be updated.');
     }
-    @isTest
+    @IsTest
     static void getActiveFieldsSuccessTest() {
         User adminUser = createUser();
         RecordType recordType = [SELECT Id, Name FROM RecordType where SobjectType = 'Master_Data__c' and Name = 'Detail Asset' WITH SECURITY_ENFORCED LIMIT 1];
