@@ -3,6 +3,15 @@
     <fullName>Model__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
     <label>Model</label>
+    <lookupFilter>
+        <active>true</active>
+        <filterItems>
+            <field>Master_Data__c.RecordType.Name</field>
+            <operation>equals</operation>
+            <value>Vehicle Type</value>
+        </filterItems>
+        <isOptional>false</isOptional>
+    </lookupFilter>
     <referenceTo>Master_Data__c</referenceTo>
     <relationshipLabel>Risks (Model)</relationshipLabel>
     <relationshipName>Model</relationshipName>
