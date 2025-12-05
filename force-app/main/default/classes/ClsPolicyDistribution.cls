@@ -1,45 +1,19 @@
-/**
-* Controller for Flow Update Quotation Get User Limit
-* TC : GS
-* DATE : 10/10/25
-*/
-
-public without sharing class ClsUserLimit {
-    @InvocableMethod(label='User Limit' description='Returns user limit' )
-    public static List<string> getUserIds(List<ID> ids) {
-        List<string> result = new List<String>();
-        String recordId = ids[0];
-        Decimal amount = 0;
-        Decimal limitAmount;
-        Quote data = [SELECT Id,OpportunityId FROM Quote WHERE Id=:recordId WITH SECURITY_ENFORCED];
-        UserLimit ul = getUserIdFilter(data.OpportunityId);
-        if(ul != null){
-            if(ul.id != null && ul.userid != null){
-                Master_Data__c md = new Master_Data__c();
-                md.Id = ul.id;
-                md.Counter_Date__c = DateTime.Now();
-                Database.SaveResult sr = Database.update(md);
-                result.add(ul.userid);
-            }
-        }
-        return result;   
-    } 
-    
-    public static UserLimit getUserIdFilter(String recordId){
+public class ClsPolicyDistribution {
+    public static data getUserIdFilter(String recordId){
         Opportunity opp = [SELECT Id,COB__c FROM Opportunity WHERE Id=:recordId WITH SECURITY_ENFORCED];
         String strField = '';
         List<Master_Data__c> listmd = [SELECT Id,showData__c 
                                        FROM Master_Data__c 
                                        WHERE BSN_ID__c =:opp.COB__c 
-                                       AND RecordType.Name = 'User Limit' 
+                                       AND RecordType.Name = 'Filter Policy Distribution' 
                                        AND Status__c = 'Active' WITH SECURITY_ENFORCED];
         if(listmd.size()>0){
             Master_Data__c md = listmd[0];
             strField = md.showData__c;
         }
         
-        UserLimit result = new UserLimit();
-        if(strField != '' && strField != null){
+        data result = new data();
+        if(strField != ''){
             List<Object> untypedList = (List<Object>) JSON.deserializeUntyped(strField);
             String queryfieldOpp = '';
             for (Object item : untypedList) {
@@ -80,8 +54,8 @@ public without sharing class ClsUserLimit {
         return result;
     } 
     
-    public static UserLimit getUserId(Decimal amount,String queryfield){
-        UserLimit result = new UserLimit();
+    public static data getUserId(Decimal amount,String queryfield){
+        data result = new data();
         if(amount != null){
             Decimal limitAmount;
             String strQueryMDMin = 'SELECT Id,LIMIT_AMOUNT__c FROM Master_Data__c';
@@ -98,7 +72,7 @@ public without sharing class ClsUserLimit {
             
             if(listMDmin.size()>0){limitAmount = listMDmin[0].LIMIT_AMOUNT__c;}
             if(limitAmount != null){
-                String strQueryMD = 'SELECT Id,USER_ID__c FROM Master_Data__c';
+                String strQueryMD = 'SELECT Id,USER_PIC__c FROM Master_Data__c';
                 strQueryMD += ' WHERE RecordType.DeveloperName = \''+ 'Approval_Limit'+'\'';
                 strQueryMD += ' AND AUTHORITY_TYPE__c = \''+'UW'+'\'';
                 strQueryMD += ' AND LIMIT_AMOUNT__c =: limitAmount';
@@ -109,13 +83,13 @@ public without sharing class ClsUserLimit {
                 List<Master_Data__c> listMD = Database.query(strQueryMD);
                 Master_Data__c md = listMD[0];
                 result.id = md.Id;
-                result.userid = md.USER_ID__c;
+                result.userid = md.USER_PIC__c;
             } 
         }
         return result;
     }
     
-    public class UserLimit{
+	public class data{
         public string id;
         public string userid;
     }

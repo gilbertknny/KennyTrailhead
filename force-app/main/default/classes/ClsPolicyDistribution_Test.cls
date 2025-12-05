@@ -1,5 +1,5 @@
 @IsTest(SeeAllData=false)
-public class ClsUserLimit_Test {
+public class ClsPolicyDistribution_Test {
 	@TestSetup
     static void setTestData(){
         String strRTIndividual = Schema.SObjectType.Account.getRecordTypeInfosByName().get('Insurance').getRecordTypeId();
@@ -7,6 +7,11 @@ public class ClsUserLimit_Test {
         acc.Name = 'ACC12345';
         acc.RecordTypeId = strRTIndividual;
         insert acc;
+        
+        Contact ct = new Contact();
+        ct.AccountId = acc.Id;
+        ct.LastName = 'Test';
+        insert ct;
         
         Opportunity opp = new Opportunity();
         opp.Name = 'Test';
@@ -18,11 +23,6 @@ public class ClsUserLimit_Test {
         opp.COB__c = '201';
         insert opp;
         
-        Quote qu = new Quote();
-        qu.OpportunityId = opp.Id;
-        qu.Name = 'Test';
-        insert qu;
-        
         String strRTMd = Schema.SObjectType.Master_Data__c.getRecordTypeInfosByName().get('Approval Limit').getRecordTypeId();
         Master_Data__c md = new Master_Data__c();
         md.RecordTypeId = strRTMd;
@@ -30,10 +30,10 @@ public class ClsUserLimit_Test {
         md.LIMIT_AMOUNT__c = 100000;
         md.Status__c = 'Approved';
         md.BSN_ID__c = '201';
-        md.USER_ID__c = UserInfo.GetUserId();
+        md.USER_PIC__c = ct.Id;
         insert md;
         
-        String strRT2 = Schema.SObjectType.Master_Data__c.getRecordTypeInfosByName().get('User Limit').getRecordTypeId();
+        String strRT2 = Schema.SObjectType.Master_Data__c.getRecordTypeInfosByName().get('Filter Policy Distribution').getRecordTypeId();
         Master_Data__c md2 = new Master_Data__c();
         md2.BSN_ID__c = '201';
         md2.Status__c = 'Active';
@@ -47,11 +47,9 @@ public class ClsUserLimit_Test {
         User u = [SELECT Id FROM User WHERE Id=:UserInfo.getUserId()];
         System.runAs(u){
             Test.startTest();
-            Quote qu = [SELECT Id FROM Quote LIMIT 1];
-            List<ID> ids = new List<ID>();
-            ids.Add(qu.Id);
-            List<string> listdata = ClsUserLimit.getUserIds(ids);
-            system.assertEquals(listdata.size(),1);
+            Opportunity opp = [SELECT Id FROM Opportunity LIMIT 1];
+            ClsPolicyDistribution.data data = ClsPolicyDistribution.getUserIdFilter(opp.Id);
+            system.assertNotEquals(data.userid,null);
             Test.stopTest();
         }
     }

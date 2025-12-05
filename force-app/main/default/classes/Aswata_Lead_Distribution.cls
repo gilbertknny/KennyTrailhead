@@ -31,7 +31,7 @@ public with sharing class Aswata_Lead_Distribution {
                     SELECT Id, Round_Robin_Member__c, Round_Robin_Member__r.Name, Branch__c,
                            Round_Robin_Counter_Branch__c, Round_Robin_Counter_Account__c
                     FROM Master_Data__c
-                    WHERE Branch__r.BRANCH_ID__c = :lead.Branch__c
+                    WHERE Salesman_Branch__r.BRANCH_ID__c  = :lead.Branch__c and RecordType.Name = 'Round Robin Member'
                     WITH SECURITY_ENFORCED
                     ORDER BY Round_Robin_Counter_Branch__c ASC
                     LIMIT 1
@@ -58,6 +58,7 @@ public with sharing class Aswata_Lead_Distribution {
                     AND Account_Sub_Segment__c = :lead.Account_Sub_Segment__c
                     AND Pipeline_Status__c = :lead.Account_Pipeline_Status__c
                     AND Business_Segmentation__c = :lead.Business_Segmentation__c
+                    AND RecordType.Name = 'Round Robin Member Account Matrix'
                     WITH SECURITY_ENFORCED
                     ORDER BY Round_Robin_Counter_Account__c ASC
                     LIMIT 1

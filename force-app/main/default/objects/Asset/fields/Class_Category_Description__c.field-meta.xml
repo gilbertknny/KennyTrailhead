@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Class_Category_Description__c</fullName>
+    <externalId>false</externalId>
+    <formula>CASE(
+    TEXT(Class_Category__c),
+
+    &quot;I&quot;,
+    &quot;Pekerjaan professional, administrative, manajerial maupun di belakang meja yang bekerja di dalam kantor dan tidak berhubungan dengan pekerjaan kasar. Dapat berlaku bagi level manajemen dengan frekuensi bepergian keluar negeri tidak lebih dari 12 kali setahun.&quot;,
+
+    &quot;II&quot;,
+    &quot;Profesi atau pekerjaan diluar kantor atau berhubungan dengan pekerjaan kasar tanpa penggunaan alat atau mesin. Berlaku pula bagi level manajemen yang bepergian ke keluar negeri dengan frekuensi lebih dari 12 kali setahun dan atas cover untuk selama perjalanan, event dan exhibition.&quot;,
+
+    &quot;III&quot;,
+    &quot;Pekerjaan yang memerlukan petunjuk manual karena berhubungan dengan pengunaan alat maupun mesin-mesin (selain dari mesin woodworking - pengolahan kayu), atlit selain yang dikecualikan dalam polis.&quot;,
+
+    &quot;IV&quot;,
+    &quot;Crew pesawat, full time tentara, pemadam kebakaran, tentara regular, penjaga penjara, nahkoda/masinis, penjaga keamanan bersenjata, pekerjaan yang berhubungan dengan pengolahan kayu.&quot;,
+
+    &quot;V&quot;,
+    &quot;Pekerjaan di atas kapal laut, anggota marinir, pilot AU, pekerja pabrik kimia, pelatih beladiri.&quot;,
+
+    &quot;VI&quot;,
+    &quot;Kumpulan sivitas akademika (pengajar, guru, dosen, siswa, pelajar, atau mahasiswa) yang tergabung dalam satu institusi pendidikan / sekolah / universitas.&quot;,
+
+    &quot;&quot;
+)</formula>
+    <label>Class Category Description</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

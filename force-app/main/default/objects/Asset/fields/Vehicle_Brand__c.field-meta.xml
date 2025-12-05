@@ -2,7 +2,17 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Vehicle_Brand__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
-    <label>Vehicle Brand</label>
+    <description>change to not used</description>
+    <label>[NOT USED] Vehicle Brand</label>
+    <lookupFilter>
+        <active>true</active>
+        <filterItems>
+            <field>Master_Data__c.RecordType.Name</field>
+            <operation>equals</operation>
+            <value>Vehicle Brand</value>
+        </filterItems>
+        <isOptional>false</isOptional>
+    </lookupFilter>
     <referenceTo>Master_Data__c</referenceTo>
     <relationshipLabel>Risks (Vehicle Brand)</relationshipLabel>
     <relationshipName>Risks4</relationshipName>
