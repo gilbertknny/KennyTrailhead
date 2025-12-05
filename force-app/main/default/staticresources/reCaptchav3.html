@@ -1,0 +1,15 @@
+<html>
+    <head>
+        <script src="https://www.google.com/recaptcha/enterprise.js?render=6Lcbh9orAAAAAN2eEhhM1tT33ZYPmT9i9ymJIZad"></script>
+        <!-- Your site code -->
+      </head>
+    <body style="max-height: 70px !important;">
+        <input type="hidden" name="recaptcha_response" id="recaptchaResponse"/>
+        <script>
+              grecaptcha.enterprise.ready(async () => {
+                const token = await grecaptcha.enterprise.execute('6Lcbh9orAAAAAN2eEhhM1tT33ZYPmT9i9ymJIZad', {action: 'LOGIN'});
+                parent.postMessage({ action: "getCaptcha", callCAPTCHAResponse : token}, "*");
+              });
+          </script>
+    </body>
+</html>
