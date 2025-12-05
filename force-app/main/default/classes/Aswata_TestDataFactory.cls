@@ -6,11 +6,18 @@
  * Author       : Fikri
  * -------------------------------------------------------------------------------
  */
+/**
+ * @description Centralized factory class for creating test data
+ */
 @IsTest
 public class Aswata_TestDataFactory {
-
-
-   // 🔹 Create a Lead record
+   /**
+     * @description Create a Lead record
+     * @param firstName
+     * @param lastName
+     * @param company
+     * @return Lead
+     */
     public static Lead createLead(String firstName, String lastName, String company) {
         Lead lead = new Lead(
             FirstName = firstName,
@@ -29,7 +36,13 @@ public class Aswata_TestDataFactory {
         insert lead;
         return lead;
     }
-
+    /**
+     * @description Create a Lead record
+     * @param firstName
+     * @param lastName
+     * @param company
+     * @return Lead
+     */
     public static Lead createLeadCustom(String firstName, String lastName, String company) {
         Lead lead = new Lead(
             FirstName = firstName,
@@ -47,8 +60,11 @@ public class Aswata_TestDataFactory {
         );
         return lead;
     }
-
-    // Create a standard Account
+    /**
+     * @description Create a standard Account
+     * @param name
+     * @return Account
+     */
     public static Account createAccount(String name) {
         Account acc = new Account(
             Name = name,
@@ -58,8 +74,13 @@ public class Aswata_TestDataFactory {
         insert acc;
         return acc;
     }
-
-    // Create a Contact linked to an Account
+    /**
+     * @description Create a Contact linked to an Account
+     * @param acc
+     * @param firstName
+     * @param lastName
+     * @return Contact
+     */
     public static Contact createContact(Account acc, String firstName, String lastName) {
         Contact con = new Contact(
             FirstName = firstName,
@@ -72,20 +93,30 @@ public class Aswata_TestDataFactory {
         insert con;
         return con;
     }
-
-    // Create an Opportunity linked to an Account
+    /**
+     * @description Create an Opportunity linked to an Account
+     * @param acc
+     * @param name
+     * @return Contact
+     */
     public static Opportunity createOpportunity(Account acc, String name) {
         Opportunity opp = new Opportunity(
             Name = name,
             AccountId = acc.Id,
             StageName = 'Prospecting',
             CloseDate = System.today().addDays(30),
-            Amount = 50000
+            Amount = 50000,
+            COB__c = '201'
         );
         insert opp;
         return opp;
     }
-
+    /**
+     * @description Create an Quote linked to an Opportunity
+     * @param opp
+     * @param name
+     * @return Quote
+     */
     public static Quote createQuote(Opportunity opp, String name) {
         Quote quo = new Quote(
             Name = name,
@@ -95,14 +126,18 @@ public class Aswata_TestDataFactory {
         insert quo;
         return quo;
     }
-
+    /**
+     * @description Create an Risk linked to an Opportunity
+     * @param oppty
+     * @param name
+     * @return Asset
+     */
     public static Asset createRisk(Opportunity oppty, String name) {
-    
         RecordType rt = [
-            SELECT Id 
-            FROM RecordType 
-            WHERE SObjectType = 'Asset' 
-            AND Name = 'Risk' 
+            SELECT Id
+            FROM RecordType
+            WHERE SObjectType = 'Asset'
+            AND Name = 'Risk'
             LIMIT 1
         ];
 
@@ -110,20 +145,26 @@ public class Aswata_TestDataFactory {
         Asset risk = new Asset(
             Name = name,
             Opportunity__c = oppty.Id,
-            COB__c = '201',
+            //COB__c = '201',
             RecordTypeId = rt.Id
         );
         insert risk;
         return risk;
     }
 
+    /**
+     * @description Create an Asset linked to an Opportunity and Risk
+     * @param oppty
+     * @param risk
+     * @param name
+     * @return Asset
+     */
     public static Asset createAsset(Opportunity oppty,Asset risk, String name) {
-    
         RecordType rt = [
-            SELECT Id 
-            FROM RecordType 
-            WHERE SObjectType = 'Asset' 
-            AND Name = 'Asset' 
+            SELECT Id
+            FROM RecordType
+            WHERE SObjectType = 'Asset'
+            AND Name = 'Asset'
             LIMIT 1
         ];
 
@@ -132,29 +173,34 @@ public class Aswata_TestDataFactory {
             Name = name,
             Opportunity__c = oppty.Id,
             ParentId = risk.Id,
-            COB__c = '201',
+            //COB__c = '201',
             RecordTypeId = rt.Id
         );
         insert ast;
         return ast;
     }
 
-
-    // Combined convenience method
+    /**
+     * @description Combined convenience method
+     * @return Map<String, SObject>
+     */
     public static Map<String, SObject> createStandardDataSet() {
         Map<String, SObject> data = new Map<String, SObject>();
         Account acc = createAccount('Test Account');
         Contact con = createContact(acc, 'John', 'Doe');
         Opportunity opp = createOpportunity(acc, 'Test Opportunity');
-        
         data.put('Account', acc);
         data.put('Contact', con);
         data.put('Opportunity', opp);
 
         return data;
     }
-
-    // 🔹 Create Master_Data__c record (generic for Coverage, City, Province, etc.)
+    /**
+     * @description 🔹 Create Master_Data__c record (generic for Coverage, City, Province, etc.)
+     * @param name
+     * @param recordTypeName
+     * @return Master_Data__c
+     */
     public static Master_Data__c createMasterData(String name, String recordTypeName) {
         RecordType rt = [
             SELECT Id FROM RecordType
@@ -169,8 +215,12 @@ public class Aswata_TestDataFactory {
         insert md;
         return md;
     }
-
-    // 🔹 Create Exchange Rate record
+    /**
+     * @description 🔹 Create Exchange Rate record
+     * @param name
+     * @param rate
+     * @return Master_Data__c
+     */
     public static Master_Data__c createExchangeRate(String name, Decimal rate) {
         RecordType rt = [
             SELECT Id FROM RecordType
@@ -186,8 +236,10 @@ public class Aswata_TestDataFactory {
         insert ex;
         return ex;
     }
-
-    // 🔹 Create linked Province → City → Address hierarchy
+    /**
+     * @description 🔹 Create linked Province → City → Address hierarchy
+     * @return Map<String, Schema.Location>
+     */
     public static Map<String, Schema.Location> createLocationHierarchy() {
         RecordType rtProvince = [
             SELECT Id FROM RecordType WHERE SObjectType = 'Location' AND Name = 'Province' LIMIT 1
@@ -211,7 +263,7 @@ public class Aswata_TestDataFactory {
 
         Schema.Location city = new Schema.Location(Name = 'Jakarta Selatan', RecordTypeId = rtCity.Id, Province__c = province.Id, LocationType = 'City');
         insert city;
-        
+
         Schema.Location village = new Schema.Location(Name = 'Setiabudi', RecordTypeId = rtVillage.Id, Province__c = province.Id, City__c = city.Id, LocationType = 'Village');
         insert village;
 
@@ -229,7 +281,10 @@ public class Aswata_TestDataFactory {
             'Address' => address
         };
     }
-
+    /**
+     * @description 🔹 createZipCode
+     * @return Schema.Location
+     */
     public static Schema.Location createZipCode() {
         RecordType rtZipCode = [
             SELECT Id FROM RecordType WHERE SObjectType = 'Location' AND Name = 'Zip Code' LIMIT 1
@@ -240,7 +295,10 @@ public class Aswata_TestDataFactory {
         return  zipCode;
 
     }
-
+    /**
+     * @description 🔹 createAddress
+     * @return Schema.Location
+     */
     public static Schema.Location createAddress() {
         RecordType rtAddress = [
             SELECT Id FROM RecordType WHERE SObjectType = 'Location' AND Name = 'Address' LIMIT 1
@@ -251,8 +309,12 @@ public class Aswata_TestDataFactory {
         return address;
 
     }
-
-    // 🔹 Overloaded version (reusable)
+    /**
+     * @description 🔹 createInsurancePolicy
+     * @param acc
+     * @param opp
+     * @return InsurancePolicy
+     */
     public static InsurancePolicy createInsurancePolicy(Account acc, Opportunity opp) {
         InsurancePolicy policy = new InsurancePolicy(
             Name = 'Test Insurance Policy',
@@ -263,15 +325,18 @@ public class Aswata_TestDataFactory {
 
         return policy;
     }
-
-    
+    /**
+     * @description createTransactionData
+     * @param recordTypeName
+     * @param recordName
+     * @return Transaction_Data__c
+     */
     public static Transaction_Data__c createTransactionData(String recordTypeName, String recordName) {
         RecordType rt = [
             SELECT Id FROM RecordType
             WHERE SObjectType = 'Transaction_Data__c' AND Name =: recordTypeName
             LIMIT 1
         ];
-        
         Transaction_Data__c transactionData = new Transaction_Data__c(
             Name = recordName,
             RecordTypeId = rt.Id
@@ -279,5 +344,53 @@ public class Aswata_TestDataFactory {
         insert transactionData;
 
         return transactionData;
+    }
+    /**
+     * @description createTestUser
+     * @param aliasPrefix
+     * @return User
+     */
+    public static User createTestUser(String aliasPrefix) {
+        Profile p = [
+            SELECT Id
+            FROM Profile
+            WHERE Name = 'Standard User'
+            LIMIT 1
+        ];
+
+        User u = new User(
+            FirstName = aliasPrefix,
+            LastName  = 'Tester',
+            Alias     = aliasPrefix.substring(0, Math.min(8, aliasPrefix.length())),
+            Email     = aliasPrefix + '@test.com',
+            Username  = aliasPrefix + '@test.com.' + System.currentTimeMillis(),
+            TimeZoneSidKey = 'Asia/Singapore',
+            LocaleSidKey   = 'en_US',
+            EmailEncodingKey = 'UTF-8',
+            LanguageLocaleKey = 'en_US',
+            ProfileId = p.Id
+        );
+        insert u;
+        return u;
+    }
+    /**
+     * @description function for create with Profile Admin
+     * @return User return usercreated
+     */
+    public static User createTestAdmin(String aliasPrefix){
+        Profile adminProfile = [SELECT Id FROM Profile WHERE Name = 'System Administrator' LIMIT 1];
+        User adminUser = new User(
+            Alias = aliasPrefix,
+            Email = aliasPrefix + System.currentTimeMillis() + '@example.com',
+            EmailEncodingKey = 'UTF-8',
+            LastName = 'AdminTest',
+            LanguageLocaleKey = 'en_US',
+            LocaleSidKey = 'en_US',
+            ProfileId = adminProfile.Id,
+            TimeZoneSidKey = 'America/Los_Angeles',
+            UserName = aliasPrefix + System.currentTimeMillis() + '@testorg.com' // Unique Username
+        );
+        insert adminUser;
+        return adminUser;
     }
 }

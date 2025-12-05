@@ -1,7 +1,7 @@
 /**
  * @description       : Controller LWC Input Coverage
  * @author            : Ahmad Yazid Munif
- * @last modified on  : 12-03-2025
+ * @last modified on  : 12-05-2025
  * @last modified by  : Ahmad Yazid Munif
 **/
 public with sharing class Aswata_Add_New_CoverageRate {
@@ -130,7 +130,9 @@ public with sharing class Aswata_Add_New_CoverageRate {
             //     exchangeMapFull.put(md.Name, md.Id);
             // }
             Asset risk = [
-                SELECT Id, Amount_Insured__c, Opportunity__c,COB__c,Opportunity__r.Busreq_ID__c,Model__c,
+                SELECT Id, Amount_Insured__c, Opportunity__c,
+                // COB__c,
+                Opportunity__r.Busreq_ID__c,Model__c,
                 Opportunity__r.Start_Date_Periode__c, Opportunity__r.End_Date_Periode__c
                 FROM Asset
                 WHERE Id = :riskId
@@ -141,7 +143,7 @@ public with sharing class Aswata_Add_New_CoverageRate {
             List<InsurancePolicyCoverage> coverageList = new List<InsurancePolicyCoverage>();
             List<String> coverageParentId = new List<String>();
             // System.debug('### AWT : exchangeMapFull');
-            System.debug('### AWT : coverageRefIdMap'+coverageRefIdMap);
+            // System.debug('### AWT : coverageRefIdMap'+coverageRefIdMap);
             // System.debug('### AWT : to looping');
             for (Aswata_Coverage_Data_Wrapper.CoverageDetailWrapper wrapper : coverageWrappers) {
                 if(composite == 'COMPOSITE'){
@@ -184,7 +186,7 @@ public with sharing class Aswata_Add_New_CoverageRate {
                     }
                 }
             }
-            System.debug('### AWT : coverageParentId'+coverageParentId);
+            // System.debug('### AWT : coverageParentId'+coverageParentId);
             performInsertUpdate(coverageList,risk,coverageParentId);
             // coverageList = Aswata_Coverage_Data_301.coverageByAssetCategory(coverageList,risk,coverageParentId);
             // List<Database.SaveResult> saveResults;
@@ -220,7 +222,7 @@ public with sharing class Aswata_Add_New_CoverageRate {
             }
             coverageList = Aswata_Coverage_Data_301.coverageByAssetCategory(coverageList,risk,coverageParentId);
             coverageList = Aswata_Coverage_Data_301.calculateDurationInYears(coverageList,risk);
-            System.debug('### AWT coverageList : '+coverageList.size());
+            // System.debug('### AWT coverageList : '+coverageList.size());
             List<Database.SaveResult> saveResults;
             if(coverageList.size() > 0) {
                 saveResults = Database.insert(coverageList, true);
