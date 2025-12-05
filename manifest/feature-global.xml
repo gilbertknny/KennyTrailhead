@@ -18,33 +18,12 @@
 		<members>VlocityMapping_Test</members>
 		<members>WebserviceAPI</members>
 		<members>WebserviceAPI_Test</members>
-		<!--
-		<members>flowRedirectController</members>
-		<members>flowRedirectControllerTest</members>
-		-->
 		<name>ApexClass</name>
 	</types>
 	<types>
 		<members>EventErrorLog</members>
 		<name>ApexTrigger</name>
 	</types>
-	<!--
-	<types>
-		<members>LEXTHEMINGAswata</members>
-		<name>BrandingSet</name>
-	</types>
-	<types>
-		<members>LogoAswata1</members>
-		<members>X2PTAsuransiWahanaTataAswata</members>
-		<name>ContentAsset</name>
-	</types>
-	<types>
-		<members>Aswata_Claim_App</members>
-		<members>Aswata_Sales_App</members>
-		<members>Aswata_Sales_App_Console</members>
-		<name>CustomApplication</name>
-	</types>
-	-->
 	<types>
 		<members>Endpoint_Header_List__mdt.Additional_Value__c</members>
 		<members>Endpoint_Header_List__mdt.Algorithms2__c</members>
@@ -105,6 +84,11 @@
 		<members>Error_Logs__e.String_To_Sign__c</members>
 		<members>Error_Logs__e.Type_Name__c</members>
 		<members>Error_Logs__e.User_Run__c</members>
+		<members>SFAWT05AssetCoverages__mdt.Coverage__c</members>
+		<members>SFAWT05__mdt.Integration_Procedure__c</members>
+		<members>SFAWT05__mdt.RecordType_DeveloperName__c</members>
+		<members>SFAWT05__mdt.RecordType_Object__c</members>
+		<members>SFAWT05__mdt.Start__c</members>
 		<members>Upload_File_Mapping__mdt.Field__c</members>
 		<members>Upload_File_Mapping__mdt.Object__c</members>
 		<name>CustomField</name>
@@ -154,6 +138,20 @@
 		<members>Endpoint_Header_List.LintaswataSFAWT17_5</members>
 		<members>Endpoint_Header_List.SalesforceComposite1</members>
 		<members>Endpoint_Header_List.SalesforceComposite2</members>
+		<members>SFAWT05.Transhipment</members>
+		<members>SFAWT05.business_companies</members>
+		<members>SFAWT05.business_request_qq</members>
+		<members>SFAWT05.coverages</members>
+		<members>SFAWT05.detail_insured</members>
+		<members>SFAWT05.document_clauses</members>
+		<members>SFAWT05.installments</members>
+		<members>SFAWT05.risk</members>
+		<members>SFAWT05AssetCoverages.amount_insured</members>
+		<members>SFAWT05AssetCoverages.busreq_id</members>
+		<members>SFAWT05AssetCoverages.currency_code</members>
+		<members>SFAWT05AssetCoverages.m_coverage_ref_id</members>
+		<members>SFAWT05AssetCoverages.partitionCode</members>
+		<members>SFAWT05AssetCoverages.risk_id</members>
 		<members>Upload_File_Mapping.Client_ID</members>
 		<members>Upload_File_Mapping.Insurance_ID</members>
 		<members>Upload_File_Mapping.Loss_Adjuster_ID</members>
@@ -167,16 +165,12 @@
 		<members>Endpoint__mdt</members>
 		<members>Error_Log__c</members>
 		<members>Error_Logs__e</members>
+		<members>SFAWT05AssetCoverages__mdt</members>
+		<members>SFAWT05__mdt</members>
 		<members>Upload_File_Mapping__mdt</members>
 		<name>CustomObject</name>
 	</types>
 	<types>
-		<!-- 
-		<members>Accumulation__c</members> 
-		<members>Facultative_Share__c</members>
-		<members>Aswata_Survey__c</members>
-		<members>Transaction_Data__c</members>
-		-->
 		<members>Error_Log__c</members>
 		<name>CustomTab</name>
 	</types>
@@ -184,21 +178,6 @@
 		<members>Recaptcha_NC</members>
 		<name>ExternalCredential</name>
 	</types>
-	<!--
-	<types>
-		<members>Aswata_Claim_App_UtilityBar</members>
-		<members>Aswata_Claim_App_UtilityBar</members>
-		<members>Aswata_Sales_App_UtilityBar</members>
-		<members>Aswata_Sales_App_UtilityBar</members>
-		<members>Aswata_Sales_App_clone_UtilityBar</members>
-		<members>Aswata_Sales_App_clone_UtilityBar</members>
-		<members>ClientRecordPage4</members>
-		<members>Insurance_Policy_Record_Page1</members>
-		<members>Product_Record_Page</members>
-		<members>Quote_Facultative</members>
-		<name>FlexiPage</name>
-	</types>
-	-->
 	<types>
 		<members>Opportunity_Auto_Launched_Clone_Oppty</members>
 		<members>Risk_Asset_Clone</members>
@@ -216,10 +195,37 @@
 		<members>Endpoint_Header__mdt-Endpoint Header Layout</members>
 		<members>Endpoint__mdt-Endpoint Layout</members>
 		<members>Error_Log__c-Error Log Layout</members>
-		<!-- <members>InsurancePolicy-Insurance Policy Layout</members> -->
+		<members>SFAWT05AssetCoverages__mdt-SFAWT05Coverages Layout</members>
+		<members>SFAWT05__mdt-SFAWT05 Layout</members>
 		<members>Upload_File_Mapping__mdt-Upload File Mapping Layout</members>
 		<name>Layout</name>
 	</types>
+	<types>
+		<members>Error_Log__c.All</members>
+		<members>Error_Log__c.Outbound</members>
+		<members>Error_Log__c.SFAWT5</members>
+		<members>SFAWT05AssetCoverages__mdt.All</members>
+		<members>SFAWT05__mdt.All</members>
+		<name>ListView</name>
+	</types>
+	<version>65.0</version>
+</Package>
+<!--
+	<types>
+		<members>Aswata_Claim_App_UtilityBar</members>
+		<members>Aswata_Claim_App_UtilityBar</members>
+		<members>Aswata_Sales_App_UtilityBar</members>
+		<members>Aswata_Sales_App_UtilityBar</members>
+		<members>Aswata_Sales_App_clone_UtilityBar</members>
+		<members>Aswata_Sales_App_clone_UtilityBar</members>
+		<members>ClientRecordPage4</members>
+		<members>Insurance_Policy_Record_Page1</members>
+		<members>Product_Record_Page</members>
+		<members>Quote_Facultative</members>
+		<name>FlexiPage</name>
+	</types>
+	-->
+
 	<!--
 	<types>
 		<members>redirectToUrl</members>
@@ -253,12 +259,10 @@
 		<members>Quote.General</members>
 		<name>RecordType</name>
 	</types>
-	-->
 	<types>
 		<members>*</members>
 		<name>SharingRules</name>
 	</types>
-	<!--
 	<types>
 		<members>Account.Edit</members>
 		<members>Account.Send_to_Lintaswata</members>
@@ -275,5 +279,63 @@
 		<name>ConnectedApp</name>
 	</types>
 	-->
-	<version>65.0</version>
-</Package>
+	<!--
+	<types>
+		<members>LEXTHEMINGAswata</members>
+		<name>BrandingSet</name>
+	</types>
+	<types>
+		<members>LogoAswata1</members>
+		<members>X2PTAsuransiWahanaTataAswata</members>
+		<name>ContentAsset</name>
+	</types>
+	<types>
+		<members>Aswata_Claim_App</members>
+		<members>Aswata_Sales_App</members>
+		<members>Aswata_Sales_App_Console</members>
+		<name>CustomApplication</name>
+	</types>
+	<types>
+		<members>APILog</members>
+		<members>APILog2</members>
+		<members>APILogMock</members>
+		<members>APILog_Test</members>
+		<members>ErrorLogRecord</members>
+		<members>ErrorLogRecord_Test</members>
+		<members>EventErrorLogHandler</members>
+		<members>InvocableClass</members>
+		<members>InvocableClass_Test</members>
+		<members>SOQL_SOBJECT</members>
+		<members>SOQL_SOBJECT_Test</members>
+		<members>TriggerHandler</members>
+		<members>TriggerHandler_Test</members>
+		<members>VlocityMapping</members>
+		<members>VlocityMapping_Test</members>
+		<members>WebserviceAPI</members>
+		<members>WebserviceAPI_Test</members>
+		<!--
+		<members>flowRedirectController</members>
+		<members>flowRedirectControllerTest</members>
+		-->
+		<name>ApexClass</name>
+	</types>
+	<types>
+		<!-- 
+		<members>Accumulation__c</members> 
+		<members>Facultative_Share__c</members>
+		<members>Aswata_Survey__c</members>
+		<members>Transaction_Data__c</members>
+		-->
+		<members>Error_Log__c</members>
+		<name>CustomTab</name>
+	</types>
+	<types>
+		<members>Endpoint_Header_List__mdt-Endpoint Header List Layout</members>
+		<members>Endpoint_Header__mdt-Endpoint Header Layout</members>
+		<members>Endpoint__mdt-Endpoint Layout</members>
+		<members>Error_Log__c-Error Log Layout</members>
+		<!-- <members>InsurancePolicy-Insurance Policy Layout</members> -->
+		<members>Upload_File_Mapping__mdt-Upload File Mapping Layout</members>
+		<name>Layout</name>
+	</types>
+	-->

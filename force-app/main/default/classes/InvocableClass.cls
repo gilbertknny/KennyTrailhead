@@ -11,7 +11,7 @@ public without sharing class InvocableClass {
                     batchRiskAssetCoverage(iv);
                 }
                 else if(iv.param=='UnderwritingApproval'){
-                    ClsUserLimit.userlimit ul = ClsUserLimit.getUserId(iv.sumInsured);
+                    ClsUserLimit.userlimit ul = ClsUserLimit.getUserId(iv.sumInsured,''); //AND BSN_ID__c = ‘201’
                     ov.userId = ul.userId;
                     listout.add(ov);
                 }
