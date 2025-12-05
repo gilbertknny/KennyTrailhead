@@ -5,7 +5,7 @@ import getSections from '@salesforce/apex/Aswata_Add_New_DetailAsset_Controller.
 import saveDetailAsset from '@salesforce/apex/Aswata_Add_New_DetailAsset_Controller.saveDetailAsset';
 import getDetailAssetData from '@salesforce/apex/Aswata_Add_New_DetailAsset_Controller.getDetailAssetData';
 import { getObjectInfo, getPicklistValuesByRecordType } from 'lightning/uiObjectInfoApi';
-import COB_FIELD from '@salesforce/schema/Asset.COB__c';
+// import COB_FIELD from '@salesforce/schema/Asset.COB__c';
 import OPPORTUNITY from '@salesforce/schema/Asset.Opportunity__c';
 import NAME_FIELD from '@salesforce/schema/Asset.Name';
 import RECORD_TYPE_FIELD from '@salesforce/schema/Asset.Record_Type__c';
@@ -56,12 +56,12 @@ export default class AddNewPolicyDetailInsured extends LightningElement {
     picklistReady = false;
     recordTypeValue = null;
     
-    @wire(getRecord, { recordId: '$recordId', fields: [NAME_FIELD,COB_FIELD, OPPORTUNITY] })
+    @wire(getRecord, { recordId: '$recordId', fields: [NAME_FIELD, OPPORTUNITY] })
     wiredOpportunity({ error, data }) {
         if (data) {
             console.log('Fetching COB data:', data);
-            this.cobValue = data.fields.COB__c.value;
-            this.cobLabel = data.fields.COB__c.displayValue;
+            // this.cobValue = data.fields.COB__c.value;
+            // this.cobLabel = data.fields.COB__c.displayValue;
             this.nameParent = data.fields.Name.value;
             this.opportunityId = data.fields.Opportunity__c.value;
             this.fetchActiveFields(this.cobValue);
