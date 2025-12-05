@@ -117,8 +117,50 @@ public class Aswata_TriggerHandler_Lead extends TriggerHandler {
 
     
     public override void beforeUpdate(){
-        for(Lead lead : (List<Lead>) Trigger.new) {
-           
+        List<Lead> leads = (List<Lead>) Trigger.new;
+
+        Set<Id> provinceIds = new Set<Id>();
+        Set<Id> cityIds = new Set<Id>();
+        Set<Id> addressIds = new Set<Id>();
+
+        for (Lead l : leads) {
+            if (l.Province__c != null) {
+                provinceIds.add(l.Province__c);
+            }
+            if (l.City__c != null) 
+            {
+                cityIds.add(l.City__c);
+            }
+            if (l.Address__c != null) 
+            {
+                addressIds.add(l.Address__c);
+            }
+        }
+
+        // Query parents
+        Map<Id, Schema.Location> provinceMap = new Map<Id, Schema.Location>(
+            [SELECT Id, Name FROM Location WHERE Id IN :provinceIds with SECURITY_ENFORCED]
+        );
+
+        Map<Id, Schema.Location> cityMap = new Map<Id, Schema.Location>(
+            [SELECT Id, Name FROM Location WHERE Id IN :cityIds with SECURITY_ENFORCED]
+        );
+
+        Map<Id, Schema.Location> addressMap = new Map<Id, Schema.Location>(
+            [SELECT Id, Address_Name__c FROM Location WHERE Id IN :addressIds with SECURITY_ENFORCED]
+        );
+
+        // Apply values
+        for (Lead l : leads) {
+            if (l.Province__c != null && provinceMap.containsKey(l.Province__c)) {
+                l.State = provinceMap.get(l.Province__c).Name;
+            }
+            if (l.City__c != null && cityMap.containsKey(l.City__c)) {
+                l.City = cityMap.get(l.City__c).Name;
+            }
+            if (l.Address__c != null && addressMap.containsKey(l.Address__c)) {
+                l.Street = addressMap.get(l.Address__c).Address_Name__c;
+            }
         }
     }
     
@@ -133,6 +175,7 @@ public class Aswata_TriggerHandler_Lead extends TriggerHandler {
         String accountId = '';
         for (Lead newLead : (List<Lead>) Trigger.new) {
             Lead oldLead = (Lead) Trigger.oldMap.get(newLead.Id);
+            
 
             // Collect Leads with changed Zip__c
             if (newLead.Zip__c != null && newLead.Zip__c != oldLead.Zip__c) {
