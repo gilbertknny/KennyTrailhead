@@ -658,13 +658,18 @@ public without sharing class ClsNewRequest {
         String opptyId;
         List<Contract> listct = [SELECT Id,SourceOpportunityId FROM Contract WHERE Id=:contractid];
         if(listct.size()>0){opptyId = listct[0].SourceOpportunityId; }
-        List<AggregateResult> listar = [SELECT Coverage_Name__c Id,Coverage_Name__r.Name Name
-                                        FROM InsurancePolicyCoverage 
-                                        WHERE Opportunity__c =: opptyId
-                                        AND Opportunity__c != NULL
-                                        AND Coverage_Name__r.Name != 'CASCO' WITH SECURITY_ENFORCED
-                                        GROUP BY Coverage_Name__r.Name,Coverage_Name__c 
-                                        ORDER BY Coverage_Name__r.Name ASC];
+        String strCategory = 'CASCO';
+        String strQuery = 'SELECT Coverage_Name__c Id,Coverage_Name__r.Name Name';
+        strQuery += ' FROM InsurancePolicyCoverage ';
+        strQuery += ' WHERE Opportunity__c =: opptyId ';
+        strQuery += ' AND Opportunity__c != NULL';
+        if(assetsection != null){strQuery += ' AND Asset__r.Section__c =: assetsection';}
+        if(assetcategory != null){strQuery += ' AND Asset__r.Category__c =: assetcategory';}
+        if(suminsured != null){strQuery += ' AND Sum_Insured_Min__c <=:suminsured AND Sum_Insured_Max__c >=:suminsured';}
+        strQuery += ' AND Coverage_Name__r.Name !=:strCategory'; 
+        strQuery += ' GROUP BY Coverage_Name__r.Name,Coverage_Name__c'; 
+        strQuery += ' ORDER BY Coverage_Name__r.Name ASC'; 
+        List<AggregateResult> listar = Database.query(strQuery);
         for(AggregateResult ar : listar){
             values.put((String)ar.get('Id'),(String)ar.get('Name'));
         }
@@ -915,6 +920,7 @@ public without sharing class ClsNewRequest {
                 asset1.Opportunity__c = opp.Id;
                 asset1.Name = riskName;
                 asset1.Risk_ID__c = '1';
+                asset1.risk_detail_id__c = 1;
                 asset1.ParentId = at1.Id;
                 if(rate != null){asset1.Exchange_Rate__c = rate;}
                 if(opty.curr != null){ asset1.Currency__c = opty.curr; }
@@ -1146,6 +1152,7 @@ public without sharing class ClsNewRequest {
                     asset2.Opportunity__c = opp2.Id;
                     asset2.Name = riskName2;
                     asset2.Risk_ID__c = '1';
+                    asset2.risk_detail_id__c = 1;
                     asset2.ParentId = at2.Id;
                     if(rate2 != null){asset2.Exchange_Rate__c = rate2;}
                     if(opty.curr != null){ asset2.Currency__c = opty.curr;}
@@ -1354,9 +1361,10 @@ public without sharing class ClsNewRequest {
                 if(recordIP != null){
                     List<InsurancePolicyCoverage> listISP = new List<InsurancePolicyCoverage>();
                     List<Object> listAsset = (List<Object>) dataMap.get('asset1');
+                    Integer iAsset = 1;
                     for(Object obj : listAsset){
                         Map<String,Object> mapObj = (Map<String, Object>)obj;
-                        Asset at = createAsset(mapObj,strRTAsset,opp.Id,riskName,at1.Id);
+                        Asset at = createAsset(mapObj,strRTAsset,opp.Id,riskName,at1.Id,iAsset);
                         Database.SaveResult sr = Database.insert(at);
                         //COVERAGE
                         List<Object> listCoverage = (List<Object>)mapObj.get('coverage');
@@ -1368,6 +1376,7 @@ public without sharing class ClsNewRequest {
                             iSP.Opportunity__c = opp.Id;
                             listISP.add(iSP);
                         }
+                        iAsset++;
                     }
                     if(listISP.size()>0){ List<Database.SaveResult> listsr = Database.insert(listISP); }
                 }
@@ -1520,7 +1529,7 @@ public without sharing class ClsNewRequest {
         return result;
     }
     
-    public static Asset createAsset(Map<String,Object> mapObj,String strRTAsset,String oppId,String riskName,String parentId){
+    public static Asset createAsset(Map<String,Object> mapObj,String strRTAsset,String oppId,String riskName,String parentId,Integer i){
         system.debug('mapObj:'+mapObj);
         String assetSectionId = (String)mapObj.get('assetSectionId');
         String assetCategoryId = (String)mapObj.get('assetCategoryId');
@@ -1534,6 +1543,7 @@ public without sharing class ClsNewRequest {
         at.Opportunity__c = oppId;
         at.Name = riskName;
         at.Risk_ID__c = '1';
+        at.risk_detail_id__c = i;
         at.ParentId = parentId;
         if(rate != null){at.Exchange_Rate__c = rate;}
         if(currencyId != null){ at.Currency__c = currencyId;}
