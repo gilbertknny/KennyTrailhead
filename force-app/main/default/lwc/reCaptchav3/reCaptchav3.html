@@ -1,0 +1,24 @@
+<template>
+    <iframe src={navigateTo} name="captchaFrame" height="80" width="300" style="max-height: 70px !important;"></iframe>
+
+    <template if:true={resultData}>
+        <div class="slds-box slds-m-top_small" style="display: none;">
+            <p><strong>Success:</strong> {resultData.success}</p>
+            <template if:true={resultData.score}>
+                <p><strong>Score:</strong> {resultData.score}</p>
+            </template>
+            <template if:true={resultData.action}>
+                <p><strong>Action:</strong> {resultData.action}</p>
+            </template>
+            <template if:true={resultData.challenge_ts}>
+                <p><strong>Timestamp:</strong> {resultData.challenge_ts}</p>
+            </template>
+            <template if:true={resultData.hostname}>
+                <p><strong>Hostname:</strong> {resultData.hostname}</p>
+            </template>
+            <template if:true={resultData.errorCodes}>
+                <p><strong>Error Codes:</strong> {resultData.errorCodes}</p>
+            </template>
+        </div>
+    </template>
+</template>

@@ -12,7 +12,7 @@ import RECORD_TYPE_FIELD from '@salesforce/schema/Asset.Record_Type__c';
 import { getRecord } from 'lightning/uiRecordApi';
 import getRecordTypeIdByCob from '@salesforce/apex/Aswata_Add_New_Asset_Controller.getRecordTypeIdByCob';
 import { CloseActionScreenEvent } from 'lightning/actions';
-import { NavigationMixin } from 'lightning/navigation';
+// import { NavigationMixin } from 'lightning/navigation';
 
 export default class AddNewPolicyDetailInsured extends LightningElement {
     @api objectName = 'Asset';

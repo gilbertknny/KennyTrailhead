@@ -18,9 +18,9 @@ public without sharing class Aswata_Coverage_Data_301 {
      */
     public static List<InsurancePolicyCoverage> coverageByAssetCategory(List<InsurancePolicyCoverage> listCoverage,Asset risk,List<String> idParentCoverage){
         Decimal counter = 1;
-        // if((String)risk.COB__c != '301'){
-        //     return listCoverage;
-        // }
+        if((String)risk.COB__c != '301'){
+            return listCoverage;
+        }
         singleComposite = 'false';
         List<String> listCategoryId = new List<String>();
         List<Asset> getByParentId = [

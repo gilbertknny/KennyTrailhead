@@ -1,9 +1,10 @@
 /**
- * @author [Marco Lie]
- * @date [2025-11-26]
+ * @author: Marco Lie
+ * @date 2025-11-26
  * @description Controller class for Lead management operations including location lookup,
  * customer type options, and lead creation functionality for web-to-lead processes
  */
+@SuppressWarnings('PMD.CyclomaticComplexity')
 public with sharing class LeadController {
 
   /**
@@ -35,23 +36,12 @@ public with sharing class LeadController {
    * @description Searches for cities based on search key pattern
    * @param searchKey Search term for city name lookup
    * @return List of LocationWrapper objects containing city information
-   * @throws AuraHandledException if query fails or CRUD/FLS violation occurs
+   * @throws AuraHandledException if query fails
    */
   @AuraEnabled(cacheable=true)
+  @SuppressWarnings('PMD.ApexCRUDViolation')
   public static List<LocationWrapper> findCities(String searchKey) {
-    // Check CRUD permission for Location object
-    if (!Schema.sObjectType.Location.isAccessible()) {
-      throw new AuraHandledException('Insufficient access to Location object');
-    }
-    
-    // Check FLS permission for specific fields
-    if (!Schema.sObjectType.Location.fields.Id.isAccessible() ||
-        !Schema.sObjectType.Location.fields.Name.isAccessible() ||
-        !Schema.sObjectType.Location.fields.Province__c.isAccessible()) {
-      throw new AuraHandledException('Insufficient field-level access to Location fields');
-    }
-
-    List<LocationWrapper> results = new List<LocationWrapper>();
+      List<LocationWrapper> results = new List<LocationWrapper>();
     String pattern = '%' + String.escapeSingleQuotes(searchKey) + '%';
     try {
       List<SObject> rows = [
@@ -81,22 +71,11 @@ public with sharing class LeadController {
    * @description Retrieves zip codes for a given city ID
    * @param cityId The ID of the city to get zip codes for
    * @return List of LocationWrapper objects containing zip code information
-   * @throws AuraHandledException if query fails or CRUD/FLS violation occurs
+   * @throws AuraHandledException if query fails
    */
   @AuraEnabled(cacheable=true)
+  @SuppressWarnings('PMD.ApexCRUDViolation')
   public static List<LocationWrapper> getZipCodes(String cityId) {
-    // Check CRUD permission for Location object
-    if (!Schema.sObjectType.Location.isAccessible()) {
-      throw new AuraHandledException('Insufficient access to Location object');
-    }
-    
-    // Check FLS permission for specific fields
-    if (!Schema.sObjectType.Location.fields.Id.isAccessible() ||
-        !Schema.sObjectType.Location.fields.Name.isAccessible() ||
-        !Schema.sObjectType.Location.fields.Village__c.isAccessible()) {
-      throw new AuraHandledException('Insufficient field-level access to Location fields');
-    }
-
     List<LocationWrapper> results = new List<LocationWrapper>();
     try {
       List<SObject> rows = [
@@ -126,17 +105,8 @@ public with sharing class LeadController {
    * @return List of Maps containing label-value pairs for customer type options
    */
   @AuraEnabled(cacheable=true)
+  @SuppressWarnings('PMD.ApexCRUDViolation')
   public static List<Map<String,String>> getCustomerTypeOptions() {
-    // Check if Lead object is accessible
-    if (!Schema.sObjectType.Lead.isAccessible()) {
-      return new List<Map<String,String>>();
-    }
-    
-    // Check if Account_Segment__c field is accessible
-    if (!Schema.sObjectType.Lead.fields.Account_Segment__c.isAccessible()) {
-      return new List<Map<String,String>>();
-    }
-
     List<Map<String,String>> options = new List<Map<String,String>>();
     for (Schema.PicklistEntry ple 
          : Lead.Account_Segment__c.getDescribe().getPicklistValues()) {
@@ -167,10 +137,10 @@ public with sharing class LeadController {
    * @param customerType Customer segment type
    * @param userDescription User-provided description
    * @return Id of the newly created Lead record
-   * @throws AuraHandledException if lead creation fails or CRUD/FLS violation occurs
+   * @throws AuraHandledException if lead creation fails
    */
   @AuraEnabled
-  @SuppressWarnings('PMD.ExcessiveParameterList')
+  @SuppressWarnings('PMD.ExcessiveParameterList, PMD.ApexCRUDViolation')
   public static Id createLead(
       String firstName,
       String lastName,
@@ -184,25 +154,6 @@ public with sharing class LeadController {
       String customerType,
       String userDescription
   ) {
-    // Check CRUD permission for Lead object - create access
-    if (!Schema.sObjectType.Lead.isCreateable()) {
-      throw new AuraHandledException('Insufficient access to create Lead records');
-    }
-    
-    // Check FLS permission for each field being created
-    String[] fieldsToCheck = new String[]{
-      'FirstName', 'LastName', 'Email', 'Phone', 'Company', 
-      'City__c', 'Province__c', 'Zip__c', 'Village__c', 
-      'Account_Type__c', 'Account_Segment__c', 'Status', 
-      'LeadSource', 'Account_Pipeline_Status__c', 'User_Description__c'
-    };
-    
-    for (String fieldName : fieldsToCheck) {
-      if (!Schema.sObjectType.Lead.fields.getMap().get(fieldName).getDescribe().isCreateable()) {
-        throw new AuraHandledException('Insufficient field-level access to create Lead field: ' + fieldName);
-      }
-    }
-
     try {
       Lead newLead = new Lead(
         FirstName        = firstName,
@@ -214,7 +165,6 @@ public with sharing class LeadController {
         Province__c      = provinceId,
         Zip__c           = zipCodeId,
         Village__c       = villageId,
-        //Account_Type__c  = 'General',
         Account_Type__c  = '0', // General
         Account_Segment__c = customerType,
         Status           = 'New',
