@@ -1,11 +1,11 @@
 <template>
-  <!-- Full-page background with direct static resource path -->
-  <div class="page-container" style={backgroundStyle}>
+  <!-- Full-page background -->
+  <div class="page-container">
 
     <!-- Logo header -->
     <div class="logo-container">
       <img
-        src={aswataLogo}
+        src="https://www.aswata.co.id/images/logo.png"
         alt="Aswata Logo"
         class="logo"
       />
@@ -62,7 +62,7 @@
 
           <!-- City lookup -->
           <div class="slds-form-element">
-            <label class="slds-form-element__label" for="cityLookup">City</label>
+            <label class="slds-form-element__label" for="cityLookup">Nama Kota</label>
             <div class="slds-form-element__control">
               <input
                 data-id="cityLookup"
@@ -143,6 +143,28 @@
             onchange={handleInputChange}
           ></lightning-textarea>
 
+          <!-- CAPTCHA Section -->
+          <div class="captcha-section slds-m-top_large slds-p-around_medium slds-border_top" style="max-height: 150px !important;">
+            <h3 class="slds-text-heading_small slds-m-bottom_small">Captcha Verification</h3>
+            <c-re-captchav3 oncaptchaverified={handleCaptchaVerified}></c-re-captchav3>
+            
+            <!-- CAPTCHA Status -->
+            <template if:true={isCaptchaVerified}>
+              <div class="slds-m-top_small slds-text-color_success" style="display: none;">
+                <lightning-icon icon-name="utility:check" size="x-small"></lightning-icon>
+                CAPTCHA verified successfully
+              </div>
+            </template>
+            
+            <template if:true={captchaError}>
+              <div class="slds-m-top_small slds-text-color_error" style="display: none;">
+                <lightning-icon icon-name="utility:error" size="x-small"></lightning-icon>
+                {captchaError}
+              </div>
+            </template>
+          </div>
+
+          <!-- Submit Button -->
           <div class="slds-m-top_medium">
             <lightning-button
               variant="brand"
@@ -150,6 +172,14 @@
               onclick={handleSubmit}
               disabled={isButtonDisabled}
             ></lightning-button>
+            
+            <!-- Loading indicator -->
+            <template if:true={isSubmitting}>
+              <div class="slds-m-top_small">
+                <lightning-spinner alternative-text="Submitting" size="small"></lightning-spinner>
+                <span class="slds-m-left_small">Submitting form...</span>
+              </div>
+            </template>
           </div>
         </template>
 
@@ -157,21 +187,26 @@
         <template if:true={isSubmitted}>
           <div class="thank-you-container">
             <img
-              src={aswataLogo}
+              src="https://www.aswata.co.id/images/logo.png"
               alt="Aswata Logo"
               class="logo-small"
             />
-            <p class="thank-you-text">
+            <p class="thank-you-text" style="font-size: 16px; padding-top: 20px;">
               ✅ Terima kasih! Data Anda telah kami terima dan akan segera menghubungi Anda dalam waktu dekat.
             </p>
           </div>
         </template>
 
         <!-- Error message -->
-        <!-- commented error detail. not visible for user
         <template if:true={error}>
-          <p class="slds-text-color_error">{error}</p>
-        </template> -->
+          <div class="slds-m-top_medium slds-notify slds-notify_alert slds-theme_error" role="alert">
+            <span class="slds-assistive-text">Error</span>
+            <span class="slds-icon_container slds-icon-utility-error slds-m-right_x-small" title="Error">
+              <lightning-icon icon-name="utility:error" size="x-small"></lightning-icon>
+            </span>
+            <h2>{error}</h2>
+          </div>
+        </template>
 
       </div>
     </lightning-card>

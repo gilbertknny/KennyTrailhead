@@ -1,7 +1,7 @@
 /**
  * @description       : Class for create new Coverage 301
  * @author            : Ahmad Yazid Munif
- * @last modified on  : 12-03-2025
+ * @last modified on  : 12-05-2025
  * @last modified by  : Ahmad Yazid Munif
 **/
 public without sharing class Aswata_Coverage_Data_301 {
@@ -17,13 +17,10 @@ public without sharing class Aswata_Coverage_Data_301 {
      * @return InsurancePolicyCoverage
      */
     public static List<InsurancePolicyCoverage> coverageByAssetCategory(List<InsurancePolicyCoverage> listCoverage,Asset risk,List<String> idParentCoverage){
-        // System.debug('### AWT risk.COB__c : '+risk.COB__c);
         Decimal counter = 1;
-        // Integer lastIndex = listCoverage.size() - 1;
-        // Decimal counter = listCoverage[lastIndex].cov_tahun_id__c;
-        if((String)risk.COB__c != '301'){
-            return listCoverage;
-        }
+        // if((String)risk.COB__c != '301'){
+        //     return listCoverage;
+        // }
         singleComposite = 'false';
         List<String> listCategoryId = new List<String>();
         List<Asset> getByParentId = [
@@ -41,14 +38,14 @@ public without sharing class Aswata_Coverage_Data_301 {
         }
         Map<String, InsurancePolicyCoverage> coverageMap = generateCoverageMap(listCoverage);
         List<String> listCovId = generateListCoverageId(idParentCoverage,listCoverage);
-        System.debug('### AWT coverageMap : '+coverageMap);
-        System.debug('### AWT listCategoryId : '+listCategoryId);
-        System.debug('### AWT listCovId : '+listCovId);
+        // System.debug('### AWT coverageMap : '+coverageMap);
+        // System.debug('### AWT listCategoryId : '+listCategoryId);
+        // System.debug('### AWT listCovId : '+listCovId);
         Map<String, Master_Data__c> mdCoverage301 = generateMasterDataCoverage(listCategoryId,listCovId);
         if(mdCoverage301 == null){
             return listCoverage;
         }
-        System.debug('### AWT mdCoverage301 : '+mdCoverage301);
+        // System.debug('### AWT mdCoverage301 : '+mdCoverage301);
         for(Asset assetItem : getByParentId){
             if(assetItem.Category__c == null){
                 continue;
@@ -56,12 +53,7 @@ public without sharing class Aswata_Coverage_Data_301 {
             Master_Data__c matchingMasterData = mdCoverage301.get(assetItem.Category__c);
             if (matchingMasterData != null) {
                 InsurancePolicyCoverage referenceCov = getReferenceCoverage(matchingMasterData, listCoverage, coverageMap);
-                System.debug('### AWT referenceCov : '+referenceCov);
-                // if(singleComposite == 'true'){
-                //     referenceCov = listCoverage[0];
-                // }else{
-                //     referenceCov = coverageMap.get(matchingMasterData.Coverage_301__c);
-                // }
+                // System.debug('### AWT referenceCov : '+referenceCov);
                 InsurancePolicyCoverage newCov = referenceCov.clone(false, true, false, false);
                 newCov.CoverageName = matchingMasterData.Name;
                 newCov.Coverage_Name__c = matchingMasterData.Id;
@@ -90,7 +82,7 @@ public without sharing class Aswata_Coverage_Data_301 {
         if (singleComposite == 'true') {
             return listCoverage[0];
         } else {
-            System.debug('### AWT matchingMasterData.Coverage_301__c : '+matchingMasterData.Coverage_301__c);
+            // System.debug('### AWT matchingMasterData.Coverage_301__c : '+matchingMasterData.Coverage_301__c);
             return coverageMap.get(matchingMasterData.Coverage_301__c);
         }
     }
@@ -115,15 +107,6 @@ public without sharing class Aswata_Coverage_Data_301 {
             counter = durationInYears;
         }
         List<InsurancePolicyCoverage> coverageToDuplicate = newListCoverage.clone();
-        // List<Id> coverageNameId = new List<Id>();
-        // for (InsurancePolicyCoverage originalCoverage : newListCoverage) {
-        //     coverageNameId.add(originalCoverage.Coverage_Name__c);
-        // }
-        // List<Master_Data__c> check301Cov = [
-        //     SELECT Id, Coverage_301__c FROM Master_Data__c
-        //     WHERE Coverage_301__c IN :coverageNameId
-        // ];
-        // System.debug('### AWT coverageNameId '+coverageNameId);
         List<String> check301Cov = generateListMasterCov301(newListCoverage);
         for (Integer i = 2; i <= counter; i++) {
             for (InsurancePolicyCoverage originalCoverage : coverageToDuplicate) {
@@ -132,18 +115,14 @@ public without sharing class Aswata_Coverage_Data_301 {
                     duplicatedCoverage.cov_tahun_id__c = i;
                     newListCoverage.add(duplicatedCoverage);
                 }
-                // InsurancePolicyCoverage duplicatedCoverage = originalCoverage.clone(false, true, false, false);
-                // duplicatedCoverage.cov_tahun_id__c = i;
-                // newListCoverage.add(duplicatedCoverage);
             }
         }
         return newListCoverage;
     }
     /**
-     * @description function for get masterData Coverage 301
-     * @param listCategoryId
-     * @param listCovId
-     * @return Map<String, Master_Data__c>
+     * @description function for calculate Years Period
+     * @param risk
+     * @return Integer
      */
     public static Integer calculationYears(Asset risk){
         Date startDate = risk.Opportunity__r.Start_Date_Periode__c;
@@ -160,35 +139,24 @@ public without sharing class Aswata_Coverage_Data_301 {
         if (extraMonths > 5) {
             durationInYears += 1;
         }
-        System.debug('### AWT durationInYears : '+durationInYears+' ExtraMonth :'+extraMonths);
-        // Integer totalDays = startDate.daysBetween(endDate);
-        // Decimal totalDaysDecimal = (Decimal)totalDays;
-        // Decimal durationInYears = totalDaysDecimal / 365;
-        // Integer floorYears = (Integer)Math.ceil(durationInYears);
-        // System.debug('### AWT durationInYears : '+durationInYears+' => '+floorYears);
-        // Integer floorYears = durationInYears.intValue();
         return durationInYears;
     }
     /**
      * @description function for get masterData Coverage 301
-     * @param listCategoryId
-     * @param listCovId
-     * @return Map<String, Master_Data__c>
+     * @param newListCoverage
+     * @return List<String>
      */
     public static List<String> generateListMasterCov301(List<InsurancePolicyCoverage> newListCoverage){
         List<Id> coverageNameId = new List<Id>();
         for (InsurancePolicyCoverage originalCoverage : newListCoverage) {
             coverageNameId.add(originalCoverage.Coverage_Name__c);
         }
-        // List<Master_Data__c> check301Cov = [
-        //     SELECT Id, Coverage_301__c FROM Master_Data__c
-        //     WHERE Coverage_301__c IN :coverageNameId
-        // ];
         List<Master_Data__c> check301Cov = [
             SELECT Id,Name,COVERAGE_REF_ID__c,
             PARENT_COVERAGE_ID__c,Coverage_301__c,Asset_Category__c
             FROM Master_Data__c
             WHERE Id IN :coverageNameId AND PARENT_COVERAGE_ID__c = '0'
+            WITH SECURITY_ENFORCED
         ];
         Set<String> mdCoverage301Set = new Set<String>();
         for (Master_Data__c mdCov301 : check301Cov) {
@@ -276,10 +244,10 @@ public without sharing class Aswata_Coverage_Data_301 {
         if (countCov > 0) {
             Decimal averageRate = sumOfRate / countCov;
             Decimal averageCommision = sumOfCommision / countCov;
-            System.debug('### AWT coverageList'+coverageList.size());
-            System.debug('### AWT sumOfRate'+sumOfRate+' - '+countCov);
-            System.debug('### AWT averageRate'+averageRate+' - '+averageCommision);
-            System.debug('### AWT updateRisk'+updateRisk.Model__c);
+            // System.debug('### AWT coverageList'+coverageList.size());
+            // System.debug('### AWT sumOfRate'+sumOfRate+' - '+countCov);
+            // System.debug('### AWT averageRate'+averageRate+' - '+averageCommision);
+            // System.debug('### AWT updateRisk'+updateRisk.Model__c);
             updateRisk.Rate_All_Coverages__c  = averageRate;
             updateRisk.Commission_All_Coverages__c = averageCommision;
             return updateRisk;
