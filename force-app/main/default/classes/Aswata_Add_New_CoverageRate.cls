@@ -131,7 +131,7 @@ public with sharing class Aswata_Add_New_CoverageRate {
             // }
             Asset risk = [
                 SELECT Id, Amount_Insured__c, Opportunity__c,
-                // COB__c,
+                COB__c,
                 Opportunity__r.Busreq_ID__c,Model__c,
                 Opportunity__r.Start_Date_Periode__c, Opportunity__r.End_Date_Periode__c
                 FROM Asset

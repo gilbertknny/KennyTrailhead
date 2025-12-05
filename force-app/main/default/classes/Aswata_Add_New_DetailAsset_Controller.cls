@@ -1,7 +1,7 @@
 /**
  * @description       : Controller for LWC Detail Asset
  * @author            : Ahmad Yazid Munif
- * @last modified on  : 11-25-2025
+ * @last modified on  : 12-05-2025
  * @last modified by  : Ahmad Yazid Munif
 **/
 public with sharing class Aswata_Add_New_DetailAsset_Controller {
@@ -249,7 +249,7 @@ public with sharing class Aswata_Add_New_DetailAsset_Controller {
                 Indemnity_Type__c,
                 Amount_Insured__c,
                 ParentId,
-                //Parent.COB__c,
+                Parent.COB__c,
                 Category__c,
                 Section__c,
                 Section__r.Name,
@@ -275,7 +275,7 @@ public with sharing class Aswata_Add_New_DetailAsset_Controller {
         result.put('Indemnity_Type__c', detailAsset.Indemnity_Type__c);
         result.put('Amount_Insured__c', detailAsset.Amount_Insured__c);
         result.put('Parent_Asset__c', detailAsset.ParentId);
-        //result.put('COB__c', detailAsset.Parent.COB__c);
+        result.put('COB__c', detailAsset.Parent.COB__c);
         result.put('Category__c', detailAsset.Category__c);
         result.put('Section__c', detailAsset.Section__c);
         result.put('Section_Name__c', detailAsset.Section__r.Name);
