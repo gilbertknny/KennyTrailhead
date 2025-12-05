@@ -1,5 +1,5 @@
 @IsTest(SeeAllData=true)
-@SuppressWarnings('PMD.ApexUnitTestShouldNotUseSeeAllDataTrue')
+@SuppressWarnings('PMD.ApexUnitTestShouldNotUseSeeAllDataTrue, PMD.ApexUnitTestClassShouldHaveRunAs')
 public class LeadControllerTest {
 
     @IsTest
