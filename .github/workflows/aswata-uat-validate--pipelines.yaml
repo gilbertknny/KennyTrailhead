@@ -121,7 +121,7 @@ jobs:
             sf project deploy start --dry-run --manifest package/package.xml --wait 1000 --target-org uat --verbose --ignore-conflicts
             DEPLOY_EXIT=$?
           else
-            sf project deploy start --dry-run --manifest package/package.xml --wait 1000 --target-org uat --verbose  --ignore-conflicts -l RunSpecifiedTests --runtests $APEX_CLASSES
+            sf project deploy start --dry-run --manifest package/package.xml --wait 1000 --target-org uat --verbose  --ignore-conflicts -l RunSpecifiedTests --tests $APEX_CLASSES
             DEPLOY_EXIT=$?
           fi
           set -e
