@@ -16,10 +16,10 @@
                     </lightning-combobox> 
                 </div>
                 <div class="slds-col slds-size_1-of-2">
-                    <lightning-input type="number" label="Proposed Rate" value={proposedFixedAmount} onchange={handleProposedFixedAmount} required></lightning-input>
+                    <lightning-input type="number" label="Proposed Rate" value={proposedFixedAmount} onchange={handleProposedFixedAmount} disabled></lightning-input>
                 </div>
                 <div class="slds-col slds-size_1-of-2">
-                    <lightning-input type="number" formatter="percent-fixed" step="0.0001" label="Deductible PCT (%)" value={deductiblePCT} onchange={handleDeductiblePCT} required></lightning-input>
+                    <lightning-input type="number" formatter="percent-fixed" step="0.0001" label="Deductible PCT (%)" value={deductiblePCT} onchange={handleDeductiblePCT} disabled></lightning-input>
                 </div>
                 <div class="slds-col slds-size_1-of-2">
                     <lightning-combobox 
@@ -27,7 +27,7 @@
                         options={deductible}
                         onchange={handleDeductible}
                         value={deductibleId} 
-                        required>
+                        disabled>
                     </lightning-combobox> 
                 </div>
                 <div class="slds-col slds-size_1-of-2">
@@ -36,29 +36,29 @@
                         options={minimumCur}
                         onchange={handleMinimumCurId}
                         value={minimumCurId} 
-                        required>
+                        disabled>
                     </lightning-combobox> 
                 </div>
                 <div class="slds-col slds-size_1-of-2">
-                    <lightning-input type="number" label="Minimum Amount" value={minimumAmount} onchange={handleMinimumAmount} required></lightning-input>
+                    <lightning-input type="number" label="Minimum Amount" value={minimumAmount} onchange={handleMinimumAmount} disabled></lightning-input>
                 </div>
                 <div class="slds-col slds-size_1-of-2">
-                    <lightning-input type="number" formatter="percent-fixed" step="0.0001" label="Banks Fee (%)" value={banksFee} onchange={handleBanksFee} required></lightning-input>
+                    <lightning-input type="number" formatter="percent-fixed" step="0.0001" label="Banks Fee (%)" value={banksFee} onchange={handleBanksFee} disabled></lightning-input>
                 </div>
                 <div class="slds-col slds-size_1-of-2">
-                    <lightning-input type="number" formatter="percent-fixed" step="0.0001" label="Agent Comission (%)" value={agentComission} onchange={handleAgentComission} required></lightning-input>
+                    <lightning-input type="number" formatter="percent-fixed" step="0.0001" label="Agent Comission (%)" value={agentComission} onchange={handleAgentComission} disabled></lightning-input>
                 </div>
                 <div class="slds-col slds-size_1-of-2">
-                    <lightning-input type="number" formatter="percent-fixed" step="0.0001" label="Broker Comission (%)" value={brokerComission} onchange={handleBrokerComission} required></lightning-input>
+                    <lightning-input type="number" formatter="percent-fixed" step="0.0001" label="Broker Comission (%)" value={brokerComission} onchange={handleBrokerComission} disabled></lightning-input>
                 </div>
                 <div class="slds-col slds-size_1-of-2">
-                    <lightning-input type="number" formatter="percent-fixed" step="0.0001" label="Commision (%)" value={generalRPremiumPCT} onchange={handleGeneralRPremiumPCT} required></lightning-input>
+                    <lightning-input type="number" formatter="percent-fixed" step="0.0001" label="Commision (%)" value={generalRPremiumPCT} onchange={handleGeneralRPremiumPCT} disabled></lightning-input>
                 </div>
                 <div class="slds-col slds-size_1-of-2">
-                    <lightning-input type="number" formatter="percent-fixed" step="0.0001" label="Overiding (%)" value={overdngComission} onchange={handleOverdngComission} required></lightning-input>
+                    <lightning-input type="number" formatter="percent-fixed" step="0.0001" label="Overiding (%)" value={overdngComission} onchange={handleOverdngComission} disabled></lightning-input>
                 </div>
                 <div class="slds-col slds-size_1-of-2">
-                    <lightning-input type="number" label="Max Person" value={maxPerson} onchange={handleMaxPerson} required></lightning-input>
+                    <lightning-input type="number" label="Max Person" value={maxPerson} onchange={handleMaxPerson} disabled></lightning-input>
                 </div>
             </div>
         </div>

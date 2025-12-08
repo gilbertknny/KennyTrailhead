@@ -121,7 +121,9 @@ jobs:
             sf project deploy start --dry-run --manifest package/package.xml --wait 1000 --target-org uat --verbose --ignore-conflicts
             DEPLOY_EXIT=$?
           else
-            sf project deploy start --dry-run --manifest package/package.xml --wait 1000 --target-org uat --verbose  --ignore-conflicts -l RunLocalTests
+            #sf project deploy start --dry-run --manifest package/package.xml --wait 1000 --target-org uat --verbose  --ignore-conflicts -l RunSpecifiedTests --tests $APEX_CLASSES
+            #DEPLOY_EXIT=$?
+            sf project deploy start --dry-run --manifest package/package.xml --wait 1000 --target-org uat --verbose  --ignore-conflicts -l RunSpecifiedTests --tests Aswata_Add_New_CoverageRate_Test Aswata_Add_New_DetailAsset_Test Aswata_Async_Asset_Test Aswata_QuotationSlip_Test Aswata_Treaty_Distribution_Test Aswata_TriggerHandler_Asset_Test ClsNewRequest_Test ClsPolicyDistribution_Test ClsUserLimit_Test LeadControllerTest ReCaptchaControllerTest InvocableClass_Test Aswata_Lead_Distribution_Test VlocityMapping_Test Aswata_TriggerHandler_Lead_Test
             DEPLOY_EXIT=$?
           fi
           set -e

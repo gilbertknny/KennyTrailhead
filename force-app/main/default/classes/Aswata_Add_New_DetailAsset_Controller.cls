@@ -1,7 +1,7 @@
 /**
  * @description       : Controller for LWC Detail Asset
  * @author            : Ahmad Yazid Munif
- * @last modified on  : 11-25-2025
+ * @last modified on  : 12-05-2025
  * @last modified by  : Ahmad Yazid Munif
 **/
 public with sharing class Aswata_Add_New_DetailAsset_Controller {

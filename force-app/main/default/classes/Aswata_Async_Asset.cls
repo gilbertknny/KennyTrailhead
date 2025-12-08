@@ -3,15 +3,13 @@
  * @Author: Baha Williams Azael 
  * @Class: Aswata_Async_Asset
  * @Description: Class untuk menghitung total amount di Parent Asset berdasarkan sum dari Child Assets
- * @Last Modified time: 2025-11-05 14:27:17 
+ * @Last Modified time: 2025-11-13 16:30:00
  */
 
 public with sharing class Aswata_Async_Asset {    
-    // Constants untuk Record Type Developer Names
     private static final String RT_RISK = 'Risk';
     private static final String RT_ASSET = 'Asset';
     
-    // Static cache untuk Record Type IDs (optional, untuk performance)
     private static Map<String, Id> recordTypeCache;
     
     /**
@@ -46,6 +44,10 @@ public with sharing class Aswata_Async_Asset {
      */
     @future
     public static void calculateParentAssetAmount(Set<Id> assetsId) {
+        calculateParentAssetAmount2(assetsId);
+    }
+    
+    public static void calculateParentAssetAmount2(Set<Id> assetsId) {
         try {
             // Validasi input
             if (assetsId == null || assetsId.isEmpty()) {
@@ -63,34 +65,32 @@ public with sharing class Aswata_Async_Asset {
             ];
             
             Set<Id> parentRiskIds = new Set<Id>();
-            Set<Id> opportunityIds = new Set<Id>(); // Track affected opportunities
+            Set<Id> opportunityIds = new Set<Id>();
             
             for (Asset rec : inputRecords) {
                 if (rec.RecordType.DeveloperName == RT_ASSET) {
-                    // This is an Asset - extract parent
                     if (rec.ParentId != null) {
                         parentRiskIds.add(rec.ParentId);
-                        // Also track the opportunity of this parent risk
                         if (rec.Parent.Opportunity__c != null) {
                             opportunityIds.add(rec.Parent.Opportunity__c);
                         }
                     }
                 } else if (rec.RecordType.DeveloperName == RT_RISK) {
-                    // This is already a Risk ID - add directly
                     parentRiskIds.add(rec.Id);
                 }
             }
             
             System.debug('Extracted ' + parentRiskIds.size() + ' parent risk IDs');
-            System.debug('Tracked ' + opportunityIds.size() + ' opportunity IDs');
+            System.debug('Tracked ' + opportunityIds.size() + ' opportunity IDs from input');
             
             if (parentRiskIds.isEmpty()) {
                 System.debug('No parent risks found');
                 return;
             }
-            
+
             List<Asset> childAssets = [
-                SELECT Id, Name, ParentId, Amount__c, Section__c, Category__c, RecordType.DeveloperName, Parent.Opportunity__c
+                SELECT Id, Name, ParentId, Amount_IDR_new__c, Section__c, Category__c, 
+                       RecordType.DeveloperName, Parent.Opportunity__c
                 FROM Asset 
                 WHERE ParentId IN :parentRiskIds
                 AND RecordType.DeveloperName = :RT_ASSET
@@ -105,12 +105,11 @@ public with sharing class Aswata_Async_Asset {
             }
             
             for (Asset child : childAssets) {
-                if (child.ParentId != null && child.Amount__c != null) {
+                if (child.ParentId != null && child.Amount_IDR_new__c != null) {
                     Decimal currentTotal = parentTotalAmountMap.get(child.ParentId);
-                    parentTotalAmountMap.put(child.ParentId, currentTotal + child.Amount__c);
-                    System.debug('Adding ' + child.Amount__c + ' from ' + child.Name + ' to parent ' + child.ParentId);
+                    parentTotalAmountMap.put(child.ParentId, currentTotal + child.Amount_IDR_new__c);
+                    System.debug('Adding ' + child.Amount_IDR_new__c + ' (Amount IDR) from ' + child.Name + ' to parent ' + child.ParentId);
                     
-                    // Track opportunity from child's parent
                     if (child.Parent.Opportunity__c != null) {
                         opportunityIds.add(child.Parent.Opportunity__c);
                     }
@@ -131,7 +130,6 @@ public with sharing class Aswata_Async_Asset {
                 Decimal totalAmount = parentTotalAmountMap.get(parent.Id);
                 Decimal oldAmount = parent.Amount_Insured__c;
                 
-                // Track opportunity
                 if (parent.Opportunity__c != null) {
                     opportunityIds.add(parent.Opportunity__c);
                 }
@@ -150,12 +148,14 @@ public with sharing class Aswata_Async_Asset {
                 System.debug('No parent risks needed update');
             }
             
-            // ========================================
-            // NOW UPDATE OPPORTUNITIES DIRECTLY
-            // ========================================
+            System.debug('Total tracked opportunity IDs: ' + opportunityIds.size());
+            System.debug('Opportunity IDs: ' + opportunityIds);
+            
             if (!opportunityIds.isEmpty()) {
-                System.debug('Also updating ' + opportunityIds.size() + ' opportunities');
+                System.debug('Calling updateOpportunityTotals for ' + opportunityIds.size() + ' opportunities');
                 updateOpportunityTotals(opportunityIds);
+            } else {
+                System.debug('No opportunity IDs to update!');
             }
         
         } catch (Exception e) {
@@ -172,12 +172,12 @@ public with sharing class Aswata_Async_Asset {
     private static void updateOpportunityTotals(Set<Id> opportunityIds) {
         try {
             if (opportunityIds == null || opportunityIds.isEmpty()) {
+                System.debug('updateOpportunityTotals: No opportunity IDs provided');
                 return;
             }
             
-            System.debug('Updating opportunity totals for ' + opportunityIds.size() + ' opportunities');
+            System.debug('updateOpportunityTotals: Processing ' + opportunityIds.size() + ' opportunities');
             
-            // Query all risks from opportunities
             List<Asset> allRisks = [
                 SELECT Id, Name, Opportunity__c, Amount_Insured__c, RecordType.DeveloperName
                 FROM Asset 
@@ -185,17 +185,14 @@ public with sharing class Aswata_Async_Asset {
                 AND RecordType.DeveloperName = :RT_RISK
             ];
             
-            System.debug('Found ' + allRisks.size() + ' risks for opportunity update');
+            System.debug('updateOpportunityTotals: Found ' + allRisks.size() + ' risks');
             
-            // Map untuk total per Opportunity
             Map<Id, Decimal> opportunityTotalMap = new Map<Id, Decimal>();
             
-            // Initialize
             for (Id oppId : opportunityIds) {
                 opportunityTotalMap.put(oppId, 0);
             }
             
-            // Calculate totals
             for (Asset risk : allRisks) {
                 if (risk.Opportunity__c != null && risk.Amount_Insured__c != null) {
                     Decimal currentTotal = opportunityTotalMap.get(risk.Opportunity__c);
@@ -204,14 +201,22 @@ public with sharing class Aswata_Async_Asset {
                 }
             }
             
-            // Query Opportunities
+            System.debug('Opportunity totals calculated: ' + opportunityTotalMap);
+            
             List<Opportunity> opportunitiesToUpdate = [
-                SELECT Id, Name, Total_Sum_Insured__c
+                SELECT Id, Name, Total_Sum_Insured__c, RecordType.Name
                 FROM Opportunity 
                 WHERE Id IN :opportunityIds
+                AND RecordType.Name = 'General'
             ];
             
-            // Update Opportunities
+            System.debug('Found ' + opportunitiesToUpdate.size() + ' opportunities with RecordType = General');
+            
+            if (opportunitiesToUpdate.size() < opportunityIds.size()) {
+                Integer skipped = opportunityIds.size() - opportunitiesToUpdate.size();
+                System.debug('Skipped ' + skipped + ' opportunities (RecordType != General)');
+            }
+            
             List<Opportunity> oppsToUpdate = new List<Opportunity>();
             for (Opportunity opp : opportunitiesToUpdate) {
                 Decimal totalAmount = opportunityTotalMap.get(opp.Id);
@@ -220,13 +225,15 @@ public with sharing class Aswata_Async_Asset {
                 if (oldAmount != totalAmount) {
                     opp.Total_Sum_Insured__c = totalAmount;
                     oppsToUpdate.add(opp);
-                    System.debug('  Updating Opportunity ' + opp.Name + ' Total_Sum_Insured__c from ' + oldAmount + ' to ' + totalAmount);
+                    System.debug('  Updating Opportunity ' + opp.Name + ' (RecordType: ' + opp.RecordType.Name + ') Total_Sum_Insured__c from ' + oldAmount + ' to ' + totalAmount);
                 }
             }
             
             if (!oppsToUpdate.isEmpty()) {
                 update oppsToUpdate;
-                System.debug('✓ Successfully updated Total_Sum_Insured__c for ' + oppsToUpdate.size() + ' opportunities');
+                System.debug('Successfully updated Total_Sum_Insured__c for ' + oppsToUpdate.size() + ' opportunities (RecordType = General)');
+            } else {
+                System.debug('No opportunities needed update (amounts unchanged or no General RecordType opportunities)');
             }
             
         } catch (Exception e) {
@@ -240,79 +247,77 @@ public with sharing class Aswata_Async_Asset {
      * Method ini akan find semua Risks di opportunity dan sum Amount_Insured__c mereka ke Opportunity.Total_Sum_Insured__c
      * @param opportunityIds Set of Opportunity IDs
      */
-    @future
-    public static void recalculateAssetsByOpportunity(Set<Id> opportunityIds) {
-        try {
-            // Validasi input
-            if (opportunityIds == null || opportunityIds.isEmpty()) {
-                System.debug('No opportunity IDs provided');
-                return;
-            }
+    // @future
+    // public static void recalculateAssetsByOpportunity(Set<Id> opportunityIds) {
+    //     try {
+    //         if (opportunityIds == null || opportunityIds.isEmpty()) {
+    //             System.debug('No opportunity IDs provided');
+    //             return;
+    //         }
             
-            System.debug('Starting recalculation for opportunities: ' + opportunityIds);
+    //         System.debug('Starting recalculation for opportunities: ' + opportunityIds);
             
-            // Query semua risks dari opportunity dengan Amount_Insured__c
-            List<Asset> allRisks = [
-                SELECT Id, Name, Opportunity__c, Amount_Insured__c, RecordType.DeveloperName
-                FROM Asset 
-                WHERE Opportunity__c IN :opportunityIds 
-                AND RecordType.DeveloperName = :RT_RISK
-            ];
+    //         List<Asset> allRisks = [
+    //             SELECT Id, Name, Opportunity__c, Amount_Insured__c, RecordType.DeveloperName
+    //             FROM Asset 
+    //             WHERE Opportunity__c IN :opportunityIds 
+    //             AND RecordType.DeveloperName = :RT_RISK
+    //         ];
             
-            System.debug('Found ' + allRisks.size() + ' risks in opportunities');
+    //         System.debug('Found ' + allRisks.size() + ' risks in opportunities');
             
-            // Map untuk menyimpan total Amount_Insured__c per Opportunity
-            Map<Id, Decimal> opportunityTotalMap = new Map<Id, Decimal>();
+    //         Map<Id, Decimal> opportunityTotalMap = new Map<Id, Decimal>();
             
-            // Inisialisasi dengan 0
-            for (Id oppId : opportunityIds) {
-                opportunityTotalMap.put(oppId, 0);
-            }
+    //         for (Id oppId : opportunityIds) {
+    //             opportunityTotalMap.put(oppId, 0);
+    //         }
             
-            // Hitung total Amount_Insured__c per Opportunity dari semua Risks
-            for (Asset risk : allRisks) {
-                if (risk.Opportunity__c != null && risk.Amount_Insured__c != null) {
-                    Decimal currentTotal = opportunityTotalMap.get(risk.Opportunity__c);
-                    opportunityTotalMap.put(risk.Opportunity__c, currentTotal + risk.Amount_Insured__c);
-                    System.debug('Adding ' + risk.Amount_Insured__c + ' from Risk ' + risk.Name + ' to Opportunity ' + risk.Opportunity__c);
-                }
-            }
+    //         for (Asset risk : allRisks) {
+    //             if (risk.Opportunity__c != null && risk.Amount_Insured__c != null) {
+    //                 Decimal currentTotal = opportunityTotalMap.get(risk.Opportunity__c);
+    //                 opportunityTotalMap.put(risk.Opportunity__c, currentTotal + risk.Amount_Insured__c);
+    //                 System.debug('Adding ' + risk.Amount_Insured__c + ' from Risk ' + risk.Name + ' to Opportunity ' + risk.Opportunity__c);
+    //             }
+    //         }
             
-            // Query Opportunities untuk update
-            List<Opportunity> opportunitiesToUpdate = [
-                SELECT Id, Name, Total_Sum_Insured__c
-                FROM Opportunity 
-                WHERE Id IN :opportunityIds
-            ];
+    //         List<Opportunity> opportunitiesToUpdate = [
+    //             SELECT Id, Name, Total_Sum_Insured__c, RecordType.Name
+    //             FROM Opportunity 
+    //             WHERE Id IN :opportunityIds
+    //             AND RecordType.Name = 'General'
+    //         ];
             
-            System.debug('Found ' + opportunitiesToUpdate.size() + ' opportunities to update');
+    //         System.debug('Found ' + opportunitiesToUpdate.size() + ' opportunities with RecordType = General');
             
-            // Update Opportunities
-            List<Opportunity> oppsToUpdate = new List<Opportunity>();
-            for (Opportunity opp : opportunitiesToUpdate) {
-                Decimal totalAmount = opportunityTotalMap.get(opp.Id);
-                Decimal oldAmount = opp.Total_Sum_Insured__c;
+    //         if (opportunitiesToUpdate.size() < opportunityIds.size()) {
+    //             Integer skipped = opportunityIds.size() - opportunitiesToUpdate.size();
+    //             System.debug('Skipped ' + skipped + ' opportunities (RecordType != General)');
+    //         }
+            
+    //         List<Opportunity> oppsToUpdate = new List<Opportunity>();
+    //         for (Opportunity opp : opportunitiesToUpdate) {
+    //             Decimal totalAmount = opportunityTotalMap.get(opp.Id);
+    //             Decimal oldAmount = opp.Total_Sum_Insured__c;
                 
-                if (oldAmount != totalAmount) {
-                    opp.Total_Sum_Insured__c = totalAmount;
-                    oppsToUpdate.add(opp);
-                    System.debug('Updating Opportunity ' + opp.Name + ' Total_Sum_Insured__c from ' + oldAmount + ' to ' + totalAmount);
-                }
-            }
+    //             if (oldAmount != totalAmount) {
+    //                 opp.Total_Sum_Insured__c = totalAmount;
+    //                 oppsToUpdate.add(opp);
+    //                 System.debug('Updating Opportunity ' + opp.Name + ' (RecordType: ' + opp.RecordType.Name + ') Total_Sum_Insured__c from ' + oldAmount + ' to ' + totalAmount);
+    //             }
+    //         }
             
-            // Perform DML
-            if (!oppsToUpdate.isEmpty()) {
-                update oppsToUpdate;
-                System.debug('Successfully updated Total_Sum_Insured__c for ' + oppsToUpdate.size() + ' opportunities');
-            } else {
-                System.debug('No opportunities needed update');
-            }
+    //         if (!oppsToUpdate.isEmpty()) {
+    //             update oppsToUpdate;
+    //             System.debug('Successfully updated Total_Sum_Insured__c for ' + oppsToUpdate.size() + ' opportunities (RecordType = General)');
+    //         } else {
+    //             System.debug('No opportunities needed update (amounts unchanged or no General RecordType opportunities)');
+    //         }
             
-        } catch (Exception e) {
-            System.debug(LoggingLevel.ERROR, 'Error in recalculateAssetsByOpportunity: ' + e.getMessage());
-            System.debug(LoggingLevel.ERROR, 'Stack trace: ' + e.getStackTraceString());
-        }
-    }
+    //     } catch (Exception e) {
+    //         System.debug(LoggingLevel.ERROR, 'Error in recalculateAssetsByOpportunity: ' + e.getMessage());
+    //         System.debug(LoggingLevel.ERROR, 'Stack trace: ' + e.getStackTraceString());
+    //     }
+    // }
     
     /**
      * Helper method untuk mendapatkan Parent Risk IDs dari Child Assets
@@ -328,7 +333,6 @@ public with sharing class Aswata_Async_Asset {
             return parentIds;
         }
         
-        // Query dengan filter RecordType = Asset untuk memastikan ini child assets
         List<Asset> childAssets = [
             SELECT Id, ParentId, RecordType.DeveloperName
             FROM Asset 

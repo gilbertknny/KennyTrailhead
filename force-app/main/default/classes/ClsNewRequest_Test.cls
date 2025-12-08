@@ -11,7 +11,7 @@ public class ClsNewRequest_Test {
         pd2.Name = '2';
         pd2.ProductCode = '2';
         pd2.Product_Line__c = pd.Id;
-        pd2.IsActive = true;
+        pd2.IsActive = true; 
         pd2.Type__c = 'Product Type';
         insert pd2;
         
@@ -134,7 +134,7 @@ public class ClsNewRequest_Test {
         ClsNewRequest.getContract(acc.Id);
         ClsNewRequest.getAssetSectionMOU(null);
         ClsNewRequest.getAssetCategoryMOU(null,null);
-        ClsNewRequest.getCoverage(null);
+        ClsNewRequest.getCoverage(null,null,null,null);
         ClsNewRequest.getCoverageDetail(null,null);
 
         List<String> listdata1 = new List<String>();

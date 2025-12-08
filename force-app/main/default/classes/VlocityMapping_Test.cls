@@ -31,6 +31,13 @@ private class VlocityMapping_Test {
 
         Contact c2 = new Contact(LastName = 'Doe', Contact_Person_ID__c = 'CP002');
         insert c2;
+
+        Master_Data__c mdc = new Master_Data__c(name = 'Category');
+        insert mdc;
+        Master_Data__c mds = new Master_Data__c(name = 'Section');
+        insert mds;
+        Master_Data__c md = new Master_Data__c(name = '201101',COVERAGE_REF_ID__c='201101',Asset_Category__c=mdc.id,Asset_Section__c=mds.id);
+        insert md;
     }
 
     @IsTest
