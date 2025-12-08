@@ -2348,11 +2348,11 @@
         <field>Asset.Beneficiary__c</field>
         <readable>true</readable>
     </fieldPermissions>
-    <!-- <fieldPermissions>
+    <fieldPermissions>
         <editable>true</editable>
         <field>Asset.Brand_Asset__c</field>
         <readable>true</readable>
-    </fieldPermissions> -->
+    </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
         <field>Asset.Brand__c</field>
@@ -2416,6 +2416,16 @@
     <fieldPermissions>
         <editable>true</editable>
         <field>Asset.Class__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Asset.Class_Category__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Asset.Class_Category_Description__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -2756,6 +2766,11 @@
     <fieldPermissions>
         <editable>true</editable>
         <field>Asset.IsCompetitorProduct</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Asset.Is_Delete__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -3115,6 +3130,11 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
+        <field>sset.Purchase_Doc_Type__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
         <field>Asset.Purchasing_Document__c</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -3163,11 +3183,11 @@
         <field>Asset.Risk_Address_ID__c</field>
         <readable>true</readable>
     </fieldPermissions>
-    <!-- <fieldPermissions>
+    <fieldPermissions>
         <editable>true</editable>
         <field>Asset.Risk_Class__c</field>
         <readable>true</readable>
-    </fieldPermissions> -->
+    </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
         <field>Asset.Risk_Code__c</field>
@@ -3188,11 +3208,11 @@
         <field>Asset.Risk_ID__c</field>
         <readable>true</readable>
     </fieldPermissions>
-    <!-- <fieldPermissions>
+    <fieldPermissions>
         <editable>true</editable>
         <field>Asset.Risk_Type_Description__c</field>
         <readable>true</readable>
-    </fieldPermissions> -->
+    </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
         <field>Asset.Risk__c</field>
@@ -3285,6 +3305,11 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
+        <field>Asset.Sailing_Date__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
         <field>Asset.Sum_Insured_for_Maximum_Indemnity_Period__c</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -3370,14 +3395,19 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
+        <field>Asset.TSI_WT__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
         <field>Asset.Tsunami_Zone__c</field>
         <readable>true</readable>
     </fieldPermissions>
-    <!-- <fieldPermissions>
+    <fieldPermissions>
         <editable>true</editable>
         <field>Asset.Type_Asset__c</field>
         <readable>true</readable>
-    </fieldPermissions> -->
+    </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
         <field>Asset.Type_Description_Carrier__c</field>
@@ -3473,11 +3503,11 @@
         <field>Asset.Vehicle_Market_Value__c</field>
         <readable>true</readable>
     </fieldPermissions>
-    <!-- <fieldPermissions>
+    <fieldPermissions>
         <editable>true</editable>
         <field>Asset.Vehicle_Territory__c</field>
         <readable>true</readable>
-    </fieldPermissions> -->
+    </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
         <field>Asset.Vehicle_Type__c</field>
@@ -12130,6 +12160,11 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
+        <field>InsurancePolicyCoverage.Currency__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
         <field>InsurancePolicyCoverage.DeathBenefitOptionType</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -13254,6 +13289,11 @@
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
+        <editable>false</editable>
+        <field>Lead.Is_Owner__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
         <editable>true</editable>
         <field>Lead.Jigsaw</field>
         <readable>true</readable>
@@ -13301,6 +13341,11 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>Lead.Owner_USER_ID__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Lead.Owner_Lead__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -15160,12 +15205,27 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
+        <field>Master_Data__c.Occupation_Code__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Master_Data__c.Occupation_Type__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
         <field>Master_Data__c.Occupy_Id__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
         <field>Master_Data__c.Occupy__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Master_Data__c.Opportunity_Type__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -15191,6 +15251,11 @@
     <fieldPermissions>
         <editable>true</editable>
         <field>Master_Data__c.PARENT_VEHICLE_TYPE_ID__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Master_Data__c.Period_Date__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -15261,6 +15326,11 @@
     <fieldPermissions>
         <editable>true</editable>
         <field>Master_Data__c.QS_PCT__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Master_Data__c.QQ_Member__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -15461,6 +15531,11 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>Master_Data__c.Type_Description__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Master_Data__c.Type_Of_Business__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -16361,6 +16436,11 @@
     <fieldPermissions>
         <editable>true</editable>
         <field>Opportunity.Asset_Check__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Opportunity.Assigned_Underwriting__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -22746,6 +22826,31 @@
     <fieldPermissions>
         <editable>true</editable>
         <field>omnistudio__VlocityTrackingEntry__c.omnistudio__VlocityInteractionToken__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>SFAWT05__mdt.Integration_Procedure__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>SFAWT05__mdt.RecordType_DeveloperName__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>SFAWT05__mdt.RecordType_Object__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>SFAWT05__mdt.Start__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>SFAWT05AssetCoverages__mdt.Coverage__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <layoutAssignments>
