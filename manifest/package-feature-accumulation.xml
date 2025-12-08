@@ -1,12 +1,46 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
 	<types>
-		<members>accumulationController</members>
-		<members>accumulationControllerTest</members>
+		<members>AccumulationController</members>
+		<members>AccumulationControllerTest</members>
+		<members>AccumulationListController</members>
+		<members>AccumulationListControllerTest</members>
+		<members>AccumulationRiskController</members>
+		<members>AccumulationRiskControllerTest</members>
 		<name>ApexClass</name>
 	</types>
 	<types>
+		<members>Accumulation__c.As_Per_Inception_Date__c</members>
+		<members>Accumulation__c.Group_ID__c</members>
+		<members>Accumulation__c.Request_Number__c</members>
+		<members>Accumulation__c.Version__c</members>
+		<members>Accumulation__c.json_accumulation__c</members>
+		<members>Asset.Accumulation_ID__c</members>
+		<members>Asset.Accumulation__c</members>
+		<members>Asset.Address_Description__c</members>
+		<members>Asset.Address__c</members>
+		<members>Asset.City__c</members>
+		<members>Asset.N_K_R__c</members>
+		<members>Asset.Tsunami_Zone__c</members>
+		<members>Asset.Vessel_Name__c</members>
+		<members>Asset.Volcanic_Zone__c</members>
+		<members>Asset.Voyage_Number__c</members>
+		<members>Asset.Zip_Code__c</members>
+		<members>Location.Earthquake_Zone__c</members>
+		<members>Opportunity.Assigned_Underwriting__c</members>
+		<members>Opportunity.Risk__c</members>
+		<members>Quote.Accumulation__c</members>
+		<members>Quote.Assigned_Underwriting__c</members>
+		<name>CustomField</name>
+	</types>
+	<types>
+		<members>Accumulation__c</members>
+		<name>CustomObject</name>
+	</types>
+	<types>
 		<members>accumulation</members>
+		<members>accumulationList</members>
+		<members>accumulationRelatedRisks</members>
 		<name>LightningComponentBundle</name>
 	</types>
 	<version>65.0</version>
