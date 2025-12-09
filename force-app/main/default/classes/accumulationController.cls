@@ -342,7 +342,7 @@ public with sharing class AccumulationController {
     }
 
     @AuraEnabled(cacheable=true)
-    public static List<AssetSearchResult> searchAssets(String addressQuery, String policyQuery, String zipCodeQuery, String nkrQuery, String riskNameQuery, String earthquakeZoneQuery, String volcanicZoneQuery, String tsunamiZoneQuery, String vesselNameQuery, String voyageNumberQuery, Date startDatePeriodeQuery, Date endDatePeriodeQuery, String contextOpportunityId) {
+    public static List<AssetSearchResult> searchAssets(String addressQuery, String policyQuery, String zipCodeQuery, String nkrQuery, String riskNameQuery, String vesselNameQuery, String voyageNumberQuery, Date startDatePeriodeQuery, Date endDatePeriodeQuery, String contextOpportunityId) {
         List<String> whereClauses = new List<String>();
         
         if (String.isNotBlank(addressQuery)) {

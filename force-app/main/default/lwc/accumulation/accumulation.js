@@ -48,11 +48,24 @@ export default class Accumulation extends LightningElement {
     // GETTERS
     // =================================================================
 
-    get showBasicFields() { return ['201', '203', '701', '702', '703', '704', '707', '808'].includes(this.bsnId); }
+    // [UPDATED] Mengganti 808 menjadi 801
+    get showBasicFields() { 
+        return ['201', '203', '701', '702', '703', '704', '707', '801'].includes(this.bsnId); 
+    }
+
     get showCatastropheFields() { return this.bsnId === '202'; }
     get showMarineFields() { return this.bsnId === '101'; }
     get showInsuredNameOnly() { return this.bsnId === '852'; }
-    get showInsurancePeriod() { return ['101', '701', '702', '703', '704', '707', '808', '852'].includes(this.bsnId); }
+    
+    // [UPDATED] Menambahkan 801 ke dalam list insurance period
+    get showInsurancePeriod() { 
+        return ['101', '701', '702', '703', '704', '707', '801', '852'].includes(this.bsnId); 
+    }
+
+    // [NEW] Helper untuk menentukan kolom standar tabel
+    get isStandardColumn() {
+        return this.showBasicFields || this.showCatastropheFields;
+    }
     
     get totalTSI() { 
         return this.accumulationList.reduce((total, item) => total + (item.sumInsuredIDR || 0), 0); 
@@ -91,7 +104,6 @@ export default class Accumulation extends LightningElement {
         return this.isLoading || this.isLimitReached;
     }
 
-    // [UPDATED] Button Logic: Always enabled in Edit Mode, Disabled if < 2 in Create Mode
     get isSaveDisabled() {
         if (this.isLoading) return true;
         if (this.isEditMode) return false; 
@@ -219,7 +231,6 @@ export default class Accumulation extends LightningElement {
     initializeSearchCriteria() {
         this.searchCriteria = {
             address: '', zipCode: '', policyNumber: '', nkr: '', riskName: '',
-            earthquakeZone: '', volcanicZone: '', tsunamiZone: '',
             vesselName: '', voyageNumber: '', startDatePeriode: null, endDatePeriode: null
         };
     }
@@ -296,11 +307,9 @@ export default class Accumulation extends LightningElement {
     }
 
     validateSearchCriteria() {
-        const { address, policyNumber, zipCode, nkr, riskName, earthquakeZone, 
-                volcanicZone, tsunamiZone, vesselName, voyageNumber, 
+        const { address, policyNumber, zipCode, nkr, riskName, vesselName, voyageNumber, 
                 startDatePeriode, endDatePeriode } = this.searchCriteria;
         return !!(address || policyNumber || zipCode || nkr || riskName || 
-                  earthquakeZone || volcanicZone || tsunamiZone || 
                   vesselName || voyageNumber || startDatePeriode || endDatePeriode);
     }
 
@@ -318,9 +327,6 @@ export default class Accumulation extends LightningElement {
             zipCodeQuery: this.searchCriteria.zipCode,
             nkrQuery: this.searchCriteria.nkr,
             riskNameQuery: this.searchCriteria.riskName,
-            earthquakeZoneQuery: this.searchCriteria.earthquakeZone || '',
-            volcanicZoneQuery: this.searchCriteria.volcanicZone || '',
-            tsunamiZoneQuery: this.searchCriteria.tsunamiZone || '',
             vesselNameQuery: this.searchCriteria.vesselName || '',
             voyageNumberQuery: this.searchCriteria.voyageNumber || '',
             startDatePeriodeQuery: this.searchCriteria.startDatePeriode || null,
@@ -356,7 +362,7 @@ export default class Accumulation extends LightningElement {
             this.handleJoinGroup(selectedRequest.groupId);
         } else {
             if (!this.isZipCodeMatch(selectedRequest.zipCode)) {
-                if (!confirm('Zip codes do not match. Do you want to proceed with the join?')) { // Translated
+                if (!confirm('Zip codes do not match. Do you want to proceed with the join?')) { 
                     return; 
                 }
             }
@@ -381,7 +387,7 @@ export default class Accumulation extends LightningElement {
                 const hasDifferentZip = assetsToJoin.some(asset => !this.isZipCodeMatch(asset.zipCode));
 
                 if (hasDifferentZip) {
-                    if (!confirm('Zip codes do not match. Do you want to proceed?')) { // Translated
+                    if (!confirm('Zip codes do not match. Do you want to proceed?')) { 
                         this.isLoading = false;
                         return; 
                     }
@@ -475,7 +481,6 @@ export default class Accumulation extends LightningElement {
         }
     }
 
-    // [MODIFIED] Handle Remove - Checks Opportunity Assigned Underwriter
     handleRemove(event) {
         const recordIdToRemove = event.currentTarget.dataset.id;
         const itemToRemove = this.accumulationList.find(item => item.id === recordIdToRemove);
@@ -484,20 +489,19 @@ export default class Accumulation extends LightningElement {
 
         if (this.isEditMode) {
             if (!itemToRemove.canDelete) {
-                this.showToast('Permission Denied', 'Only the Assigned Underwriter can remove this risk.', 'warning'); // Translated
+                this.showToast('Permission Denied', 'Only the Assigned Underwriter can remove this risk.', 'warning'); 
                 return;
             }
-            if (confirm('Are you sure you want to remove this risk? This action is immediate.')) { // Translated
+            if (confirm('Are you sure you want to remove this risk? This action is immediate.')) { 
                 this.handleImmediateDelete(itemToRemove);
             }
         } else {
             this.accumulationList = this.accumulationList.filter(item => item.id !== recordIdToRemove);
             this.showAccumulationList = this.accumulationList.length > 0;
-            this.showToast('Info', 'Risk removed from list.', 'info'); // Translated
+            this.showToast('Info', 'Risk removed from list.', 'info'); 
         }
     }
 
-    // [NEW] Immediate API call for Deletion
     handleImmediateDelete(itemToRemove) {
         this.isLoading = true;
 
@@ -513,20 +517,20 @@ export default class Accumulation extends LightningElement {
             riskId: itemToRemove.riskId,
             groupId: itemToRemove.groupId,
             allAssetIds: [], 
-            assetDetails: [], // Empty list = no updates/creates
-            deletedAssetDetails: [itemToRemove], // Trigger Delete Logic in IP
+            assetDetails: [], 
+            deletedAssetDetails: [itemToRemove], 
             inceptionDate: this.inceptionDate
         };
 
         updateAccumulationRecord({ data: payload })
             .then(result => {
                 if (result && result.success) {
-                    this.showToast('Success', 'Risk deleted successfully.', 'success'); // Translated
+                    this.showToast('Success', 'Risk deleted successfully.', 'success'); 
                     this.accumulationList = this.accumulationList.filter(item => item.id !== itemToRemove.id);
                     this.showAccumulationList = this.accumulationList.length > 0;
                 } else {
                     const msg = result && result.message ? result.message : 'Unknown error';
-                    this.showToast('Error', 'Failed to delete: ' + msg, 'error'); // Translated
+                    this.showToast('Error', 'Failed to delete: ' + msg, 'error'); 
                 }
             })
             .catch(error => {
@@ -541,7 +545,7 @@ export default class Accumulation extends LightningElement {
         if (this.isLoading) return;
 
         if (!this.isEditMode && this.accumulationList.length < 2) {
-             this.showToast('Warning', 'Minimum 2 risks required to create accumulation.', 'warning'); // Translated
+             this.showToast('Warning', 'Minimum 2 risks required to create accumulation.', 'warning'); 
              return;
         }
 
@@ -552,11 +556,11 @@ export default class Accumulation extends LightningElement {
         saveMethod({ data: recordData })
             .then(result => {
                 if (result && result.success) {
-                    this.showToast('Success', 'Integration Successful.', 'success'); // Translated
+                    this.showToast('Success', 'Integration Successful.', 'success'); 
                     setTimeout(() => location.reload(), RELOAD_DELAY);
                 } else {
                     const msg = result && result.message ? result.message : 'Unknown integration error';
-                    this.showToast('Error', 'Integration Failed: ' + msg, 'error'); // Translated
+                    this.showToast('Error', 'Integration Failed: ' + msg, 'error'); 
                     this.isLoading = false; 
                 }
             })
@@ -572,7 +576,6 @@ export default class Accumulation extends LightningElement {
         const newVersion = this.isEditMode ? this.version : this.calculateNewVersion();
         const allAssetIds = this.accumulationList.map(item => item.id); 
 
-        // deletedAssetDetails is always null here because deletions are handled immediately
         const deletedAssetDetails = null;
 
         return {

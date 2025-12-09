@@ -208,6 +208,13 @@
                                 disabled={isSearchDisabled}>
                             </lightning-input>
                         </div>
+                        <div class="slds-col slds-size_1-of-3">
+                            <lightning-input 
+                                label="COB" 
+                                value={bsnId} 
+                                readonly>
+                            </lightning-input>
+                        </div>
                     </div>
                 </template>
 
@@ -251,33 +258,12 @@
                             </lightning-input>
                         </div>
                         <div class="slds-col slds-size_1-of-3">
-                            <lightning-input 
-                                label="EARTHQUAKE ZONE" 
-                                name="earthquakeZone" 
-                                value={searchCriteria.earthquakeZone} 
-                                onchange={handleSearchCriteriaChange}
-                                disabled={isSearchDisabled}>
-                            </lightning-input>
-                        </div>
+                             </div>
                         <div class="slds-col slds-size_1-of-3">
                             <lightning-input 
-                                label="VOLCANIC ZONE" 
-                                name="volcanicZone" 
-                                value={searchCriteria.volcanicZone} 
-                                onchange={handleSearchCriteriaChange}
-                                disabled={isSearchDisabled}>
-                            </lightning-input>
-                        </div>
-                    </div>
-                    
-                    <div class="slds-grid slds-wrap slds-gutters slds-m-top_small">
-                        <div class="slds-col slds-size_1-of-3">
-                            <lightning-input 
-                                label="TSUNAMI ZONE" 
-                                name="tsunamiZone" 
-                                value={searchCriteria.tsunamiZone} 
-                                onchange={handleSearchCriteriaChange}
-                                disabled={isSearchDisabled}>
+                                label="COB" 
+                                value={bsnId} 
+                                readonly>
                             </lightning-input>
                         </div>
                     </div>
@@ -333,10 +319,30 @@
                             <tr class="slds-line-height_reset">
                                 <th>GROUP</th>
                                 <th>REQUEST NUM.</th>
-                                <th>POLICY NUM.</th>
-                                <th>RISK NAME</th>
-                                <th>ADDRESS</th>
-                                <th>RISK ID</th>
+                                
+                                <template if:true={isStandardColumn}>
+                                    <th>POLICY NUM.</th>
+                                    <th>RISK NAME</th>
+                                    <th>ADDRESS</th>
+                                    <th>RISK ID</th>
+                                </template>
+
+                                <template if:true={showMarineFields}>
+                                    <th>VESSEL NAME</th>
+                                    <th>VOYAGE NUMBER</th>
+                                    <th>POLICY NUM.</th>
+                                </template>
+
+                                <template if:true={showInsuredNameOnly}>
+                                    <th>POLICY NUM.</th>
+                                    <th>THE INSURED NAME</th>
+                                </template>
+                                
+                                <template if:true={showInsurancePeriod}>
+                                    <th>START DATE</th>
+                                    <th>END DATE</th>
+                                </template>
+
                                 <th>ACTION</th>
                             </tr>
                         </thead>
@@ -352,10 +358,34 @@
                                         </template>
                                     </td>
                                     <td>{req.requestNum}</td>
-                                    <td>{req.policyNum}</td>
-                                    <td>{req.riskName}</td>
-                                    <td>{req.address}</td>
-                                    <td>{req.riskId}</td>
+
+                                    <template if:true={isStandardColumn}>
+                                        <td>{req.policyNum}</td>
+                                        <td>{req.riskName}</td>
+                                        <td>{req.address}</td>
+                                        <td>{req.riskId}</td>
+                                    </template>
+
+                                    <template if:true={showMarineFields}>
+                                        <td>{req.vesselName}</td>
+                                        <td>{req.voyageNumber}</td>
+                                        <td>{req.policyNum}</td>
+                                    </template>
+
+                                    <template if:true={showInsuredNameOnly}>
+                                        <td>{req.policyNum}</td>
+                                        <td>{req.insuredName}</td>
+                                    </template>
+                                    
+                                    <template if:true={showInsurancePeriod}>
+                                        <td>
+                                            <lightning-formatted-date-time value={req.startDatePeriode}></lightning-formatted-date-time>
+                                        </td>
+                                        <td>
+                                            <lightning-formatted-date-time value={req.endDatePeriode}></lightning-formatted-date-time>
+                                        </td>
+                                    </template>
+
                                     <td>
                                         <lightning-button 
                                             label="Join" 
