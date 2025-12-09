@@ -6,6 +6,24 @@
 
 public without sharing class ClsChangeOwner {
     @AuraEnabled(cacheable=false)
+    public static Boolean getPermission(){
+        Boolean result = false;
+        String userId = UserInfo.getUserId();
+        User us = [SELECT Id,Profile.Name FROM User WHERE Id=:userId];
+        if(us.Profile.Name == 'System Administrator'){ result = true; }
+        else{
+            //SPV
+        	List<PermissionSetAssignment> listPSA = [SELECT Id,AssigneeId
+                                                 FROM PermissionSetAssignment 
+												WHERE PermissionSet.Name LIKE '%SPV%' 
+                                                 AND AssigneeId =:userId
+                                                 AND IsActive = TRUE];
+            if(listPSA.size()>0){ result = true; }
+        }
+        return result;
+    }
+    
+    @AuraEnabled(cacheable=false)
     public static User getUser(string recordId){
         User u = new User();
         if(recordId != null && recordId != ''){
@@ -121,12 +139,11 @@ public without sharing class ClsChangeOwner {
                 Map<String,Object> mapObj = (Map<String, Object>)obj;
                 String strId = (String)mapObj.get('Id');
                 String strOwnerId = (String)mapObj.get('OwnerId');
-                //system.debug('strId:'+strId);
-                //system.debug('strOwnerId:'+strOwnerId);
                 mapId.put(strId,strOwnerId);
                 Account acc = new Account();
                 acc.Id = strId;
                 acc.OwnerId = strOwnerId;
+                acc.IsSchedule__c = true; //Schedule SFAWT-17
                 listDataAccount.add(acc);
                 
             }
@@ -136,8 +153,6 @@ public without sharing class ClsChangeOwner {
                 Map<String,Object> mapObj = (Map<String, Object>)obj;
                 String strId = (String)mapObj.get('Id');
                 String strOwnerId = (String)mapObj.get('OwnerId');
-                //system.debug('strId:'+strId);
-                //system.debug('strOwnerId:'+strOwnerId);
                 mapId.put(strId,strOwnerId);
                 Opportunity opp = new Opportunity();
                 opp.Id = strId;
@@ -150,8 +165,6 @@ public without sharing class ClsChangeOwner {
                 Map<String,Object> mapObj = (Map<String, Object>)obj;
                 String strId = (String)mapObj.get('Id');
                 String strOwnerId = (String)mapObj.get('OwnerId');
-                //system.debug('strId:'+strId);
-                //system.debug('strOwnerId:'+strOwnerId);
                 mapId.put(strId,strOwnerId);
                 InsurancePolicy ip = new InsurancePolicy();
                 ip.Id = strId;
@@ -164,8 +177,6 @@ public without sharing class ClsChangeOwner {
                 Map<String,Object> mapObj = (Map<String, Object>)obj;
                 String strId = (String)mapObj.get('Id');
                 String strOwnerId = (String)mapObj.get('OwnerId');
-                //system.debug('strId:'+strId);
-                //system.debug('strOwnerId:'+strOwnerId);
                 mapWhoId.put(strId,strOwnerId);
                 Lead ld = new Lead();
                 ld.Id = strId;
@@ -178,8 +189,6 @@ public without sharing class ClsChangeOwner {
                 Map<String,Object> mapObj = (Map<String, Object>)obj;
                 String strId = (String)mapObj.get('Id');
                 String strOwnerId = (String)mapObj.get('OwnerId');
-                //system.debug('strId:'+strId);
-                //system.debug('strOwnerId:'+strOwnerId);
                 mapId.put(strId,strOwnerId);
                 Claim cl = new Claim();
                 cl.Id = strId;
@@ -192,8 +201,6 @@ public without sharing class ClsChangeOwner {
                 Map<String,Object> mapObj = (Map<String, Object>)obj;
                 String strId = (String)mapObj.get('Id');
                 String strOwnerId = (String)mapObj.get('OwnerId');
-                //system.debug('strId:'+strId);
-                //system.debug('strOwnerId:'+strOwnerId);
                 mapId.put(strId,strOwnerId);
                 Case cs = new Case();
                 cs.Id = strId;
@@ -234,18 +241,50 @@ public without sharing class ClsChangeOwner {
             system.debug(LoggingLevel.WARN,'listDataCase:'+listDataCase);
             system.debug(LoggingLevel.WARN,'listDataTask:'+listDataTask);
             
+            List<String> listid = new List<String>();
             if(listDataAccount.size()>0){ List<Database.SaveResult> sr = Database.update(listDataAccount);}
-            if(listDataOpportunity.size()>0){ List<Database.SaveResult> sr = Database.update(listDataOpportunity);}
+            if(listDataOpportunity.size()>0){ 
+                List<Database.SaveResult> listsr = Database.update(listDataOpportunity);
+                for(Database.SaveResult sr : listsr){
+                    listid.add(sr.Id);
+                }
+            }
             if(listDataInsurancePolicy.size()>0){ List<Database.SaveResult> sr = Database.update(listDataInsurancePolicy);}
             if(listDataLead.size()>0){ List<Database.SaveResult> sr = Database.update(listDataLead); }
             if(listDataClaim.size()>0){ List<Database.SaveResult> sr = Database.update(listDataClaim); }
             if(listDataCase.size()>0){ List<Database.SaveResult> sr = Database.update(listDataCase); }
             if(listDataTask.size()>0){ List<Database.SaveResult> sr = Database.update(listDataTask); }
+            //CALL SFAWT-15
+            callSFAWT15(listid);            
             result = 'Sukses';
         }catch(Exception e){
             Database.rollback(sp); 
             result = e.getMessage();
         }
         return result;
+    }
+    
+    public static void callSFAWT15(List<String> listid){
+        List<Opportunity> listopp = [SELECT Id,Busreq_ID__c,Marketer_ID__c FROM Opportunity WHERE Id IN:listid AND Id != null];
+        if(listopp.size()>0){
+            String strJSON = '{';
+            strJSON += '"data": {';
+            strJSON += '"BUSINESS_REQUEST": [';
+            Integer i = 0;
+            for(Opportunity opp : listopp){
+                if(i > 0){ strJSON += ','; }
+                strJSON += '{"BUSREQ_ID": "'+opp.Busreq_ID__c+'","MARKETER_ID": "'+opp.Marketer_ID__c+'"}'; 
+                i++;
+            }
+            strJSON += ']}';
+            strJSON += '}';
+            List<VlocityMappingFlowBridge.Request> requests = new List<VlocityMappingFlowBridge.Request>();
+            VlocityMappingFlowBridge.Request req = new VlocityMappingFlowBridge.Request();
+            req.ipName = 'SFAWT-15';
+            req.jsonInput = strJSON;
+            requests.add(req);
+            List<VlocityMappingFlowBridge.Response> listres = VlocityMappingFlowBridge.invoke(requests);
+            system.debug(LoggingLevel.WARN,'listres:'+listres);
+        }
     }
 }
