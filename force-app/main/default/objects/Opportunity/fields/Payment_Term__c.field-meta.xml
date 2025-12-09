@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Payment_Term__c</fullName>
+    <label>Payment Term</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>LONG TERM</fullName>
+                <default>false</default>
+                <label>LONG TERM</label>
+            </value>
+            <value>
+                <fullName>CIA</fullName>
+                <default>false</default>
+                <label>Cash In Advance</label>
+            </value>
+            <value>
+                <fullName>IST</fullName>
+                <default>false</default>
+                <label>Installment</label>
+            </value>
+            <value>
+                <fullName>MUL</fullName>
+                <default>false</default>
+                <label>Multiple Note</label>
+            </value>
+            <value>
+                <fullName>FULL PAYMENT</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>FULL PAYMENT</label>
+            </value>
+            <value>
+                <fullName>SHORT TERM PERIOD</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>SHORT TERM PERIOD</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

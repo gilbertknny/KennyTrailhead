@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Clause</fullName>
+    <columns>Clause_Id__c</columns>
+    <columns>NAME</columns>
+    <columns>BSN_ID__c</columns>
+    <columns>IND_NAME__c</columns>
+    <columns>ENG_NAME__c</columns>
+    <columns>IND_DESC__c</columns>
+    <columns>ENG_DESC__c</columns>
+    <columns>ENG_DESC_CL__c</columns>
+    <columns>Is_Default__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>RECORDTYPE</field>
+        <operation>equals</operation>
+        <value>Master_Data__c.Clause</value>
+    </filters>
+    <filters>
+        <field>BSN_ID__c</field>
+        <operation>equals</operation>
+        <value>301</value>
+    </filters>
+    <filters>
+        <field>Is_Default__c</field>
+        <operation>equals</operation>
+        <value>1</value>
+    </filters>
+    <label>Clause</label>
+</ListView>

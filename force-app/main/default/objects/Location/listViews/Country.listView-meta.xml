@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Country</fullName>
+    <columns>Name</columns>
+    <columns>LocationType</columns>
+    <columns>Country_ID__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>LocationType</field>
+        <operation>equals</operation>
+        <value>Country</value>
+    </filters>
+    <label>Country</label>
+</ListView>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RecordType xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Loss_Object</fullName>
+    <active>true</active>
+    <label>Loss Object</label>
+    <picklistValues>
+        <picklist>Category</picklist>
+        <values>
+            <fullName>Damaged Property</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Involved Injury</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Extent_of_damage__c</picklist>
+        <values>
+            <fullName>Cadangan</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ganti</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Repair</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Salvage__c</picklist>
+        <values>
+            <fullName>No</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Yes</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+</RecordType>

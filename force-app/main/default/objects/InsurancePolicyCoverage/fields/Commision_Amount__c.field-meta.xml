@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Commision_Amount__c</fullName>
+    <description>IF(
+    NOT(ISBLANK(Final_Approved_Premi_Amount__c)),
+    (Final_Approved_Premi_Amount__c * Commision__c) / 100,
+    IF(
+        NOT(ISBLANK(Fixed_Premi_Amount__c)),
+        (Fixed_Premi_Amount__c * Commision__c) / 100,
+        IF(
+            NOT(ISBLANK(Premi_Amount__c)),
+            (Premi_Amount__c * Commision__c) / 100,
+            0
+        )
+    )
+)</description>
+    <externalId>false</externalId>
+    <formula>IF(
+    AND(
+        NOT(ISBLANK(Final_Approved_Premi_Amount__c)),
+        Final_Approved_Premi_Amount__c &lt;&gt; 0
+    ),
+    Final_Approved_Premi_Amount__c * Commision__c,
+    IF(
+        AND(
+            NOT(ISBLANK(Fixed_Premi_Amount__c)),
+            Fixed_Premi_Amount__c &lt;&gt; 0
+        ),
+        Fixed_Premi_Amount__c * Commision__c,
+        IF(
+            AND(
+                NOT(ISBLANK(Premi_Amount__c)),
+                Premi_Amount__c &lt;&gt; 0
+            ),
+            Premi_Amount__c * Commision__c,
+            0
+        )
+    )
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Commision Amount</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>3</scale>
+    <trackHistory>false</trackHistory>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

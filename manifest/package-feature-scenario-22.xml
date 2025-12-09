@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
 	<types>
+		<members>ClaimController</members>
+		<members>ClaimControllerNonMV</members>
+		<members>ClaimControllerNonMVTest</members>
+		<members>ClaimControllerTest</members>
+		<name>ApexClass</name>
+	</types>
+	<types>
 		<members>Case.Address_Description__c</members>
+		<members>Case.Origin</members>
+		<members>Claim.Status</members>
 		<members>Case.Address_LU__c</members>
 		<members>Case.Biaya_Derek__c</members>
 		<members>Case.Branch_Reg__c</members>
@@ -123,6 +132,11 @@
 	<types>
 		<members>Counting__c</members>
 		<name>CustomObject</name>
+	</types>
+	<types>
+		<members>claimData</members>
+		<members>claimDataNonMV</members>
+		<name>LightningComponentBundle</name>
 	</types>
 	<types>
 		<members>Case.Claim</members>

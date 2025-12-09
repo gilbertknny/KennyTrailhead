@@ -1,0 +1,1193 @@
+<!--
+  @description       : LWC Treaty
+  @author            : Ahmad Yazid Munif
+  @last modified on  : 12-01-2025
+  @last modified by  : Ahmad Yazid Munif
+-->
+<template>
+    <lightning-card>
+        <div class="slds-m-around_medium slds-p-bottom_none">
+            <!-- Header -->
+            <div class="section-header slds-m-bottom_medium slds-grid slds-align_absolute-center">
+                <lightning-icon icon-name="custom:custom21" size="small" class="slds-m-right_x-small"></lightning-icon>
+                <h1 class="slds-text-heading_medium slds-text-heading_bold">CAPACITY CALCULATION</h1>
+            </div>
+            <!-- SELECT RISK -->
+            <div class="slds-grid slds-wrap">
+                <div class="slds-col slds-size_12-of-12 slds-large-size_12-of-12 slds-m-bottom_large">
+                    <lightning-combobox
+                        name="reqIdSelector"
+                        label="Select Risk"
+                        value={selectedBusreqId}
+                        placeholder="Pilih ReqId..."
+                        options={busreqIdOptions}
+                        onchange={handleBusreqIdChange}
+                        disabled={isRiskSelectorDisabled}
+                    ></lightning-combobox>
+                </div>
+            </div>
+            <template if:true={isLoading}>
+                <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+            </template>
+            <!-- ========== REFERENCE ========== -->
+            <div>
+                <div class="section-divider">
+                    <h1 class="slds-text-heading_small slds-text-heading_small_bold">REFERENCE</h1>
+                </div>
+                <div class="slds-grid slds-wrap slds-gutters">
+                    <!-- Left Column -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                        <div class="slds-form-element share-row">
+                            <label class="slds-form-element__label">Date Opportunity Created</label>
+                            <div class="slds-form-element__control">
+                                <span class="slds-form-element__static">{currentFormated.dateOpportunity}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Right Column -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                        <div class="slds-form-element share-row">
+                            <label class="slds-form-element__label">Date Quotation Request</label>
+                            <div class="slds-form-element__control">
+                                <span class="slds-form-element__static">{currentFormated.dateQuoteRequest}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-grid slds-wrap slds-gutters">
+                    <!-- Left Column -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                        <div class="slds-form-element share-row">
+                            <label class="slds-form-element__label">Risk ID No.</label>
+                            <div class="slds-form-element__control">
+                                <span class="slds-form-element__static">{currentFormated.riskNo}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Right Column -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                        <div class="slds-form-element share-row">
+                            <label class="slds-form-element__label">Risk Name</label>
+                            <div class="slds-form-element__control">
+                                <span class="slds-form-element__static">{currentFormated.riskName}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-grid slds-wrap slds-gutters">
+                    <!-- Left Column -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                        <div class="slds-form-element share-row">
+                            <label class="slds-form-element__label">Accumulation ID</label>
+                            <div class="slds-form-element__control">
+                                <span class="slds-form-element__static">{currentFormated.idAccumulation}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Right Column -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                        <div class="slds-form-element share-row">
+                            <label class="slds-form-element__label">Accumulation Date</label>
+                            <div class="slds-form-element__control">
+                                <span class="slds-form-element__static">{currentFormated.dateAccumulation}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-grid slds-wrap slds-gutters">
+                    <!-- Left Column -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                        <div class="slds-form-element share-row">
+                            <label class="slds-form-element__label">Opportunity/Quotation No.</label>
+                            <div class="slds-form-element__control">
+                                <span class="slds-form-element__static">{currentFormated.oppyQuoteNo}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Right Column -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                        <div class="slds-form-element share-row">
+                            <label class="slds-form-element__label">Insurance Period</label>
+                            <div class="slds-form-element__control">
+                                <span class="slds-form-element__static">{currentFormated.insurancePeriod}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-grid slds-wrap slds-gutters">
+                    <!-- Left Column -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                        <div class="slds-form-element share-row">
+                            <label class="slds-form-element__label">Location</label>
+                            <div class="slds-form-element__control">
+                                <span class="slds-form-element__static">{currentFormated.location}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Right Column -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                        <div class="slds-form-element share-row">
+                            <label class="slds-form-element__label">List - Last Accumulated Risk</label>
+                            <div class="slds-form-element__control">
+                                <span class="slds-form-element__static">{currentFormated.listAccumulatedRisk}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- ========== SUM INSURED ========== -->
+            <div>
+                <div class="section-divider">
+                    <h1 class="slds-text-heading_small slds-text-heading_small_bold">DETAIL</h1>
+                </div>
+                <div class="slds-grid slds-wrap slds-gutters">
+                    <!-- Left Column -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                        <div class="slds-form-element share-row">
+                            <label class="slds-form-element__label">Total Sum Insured - 100%</label>
+                            <div class="slds-form-element__control">
+                                <span class="slds-form-element__static">{currentFormated.totalSumInsured100}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Right Column -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                        <div class="slds-form-element share-row">
+                            <label class="slds-form-element__label">Total Sum Insured - Aswata Share</label>
+                            <div class="slds-form-element__control">
+                                <!-- <span class="slds-form-element__static">{aswataShareAmount}</span> -->
+                                <span class="slds-form-element__static">{currentFormated.totalSumInsuredShare}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-grid slds-wrap slds-gutters">
+                    <!-- Left Column -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                        <div class="slds-form-element share-row">
+                            <label class="slds-form-element__label">Total Accumulated Sum Insured - 100%</label>
+                            <div class="slds-form-element__control">
+                                <span class="slds-form-element__static">{currentFormated.accumulatedSumInsured100}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Right Column -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                        <div class="slds-form-element share-row">
+                            <label class="slds-form-element__label">Total Accumulated Sum Insured - Aswata Share</label>
+                            <div class="slds-form-element__control">
+                                <span class="slds-form-element__static">{currentFormated.accumulatedSumInsuredShare}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- ========== DETAIL ========== -->
+            <div>
+                <div class="slds-col slds-size_12-of-12 slds-m-top_large slds-p-horizontal_medium">
+                    <div class="slds-grid slds-wrap slds-text-align_center slds-border_bottom slds-show_large">
+                        <div class="slds-col slds-size_2-of-12 slds-text-title_bold">LAYER</div>
+                        <div class="slds-col slds-size_10-of-12 slds-grid slds-wrap">
+                            <div class="slds-col slds-size_3-of-12 slds-text-title_bold">REMAINING (Amount)</div>
+                            <div class="slds-col slds-size_3-of-12 slds-text-title_bold">% (Of TSI)</div>
+                            <div class="slds-col slds-size_3-of-12 slds-text-title_bold">ABSORBED - ACCUMULATED</div>
+                            <div class="slds-col slds-size_3-of-12 slds-text-title_bold">MAXIMUM CAPACITY</div>
+                        </div>
+                    </div>
+                    <!-- BPPDAN -->
+                    <div class="slds-grid slds-wrap slds-grid_vertical-align-center">
+                        <div class="slds-col slds-size_12-of-12 slds-large-size_2-of-12 slds-text-title_bold">
+                            BPPDAN
+                        </div>
+                        <div class="slds-col slds-size_12-of-12 slds-large-size_10-of-12">
+                            <div class="slds-grid slds-wrap slds-grid_vertical-align-center">
+                                <div class="slds-col slds-size_12-of-12 slds-large-size_3-of-12 slds-p-horizontal_x-small">
+                                    <lightning-input 
+                                        label="Remaining (Amount)"
+                                        class="slds-hide_large"
+                                        value={currentFormated.bppda.limit} 
+                                        data-object="bppda"
+                                        data-field="limit" 
+                                        onkeydown={handleNumericKeyDown}
+                                        onfocus={handleInputFocus}
+                                        onblur={handleInputBlur}>
+                                    </lightning-input>
+                                    <lightning-input 
+                                        class="slds-show_large"
+                                        value={currentFormated.bppda.limit} 
+                                        data-object="bppda"
+                                        data-field="limit" 
+                                        style="margin-top: -10px;"
+                                        onkeydown={handleNumericKeyDown}
+                                        onfocus={handleInputFocus}
+                                        onblur={handleInputBlur}>
+                                    </lightning-input>
+                                </div>
+                                <div class="slds-col slds-size_12-of-12 slds-large-size_3-of-12 slds-p-horizontal_x-small">
+                                    <div class="slds-form-element"> 
+                                        <label class="slds-form-element__label slds-hide_large">% (Of TSI)</label>
+                                        <div class="slds-form-element__control slds-hide_large">
+                                            <span class="slds-form-element__static slds-text-body_regular">
+                                                {bppdaLimitPercentage}
+                                            </span>
+                                        </div>
+                                        <div class="slds-text-align_center slds-form-element__control slds-show_large slds-grid_vertical-align-center custom-static-control">
+                                            {bppdaLimitPercentage}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_12-of-12 slds-large-size_3-of-12 slds-p-horizontal_x-small">
+                                    <div class="slds-form-element"> 
+                                        <label class="slds-form-element__label slds-hide_large">Absorbed - Accumulated</label>
+                                        <div class="slds-form-element__control slds-hide_large">
+                                            <span class="slds-form-element__static slds-text-body_regular">
+                                                {currentFormated.bppda.accumulation}
+                                            </span>
+                                        </div>
+                                        <div class="slds-text-align_center slds-form-element__control slds-show_large slds-grid_vertical-align-center custom-static-control">
+                                            {currentFormated.bppda.accumulation}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_12-of-12 slds-large-size_3-of-12 slds-p-horizontal_x-small ">
+                                    <div class="slds-form-element"> 
+                                        <label class="slds-form-element__label slds-hide_large">Maximum Capacity</label>
+                                        <div class="slds-form-element__control slds-hide_large">
+                                            <span class="slds-form-element__static slds-text-body_regular">
+                                                {currentFormated.bppda.capacity}
+                                            </span>
+                                        </div>
+                                        <div class="slds-text-align_center slds-form-element__control slds-show_large slds-grid_vertical-align-center custom-static-control">
+                                            {currentFormated.bppda.capacity}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr style="margin-top:5px;margin-bottom:0px"></hr>
+                    <!-- POOL EARTHQUAKE -->
+                    <div class="slds-grid slds-wrap slds-grid_vertical-align-center">
+                        <div class="slds-col slds-size_12-of-12 slds-large-size_2-of-12 slds-text-title_bold">
+                            POOL EARTHQUAKE
+                        </div>
+                        <div class="slds-col slds-size_12-of-12 slds-large-size_10-of-12">
+                            <div class="slds-grid slds-wrap slds-grid_vertical-align-center">
+                                <div class="slds-col slds-size_12-of-12 slds-large-size_3-of-12 slds-p-horizontal_x-small">
+                                    <lightning-input 
+                                        label="Remaining (Amount)"
+                                        class="slds-hide_large"
+                                        value={currentFormated.poolEq.limit}
+                                        data-object="poolEq"
+                                        data-field="limit" 
+                                        onkeydown={handleNumericKeyDown}
+                                        onfocus={handleInputFocus}
+                                        onblur={handleInputBlur}>
+                                    </lightning-input>
+                                    <lightning-input 
+                                        class="slds-show_large"
+                                        value={currentFormated.poolEq.limit}
+                                        data-object="poolEq"
+                                        data-field="limit" 
+                                        style="margin-top: -10px;"
+                                        onkeydown={handleNumericKeyDown}
+                                        onfocus={handleInputFocus}
+                                        onblur={handleInputBlur}>
+                                    </lightning-input>
+                                </div>
+                                <div class="slds-col slds-size_12-of-12 slds-large-size_3-of-12 slds-p-horizontal_x-small">
+                                    <div class="slds-form-element"> 
+                                        <label class="slds-form-element__label slds-hide_large">% (Of TSI)</label>
+                                        <div class="slds-form-element__control slds-hide_large">
+                                            <span class="slds-form-element__static slds-text-body_regular">{poolEqLimitPercentage}</span>
+                                        </div>
+                                        <div class="slds-text-align_center slds-form-element__control slds-show_large slds-grid_vertical-align-center custom-static-control">
+                                            {poolEqLimitPercentage}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_12-of-12 slds-large-size_3-of-12 slds-p-horizontal_x-small">
+                                    <div class="slds-form-element"> 
+                                        <label class="slds-form-element__label slds-hide_large">Absorbed - Accumulated</label>
+                                        <div class="slds-form-element__control slds-hide_large">
+                                            <span class="slds-form-element__static slds-text-body_regular">{currentFormated.poolEq.accumulation}</span>
+                                        </div>
+                                        <div class="slds-text-align_center slds-form-element__control slds-show_large slds-grid_vertical-align-center custom-static-control">
+                                            {currentFormated.poolEq.accumulation}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_12-of-12 slds-large-size_3-of-12 slds-p-horizontal_x-small ">
+                                    <div class="slds-form-element"> 
+                                        <label class="slds-form-element__label slds-hide_large">Maximum Capacity</label>
+                                        <div class="slds-form-element__control slds-hide_large">
+                                            <span class="slds-form-element__static slds-text-body_regular">{currentFormated.poolEq.capacity}</span>
+                                        </div>
+                                        <div class="slds-text-align_center slds-form-element__control slds-show_large slds-grid_vertical-align-center custom-static-control">
+                                            {currentFormated.poolEq.capacity}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr style="margin-top:5px;margin-bottom:0px"></hr>
+                    <!-- POOL CUSTOM BOND -->
+                    <div class="slds-grid slds-wrap slds-grid_vertical-align-center">
+                        <div class="slds-col slds-size_12-of-12 slds-large-size_2-of-12 slds-text-title_bold">
+                            POOL CUSTOM BOND
+                        </div>
+                        <div class="slds-col slds-size_12-of-12 slds-large-size_10-of-12">
+                            <div class="slds-grid slds-wrap slds-grid_vertical-align-center">
+                                <div class="slds-col slds-size_12-of-12 slds-large-size_3-of-12 slds-p-horizontal_x-small">
+                                    <lightning-input 
+                                        label="Remaining (Amount)"
+                                        class="slds-hide_large"
+                                        value={currentFormated.poolCustomBond.limit}
+                                        data-object="poolCustomBond"
+                                        data-field="limit" 
+                                        onkeydown={handleNumericKeyDown}
+                                        onfocus={handleInputFocus}
+                                        onblur={handleInputBlur}>
+                                    </lightning-input>
+                                    <lightning-input 
+                                        class="slds-show_large"
+                                        value={currentFormated.poolCustomBond.limit}
+                                        data-object="poolCustomBond"
+                                        data-field="limit" 
+                                        style="margin-top: -10px;"
+                                        onkeydown={handleNumericKeyDown}
+                                        onfocus={handleInputFocus}
+                                        onblur={handleInputBlur}>
+                                    </lightning-input>
+                                </div>
+                                <div class="slds-col slds-size_12-of-12 slds-large-size_3-of-12 slds-p-horizontal_x-small">
+                                    <div class="slds-form-element"> 
+                                        <label class="slds-form-element__label slds-hide_large">% (Of TSI)</label>
+                                        <div class="slds-form-element__control slds-hide_large">
+                                            <span class="slds-form-element__static slds-text-body_regular">{poolCustomBondLimitPercentage}</span>
+                                        </div>
+                                        <div class="slds-text-align_center slds-form-element__control slds-show_large slds-grid_vertical-align-center custom-static-control">
+                                            {poolCustomBondLimitPercentage}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_12-of-12 slds-large-size_3-of-12 slds-p-horizontal_x-small">
+                                    <div class="slds-form-element"> 
+                                        <label class="slds-form-element__label slds-hide_large">Absorbed - Accumulated</label>
+                                        <div class="slds-form-element__control slds-hide_large">
+                                            <span class="slds-form-element__static slds-text-body_regular">{currentFormated.poolCustomBond.accumulation}</span>
+                                        </div>
+                                        <div class="slds-text-align_center slds-form-element__control slds-show_large slds-grid_vertical-align-center custom-static-control">
+                                            {currentFormated.poolCustomBond.accumulation}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_12-of-12 slds-large-size_3-of-12 slds-p-horizontal_x-small ">
+                                    <div class="slds-form-element"> 
+                                        <label class="slds-form-element__label slds-hide_large">Maximum Capacity</label>
+                                        <div class="slds-form-element__control slds-hide_large">
+                                            <span class="slds-form-element__static slds-text-body_regular">{currentFormated.poolCustomBond.capacity}</span>
+                                        </div>
+                                        <div class="slds-text-align_center slds-form-element__control slds-show_large slds-grid_vertical-align-center custom-static-control">
+                                            {currentFormated.poolCustomBond.capacity}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr style="margin-top:5px;margin-bottom:0px"></hr>
+                    <!-- KARK-->
+                    <div class="slds-grid slds-wrap slds-grid_vertical-align-center">
+                        <div class="slds-col slds-size_12-of-12 slds-large-size_2-of-12 slds-text-title_bold">
+                            KARK
+                        </div>
+                        <div class="slds-col slds-size_12-of-12 slds-large-size_10-of-12">
+                            <div class="slds-grid slds-wrap slds-grid_vertical-align-center">
+                                <div class="slds-col slds-size_12-of-12 slds-large-size_3-of-12 slds-p-horizontal_x-small">
+                                    <lightning-input 
+                                        label="Remaining (Amount)"
+                                        class="slds-hide_large"
+                                        value={currentFormated.kark.limit}
+                                        data-object="kark"
+                                        data-field="limit" 
+                                        onkeydown={handleNumericKeyDown}
+                                        onfocus={handleInputFocus}
+                                        onblur={handleInputBlur}>
+                                    </lightning-input>
+                                    <lightning-input 
+                                        class="slds-show_large"
+                                        value={currentFormated.kark.limit}
+                                        data-object="kark"
+                                        data-field="limit" 
+                                        style="margin-top: -10px;"
+                                        onkeydown={handleNumericKeyDown}
+                                        onfocus={handleInputFocus}
+                                        onblur={handleInputBlur}>
+                                    </lightning-input>
+                                </div>
+                                <div class="slds-col slds-size_12-of-12 slds-large-size_3-of-12 slds-p-horizontal_x-small">
+                                    <div class="slds-form-element"> 
+                                        <label class="slds-form-element__label slds-hide_large">% (Of TSI)</label>
+                                        <div class="slds-form-element__control slds-hide_large">
+                                            <span class="slds-form-element__static slds-text-body_regular">{karkLimitPercentage}</span>
+                                        </div>
+                                        <div class="slds-text-align_center slds-form-element__control slds-show_large slds-grid_vertical-align-center custom-static-control">
+                                            {karkLimitPercentage}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_12-of-12 slds-large-size_3-of-12 slds-p-horizontal_x-small">
+                                    <div class="slds-form-element"> 
+                                        <label class="slds-form-element__label slds-hide_large">Absorbed - Accumulated</label>
+                                        <div class="slds-form-element__control slds-hide_large">
+                                            <span class="slds-form-element__static slds-text-body_regular">{currentFormated.kark.accumulation}</span>
+                                        </div>
+                                        <div class="slds-text-align_center slds-form-element__control slds-show_large slds-grid_vertical-align-center custom-static-control">
+                                            {currentFormated.kark.accumulation}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_12-of-12 slds-large-size_3-of-12 slds-p-horizontal_x-small ">
+                                    <div class="slds-form-element"> 
+                                        <label class="slds-form-element__label slds-hide_large">Maximum Capacity</label>
+                                        <div class="slds-form-element__control slds-hide_large">
+                                            <span class="slds-form-element__static slds-text-body_regular">{currentFormated.kark.capacity}</span>
+                                        </div>
+                                        <div class="slds-text-align_center slds-form-element__control slds-show_large slds-grid_vertical-align-center custom-static-control">
+                                            {currentFormated.kark.capacity}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr style="margin-top:5px;margin-bottom:0px"></hr>
+                    <!-- UNDERLYING RETENTION -->
+                    <div class="slds-grid slds-wrap slds-grid_vertical-align-center">
+                        <div class="slds-col slds-size_12-of-12 slds-large-size_2-of-12 slds-text-title_bold">
+                            UR
+                        </div>
+                        <div class="slds-col slds-size_12-of-12 slds-large-size_10-of-12">
+                            <div class="slds-grid slds-wrap slds-grid_vertical-align-center">
+                                <div class="slds-col slds-size_12-of-12 slds-large-size_3-of-12 slds-p-horizontal_x-small">
+                                    <lightning-input 
+                                        label="Remaining (Amount)"
+                                        class="slds-hide_large"
+                                        value={currentFormated.underlying.limit}
+                                        data-object="underlying"
+                                        data-field="limit" 
+                                        onkeydown={handleNumericKeyDown}
+                                        onfocus={handleInputFocus}
+                                        onblur={handleInputBlur}>
+                                    </lightning-input>
+                                    <lightning-input 
+                                        class="slds-show_large"
+                                        value={currentFormated.underlying.limit}
+                                        data-object="underlying"
+                                        data-field="limit" 
+                                        style="margin-top: -10px;"
+                                        onkeydown={handleNumericKeyDown}
+                                        onfocus={handleInputFocus}
+                                        onblur={handleInputBlur}>
+                                    </lightning-input>
+                                </div>
+                                <div class="slds-col slds-size_12-of-12 slds-large-size_3-of-12 slds-p-horizontal_x-small">
+                                    <div class="slds-form-element"> 
+                                        <label class="slds-form-element__label slds-hide_large">% (Of TSI)</label>
+                                        <div class="slds-form-element__control slds-hide_large">
+                                            <span class="slds-form-element__static slds-text-body_regular">{underlyingLimitPercentage}</span>
+                                        </div>
+                                        <div class="slds-text-align_center slds-form-element__control slds-show_large slds-grid_vertical-align-center custom-static-control">
+                                            {underlyingLimitPercentage}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_12-of-12 slds-large-size_3-of-12 slds-p-horizontal_x-small">
+                                    <div class="slds-form-element"> 
+                                        <label class="slds-form-element__label slds-hide_large">Absorbed - Accumulated</label>
+                                        <div class="slds-form-element__control slds-hide_large">
+                                            <span class="slds-form-element__static slds-text-body_regular">{currentFormated.underlying.accumulation}</span>
+                                        </div>
+                                        <div class="slds-text-align_center slds-form-element__control slds-show_large slds-grid_vertical-align-center custom-static-control">
+                                            {currentFormated.underlying.accumulation}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_12-of-12 slds-large-size_3-of-12 slds-p-horizontal_x-small ">
+                                    <div class="slds-form-element"> 
+                                        <label class="slds-form-element__label slds-hide_large">Maximum Capacity</label>
+                                        <div class="slds-form-element__control slds-hide_large">
+                                            <span class="slds-form-element__static slds-text-body_regular">{currentFormated.underlying.capacity}</span>
+                                        </div>
+                                        <div class="slds-text-align_center slds-form-element__control slds-show_large slds-grid_vertical-align-center custom-static-control">
+                                            {currentFormated.underlying.capacity}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr style="margin-top:5px;margin-bottom:0px"></hr>
+                    <!-- EXCESS OF LOSS -->
+                    <div class="slds-grid slds-wrap slds-grid_vertical-align-center">
+                        <div class="slds-col slds-size_12-of-12 slds-large-size_2-of-12 slds-text-title_bold">
+                            EXCESS OF LOSS
+                        </div>
+                        <div class="slds-col slds-size_12-of-12 slds-large-size_10-of-12">
+                            <div class="slds-grid slds-wrap slds-grid_vertical-align-center">
+                                <div class="slds-col slds-size_12-of-12 slds-large-size_3-of-12 slds-p-horizontal_x-small">
+                                    <lightning-input 
+                                        label="Remaining (Amount)"
+                                        class="slds-hide_large"
+                                        value={currentFormated.excessLoss.limit}
+                                        data-object="excessLoss"
+                                        data-field="limit" 
+                                        onkeydown={handleNumericKeyDown}
+                                        onfocus={handleInputFocus}
+                                        onblur={handleInputBlur}>
+                                    </lightning-input>
+                                    <lightning-input 
+                                        class="slds-show_large"
+                                        value={currentFormated.excessLoss.limit}
+                                        data-object="excessLoss"
+                                        data-field="limit" 
+                                        style="margin-top: -10px;"
+                                        onkeydown={handleNumericKeyDown}
+                                        onfocus={handleInputFocus}
+                                        onblur={handleInputBlur}>
+                                    </lightning-input>
+                                </div>
+                                <div class="slds-col slds-size_12-of-12 slds-large-size_3-of-12 slds-p-horizontal_x-small">
+                                    <div class="slds-form-element"> 
+                                        <label class="slds-form-element__label slds-hide_large">% (Of TSI)</label>
+                                        <div class="slds-form-element__control slds-hide_large">
+                                            <span class="slds-form-element__static slds-text-body_regular">{excessLossLimitPercentage}</span>
+                                        </div>
+                                        <div class="slds-text-align_center slds-form-element__control slds-show_large slds-grid_vertical-align-center custom-static-control">
+                                            {excessLossLimitPercentage}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_12-of-12 slds-large-size_3-of-12 slds-p-horizontal_x-small">
+                                    <div class="slds-form-element"> 
+                                        <label class="slds-form-element__label slds-hide_large">Absorbed - Accumulated</label>
+                                        <div class="slds-form-element__control slds-hide_large">
+                                            <span class="slds-form-element__static slds-text-body_regular">{currentFormated.excessLoss.accumulation}</span>
+                                        </div>
+                                        <div class="slds-text-align_center slds-form-element__control slds-show_large slds-grid_vertical-align-center custom-static-control">
+                                            {currentFormated.excessLoss.accumulation}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_12-of-12 slds-large-size_3-of-12 slds-p-horizontal_x-small ">
+                                    <div class="slds-form-element"> 
+                                        <label class="slds-form-element__label slds-hide_large">Maximum Capacity</label>
+                                        <div class="slds-form-element__control slds-hide_large">
+                                            <span class="slds-form-element__static slds-text-body_regular">{currentFormated.excessLoss.capacity}</span>
+                                        </div>
+                                        <div class="slds-text-align_center slds-form-element__control slds-show_large slds-grid_vertical-align-center custom-static-control">
+                                            {currentFormated.excessLoss.capacity}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr style="margin-top:5px;margin-bottom:0px"></hr>
+                    <!-- GROSS RETENTION -->
+                    <div class="slds-grid slds-wrap slds-grid_vertical-align-center">
+                        <div class="slds-col slds-size_12-of-12 slds-large-size_2-of-12 slds-text-title_bold">
+                            GROSS RETENTION
+                        </div>
+                        <div class="slds-col slds-size_12-of-12 slds-large-size_10-of-12">
+                            <div class="slds-grid slds-wrap slds-grid_vertical-align-center">
+                                <div class="slds-col slds-size_12-of-12 slds-large-size_3-of-12 slds-p-horizontal_x-small">
+                                    <lightning-input 
+                                        label="Remaining (Amount)"
+                                        class="slds-hide_large"
+                                        value={currentFormated.grossRetention.limit}
+                                        data-object="grossRetention"
+                                        data-field="limit" 
+                                        onkeydown={handleNumericKeyDown}
+                                        onfocus={handleInputFocus}
+                                        onblur={handleInputBlur}>
+                                    </lightning-input>
+                                    <lightning-input 
+                                        class="slds-show_large"
+                                        value={currentFormated.grossRetention.limit}
+                                        data-object="grossRetention"
+                                        data-field="limit" 
+                                        style="margin-top: -10px;"
+                                        onkeydown={handleNumericKeyDown}
+                                        onfocus={handleInputFocus}
+                                        onblur={handleInputBlur}>
+                                    </lightning-input>
+                                </div>
+                                <div class="slds-col slds-size_12-of-12 slds-large-size_3-of-12 slds-p-horizontal_x-small">
+                                    <div class="slds-form-element"> 
+                                        <label class="slds-form-element__label slds-hide_large">% (Of TSI)</label>
+                                        <div class="slds-form-element__control slds-hide_large">
+                                            <span class="slds-form-element__static slds-text-body_regular">{grossRetentionLimitPercentage}</span>
+                                        </div>
+                                        <div class="slds-text-align_center slds-form-element__control slds-show_large slds-grid_vertical-align-center custom-static-control">
+                                            {grossRetentionLimitPercentage}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_12-of-12 slds-large-size_3-of-12 slds-p-horizontal_x-small">
+                                    <div class="slds-form-element"> 
+                                        <label class="slds-form-element__label slds-hide_large">Absorbed - Accumulated</label>
+                                        <div class="slds-form-element__control slds-hide_large">
+                                            <span class="slds-form-element__static slds-text-body_regular">{currentFormated.grossRetention.accumulation}</span>
+                                        </div>
+                                        <div class="slds-text-align_center slds-form-element__control slds-show_large slds-grid_vertical-align-center custom-static-control">
+                                            {currentFormated.grossRetention.accumulation}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_12-of-12 slds-large-size_3-of-12 slds-p-horizontal_x-small ">
+                                    <div class="slds-form-element"> 
+                                        <label class="slds-form-element__label slds-hide_large">Maximum Capacity</label>
+                                        <div class="slds-form-element__control slds-hide_large">
+                                            <span class="slds-form-element__static slds-text-body_regular">{currentFormated.grossRetention.capacity}</span>
+                                        </div>
+                                        <div class="slds-text-align_center slds-form-element__control slds-show_large slds-grid_vertical-align-center custom-static-control">
+                                            {currentFormated.grossRetention.capacity}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr style="margin-top:5px;margin-bottom:0px"></hr>
+                    <!-- QUOTA SHARE -->
+                    <div class="slds-grid slds-wrap slds-grid_vertical-align-center">
+                        <div class="slds-col slds-size_12-of-12 slds-large-size_2-of-12 slds-text-title_bold">
+                            QUOTA SHARE
+                        </div>
+                        <div class="slds-col slds-size_12-of-12 slds-large-size_10-of-12">
+                            <div class="slds-grid slds-wrap slds-grid_vertical-align-center">
+                                <div class="slds-col slds-size_12-of-12 slds-large-size_3-of-12 slds-p-horizontal_x-small">
+                                    <lightning-input 
+                                        label="Remaining (Amount)"
+                                        class="slds-hide_large"
+                                        value={currentFormated.quotaShare.limit}
+                                        data-object="quotaShare"
+                                        data-field="limit" 
+                                        onkeydown={handleNumericKeyDown}
+                                        onfocus={handleInputFocus}
+                                        onblur={handleInputBlur}>
+                                    </lightning-input>
+                                    <lightning-input 
+                                        class="slds-show_large"
+                                        value={currentFormated.quotaShare.limit}
+                                        data-object="quotaShare"
+                                        data-field="limit" 
+                                        style="margin-top: -10px;"
+                                        onkeydown={handleNumericKeyDown}
+                                        onfocus={handleInputFocus}
+                                        onblur={handleInputBlur}>
+                                    </lightning-input>
+                                </div>
+                                <div class="slds-col slds-size_12-of-12 slds-large-size_3-of-12 slds-p-horizontal_x-small">
+                                    <div class="slds-form-element"> 
+                                        <label class="slds-form-element__label slds-hide_large">% (Of TSI)</label>
+                                        <div class="slds-form-element__control slds-hide_large">
+                                            <span class="slds-form-element__static slds-text-body_regular">{quotaShareLimitPercentage}</span>
+                                        </div>
+                                        <div class="slds-text-align_center slds-form-element__control slds-show_large slds-grid_vertical-align-center custom-static-control">
+                                            {quotaShareLimitPercentage}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_12-of-12 slds-large-size_3-of-12 slds-p-horizontal_x-small">
+                                    <div class="slds-form-element"> 
+                                        <label class="slds-form-element__label slds-hide_large">Absorbed - Accumulated</label>
+                                        <div class="slds-form-element__control slds-hide_large">
+                                            <span class="slds-form-element__static slds-text-body_regular">{currentFormated.quotaShare.accumulation}</span>
+                                        </div>
+                                        <div class="slds-text-align_center slds-form-element__control slds-show_large slds-grid_vertical-align-center custom-static-control">
+                                            {currentFormated.quotaShare.accumulation}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_12-of-12 slds-large-size_3-of-12 slds-p-horizontal_x-small ">
+                                    <div class="slds-form-element"> 
+                                        <label class="slds-form-element__label slds-hide_large">Maximum Capacity</label>
+                                        <div class="slds-form-element__control slds-hide_large">
+                                            <span class="slds-form-element__static slds-text-body_regular">{currentFormated.quotaShare.capacity}</span>
+                                        </div>
+                                        <div class="slds-text-align_center slds-form-element__control slds-show_large slds-grid_vertical-align-center custom-static-control">
+                                            {currentFormated.quotaShare.capacity}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr style="margin-top:5px;margin-bottom:0px"></hr>
+                    <!-- SURPLUS -->
+                    <div class="slds-grid slds-wrap slds-grid_vertical-align-center">
+                        <div class="slds-col slds-size_12-of-12 slds-large-size_2-of-12 slds-text-title_bold">
+                            SURPLUS
+                        </div>
+                        <div class="slds-col slds-size_12-of-12 slds-large-size_10-of-12">
+                            <div class="slds-grid slds-wrap slds-grid_vertical-align-center">
+                                <div class="slds-col slds-size_12-of-12 slds-large-size_3-of-12 slds-p-horizontal_x-small">
+                                    <lightning-input 
+                                        label="Remaining (Amount)"
+                                        class="slds-hide_large"
+                                        value={currentFormated.surplus.limit}
+                                        data-object="surplus"
+                                        data-field="limit" 
+                                        onkeydown={handleNumericKeyDown}
+                                        onfocus={handleInputFocus}
+                                        onblur={handleInputBlur}>
+                                    </lightning-input>
+                                    <lightning-input 
+                                        class="slds-show_large"
+                                        value={currentFormated.surplus.limit}
+                                        data-object="surplus"
+                                        data-field="limit" 
+                                        style="margin-top: -10px;"
+                                        onkeydown={handleNumericKeyDown}
+                                        onfocus={handleInputFocus}
+                                        onblur={handleInputBlur}>
+                                    </lightning-input>
+                                </div>
+                                <div class="slds-col slds-size_12-of-12 slds-large-size_3-of-12 slds-p-horizontal_x-small">
+                                    <div class="slds-form-element"> 
+                                        <label class="slds-form-element__label slds-hide_large">% (Of TSI)</label>
+                                        <div class="slds-form-element__control slds-hide_large">
+                                            <span class="slds-form-element__static slds-text-body_regular">{surplusLimitPercentage}</span>
+                                        </div>
+                                        <div class="slds-text-align_center slds-form-element__control slds-show_large slds-grid_vertical-align-center custom-static-control">
+                                            {surplusLimitPercentage}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_12-of-12 slds-large-size_3-of-12 slds-p-horizontal_x-small">
+                                    <div class="slds-form-element"> 
+                                        <label class="slds-form-element__label slds-hide_large">Absorbed - Accumulated</label>
+                                        <div class="slds-form-element__control slds-hide_large">
+                                            <span class="slds-form-element__static slds-text-body_regular">{currentFormated.surplus.accumulation}</span>
+                                        </div>
+                                        <div class="slds-text-align_center slds-form-element__control slds-show_large slds-grid_vertical-align-center custom-static-control">
+                                            {currentFormated.surplus.accumulation}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_12-of-12 slds-large-size_3-of-12 slds-p-horizontal_x-small ">
+                                    <div class="slds-form-element"> 
+                                        <label class="slds-form-element__label slds-hide_large">Maximum Capacity</label>
+                                        <div class="slds-form-element__control slds-hide_large">
+                                            <span class="slds-form-element__static slds-text-body_regular">{currentFormated.surplus.capacity}</span>
+                                        </div>
+                                        <div class="slds-text-align_center slds-form-element__control slds-show_large slds-grid_vertical-align-center custom-static-control">
+                                            {currentFormated.surplus.capacity}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr style="margin-top:5px;margin-bottom:0px"></hr>
+                    <!-- FACOBLIG -->
+                    <div class="slds-grid slds-wrap slds-grid_vertical-align-center">
+                        <div class="slds-col slds-size_12-of-12 slds-large-size_2-of-12 slds-text-title_bold">
+                            FACOBLIG
+                        </div>
+                        <div class="slds-col slds-size_12-of-12 slds-large-size_10-of-12">
+                            <div class="slds-grid slds-wrap slds-grid_vertical-align-center">
+                                <div class="slds-col slds-size_12-of-12 slds-large-size_3-of-12 slds-p-horizontal_x-small">
+                                    <lightning-input 
+                                        label="Remaining (Amount)"
+                                        class="slds-hide_large"
+                                        value={currentFormated.facoblig.limit}
+                                        data-object="facoblig"
+                                        data-field="limit" 
+                                        onkeydown={handleNumericKeyDown}
+                                        onfocus={handleInputFocus}
+                                        onblur={handleInputBlur}>
+                                    </lightning-input>
+                                    <lightning-input 
+                                        class="slds-show_large"
+                                        value={currentFormated.facoblig.limit}
+                                        data-object="facoblig"
+                                        data-field="limit" 
+                                        style="margin-top: -10px;"
+                                        onkeydown={handleNumericKeyDown}
+                                        onfocus={handleInputFocus}
+                                        onblur={handleInputBlur}>
+                                    </lightning-input>
+                                </div>
+                                <div class="slds-col slds-size_12-of-12 slds-large-size_3-of-12 slds-p-horizontal_x-small">
+                                    <div class="slds-form-element"> 
+                                        <label class="slds-form-element__label slds-hide_large">% (Of TSI)</label>
+                                        <div class="slds-form-element__control slds-hide_large">
+                                            <span class="slds-form-element__static slds-text-body_regular">{facobligLimitPercentage}</span>
+                                        </div>
+                                        <div class="slds-text-align_center slds-form-element__control slds-show_large slds-grid_vertical-align-center custom-static-control">
+                                            {facobligLimitPercentage}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_12-of-12 slds-large-size_3-of-12 slds-p-horizontal_x-small">
+                                    <div class="slds-form-element"> 
+                                        <label class="slds-form-element__label slds-hide_large">Absorbed - Accumulated</label>
+                                        <div class="slds-form-element__control slds-hide_large">
+                                            <span class="slds-form-element__static slds-text-body_regular">{currentFormated.facoblig.accumulation}</span>
+                                        </div>
+                                        <div class="slds-text-align_center slds-form-element__control slds-show_large slds-grid_vertical-align-center custom-static-control">
+                                            {currentFormated.facoblig.accumulation}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_12-of-12 slds-large-size_3-of-12 slds-p-horizontal_x-small ">
+                                    <div class="slds-form-element"> 
+                                        <label class="slds-form-element__label slds-hide_large">Maximum Capacity</label>
+                                        <div class="slds-form-element__control slds-hide_large">
+                                            <span class="slds-form-element__static slds-text-body_regular">{currentFormated.facoblig.capacity}</span>
+                                        </div>
+                                        <div class="slds-text-align_center slds-form-element__control slds-show_large slds-grid_vertical-align-center custom-static-control">
+                                            {currentFormated.facoblig.capacity}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr style="margin-top:5px;margin-bottom:0px"></hr>
+                    <!-- TOTAL CAPACITY -->
+                    <div class="slds-grid slds-wrap slds-grid_vertical-align-center slds-m-top_medium">
+                        <div class="slds-col slds-size_12-of-12 slds-large-size_2-of-12 slds-text-title_bold">
+                            TOTAL CAPACITY
+                        </div>
+                        <div class="slds-col slds-size_12-of-12 slds-large-size_10-of-12">
+                            <div class="slds-grid slds-wrap slds-grid_vertical-align-center">
+                                <div class="slds-col slds-size_12-of-12 slds-large-size_3-of-12 slds-p-horizontal_x-small">
+                                    <div class="slds-form-element"> 
+                                        <label class="slds-form-element__label slds-hide_large">Remaining (Amount)</label>
+                                        <div class="slds-form-element__control slds-hide_large">
+                                            <span class="slds-form-element__static slds-text-body_regular">{totalLimitDisplay}</span>
+                                        </div>
+                                        <div class="slds-form-element__control slds-show_large slds-grid_vertical-align-center custom-static-control">
+                                            {totalLimitDisplay}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_12-of-12 slds-large-size_3-of-12 slds-p-horizontal_x-small">
+                                    <div class="slds-form-element"> 
+                                        <label class="slds-form-element__label slds-hide_large">% (Of TSI)</label>
+                                        <div class="slds-form-element__control slds-hide_large">
+                                            <span class="slds-form-element__static slds-text-body_regular">{totalTsiDisplay}</span>
+                                        </div>
+                                        <div class="slds-text-align_center slds-form-element__control slds-show_large slds-grid_vertical-align-center custom-static-control">
+                                            {totalTsiDisplay}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_12-of-12 slds-large-size_3-of-12 slds-p-horizontal_x-small">
+                                    <div class="slds-form-element"> 
+                                        <label class="slds-form-element__label slds-hide_large">Absorbed - Accumulated</label>
+                                        <div class="slds-form-element__control slds-hide_large">
+                                            <span class="slds-form-element__static slds-text-body_regular">{totalAccumulationDisplay}</span>
+                                        </div>
+                                        <div class="slds-text-align_center slds-form-element__control slds-show_large slds-grid_vertical-align-center custom-static-control">
+                                            {totalAccumulationDisplay}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_12-of-12 slds-large-size_3-of-12 slds-p-horizontal_x-small ">
+                                    <div class="slds-form-element"> 
+                                        <label class="slds-form-element__label slds-hide_large">Maximum Capacity</label>
+                                        <div class="slds-form-element__control slds-hide_large">
+                                            <span class="slds-form-element__static slds-text-body_regular">{totalCapacityDisplay}</span>
+                                        </div>
+                                        <div class="slds-text-align_center slds-form-element__control slds-show_large slds-grid_vertical-align-center custom-static-control">
+                                            {totalCapacityDisplay}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr style="margin-top:5px;margin-bottom:0px"></hr>
+                    <!-- EXCESS -->
+                    <div class="slds-grid slds-wrap slds-grid_vertical-align-center slds-m-top_medium">
+                        <div class="slds-col slds-size_12-of-12 slds-large-size_2-of-12 slds-text-title_bold">
+                            EXCESS
+                        </div>
+                        <div class="slds-col slds-size_12-of-12 slds-large-size_10-of-12">
+                            <div class="slds-grid slds-wrap slds-grid_vertical-align-center">
+                                <div class="slds-col slds-size_12-of-12 slds-large-size_3-of-12 slds-p-horizontal_x-small">
+                                    <div class="slds-form-element"> 
+                                        <label class="slds-form-element__label slds-hide_large">Remaining (Amount)</label>
+                                        <div class="slds-form-element__control slds-hide_large">
+                                            <span class="slds-form-element__static slds-text-body_regular">{totalExcessDisplay}</span>
+                                        </div>
+                                        <div class="slds-form-element__control slds-show_large slds-grid_vertical-align-center custom-static-control">
+                                            {totalExcessDisplay}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_12-of-12 slds-large-size_3-of-12 slds-p-horizontal_x-small">
+                                    <div class="slds-form-element"> 
+                                        <label class="slds-form-element__label slds-hide_large">% (Of TSI)</label>
+                                        <div class="slds-form-element__control slds-hide_large">
+                                            <span class="slds-form-element__static slds-text-body_regular">{totalexcessPercentDisplay}</span>
+                                        </div>
+                                        <div class="slds-text-align_center slds-form-element__control slds-show_large slds-grid_vertical-align-center custom-static-control">
+                                            {totalexcessPercentDisplay}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_12-of-12 slds-large-size_6-of-12 slds-p-horizontal_x-small">
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr style="margin-top:5px;margin-bottom:0px"></hr>
+                    <!-- SET FACULTATIVE -->
+                    <div class="slds-grid slds-wrap slds-grid_vertical-align-center slds-m-top_small">
+                        <div class="slds-col slds-size_12-of-12 slds-large-size_2-of-12 slds-text-title_bold">
+                            SET FACULTATIVE
+                        </div>
+                        <div class="slds-col slds-size_12-of-12 slds-large-size_10-of-12">
+                            <div class="slds-grid slds-wrap slds-grid_vertical-align-center">
+                                <div class="slds-col slds-size_12-of-12 slds-large-size_3-of-12 slds-p-horizontal_x-small">
+                                    <lightning-input 
+                                        label="Remaining (Amount)"
+                                        class="slds-hide_large"
+                                        value={currentFormated.setFacultative}
+                                        data-field="setFacultative" 
+                                        onkeydown={handleNumericKeyDown}
+                                        onfocus={handleInputFocusFacultative}
+                                        onblur={handleInputBlurFacultative}>
+                                    </lightning-input>
+                                    <lightning-input 
+                                        class="slds-show_large"
+                                        value={currentFormated.setFacultative}
+                                        data-field="setFacultative" 
+                                        style="margin-top: -10px;"
+                                        onkeydown={handleNumericKeyDown}
+                                        onfocus={handleInputFocusFacultative}
+                                        onblur={handleInputBlurFacultative}>
+                                    </lightning-input>
+                                </div>
+                                <div class="slds-col slds-size_12-of-12 slds-large-size_3-of-12 slds-p-horizontal_x-small">
+                                    <div class="slds-form-element"> 
+                                        <label class="slds-form-element__label slds-hide_large">% (Of TSI)</label>
+                                        <div class="slds-form-element__control slds-hide_large">
+                                            <span class="slds-form-element__static slds-text-body_regular">{facultativePercentage}</span>
+                                        </div>
+                                        <div class="slds-text-align_center slds-form-element__control slds-show_large slds-grid_vertical-align-center custom-static-control">
+                                            {facultativePercentage}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_12-of-12 slds-large-size_6-of-12 slds-p-horizontal_x-small">
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr style="margin-top:5px;margin-bottom:0px"></hr>
+                    <!-- SHARE OFFERED -->
+                    <div class="slds-grid slds-wrap slds-grid_vertical-align-center slds-m-top_medium">
+                        <div class="slds-col slds-size_12-of-12 slds-large-size_2-of-12 slds-text-title_bold">
+                            SHARE OFFERED
+                        </div>
+                        <div class="slds-col slds-size_12-of-12 slds-large-size_10-of-12">
+                            <div class="slds-grid slds-wrap slds-grid_vertical-align-center">
+                                <div class="slds-col slds-size_12-of-12 slds-large-size_3-of-12 slds-p-horizontal_x-small">
+                                    <div class="slds-form-element"> 
+                                        <label class="slds-form-element__label slds-hide_large">Remaining (Amount)</label>
+                                        <div class="slds-form-element__control slds-hide_large">
+                                            <span class="slds-form-element__static slds-text-body_regular">{totalShareDisplay}</span>
+                                        </div>
+                                        <div class="slds-form-element__control slds-show_large slds-grid_vertical-align-center custom-static-control">
+                                            {totalShareDisplay}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_12-of-12 slds-large-size_3-of-12 slds-p-horizontal_x-small">
+                                    <div class="slds-form-element"> 
+                                        <label class="slds-form-element__label slds-hide_large">% (Of TSI)</label>
+                                        <div class="slds-form-element__control slds-hide_large">
+                                            <span class="slds-form-element__static slds-text-body_regular">{totalSharePercentDisplay}</span>
+                                        </div>
+                                        <div class="slds-text-align_center slds-form-element__control slds-show_large slds-grid_vertical-align-center custom-static-control">
+                                            {totalSharePercentDisplay}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_12-of-12 slds-large-size_6-of-12 slds-p-horizontal_x-small">
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr style="margin-top:5px;margin-bottom:0px"></hr>
+                    <!-- APPROVED -->
+                    <div class="slds-grid slds-wrap slds-grid_vertical-align-center slds-m-top_medium">
+                        <div class="slds-col slds-size_12-of-12 slds-large-size_2-of-12 slds-text-title_bold">
+                            APPROVED
+                        </div>
+                        <div class="slds-col slds-size_12-of-12 slds-large-size_10-of-12">
+                            <div class="slds-grid slds-wrap slds-grid_vertical-align-center">
+                                <div class="slds-col slds-size_12-of-12 slds-large-size_3-of-12 slds-p-horizontal_x-small">
+                                    <div class="slds-form-element"> 
+                                        <label class="slds-form-element__label slds-hide_large">Remaining (Amount)</label>
+                                        <div class="slds-form-element__control slds-hide_large">
+                                            <span class="slds-form-element__static slds-text-body_regular">{totalAcceptedDisplay}</span>
+                                        </div>
+                                        <div class="slds-form-element__control slds-show_large slds-grid_vertical-align-center custom-static-control">
+                                            {totalAcceptedDisplay}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_12-of-12 slds-large-size_3-of-12 slds-p-horizontal_x-small">
+                                    <div class="slds-form-element"> 
+                                        <label class="slds-form-element__label slds-hide_large">% (Of TSI)</label>
+                                        <div class="slds-form-element__control slds-hide_large">
+                                            <span class="slds-form-element__static slds-text-body_regular">{totalAcceptedPercentDisplay}</span>
+                                        </div>
+                                        <div class="slds-text-align_center slds-form-element__control slds-show_large slds-grid_vertical-align-center custom-static-control">
+                                            {totalAcceptedPercentDisplay}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_12-of-12 slds-large-size_6-of-12 slds-p-horizontal_x-small">
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr style="margin-top:5px;margin-bottom:0px"></hr>
+                    <!-- BINDING -->
+                    <div class="slds-grid slds-wrap slds-grid_vertical-align-center slds-m-top_medium">
+                        <div class="slds-col slds-size_12-of-12 slds-large-size_2-of-12 slds-text-title_bold">
+                            BINDING
+                        </div>
+                        <div class="slds-col slds-size_12-of-12 slds-large-size_10-of-12">
+                            <div class="slds-grid slds-wrap slds-grid_vertical-align-center">
+                                <div class="slds-col slds-size_12-of-12 slds-large-size_3-of-12 slds-p-horizontal_x-small">
+                                    <div class="slds-form-element"> 
+                                        <label class="slds-form-element__label slds-hide_large">Remaining (Amount)</label>
+                                        <div class="slds-form-element__control slds-hide_large">
+                                            <span class="slds-form-element__static slds-text-body_regular">{totalBindingDisplay}</span>
+                                        </div>
+                                        <div class="slds-form-element__control slds-show_large slds-grid_vertical-align-center custom-static-control">
+                                            {totalBindingDisplay}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_12-of-12 slds-large-size_3-of-12 slds-p-horizontal_x-small">
+                                    <div class="slds-form-element"> 
+                                        <label class="slds-form-element__label slds-hide_large">% (Of TSI)</label>
+                                        <div class="slds-form-element__control slds-hide_large">
+                                            <span class="slds-form-element__static slds-text-body_regular">{totalBindingPercentDisplay}</span>
+                                        </div>
+                                        <div class="slds-text-align_center slds-form-element__control slds-show_large slds-grid_vertical-align-center custom-static-control">
+                                            {totalBindingPercentDisplay}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_12-of-12 slds-large-size_6-of-12 slds-p-horizontal_x-small">
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr style="margin-top:5px;margin-bottom:0px"></hr>
+                    <!-- PENDING BINDING -->
+                    <div class="slds-grid slds-wrap slds-grid_vertical-align-center slds-m-top_medium">
+                        <div class="slds-col slds-size_12-of-12 slds-large-size_2-of-12 slds-text-title_bold">
+                            PENDING BINDING
+                        </div>
+                        <div class="slds-col slds-size_12-of-12 slds-large-size_10-of-12">
+                            <div class="slds-grid slds-wrap slds-grid_vertical-align-center">
+                                <div class="slds-col slds-size_12-of-12 slds-large-size_3-of-12 slds-p-horizontal_x-small">
+                                    <div class="slds-form-element"> 
+                                        <label class="slds-form-element__label slds-hide_large">Remaining (Amount)</label>
+                                        <div class="slds-form-element__control slds-hide_large">
+                                            <span class="slds-form-element__static slds-text-body_regular">{totalPendingBindingDisplay}</span>
+                                        </div>
+                                        <div class="slds-form-element__control slds-show_large slds-grid_vertical-align-center custom-static-control">
+                                            {totalPendingBindingDisplay}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_12-of-12 slds-large-size_3-of-12 slds-p-horizontal_x-small">
+                                    <div class="slds-form-element"> 
+                                        <label class="slds-form-element__label slds-hide_large">% (Of TSI)</label>
+                                        <div class="slds-form-element__control slds-hide_large">
+                                            <span class="slds-form-element__static slds-text-body_regular">{totalPendingBindingPercentDisplay}</span>
+                                        </div>
+                                        <div class="slds-text-align_center slds-form-element__control slds-show_large slds-grid_vertical-align-center custom-static-control">
+                                            {totalPendingBindingPercentDisplay}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_12-of-12 slds-large-size_6-of-12 slds-p-horizontal_x-small">
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr style="margin-top:5px;margin-bottom:0px"></hr>
+                    <!-- SHORTFALL -->
+                    <div class="slds-grid slds-wrap slds-grid_vertical-align-center slds-m-top_medium">
+                        <div class="slds-col slds-size_12-of-12 slds-large-size_2-of-12 slds-text-title_bold">
+                            SHORTFALL
+                        </div>
+                        <div class="slds-col slds-size_12-of-12 slds-large-size_10-of-12">
+                            <div class="slds-grid slds-wrap slds-grid_vertical-align-center">
+                                <div class="slds-col slds-size_12-of-12 slds-large-size_3-of-12 slds-p-horizontal_x-small">
+                                    <div class="slds-form-element"> 
+                                        <label class="slds-form-element__label slds-hide_large">Remaining (Amount)</label>
+                                        <div class="slds-form-element__control slds-hide_large">
+                                            <span class="slds-form-element__static slds-text-body_regular">{totalShortfallDisplay}</span>
+                                        </div>
+                                        <div class="slds-form-element__control slds-show_large slds-grid_vertical-align-center custom-static-control">
+                                            {totalShortfallDisplay}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_12-of-12 slds-large-size_3-of-12 slds-p-horizontal_x-small">
+                                    <div class="slds-form-element"> 
+                                        <label class="slds-form-element__label slds-hide_large">% (Of TSI)</label>
+                                        <div class="slds-form-element__control slds-hide_large">
+                                            <span class="slds-form-element__static slds-text-body_regular">{totalShortfallPercentDisplay}</span>
+                                        </div>
+                                        <div class="slds-text-align_center slds-form-element__control slds-show_large slds-grid_vertical-align-center custom-static-control">
+                                            {totalShortfallPercentDisplay}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_12-of-12 slds-large-size_6-of-12 slds-p-horizontal_x-small">
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr style="margin-top:5px;margin-bottom:0px"></hr>
+                </div>
+            </div>
+        </div>
+        <div class="slds-grid slds-grid_align-end slds-m-top_large">
+            <!-- <lightning-button 
+                label="Cancel" title="Cancel" 
+                onclick={handleCancel} class="slds-m-right_x-small">
+            </lightning-button> -->
+            <lightning-button 
+                label="Save" title="Save" 
+                variant="brand" onclick={handleSave}>
+            </lightning-button>
+        </div>
+    </lightning-card>
+</template>

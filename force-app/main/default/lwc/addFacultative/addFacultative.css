@@ -1,0 +1,65 @@
+.section-divider {
+    background-color: #10499e; /* Purple tone like your button */
+    color: #ffffff; /* SLDS theme shade color */
+    padding: 0.25rem 0.75rem;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+    border-radius: 0.25rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+.slds-badge {
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.section-divider h1 {
+    color: #ffffff;
+    margin: 0;
+    font-size: 0.95rem;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+.custom-medium-modal .slds-modal__container {
+    width: 60% !important;  /* between default (40%) and large (70%) */
+    max-width: 60% !important;
+}
+
+.custom-medium-modal .slds-modal__content {
+    max-height: 65vh;       /* make datatable scrollable if needed */
+    overflow-y: auto;
+}
+
+lightning-input.percent-field::part(input) {
+  text-align: right;
+}
+lightning-input.currency-field::part(input) {
+  text-align: center;
+}
+lightning-input.amount-field::part(input) {
+  text-align: right;
+}
+
+.share-row {
+    border: none; /* remove all borders */
+    border-bottom: 1px solid #d8dde6; /* subtle gray border (SLDS token equivalent) */
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.75rem;
+    background-color: #ffffff; /* keep it clean and bright */
+    transition: box-shadow 0.2s ease-in-out;
+}
+
+.columnBorder {
+    border: 1px solid #d8dde6; /* border on all sides */
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.75rem;
+    background-color: #ffffff; /* clean and bright */
+    transition: box-shadow 0.2s ease-in-out;
+    border-radius: 0.5rem; /* optional: smooth corners for a polished look */
+}
+
+
+/* Optional: subtle hover effect */
+.share-row:hover {
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}

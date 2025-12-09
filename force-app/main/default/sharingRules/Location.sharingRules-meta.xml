@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SharingRules xmlns="http://soap.sforce.com/2006/04/metadata">
+    <sharingGuestRules>
+        <fullName>LocationGuest</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>LocationGuest</label>
+        <sharedTo>
+            <guestUser>Web_to_Lead_UAT</guestUser>
+        </sharedTo>
+        <criteriaItems>
+            <field>Name</field>
+            <operation>notEqual</operation>
+            <value></value>
+        </criteriaItems>
+        <includeHVUOwnedRecords>false</includeHVUOwnedRecords>
+    </sharingGuestRules>
+    <sharingGuestRules>
+        <fullName>Omni_Location_Guest_User</fullName>
+        <accessLevel>Read</accessLevel>
+        <label>Omni Location Guest User</label>
+        <sharedTo>
+            <guestUser>Claim_Registration</guestUser>
+        </sharedTo>
+        <criteriaItems>
+            <field>CreatedById</field>
+            <operation>startsWith</operation>
+            <value>005</value>
+        </criteriaItems>
+        <includeHVUOwnedRecords>false</includeHVUOwnedRecords>
+    </sharingGuestRules>
+</SharingRules>

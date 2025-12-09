@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Renewal_Milestone__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF ( Count_Renewal__c &gt; 30, &apos;Incoming Renewal&apos;,
+IF ( Count_Renewal__c = 30, &apos;Renewal H-30&apos;,
+IF ( Count_Renewal__c &gt; 15, &apos;Incoming H-15&apos;,
+IF ( Count_Renewal__c = 15, &apos;Renewal H-15&apos;,
+IF ( Count_Renewal__c &gt; -14, &apos;Over H+14&apos;,
+IF ( Count_Renewal__c = -14, &apos;Reminder H+14&apos;,&apos;&apos;))))))</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Renewal Milestone</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

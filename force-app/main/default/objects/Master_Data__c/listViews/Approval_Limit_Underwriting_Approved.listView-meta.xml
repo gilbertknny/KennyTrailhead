@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Approval_Limit_Underwriting_Approved</fullName>
+    <columns>NAME</columns>
+    <columns>USER_ID__c</columns>
+    <columns>BSN_ID__c</columns>
+    <columns>AUTHORITY_TYPE__c</columns>
+    <columns>CURRENCY_CODE__c</columns>
+    <columns>LIMIT_AMOUNT__c</columns>
+    <columns>AGE__c</columns>
+    <columns>TONNAGE__c</columns>
+    <columns>CREATED_DATE__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>AUTHORITY_TYPE__c</field>
+        <operation>contains</operation>
+        <value>UW</value>
+    </filters>
+    <filters>
+        <field>RECORDTYPE</field>
+        <operation>equals</operation>
+        <value>Master_Data__c.Approval_Limit</value>
+    </filters>
+    <filters>
+        <field>Status__c</field>
+        <operation>equals</operation>
+        <value>Approved</value>
+    </filters>
+    <label>Approval Limit Underwriting - Approved</label>
+</ListView>

@@ -1,0 +1,65 @@
+<template>
+    
+    <lightning-modal-header label="Create Opportunity Renewal/Endorsement"></lightning-modal-header>
+    <lightning-modal-body>
+        <template if:true={isLoading}>
+            <lightning-spinner alternative-text="Loading" size="medium" variant="brand"></lightning-spinner>
+        </template>
+        <div class="slds-box slds-theme_default">
+            <lightning-combobox 
+                label="Opportunity Type"
+                options={opportunityType}
+                onchange={handleOpportunityType}
+                value={opportunityTypeId} 
+                required>
+            </lightning-combobox> 
+            <lightning-record-picker
+                label="Ref Policy Number"
+                placeholder="Search Policy Number..."
+                object-api-name="InsurancePolicy"
+                display-fields="Name"
+                onchange={handleRefPolNumber}
+                display-info={displayInfo}
+                matching-info={matchingInfoPolicy}
+                value={refPolNumberId}
+                filter={filter}
+                required>
+            </lightning-record-picker>
+            <template if:true={showRN}>
+                <lightning-combobox 
+                        label="Status Renewal"
+                        options={statusRenewal}
+                        onchange={handleStatusRenewal}
+                        required>
+                </lightning-combobox> 
+                <lightning-textarea label="Description" onchange={handleDescription} value={description} required></lightning-textarea>
+            </template>
+            <template if:true={showED}>
+                <lightning-input type="date" label="Insurance Endorse Date" onchange={handleInsuranceEndorseDate} required></lightning-input>
+                <lightning-combobox 
+                        label="Endorse Note Change"
+                        options={endorseNoteChange}
+                        onchange={handleEndorseNoteChange}
+                        required>
+                </lightning-combobox>
+                <lightning-textarea label="Endorsement Description" onchange={handleEndorsementDescription} required></lightning-textarea>
+            </template>
+        </div>
+    </lightning-modal-body>
+    <lightning-modal-footer>
+        <div class="slds-m-top_small slds-align_absolute-center">
+            <lightning-button 
+                variant="Neutral" 
+                label="Cancel" 
+                class="slds-m-left_x-small" 
+                onclick={handleCancel}>
+            </lightning-button>
+            <lightning-button 
+                variant="brand" 
+                class="slds-m-left_x-small" 
+                label="Submit" 
+                onclick={handleSave}>
+            </lightning-button>
+        </div>
+    </lightning-modal-footer>
+</template>

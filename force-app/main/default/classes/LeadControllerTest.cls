@@ -1,4 +1,5 @@
 @IsTest(SeeAllData=true)
+@SuppressWarnings('PMD.ApexUnitTestShouldNotUseSeeAllDataTrue, PMD.ApexUnitTestClassShouldHaveRunAs')
 public class LeadControllerTest {
 
     @IsTest
@@ -43,7 +44,6 @@ public class LeadControllerTest {
         ];
 
         if (!zips.isEmpty()) {
-            Schema.Location zip = zips[0];
             Test.startTest();
             List<LeadController.LocationWrapper> results = LeadController.getZipCodes(city.Id);
             Test.stopTest();
@@ -106,10 +106,10 @@ public class LeadControllerTest {
             FROM Lead
             WHERE Id = :leadId
         ];
-        System.assertEquals('Marco', insertedLead.FirstName);
-        System.assertEquals(city.Id, insertedLead.City__c);
+        System.assertEquals('Marco', insertedLead.FirstName, 'First name should match');
+        System.assertEquals(city.Id, insertedLead.City__c, 'City reference should match');
         if (zip != null) {
-            System.assertEquals(zip.Id, insertedLead.Zip__c);
+            System.assertEquals(zip.Id, insertedLead.Zip__c, 'Zip code reference should match');
         }
     }
 }

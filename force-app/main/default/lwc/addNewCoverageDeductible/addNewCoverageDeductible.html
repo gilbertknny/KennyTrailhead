@@ -1,0 +1,684 @@
+<!--
+  @description       : 
+  @author            : Ahmad Yazid Munif
+  @group             : 
+  @last modified on  : 11-20-2025
+  @last modified by  : Ahmad Yazid Munif
+-->
+<template>
+    <div class="slds-p-around_medium slds-scrollable_x">
+        <lightning-radio-group
+            label="Deductible Setting"
+            options={modeOptions}
+            value={selectedMode}
+            onchange={handleModeChange}
+            required
+            class="slds-m-bottom_medium"
+            disabled=true>
+        </lightning-radio-group>
+        <!-- <div class="slds-m-vertical_medium">
+            <h2 class="slds-text-heading_small slds-text-align_center slds-p-bottom_small">
+                Deductible
+            </h2>
+        </div> -->
+<template if:true={coverageDataFormated}>
+    <div style="overflow-x: auto;"> 
+        <table class="slds-table slds-table_cell-buffer slds-table_bordered" 
+               style="min-width: 1400px; width: 100%;">
+            <thead>
+                <tr class="slds-line-height_reset">
+                    <th class="slds-text-align_left" scope="col" style="width: 80px;">
+                        <div class="slds-cell-wrap" title="ID Coverage">ID</div>
+                    </th>
+                    <th class="slds-text-align_left" scope="col" style="width: 280px;">
+                        <div class="slds-cell-wrap" title="Coverage Name">Name</div>
+                    </th>
+                    <th class="slds-text-align_left" scope="col" style="width: 150px;">
+                        <div class="slds-cell-wrap" title="Type">Type</div>
+                    </th>
+                    <th class="slds-text-align_left" scope="col" style="width: 150px;">
+                        <div class="slds-cell-wrap" title="Amount">Amount/ Percentage</div>
+                    </th>
+                    <th class="slds-text-align_left" scope="col" style="width: 150px;">
+                        <div class="slds-cell-wrap" title="Currency">Currency</div>
+                    </th>
+                    <th class="slds-text-align_left" scope="col" style="width: 180px;">
+                        <div class="slds-cell-wrap" title="Select1">Applied to/ of <span class="slds-required">*</span></div>
+                    </th>
+                    <th class="slds-text-align_left" scope="col" style="width: 150px;">
+                        <div class="slds-cell-wrap" title="Minimum">Minimum</div>
+                    </th>
+                    <th class="slds-text-align_left" scope="col" style="width: 260px;">
+                        <div class="slds-cell-wrap" title="Description">Description</div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <template for:each={coverageDataFormated} for:item="row">
+                    <template if:false={row.isSingleRate}> 
+                        <tr key={row.id}> 
+                                <td data-label="ID Coverage" style="width: 80px;">{row.coverageId}</td>
+                                <td data-label="Coverage Name" style="width: 280px;">{row.coverageName}</td>
+                                <td data-label="Deductible Setting" style="width: 150px;">
+                                    <div class="lookup-cell-adjust">
+                                        <lightning-combobox
+                                            data-id={row.id}
+                                            name="deductibleSetting"
+                                            value={row.deductibleSetting}
+                                            options={options}
+                                            onchange={handleChange}
+                                            disabled={row.compositeDisable}
+                                            class="full-width-combobox"> 
+                                        </lightning-combobox>
+                                    </div>
+                                </td>
+                                <template lwc:if={row.isFlat}>
+                                    <td data-label="Deductible Amount" style="width: 150px;">
+                                        <lightning-input
+                                            type="text"
+                                            onkeydown={handleNumericKeyDown}
+                                            value={row.deductible.deductibleAmount}
+                                            data-id={row.id}
+                                            data-fieldname="deductibleAmount" 
+                                            onfocus={handleInputFocus}
+                                            onblur={handleInputBlur} 
+                                            data-object="deductible"
+                                            data-field="deductibleAmount"
+                                            class="full-width-input input-amount" 
+                                            disabled={row.compositeDisable}
+                                            variant="label-hidden">
+                                        </lightning-input>
+                                    </td>
+                                    
+                                    <td data-label="Currency Setting" style="width: 150px;">
+                                        <lightning-combobox
+                                            data-id={row.id} 
+                                            name="currencyName" 
+                                            value={row.deductible.currencyName}
+                                            options={currencyPicklist} 
+                                            disabled={row.compositeDisable}
+                                            onchange={handleChange} 
+                                            variant="label-hidden">
+                                        </lightning-combobox>
+                                        <!-- <div class="lookup-cell-adjust">
+                                            <c-custom-lookup
+                                                data-id={row.id} 
+                                                record-id={row.currencyId}
+                                                placeholder="currency" 
+                                                data-field="Currency__c" 
+                                                icon-name="standard:location"
+                                                object-api-name="Master_Data__c" 
+                                                fields="Name, Exchange_Rate__c"
+                                                record-type-name="Exchange Rate" 
+                                                onrecordselected={handleLookUpSelected}
+                                                onrecordcleared={handleLookUpCleared}>
+                                            </c-custom-lookup>
+                                        </div> -->
+                                    </td>
+
+                                    <td data-label="Deductible Flag" style="width: 180px;">
+                                        <lightning-combobox
+                                            data-id={row.id} 
+                                            name="deductibleFlag" 
+                                            value=''
+                                            options={deductFlag} 
+                                            disabled=true
+                                            onchange={handleChange} 
+                                            variant="label-hidden">
+                                        </lightning-combobox>
+                                    </td>
+                                    <td data-label="Minimum" style="width: 150px;">
+                                        <lightning-input
+                                            type="text"
+                                            onkeydown={handleNumericKeyDown}
+                                            data-id={row.id}
+                                            value=''
+                                            data-fieldname="minimumAmount" 
+                                            onfocus={handleInputFocus}
+                                            onblur={handleInputBlur} 
+                                            data-object="deductible"
+                                            data-field="minimumAmount"
+                                            class="full-width-input input-amount" 
+                                            disabled=true
+                                            variant="label-hidden">
+                                        </lightning-input>
+                                    </td>
+                                    <td data-label="Description" style="width: 260px;">
+                                        <lightning-input
+                                            type="text" 
+                                            data-id={row.id}
+                                            value={row.deductible.descriptionValue} 
+                                            data-fieldname="descriptionValue"
+                                            onchange={handleInputChange}
+                                            class="full-width-input input-amount" 
+                                            disabled={row.compositeDisable}
+                                            variant="label-hidden">
+                                        </lightning-input>
+                                    </td>
+                                </template>
+                                <template lwc:elseif={row.isPercent}>
+                                    <td data-label="Deductible Amount" style="width: 150px;">
+                                        <lightning-input 
+                                            type="number"
+                                            value={row.deductible.deductibleAmount} 
+                                            data-id={row.id}
+                                            data-fieldname="deductibleAmount" 
+                                            data-object="deductible"
+                                            data-field="deductibleAmount"
+                                            class="full-width-input input-amount" 
+                                            disabled={row.compositeDisable}
+                                            onchange={handleInputChange}
+                                            placeholder="%" min="0" max="100" step="0.01"
+                                            variant="label-hidden">
+                                        </lightning-input>
+                                        <!-- <lightning-input
+                                            type="text"
+                                            onkeydown={handleNumericKeyDown}
+                                            value={row.deductible.deductibleAmount} 
+                                            data-id={row.id}
+                                            data-fieldname="deductibleAmount" 
+                                            onfocus={handleInputFocus}
+                                            onblur={handleInputBlur} 
+                                            data-object="deductible"
+                                            data-field="deductibleAmount"
+                                            class="full-width-input input-amount" 
+                                            disabled={row.compositeDisable}
+                                            variant="label-hidden">
+                                        </lightning-input> -->
+                                    </td>
+                                    <td data-label="Currency Setting" style="width: 150px;">
+                                        <lightning-combobox
+                                            data-id={row.id} 
+                                            name="currencyName" 
+                                            value={row.deductible.currencyName}
+                                            options={currencyPicklist} 
+                                            disabled={row.compositeDisable}
+                                            onchange={handleChange} 
+                                            variant="label-hidden">
+                                        </lightning-combobox>
+                                        <!-- <div class="lookup-cell-adjust">
+                                            <c-custom-lookup
+                                                data-id={row.id} 
+                                                record-id={row.currencyId} 
+                                                placeholder="currency" 
+                                                data-field="Currency__c" 
+                                                icon-name="standard:location"
+                                                object-api-name="Master_Data__c" 
+                                                fields="Name, Exchange_Rate__c"
+                                                record-type-name="Exchange Rate" 
+                                                onrecordselected={handleLookUpSelected}
+                                                onrecordcleared={handleLookUpCleared}>
+                                            </c-custom-lookup>
+                                        </div> -->
+                                    </td>
+                                    <td data-label="Deductible Flag" style="width: 180px;">
+                                        <lightning-combobox
+                                            data-id={row.id} 
+                                            name="deductibleFlag" 
+                                            value={row.deductible.deductibleFlag}
+                                            options={deductFlag} 
+                                            disabled={row.compositeDisable}
+                                            onchange={handleChange} 
+                                            variant="label-hidden">
+                                        </lightning-combobox>
+                                    </td>
+                                    <td data-label="Minimum" style="width: 150px;">
+                                        <lightning-input
+                                            type="text"
+                                            onkeydown={handleNumericKeyDown}
+                                            data-id={row.id}
+                                            value={row.deductible.minimumAmount} 
+                                            data-fieldname="minimumAmount" 
+                                            onfocus={handleInputFocus}
+                                            onblur={handleInputBlur} 
+                                            data-object="deductible"
+                                            data-field="minimumAmount"
+                                            class="full-width-input input-amount" 
+                                            disabled={row.compositeDisable}
+                                            variant="label-hidden">
+                                        </lightning-input>
+                                    </td>
+                                    <td data-label="Description" style="width: 260px;">
+                                        <lightning-input
+                                            type="text" 
+                                            data-id={row.id}
+                                            value={row.deductible.descriptionValue} 
+                                            data-fieldname="descriptionValue"
+                                            onchange={handleInputChange}
+                                            class="full-width-input input-amount" 
+                                            disabled={row.compositeDisable}
+                                            variant="label-hidden">
+                                        </lightning-input>
+                                    </td>
+                                </template>
+                                <template lwc:else>
+                                    <td data-label="Deductible Amount" style="width: 150px;">
+                                        <lightning-input
+                                            type="text"
+                                            onkeydown={handleNumericKeyDown}
+                                            value={row.deductible.deductibleAmount} 
+                                            data-id={row.id}
+                                            data-fieldname="deductibleAmount" 
+                                            onchange={handleInputChange}
+                                            class="full-width-input input-amount" 
+                                            disabled=true
+                                            variant="label-hidden">
+                                        </lightning-input>
+                                    </td>
+                                    <td data-label="Currency Setting" style="width: 150px;">
+                                        <lightning-combobox
+                                            data-id={row.id} 
+                                            name="currencyName" 
+                                            value={row.deductible.currencyName}
+                                            options={currencyPicklist} 
+                                            onchange={handleChange} 
+                                            disabled=true
+                                            variant="label-hidden">
+                                        </lightning-combobox>
+                                        <!-- <div class="lookup-cell-adjust">
+                                            <c-custom-lookup
+                                                data-id={row.id} 
+                                                record-id={row.currencyId} 
+                                                placeholder="currency" 
+                                                data-field="Currency__c" 
+                                                icon-name="standard:location"
+                                                object-api-name="Master_Data__c" 
+                                                fields="Name, Exchange_Rate__c"
+                                                record-type-name="Exchange Rate" 
+                                                onrecordselected={handleLookUpSelected}
+                                                onrecordcleared={handleLookUpCleared}>
+                                            </c-custom-lookup>
+                                        </div> -->
+                                    </td>
+                                    <td data-label="Deductible Flag" style="width: 180px;">
+                                        <lightning-combobox
+                                            data-id={row.id} 
+                                            name="deductibleFlag" 
+                                            value={row.deductible.deductibleFlag}
+                                            options={deductFlag} 
+                                            onchange={handleChange} 
+                                            disabled=true
+                                            variant="label-hidden">
+                                        </lightning-combobox>
+                                    </td>
+                                    <td data-label="Minimum" style="width: 150px;">
+                                        <lightning-input
+                                            type="text"
+                                            onkeydown={handleNumericKeyDown}
+                                            data-id={row.id}
+                                            value={row.deductible.minimumAmount} 
+                                            data-fieldname="minimumAmount" 
+                                            onchange={handleInputChange}
+                                            class="full-width-input input-amount" 
+                                            disabled=true
+                                            variant="label-hidden">
+                                        </lightning-input>
+                                    </td>
+                                    <td data-label="Description" style="width: 260px;">
+                                        <lightning-input
+                                            type="text" 
+                                            data-id={row.id}
+                                            value={row.deductible.descriptionValue} 
+                                            data-fieldname="descriptionValue"
+                                            onchange={handleInputChange}
+                                            class="full-width-input input-amount" 
+                                            disabled=true
+                                            variant="label-hidden">
+                                        </lightning-input>
+                                    </td>
+                                </template>
+                            </tr>
+                    </template>
+                </template>
+
+                <template if:false={isModeBreakdown}>
+                    <template for:each={coverageDataFormated} for:item="row">
+                        <template if:true={row.isSingleRate}> 
+                            <tr key={row.id}> 
+                                <td data-label="ID Coverage" style="width: 80px;">{row.coverageId}</td>
+                                <td data-label="Coverage Name" style="width: 280px;">{row.coverageName}</td>
+                                <td data-label="Deductible Setting" style="width: 150px;">
+                                    <div class="lookup-cell-adjust">
+                                        <lightning-combobox
+                                            data-id={row.id}
+                                            name="deductibleSetting"
+                                            value={row.deductibleSetting}
+                                            options={options}
+                                            onchange={handleChange}
+                                            disabled={row.compositeDisable}
+                                            class="full-width-combobox"> 
+                                        </lightning-combobox>
+                                    </div>
+                                </td>
+                                <template lwc:if={row.isFlat}>
+                                    <td data-label="Deductible Amount" style="width: 150px;">
+                                        <!-- <lightning-input
+                                            type="text"
+                                            onkeydown={handleNumericKeyDown}
+                                            value={row.deductible.deductibleAmount}
+                                            data-id={row.id}
+                                            data-fieldname="deductibleAmount" 
+                                            onchange={handleInputChange}
+                                            class="full-width-input input-amount" 
+                                            disabled={row.compositeDisable}
+                                            variant="label-hidden">
+                                        </lightning-input> -->
+                                        <lightning-input
+                                            type="text"
+                                            onkeydown={handleNumericKeyDown}
+                                            value={row.deductible.deductibleAmount}
+                                            data-id={row.id}
+                                            data-fieldname="deductibleAmount" 
+                                            onfocus={handleInputFocus}
+                                            onblur={handleInputBlur} 
+                                            data-object="deductible"
+                                            data-field="deductibleAmount"
+                                            class="full-width-input input-amount" 
+                                            disabled={row.compositeDisable}
+                                            variant="label-hidden">
+                                        </lightning-input>
+                                    </td>
+                                    
+                                    <td data-label="Currency Setting" style="width: 150px;">
+                                        <lightning-combobox
+                                            data-id={row.id} 
+                                            name="currencyName" 
+                                            value={row.deductible.currencyName}
+                                            options={currencyPicklist} 
+                                            disabled={row.compositeDisable}
+                                            onchange={handleChange} 
+                                            variant="label-hidden">
+                                        </lightning-combobox>
+                                        <!-- <div class="lookup-cell-adjust">
+                                            <c-custom-lookup
+                                                data-id={row.id} 
+                                                record-id={row.currencyId}
+                                                placeholder="currency" 
+                                                data-field="Currency__c" 
+                                                icon-name="standard:location"
+                                                object-api-name="Master_Data__c" 
+                                                fields="Name, Exchange_Rate__c"
+                                                record-type-name="Exchange Rate" 
+                                                onrecordselected={handleLookUpSelected}
+                                                onrecordcleared={handleLookUpCleared}>
+                                            </c-custom-lookup>
+                                        </div> -->
+                                    </td>
+
+                                    <td data-label="Deductible Flag" style="width: 180px;">
+                                        <lightning-combobox
+                                            data-id={row.id} 
+                                            name="deductibleFlag" 
+                                            value=''
+                                            options={deductFlag} 
+                                            disabled=true
+                                            onchange={handleChange} 
+                                            variant="label-hidden">
+                                        </lightning-combobox>
+                                    </td>
+                                    
+                                    
+                                    <td data-label="Minimum" style="width: 150px;">
+                                        <lightning-input
+                                            type="text"
+                                            onkeydown={handleNumericKeyDown}
+                                            data-id={row.id}
+                                            value=''
+                                            data-fieldname="minimumAmount" 
+                                            onfocus={handleInputFocus}
+                                            onblur={handleInputBlur} 
+                                            data-object="deductible"
+                                            data-field="minimumAmount"
+                                            class="full-width-input input-amount" 
+                                            disabled=true
+                                            variant="label-hidden">
+                                        </lightning-input>
+                                    </td>
+                                    <td data-label="Description" style="width: 260px;">
+                                        <lightning-input
+                                            type="text" 
+                                            data-id={row.id}
+                                            value={row.deductible.descriptionValue} 
+                                            data-fieldname="descriptionValue"
+                                            onchange={handleInputChange}
+                                            class="full-width-input input-amount" 
+                                            disabled={row.compositeDisable}
+                                            variant="label-hidden">
+                                        </lightning-input>
+                                    </td>
+                                </template>
+                                <template lwc:elseif={row.isPercent}>
+                                    <td data-label="Deductible Amount" style="width: 150px;">
+                                        <lightning-input 
+                                            value={row.deductible.deductibleAmount} 
+                                            data-id={row.id}
+                                            data-fieldname="deductibleAmount" 
+                                            data-object="deductible"
+                                            data-field="deductibleAmount"
+                                            class="full-width-input input-amount" 
+                                            disabled={row.compositeDisable}
+                                            onchange={handleInputChange}
+                                            placeholder="%" min="0" max="100" step="0.01"
+                                            type="number" 
+                                            variant="label-hidden">
+                                        </lightning-input>
+                                        <!-- <lightning-input
+                                            type="text"
+                                            onkeydown={handleNumericKeyDown}
+                                            value={row.deductible.deductibleAmount} 
+                                            data-id={row.id}
+                                            data-fieldname="deductibleAmount" 
+                                            onchange={handleInputChange}
+                                            class="full-width-input input-amount" 
+                                            disabled={row.compositeDisable}
+                                            variant="label-hidden">
+                                        </lightning-input> -->
+                                    </td>
+                                    <td data-label="Currency Setting" style="width: 150px;">
+                                        <lightning-combobox
+                                            data-id={row.id} 
+                                            name="currencyName" 
+                                            value={row.deductible.currencyName}
+                                            options={currencyPicklist} 
+                                            disabled={row.compositeDisable}
+                                            onchange={handleChange} 
+                                            variant="label-hidden">
+                                        </lightning-combobox>
+                                        <!-- <div class="lookup-cell-adjust">
+                                            <c-custom-lookup
+                                                data-id={row.id} 
+                                                record-id={row.currencyId} 
+                                                placeholder="currency" 
+                                                data-field="Currency__c" 
+                                                icon-name="standard:location"
+                                                object-api-name="Master_Data__c" 
+                                                fields="Name, Exchange_Rate__c"
+                                                record-type-name="Exchange Rate" 
+                                                onrecordselected={handleLookUpSelected}
+                                                onrecordcleared={handleLookUpCleared}>
+                                            </c-custom-lookup>
+                                        </div> -->
+                                    </td>
+                                    <td data-label="Deductible Flag" style="width: 180px;">
+                                        <lightning-combobox
+                                            data-id={row.id} 
+                                            name="deductibleFlag" 
+                                            value={row.deductible.deductibleFlag}
+                                            options={deductFlag} 
+                                            disabled={row.compositeDisable}
+                                            onchange={handleChange} 
+                                            variant="label-hidden">
+                                        </lightning-combobox>
+                                    </td>
+                                    <td data-label="Minimum" style="width: 150px;">
+                                        <lightning-input
+                                            type="text"
+                                            onkeydown={handleNumericKeyDown}
+                                            data-id={row.id}
+                                            value={row.deductible.minimumAmount} 
+                                            data-fieldname="minimumAmount" 
+                                            onfocus={handleInputFocus}
+                                            onblur={handleInputBlur} 
+                                            data-object="deductible"
+                                            data-field="minimumAmount"
+                                            class="full-width-input input-amount" 
+                                            disabled={row.compositeDisable}
+                                            variant="label-hidden">
+                                        </lightning-input>
+                                    </td>
+                                    <td data-label="Description" style="width: 260px;">
+                                        <lightning-input
+                                            type="text" 
+                                            data-id={row.id}
+                                            value={row.deductible.descriptionValue} 
+                                            data-fieldname="descriptionValue"
+                                            onchange={handleInputChange}
+                                            class="full-width-input input-amount" 
+                                            disabled={row.compositeDisable}
+                                            variant="label-hidden">
+                                        </lightning-input>
+                                    </td>
+                                </template>
+                                <template lwc:else>
+                                    <td data-label="Deductible Amount" style="width: 150px;">
+                                        <lightning-input
+                                            type="text"
+                                            onkeydown={handleNumericKeyDown}
+                                            value={row.deductible.deductibleAmount} 
+                                            data-id={row.id}
+                                            data-fieldname="deductibleAmount" 
+                                            onchange={handleInputChange}
+                                            class="full-width-input input-amount" 
+                                            disabled=true
+                                            variant="label-hidden">
+                                        </lightning-input>
+                                    </td>
+                                    <td data-label="Currency Setting" style="width: 150px;">
+                                        <lightning-combobox
+                                            data-id={row.id} 
+                                            name="currencyName" 
+                                            value={row.deductible.currencyName}
+                                            options={currencyPicklist} 
+                                            onchange={handleChange} 
+                                            disabled=true
+                                            variant="label-hidden">
+                                        </lightning-combobox>
+                                        <!-- <div class="lookup-cell-adjust">
+                                            <c-custom-lookup
+                                                data-id={row.id} 
+                                                record-id={row.currencyId} 
+                                                placeholder="currency" 
+                                                data-field="Currency__c" 
+                                                icon-name="standard:location"
+                                                object-api-name="Master_Data__c" 
+                                                fields="Name, Exchange_Rate__c"
+                                                record-type-name="Exchange Rate" 
+                                                onrecordselected={handleLookUpSelected}
+                                                onrecordcleared={handleLookUpCleared}>
+                                            </c-custom-lookup>
+                                        </div> -->
+                                    </td>
+                                    <td data-label="Deductible Flag" style="width: 180px;">
+                                        <lightning-combobox
+                                            data-id={row.id} 
+                                            name="deductibleFlag" 
+                                            value={row.deductible.deductibleFlag}
+                                            options={deductFlag} 
+                                            onchange={handleChange} 
+                                            disabled=true
+                                            variant="label-hidden">
+                                        </lightning-combobox>
+                                    </td>
+                                    <td data-label="Minimum" style="width: 150px;">
+                                        <lightning-input
+                                            type="text"
+                                            onkeydown={handleNumericKeyDown}
+                                            data-id={row.id}
+                                            value={row.deductible.minimumAmount} 
+                                            data-fieldname="minimumAmount" 
+                                            onchange={handleInputChange}
+                                            class="full-width-input input-amount" 
+                                            disabled=true
+                                            variant="label-hidden">
+                                        </lightning-input>
+                                    </td>
+                                    <td data-label="Description" style="width: 260px;">
+                                        <lightning-input
+                                            type="text" 
+                                            data-id={row.id}
+                                            value={row.deductible.descriptionValue} 
+                                            data-fieldname="descriptionValue"
+                                            onchange={handleInputChange}
+                                            class="full-width-input input-amount" 
+                                            disabled=true
+                                            variant="label-hidden">
+                                        </lightning-input>
+                                    </td>
+                                </template>
+                            </tr>
+                        </template>
+                    </template>
+                </template>
+                <tr class="slds-line-height_reset slds-text-color_default">
+                    <th class="slds-text-align_left" scope="col" style="width: 80px;">
+                        <div class="slds-cell-wrap"> </div>
+                    </th>
+                    <th class="slds-text-align_left" scope="col" style="width: 280px;">
+                        <div class="slds-cell-wrap">Description</div>
+                    </th>
+                    <th colspan="6" class="slds-text-align_left" scope="col">
+                        <lightning-input
+                            type="text" 
+                            value={descriptionDeductible} 
+                            data-fieldname="description"
+                            onchange={handleChangeDescSingle} 
+                            variant="label-hidden"
+                            class="full-width-input">
+                        </lightning-input>
+                    </th>
+                </tr>
+            </tbody>
+        </table>
+        <div style="padding: 1.5rem">
+        </div>
+    </div>
+    <footer class="slds-modal__footer">
+        <div class="slds-grid slds-grid_align-end slds-m-top_large">
+            <div class="slds-grid slds-grid_align-center slds-gap_small">
+                <lightning-button 
+                    label="Previous" 
+                    onclick={handlePrevious} 
+                    variant="neutral">
+                </lightning-button>
+                <lightning-button 
+                    label="Next" 
+                    onclick={handleNext} 
+                    class="slds-m-left_small"
+                    variant="brand">
+                </lightning-button>
+            </div>
+        </div>
+    </footer>
+    <!-- <div>
+        <footer class="slds-card__footer navigationBar slds-grid slds-grid_align-spread slds-grid_vertical-align-center slds-grow">
+            <div class="slds-grow">
+            </div>
+            <div class="navigation-bar__right-align">
+                <lightning-button 
+                    label="Previous"
+                    onclick={handlePreviousAction}
+                    variant="neutral"
+                    class="slds-m-right_x-small"
+                ></lightning-button>
+                <lightning-button 
+                    label="Next"
+                    onclick={handleNextAction}
+                    variant="brand"
+                    class="slds-m-left_x-small"
+                ></lightning-button>
+            </div>
+        </footer>
+    </div> -->
+</template>
+    </div>
+</template>

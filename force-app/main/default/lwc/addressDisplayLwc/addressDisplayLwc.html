@@ -1,13 +1,33 @@
 <template>
     <div class="container-root">
+        <template if:true={isLoading}>
+            <lightning-spinner alternative-text="Loading..." size="small"></lightning-spinner>
+        </template>
+        
         <div class="left-col">
             <lightning-record-edit-form object-api-name="Location">
-            <lightning-messages></lightning-messages>
-            <lightning-input-field field-name="Country__c" value={country} onchange={handleCountryChange}></lightning-input-field>
-            <lightning-input-field field-name="Province__c" value={province} onchange={handleProvinceChange}></lightning-input-field>
-            <lightning-input-field field-name="City__c" value={city} onchange={handleCityChange}></lightning-input-field>
-            <lightning-input-field field-name="Zip_Code__c" value={zip} onchange={handleZipChange}></lightning-input-field>
-        </lightning-record-edit-form>
+                <lightning-messages></lightning-messages>
+                <lightning-input-field 
+                    field-name="Country__c" 
+                    value={country} 
+                    onchange={handleCountryChange}>
+                </lightning-input-field>
+                <lightning-input-field 
+                    field-name="Province__c" 
+                    value={province} 
+                    onchange={handleProvinceChange}>
+                </lightning-input-field>
+                <lightning-input-field 
+                    field-name="City__c" 
+                    value={city} 
+                    onchange={handleCityChange}>
+                </lightning-input-field>
+                <lightning-input-field 
+                    field-name="Zip_Code__c" 
+                    value={zip} 
+                    onchange={handleZipChange}>
+                </lightning-input-field>
+            </lightning-record-edit-form>
         </div>
 
         <div class="right-col">
@@ -32,16 +52,18 @@
                             </template>
                         </template>
                         <template if:true={noResults}>
-                            <div class="no-res">No results</div>
+                            <div class="no-res">No results found</div>
                         </template>
                     </div>
                 </template>
             </div>
+            
             <lightning-textarea 
-            label="Address Description" 
-            value={selectedAddressDesc} 
-            disabled={isTextareaDisabled}
-            onchange={handleDescriptionChange}> </lightning-textarea>
+                label="Address Description" 
+                value={selectedAddressDesc} 
+                disabled={isTextareaDisabled}
+                onchange={handleDescriptionChange}>
+            </lightning-textarea>
         </div>
     </div>
 </template>

@@ -1,11 +1,30 @@
+/**
+ * @author: Marco Lie
+ * @date 2025-11-26
+ * @description Controller class for Lead management operations including location lookup,
+ * customer type options, and lead creation functionality for web-to-lead processes
+ */
+@SuppressWarnings('PMD.CyclomaticComplexity')
 public with sharing class LeadController {
 
+  /**
+   * @description Wrapper class to hold location data for Aura-enabled response
+   */
+  @SuppressWarnings('PMD.PropertyNamingConventions')
   public class LocationWrapper {
-    @AuraEnabled public String Id   { get; set; }
+    @AuraEnabled public String Id { get; set; }
     @AuraEnabled public String Name { get; set; }
     @AuraEnabled public String Province { get; set; }
     @AuraEnabled public String Village { get; set; }
-    public LocationWrapper(Id id, String name, String province, String Village) {
+    
+    /**
+     * @description Constructor for LocationWrapper class
+     * @param id Location record Id
+     * @param name Location name
+     * @param province Province name
+     * @param village Village name
+     */
+    public LocationWrapper(Id id, String name, String province, String village) {
       this.Id   = String.valueOf(id);
       this.Name = name;
       this.Province = province;
@@ -13,7 +32,14 @@ public with sharing class LeadController {
     }
   }
     
-    @AuraEnabled(cacheable=true)
+  /**
+   * @description Searches for cities based on search key pattern
+   * @param searchKey Search term for city name lookup
+   * @return List of LocationWrapper objects containing city information
+   * @throws AuraHandledException if query fails
+   */
+  @AuraEnabled(cacheable=true)
+  @SuppressWarnings('PMD.ApexCRUDViolation')
   public static List<LocationWrapper> findCities(String searchKey) {
       List<LocationWrapper> results = new List<LocationWrapper>();
     String pattern = '%' + String.escapeSingleQuotes(searchKey) + '%';
@@ -35,14 +61,20 @@ public with sharing class LeadController {
             null
         ));
       }
-        system.debug('result City='+results);
       return results;
     } catch (Exception e) {
       throw new AuraHandledException(e.getMessage());
     }
   }
 
+  /**
+   * @description Retrieves zip codes for a given city ID
+   * @param cityId The ID of the city to get zip codes for
+   * @return List of LocationWrapper objects containing zip code information
+   * @throws AuraHandledException if query fails
+   */
   @AuraEnabled(cacheable=true)
+  @SuppressWarnings('PMD.ApexCRUDViolation')
   public static List<LocationWrapper> getZipCodes(String cityId) {
     List<LocationWrapper> results = new List<LocationWrapper>();
     try {
@@ -62,14 +94,18 @@ public with sharing class LeadController {
             (String)row.get('Village__c')
         ));
       }
-        system.debug('result Zip Code='+results);
       return results;
     } catch (Exception e) {
       throw new AuraHandledException(e.getMessage());
     }
   }
 
+  /**
+   * @description Retrieves customer type options from Lead Account_Segment__c picklist
+   * @return List of Maps containing label-value pairs for customer type options
+   */
   @AuraEnabled(cacheable=true)
+  @SuppressWarnings('PMD.ApexCRUDViolation')
   public static List<Map<String,String>> getCustomerTypeOptions() {
     List<Map<String,String>> options = new List<Map<String,String>>();
     for (Schema.PicklistEntry ple 
@@ -84,12 +120,27 @@ public with sharing class LeadController {
             'value' => ple.getValue()
         });
     }
-      
-      system.debug('result Customer Type='+options);
     return options;
   }
 
+  /**
+   * @description Creates a new Lead record with the provided information
+   * @param firstName Lead's first name
+   * @param lastName Lead's last name
+   * @param email Lead's email address
+   * @param phone Lead's phone number
+   * @param company Lead's company name
+   * @param provinceId Province location ID
+   * @param cityId City location ID
+   * @param zipCodeId Zip code location ID
+   * @param villageId Village location ID
+   * @param customerType Customer segment type
+   * @param userDescription User-provided description
+   * @return Id of the newly created Lead record
+   * @throws AuraHandledException if lead creation fails
+   */
   @AuraEnabled
+  @SuppressWarnings('PMD.ExcessiveParameterList, PMD.ApexCRUDViolation')
   public static Id createLead(
       String firstName,
       String lastName,
@@ -114,7 +165,6 @@ public with sharing class LeadController {
         Province__c      = provinceId,
         Zip__c           = zipCodeId,
         Village__c       = villageId,
-        //Account_Type__c  = 'General',
         Account_Type__c  = '0', // General
         Account_Segment__c = customerType,
         Status           = 'New',
@@ -122,7 +172,6 @@ public with sharing class LeadController {
         Account_Pipeline_Status__c = 'Direct',
         User_Description__c = userDescription
       );
-        system.debug('created Data='+newLead);
       insert newLead;
       return newLead.Id;
     } catch (Exception e) {

@@ -101,6 +101,7 @@
 		<members>Account.is_Owner__c</members>
 		<members>Contact.Actived__c</members>
 		<members>Contact.Address__c</members>
+		<members>Contact.Branch__c</members>
 		<members>Contact.Contact_Person_ID__c</members>
 		<members>Contact.EmailThreadKey__c</members>
 		<members>Contact.Fax_Area__c</members>
@@ -186,6 +187,16 @@
 		<name>GlobalValueSet</name>
 	</types>
 	<types>
+		<members>Account-Account Business Layout</members>
+		<members>Account-Account Individual Layout</members>
+		<members>Account-Account Insurance</members>
+		<members>Account-Account Loss Adjuster</members>
+		<members>Account-Account Surveyor</members>
+		<members>Account-Account Workshop</members>
+		<members>User-User Layout</members>
+		<name>Layout</name>
+	</types>
+	<types>
 		<members>addressDisplayLwc</members>
 		<name>LightningComponentBundle</name>
 	</types>
@@ -204,6 +215,10 @@
 		<members>Location.Village</members>
 		<members>Location.Zip_Code</members>
 		<name>RecordType</name>
+	</types>
+	<types>
+		<members>Opportunity.Create_Opportunity</members>
+		<name>QuickAction</name>
 	</types>
 	<version>65.0</version>
 </Package>

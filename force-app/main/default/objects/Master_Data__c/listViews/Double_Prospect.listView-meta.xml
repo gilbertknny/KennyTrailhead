@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Double_Prospect</fullName>
+    <columns>NAME</columns>
+    <columns>BSN_ID__c</columns>
+    <columns>Risk_Description__c</columns>
+    <columns>Risk_Situation__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>RECORDTYPE</field>
+        <operation>equals</operation>
+        <value>Master_Data__c.Double_Prospect</value>
+    </filters>
+    <label>Double Prospect</label>
+</ListView>

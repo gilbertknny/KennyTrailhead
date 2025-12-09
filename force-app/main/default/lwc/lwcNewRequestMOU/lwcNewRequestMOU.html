@@ -1,0 +1,82 @@
+<template>
+    <lightning-modal-header label="Coverage"></lightning-modal-header>
+     <lightning-modal-body>
+        <template if:true={isLoading}>
+            <lightning-spinner alternative-text="Loading" size="medium" variant="brand"></lightning-spinner>
+        </template>
+        <div class="slds-p-around_medium">
+            <div class="slds-grid slds-wrap slds-gutters_small">
+                <div class="slds-col slds-size_1-of-2">
+                    <lightning-combobox 
+                        label="Coverage"
+                        options={coverage}
+                        onchange={handleCoverage}
+                        value={coverageId} 
+                        required>
+                    </lightning-combobox> 
+                </div>
+                <div class="slds-col slds-size_1-of-2">
+                    <lightning-input type="number" label="Proposed Rate" value={proposedFixedAmount} onchange={handleProposedFixedAmount} disabled></lightning-input>
+                </div>
+                <div class="slds-col slds-size_1-of-2">
+                    <lightning-input type="number" formatter="percent-fixed" step="0.0001" label="Deductible PCT (%)" value={deductiblePCT} onchange={handleDeductiblePCT} disabled></lightning-input>
+                </div>
+                <div class="slds-col slds-size_1-of-2">
+                    <lightning-combobox 
+                        label="Deductible Flag"
+                        options={deductible}
+                        onchange={handleDeductible}
+                        value={deductibleId} 
+                        disabled>
+                    </lightning-combobox> 
+                </div>
+                <div class="slds-col slds-size_1-of-2">
+                    <lightning-combobox 
+                        label="Minimum Currency"
+                        options={minimumCur}
+                        onchange={handleMinimumCurId}
+                        value={minimumCurId} 
+                        disabled>
+                    </lightning-combobox> 
+                </div>
+                <div class="slds-col slds-size_1-of-2">
+                    <lightning-input type="number" label="Minimum Amount" value={minimumAmount} onchange={handleMinimumAmount} disabled></lightning-input>
+                </div>
+                <div class="slds-col slds-size_1-of-2">
+                    <lightning-input type="number" formatter="percent-fixed" step="0.0001" label="Banks Fee (%)" value={banksFee} onchange={handleBanksFee} disabled></lightning-input>
+                </div>
+                <div class="slds-col slds-size_1-of-2">
+                    <lightning-input type="number" formatter="percent-fixed" step="0.0001" label="Agent Comission (%)" value={agentComission} onchange={handleAgentComission} disabled></lightning-input>
+                </div>
+                <div class="slds-col slds-size_1-of-2">
+                    <lightning-input type="number" formatter="percent-fixed" step="0.0001" label="Broker Comission (%)" value={brokerComission} onchange={handleBrokerComission} disabled></lightning-input>
+                </div>
+                <div class="slds-col slds-size_1-of-2">
+                    <lightning-input type="number" formatter="percent-fixed" step="0.0001" label="Commision (%)" value={generalRPremiumPCT} onchange={handleGeneralRPremiumPCT} disabled></lightning-input>
+                </div>
+                <div class="slds-col slds-size_1-of-2">
+                    <lightning-input type="number" formatter="percent-fixed" step="0.0001" label="Overiding (%)" value={overdngComission} onchange={handleOverdngComission} disabled></lightning-input>
+                </div>
+                <div class="slds-col slds-size_1-of-2">
+                    <lightning-input type="number" label="Max Person" value={maxPerson} onchange={handleMaxPerson} disabled></lightning-input>
+                </div>
+            </div>
+        </div>
+    </lightning-modal-body>
+    <lightning-modal-footer>
+        <div class="slds-m-top_small slds-align_absolute-center">
+            <lightning-button 
+                variant="Neutral" 
+                label="Cancel" 
+                class="slds-m-left_x-small" 
+                onclick={handleCancel}>
+            </lightning-button>
+            <lightning-button 
+                variant="brand" 
+                class="slds-m-left_x-small" 
+                label={labelAdd}
+                onclick={handleAdd}>
+            </lightning-button>
+        </div>
+    </lightning-modal-footer>
+</template>
