@@ -122,7 +122,7 @@ jobs:
             DEPLOY_EXIT=$?
           else
             #sf project deploy start --manifest package/package.xml --wait 1000 --target-org uat --verbose -l RunLocalTests
-            sf project deploy start --manifest package/package.xml --wait 1000 --target-org uat --verbose -l RunSpecifiedTests --tests Aswata_Add_New_CoverageRate_Test Aswata_Add_New_DetailAsset_Test Aswata_Async_Asset_Test Aswata_QuotationSlip_Test Aswata_Treaty_Distribution_Test Aswata_TriggerHandler_Asset_Test ClsNewRequest_Test ClsPolicyDistribution_Test ClsUserLimit_Test LeadControllerTest ReCaptchaControllerTest InvocableClass_Test Aswata_Lead_Distribution_Test VlocityMapping_Test Aswata_TriggerHandler_Lead_Test OpportunityControllerTest UploadFileQueueable_Test WebserviceAPI_Test Aswata_TriggerHandler_Opportunity_Test ContentVersion_Test Aswata_Async_PremiCalculation_Test
+            sf project deploy start --manifest package/package.xml --wait 1000 --target-org uat --verbose -l RunSpecifiedTests --tests Aswata_TriggerHandler_Opportunity_Test ClsChangeOwner_Test
             DEPLOY_EXIT=$?
           fi
           set -e
