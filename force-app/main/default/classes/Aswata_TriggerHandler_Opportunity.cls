@@ -7,7 +7,7 @@
 public class Aswata_TriggerHandler_Opportunity extends TriggerHandler {
     public override void beforeUpdate(){ 
         for(Opportunity data : (List<Opportunity>) Trigger.new) {
-            assignPICId(data.Id);
+            if(!System.isFuture() && !System.isBatch()) assignPICId(data.Id);
         }
     } 
     
