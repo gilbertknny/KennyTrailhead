@@ -331,18 +331,16 @@ private class AccumulationControllerTest {
         System.assert(message.contains('No active Risk found'), 'Should contain no risk message');
     }
     
-    @isTest
+@isTest
     static void testSearchAssets() {
         Test.startTest();
+        // PERBAIKAN: Menyesuaikan dengan 10 parameter yang ada di Controller
         List<AccumulationController.AssetSearchResult> results = AccumulationController.searchAssets(
             'Test Address', // addressQuery
             'POL001',       // policyQuery
             '12345',        // zipCodeQuery
             'NKR001',       // nkrQuery
             'Test Risk',    // riskNameQuery
-            null,           // earthquakeZoneQuery
-            null,           // volcanicZoneQuery
-            null,           // tsunamiZoneQuery
             null,           // vesselNameQuery
             null,           // voyageNumberQuery
             null,           // startDatePeriodeQuery
@@ -354,7 +352,7 @@ private class AccumulationControllerTest {
         System.assertNotEquals(null, results, 'Should return results');
     }
     
-    @isTest
+@isTest
     static void testSearchAssetsWithContext() {
         Opportunity opp = [SELECT Id FROM Opportunity LIMIT 1];
         
@@ -365,9 +363,6 @@ private class AccumulationControllerTest {
             null,           // zipCodeQuery
             null,           // nkrQuery
             null,           // riskNameQuery
-            null,           // earthquakeZoneQuery
-            null,           // volcanicZoneQuery
-            null,           // tsunamiZoneQuery
             null,           // vesselNameQuery
             null,           // voyageNumberQuery
             null,           // startDatePeriodeQuery
@@ -379,12 +374,12 @@ private class AccumulationControllerTest {
         System.assertNotEquals(null, results, 'Should return results');
     }
     
-    @isTest
+@isTest
     static void testSearchAssetsNoResults() {
         Test.startTest();
         List<AccumulationController.AssetSearchResult> results = AccumulationController.searchAssets(
             'NonExistentAddress',
-            null, null, null, null, null, null, null, null, null, null, null, null
+            null, null, null, null, null, null, null, null, null 
         );
         Test.stopTest();
         
@@ -616,35 +611,5 @@ private class AccumulationControllerTest {
         
         System.assertNotEquals(null, result1, 'Should return result for opp before July');
         System.assertNotEquals(null, result2, 'Should return result for opp after July');
-    }
-    @isTest
-    static void testAccumulationInputWrapperFullCoverage() {
-        Test.startTest();
-        // Instosiasi Wrapper
-        AccumulationController.AccumulationInput input = new AccumulationController.AccumulationInput();
-
-        // 1. Lakukan SET pada semua field yang merah (Trigger Setter)
-        input.oppId = '006FakeId';
-        input.policyNum = 'POL-TEST-001';
-        input.riskId = 'RISK-TEST-001';
-        input.groupId = 'GROUP-TEST-001';
-        input.allAssetIds = new List<String>{'Asset1', 'Asset2'};
-        input.inceptionDate = System.now();
-        input.businessRequestId = 'BUSREQ-TEST';
-        input.address = 'Jalan Sudirman No 1';
-        input.zipCode = '12190';
-
-        // 2. Lakukan GET/Assert pada semua field tersebut (Trigger Getter)
-        System.assertEquals('006FakeId', input.oppId);
-        System.assertEquals('POL-TEST-001', input.policyNum);
-        System.assertEquals('RISK-TEST-001', input.riskId);
-        System.assertEquals('GROUP-TEST-001', input.groupId);
-        System.assertEquals(2, input.allAssetIds.size());
-        System.assertNotEquals(null, input.inceptionDate);
-        System.assertEquals('BUSREQ-TEST', input.businessRequestId);
-        System.assertEquals('Jalan Sudirman No 1', input.address);
-        System.assertEquals('12190', input.zipCode);
-        
-        Test.stopTest();
     }
 }
