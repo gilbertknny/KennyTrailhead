@@ -1,63 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Product_Type__c</fullName>
+    <externalId>false</externalId>
     <label>Product Type</label>
+    <length>255</length>
     <required>false</required>
     <trackTrending>false</trackTrending>
-    <type>Picklist</type>
-    <valueSet>
-        <valueSetDefinition>
-            <sorted>false</sorted>
-            <value>
-                <fullName>Home &amp; Shop</fullName>
-                <default>false</default>
-                <label>Home &amp; Shop</label>
-            </value>
-            <value>
-                <fullName>Personal &amp; Innovative Product</fullName>
-                <default>false</default>
-                <label>Personal &amp; Innovative Product</label>
-            </value>
-            <value>
-                <fullName>Auto</fullName>
-                <default>false</default>
-                <label>Auto</label>
-            </value>
-            <value>
-                <fullName>Marine &amp; Aviation</fullName>
-                <default>false</default>
-                <label>Marine &amp; Aviation</label>
-            </value>
-            <value>
-                <fullName>Heavy Equipment</fullName>
-                <default>false</default>
-                <label>Heavy Equipment</label>
-            </value>
-            <value>
-                <fullName>Financial Lines</fullName>
-                <default>false</default>
-                <label>Financial Lines</label>
-            </value>
-            <value>
-                <fullName>Casualty</fullName>
-                <default>false</default>
-                <label>Casualty</label>
-            </value>
-            <value>
-                <fullName>Energy Risk</fullName>
-                <default>false</default>
-                <label>Energy Risk</label>
-            </value>
-            <value>
-                <fullName>Engineering</fullName>
-                <default>false</default>
-                <label>Engineering</label>
-            </value>
-            <value>
-                <fullName>Oil &amp; Gas</fullName>
-                <default>false</default>
-                <label>Oil &amp; Gas</label>
-            </value>
-        </valueSetDefinition>
-    </valueSet>
+    <type>Text</type>
+    <unique>false</unique>
 </CustomField>

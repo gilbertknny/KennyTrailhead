@@ -4,6 +4,7 @@
             <lightning-spinner alternative-text="Loading" size="medium" variant="brand"></lightning-spinner>
         </template>
         <div class="slds-p-around_medium">
+            <template if:true={showData}>
             <lightning-progress-indicator current-step={currentStep} type="base" variant="base" class="slds-m-bottom_large">
                 <lightning-progress-step label="User" value="1">
                 </lightning-progress-step>
@@ -202,6 +203,12 @@
                     </template>
                 </div>
             </div>
+            </template>
+            <template if:false={showData}>
+                <div class="slds-p-around_large" style="height: 200px !important;border:1px solid gray;">
+                    <b>This System only used for Supervisor!</b>
+                </div>
+            </template>
         </div>
     </lightning-card>
 </template>

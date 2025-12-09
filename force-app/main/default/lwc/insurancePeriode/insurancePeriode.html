@@ -205,7 +205,8 @@
           <lightning-button
             label="Edit"
             variant="brand"
-            onclick={handleEdit}
+            onclick={handleEdit} 
+            disabled={isNotOwner}
             >
           </lightning-button>
         </template>

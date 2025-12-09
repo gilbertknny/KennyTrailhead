@@ -101,7 +101,7 @@ export default class TheInsuredLWC extends LightningElement {
 
   connectedCallback() {
     this.loadOpportunity();
-    console.log('theInsured loaded. Last updated 07/11/2025 16.35');
+    console.log('theInsured loaded. Last updated 09/12/2025 14.31');
   }
 
   loadOpportunity() {
@@ -137,7 +137,7 @@ export default class TheInsuredLWC extends LightningElement {
       this.showToast('Error loading members', result.error);
     }
   }
-
+  /* backup old code
   handleSearchKeyChange(evt) {
     this.searchKey = evt.target.value;
     if (this.searchKey.length < 2) {
@@ -148,7 +148,7 @@ export default class TheInsuredLWC extends LightningElement {
       .then(results => (this.searchResults = results))
       .catch(error => console.error(error));
       console.log("search result=", JSON.stringify(this.searchResults, null, 2));
-  }
+  } */
   /*
   handleSelectAccount(evt) {
     const { id, name, address, contract, loan } = evt.currentTarget.dataset;
@@ -162,6 +162,29 @@ export default class TheInsuredLWC extends LightningElement {
     ];
     this.clearLookup();
   }*/ 
+
+  handleSearchKeyChange(evt) {
+    this.searchKey = evt.target.value;
+    if (this.searchKey.length < 2) {
+      this.searchResults = [];
+      return;
+    }
+    searchAccounts({ searchKey: this.searchKey })
+      .then(results => {
+        // Get IDs of accounts already in the members table
+        const existingAccountIds = new Set(
+          this.members.map(member => member.accountId)
+        );
+        
+        // Filter out accounts that are already in the table
+        this.searchResults = results.filter(
+          account => !existingAccountIds.has(account.Id)
+        );
+      })
+      .catch(error => console.error(error));
+    console.log("search result=", JSON.stringify(this.searchResults, null, 2));
+  }
+  
   handleSelectAccount(evt) {
     const { id, name, address } = evt.currentTarget.dataset;
     console.log('currentTarget=', JSON.stringify(evt.currentTarget.dataset, null, 2));
