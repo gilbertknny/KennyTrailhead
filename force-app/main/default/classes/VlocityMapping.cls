@@ -118,94 +118,55 @@ global with sharing class VlocityMapping implements callable{
         Map<String, Object> mapobjqq = new Map<String, Object>();
         Map<String, Object> mapobjcl = new Map<String, Object>();
         Map<String, Object> mapobjsp = new Map<String, Object>();
-        List<Object> lrisk = (List<Object>) inputMap.get('risk') ;
-        List<Object> lcoverages = (List<Object>) inputMap.get('coverages') ;
-        List<Object> lasset = (List<Object>) inputMap.get('detail_insured') ;
-        List<Object> linstallments = (List<Object>) inputMap.get('installments') ;
-        List<Object> lbusinesscompanies = (List<Object>) inputMap.get('business_companies') ;
-        List<Object> lbusinessqq = (List<Object>) inputMap.get('business_request_qq');
-        List<Object> ldocumentclauses = (List<Object>) inputMap.get('document_clauses') ;
+        List<Object> lrisk = inputMap.containsKey('risk') ? (List<Object>) inputMap.get('risk') :new List<Object>() ;
+        List<Object> lcoverages = inputMap.containsKey('coverages')? (List<Object>) inputMap.get('coverages') : new List<Object>() ;
+        List<Object> lasset =  inputMap.containsKey('detail_insured')? (List<Object>) inputMap.get('detail_insured') : new List<Object>() ;
+        List<Object> linstallments = inputMap.containsKey('installments')? (List<Object>) inputMap.get('installments') :  new List<Object>() ;
+        List<Object> lbusinesscompanies = inputMap.containsKey('business_companies')? (List<Object>) inputMap.get('business_companies') :  new List<Object>() ;
+        List<Object> lbusinessqq = inputMap.containsKey('business_request_qq')? (List<Object>) inputMap.get('business_request_qq') : new List<Object>();
+        List<Object> ldocumentclauses = inputMap.containsKey('document_clauses')? (List<Object>) inputMap.get('document_clauses') : new List<Object>() ;
+        List<Object> ltranshipment =  inputMap.containsKey('transhipments') ? (List<Object>) inputMap.get('transhipments') : new List<Object>() ;
         Object documentPolicy = (Object) inputMap.get('documentPolicy');
-        lasset = lasset == null ? new List<Object>() : lasset;
         mapobjsp = (Map<String, Object>) documentPolicy;
         String extid = mapobjsp.containsKey('policy_number') ? (String) mapobjsp.get('policy_number') : '';
         
         if(!lrisk.isEmpty()){
-            SFAWT05 sfawt = new SFAWT05();
-            sfawt.externalId = extid;
-            sfawt.lobj = lrisk;
-            sfawt.mnt = 0;
-            sfawt.nameIP = 'SFAWT05Extend_RiskAssetCoverage';
-            sfawt.rtId = SOQL_SOBJECT.getRecordTypeIdbyDevName('Asset', 'Risk');
-            sfawt.varout = 'risk';
+            SFAWT05 sfawt = setSFAWT5(lrisk, 'risk', extid);
             mapobj.putAll(setmapObjmap(sfawt));
         }
         
         if(!linstallments.isEmpty()){
-            SFAWT05 sfawt = new SFAWT05();
-            sfawt.externalId = '';
-            sfawt.lobj = linstallments;
-            sfawt.mnt = 0;
-            sfawt.nameIP = 'SFAWT05Extend_Transaction';
-            sfawt.rtId = SOQL_SOBJECT.getRecordTypeIdbyDevName('Transaction_Data__c', 'Installment');
-            sfawt.varout = 'installments';
+            SFAWT05 sfawt = setSFAWT5(linstallments, 'installments', null);
             mapobj.putAll(setmapObjmap(sfawt));
         }
         
         if(!lbusinesscompanies.isEmpty()){
-            SFAWT05 sfawt = new SFAWT05();
-            sfawt.externalId = '';
-            sfawt.lobj = lbusinesscompanies;
-            sfawt.mnt = 0;
-            sfawt.nameIP = 'SFAWT05Extend_Transaction';
-            sfawt.rtId = SOQL_SOBJECT.getRecordTypeIdbyDevName('Transaction_Data__c', 'CoInsurer');
-            sfawt.varout = 'business_companies';
+            SFAWT05 sfawt = setSFAWT5(lbusinesscompanies, 'business_companies', null);
             mapobj.putAll(setmapObjmap(sfawt));
         }
-        
+        //Untuk COB 101
+        if(!ltranshipment.isEmpty()){
+            SFAWT05 sfawt = setSFAWT5(ltranshipment, 'transhipments', null);
+            mapobj.putAll(setmapObjmap(sfawt));
+        }
         if(!lbusinessqq.isEmpty()){
-            SFAWT05 sfawt = new SFAWT05();
-            sfawt.externalId = '';
-            sfawt.lobj = lbusinessqq;
-            sfawt.mnt = 0;
-            sfawt.nameIP = 'SFAWT05Extend_Transaction';
-            sfawt.rtId = SOQL_SOBJECT.getRecordTypeIdbyDevName('Transaction_Data__c', 'Member_of_QQ');
-            sfawt.varout = 'business_request_qq';
+            SFAWT05 sfawt = setSFAWT5(lbusinessqq, 'business_request_qq', null);
             mapobj.putAll(setmapObjmap(sfawt));
         }
-        
         if(!ldocumentclauses.isEmpty()){
-            SFAWT05 sfawt = new SFAWT05();
-            sfawt.externalId = '';
-            sfawt.lobj = ldocumentclauses;
-            sfawt.mnt = 0;
-            sfawt.nameIP = 'SFAWT05Extend_Transaction';
-            sfawt.rtId = SOQL_SOBJECT.getRecordTypeIdbyDevName('Transaction_Data__c', 'Clause');
-            sfawt.varout = 'document_clauses';
+            SFAWT05 sfawt = setSFAWT5(ldocumentclauses, 'document_clauses', null);
             mapobj.putAll(setmapObjmap(sfawt));
         }
 
         if(!lcoverages.isEmpty()){
             lasset = setAssetMatrix(lcoverages, lasset);
             Integer max1 = lcoverages.size() > 20 ? 20 : lcoverages.size();
-            SFAWT05 sfawt = new SFAWT05();
-            sfawt.externalId = extid;
-            sfawt.lobj = lcoverages;
-            sfawt.mnt = 1;
-            sfawt.nameIP = 'SFAWT05Extend_RiskAssetCoverage';
-            sfawt.rtId = null;
-            sfawt.varout = 'coverages';
+            SFAWT05 sfawt = setSFAWT5(lcoverages, 'coverages', extid);
             mapobj.putAll(setmapObjmap(sfawt));
         }
         
-        if(!lasset.isEmpty() ){
-            SFAWT05 sfawt = new SFAWT05();
-            sfawt.externalId = extid;
-            sfawt.lobj = lasset;
-            sfawt.mnt = 1;
-            sfawt.nameIP = 'SFAWT05Extend_RiskAssetCoverage';
-            sfawt.rtId = SOQL_SOBJECT.getRecordTypeIdbyDevName('Asset', 'Asset');
-            sfawt.varout = 'detail_insured';
+        if(!lasset.isEmpty()){
+            SFAWT05 sfawt = setSFAWT5(lasset, 'detail_insured', extid);
             mapobj.putAll(setmapObjmap(sfawt));
         }
         return mapobj;
@@ -215,12 +176,21 @@ global with sharing class VlocityMapping implements callable{
         List<Object> listcovid = new List<Object>();
         List<Object> listmd = new List<Object>();
         Map<String,Object> md = new Map<String,Object>();
+        Map<String,Object> mapobj1 = new Map<String,Object>();
+        Map<String,Object> mapobj2 = new Map<String,Object>();
         Map<String,Object> mapobj3 = new Map<String,Object>();
+        Map<String,Object> mapobj4 = new Map<String,Object>();
         Map<String,Object> mapobj5 = new Map<String,Object>();
+        Map<String,Object> mapobj6 = new Map<String,Object>();
+        Map<String,Object> mapobj7 = new Map<String,Object>();
+        Map<String,Object> mapast = new Map<String,Object>();
+        Map<String,Object> mac = new Map<String,Object>();
+        Map<String,Object> msc = new Map<String,Object>();
+        Map<String, SFAWT05AssetCoverages__mdt> mascov = SFAWT05AssetCoverages__mdt.getAll();
         Integer x = 0;
         for(Object obj:lcoverages){
-            Map<String,Object> mapobj1 = (Map<String,Object>) obj;
-            Map<String,Object> mapobj2 = new Map<String,Object>();
+            mapobj1 = (Map<String,Object>) obj;
+            mapobj2 = new Map<String,Object>();
             if(mapobj1.containsKey('m_coverage_ref_id')){
                 mapobj2.put('listref',mapobj1.get('m_coverage_ref_id'));
                 listcovid.add(mapobj2);
@@ -233,7 +203,7 @@ global with sharing class VlocityMapping implements callable{
             listmd = (List<Object>) md.get('output') ;
             if(listmd!=null){
                 for(Object md1:listmd){
-                    Map<String,Object> mapobj4 = (Map<String,Object>) md1;
+                    mapobj4 = (Map<String,Object>) md1;
                     mapobj5.put((String) mapobj4.get('COVERAGE_REF_ID__c'),mapobj4);
                 }
             }
@@ -244,23 +214,19 @@ global with sharing class VlocityMapping implements callable{
                 x++;
                 String jsobj = JSON.serialize(obj);
                 jsobj = jsobj.replace('"busreqId"','"busreq_id"');
-                Map<String,Object> mapast = new Map<String,Object>();
-                Map<String,Object> mapobj1 = (Map<String,Object>) JSON.deserializeUntyped(jsobj);
-                String coverageid = String.valueOf(mapobj1.get('m_coverage_ref_id'));
+                mapast = new Map<String,Object>();
+                mapobj7 = (Map<String,Object>) JSON.deserializeUntyped(jsobj);
+                String coverageid = String.valueOf(mapobj7.get('m_coverage_ref_id'));
                 if(mapobj5.containsKey(coverageid)){
-                    Map<String,Object> mapobj6 = (Map<String,Object>) mapobj5.get(coverageid);
-                    Map<String,Object> mac = (Map<String,Object>) mapobj6.get('Asset_Category__r');
-                    Map<String,Object> msc = (Map<String,Object>) mapobj6.get('Asset_Section__r');
-                        
-                    mapast.put('risk_id',mapobj1.get('riskId'));
-                    mapast.put('currency_code',mapobj1.get('minimum_cur_id'));
-                    mapast.put('busreq_id',mapobj1.get('busreq_id'));
+                    mapobj6 = (Map<String,Object>) mapobj5.get(coverageid);
+                    mac = (Map<String,Object>) mapobj6.get('Asset_Category__r');
+                    msc = (Map<String,Object>) mapobj6.get('Asset_Section__r');
+                    for(SFAWT05AssetCoverages__mdt mdt: mascov.values() ){
+                        mapast.put(mdt.DeveloperName,mapobj7.get(mdt.coverage__c));
+                    }    
                     mapast.put('detail_description',mac.get('Name')+' '+msc.get('Name'));
-                    mapast.put('partitionCode',mapobj1.get('partitionCode'));
                     mapast.put('risk_detail_flag',null);
                     mapast.put('risk_detail_id',x);
-                    mapast.put('amount_insured',mapobj1.get('amount_insured'));
-                    mapast.put('m_coverage_ref_id',mapobj1.get('m_coverage_ref_id'));
                     lasset.add(mapast);
                 }
             }
@@ -281,6 +247,21 @@ global with sharing class VlocityMapping implements callable{
         mapin.put('listconasw',sfawt.lobj);
         mapobj.put(sfawt.varout,callQueue(mapin,sfawt.mnt));   
         return mapobj;
+    }
+     /** @description setAssetMatrix  @param lobj @param varout @param extid @return sfawt */
+    public static SFAWT05 setSFAWT5(List<Object> lobj, String varout,String extid){
+        SFAWT05__mdt sfm = SFAWT05__mdt.getInstance(varout);
+        SFAWT05 sfawt = new SFAWT05();
+        sfawt.externalId = extid;
+        sfawt.lobj = lobj;
+        sfawt.mnt = Integer.valueOf(sfm.start__c);
+        sfawt.nameIP = sfm.Integration_Procedure__c;
+        sfawt.rtId = null;
+        if(String.isNotBlank(sfm.RecordType_DeveloperName__c) && String.isNotBlank(sfm.RecordType_Object__c)){
+            sfawt.rtId = SOQL_SOBJECT.getRecordTypeIdbyDevName(sfm.RecordType_Object__c, sfm.RecordType_DeveloperName__c);
+        }
+        sfawt.varout = varout;
+        return sfawt;
     }
     
     /** @description VlocityMapping  @param inputMap @param mnt @return jobid */

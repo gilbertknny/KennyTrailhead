@@ -133,6 +133,16 @@
                 <identifier>RecordCategory__cField</identifier>
             </fieldInstance>
         </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.COB__c</fieldItem>
+                <identifier>RecordCOB__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
         <name>Facet-e868cca7-5bb8-40e0-ad76-869fbaef8487</name>
         <type>Facet</type>
     </flexiPageRegions>
@@ -223,19 +233,6 @@
                 </fieldInstanceProperties>
                 <fieldItem>Record.Declare_Value__c</fieldItem>
                 <identifier>RecordDeclare_Value_cField</identifier>
-                <visibilityRule>
-                    <booleanFilter>1 AND 2</booleanFilter>
-                    <criteria>
-                        <leftValue>{!Record.Indemnity_Type__c}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>First Loss</rightValue>
-                    </criteria>
-                    <criteria>
-                        <leftValue>{!Record.Indemnity_Type__c}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>Lost Limit</rightValue>
-                    </criteria>
-                </visibilityRule>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
@@ -286,16 +283,6 @@
                 <identifier>RecordInterest_Insured_Detail_Description_cField2</identifier>
             </fieldInstance>
         </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Amount_Insured__c</fieldItem>
-                <identifier>RecordAmount_Insured_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
         <name>Facet-30osk84d9e1</name>
         <type>Facet</type>
     </flexiPageRegions>
@@ -318,19 +305,6 @@
                 </fieldInstanceProperties>
                 <fieldItem>Record.Declare_Value__c</fieldItem>
                 <identifier>RecordDeclare_Value_cField2</identifier>
-                <visibilityRule>
-                    <booleanFilter>1 AND 2</booleanFilter>
-                    <criteria>
-                        <leftValue>{!Record.Indemnity_Type__c}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>First Loss</rightValue>
-                    </criteria>
-                    <criteria>
-                        <leftValue>{!Record.Indemnity_Type__c}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>Lost Limit</rightValue>
-                    </criteria>
-                </visibilityRule>
             </fieldInstance>
         </itemInstances>
         <name>Facet-i4sn7xp4owd</name>
@@ -423,19 +397,6 @@
                 </fieldInstanceProperties>
                 <fieldItem>Record.Declare_Value__c</fieldItem>
                 <identifier>RecordDeclare_Value_cField4</identifier>
-                <visibilityRule>
-                    <booleanFilter>1 AND 2</booleanFilter>
-                    <criteria>
-                        <leftValue>{!Record.Indemnity_Type__c}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>First Loss</rightValue>
-                    </criteria>
-                    <criteria>
-                        <leftValue>{!Record.Indemnity_Type__c}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>Lost Limit</rightValue>
-                    </criteria>
-                </visibilityRule>
             </fieldInstance>
         </itemInstances>
         <name>Facet-1ykxvg2hfro</name>
@@ -508,19 +469,6 @@
                 </fieldInstanceProperties>
                 <fieldItem>Record.Declare_Value__c</fieldItem>
                 <identifier>RecordDeclare_Value_cField3</identifier>
-                <visibilityRule>
-                    <booleanFilter>1 AND 2</booleanFilter>
-                    <criteria>
-                        <leftValue>{!Record.Indemnity_Type__c}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>First Loss</rightValue>
-                    </criteria>
-                    <criteria>
-                        <leftValue>{!Record.Indemnity_Type__c}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>Lost Limit</rightValue>
-                    </criteria>
-                </visibilityRule>
             </fieldInstance>
         </itemInstances>
         <name>Facet-4bhwz00o1ip</name>
@@ -762,10 +710,16 @@
                 <componentName>flexipage:fieldSection</componentName>
                 <identifier>flexipage_fieldSection</identifier>
                 <visibilityRule>
+                    <booleanFilter>1 AND 2</booleanFilter>
                     <criteria>
-                        <leftValue>{!Record.Parent.COB__c}</leftValue>
+                        <leftValue>{!Record.COB__c}</leftValue>
                         <operator>EQUAL</operator>
                         <rightValue>101</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.Section__r.Name}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Material Damage</rightValue>
                     </criteria>
                 </visibilityRule>
             </componentInstance>
@@ -787,31 +741,21 @@
                 <componentName>flexipage:fieldSection</componentName>
                 <identifier>flexipage_fieldSection3</identifier>
                 <visibilityRule>
-                    <booleanFilter>(1 OR 2 OR 3 OR 4 OR 5) AND 6</booleanFilter>
+                    <booleanFilter>(1 OR 2 OR 3 ) AND 4</booleanFilter>
                     <criteria>
-                        <leftValue>{!Record.Parent.COB__c}</leftValue>
+                        <leftValue>{!Record.COB__c}</leftValue>
                         <operator>EQUAL</operator>
                         <rightValue>201</rightValue>
                     </criteria>
                     <criteria>
-                        <leftValue>{!Record.Parent.COB__c}</leftValue>
+                        <leftValue>{!Record.COB__c}</leftValue>
                         <operator>EQUAL</operator>
                         <rightValue>202</rightValue>
                     </criteria>
                     <criteria>
-                        <leftValue>{!Record.Parent.COB__c}</leftValue>
+                        <leftValue>{!Record.COB__c}</leftValue>
                         <operator>EQUAL</operator>
                         <rightValue>203</rightValue>
-                    </criteria>
-                    <criteria>
-                        <leftValue>{!Record.Parent.COB__c}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>204</rightValue>
-                    </criteria>
-                    <criteria>
-                        <leftValue>{!Record.Parent.COB__c}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>205</rightValue>
                     </criteria>
                     <criteria>
                         <leftValue>{!Record.Section__r.Name}</leftValue>
@@ -838,31 +782,21 @@
                 <componentName>flexipage:fieldSection</componentName>
                 <identifier>flexipage_fieldSection6</identifier>
                 <visibilityRule>
-                    <booleanFilter>(1 OR 2 OR 3 OR 4 OR 5) AND 6</booleanFilter>
+                    <booleanFilter>(1 OR 2 OR 3 ) AND 4</booleanFilter>
                     <criteria>
-                        <leftValue>{!Record.Parent.COB__c}</leftValue>
+                        <leftValue>{!Record.COB__c}</leftValue>
                         <operator>EQUAL</operator>
                         <rightValue>201</rightValue>
                     </criteria>
                     <criteria>
-                        <leftValue>{!Record.Parent.COB__c}</leftValue>
+                        <leftValue>{!Record.COB__c}</leftValue>
                         <operator>EQUAL</operator>
                         <rightValue>202</rightValue>
                     </criteria>
                     <criteria>
-                        <leftValue>{!Record.Parent.COB__c}</leftValue>
+                        <leftValue>{!Record.COB__c}</leftValue>
                         <operator>EQUAL</operator>
                         <rightValue>203</rightValue>
-                    </criteria>
-                    <criteria>
-                        <leftValue>{!Record.Parent.COB__c}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>204</rightValue>
-                    </criteria>
-                    <criteria>
-                        <leftValue>{!Record.Parent.COB__c}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>205</rightValue>
                     </criteria>
                     <criteria>
                         <leftValue>{!Record.Section__r.Name}</leftValue>
@@ -889,25 +823,20 @@
                 <componentName>flexipage:fieldSection</componentName>
                 <identifier>flexipage_fieldSection5</identifier>
                 <visibilityRule>
-                    <booleanFilter>(1 OR 2 OR 3) AND 4</booleanFilter>
+                    <booleanFilter>(1 OR 2) AND 3</booleanFilter>
                     <criteria>
-                        <leftValue>{!Record.Parent.COB__c}</leftValue>
+                        <leftValue>{!Record.COB__c}</leftValue>
                         <operator>EQUAL</operator>
                         <rightValue>301</rightValue>
                     </criteria>
                     <criteria>
-                        <leftValue>{!Record.Parent.COB__c}</leftValue>
+                        <leftValue>{!Record.COB__c}</leftValue>
                         <operator>EQUAL</operator>
                         <rightValue>302</rightValue>
                     </criteria>
                     <criteria>
-                        <leftValue>{!Record.Parent.COB__c}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>303</rightValue>
-                    </criteria>
-                    <criteria>
                         <leftValue>{!Record.Section__r.Name}</leftValue>
-                        <operator>EQUAL</operator>
+                        <operator>CONTAINS</operator>
                         <rightValue>Material Damage</rightValue>
                     </criteria>
                 </visibilityRule>
@@ -930,25 +859,20 @@
                 <componentName>flexipage:fieldSection</componentName>
                 <identifier>flexipage_fieldSection7</identifier>
                 <visibilityRule>
-                    <booleanFilter>(1 OR 2 OR 3) AND 4</booleanFilter>
+                    <booleanFilter>(1 OR 2) AND 3</booleanFilter>
                     <criteria>
-                        <leftValue>{!Record.Parent.COB__c}</leftValue>
+                        <leftValue>{!Record.COB__c}</leftValue>
                         <operator>EQUAL</operator>
                         <rightValue>301</rightValue>
                     </criteria>
                     <criteria>
-                        <leftValue>{!Record.Parent.COB__c}</leftValue>
+                        <leftValue>{!Record.COB__c}</leftValue>
                         <operator>EQUAL</operator>
                         <rightValue>302</rightValue>
                     </criteria>
                     <criteria>
-                        <leftValue>{!Record.Parent.COB__c}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>303</rightValue>
-                    </criteria>
-                    <criteria>
                         <leftValue>{!Record.Section__r.Name}</leftValue>
-                        <operator>EQUAL</operator>
+                        <operator>CONTAINS</operator>
                         <rightValue>Liability</rightValue>
                     </criteria>
                 </visibilityRule>
@@ -971,25 +895,20 @@
                 <componentName>flexipage:fieldSection</componentName>
                 <identifier>flexipage_fieldSection8</identifier>
                 <visibilityRule>
-                    <booleanFilter>(1 OR 2 OR 3) AND 4</booleanFilter>
+                    <booleanFilter>(1 OR 2) AND 3</booleanFilter>
                     <criteria>
-                        <leftValue>{!Record.Parent.COB__c}</leftValue>
+                        <leftValue>{!Record.COB__c}</leftValue>
                         <operator>EQUAL</operator>
                         <rightValue>301</rightValue>
                     </criteria>
                     <criteria>
-                        <leftValue>{!Record.Parent.COB__c}</leftValue>
+                        <leftValue>{!Record.COB__c}</leftValue>
                         <operator>EQUAL</operator>
                         <rightValue>302</rightValue>
                     </criteria>
                     <criteria>
-                        <leftValue>{!Record.Parent.COB__c}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>303</rightValue>
-                    </criteria>
-                    <criteria>
                         <leftValue>{!Record.Section__r.Name}</leftValue>
-                        <operator>EQUAL</operator>
+                        <operator>CONTAINS</operator>
                         <rightValue>Physical / Persons</rightValue>
                     </criteria>
                 </visibilityRule>
@@ -1016,50 +935,10 @@
         <name>main</name>
         <type>Region</type>
     </flexiPageRegions>
-    <flexiPageRegions>
-        <itemInstances>
-            <componentInstance>
-                <componentInstanceProperties>
-                    <name>flexcardName</name>
-                    <value>ClaimDetailsCard</value>
-                </componentInstanceProperties>
-                <componentName>runtime_omnistudio:flexcard</componentName>
-                <identifier>runtime_omnistudio_flexcard</identifier>
-            </componentInstance>
-        </itemInstances>
-        <itemInstances>
-            <componentInstance>
-                <componentInstanceProperties>
-                    <name>parentFieldApiName</name>
-                    <value>Asset.Id</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>relatedListApiName</name>
-                    <value>ActivityHistories</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>relatedListComponentOverride</name>
-                    <value>NONE</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>rowsToDisplay</name>
-                    <value>10</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>showActionBar</name>
-                    <value>true</value>
-                </componentInstanceProperties>
-                <componentName>force:relatedListSingleContainer</componentName>
-                <identifier>force_relatedListSingleContainer</identifier>
-            </componentInstance>
-        </itemInstances>
-        <name>sidebar</name>
-        <type>Region</type>
-    </flexiPageRegions>
     <masterLabel>Asset Lightning Page</masterLabel>
     <sobjectType>Asset</sobjectType>
     <template>
-        <name>flexipage:recordHomeTemplateDesktop</name>
+        <name>flexipage:recordHomeSingleColTemplateDesktop</name>
         <properties>
             <name>enablePageActionConfig</name>
             <value>false</value>
