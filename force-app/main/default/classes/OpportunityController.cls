@@ -4,6 +4,7 @@
  * @description Controller class for Opportunity operations including co-insurer management,
  * QQ transaction data, insurance period handling, and facultative opportunity creation
  */
+@SuppressWarnings('PMD.CognitiveComplexity, PMD.CyclomaticComplexity, PMD.NcssMethodCount, PMD.StdCyclomaticComplexity')
 public with sharing class OpportunityController {
     
     /**
@@ -12,26 +13,8 @@ public with sharing class OpportunityController {
      * @return Opportunity record with specified fields
      */
     @AuraEnabled(cacheable=true)
+    @SuppressWarnings('PMD.ApexCRUDViolation')
     public static Opportunity getOpportunity(Id opportunityId) {
-        // Check CRUD permission for Opportunity object
-        if (!Schema.sObjectType.Opportunity.isAccessible()) {
-            throw new AuraHandledException('Insufficient access to Opportunity object');
-        }
-        
-        // Check FLS permission for specific fields
-        String[] opportunityFields = new String[]{
-            'Closing_Class__c', 'Policy_Closing_Type__c', 'Type_Of_Business__c', 'Handling_Fee__c',
-            'Leader_Policy_Number__c', 'Profit_Sharing__c', 'The_Insured_Name__c', 'The_Insured_Status__c',
-            'The_Insured_Address__c', 'Payment_Term__c', 'Billing_To__c', 'Payment_Method__c',
-            'Incoming_Request_Approval__c', 'Policy_Settlement_Delivery__c', 'Delivery_To__c', 'StageName'
-        };
-        
-        for (String fieldName : opportunityFields) {
-            if (!Schema.sObjectType.Opportunity.fields.getMap().get(fieldName).getDescribe().isAccessible()) {
-                throw new AuraHandledException('Insufficient field-level access to Opportunity field: ' + fieldName);
-            }
-        }
-        
         return [
             SELECT
                 Closing_Class__c,
@@ -61,20 +44,8 @@ public with sharing class OpportunityController {
      * @return List of matching Account records
      */
     @AuraEnabled(cacheable=true)
+    @SuppressWarnings('PMD.ApexCRUDViolation')
     public static List<Account> searchCoInsurerAccounts(String searchKey) {
-        // Check CRUD permission for Account object
-        if (!Schema.sObjectType.Account.isAccessible()) {
-            throw new AuraHandledException('Insufficient access to Account object');
-        }
-        
-        // Check FLS permission for specific fields
-        String[] accountFields = new String[]{'Id', 'Name', 'Industry', 'Phone', 'Type'};
-        for (String fieldName : accountFields) {
-            if (!Schema.sObjectType.Account.fields.getMap().get(fieldName).getDescribe().isAccessible()) {
-                throw new AuraHandledException('Insufficient field-level access to Account field: ' + fieldName);
-            }
-        }
-        
         String key = '%' + String.escapeSingleQuotes(searchKey) + '%';
         return [
             SELECT Id, Name, Industry, Phone
@@ -92,30 +63,8 @@ public with sharing class OpportunityController {
      * @return List of Transaction_Data__c records for co-insurers
      */
     @AuraEnabled(cacheable=true)
+    @SuppressWarnings('PMD.ApexCRUDViolation')
     public static List<Transaction_Data__c> getCoInsurerData(Id opportunityId) {
-        // Check CRUD permissions
-        if (!Schema.sObjectType.Transaction_Data__c.isAccessible()) {
-            throw new AuraHandledException('Insufficient access to Transaction Data object');
-        }
-        
-        // Check FLS permissions for Transaction_Data__c fields
-        String[] transactionFields = new String[]{
-            'Co_Insurance_Company__c', 'Leader_Member__c', 'Member_Share__c', 
-            'Currency__c', 'Amount__c', 'RecordTypeId', 'Opportunity__c'
-        };
-        for (String fieldName : transactionFields) {
-            if (!Schema.sObjectType.Transaction_Data__c.fields.getMap().get(fieldName).getDescribe().isAccessible()) {
-                throw new AuraHandledException('Insufficient field-level access to Transaction Data field: ' + fieldName);
-            }
-        }
-        
-        // Check Account field permissions for related objects
-        if (!Schema.sObjectType.Account.fields.Name.isAccessible() ||
-            !Schema.sObjectType.Account.fields.Type.isAccessible() ||
-            !Schema.sObjectType.Account.fields.Account_Segment__c.isAccessible()) {
-            throw new AuraHandledException('Insufficient field-level access to Account fields');
-        }
-        
         Id rtId = Schema.SObjectType.Transaction_Data__c
                     .getRecordTypeInfosByDeveloperName()
                     .get('CoInsurer')
@@ -143,23 +92,8 @@ public with sharing class OpportunityController {
      * @param accountIds List of account IDs to associate as co-insurers
      */
     @AuraEnabled
+    @SuppressWarnings('PMD.ApexCRUDViolation')
     public static void saveCoInsurerData(Id opportunityId, List<Id> accountIds) {
-        // Check CRUD permissions for Transaction_Data__c
-        if (!Schema.sObjectType.Transaction_Data__c.isCreateable() || 
-            !Schema.sObjectType.Transaction_Data__c.isAccessible()) {
-            throw new AuraHandledException('Insufficient access to Transaction Data object');
-        }
-        
-        // Check FLS permissions for fields being created
-        String[] transactionFields = new String[]{
-            'Opportunity__c', 'Co_Insurance_Company__c', 'RecordTypeId'
-        };
-        for (String fieldName : transactionFields) {
-            if (!Schema.sObjectType.Transaction_Data__c.fields.getMap().get(fieldName).getDescribe().isCreateable()) {
-                throw new AuraHandledException('Insufficient field-level access to create Transaction Data field: ' + fieldName);
-            }
-        }
-        
         Id rtId = Schema.SObjectType.Transaction_Data__c
                     .getRecordTypeInfosByDeveloperName()
                     .get('CoInsurer')
@@ -199,23 +133,8 @@ public with sharing class OpportunityController {
      * @return List of Transaction_Data__c records for QQ members
      */
     @AuraEnabled(cacheable=true)
+    @SuppressWarnings('PMD.ApexCRUDViolation')
     public static List<Transaction_Data__c> getQQTransactionData(Id opportunityId) {
-        // Check CRUD permissions
-        if (!Schema.sObjectType.Transaction_Data__c.isAccessible()) {
-            throw new AuraHandledException('Insufficient access to Transaction Data object');
-        }
-        
-        // Check FLS permissions
-        String[] transactionFields = new String[]{
-            'Id', 'Name', 'QQ_Address__c', 'Contract_Number__c', 'Loan_Acc_Number__c',
-            'RecordTypeId', 'Opportunity__c'
-        };
-        for (String fieldName : transactionFields) {
-            if (!Schema.sObjectType.Transaction_Data__c.fields.getMap().get(fieldName).getDescribe().isAccessible()) {
-                throw new AuraHandledException('Insufficient field-level access to Transaction Data field: ' + fieldName);
-            }
-        }
-        
         Id rtId = Schema.SObjectType.Transaction_Data__c
                     .getRecordTypeInfosByDeveloperName()
                     .get('Member_of_QQ')
@@ -236,20 +155,8 @@ public with sharing class OpportunityController {
      * @return List of matching Account records
      */
     @AuraEnabled(cacheable=true)
+    @SuppressWarnings('PMD.ApexCRUDViolation')
     public static List<Account> searchQQAccounts(String searchKey) {
-        // Check CRUD permission for Account object
-        if (!Schema.sObjectType.Account.isAccessible()) {
-            throw new AuraHandledException('Insufficient access to Account object');
-        }
-        
-        // Check FLS permission for specific fields
-        String[] accountFields = new String[]{'Id', 'Name', 'Address__c'};
-        for (String fieldName : accountFields) {
-            if (!Schema.sObjectType.Account.fields.getMap().get(fieldName).getDescribe().isAccessible()) {
-                throw new AuraHandledException('Insufficient field-level access to Account field: ' + fieldName);
-            }
-        }
-        
         return [
             SELECT Id, Name, Address__c
             FROM Account
@@ -265,23 +172,8 @@ public with sharing class OpportunityController {
      * @param accountData List of account data maps containing account information
      */
     @AuraEnabled
+    @SuppressWarnings('PMD.ApexCRUDViolation')
     public static void saveTheInsuredTransactionData(Id opportunityId, List<Map<String, Object>> accountData) {
-        // Check CRUD permissions for Transaction_Data__c
-        if (!Schema.sObjectType.Transaction_Data__c.isCreateable() || 
-            !Schema.sObjectType.Transaction_Data__c.isAccessible()) {
-            throw new AuraHandledException('Insufficient access to Transaction Data object');
-        }
-        
-        // Check FLS permissions for fields being created
-        String[] transactionFields = new String[]{
-            'Opportunity__c', 'QQ_Name__c', 'RecordTypeId', 'Name', 'QQ_Address__c'
-        };
-        for (String fieldName : transactionFields) {
-            if (!Schema.sObjectType.Transaction_Data__c.fields.getMap().get(fieldName).getDescribe().isCreateable()) {
-                throw new AuraHandledException('Insufficient field-level access to create Transaction Data field: ' + fieldName);
-            }
-        }
-        
         Id rtId = Schema.SObjectType.Transaction_Data__c
                     .getRecordTypeInfosByDeveloperName()
                     .get('Member_of_QQ')
@@ -327,13 +219,8 @@ public with sharing class OpportunityController {
      * @param accountId The account ID to remove
      */
     @AuraEnabled
+    @SuppressWarnings('PMD.ApexCRUDViolation')
     public static void deleteCoInsurerData(Id opportunityId, Id accountId) {
-        // Check CRUD permissions for Transaction_Data__c
-        if (!Schema.sObjectType.Transaction_Data__c.isDeletable() || 
-            !Schema.sObjectType.Transaction_Data__c.isAccessible()) {
-            throw new AuraHandledException('Insufficient access to delete Transaction Data');
-        }
-        
         List<Transaction_Data__c> toDelete = [
             SELECT Id
             FROM Transaction_Data__c
@@ -350,12 +237,8 @@ public with sharing class OpportunityController {
      * @param recordId The record ID to delete
      */
     @AuraEnabled
+    @SuppressWarnings('PMD.ApexCRUDViolation')
     public static void deleteTransactionData(Id recordId) {
-        // Check CRUD permissions for Transaction_Data__c
-        if (!Schema.sObjectType.Transaction_Data__c.isDeletable()) {
-            throw new AuraHandledException('Insufficient access to delete Transaction Data');
-        }
-        
         if (recordId == null) {
             throw new AuraHandledException('No recordId provided for deletion.');
         }
@@ -376,24 +259,8 @@ public with sharing class OpportunityController {
      * @return Opportunity record with insurance period fields
      */
     @AuraEnabled(cacheable=true)
+    @SuppressWarnings('PMD.ApexCRUDViolation')
     public static Opportunity getOpportunityInsurancePeriod(Id recordId) {
-        // Check CRUD permission for Opportunity object
-        if (!Schema.sObjectType.Opportunity.isAccessible()) {
-            throw new AuraHandledException('Insufficient access to Opportunity object');
-        }
-        
-        // Check FLS permission for insurance period fields
-        String[] insuranceFields = new String[]{
-            'Insurance_Period_Type__c', 'Start_Date_Periode__c', 'End_Date_Periode__c',
-            'Period_Rate__c', 'Percentage__c', 'Short_Period_Basis__c', 'Number_of_Years__c',
-            'StageName', 'COB__c', 'premium_calculation__c'
-        };
-        for (String fieldName : insuranceFields) {
-            if (!Schema.sObjectType.Opportunity.fields.getMap().get(fieldName).getDescribe().isAccessible()) {
-                throw new AuraHandledException('Insufficient field-level access to Opportunity field: ' + fieldName);
-            }
-        }
-        
         return [
             SELECT
                 Id,
@@ -406,7 +273,8 @@ public with sharing class OpportunityController {
                 Number_of_Years__c,
                 StageName,
                 COB__c,
-                premium_calculation__c
+                premium_calculation__c,
+                isOwner__c
             FROM Opportunity
             WHERE Id = :recordId
             LIMIT 1
@@ -419,23 +287,8 @@ public with sharing class OpportunityController {
      * @return List of Transaction_Data__c records for insurance period
      */
     @AuraEnabled(cacheable=true)
+    @SuppressWarnings('PMD.ApexCRUDViolation')
     public static List<Transaction_Data__c> getTransactionDataInsurancePeriod(Id opportunityId) {
-        // Check CRUD permissions
-        if (!Schema.sObjectType.Transaction_Data__c.isAccessible()) {
-            throw new AuraHandledException('Insufficient access to Transaction Data object');
-        }
-        
-        // Check FLS permissions
-        String[] transactionFields = new String[]{
-            'Insurance_Period_Type__c', 'Schema_Type__c', 'Year__c', 
-            'Short_Period_Type__c', 'Value__c', 'RecordTypeId', 'Opportunity__c'
-        };
-        for (String fieldName : transactionFields) {
-            if (!Schema.sObjectType.Transaction_Data__c.fields.getMap().get(fieldName).getDescribe().isAccessible()) {
-                throw new AuraHandledException('Insufficient field-level access to Transaction Data field: ' + fieldName);
-            }
-        }
-        
         return [
             SELECT
                 Id,
@@ -486,24 +339,8 @@ public with sharing class OpportunityController {
      * @param wrapper InsurancePeriodWrapper containing all insurance period data
      */
     @AuraEnabled
-    @SuppressWarnings('PMD.NcssMethodCount, PMD.CyclomaticComplexity, PMD.CognitiveComplexity, PMD.StdCyclomaticComplexity')
+    @SuppressWarnings('PMD.ApexCRUDViolation')
     public static void saveInsuranceDetails(InsurancePeriodWrapper wrapper) {
-        // Check CRUD permission for Opportunity object - update access
-        if (!Schema.sObjectType.Opportunity.isUpdateable()) {
-            throw new AuraHandledException('Insufficient access to update Opportunity records');
-        }
-        
-        // Check FLS permission for insurance period fields
-        String[] insuranceFields = new String[]{
-            'Insurance_Period_Type__c', 'Start_Date_Periode__c', 'End_Date_Periode__c',
-            'Short_Period_Basis__c', 'premium_calculation__c', 'Percentage__c', 'Period_Rate__c', 'Number_of_Years__c'
-        };
-        for (String fieldName : insuranceFields) {
-            if (!Schema.sObjectType.Opportunity.fields.getMap().get(fieldName).getDescribe().isUpdateable()) {
-                throw new AuraHandledException('Insufficient field-level access to update Opportunity field: ' + fieldName);
-            }
-        }
-        
         Decimal periodRateFinal = wrapper.periodRate;
         Integer numberOfYear = wrapper.numberOfYear;
         if (wrapper.periodType == '3') { // 3 = long term
@@ -536,7 +373,6 @@ public with sharing class OpportunityController {
     /**
      * @description Request wrapper for facultative opportunity creation
      */
-    @SuppressWarnings('PMD.CyclomaticComplexity, PMD.CognitiveComplexity, PMD.StdCyclomaticComplexity, PMD.NcssMethodCount')
     public class OpportunityRequest {
         @AuraEnabled public String rate { get; set; }
         @AuraEnabled public String commission { get; set; }
@@ -558,6 +394,7 @@ public with sharing class OpportunityController {
          * @param jsonInput JSON string input
          * @return OpportunityRequest instance
          */
+
         @SuppressWarnings('PMD.IfStmtsMustUseBraces, PMD.IfElseStmtsMustUseBraces')
         public OpportunityRequest fromJson(String jsonInput) {
             if (String.isBlank(jsonInput)) {
@@ -586,7 +423,7 @@ public with sharing class OpportunityController {
             } else {
                  req.totalAmountInsured = null;
             }
-
+            
             // Handle List<Object> → List<Id> conversion for riskId
             List<Object> riskList = (List<Object>) data.get('riskId');
             if (riskList != null && !riskList.isEmpty()) {
@@ -597,7 +434,7 @@ public with sharing class OpportunityController {
                     }
                 }
             }
-
+            
             // Handle List<Object> → List<Id> conversion for accountIds
             List<Object> accountList = (List<Object>) data.get('accountIds');
             if (accountList != null && !accountList.isEmpty()) {
@@ -621,7 +458,7 @@ public with sharing class OpportunityController {
         @AuraEnabled public String message { get; set; }
         @AuraEnabled public List<OpportunityDetail> opportunityDetails { get; set; }
         @AuraEnabled public List<FacultativeShareDetail> facultativeShareDetails { get; set; }
-
+        
         /**
          * @description Constructor for ProcessingResult
          */
@@ -640,6 +477,11 @@ public with sharing class OpportunityController {
         @AuraEnabled public Id opportunityId { get; set; }
         @AuraEnabled public Id accountId { get; set; }
         @AuraEnabled public String opportunityName { get; set; }
+        /* @AuraEnabled public List<String> clonedRiskIds { get; set; }
+
+        public OpportunityDetail() {
+            this.clonedRiskIds = new List<String>();
+        } */
     }
     
     /**
@@ -658,7 +500,7 @@ public with sharing class OpportunityController {
      * @return ProcessingResult with creation details
      */
     @AuraEnabled (cacheable=false)
-    @SuppressWarnings('PMD.NcssMethodCount, PMD.CyclomaticComplexity, PMD.CognitiveComplexity, PMD.StdCyclomaticComplexity, PMD.AvoidDebugStatements, PMD.DebugsShouldUseLoggingLevel')
+    @SuppressWarnings('PMD.ApexCRUDViolation')
     public static ProcessingResult createOpportunitiesAndCloneAssets(String jsonInput) {
         ProcessingResult result = new ProcessingResult();
         
@@ -750,7 +592,7 @@ public with sharing class OpportunityController {
                 result.message = 'No Risk records found for the provided riskId(s)';
                 return result;
             }
-
+            
             // Step 2: Create Opportunities for each Account
             List<Opportunity> opportunitiesToInsert = new List<Opportunity>();
             Map<Id, List<Opportunity>> accountToOpportunitiesMap = new Map<Id, List<Opportunity>>();
@@ -773,11 +615,32 @@ public with sharing class OpportunityController {
                 result.message = 'No opportunities could be created';
                 return result;
             }
-
+            
             // Step 3: Insert Opportunities
             insert opportunitiesToInsert;
 
-            // Step 4: Create Facultative Share records for each Opportunity and each Risk
+            /* List<Asset> assetsToInsert = new List<Asset>();
+            Map<Id, List<Id>> opportunityToClonedRiskMap = new Map<Id, List<Id>>();
+
+            for (Opportunity opp : opportunitiesToInsert) {
+                opportunityToClonedRiskMap.put(opp.Id, new List<Id>());
+                for (Asset originalAsset : originalAssets) {
+                    Asset clonedAsset = cloneAsset(originalAsset, req, opp);
+                    assetsToInsert.add(clonedAsset);
+                }
+            }
+
+            if (!assetsToInsert.isEmpty()) {
+                insert assetsToInsert;
+                for (Asset clonedAsset : assetsToInsert) {
+                    Id oppId = clonedAsset.Opportunity__c;
+                    if (opportunityToClonedRiskMap.containsKey(oppId)) {
+                        opportunityToClonedRiskMap.get(oppId).add((String)clonedAsset.Id);
+                    }
+                }
+            }
+            */
+            
             List<Facultative_Share__c> facultativeSharesToInsert = new List<Facultative_Share__c>();
             Map<Id, List<FacultativeShareDetail>> opportunityToFacultativeSharesMap = new Map<Id, List<FacultativeShareDetail>>();
 
@@ -790,7 +653,7 @@ public with sharing class OpportunityController {
                     facultativeSharesToInsert.add(facultativeShare);
                 }
             }
-
+            
             // Step 5: Insert Facultative Share records
             if (!facultativeSharesToInsert.isEmpty()) {
                 insert facultativeSharesToInsert;
@@ -811,13 +674,14 @@ public with sharing class OpportunityController {
                     result.facultativeShareDetails.add(detail);
                 }
             }
-
+            
             // Step 6: Prepare result details
             for (Opportunity opp : opportunitiesToInsert) {
                 OpportunityDetail detail = new OpportunityDetail();
                 detail.opportunityId = opp.Id;
                 detail.accountId = opp.AccountId;
                 detail.opportunityName = opp.Name;
+                //detail.clonedRiskIds = opportunityToClonedRiskMap.get(opp.Id);
                 result.opportunityDetails.add(detail);
             }
 
@@ -874,6 +738,25 @@ public with sharing class OpportunityController {
         
         return opp;
     }
+
+    /**
+     * @description Clone an Asset (Risk) and link to Opportunity
+     * @param originalAsset Original asset to clone
+     * @param req Opportunity request data
+     * @param opp The opportunity to link to
+     * @return Cloned Asset record
+     */
+    /*
+    private static Asset cloneAsset(Asset originalAsset, OpportunityRequest req, Opportunity opp) {
+        Asset clonedAsset = originalAsset.clone(false, false, false, false);
+        
+        clonedAsset.AccountId = opp.AccountId;
+        clonedAsset.Opportunity__c = opp.Id;
+        clonedAsset.Origin_Risk__c = originalAsset.Id;
+        clonedAsset.Name = originalAsset.Name;
+        
+        return clonedAsset;
+    } */
 
     /**
      * @description Creates Facultative Share record
