@@ -208,7 +208,7 @@ export default class InsurancePeriode extends NavigationMixin(LightningElement) 
     }
 
     connectedCallback() {
-        console.log('last update 09/12/2025 13.57');
+        console.log('last update 10/12/2025 14.36');
         console.log('opptyId: ' + this.recordId);
         console.log('isOwner: ' + this.isOwner);
     }
@@ -247,6 +247,7 @@ export default class InsurancePeriode extends NavigationMixin(LightningElement) 
                 this.isTypeLocked = true;
                 console.log('COB='+this.cob);
                 console.log('premiumCalculation='+this.premiumCalculation);
+                console.log('stage='+this.stage);
             } else if (error) {
                 this.error = error;
                 this.isLoading = false;
@@ -288,7 +289,7 @@ export default class InsurancePeriode extends NavigationMixin(LightningElement) 
     }
 
     get isNotOwner(){
-        return this.isOwner;
+        return !this.isOwner;
     }
 
     // ------ NEW: Premium Calculation Handler ------
