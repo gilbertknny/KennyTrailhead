@@ -157,7 +157,7 @@ global without sharing class VlocityMapping implements callable{
     /** @description setAssetMatrix  @param inputMap @param param @param extid @return setmapObjmap */
     public static Map<String,Object> getmapobject(Map<String,Object> inputMap,String param,String extid){
         List<Object> lobj = inputMap.containsKey(param) ? (List<Object>) inputMap.get(param) :new List<Object>() ;
-        if(lobj!=null){
+        if(lobj!=null ){
             if(!lobj.isEmpty()){
                 SFAWT05 sfawt = setSFAWT5(lobj, param, extid);
                 return setmapObjmap(sfawt);
