@@ -253,6 +253,12 @@
         </connector>
         <flowName>Transaction_Data_Clone</flowName>
         <inputAssignments>
+            <name>AccountId</name>
+            <value>
+                <elementReference>Get_Opportunity.AccountId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
             <name>NewOptyId</name>
             <value>
                 <elementReference>OpportunityResult.Id</elementReference>

@@ -1,15 +1,7 @@
 /** @description VlocityMapping  hanya run menggunakan global class */
 @SuppressWarnings('PMD.AvoidGlobalModifier, PMD.StdCyclomaticComplexity, PMD.CyclomaticComplexity')
 
-global with sharing class VlocityMapping implements callable{
-    /** @description VlocityMapping
-     *
-     *
-    public VlocityMapping() {
-
-    }
-    */
-
+global without sharing class VlocityMapping implements callable{
     /** @description VlocityMapping  @param ipname @param jsonInput @return map */
     public static Map<String,Object> callIP(String ipname,String jsonInput){
         Map<String, Object> input = new Map<String, Object>();
@@ -110,67 +102,111 @@ global with sharing class VlocityMapping implements callable{
     /** @description VlocityMapping  @param inputMap @return mapjobid */
     public static Map<String,Object> sfawt05Extend(Map<String, Object> inputMap){
         Map<String, Object> mapobj = new Map<String, Object>();
-        Map<String, Object> mapobjcv = new Map<String, Object>();
-        Map<String, Object> mapobjas = new Map<String, Object>();
-        Map<String, Object> mapobjrs = new Map<String, Object>();
-        Map<String, Object> mapobjin = new Map<String, Object>();
-        Map<String, Object> mapobjbc = new Map<String, Object>();
-        Map<String, Object> mapobjqq = new Map<String, Object>();
-        Map<String, Object> mapobjcl = new Map<String, Object>();
-        Map<String, Object> mapobjsp = new Map<String, Object>();
-        List<Object> lrisk = inputMap.containsKey('risk') ? (List<Object>) inputMap.get('risk') :new List<Object>() ;
+        Map<String, InsurancePolicy> mappolicy = new Map<String, InsurancePolicy>();
         List<Object> lcoverages = inputMap.containsKey('coverages')? (List<Object>) inputMap.get('coverages') : new List<Object>() ;
         List<Object> lasset =  inputMap.containsKey('detail_insured')? (List<Object>) inputMap.get('detail_insured') : new List<Object>() ;
-        List<Object> linstallments = inputMap.containsKey('installments')? (List<Object>) inputMap.get('installments') :  new List<Object>() ;
-        List<Object> lbusinesscompanies = inputMap.containsKey('business_companies')? (List<Object>) inputMap.get('business_companies') :  new List<Object>() ;
-        List<Object> lbusinessqq = inputMap.containsKey('business_request_qq')? (List<Object>) inputMap.get('business_request_qq') : new List<Object>();
         List<Object> ldocumentclauses = inputMap.containsKey('document_clauses')? (List<Object>) inputMap.get('document_clauses') : new List<Object>() ;
-        List<Object> ltranshipment =  inputMap.containsKey('transhipments') ? (List<Object>) inputMap.get('transhipments') : new List<Object>() ;
         Object documentPolicy = (Object) inputMap.get('documentPolicy');
-        mapobjsp = (Map<String, Object>) documentPolicy;
+        Object businessrequest = (Object) inputMap.get('business_request');
+        Map<String, Object> mapobjsp = documentPolicy!=null ? (Map<String, Object>) documentPolicy : new Map<String, Object>();
         String extid = mapobjsp.containsKey('policy_number') ? (String) mapobjsp.get('policy_number') : '';
-        
-        if(!lrisk.isEmpty()){
-            SFAWT05 sfawt = setSFAWT5(lrisk, 'risk', extid);
-            mapobj.putAll(setmapObjmap(sfawt));
+        if(String.isNotBlank(extid) && Schema.sObjectType.InsurancePolicy.isAccessible()){
+            List<InsurancePolicy> lip = [select id,SourceOpportunityId,NameInsuredId,BUSREQ_ID__c,Aswata_Policy_Number__c,COB__c from InsurancePolicy where Aswata_Policy_Number__c=:extid];
+            for(InsurancePolicy ip:lip){
+                mappolicy.put(ip.Aswata_Policy_Number__c,ip);
+                mappolicy.put(ip.BUSREQ_ID__c,ip);
+            }
         }
-        
-        if(!linstallments.isEmpty()){
-            SFAWT05 sfawt = setSFAWT5(linstallments, 'installments', null);
-            mapobj.putAll(setmapObjmap(sfawt));
+        mapobj = setmapall(mapobj, getmapobject(inputMap, 'risk', extid));
+        mapobj = setmapall(mapobj, getmapobject(inputMap, 'installments', null));
+        mapobj = setmapall(mapobj, getmapobject(inputMap, 'business_companies', null));
+        mapobj = setmapall(mapobj, getmapobject(inputMap, 'transhipments', null));
+        mapobj = setmapall(mapobj, getmapobject(inputMap, 'business_request_qq', null));
+        if(ldocumentclauses!=null){
+            if(!ldocumentclauses.isEmpty()){
+                List<ApexDefinedFlow> lclauseflow = setclause(ldocumentclauses,mappolicy);
+                SFAWT05 sfawt = setSFAWT5(lclauseflow, 'document_clauses', extid);
+                mapobj.putAll(setmapObjmap(sfawt));
+            }
         }
-        
-        if(!lbusinesscompanies.isEmpty()){
-            SFAWT05 sfawt = setSFAWT5(lbusinesscompanies, 'business_companies', null);
-            mapobj.putAll(setmapObjmap(sfawt));
+        if(lcoverages!=null){
+            if(!lcoverages.isEmpty()){
+                lasset = setAssetMatrix(lcoverages, lasset);
+                Integer max1 = lcoverages.size() > 20 ? 20 : lcoverages.size();
+                SFAWT05 sfawt = setSFAWT5(lcoverages, 'coverages', extid);
+                mapobj.putAll(setmapObjmap(sfawt));
+            }
         }
-        //Untuk COB 101
-        if(!ltranshipment.isEmpty()){
-            SFAWT05 sfawt = setSFAWT5(ltranshipment, 'transhipments', null);
-            mapobj.putAll(setmapObjmap(sfawt));
-        }
-        if(!lbusinessqq.isEmpty()){
-            SFAWT05 sfawt = setSFAWT5(lbusinessqq, 'business_request_qq', null);
-            mapobj.putAll(setmapObjmap(sfawt));
-        }
-        if(!ldocumentclauses.isEmpty()){
-            SFAWT05 sfawt = setSFAWT5(ldocumentclauses, 'document_clauses', null);
-            mapobj.putAll(setmapObjmap(sfawt));
-        }
-
-        if(!lcoverages.isEmpty()){
-            lasset = setAssetMatrix(lcoverages, lasset);
-            Integer max1 = lcoverages.size() > 20 ? 20 : lcoverages.size();
-            SFAWT05 sfawt = setSFAWT5(lcoverages, 'coverages', extid);
-            mapobj.putAll(setmapObjmap(sfawt));
-        }
-        
-        if(!lasset.isEmpty()){
-            SFAWT05 sfawt = setSFAWT5(lasset, 'detail_insured', extid);
-            mapobj.putAll(setmapObjmap(sfawt));
+        if(lasset!=null){
+            if(!lasset.isEmpty()){
+                SFAWT05 sfawt = setSFAWT5(lasset, 'detail_insured', extid);
+                mapobj.putAll(setmapObjmap(sfawt));
+            }
         }
         return mapobj;
     }
+    
+    /** @description setmapall  @param mapobjall @param mapobj  @return mapobjall */
+    public static Map<String,Object> setmapall(Map<String,Object> mapobjall, Map<String,Object> mapobj){
+        if(mapobj!=null){
+            mapobjall.putAll(mapobj);
+        }
+        return mapobjall;
+    }
+
+    /** @description setAssetMatrix  @param inputMap @param param @param extid @return setmapObjmap */
+    public static Map<String,Object> getmapobject(Map<String,Object> inputMap,String param,String extid){
+        List<Object> lobj = inputMap.containsKey(param) ? (List<Object>) inputMap.get(param) :new List<Object>() ;
+        if(lobj!=null){
+            if(!lobj.isEmpty()){
+                SFAWT05 sfawt = setSFAWT5(lobj, param, extid);
+                return setmapObjmap(sfawt);
+            }
+        }
+        return null;
+    }
+
+    /** @description setAssetMatrix  @param ldocumentclauses @param mappolicy @return lclauseflow */
+    public static List<ApexDefinedFlow>  setclause(List<Object> ldocumentclauses, Map<String,InsurancePolicy> mappolicy){
+        List<ApexDefinedFlow> lclauseflow = new List<ApexDefinedFlow>();
+        Map<String, Object> mapdc = new Map<String, Object>();
+        Map<String, Object> mapcl = new Map<String, Object>();
+        InsurancePolicy ip = new InsurancePolicy();
+        for(InsurancePolicy v : mappolicy.values()){
+            ip = v;
+        }
+        for(Object dc : ldocumentclauses){
+            mapdc = (Map<String,Object>) dc;
+            mapcl.put(String.valueOf(mapdc.get('clausa_id')),null);
+        }
+        if(!mapcl.isEmpty()  && Schema.sObjectType.Master_Data__c.isAccessible()){
+            List<Master_Data__c> lmd = [select id,Clause_Id__c from Master_Data__c where Clause_Id__c in :mapcl.keySet() and BSN_ID__c=:ip?.COB__c];
+            for(Master_Data__c md:lmd){
+                mapcl.put(md.Clause_Id__c,md.id);
+            }
+        }
+        for(Object dc : ldocumentclauses){
+            mapdc = (Map<String,Object>) dc;
+            String clausaid = String.valueOf(mapdc.get('clausa_id'));
+            String busreqid = (String) mapdc.get('busreq_id');
+            ApexDefinedFlow adf = new ApexDefinedFlow();
+            adf.busreqid = busreqid;
+            adf.clausaid = clausaid;
+            adf.clausedesccl = (String) mapdc.get('clause_desc_cl');
+            adf.clausename = (String) mapdc.get('clause_name');
+            adf.insurancepolicyid = ip?.Id;
+            adf.isadditional = mapdc.get('is_additional') == 'Y' ? true : false;
+            adf.ischanged = mapdc.get('is_changed') == 'Y' ? true : false;
+            adf.mdclausaid = (String) mapcl.get(clausaid);
+            adf.opportunityid = ip?.SourceOpportunityId;
+            adf.partitionCode = (String) mapdc.get('partitionCode');
+            adf.policynum = ip?.Aswata_Policy_Number__c;
+            adf.uniqueid = clausaid+busreqid;
+            lclauseflow.add(adf);
+        }
+        return lclauseflow;
+    }
+
     /** @description setAssetMatrix  @param lcoverages @param lasset @return lasset */
     public static List<Object> setAssetMatrix(List<Object> lcoverages, List<Object> lasset){
         List<Object> listcovid = new List<Object>();
