@@ -267,7 +267,7 @@ global without sharing class VlocityMapping implements callable{
                 }
             }
         }
-        return lasset;
+        return lasset; 
     }
     /** @description setAssetMatrix  @param sfawt @return mapobj */
     public static Map<String,Object> setmapObjmap(SFAWT05 sfawt){
