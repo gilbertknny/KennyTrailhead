@@ -1,10 +1,10 @@
 /**
  * @description       : Data Handler for LWC Treaty Distribution
  * @author            : Ahmad Yazid Munif
- * @last modified on  : 11-14-2025
+ * @last modified on  : 12-05-2025
  * @last modified by  : Ahmad Yazid Munif
 **/
-public with sharing class Aswata_Treaty_Distribution {
+public without sharing class Aswata_Treaty_Distribution {
     /**
      * @description function for get transaction data from opportunity related in quote
      * @param recordId string Id quote
@@ -43,27 +43,30 @@ public with sharing class Aswata_Treaty_Distribution {
     public static List<QuoteOpptyRelated> getRelatedListRisk(String recordId) {
         // 012MS000000BcI5YAK
         RecordType rtRisk = [
-            SELECT id FROM RecordType 
+            SELECT id FROM RecordType
             WHERE SobjectType = 'Asset' AND Name = 'RIsk'
             WITH SECURITY_ENFORCED LIMIT 1
         ];
         Quote resultOppty = [
-            SELECT OpportunityId,Treaty_Distribution_Response__c
+            SELECT QuoteNumber,OpportunityId,Treaty_Distribution_Response__c,CreatedDate
             FROM Quote WHERE Id = :recordId
             WITH SECURITY_ENFORCED LIMIT 1
         ];
         System.debug('resultOppty'+resultOppty);
         List<Asset> relatedAsset = [
-            SELECT Id,name, Risk_ID__c, 
-            Accumulation__c, Accumulation__r.Name, 
+            SELECT Id,Name, Risk_ID__c,Amount_Insured__c,Accumulation_ID__c,
+            Accumulation__c, Accumulation__r.Name,Accumulation__r.CreatedDate,
             Opportunity__r.Busreq_ID__c, Opportunity__r.Name,
             Opportunity__r.Start_Date_Periode__c,
             Opportunity__r.End_Date_Periode__c,
             Opportunity__r.Total_Sum_Insured__c,
-            Opportunity__c
+            Opportunity__c, Address__c,
+            Address__r.Name, Address__r.City__r.Name,
+            Address__r.Country__r.Name,
+            Address__r.Zip_Code__r.Name
             FROM Asset WHERE Opportunity__c = :resultOppty.OpportunityId
             AND RecordTypeId = :rtRisk.Id
-            AND Accumulation__c != null
+            // AND (Accumulation__c != null OR Accumulation_ID__c != null)
             WITH SECURITY_ENFORCED
         ];
         System.debug('relatedAsset'+relatedAsset);
@@ -71,62 +74,94 @@ public with sharing class Aswata_Treaty_Distribution {
         for(Asset item : relatedAsset){
             QuoteOpptyRelated opptyQuote = new QuoteOpptyRelated();
             opptyQuote.id = item.Opportunity__c;
+            opptyQuote.riskNo = item.Risk_ID__c;
+            opptyQuote.riskName = item.Name;
+            opptyQuote.opptyName = item.Opportunity__r.Name;
             opptyQuote.labelName = item.Opportunity__r.Busreq_ID__c+' - '+item.Risk_ID__c;
-            opptyQuote.findId = item.Opportunity__r.Busreq_ID__c+item.Risk_ID__c;
+            // opptyQuote.findId = item.Opportunity__r.Busreq_ID__c+item.Risk_ID__c;
+            // opptyQuote.labelName = item.Name;
+            opptyQuote.findId = item.Id;
             opptyQuote.busreqId = item.Opportunity__r.Busreq_ID__c;
-            opptyQuote.opportunityName = item.Opportunity__r.Name;
-            opptyQuote.oppTotalSumInsured = item.Opportunity__r.Total_Sum_Insured__c;
+            opptyQuote.accumId = item.Accumulation_ID__c;
+            // opptyQuote.oppTotalSumInsured = item.Opportunity__r.Total_Sum_Insured__c;
+            opptyQuote.oppTotalSumInsured = item.Amount_Insured__c;
             opptyQuote.oppStartDatePeriode = item.Opportunity__r.Start_Date_Periode__c;
             opptyQuote.oppEndDatePeriode = item.Opportunity__r.End_Date_Periode__c;
-            opptyQuote.treatyResponse = resultOppty.Treaty_Distribution_Response__c;
+            opptyQuote.quoteReqDate = resultOppty.CreatedDate.date();
+            opptyQuote.quoteNumber = resultOppty.QuoteNumber;
+            // opptyQuote.accumDate = item.Accumulation__r.CreatedDate;
+            opptyQuote.addressRisk = generateFormattedAddress(item);
+            // opptyQuote.treatyResponse = resultOppty.Treaty_Distribution_Response__c;
+            // if(item.Opportunity__r.Busreq_ID__c != null &&
+            //     item.Risk_ID__c != null){
+            //     listOpptyQuote.add(opptyQuote);
+            // }
             listOpptyQuote.add(opptyQuote);
         }
-        System.debug('listOpptyQuote'+listOpptyQuote);
+        // System.debug('listOpptyQuote'+listOpptyQuote);
         return listOpptyQuote;
     }
     /**
-     * @description function for get opportunity related from quote
-     * @param recordId string Id quote
-     * @return Quote object
+     * @description Menggabungkan komponen alamat dari record Asset menjadi satu string
+     * @param risk Record Asset yang memiliki lookup ke Address__c
+     * @return String Alamat lengkap
      */
-    // @AuraEnabled(cacheable=true)
-    // public static Quote getRelatedOpportunityData(String recordId) {
-    //     if (!Schema.sObjectType.Quote.isAccessible()) {
-    //         throw new SecurityException(
-    //             'Insufficient permissions to access Quote'
-    //         );
-    //     }
-    //     Quote resultOppty = [
-    //         SELECT OpportunityId,
-    //         Opportunity.Name,Opportunity.Total_Sum_Insured__c,
-    //         Opportunity.Start_Date_Periode__c,Opportunity.End_Date_Periode__c,
-    //         Treaty_Distribution_Response__c
-    //         FROM Quote WHERE Id = :recordId
-    //         LIMIT 1
-    //     ];
-        
-    //     // QuoteOpptyRelated opptyQuote = new QuoteOpptyRelated();
-    //     // opptyQuote.id = resultOppty.OpportunityId;
-    //     // opptyQuote.opportunityName = resultOppty.Opportunity.Name;
-    //     // opptyQuote.oppTotalSumInsured = resultOppty.Opportunity.Total_Sum_Insured__c;
-    //     // opptyQuote.oppStartDatePeriode = resultOppty.Opportunity.Start_Date_Periode__c;
-    //     // opptyQuote.oppEndDatePeriode = resultOppty.Opportunity.End_Date_Periode__c;
-    //     return resultOppty;
-    // }
+    public static String generateFormattedAddress(Asset risk) {
+        if (risk == null || risk.Address__c == null) {
+            return '';
+        }
+        List<String> addressComponents = new List<String>();
+        if (String.isNotBlank(risk.Address__r.Name)) {
+            addressComponents.add(risk.Address__r.Name);
+        }
+        if (String.isNotBlank(risk.Address__r.City__r.Name)) {
+            addressComponents.add(risk.Address__r.City__r.Name);
+        }
+        if (String.isNotBlank(risk.Address__r.Country__r.Name)) {
+            addressComponents.add(risk.Address__r.Country__r.Name);
+        }
+        if (String.isNotBlank(risk.Address__r.Zip_Code__r.Name)) {
+            addressComponents.add(risk.Address__r.Zip_Code__r.Name);
+        }
+        if (addressComponents.isEmpty()) {
+            return '';
+        }
+        return String.join(addressComponents, ', ');
+    }
+    /**
+     * @description function for getResponseTreaty from API
+     * @param recordId string Id quote
+     * @return Map<String,Object>
+     */
+    @AuraEnabled
+    public static Map<String,Object> getResponseTreaty(String recordId) {
+        system.debug('recordId'+recordId);
+        // recordId = '02iMS000000QOBkYAO';
+        Map<String,String> mapstr = new Map<String,String>();
+        mapstr.put('recId',recordId);
+        Map<String,Object> result = VlocityMapping.callIP('SFAWT27_SendTreaty',json.serialize(mapstr));
+        system.debug('result'+result);
+        return result;
+    }
     /**
      * @description Class wrapper return getRelatedOppty
      * all value JSON can deserialize with this wrapper
      */
     public class QuoteOpptyRelated {
         @AuraEnabled public String id;
+        @AuraEnabled public String riskNo;
+        @AuraEnabled public String riskName;
         @AuraEnabled public String labelName;
         @AuraEnabled public String findId;
         @AuraEnabled public String busreqId;
-        @AuraEnabled public String opportunityName;
+        @AuraEnabled public String accumId;
+        @AuraEnabled public String opptyName;
         @AuraEnabled public Decimal oppTotalSumInsured;
         @AuraEnabled public Date oppStartDatePeriode;
         @AuraEnabled public Date oppEndDatePeriode;
-        @AuraEnabled public String treatyResponse;
+        @AuraEnabled public Date quoteReqDate;
+        @AuraEnabled public String quoteNumber;
+        @AuraEnabled public String addressRisk;
     }
     /**
      * @description function for save setFacultative
@@ -145,10 +180,37 @@ public with sharing class Aswata_Treaty_Distribution {
         if (!assetsToUpdate.isEmpty()) {
             processAssetUpdates(assetsToUpdate, riskPairs[0].setFacultative);
         }
+        Quote oldQuote = [
+            SELECT Id, Treaty_Distribution_Response__c 
+            FROM Quote 
+            WHERE Id = :quoteId 
+            WITH SECURITY_ENFORCED 
+            LIMIT 1
+        ];
+        Map<String, Map<String, Object>> riskMap = new Map<String, Map<String, Object>>();
+        List<Object> finalJsonArray = new List<Object>();
+        String existingJson = oldQuote.Treaty_Distribution_Response__c;
+        if (String.isNotBlank(existingJson)) {
+            List<Object> oldArray = (List<Object>)JSON.deserializeUntyped(existingJson);
+            for (Object obj : oldArray) {
+                Map<String, Object> oldObjectMap = (Map<String, Object>)obj;
+                String riskId = (String)oldObjectMap.get('riskId');
+                riskMap.put(riskId, oldObjectMap);
+            }
+        }
+        if (String.isNotBlank(jsonData)) {
+            Map<String, Object> newObjectMap = (Map<String, Object>)JSON.deserializeUntyped(jsonData);
+            String newRiskId = (String)newObjectMap.get('riskId');
+            if (String.isNotBlank(newRiskId)) {
+                riskMap.put(newRiskId, newObjectMap);
+            }
+        }
+        finalJsonArray.addAll(riskMap.values());
+        String mergedJsonArrayString = JSON.serialize(finalJsonArray);
         // 4. Update Quote
         Quote updateQuote = new Quote(
             Id = quoteId,
-            Treaty_Distribution_Response__c = jsonData
+            Treaty_Distribution_Response__c = mergedJsonArrayString
         );
         // System.debug('### AWT updateQuote'+updateQuote);
         // OperationDML
@@ -194,30 +256,35 @@ public with sharing class Aswata_Treaty_Distribution {
         if (riskPairs.isEmpty()) {
             return new List<Asset>();
         }
-        List<String> busreqIdList = new List<String>();
-        Set<String> targetCombinedIdSet = new Set<String>();
+        // List<String> busreqIdList = new List<String>();
+        List<String> riskIdList = new List<String>();
+        // Set<String> targetCombinedIdSet = new Set<String>();
         for (RiskPairWrapper pair : riskPairs) {
-            String safeBusreqId = String.escapeSingleQuotes(pair.busreqId);
-            String safeRiskNumber = String.escapeSingleQuotes(pair.riskId);
-            targetCombinedIdSet.add(safeBusreqId+safeRiskNumber);
-            busreqIdList.add(safeBusreqId);
+            // String safeBusreqId = String.escapeSingleQuotes(pair.busreqId);
+            // String safeRiskNumber = String.escapeSingleQuotes(pair.riskId);
+            // targetCombinedIdSet.add(safeBusreqId+safeRiskNumber);
+            // busreqIdList.add(safeBusreqId);
+            String safeRiskId = String.escapeSingleQuotes(pair.riskId);
+            riskIdList.add(safeRiskId);
         }
         // System.debug('### AWT busreqIdList'+busreqIdList);
         List<Asset> getAssetByBusreq = [
-            SELECT Id, Opportunity__r.Busreq_ID__c,Risk_ID__c
+            SELECT Id, Opportunity__r.Busreq_ID__c,Risk_ID__c, Accumulation__r.Group_ID__c
             FROM Asset
-            WHERE Opportunity__r.Busreq_ID__c IN :busreqIdList
+            WHERE Id IN :riskIdList
+            // WHERE Opportunity__r.Busreq_ID__c IN :busreqIdList
             WITH SECURITY_ENFORCED
         ];
-        List<Asset> finalFilteredAssets = new List<Asset>();
-        for(Asset ass: getAssetByBusreq){
-            String queriedCombinedId = ass.Opportunity__r.Busreq_ID__c + ass.Risk_ID__c;
-            if (targetCombinedIdSet.contains(queriedCombinedId)) {
-                finalFilteredAssets.add(ass);
-            }
-        }
+        // List<Asset> finalFilteredAssets = new List<Asset>();
+        // for(Asset ass: getAssetByBusreq){
+        //     String queriedCombinedId = ass.Opportunity__r.Busreq_ID__c + ass.Risk_ID__c;
+        //     if (targetCombinedIdSet.contains(queriedCombinedId)) {
+        //         finalFilteredAssets.add(ass);
+        //     }
+        // }
         // System.debug('### AWT finalFilteredAssets'+finalFilteredAssets);
-        return finalFilteredAssets;
+        // System.debug('### AWT finalFilteredAssets'+getAssetByBusreq);
+        return getAssetByBusreq;
     }
     /**
      * @description function for proccessing update asset with setFacultative value
@@ -229,25 +296,40 @@ public with sharing class Aswata_Treaty_Distribution {
         if(setFacultativeValue != null && setFacultativeValue != 0){
             facultativeValue = setFacultativeValue;
         }
-        RecordType rtFolder = [
-            SELECT Id,Name
-            FROM RecordType
-            WHERE SobjectType = 'Transaction_Data__c' AND Name = 'Facultative Folder'
+        String folderFaculId = null;
+        String groupId = assetsToUpdate[0].Accumulation__r.Group_ID__c;
+        List<Asset> assetsByGroup = [
+            SELECT Id, Opportunity__r.Busreq_ID__c,Risk_ID__c,
+            Accumulation__r.Group_ID__c,Facultative_Folder__c,Has_Facultative__c
+            FROM Asset
+            WHERE Accumulation__r.Group_ID__c = :groupId
+            AND Facultative_Folder__c != null
             WITH SECURITY_ENFORCED LIMIT 1
         ];
-        Transaction_Data__c transacData = new Transaction_Data__c(
-            Detail_Description__c = 'Treaty Distribution',
-            RecordTypeId = rtFolder.Id
-        );
-        // OperationDML
-        Database.insert(transacData, AccessLevel.USER_MODE);
+        if (!assetsByGroup.isEmpty()) {
+            folderFaculId = assetsByGroup[0].Facultative_Folder__c;
+        }else{
+            RecordType rtFolder = [
+                SELECT Id,Name
+                FROM RecordType
+                WHERE SobjectType = 'Transaction_Data__c' AND Name = 'Facultative Folder'
+                WITH SECURITY_ENFORCED LIMIT 1
+            ];
+            Transaction_Data__c transacData = new Transaction_Data__c(
+                Detail_Description__c = 'Treaty Distribution',
+                RecordTypeId = rtFolder.Id
+            );
+            // OperationDML
+            Database.insert(transacData, AccessLevel.USER_MODE);
+            folderFaculId = transacData.Id;
+        }
         List<Asset> updateAssetList = new List<Asset>();
         for(Asset a : assetsToUpdate){
             updateAssetList.add(new Asset(
                 Id = a.Id,
                 Facultative__c = facultativeValue,
                 Has_Facultative__c = true,
-                Facultative_Folder__c = transacData.Id
+                Facultative_Folder__c = folderFaculId
             ));
         }
         System.debug('### AWT updateAssetList'+updateAssetList);

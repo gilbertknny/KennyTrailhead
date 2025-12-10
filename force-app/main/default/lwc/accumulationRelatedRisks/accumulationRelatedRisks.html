@@ -1,0 +1,31 @@
+<template>
+    <lightning-card icon-name="standard:asset">
+        <h1 slot="title">Risks ({recordCount})</h1>
+        
+        <!-- <div slot="actions">
+            <lightning-button label="New" onclick={handleNew}></lightning-button>
+        </div> -->
+
+        <div class="slds-p-horizontal_small">
+            <template if:true={data}>
+                <div>
+                    <lightning-datatable
+                        key-field="Id"
+                        data={data}
+                        columns={columns}
+                        onrowaction={handleRowAction}
+                        hide-checkbox-column="true"
+                        resize-column-disabled="true">
+                    </lightning-datatable>
+                </div>
+            </template>
+            <template if:true={error}>
+                <p class="slds-text-color_error">{error}</p>
+            </template>
+        </div>
+
+        <!-- <div slot="footer" class="slds-align_absolute-center">
+            <a href="javascript:void(0);">View All</a>
+        </div> -->
+    </lightning-card>
+</template>

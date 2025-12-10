@@ -1,0 +1,27 @@
+<messaging:emailTemplate subject="[ASWATA] Pemberitahuan Pembaruan Polis Anda – {!relatedTo.Aswata_Policy_Number__c}" 
+    recipientType="Contact" 
+    relatedToType="InsurancePolicy">
+
+    <messaging:htmlEmailBody >
+        <html>
+            <body style="font-family: Arial, sans-serif;">
+                <p>Kepada Yth. {!relatedTo.NameInsured__c},</p>
+                
+                <p>Bersama email ini kami lampirkan dokumen pemberitahuan perpanjangan polis Asuransi Kebakaran Aswata Anda dengan nomor <b>{!relatedTo.Aswata_Policy_Number__c}</b>.</p>
+                
+                <p>Mohon untuk meninjau kembali data yang tertera. Jika setuju untuk diperpanjang, mohon konfirmasi melalui formulir yang terlampir.</p>
+                
+                <br/>
+                <p>Hormat Kami,</p>
+                <p><b>PT. Asuransi Wahana Tata</b></p>
+            </body>
+        </html>
+    </messaging:htmlEmailBody>
+
+    <messaging:attachment renderAs="pdf" filename="RenewalNotice_{!relatedTo.Aswata_Policy_Number__c}.pdf">
+        
+        <c:RenewalNoticePDF policyIdValue="{!relatedTo.Id}" />
+        
+    </messaging:attachment>
+
+</messaging:emailTemplate>

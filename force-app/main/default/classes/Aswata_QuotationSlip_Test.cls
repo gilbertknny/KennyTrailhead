@@ -1,12 +1,12 @@
 /**
  * @description       : Test Class PDF Quotation
  * @author            : Ahmad Yazid Munif
- * @last modified on  : 11-23-2025
+ * @last modified on  : 12-02-2025
  * @last modified by  : Ahmad Yazid Munif
 **/
-@isTest
+@IsTest
 private class Aswata_QuotationSlip_Test {
-    @testSetup
+    @TestSetup
     static void makeData() {
         Account acc = new Account(Name = 'Jhon');
         insert acc;
@@ -192,7 +192,7 @@ private class Aswata_QuotationSlip_Test {
         // ));
         insert listTrxData;
     }
-    @isTest
+    @IsTest
     static void testCob201SingleRisk() {
         User adminUser = createUser();
         Quote testQuote = [SELECT Id FROM Quote WHERE Name = 'Quote 201' LIMIT 1];
@@ -215,7 +215,7 @@ private class Aswata_QuotationSlip_Test {
         System.assertNotEquals(null, controller.quoteRecord, 'Quote Record seharusnya berhasil di-query di konstruktor.');
         System.assertEquals(null, resultPage, 'Seharusnya tetap dipage ini.');
     }
-    @isTest
+    @IsTest
     static void testCob201MultiRisk() {
         User adminUser = createUser();
         Quote testQuote = [SELECT Id FROM Quote WHERE Name = 'Quote 201 Multi' LIMIT 1];
@@ -239,7 +239,7 @@ private class Aswata_QuotationSlip_Test {
         System.assertNotEquals(null, controller.quoteRecord, 'Quote Record seharusnya berhasil di-query di konstruktor.');
         System.assertEquals(null, resultPage, 'Seharusnya tetap dipage ini.');
     }
-    @isTest
+    @IsTest
     static void testCob301Redirect() {
         User adminUser = createUser();
         Quote testQuote = [SELECT OpportunityId, Administration_Cost__c, Stamp_Duty__c, Opportunity.COB__c FROM Quote WHERE Name = 'Quote 301' LIMIT 1];
@@ -257,7 +257,7 @@ private class Aswata_QuotationSlip_Test {
         System.assertNotEquals(null, controller.quoteRecord, 'Quote Record seharusnya berhasil di-query di konstruktor.');
         System.assertEquals(null, resultPage, 'Seharusnya Pindah Page.');
     }
-    @isTest
+    @IsTest
     static void testCob301SingleRisk() {
         User adminUser = createUser();
         Quote testQuote = [SELECT OpportunityId, Administration_Cost__c, Stamp_Duty__c, Opportunity.COB__c FROM Quote WHERE Name = 'Quote 301' LIMIT 1];
@@ -274,7 +274,7 @@ private class Aswata_QuotationSlip_Test {
         System.assertNotEquals(null, controller.quoteRecord, 'Quote Record seharusnya berhasil di-query di konstruktor.');
         System.assertEquals(null, resultPage, 'Return PageReference.');
     }
-    @isTest
+    @IsTest
     static void testCob301MultiRisk() {
         User adminUser = createUser();
         Quote testQuote = [SELECT OpportunityId, Administration_Cost__c, Stamp_Duty__c, Opportunity.COB__c FROM Quote WHERE Name = 'Quote 301 Multi' LIMIT 1];

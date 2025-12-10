@@ -1,7 +1,7 @@
 /**
  * @description       : Data Handler Quotation
  * @author            : Ahmad Yazid Munif
- * @last modified on  : 11-23-2025
+ * @last modified on  : 12-03-2025
  * @last modified by  : Ahmad Yazid Munif
 **/
 public without sharing class Aswata_QuotationSlip_DataHandler {
@@ -31,12 +31,22 @@ public without sharing class Aswata_QuotationSlip_DataHandler {
             result.insuredName = (opptyQuote.The_Insured_Name__r != null) ? opptyQuote.The_Insured_Name__r.Name : '';
             result.insuredAddress = opptyQuote.The_Insured_Address__c;
         }
-        List<Transaction_Data__c> rawTrxData = [
-            SELECT Id, Clauses_Name__c,Clause_Description__c,QQ_Name__r.Name
-            FROM Transaction_Data__c
-            WHERE Opportunity__c = :opptyId
-            WITH SECURITY_ENFORCED
-        ];
+        String cond = 'Opportunity__c = :opptyId';
+        String dpFields = SOQL_SOBJECT.getallfield('Transaction_Data__c');
+        SOQL_SOBJECT.SOQL_Param sp = new SOQL_SOBJECT.SOQL_Param();
+        sp.sobjectName = 'Transaction_Data__c';
+        sp.condition = cond;
+        sp.fields = dpFields;
+        sp.addField = ',QQ_Name__r.Name';
+        String dpquery = SOQL_SOBJECT.SOQL(sp)+' WITH SECURITY_ENFORCED';
+        // String queryx = 'SELECT '+field+' ,QQ_Name__r.Name FROM Transaction_Data__c WHERE Opportunity__c = :opptyId WITH SECURITY_ENFORCED';
+        // List<Transaction_Data__c> rawTrxData = [
+        //     SELECT Id, Clauses_Name__c,Clause_Description__c,QQ_Name__r.Name
+        //     FROM Transaction_Data__c
+        //     WHERE Opportunity__c = :opptyId
+        //     WITH SECURITY_ENFORCED
+        // ];
+        List<Transaction_Data__c> rawTrxData = Database.query(dpquery);
         List<Transaction_Data__c> trxDataOppty = new List<Transaction_Data__c>();
         for (Transaction_Data__c trx : rawTrxData) {
             if (String.isNotBlank(trx.Clauses_Name__c) && trx.Clauses_Name__c!='-') {

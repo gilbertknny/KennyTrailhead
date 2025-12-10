@@ -160,7 +160,10 @@
         <type>AutoNumber</type>
     </nameField>
     <pluralLabel>Error Log</pluralLabel>
-    <searchLayouts></searchLayouts>
+    <searchLayouts>
+        <searchResultsAdditionalFields>Response_Body__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Request_Body__c</searchResultsAdditionalFields>
+    </searchLayouts>
     <sharingModel>ReadWrite</sharingModel>
     <visibility>Public</visibility>
 </CustomObject>

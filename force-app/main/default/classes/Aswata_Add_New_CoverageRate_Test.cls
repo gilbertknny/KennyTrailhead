@@ -1,14 +1,14 @@
 /**
  * @description       : Test Class for Aswata_Add_New_CoverageRate
  * @author            : Ahmad Yazid Munif
- * @last modified on  : 11-21-2025
+ * @last modified on  : 12-07-2025
  * @last modified by  : Ahmad Yazid Munif
 **/
 
-@isTest
+@IsTest
 private class Aswata_Add_New_CoverageRate_Test {
 
-    @testSetup
+    @TestSetup
     static void makeData() {
         Id standardRtId = Schema.SObjectType.Master_Data__c.getRecordTypeInfosByName().get('Coverage').getRecordTypeId();
         RecordType rtCovRate = [SELECT Id FROM RecordType WHERE SobjectType = 'Master_Data__c' AND Name = 'Coverage Rate' LIMIT 1];
@@ -55,6 +55,7 @@ private class Aswata_Add_New_CoverageRate_Test {
         exchangeRatesToInsert.add(new Master_Data__c(
             Name = 'Comprehensive',
             COVERAGE_REF_ID__c = '301100',
+            PARENT_COVERAGE_ID__c = '0',
             RecordTypeId = rtCoverage.Id
         ));
         exchangeRatesToInsert.add(new Master_Data__c(
@@ -116,6 +117,7 @@ private class Aswata_Add_New_CoverageRate_Test {
         System.runAs(adminUser) {
             results = Aswata_Coverage_Data_Handler.getCoverageFields(testRtId, testCob,risk.Id);
             results2 = Aswata_Coverage_Data_Handler.getCoverageFields(testRtId, '201',risk.Id);
+            Aswata_Add_New_CoverageRate.getLastestId(risk);
         }
         Test.stopTest();
         System.assertNotEquals(null, results, 'Results list should not be null.');
@@ -238,6 +240,52 @@ private class Aswata_Add_New_CoverageRate_Test {
         System.assertEquals('COV-001', config.coverageId, 'coverageId should be set correctly.');
         System.assertEquals(10.5, config.batasBawah, 'batasBawah should be set correctly.');
     }
+    @IsTest
+    static void testCob301LongPeriod() {
+        User adminUser = createUser();
+        Account insertAcc = [SELECT Id,Name FROM Account WHERE Name = 'Jhon'];
+        Date startDate = Date.newInstance(2025, 11, 21);
+        Date endDate = Date.newInstance(2029, 11, 21);
+        Opportunity opp = new Opportunity(
+            Name = 'OPPTY-03',
+            AccountId = insertAcc.Id,
+            StageName = 'Prospecting',
+            CloseDate = System.today().addDays(30),
+            Amount = 50000,
+            COB__c = '301',
+            Start_Date_Periode__c = startDate,
+            End_Date_Periode__c = endDate
+        );
+        insert opp;
+        Asset testRisk = Aswata_TestDataFactory.createRisk(opp,'RISK TEST 3 301');
+        // Asset testRisk = [SELECT Id,Opportunity__r.Start_Date_Periode__c,Opportunity__r.End_Date_Periode__c FROM Asset WHERE Name = 'RISK TEST 301' LIMIT 1];
+        Master_Data__c config = new Master_Data__c(
+            Name = 'Test Coverage Config 2',
+            BSN_ID__c = '301',
+            PARENT_COVERAGE_ID__c = '115511'
+        );
+        insert config;
+        Master_Data__c mdCasco = [SELECT Id FROM Master_Data__c WHERE NAME='Comprehensive' LIMIT 1];
+        List<InsurancePolicyCoverage> dummyCoverages = new List<InsurancePolicyCoverage>();
+        dummyCoverages.add(new InsurancePolicyCoverage(
+            CoverageName = 'Coverage A',
+            Coverage_Name__c = config.Id,
+            Proposed_Fixed_Amount__c = 1000.00
+        ));
+        dummyCoverages.add(new InsurancePolicyCoverage(
+            CoverageName = 'Coverage B',
+            Coverage_Name__c = mdCasco.Id,
+            Proposed_Fixed_Amount__c = 500.00
+        ));
+        Test.startTest();
+        List<InsurancePolicyCoverage> resultCoverages;
+        System.runAs(adminUser) {
+            resultCoverages = Aswata_Coverage_Data_301.calculateDurationInYears(dummyCoverages, testRisk);
+        }
+        Test.stopTest();
+        // System.assertEquals('COV-001', config.coverageId, 'coverageId should be set correctly.');
+        System.assertEquals(2, resultCoverages.size(), 'Seharusnya mengembalikan 2 coverage.');
+    }
     /**
      * @description function for generate data wrapper
      * @param idWrapper just idWrapper from REF ID Coverage
@@ -307,13 +355,17 @@ private class Aswata_Add_New_CoverageRate_Test {
         InsurancePolicy policy = [SELECT Id FROM InsurancePolicy WHERE Name = 'DummyInsurancePolicy' LIMIT 1];
         Account insertAcc = [SELECT Id,Name FROM Account WHERE Name = 'Jhon'];
         // Opportunity opp = Aswata_TestDataFactory.createOpportunity(insertAcc,'OPPTY-02');
+        Date startDate = Date.newInstance(2025, 11, 21);
+        Date endDate = Date.newInstance(2029, 11, 21);
         Opportunity opp = new Opportunity(
             Name = 'OPPTY-02',
             AccountId = insertAcc.Id,
             StageName = 'Prospecting',
             CloseDate = System.today().addDays(30),
             Amount = 50000,
-            COB__c = '301'
+            COB__c = '301',
+            Start_Date_Periode__c = startDate,
+            End_Date_Periode__c = endDate
         );
         insert opp;
         Asset risk = Aswata_TestDataFactory.createRisk(opp,'RISK TEST 301');
@@ -364,7 +416,7 @@ private class Aswata_Add_New_CoverageRate_Test {
     @IsTest
     static void testInsertCoverage301Details() {
         User adminUser = createUser();
-        Aswata_Coverage_Data_Wrapper.CoverageDetailWrapper wrapper = generate301Data('301100_0','BREAKDOWN_DEDUCTIBLE','Flat');
+        Aswata_Coverage_Data_Wrapper.CoverageDetailWrapper wrapper = generate301Data('301100','BREAKDOWN_DEDUCTIBLE','Flat');
         List<Aswata_Coverage_Data_Wrapper.CoverageDetailWrapper> wrapperList = new List<Aswata_Coverage_Data_Wrapper.CoverageDetailWrapper>{ wrapper };
         String jsonPayload = JSON.serialize(wrapperList);
         List<String> inputList = new List<String>{ jsonPayload };
@@ -387,7 +439,7 @@ private class Aswata_Add_New_CoverageRate_Test {
     @IsTest
     static void testInsertCoverage301NoDataDetails() {
         User adminUser = createUser();
-        Aswata_Coverage_Data_Wrapper.CoverageDetailWrapper wrapper = generate301Data('301100_0','COMPOSITE','CC');
+        Aswata_Coverage_Data_Wrapper.CoverageDetailWrapper wrapper = generate301Data('301100','COMPOSITE','CC');
         List<Aswata_Coverage_Data_Wrapper.CoverageDetailWrapper> wrapperList = new List<Aswata_Coverage_Data_Wrapper.CoverageDetailWrapper>{ wrapper };
         String jsonPayload = JSON.serialize(wrapperList);
         List<String> inputList = new List<String>{ jsonPayload };
@@ -416,7 +468,7 @@ private class Aswata_Add_New_CoverageRate_Test {
     @IsTest
     static void testInsertCoverage301Detail2() {
         User adminUser = createUser();
-        Aswata_Coverage_Data_Wrapper.CoverageDetailWrapper wrapper = generate301Data('301100_0','BREAKDOWN_DEDUCTIBLE','Flat');
+        Aswata_Coverage_Data_Wrapper.CoverageDetailWrapper wrapper = generate301Data('301100','BREAKDOWN_DEDUCTIBLE','Flat');
         List<Aswata_Coverage_Data_Wrapper.CoverageDetailWrapper> wrapperList = new List<Aswata_Coverage_Data_Wrapper.CoverageDetailWrapper>{ wrapper };
         String jsonPayload = JSON.serialize(wrapperList);
         List<String> inputList = new List<String>{ jsonPayload };

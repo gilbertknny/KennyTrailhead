@@ -13,7 +13,7 @@ public class ClsChangeOwner_Test {
         
         String strRTIndividual = Schema.SObjectType.Account.getRecordTypeInfosByName().get('Insurance').getRecordTypeId();
         Account acc = new Account();
-        acc.Name = 'ACC12345';
+        acc.Name = 'ACCOUNTA';
         acc.RecordTypeId = strRTIndividual;
         acc.OwnerId = userId;
         insert acc;      
@@ -36,8 +36,8 @@ public class ClsChangeOwner_Test {
         insert ip;
         
         Lead ld = new Lead();
-        ld.FirstName = '1';
-        ld.LastName = '2';
+        ld.FirstName = 'A';
+        ld.LastName = 'B';
         ld.OwnerId = userId;
         insert ld;
         
@@ -58,7 +58,7 @@ public class ClsChangeOwner_Test {
         insert ts;
         
         Task ts2 = new Task();
-        ts2.Subject = 'Test2';
+        ts2.Subject = 'TestTest';
         ts2.WhoId = ld.Id;
         ts2.Status = 'Open';
         insert ts2;
@@ -94,6 +94,7 @@ public class ClsChangeOwner_Test {
             data += '}';
             string result = ClsChangeOwner.saveData(data);
             system.assertEquals(result,'Sukses');
+            ClsChangeOwner.getPermission();
             Test.stopTest();
         }
     }

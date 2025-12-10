@@ -48,6 +48,46 @@
             <targetReference>Transhipment_Confirmation_Screen</targetReference>
         </connector>
     </assignments>
+    <assignments>
+        <name>Assign_Variable</name>
+        <label>Assign Variable</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>countAllTranshipment</assignToReference>
+            <operator>AssignCount</operator>
+            <value>
+                <elementReference>Get_All_Transhipment</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Transhipment</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Reset_variable</name>
+        <label>Reset variable</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>countAllTranshipment</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <numberValue>0.0</numberValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>varVesselName</assignToReference>
+            <operator>Assign</operator>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>varRadioSelect</assignToReference>
+            <operator>Assign</operator>
+        </assignmentItems>
+        <connector>
+            <targetReference>finalScreen</targetReference>
+        </connector>
+    </assignments>
     <choices>
         <name>vesselFromMasterData</name>
         <choiceText>Search From Master Data</choiceText>
@@ -70,6 +110,29 @@
             <stringValue>{&quot;location&quot;:&quot;top&quot;,&quot;type&quot;:&quot;simple&quot;}</stringValue>
         </value>
     </customProperties>
+    <decisions>
+        <name>Check_Clicked_Button</name>
+        <label>Check Clicked Button</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>Selesai</defaultConnectorLabel>
+        <rules>
+            <name>Click_Add</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>lastButton.value</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Add</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <isGoTo>true</isGoTo>
+                <targetReference>Risk_Detail</targetReference>
+            </connector>
+            <label>Click Add</label>
+        </rules>
+    </decisions>
     <decisions>
         <name>Check_Vessel_Input_Type</name>
         <label>Check Vessel Input Type</label>
@@ -118,6 +181,12 @@
         <dataType>String</dataType>
         <expression>&quot;Transhipment - &quot;&amp;{!Transhipment_At}</expression>
     </formulas>
+    <formulas>
+        <name>formulaTranshipmentID</name>
+        <dataType>Number</dataType>
+        <expression>{!countAllTranshipment}+1</expression>
+        <scale>0</scale>
+    </formulas>
     <interviewLabel>Transhipment Input Screen Flow {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Transhipment Input Screen Flow</label>
     <processMetadataValues>
@@ -145,7 +214,7 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>finalScreen</targetReference>
+            <targetReference>Reset_variable</targetReference>
         </connector>
         <inputAssignments>
             <field>Country__c</field>
@@ -178,6 +247,12 @@
             </value>
         </inputAssignments>
         <inputAssignments>
+            <field>Transhipment_Id__c</field>
+            <value>
+                <elementReference>formulaTranshipmentID</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
             <field>Vessel_Aircraft_Carrier_Name_Manual__c</field>
             <value>
                 <elementReference>Vessel_Aircraft_Carrier_Name_manual</elementReference>
@@ -198,6 +273,43 @@
         <object>Transaction_Data__c</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordCreates>
+    <recordLookups>
+        <name>Get_All_Transhipment</name>
+        <label>Get All Transhipment</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Assign_Variable</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Risk__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Risk_Detail.Id</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>RecordTypeId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Record_Type_Transhipment.Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>Transaction_Data__c</object>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>Name</queriedFields>
+        <queriedFields>Risk__c</queriedFields>
+        <queriedFields>Transhipment_Id__c</queriedFields>
+        <queriedFields>Transhipment_At__c</queriedFields>
+        <queriedFields>Country__c</queriedFields>
+        <queriedFields>Vessel_Aircraft_Carrier_Name__c</queriedFields>
+        <queriedFields>Vessel_Aircraft_Carrier_Name_Manual__c</queriedFields>
+        <queriedFields>Vessel_Aircraft_Carrier_Number__c</queriedFields>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
     <recordLookups>
         <name>Get_Country_List</name>
         <label>Get Country List</label>
@@ -228,7 +340,7 @@
         <locationY>0</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Save_Transhipment_Input</targetReference>
+            <targetReference>Get_All_Transhipment</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -286,7 +398,7 @@
         <locationY>0</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Transhipment</targetReference>
+            <targetReference>Get_Record_Type_Transhipment</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -329,10 +441,59 @@
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
+        <connector>
+            <targetReference>Check_Clicked_Button</targetReference>
+        </connector>
         <fields>
             <name>finalConfirmationText</name>
             <fieldText>&lt;p&gt;Transhipment berhasil disimpan.&lt;/p&gt;</fieldText>
             <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <fields>
+            <name>lastButton</name>
+            <extensionName>c:fsc_flowButtonBar</extensionName>
+            <fieldType>ComponentInstance</fieldType>
+            <inputParameters>
+                <name>alignment</name>
+                <value>
+                    <stringValue>center</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>orientation</name>
+                <value>
+                    <stringValue>horizontal</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>showLines</name>
+                <value>
+                    <stringValue>neither</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>actionMode</name>
+                <value>
+                    <stringValue>navigation</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>buttons</name>
+                <value>
+                    <stringValue>[{&quot;label&quot;:&quot;Add New Transhipment&quot;,&quot;value&quot;:&quot;Add&quot;,&quot;iconPosition&quot;:&quot;left&quot;,&quot;variant&quot;:&quot;brand-outline&quot;,&quot;iconName&quot;:&quot;utility:add&quot;,&quot;index&quot;:0}]</stringValue>
+                </value>
+            </inputParameters>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>true</isRequired>
+            <storeOutputAutomatically>true</storeOutputAutomatically>
             <styleProperties>
                 <verticalAlignment>
                     <stringValue>top</stringValue>
@@ -525,7 +686,7 @@
         <allowPause>false</allowPause>
         <backButtonLabel>Kembali</backButtonLabel>
         <connector>
-            <targetReference>Get_Record_Type_Transhipment</targetReference>
+            <targetReference>Save_Transhipment_Input</targetReference>
         </connector>
         <fields>
             <name>Copy_1_of_textTitle</name>
@@ -676,7 +837,18 @@
             <targetReference>Risk_Detail</targetReference>
         </connector>
     </start>
-    <status>Active</status>
+    <status>Draft</status>
+    <variables>
+        <name>countAllTranshipment</name>
+        <dataType>Number</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <scale>0</scale>
+        <value>
+            <numberValue>0.0</numberValue>
+        </value>
+    </variables>
     <variables>
         <name>recordId</name>
         <dataType>String</dataType>

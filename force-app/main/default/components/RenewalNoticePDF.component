@@ -1,0 +1,199 @@
+<apex:component controller="renewalNoticeController" access="global">
+    <apex:attribute name="policyIdValue" type="Id" description="ID of the Policy" assignTo="{!componentPolicyId}" />
+
+    <html>
+    <head>
+        <style>
+            @page { size: A4; margin: 1.5cm; }
+            body { font-family: Arial, Helvetica, sans-serif; font-size: 11px; margin: 0; line-height: 1.5; }
+            .header { width: 100%; margin-bottom: 10px; }
+            .header img { width: 140px; }
+            h2 { text-align: center; margin: 10px 0; font-size: 13px; font-weight: bold; text-decoration: underline; }
+            h3 { text-decoration: underline; text-align: center; margin-top: 20px; margin-bottom: 10px; }
+            table { width: 100%; border-collapse: collapse; font-size: 10px; }
+            th, td { border: 1px solid #000; padding: 5px; vertical-align: top; text-align: left; }
+            .no-border td, .no-border { border: none; padding: 2px 0; }
+            .label { width: 160px; white-space: nowrap; }
+            .center { text-align: center; }
+            .bold { font-weight: bold; }
+            .right { text-align: right; }
+            .checkbox-box { border: 1px solid #000; width: 12px; height: 12px; display: inline-block; margin-right: 8px; vertical-align: middle; }
+            .page-break { page-break-before: always; }
+        </style>
+    </head>
+
+    <body>
+        <table class="header no-border">
+            <tr><td><img src="{!$Resource.AswataLogo}" alt="Logo" /></td></tr>
+        </table>
+
+        <table class="no-border" style="margin-bottom:20px;">
+            <tr><td class="label">No</td><td>: {!policy.Notice_ID__c}</td></tr>
+            <tr><td class="label">Perihal</td><td>: Pemberitahuan Polis Jatuh Tempo</td></tr>
+            <tr><td class="label">Lampiran</td><td>: </td></tr>
+        </table>
+
+        <table class="no-border">
+            <tr><td class="bold">Kepada Yth,</td></tr>
+            <tr><td>{!policy.NameInsured__c}</td></tr>
+            <tr><td>{!policy.Address__c}</td></tr>
+        </table>
+
+        <p style="margin-top:20px;">Dengan hormat,</p>
+        <p>
+            Segenap Direksi dan Management <b>PT. Asuransi Wahana Tata</b> mengucapkan terima kasih atas kepercayaan Bapak/Ibu dalam menggunakan Jasa Asuransi Kebakaran Aswata.
+            Dengan ini kami memberitahukan bahwa polis Asuransi Kebakaran Aswata Bapak/Ibu akan berakhir tanggal
+            <b>
+                <apex:outputText value="{0,date,dd MMMM yyyy}">
+                    <apex:param value="{!policy.ExpirationDate}" />
+                </apex:outputText>
+            </b>.
+            Adapun data polis sebagai berikut :
+        </p>
+
+        <p style="margin-left:20px;">
+            <b>Nomor Polis :</b> {!policy.Aswata_Policy_Number__c} <br/>
+            <b>Nama Tertanggung :</b> {!policy.NameInsured__c} <br/>
+            <b>Alamat Tertanggung :</b> {!policy.Address__c} <br/>
+            <b>No Telp./Handphone/Email :</b> {!policy.Phone__c}
+        </p>
+
+        <p><b>Dengan detail Resiko :</b></p>
+
+        <apex:outputPanel rendered="{!numberOfRisks > 1}">
+            <table style="table-layout:fixed;">
+                <thead>
+                    <tr>
+                        <th style="width:20px;">No</th>
+                        <th style="width:140px;">Lokasi Pertanggungan</th>
+                        <th style="width:140px;">Okupasi / Kode Okupasi</th>
+                        <th style="width:140px;">Luas Jaminan Sebelumnya</th>
+                        <th style="width:140px;">Harga Pertanggungan sesuai Polis</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="center">1</td>
+                        <td>Terlampir</td>
+                        <td>Terlampir</td>
+                        <td>Terlampir</td>
+                        <td>Terlampir</td>
+                    </tr>
+                </tbody>
+            </table>
+        </apex:outputPanel>
+
+        <apex:outputPanel rendered="{!numberOfRisks == 1}">
+            <table style="table-layout:fixed;">
+                <thead>
+                    <tr>
+                        <th style="width:20px;">No</th>
+                        <th style="width:140px;">Lokasi Pertanggungan</th>
+                        <th style="width:140px;">Okupasi / Kode Okupasi</th>
+                        <th style="width:140px;">Luas Jaminan Sebelumnya</th>
+                        <th style="width:140px;">Harga Pertanggungan sesuai Polis</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="center">1</td>
+                        <td>{!singleRisk.Name}</td>
+                        <td>{!singleRisk.Occupation_Description__c} / {!singleRisk.Occupation_Code__r.Name}</td>
+                        <td>{!singleRisk.Type_Description__c}</td>
+                        <td>
+                            IDR
+                            <apex:outputText value="{0, number, ###,###,##0}">
+                                <apex:param value="{!singleRisk.Amount_IDR__c}" />
+                            </apex:outputText>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </apex:outputPanel>
+
+        <apex:outputPanel rendered="{!numberOfRisks == 0}">
+            <p style="color:red; font-style:italic;">Tidak ada data Risk yang tersedia untuk polis ini.</p>
+        </apex:outputPanel>
+
+        <p>
+            Mohon tanggapan Bapak/Ibu dengan cara mengisi dan mengirimkan formulir Pemberitahuan perpanjangan (terlampir) kepada kami.
+            Jika Bapak/Ibu membutuhkan informasi lebih lanjut berkaitan dengan polis jatuh tempo, silahkan menghubungi :
+        </p>
+
+        <p>
+            <span class="bold">Renewal Center</span><br/>
+            (021) 3483 4498 (Hunting) / (021) 3483 2972 (fax)<br/>
+            renewalcenter@aswata.co.id
+        </p>
+        <p>Terima Kasih,</p>
+        <p class="bold">PT. ASURANSI WAHANA TATA</p>
+
+        <h3>Pemberitahuan Perpanjangan</h3>
+        <p style="margin:0;">Saya yang bertanda tangan di bawah ini menyatakan, Polis No.: <b>{!policy.Aswata_Policy_Number__c}</b></p>
+        <div style="margin:6px 0; line-height:1.8;">
+            <p style="margin:0;"><span class="checkbox-box"></span> Setuju untuk diperpanjang</p>
+            <p style="margin:0;"><span class="checkbox-box"></span> Tidak diperpanjang, karena ............................................................</p>
+        </div>
+        
+        <table style="width:100%; border-collapse:collapse; font-size:10px; margin-top:6px;">
+            <tr><td style="border:1px solid #000; text-align:center; padding:4px;">Catatan tambahan untuk penambahan/perubahan informasi untuk pertanggungan yang diperbarui (jika ada)</td></tr>
+            <tr><td style="border:1px solid #000; height:25px;">&nbsp;</td></tr>
+        </table>
+
+        <table class="no-border" style="width:100%; margin-top:10px; font-size:10px;">
+            <tr>
+                <td style="width:65%; vertical-align:top;">
+                    <p class="bold" style="margin:0;">Catatan :</p>
+                    <p style="margin-top:5px; text-align:justify;">
+                        Formulir ini bersifat pemberitahuan dan bukan perpanjangan pertanggungan secara otomatis.<br/>
+                        Sebelum Bapak/Ibu memberikan persetujuan dan menyampaikannya kepada kami,
+                        mohon kesediaan untuk meninjau kembali data mengenai Tertanggung, Objek Pertanggungan,
+                        Nilai Pertanggungan, serta informasi lainnya.<br/>
+                        Setiap informasi yang Bapak/Ibu berikan merupakan satu kesatuan dan bagian yang tidak terpisahkan dari Polis Asuransi.
+                    </p>
+                </td>
+                <td style="width:35%; text-align:right; padding-top:20px;">
+                    <p>.........................................., 
+                        <apex:outputText value="{0,date,yyyy}"><apex:param value="{!TODAY()}" /></apex:outputText>
+                    </p>
+                    <p style="margin-top:50px;">( ............................................................... )</p>
+                </td>
+            </tr>
+        </table>
+
+        <apex:outputPanel rendered="{!numberOfRisks > 1}">
+            <div class="page-break">
+                <h2>Lampiran Atas No Polis : {!policy.Aswata_Policy_Number__c}</h2>
+                <table style="table-layout:fixed;">
+                    <thead>
+                        <tr>
+                            <th style="width:20px;">No</th>
+                            <th style="width:140px;">Lokasi Pertanggungan</th>
+                            <th style="width:140px;">Okupasi / Kode Okupasi</th>
+                            <th style="width:140px;">Luas Jaminan Sebelumnya</th>
+                            <th style="width:140px;">Harga Pertanggungan</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <apex:variable var="rowNum" value="{!1}" />
+                        <apex:repeat value="{!risksList}" var="risk">
+                            <tr>
+                                <td class="center">{!rowNum}</td>
+                                <td>{!risk.Name}</td>
+                                <td>{!risk.Occupation_Description__c} / {!risk.Occupation_Code__r.Name}</td>
+                                <td>{!risk.Type_Description__c}</td>
+                                <td>IDR <apex:outputText value="{0, number, ###,###,##0}"><apex:param value="{!risk.Amount_IDR__c}" /></apex:outputText></td>
+                            </tr>
+                            <apex:variable var="rowNum" value="{!rowNum + 1}" />
+                        </apex:repeat>
+                    </tbody>
+                </table>
+                <p class="bold right" style="margin-top:5px;">
+                    Total Harga Pertanggungan: IDR 
+                    <apex:outputText value="{0, number, ###,###,##0}"><apex:param value="{!totalSumInsured}" /></apex:outputText>
+                </p>
+            </div>
+        </apex:outputPanel>
+    </body>
+    </html>
+</apex:component>

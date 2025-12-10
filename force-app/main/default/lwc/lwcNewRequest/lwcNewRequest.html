@@ -285,16 +285,50 @@
                                         <lightning-accordion-section name="1period" label="Insurance Period">
                                             <div class="slds-grid slds-wrap slds-gutters_small">
                                             <!-- Insurance Type -->
-                                            <div class="slds-col slds-size_1-of-1">
-                                                <lightning-radio-group
-                                                    name="periodType"
-                                                    label="Insurance Type"
-                                                    options={insuranceTypeOptions}
-                                                    value={periodType}
-                                                    onchange={handleInsurance}
+                                            <template if:false={showPremium}>
+                                                <div class="slds-col slds-size_1-of-1">
+                                                    <lightning-radio-group
+                                                        name="periodType"
+                                                        label="Insurance Type"
+                                                        type="button"
+                                                        options={insuranceTypeOptions}
+                                                        value={periodType}
+                                                        onchange={handleInsurance}
+                                                        required>
+                                                    </lightning-radio-group>
+                                                </div>
+                                            </template>
+                                            <!-- Dates -->
+                                            <div class="slds-col slds-size_1-of-2">
+                                                <lightning-input
+                                                    type="date"
+                                                    label="Start Date"
+                                                    value={startDate}
+                                                    onchange={handleStartDateChange}
                                                     required>
-                                                </lightning-radio-group>
+                                                </lightning-input>
                                             </div>
+                                            <div class="slds-col slds-size_1-of-2">
+                                                <lightning-input
+                                                    type="date"
+                                                    label="End Date"
+                                                    value={endDate}
+                                                    onchange={handleEndDateChange}
+                                                    required>
+                                                </lightning-input>
+                                            </div>
+                                            <!-- PREMIUM CALCULATION-->
+                                            <template if:true={showPremium}>
+                                                <div class="slds-col slds-size_1-of-1">
+                                                    <lightning-combobox 
+                                                            label="Premium Calculation"
+                                                            options={premiumCalculation}
+                                                            onchange={handlePremiumCalculation} 
+                                                            value={premiumCalculationId}
+                                                            >
+                                                    </lightning-combobox>
+                                                </div>
+                                            </template>
                                             <!-- Annual -->
                                             <template if:true={isAnnual}>
                                                 <div class="slds-col slds-size_1-of-1">
@@ -303,10 +337,8 @@
                                                         type="number"
                                                         label="Number of Years"
                                                         value={years}
-                                                        min="1" 
-                                                        max="100" 
                                                         onchange={handleYearsChange}
-                                                        disable>
+                                                        style="display: none;">
                                                     </lightning-input>
                                                 </div>
                                             </template>
@@ -316,6 +348,7 @@
                                                     <lightning-radio-group
                                                     name="shortBasis"
                                                     label="Short-Period Basis"
+                                                    type="button"
                                                     options={shortBasisOptions}
                                                     value={shortBasis}
                                                     onchange={handleShortBasisChange}
@@ -338,25 +371,6 @@
                                                     </div>
                                                 </template>
                                             </template>
-                                            <!-- Dates -->
-                                            <div class="slds-col slds-size_1-of-2">
-                                                <lightning-input
-                                                    type="date"
-                                                    label="Start Date"
-                                                    value={startDate}
-                                                    onchange={handleStartDateChange}
-                                                    required>
-                                                </lightning-input>
-                                            </div>
-                                            <div class="slds-col slds-size_1-of-2">
-                                                <lightning-input
-                                                    type="date"
-                                                    label="End Date"
-                                                    value={endDate}
-                                                    onchange={handleEndDateChange}
-                                                    required>
-                                                </lightning-input>
-                                            </div>
                                             <!-- Information: Days & Rate -->
                                             <template if:true={showInfo}>
                                                 <div class="slds-col slds-size_1-of-1">
@@ -381,8 +395,7 @@
                                                             placeholder="Select Schema"
                                                             label="Select Schema"
                                                             options={schemaOptions}
-                                                            onchange={handleSchemaChange}
-                                                            required>
+                                                            onchange={handleSchemaChange}>
                                                         </lightning-combobox>
                                                         <template if:true={hasSchemaType}>
                                                             <table class="slds-table slds-table_cell-buffer slds-table_bordered"
@@ -431,17 +444,6 @@
                                             </div>
                                         </lightning-accordion-section>    
                                     </lightning-accordion>
-                                    <!-- PREMIUM CALCULATION-->
-                                    <template if:true={showPremium}>
-                                        <div class="slds-col slds-size_1-of-1">
-                                            <lightning-combobox 
-                                                    label="Premium Calculation"
-                                                    options={premiumCalculation}
-                                                    onchange={handlePremiumCalculation} 
-                                                    >
-                                            </lightning-combobox>
-                                        </div>
-                                    </template>
                                     <!-- MOU-->
                                     <template if:true={showMOU}>
                                         <!-- RISK-->
@@ -469,11 +471,94 @@
                                                 </div>
                                             </lightning-accordion-section>
                                         </lightning-accordion>
+                                        <!-- ASSET & COVERAGE-->
+                                        <lightning-accordion active-section-name="1AssetCoverage" allow-multiple-sections-open style="width:100%;">
+                                            <lightning-accordion-section name="1AssetCoverage" label="Asset &amp; Coverage">
+                                                <div class="slds-grid slds-wrap slds-gutters_small">
+                                                    <template for:each={dataAsset1} for:item="data" for:index="index">
+                                                        <div key={data.id} class="slds-grid slds-wrap slds-gutters_small" style="border:solid 2px black;padding-bottom:10px;margin-bottom:5px;">
+                                                            <div class="slds-col slds-size_1-of-1" style="text-align:right;padding-top:5px;">
+                                                                <lightning-button data-id={data.id}
+                                                                    variant="destructive"
+                                                                    label="Delete"
+                                                                    icon-name="utility:delete"
+                                                                    onclick={handleDeleteAsset1}>
+                                                                </lightning-button>
+                                                            </div>
+                                                            <div class="slds-col slds-size_1-of-2">
+                                                                <lightning-combobox data-id={data.id}
+                                                                    data-name="assetSection"
+                                                                    label="Asset Section"
+                                                                    options={assetSection1MOU}
+                                                                    value={data.assetSectionId}
+                                                                    onchange={handleDataAsset}
+                                                                    required>
+                                                                </lightning-combobox>
+                                                            </div>
+                                                            <div class="slds-col slds-size_1-of-2">
+                                                                <lightning-combobox data-id={data.id}
+                                                                    data-name="assetCategory"
+                                                                    label="Asset Category"
+                                                                    options={data.assetCategory}
+                                                                    value={data.assetCategoryId}
+                                                                    onchange={handleDataAsset}>
+                                                                </lightning-combobox>
+                                                            </div>
+                                                            <div class="slds-col slds-size_1-of-2">
+                                                                <lightning-combobox data-id={data.id}
+                                                                    data-name="currency"
+                                                                    label="Currency"
+                                                                    options={currency}
+                                                                    value={data.currencyId}
+                                                                    onchange={handleDataAsset}
+                                                                    required>
+                                                                </lightning-combobox>
+                                                            </div> 
+                                                            <div class="slds-col slds-size_1-of-2">
+                                                                <lightning-input data-id={data.id} data-name="sumInsured" value={data.sumInsured} type="number" label="Sum Insured" onchange={handleDataAsset} required></lightning-input>
+                                                            </div>
+                                                            <div class="slds-col slds-size_1-of-2">
+                                                                <template if:true={data.showIDR}>
+                                                                    <lightning-input type="number" label="Sum Insured IDR" value={data.sumInsuredIDR} disabled></lightning-input>
+                                                                </template>
+                                                            </div>
+                                                            <div class="slds-col slds-size_1-of-1">
+                                                                <b>Coverage</b>
+                                                                <lightning-datatable data-id={data.id}
+                                                                    class="slds-m-top_medium"
+                                                                    key-field="Id"
+                                                                    data={data.coverage}
+                                                                    columns={columnscoverage1}
+                                                                    hide-checkbox-column
+                                                                    onrowaction={handleRowActionCoverage}>
+                                                                </lightning-datatable>
+                                                            </div>
+                                                            <div class="slds-col slds-size_1-of-1" style="padding-top:5px;">
+                                                                <lightning-button 
+                                                                    data-id={data.id}
+                                                                    variant="brand"
+                                                                    label="Coverage"
+                                                                    icon-name="utility:add"
+                                                                    onclick={handleAddAssetCoverage1}>
+                                                                </lightning-button>
+                                                            </div>
+                                                        </div>
+                                                    </template>
+                                                     <div class="slds-col slds-size_1-of-1">
+                                                        <lightning-button
+                                                            variant="brand"
+                                                            label="Asset"
+                                                            icon-name="utility:add"
+                                                            onclick={handleAddAsset1}>
+                                                        </lightning-button>
+                                                    </div>
+                                                </div>
+                                            </lightning-accordion-section>
+                                        </lightning-accordion>
                                         <!-- ASSET-->
-                                        <lightning-accordion active-section-name="1Asset" allow-multiple-sections-open style="width:100%;">
+                                        <!--<lightning-accordion active-section-name="1Asset" allow-multiple-sections-open style="width:100%;">
                                             <lightning-accordion-section name="1Asset" label="Asset">
                                                 <div class="slds-grid slds-wrap slds-gutters_small">
-                                                    <!-- ASSET SECTION-->
                                                     <div class="slds-col slds-size_1-of-2">
                                                         <lightning-combobox 
                                                             label="Asset Section"
@@ -483,7 +568,6 @@
                                                             required>
                                                         </lightning-combobox>
                                                     </div>
-                                                    <!-- ASSET CATEGORY-->
                                                     <div class="slds-col slds-size_1-of-2">
                                                         <lightning-combobox 
                                                             label="Asset Category"
@@ -492,7 +576,6 @@
                                                             value={assetCategoryId1MOU}>
                                                         </lightning-combobox>
                                                     </div>
-                                                    <!-- CURRENCY-->
                                                     <div class="slds-col slds-size_1-of-2">
                                                         <lightning-combobox 
                                                             label="Currency"
@@ -502,11 +585,9 @@
                                                         </lightning-combobox>
                                                     </div> 
                                                     <div class="slds-col slds-size_1-of-2"></div>
-                                                    <!-- SUM INSURED-->
                                                     <div class="slds-col slds-size_1-of-2">
                                                         <lightning-input type="number" label="Sum Insured" onchange={handleSumInsured} required></lightning-input>
                                                     </div>
-                                                    <!-- SUM INSURED IDR-->
                                                     <div class="slds-col slds-size_1-of-2">
                                                         <template if:true={showIDR}>
                                                             <lightning-input type="number" label="Sum Insured IDR" value={sumInsuredIDR} disabled></lightning-input>
@@ -514,9 +595,9 @@
                                                     </div>
                                                 </div>
                                             </lightning-accordion-section>
-                                        </lightning-accordion>
+                                        </lightning-accordion>-->
                                         <!-- COVERAGE-->
-                                        <lightning-accordion active-section-name="1Coverage" allow-multiple-sections-open style="width:100%;">
+                                        <!--<lightning-accordion active-section-name="1Coverage" allow-multiple-sections-open style="width:100%;">
                                             <lightning-accordion-section name="1Coverage" label="Coverage">
                                                 <div class="slds-grid slds-wrap slds-gutters_small">
                                                     <div class="slds-col slds-size_1-of-1">
@@ -538,7 +619,7 @@
                                                     </div>
                                                 </div>
                                             </lightning-accordion-section>
-                                        </lightning-accordion>
+                                        </lightning-accordion>-->
                                     </template>
                                     <!-- STANDARD-->
                                     <template if:false={showMOU}>
@@ -793,7 +874,7 @@
                                                                         </div>
                                                                         <br key={file.name}/>
                                                                     </template>
-                                                                </div>
+                                                            </div>
                                                         </template>
                                                     </template>
                                                 </div>
@@ -861,27 +942,60 @@
                                 <lightning-accordion-section name="2period" label="Insurance Period">
                                     <div class="slds-grid slds-wrap slds-gutters_small">
                                     <!-- Insurance Type -->
-                                    <div class="slds-col slds-size_1-of-1">
-                                        <lightning-radio-group
-                                            name="periodType"
-                                            label="Insurance Type"
-                                            options={insuranceTypeOptions}
-                                            value={periodType2}
-                                            onchange={handleInsurance2}>
-                                        </lightning-radio-group>
+                                    <template if:false={showPremium2}>
+                                        <div class="slds-col slds-size_1-of-1">
+                                            <lightning-radio-group
+                                                name="periodType2"
+                                                label="Insurance Type"
+                                                type="button"
+                                                options={insuranceTypeOptions}
+                                                value={periodType2}
+                                                onchange={handleInsurance2}
+                                                required>
+                                            </lightning-radio-group>
+                                        </div>
+                                    </template>
+                                    <!-- Dates -->
+                                    <div class="slds-col slds-size_1-of-2">
+                                        <lightning-input
+                                            type="date"
+                                            label="Start Date"
+                                            value={startDate2}
+                                            onchange={handleStartDateChange2}
+                                            required>
+                                        </lightning-input>
                                     </div>
+                                    <div class="slds-col slds-size_1-of-2">
+                                        <lightning-input
+                                            type="date"
+                                            label="End Date"
+                                            value={endDate2}
+                                            onchange={handleEndDateChange2}
+                                            required>
+                                        </lightning-input>
+                                    </div>
+                                    <!-- PREMIUM CALCULATION-->
+                                    <template if:true={showPremium2}>
+                                        <div class="slds-col slds-size_1-of-1">
+                                            <lightning-combobox 
+                                                    label="Premium Calculation"
+                                                    options={premiumCalculation}
+                                                    onchange={handlePremiumCalculation2} 
+                                                    value={premiumCalculationId2}
+                                                    >
+                                            </lightning-combobox>
+                                        </div>
+                                    </template>
                                     <!-- Annual -->
                                     <template if:true={isAnnual2}>
                                         <div class="slds-col slds-size_1-of-1">
                                             <lightning-input
-                                                name="years"
+                                                name="years2"
                                                 type="number"
                                                 label="Number of Years"
                                                 value={years2}
-                                                min="1" 
-                                                max="100" 
                                                 onchange={handleYearsChange2}
-                                                disable>
+                                                style="display: none;">
                                             </lightning-input>
                                         </div>
                                     </template>
@@ -889,8 +1003,9 @@
                                     <template if:true={isShort2}>
                                         <div class="slds-col slds-size_1-of-1">
                                             <lightning-radio-group
-                                            name="shortBasis"
+                                            name="shortBasis2"
                                             label="Short-Period Basis"
+                                            type="button"
                                             options={shortBasisOptions}
                                             value={shortBasis2}
                                             onchange={handleShortBasisChange2}>
@@ -899,7 +1014,7 @@
                                         <template if:true={isPercentageBasis2}>
                                             <div class="slds-col slds-size_1-of-1">
                                                 <lightning-input
-                                                    name="percentage"
+                                                    name="percentage2"
                                                     label="Percentage (%)"
                                                     type="number"
                                                     min="0"
@@ -911,23 +1026,6 @@
                                             </div>
                                         </template>
                                     </template>
-                                    <!-- Dates -->
-                                    <div class="slds-col slds-size_1-of-2">
-                                        <lightning-input
-                                            type="date"
-                                            label="Start Date"
-                                            value={startDate2}
-                                            onchange={handleStartDateChange2}>
-                                        </lightning-input>
-                                    </div>
-                                    <div class="slds-col slds-size_1-of-2">
-                                        <lightning-input
-                                            type="date"
-                                            label="End Date"
-                                            value={endDate2}
-                                            onchange={handleEndDateChange2}>
-                                        </lightning-input>
-                                    </div>
                                     <!-- Information: Days & Rate -->
                                     <template if:true={showInfo2}>
                                         <div class="slds-col slds-size_1-of-1">
@@ -948,12 +1046,12 @@
                                         <div class="slds-col slds-size_1-of-1">
                                             <lightning-card title="Schema">
                                                 <lightning-combobox
-                                                    name="schema"
+                                                    name="schema2"
                                                     placeholder="Select Schema"
                                                     label="Select Schema"
                                                     options={schemaOptions}
                                                     onchange={handleSchemaChange2}
-                                                    required>
+                                                    >
                                                 </lightning-combobox>
                                                 <template if:true={hasSchemaType2}>
                                                 <table class="slds-table slds-table_cell-buffer slds-table_bordered"
@@ -971,7 +1069,7 @@
                                                                 <td>
                                                                     <template if:true={row.type}>
                                                                         <lightning-combobox
-                                                                            name="rowType"
+                                                                            name="rowType2"
                                                                             data-year={row.year}
                                                                             label="Basis"
                                                                             options={shortBasisOptions}
@@ -981,7 +1079,7 @@
                                                                     </template>
                                                                     <lightning-input
                                                                         type="text"
-                                                                        name="rowPercentage"
+                                                                        name="rowPercentage2"
                                                                         data-year={row.year}
                                                                         value={row.percentage}
                                                                         inputmode="decimal"
@@ -1132,69 +1230,136 @@
                                                 <lightning-textarea label="Description" onchange={handleDescription2}></lightning-textarea>
                                             </div>
                                             <!-- FILE-->
-                                            <div class="slds-grid">
-                                                <!-- FILE QUOTATION SLIP-->
-                                                <div class="slds-col slds-size_1-of-3">
-                                                    <lightning-file-upload
-                                                        label="Quotation &amp; Supporting Document"
-                                                        accept={acceptedFormats}
-                                                        record-id={myFileId}
-                                                        onuploadfinished={handleUploadFinished3}
-                                                        multiple
-                                                        required>
-                                                    </lightning-file-upload>
-                                                    <!-- VIEW FILE QUOTATION SLIP-->
-                                                    <template if:true={filequote2.length} for:each={filequote2} for:item="file">
-                                                        <div key={file.name} style="display: flex;" >
-                                                            <p>{file.name}</p>&nbsp;
-                                                            <lightning-button-icon icon-name="utility:delete" alternative-text="Delete"
-                                                                                    data-id={file.documentId} onclick={handleDelete3} size="small">
-                                                            </lightning-button-icon>
-                                                        </div>
-                                                        <br key={file.name}/>
-                                                    </template>
+                                            <template if:true={showFull}>
+                                                <div class="slds-grid">
+                                                    <!-- FILE QUOTATION SLIP-->
+                                                    <div class="slds-col slds-size_1-of-3">
+                                                        <lightning-file-upload
+                                                            label="Quotation &amp; Supporting Document"
+                                                            accept={acceptedFormats}
+                                                            record-id={myFileId}
+                                                            onuploadfinished={handleUploadFinished3}
+                                                            multiple
+                                                            required>
+                                                        </lightning-file-upload>
+                                                        <!-- VIEW FILE QUOTATION SLIP-->
+                                                        <template if:true={filequote2.length} for:each={filequote2} for:item="file">
+                                                            <div key={file.name} style="display: flex;" >
+                                                                <p>{file.name}</p>&nbsp;
+                                                                <lightning-button-icon icon-name="utility:delete" alternative-text="Delete"
+                                                                                        data-id={file.documentId} onclick={handleDelete3} size="small">
+                                                                </lightning-button-icon>
+                                                            </div>
+                                                            <br key={file.name}/>
+                                                        </template>
+                                                    </div>
+                                                    <!-- FILE CLOSING SLIP-->
+                                                    <div class="slds-col slds-size_1-of-3">
+                                                        <lightning-file-upload
+                                                            label="Closing Slip"
+                                                            accept={acceptedFormats}
+                                                            record-id={myFileId}
+                                                            onuploadfinished={handleUploadFinished4}
+                                                            multiple>
+                                                        </lightning-file-upload>
+                                                        <!-- VIEW FILE CLOSING SLIP-->
+                                                        <template if:true={fileclosing2.length} for:each={fileclosing2} for:item="file">
+                                                            <div key={file.name} style="display: flex;" >
+                                                                <p>{file.name}</p>&nbsp;
+                                                                <lightning-button-icon icon-name="utility:delete" alternative-text="Delete"
+                                                                                        data-id={file.documentId} onclick={handleDelete4} size="small">
+                                                                </lightning-button-icon>
+                                                            </div>
+                                                            <br key={file.name}/>
+                                                        </template>
+                                                    </div>
+                                                    <!-- FILE SURVEY REPORT-->
+                                                    <div class="slds-col slds-size_1-of-3">
+                                                        <lightning-file-upload
+                                                            label="Survey Report"
+                                                            accept={acceptedFormats}
+                                                            record-id={myFileId}
+                                                            onuploadfinished={handleUploadFinished5}
+                                                            multiple>
+                                                        </lightning-file-upload>
+                                                        <!-- VIEW FILE SURVEY REPORT-->
+                                                        <template if:true={filesurvey2.length} for:each={filesurvey2} for:item="file">
+                                                            <div key={file.name} style="display: flex;" >
+                                                                <p>{file.name}</p>&nbsp;
+                                                                <lightning-button-icon icon-name="utility:delete" alternative-text="Delete"
+                                                                                        data-id={file.documentId} onclick={handleDelete5} size="small">
+                                                                </lightning-button-icon>
+                                                            </div>
+                                                            <br key={file.name}/>
+                                                        </template>
+                                                    </div>
                                                 </div>
-                                                <!-- FILE CLOSING SLIP-->
-                                                <div class="slds-col slds-size_1-of-3">
-                                                    <lightning-file-upload
-                                                        label="Closing Slip"
-                                                        accept={acceptedFormats}
-                                                        record-id={myFileId}
-                                                        onuploadfinished={handleUploadFinished4}
-                                                        multiple>
-                                                    </lightning-file-upload>
-                                                    <!-- VIEW FILE CLOSING SLIP-->
-                                                    <template if:true={fileclosing2.length} for:each={fileclosing2} for:item="file">
-                                                        <div key={file.name} style="display: flex;" >
-                                                            <p>{file.name}</p>&nbsp;
-                                                            <lightning-button-icon icon-name="utility:delete" alternative-text="Delete"
-                                                                                    data-id={file.documentId} onclick={handleDelete4} size="small">
-                                                            </lightning-button-icon>
-                                                        </div>
-                                                        <br key={file.name}/>
-                                                    </template>
+                                            </template>
+                                            <template if:false={showFull}>
+                                                <div class="slds-grid">
+                                                    <!-- FILE QUOTATION SLIP-->
+                                                    <div class="slds-col slds-size_1-of-2">
+                                                        <lightning-file-upload
+                                                            label="Quotation &amp; Supporting Document"
+                                                            accept={acceptedFormats}
+                                                            record-id={myFileId}
+                                                            onuploadfinished={handleUploadFinished3}
+                                                            multiple 
+                                                            required>
+                                                        </lightning-file-upload>
+                                                        <!-- VIEW FILE QUOTATION SLIP-->
+                                                        <template if:true={filequote2.length} for:each={filequote2} for:item="file">
+                                                            <div key={file.name} style="display: flex;" >
+                                                                <p>{file.name}</p>&nbsp;
+                                                                <lightning-button-icon icon-name="utility:delete" alternative-text="Delete"
+                                                                                        data-id={file.documentId} onclick={handleDelete3} size="small">
+                                                                </lightning-button-icon>
+                                                            </div>
+                                                            <br key={file.name}/>
+                                                        </template>
+                                                    </div>
+                                                    <!-- FILE CLOSING SLIP-->
+                                                    <div class="slds-col slds-size_1-of-2">
+                                                        <lightning-file-upload
+                                                            label="Closing Slip"
+                                                            accept={acceptedFormats}
+                                                            record-id={myFileId}
+                                                            onuploadfinished={handleUploadFinished4}
+                                                            multiple>
+                                                        </lightning-file-upload>
+                                                        <!-- VIEW FILE CLOSING SLIP-->
+                                                        <template if:true={fileclosing2.length} for:each={fileclosing2} for:item="file">
+                                                            <div key={file.name} style="display: flex;" >
+                                                                <p>{file.name}</p>&nbsp;
+                                                                <lightning-button-icon icon-name="utility:delete" alternative-text="Delete"
+                                                                                        data-id={file.documentId} onclick={handleDelete4} size="small">
+                                                                </lightning-button-icon>
+                                                            </div>
+                                                            <br key={file.name}/>
+                                                        </template>
+                                                    </div>
                                                 </div>
                                                 <!-- FILE SURVEY REPORT-->
-                                                <div class="slds-col slds-size_1-of-3">
-                                                    <lightning-file-upload
-                                                        label="Survey Report"
-                                                        accept={acceptedFormats}
-                                                        record-id={myFileId}
-                                                        onuploadfinished={handleUploadFinished5}
-                                                        multiple>
-                                                    </lightning-file-upload>
-                                                    <!-- VIEW FILE SURVEY REPORT-->
-                                                    <template if:true={filesurvey2.length} for:each={filesurvey2} for:item="file">
-                                                        <div key={file.name} style="display: flex;" >
-                                                            <p>{file.name}</p>&nbsp;
-                                                            <lightning-button-icon icon-name="utility:delete" alternative-text="Delete"
-                                                                                    data-id={file.documentId} onclick={handleDelete5} size="small">
-                                                            </lightning-button-icon>
-                                                        </div>
-                                                        <br key={file.name}/>
-                                                    </template>
+                                                <div class="slds-col slds-size_1-of-2">
+                                                        <lightning-file-upload
+                                                            label="Survey Report"
+                                                            accept={acceptedFormats}
+                                                            record-id={myFileId}
+                                                            onuploadfinished={handleUploadFinished5}
+                                                            multiple>
+                                                        </lightning-file-upload>
+                                                        <!-- VIEW FILE SURVEY REPORT-->
+                                                        <template if:true={filesurvey2.length} for:each={filesurvey2} for:item="file">
+                                                            <div key={file.name} style="display: flex;" >
+                                                                <p>{file.name}</p>&nbsp;
+                                                                <lightning-button-icon icon-name="utility:delete" alternative-text="Delete"
+                                                                                        data-id={file.documentId} onclick={handleDelete5} size="small">
+                                                                </lightning-button-icon>
+                                                            </div>
+                                                            <br key={file.name}/>
+                                                        </template>
                                                 </div>
-                                            </div>
+                                            </template>
                                         </template>
                                     </div>
                                 </lightning-accordion-section>

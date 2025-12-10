@@ -14,6 +14,8 @@ public class ClsUserLimit_Test {
         opp.StageName = 'Proposal';
         opp.CloseDate = Date.Today();
         opp.Sum_Insured__c = 100000;
+        opp.Total_Sum_Insured__c = 100000;
+        opp.COB__c = '201';
         insert opp;
         
         Quote qu = new Quote();
@@ -25,10 +27,19 @@ public class ClsUserLimit_Test {
         Master_Data__c md = new Master_Data__c();
         md.RecordTypeId = strRTMd;
         md.AUTHORITY_TYPE__c = 'UW';
-        md.LIMIT_AMOUNT__c = 1000000;
+        md.LIMIT_AMOUNT__c = 100000;
         md.Status__c = 'Approved';
+        md.BSN_ID__c = '201';
         md.USER_ID__c = UserInfo.GetUserId();
         insert md;
+        
+        String strRT2 = Schema.SObjectType.Master_Data__c.getRecordTypeInfosByName().get('User Limit').getRecordTypeId();
+        Master_Data__c md2 = new Master_Data__c();
+        md2.BSN_ID__c = '201';
+        md2.Status__c = 'Active';
+        md2.showData__c = '[{"param1":"BSN_ID__c","param2":"COB__c"}]';
+        md2.RecordTypeId = strRT2;
+        insert md2;
     }
     
     @IsTest

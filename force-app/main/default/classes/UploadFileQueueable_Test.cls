@@ -20,10 +20,10 @@
  * See the Apex Language Reference for more information about Testing and Code Coverage.
  * @description UploadFileQueueable_Test
  */
-@isTest
+@IsTest
 private class UploadFileQueueable_Test {
 
-    @isTest
+    @IsTest
     static void myUnitTest() {
         User currentUser = [SELECT Id FROM User WHERE Id = :UserInfo.getUserId()];
         
