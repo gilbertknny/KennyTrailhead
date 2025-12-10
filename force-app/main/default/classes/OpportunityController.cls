@@ -156,14 +156,37 @@ public with sharing class OpportunityController {
      */
     @AuraEnabled(cacheable=true)
     @SuppressWarnings('PMD.ApexCRUDViolation')
-    public static List<Account> searchQQAccounts(String searchKey) {
-        return [
-            SELECT Id, Name, Address__c
-            FROM Account
-            WHERE Name LIKE :(searchKey + '%')
-            ORDER BY Id ASC
-            LIMIT 10
-        ];
+    public static List<Account> searchQQAccounts(String searchKey, Id opportunityId) {
+        try {
+            if (String.isBlank(searchKey) || searchKey.length() < 2) {
+                return new List<Account>();
+            }
+            
+            // Get accounts that match search key
+            String searchTerm = '%' + searchKey + '%';
+            
+            // Get Account IDs that are already linked to this opportunity via Transaction_Data__c
+            Set<Id> excludedAccountIds = new Set<Id>();
+            for (Transaction_Data__c td : [
+                SELECT QQ_Name__c 
+                FROM Transaction_Data__c 
+                WHERE Opportunity__c = :opportunityId
+                AND QQ_Name__c != null
+            ]) {
+                excludedAccountIds.add(td.QQ_Name__c);
+            }
+            
+            // Build query to exclude already linked accounts
+            String query = 'SELECT Id, Name, Address__c FROM Account ' +
+                          'WHERE Name LIKE :searchTerm ' +
+                          'AND Id NOT IN :excludedAccountIds ' +
+                          'ORDER BY Name ' +
+                          'LIMIT 10';
+            
+            return Database.query(query);
+        } catch (Exception e) {
+            throw new AuraHandledException('Error searching accounts: ' + e.getMessage());
+        }
     }
     
     /**
