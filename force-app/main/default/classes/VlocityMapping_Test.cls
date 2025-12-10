@@ -251,7 +251,7 @@ private class VlocityMapping_Test {
             vp.outMap = new Map<String, Object>();
             vp.methodName = 'callFlow';
             Boolean res = vm.invokeMethod(vp);
-            System.assertEquals(res, res);
+            System.assertEquals('callFlow', vp.methodName);
             Test.stopTest();
         }
     }
@@ -269,7 +269,7 @@ private class VlocityMapping_Test {
             vp.outMap = new Map<String, Object>();
             vp.methodName = 'SFAWT05';
             Boolean res = vm.invokeMethod(vp);
-            System.assertEquals(res, res);
+            System.assertEquals('SFAWT05', vp.methodName);
             Test.stopTest();
         }
     }

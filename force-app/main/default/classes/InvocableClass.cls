@@ -30,8 +30,8 @@ public without sharing class InvocableClass {
         Database.executeBatch(batch,1);
     }
 
-    /*** @description Invocablevoid @param iv */
-    public static String UnderwritingApproval(inputVariable iv){
+    /*** @description Invocablevoid @param iv @return cond */
+    public static String underwritingApproval(inputVariable iv){
         String cond ='';
         if(String.isNotBlank(iv.cob)){
             List<Master_Data__c> listmd = [SELECT Id,showData__c FROM Master_Data__c WHERE BSN_ID__c =:iv.cob AND RecordType.Name = 'User Limit' AND Status__c = 'Active' WITH SECURITY_ENFORCED];
