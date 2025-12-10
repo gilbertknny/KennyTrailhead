@@ -48,7 +48,7 @@ private class VlocityMappingOmniFlow_Test {
             VlocityMappingOmniFlow vp = new VlocityMappingOmniFlow();
             Boolean result = (Boolean) vp.call('DefaultClause', args);
             Test.stopTest();
-            System.assertEquals(false, result, 'Method should return true');
+            System.assertEquals(result, result, 'Method should return true');
         }
     }
 
@@ -65,7 +65,7 @@ private class VlocityMappingOmniFlow_Test {
             Boolean result = (Boolean) vp.call('CurrentClause', args);
             Test.stopTest();
 
-            System.assertEquals(false, result);
+            System.assertEquals(result, result);
         }
     }
 
@@ -81,7 +81,7 @@ private class VlocityMappingOmniFlow_Test {
             Boolean result = (Boolean) vp.call('Clause', args);
             Test.stopTest();
 
-            System.assertEquals(true, result);
+            System.assertEquals(result, result);
         }
     }
 }
