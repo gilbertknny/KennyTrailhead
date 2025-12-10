@@ -1,42 +1,25 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
 	<types>
-		<members>APILog</members>
-		<members>APILog2</members>
-		<members>APILogMock</members>
-		<members>APILog_Test</members>
-		<members>ApexDefinedFlow</members>
-		<members>ErrorLogRecord</members>
-		<members>ErrorLogRecord_Test</members>
-		<members>EventErrorLogHandler</members>
-		<members>InvocableClass</members>
-		<members>InvocableClass_Test</members>
-		<members>InvocableOmniFlow</members>
-		<members>InvocableOmniFlow_Test</members>
-		<members>SOQL_SOBJECT</members>
-		<members>SOQL_SOBJECT_Test</members>
-		<members>TriggerHandler</members>
-		<members>TriggerHandler_Test</members>
 		<members>VlocityMapping</members>
-		<members>VlocityMappingOmniFlow</members>
-		<members>VlocityMappingOmniFlow_Test</members>
 		<members>VlocityMapping_Test</members>
-		<members>WebserviceAPI</members>
-		<members>WebserviceAPI_Test</members>
+		<members>renewalNoticeController</members>
+		<members>renewalNoticeControllerTest</members>
 		<name>ApexClass</name>
 	</types>
 	<types>
-		<members>EventErrorLog</members>
-		<name>ApexTrigger</name>
+		<members>RenewalNoticePDF</members>
+		<name>ApexComponent</name>
 	</types>
 	<types>
-		<members>Account.Lintaswata_CreatedbyId__c</members>
-		<members>Account.Lintaswata_Createddate__c</members>
-		<members>Account.Lintaswata_LastmodifiedbyId__c</members>
-		<members>Account.Lintaswata_Lastmodifieddate__c</members>
-		<members>Asset.Lintaswata_Amount__c</members>
-		<members>Asset.Lintaswata_Currency__c</members>
-		<members>Asset.Lintaswata_Sync__c</members>
+		<members>renewalNotice</members>
+		<name>ApexPage</name>
+	</types>
+	<types>
+		<members>InsurancePolicy.IP_Renewal_Underwriting</members>
+		<name>ApprovalProcess</name>
+	</types>
+	<types>
 		<members>Endpoint_Header_List__mdt.Additional_Value__c</members>
 		<members>Endpoint_Header_List__mdt.Algorithms2__c</members>
 		<members>Endpoint_Header_List__mdt.Algorithms__c</members>
@@ -54,91 +37,19 @@
 		<members>Endpoint__mdt.Integration_Procedure__c</members>
 		<members>Endpoint__mdt.Method__c</members>
 		<members>Endpoint__mdt.Type__c</members>
-		<members>Error_Log__c.API_Type__c</members>
-		<members>Error_Log__c.Class_Name__c</members>
-		<members>Error_Log__c.Endpoint__c</members>
-		<members>Error_Log__c.Error_Cause__c</members>
-		<members>Error_Log__c.Error_Datetime__c</members>
-		<members>Error_Log__c.Error_Messages__c</members>
-		<members>Error_Log__c.Is_Schedule__c</members>
-		<members>Error_Log__c.Line_Number__c</members>
-		<members>Error_Log__c.Object_Name__c</members>
-		<members>Error_Log__c.RelatedId__c</members>
-		<members>Error_Log__c.Relation_Record__c</members>
-		<members>Error_Log__c.Request_Body__c</members>
-		<members>Error_Log__c.Request_Header__c</members>
-		<members>Error_Log__c.Request_IP__c</members>
-		<members>Error_Log__c.Response_Body__c</members>
-		<members>Error_Log__c.Response_Header__c</members>
-		<members>Error_Log__c.Response_Status_Code__c</members>
-		<members>Error_Log__c.Response_Status__c</members>
-		<members>Error_Log__c.Stack_Trace__c</members>
-		<members>Error_Log__c.String_To_Sign__c</members>
-		<members>Error_Log__c.Type_Name__c</members>
-		<members>Error_Log__c.User_Run__c</members>
-		<members>Error_Logs__e.API_Type__c</members>
-		<members>Error_Logs__e.Class_Flow_Name__c</members>
-		<members>Error_Logs__e.Endpoint__c</members>
-		<members>Error_Logs__e.Error_Cause__c</members>
-		<members>Error_Logs__e.Error_Datetime__c</members>
-		<members>Error_Logs__e.Error_Messages__c</members>
-		<members>Error_Logs__e.Line_Number__c</members>
-		<members>Error_Logs__e.Object_Name__c</members>
-		<members>Error_Logs__e.RelatedId__c</members>
-		<members>Error_Logs__e.Request_Body__c</members>
-		<members>Error_Logs__e.Request_Header__c</members>
-		<members>Error_Logs__e.Request_IP__c</members>
-		<members>Error_Logs__e.Response_Body__c</members>
-		<members>Error_Logs__e.Response_Header__c</members>
-		<members>Error_Logs__e.Response_Status_Code__c</members>
-		<members>Error_Logs__e.Response_Status__c</members>
-		<members>Error_Logs__e.Stack_Trace__c</members>
-		<members>Error_Logs__e.String_To_Sign__c</members>
-		<members>Error_Logs__e.Type_Name__c</members>
-		<members>Error_Logs__e.User_Run__c</members>
+		<members>InsurancePolicy.Approval_Status__c</members>
+		<members>InsurancePolicy.Aswata_Policy_Number__c</members>
+		<members>InsurancePolicy.BUSREQ_ID__c</members>
+		<members>InsurancePolicy.COB__c</members>
 		<members>InsurancePolicy.Lintaswata_Currency__c</members>
 		<members>InsurancePolicy.Lintaswata_Premium__c</members>
 		<members>InsurancePolicy.Lintaswata_Sum_Insured__c</members>
 		<members>InsurancePolicy.Lintaswata_Sync__c</members>
-		<members>InsurancePolicyCoverage.Lintaswata_Agent_Comission__c</members>
-		<members>InsurancePolicyCoverage.Lintaswata_Banks_Fee_Comission__c</members>
-		<members>InsurancePolicyCoverage.Lintaswata_Broker_Comission__c</members>
-		<members>InsurancePolicyCoverage.Lintaswata_Claim_Loss_Amount__c</members>
-		<members>InsurancePolicyCoverage.Lintaswata_Deductible_PCT__c</members>
-		<members>InsurancePolicyCoverage.Lintaswata_Deductible__c</members>
-		<members>InsurancePolicyCoverage.Lintaswata_Discount__c</members>
-		<members>InsurancePolicyCoverage.Lintaswata_Final_Approved_Rate__c</members>
-		<members>InsurancePolicyCoverage.Lintaswata_Finance_Commision__c</members>
-		<members>InsurancePolicyCoverage.Lintaswata_Minimum_Cur_ID__c</members>
-		<members>InsurancePolicyCoverage.Lintaswata_Overdng_Comission__c</members>
-		<members>InsurancePolicyCoverage.Lintaswata_Proposed_Rate__c</members>
-		<members>InsurancePolicyCoverage.Lintaswata_Sync__c</members>
-		<members>InsurancePolicyProductClause.BSN_ID__c</members>
-		<members>InsurancePolicyProductClause.Business_Request_Number__c</members>
-		<members>InsurancePolicyProductClause.Busreq_ID__c</members>
-		<members>InsurancePolicyProductClause.Clause_Description__c</members>
-		<members>InsurancePolicyProductClause.Clause_ID__c</members>
-		<members>InsurancePolicyProductClause.Clause_Name__c</members>
-		<members>InsurancePolicyProductClause.Is_Additional__c</members>
-		<members>InsurancePolicyProductClause.Is_Changed__c</members>
-		<members>InsurancePolicyProductClause.Lintaswata_Last_Update__c</members>
-		<members>InsurancePolicyProductClause.Lintaswata_Sync__c</members>
-		<members>InsurancePolicyProductClause.Master_Data__c</members>
-		<members>InsurancePolicyProductClause.Opportunity__c</members>
-		<members>InsurancePolicyProductClause.Partition_Code__c</members>
-		<members>InsurancePolicyProductClause.Unique_ID__c</members>
-		<members>Opportunity.Lintaswata_Premium__c</members>
-		<members>Opportunity.Lintaswata_Rate__c</members>
-		<members>Opportunity.Lintaswata_Sum_Insured__c</members>
-		<members>Opportunity.Lintaswata_Sync__c</members>
-		<members>SFAWT05AssetCoverages__mdt.Coverage__c</members>
-		<members>SFAWT05__mdt.Integration_Procedure__c</members>
-		<members>SFAWT05__mdt.RecordType_DeveloperName__c</members>
-		<members>SFAWT05__mdt.RecordType_Object__c</members>
-		<members>SFAWT05__mdt.Start__c</members>
-		<members>Transaction_Data__c.Lintaswata_Sync__c</members>
-		<members>Upload_File_Mapping__mdt.Field__c</members>
-		<members>Upload_File_Mapping__mdt.Object__c</members>
+		<members>InsurancePolicy.Notice_ID__c</members>
+		<members>InsurancePolicy.Status_Notice__c</members>
+		<members>InsurancePolicy.Status_Renewal__c</members>
+		<members>InsurancePolicy.Underwriting_User__c</members>
+		<members>InsurancePolicy.lintas_last_updated__c</members>
 		<name>CustomField</name>
 	</types>
 	<types>
@@ -146,14 +57,11 @@
 		<members>Endpoint.LintaswataGetPolicy</members>
 		<members>Endpoint.LintaswataOauth</members>
 		<members>Endpoint.LintaswataSFAWT01</members>
-		<members>Endpoint.LintaswataSFAWT02</members>
 		<members>Endpoint.LintaswataSFAWT04</members>
 		<members>Endpoint.LintaswataSFAWT05A</members>
 		<members>Endpoint.LintaswataSFAWT06</members>
 		<members>Endpoint.LintaswataSFAWT15</members>
 		<members>Endpoint.LintaswataSFAWT17</members>
-		<members>Endpoint.LintaswataSFAWT27</members>
-		<members>Endpoint.LintaswataSFAWT27A</members>
 		<members>Endpoint.SFAWT03_RenewalNotice</members>
 		<members>Endpoint.SFAWT04_RenewalNoticeAgreement</members>
 		<members>Endpoint.SFAWT05_Internal</members>
@@ -186,81 +94,44 @@
 		<members>Endpoint_Header_List.LintaswataSFAWT17_5</members>
 		<members>Endpoint_Header_List.SalesforceComposite1</members>
 		<members>Endpoint_Header_List.SalesforceComposite2</members>
-		<members>SFAWT05.transhipments</members>
-		<members>SFAWT05.business_companies</members>
-		<members>SFAWT05.business_request_qq</members>
-		<members>SFAWT05.coverages</members>
-		<members>SFAWT05.detail_insured</members>
-		<members>SFAWT05.document_clauses</members>
-		<members>SFAWT05.installments</members>
-		<members>SFAWT05.risk</members>
-		<members>SFAWT05AssetCoverages.amount_insured</members>
-		<members>SFAWT05AssetCoverages.busreq_id</members>
-		<members>SFAWT05AssetCoverages.currency_code</members>
-		<members>SFAWT05AssetCoverages.m_coverage_ref_id</members>
-		<members>SFAWT05AssetCoverages.partitionCode</members>
-		<members>SFAWT05AssetCoverages.risk_id</members>
-		<members>Upload_File_Mapping.Client_ID</members>
-		<members>Upload_File_Mapping.Insurance_ID</members>
-		<members>Upload_File_Mapping.Loss_Adjuster_ID</members>
-		<members>Upload_File_Mapping.Surveyor_ID</members>
-		<members>Upload_File_Mapping.Workshop_ID</members>
 		<name>CustomMetadata</name>
 	</types>
 	<types>
 		<members>Endpoint_Header_List__mdt</members>
 		<members>Endpoint_Header__mdt</members>
 		<members>Endpoint__mdt</members>
-		<members>Error_Log__c</members>
-		<members>Error_Logs__e</members>
-		<members>InsurancePolicyProductClause</members>
-		<members>SFAWT05AssetCoverages__mdt</members>
-		<members>SFAWT05__mdt</members>
-		<members>Upload_File_Mapping__mdt</members>
 		<name>CustomObject</name>
 	</types>
 	<types>
-		<members>Error_Log__c</members>
-		<name>CustomTab</name>
+		<members>unfiled$public/VFP_Renewal</members>
+		<name>EmailTemplate</name>
 	</types>
 	<types>
-		<members>Recaptcha_NC</members>
-		<name>ExternalCredential</name>
-	</types>
-	<types>
-		<members>Clause_Before_Insert</members>
+		<members>InsurancePolicy_Approval</members>
+		<members>InsurancePolicy_Send_Notification_For_Sales_User_and_UW_After_Created</members>
 		<members>Opportunity_Auto_Launched_Clone_Oppty</members>
 		<members>Risk_Asset_Clone</members>
 		<members>Transaction_Data_Clone</members>
-		<members>Upsert_Insurance_Policy_Product_Clause</members>
 		<name>Flow</name>
 	</types>
 	<types>
-		<members>Clause_Before_Insert</members>
-		<members>Opportunity_Auto_Launched_Clone_Oppty</members>
-		<members>Risk_Asset_Clone</members>
-		<members>Transaction_Data_Clone</members>
-		<members>Upsert_Insurance_Policy_Product_Clause</members>
+		<members>InsurancePolicy_Approval</members>
+		<members>InsurancePolicy_Send_Notification_For_Sales_User_and_UW_After_Created</members>
 		<name>FlowDefinition</name>
 	</types>
 	<types>
-		<members>Endpoint_Header_List__mdt-Endpoint Header List Layout</members>
-		<members>Endpoint_Header__mdt-Endpoint Header Layout</members>
-		<members>Endpoint__mdt-Endpoint Layout</members>
-		<members>Error_Log__c-Error Log Layout</members>
-		<members>InsurancePolicyProductClause-Insurance Policy Product Clause Layout</members>
-		<members>SFAWT05AssetCoverages__mdt-SFAWT05Coverages Layout</members>
-		<members>SFAWT05__mdt-SFAWT05 Layout</members>
-		<members>Upload_File_Mapping__mdt-Upload File Mapping Layout</members>
-		<name>Layout</name>
+		<members>InsurancePolicy</members>
+		<name>Workflow</name>
 	</types>
 	<types>
-		<members>Error_Log__c.All</members>
-		<members>Error_Log__c.Outbound</members>
-		<members>Error_Log__c.SFAWT5</members>
-		<members>SFAWT05AssetCoverages__mdt.All</members>
-		<members>SFAWT05__mdt.All</members>
-		<name>ListView</name>
+		<members>InsurancePolicy.EA_Insurance_Policy_Renewal_Notice</members>
+		<name>WorkflowAlert</name>
+	</types>
+	<types>
+		<members>InsurancePolicy.IP_Decision_Underwriting_Submitted</members>
+		<members>InsurancePolicy.Reject_Update_Status</members>
+		<members>InsurancePolicy.Update_Status_Approve</members>
+		<name>WorkflowFieldUpdate</name>
 	</types>
 	<version>65.0</version>
 </Package>
