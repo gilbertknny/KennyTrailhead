@@ -4,11 +4,20 @@ private class InvocableClass_Test {
 
     @TestSetup
     static void setupTestData() {
+        String strRTMd2 = Schema.SObjectType.Master_Data__c.getRecordTypeInfosByName().get('User Limit').getRecordTypeId();
+        Master_Data__c md2 = new Master_Data__c();
+        md2.RecordTypeId = strRTMd2;
+        md2.AUTHORITY_TYPE__c = 'UW';
+        md2.BSN_ID__c = '201';
+        md2.Status__c = 'Active';
+        insert md2;
+
         String strRTMd = Schema.SObjectType.Master_Data__c.getRecordTypeInfosByName().get('Approval Limit').getRecordTypeId();
         Master_Data__c md = new Master_Data__c();
         md.RecordTypeId = strRTMd;
         md.AUTHORITY_TYPE__c = 'UW';
         md.LIMIT_AMOUNT__c = 1000000;
+        md.BSN_ID__c = '201';
         md.Status__c = 'Approved';
         insert md;
 
@@ -20,7 +29,7 @@ private class InvocableClass_Test {
         RecordType rt = [SELECT Id FROM RecordType WHERE SObjectType = 'Asset' AND Name = 'Risk' LIMIT 1];
         
         // Create a test Opportunity
-        Opportunity oldOpp = new Opportunity(Name = 'Old Opty', StageName = 'Prospecting', CloseDate = System.today());
+        Opportunity oldOpp = new Opportunity(Name = 'Old Opty', StageName = 'Prospecting', CloseDate = System.today(),cob__c='201');
         insert oldOpp;
 
         // Create a test Asset related to old Opportunity
@@ -32,7 +41,7 @@ private class InvocableClass_Test {
         insert asset;
 
         // Create another Opportunity for new reference
-        Opportunity newOpp = new Opportunity(Name = 'New Opty', StageName = 'Prospecting', CloseDate = System.today());
+        Opportunity newOpp = new Opportunity(Name = 'New Opty', StageName = 'Prospecting', CloseDate = System.today(),cob__c='201');
         insert newOpp;
     }
 
@@ -68,9 +77,13 @@ private class InvocableClass_Test {
         User currentUser = [SELECT Id FROM User WHERE Id = :UserInfo.getUserId()];
         
         System.runAs(currentUser) {
+            Account acc = [SELECT Id FROM Account LIMIT 1];
+            Opportunity oldOpp = [SELECT Id FROM Opportunity WHERE Name = 'Old Opty' LIMIT 1];
             InvocableClass.InputVariable input = new InvocableClass.InputVariable();
             input.param = 'UnderwritingApproval';
             input.sumInsured = 100000;
+            input.oldoptyId = oldOpp.Id;
+            input.cob = '201';
 
             Test.startTest();
             InvocableClass.Invocablevoid(new List<InvocableClass.InputVariable>{ input });
