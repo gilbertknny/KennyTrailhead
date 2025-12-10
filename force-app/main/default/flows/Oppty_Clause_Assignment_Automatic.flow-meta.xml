@@ -3,6 +3,31 @@
     <apiVersion>65.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <decisions>
+        <name>Check_Insurance_Policy</name>
+        <label>Check Insurance Policy</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Create_Insurance_Policy_Product_Clause</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>InsPolicyNulll</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>InsurancePolicyId</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Create_Insurance_Policy</targetReference>
+            </connector>
+            <label>InsPolicyNulll</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>Check_Master_Data</name>
         <label>Check Master Data</label>
         <locationX>0</locationX>
@@ -57,8 +82,60 @@
         <label>Create Clause In Transaction Data</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
-        <inputReference>Create_clause</inputReference>
+        <inputReference>Create_Insurance_Policy_Product_Clause</inputReference>
     </recordCreates>
+    <recordCreates>
+        <name>Create_Insurance_Policy</name>
+        <label>Create Insurance Policy</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignRecordIdToReference>InsurancePolicyId</assignRecordIdToReference>
+        <connector>
+            <targetReference>Create_Insurance_Policy_Product_Clause</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Name</field>
+            <value>
+                <elementReference>$Record.Name</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>NameInsuredId</field>
+            <value>
+                <elementReference>$Record.AccountId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>SourceOpportunityId</field>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <object>InsurancePolicy</object>
+    </recordCreates>
+    <recordLookups>
+        <name>get_Insurance_Policy</name>
+        <label>get Insurance Policy</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Check_Insurance_Policy</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>SourceOpportunityId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </filters>
+        <object>InsurancePolicy</object>
+        <outputAssignments>
+            <assignToReference>InsurancePolicyId</assignToReference>
+            <field>Id</field>
+        </outputAssignments>
+    </recordLookups>
     <recordLookups>
         <name>Get_Master_Clause</name>
         <label>Get Master Clause</label>
@@ -108,7 +185,7 @@
         <locationY>0</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Create_clause</targetReference>
+            <targetReference>get_Insurance_Policy</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -171,8 +248,8 @@
     </start>
     <status>Active</status>
     <transforms>
-        <name>Create_clause</name>
-        <label>Create clause</label>
+        <name>Create_Insurance_Policy_Product_Clause</name>
+        <label>Create Insurance Policy Product Clause</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
@@ -180,7 +257,7 @@
         </connector>
         <dataType>SObject</dataType>
         <isCollection>true</isCollection>
-        <objectType>Transaction_Data__c</objectType>
+        <objectType>InsurancePolicyProductClause</objectType>
         <scale>0</scale>
         <storeOutputAutomatically>true</storeOutputAutomatically>
         <transformValues>
@@ -192,6 +269,13 @@
                 </value>
             </transformValueActions>
             <transformValueActions>
+                <outputFieldApiName>Clause_ID__c</outputFieldApiName>
+                <transformType>Map</transformType>
+                <value>
+                    <elementReference>Get_Master_Clause[$EachItem].Clause_Id__c</elementReference>
+                </value>
+            </transformValueActions>
+            <transformValueActions>
                 <outputFieldApiName>Clause_Description__c</outputFieldApiName>
                 <transformType>Map</transformType>
                 <value>
@@ -199,31 +283,10 @@
                 </value>
             </transformValueActions>
             <transformValueActions>
-                <outputFieldApiName>Clause_Id__c</outputFieldApiName>
-                <transformType>Map</transformType>
-                <value>
-                    <elementReference>Get_Master_Clause[$EachItem].Clause_Id__c</elementReference>
-                </value>
-            </transformValueActions>
-            <transformValueActions>
-                <outputFieldApiName>Clauses_Name__c</outputFieldApiName>
+                <outputFieldApiName>Clause_Name__c</outputFieldApiName>
                 <transformType>Map</transformType>
                 <value>
                     <elementReference>Get_Master_Clause[$EachItem].ENG_NAME__c</elementReference>
-                </value>
-            </transformValueActions>
-            <transformValueActions>
-                <outputFieldApiName>Master_Data__c</outputFieldApiName>
-                <transformType>Map</transformType>
-                <value>
-                    <elementReference>Get_Master_Clause[$EachItem].Id</elementReference>
-                </value>
-            </transformValueActions>
-            <transformValueActions>
-                <outputFieldApiName>RecordTypeId</outputFieldApiName>
-                <transformType>Map</transformType>
-                <value>
-                    <elementReference>Get_Record_Type.Id</elementReference>
                 </value>
             </transformValueActions>
             <transformValueActions>
@@ -234,12 +297,33 @@
                 </value>
             </transformValueActions>
             <transformValueActions>
+                <outputFieldApiName>Master_Data__c</outputFieldApiName>
+                <transformType>Map</transformType>
+                <value>
+                    <elementReference>Get_Master_Clause[$EachItem].Id</elementReference>
+                </value>
+            </transformValueActions>
+            <transformValueActions>
                 <outputFieldApiName>Opportunity__c</outputFieldApiName>
                 <transformType>Map</transformType>
                 <value>
                     <elementReference>$Record.Id</elementReference>
                 </value>
             </transformValueActions>
+            <transformValueActions>
+                <outputFieldApiName>InsurancePolicyId</outputFieldApiName>
+                <transformType>Map</transformType>
+                <value>
+                    <elementReference>InsurancePolicyId</elementReference>
+                </value>
+            </transformValueActions>
         </transformValues>
     </transforms>
+    <variables>
+        <name>InsurancePolicyId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
 </Flow>
