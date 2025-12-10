@@ -113,13 +113,6 @@
             </value>
         </assignmentItems>
         <assignmentItems>
-            <assignToReference>Clause.CreationMethod</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <stringValue>AutoAdded</stringValue>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
             <assignToReference>LClauseUpsert</assignToReference>
             <operator>Add</operator>
             <value>
@@ -130,6 +123,7 @@
             <targetReference>Loop</targetReference>
         </connector>
     </assignments>
+    <description>CreatedMethod removed</description>
     <environments>Default</environments>
     <interviewLabel>Upsert Insurance Policy Product Clause {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Upsert Insurance Policy Product Clause</label>
