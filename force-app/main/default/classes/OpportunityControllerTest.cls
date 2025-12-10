@@ -114,8 +114,39 @@ public class OpportunityControllerTest {
 
     @IsTest
     static void testSearchQQAccounts() {
-        List<Account> results = OpportunityController.searchQQAccounts('QQ');
-        System.assert(!results.isEmpty(), 'Should return QQ accounts');
+        Opportunity opp = [SELECT Id FROM Opportunity LIMIT 1];
+        
+        // Test searching for 'QQ' - should return the QQ Account that's not linked to the opportunity
+        List<Account> results = OpportunityController.searchQQAccounts('QQ', opp.Id);
+        
+        // Since the setup creates a Transaction_Data__c record for the QQ account linked to the opportunity,
+        // it should be excluded from search results. So results should be empty initially.
+        System.assertEquals(0, results.size(), 'Should exclude accounts already linked to opportunity via Transaction_Data__c');
+        
+        // Now create a new QQ account that's not linked
+        Account newQQAccount = new Account(
+            Name = 'New QQ Account', 
+            Address__c = 'New Address'
+        );
+        insert newQQAccount;
+        
+        // Search again - should now return the new account since it's not linked
+        results = OpportunityController.searchQQAccounts('QQ', opp.Id);
+        System.assertEquals(1, results.size(), 'Should return accounts not linked to opportunity');
+        System.assertEquals('New QQ Account', results[0].Name, 'Should return the new QQ account');
+        
+        // Add the new account to Transaction_Data__c for this opportunity
+        Id qqRtId = Schema.SObjectType.Transaction_Data__c.getRecordTypeInfosByDeveloperName().get('Member_of_QQ').getRecordTypeId();
+        insert new Transaction_Data__c(
+            Opportunity__c = opp.Id,
+            QQ_Name__c = newQQAccount.Id,
+            RecordTypeId = qqRtId,
+            QQ_Address__c = 'New Address'
+        );
+        
+        // Search again - should now be empty again since both accounts are linked
+        results = OpportunityController.searchQQAccounts('QQ', opp.Id);
+        System.assertEquals(0, results.size(), 'Should exclude all accounts linked to opportunity');
     }
 
     // FIXED: Updated to test both new and existing records

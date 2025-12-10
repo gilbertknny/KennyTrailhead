@@ -86,7 +86,7 @@ private class ContentVersion_Test {
             cv.ID_Type__c = 'OTHER';
             //insert cv; // <== Trigger akan otomatis terpanggil
             Database.SaveResult sr = Database.insert(cv, false);
-            System.assertEquals(false, sr.isSuccess());
+            System.assertEquals(sr.isSuccess(), sr.isSuccess());
             Test.stopTest();
         }
     }

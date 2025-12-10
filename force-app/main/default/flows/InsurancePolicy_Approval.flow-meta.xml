@@ -12,6 +12,18 @@
         </connector>
         <flowTransactionModel>Automatic</flowTransactionModel>
         <inputParameters>
+            <name>cob</name>
+            <value>
+                <elementReference>$Record.COB__c</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>oldoptyId</name>
+            <value>
+                <elementReference>$Record.SourceOpportunityId</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
             <name>param</name>
             <value>
                 <stringValue>UnderwritingApproval</stringValue>
@@ -20,7 +32,7 @@
         <inputParameters>
             <name>sumInsured</name>
             <value>
-                <elementReference>$Record.TotalSumInsured</elementReference>
+                <elementReference>$Record.Lintaswata_Sum_Insured__c</elementReference>
             </value>
         </inputParameters>
         <nameSegment>InvocableClass</nameSegment>

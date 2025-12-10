@@ -24,6 +24,7 @@ export default class InsurancePeriode extends NavigationMixin(LightningElement) 
     @track schemaType = null;
     @track stage = null;
     @track cob = null;
+    @track isOwner = false;
     premiumCalculation = null; // NEW: Added for Premium Calculation
 
     // State management
@@ -207,8 +208,9 @@ export default class InsurancePeriode extends NavigationMixin(LightningElement) 
     }
 
     connectedCallback() {
-        console.log('last update 02/12/2025 14.48');
+        console.log('last update 10/12/2025 14.36');
         console.log('opptyId: ' + this.recordId);
+        console.log('isOwner: ' + this.isOwner);
     }
 
     // ------ Lifecycle & Data ------
@@ -228,6 +230,7 @@ export default class InsurancePeriode extends NavigationMixin(LightningElement) 
                 this.stage = data.StageName;
                 this.cob = data.COB__c;
                 this.premiumCalculation = data.premium_calculation__c; // NEW: Load premium calculation
+                this.isOwner = data.isOwner__c;
                 this.calculateDuration();
                 this.calculateExpectedPeriodType();
                 // NEW: Adjust premium calculation on load
@@ -244,6 +247,7 @@ export default class InsurancePeriode extends NavigationMixin(LightningElement) 
                 this.isTypeLocked = true;
                 console.log('COB='+this.cob);
                 console.log('premiumCalculation='+this.premiumCalculation);
+                console.log('stage='+this.stage);
             } else if (error) {
                 this.error = error;
                 this.isLoading = false;
@@ -281,7 +285,11 @@ export default class InsurancePeriode extends NavigationMixin(LightningElement) 
     }
 
     get isReadOnly() {
-        return this.stage === 'Closed Won' || this.stage === 'Closed Lost' || this.stage === 'Cancel' || this.isEditing == false;
+        return this.stage === 'Closed Won' || this.stage === 'Closed Lost' || this.stage === 'Cancel' || this.isEditing == false || this.isOwner == false;
+    }
+
+    get isNotOwner(){
+        return !this.isOwner;
     }
 
     // ------ NEW: Premium Calculation Handler ------
@@ -402,6 +410,10 @@ export default class InsurancePeriode extends NavigationMixin(LightningElement) 
     // ------ Event handlers ------
     handleEdit() {
         this.isEditing = true;
+        if(this.isOwner == false){
+            alert('Anda tidak memiliki akses/diperbolehkan merubah Opportunity ini!');
+            this.isEditing = false;
+        }
         if(this.stage === 'Closed Won' || this.stage === 'Closed Lost' || this.stage === 'Cancel'){
             alert('Tidak dapat melakukan perubahan pada stage Closed atau Cancel');
             this.isEditing = false;
