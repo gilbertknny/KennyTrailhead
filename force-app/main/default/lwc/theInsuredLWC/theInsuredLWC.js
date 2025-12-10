@@ -101,7 +101,7 @@ export default class TheInsuredLWC extends LightningElement {
 
   connectedCallback() {
     this.loadOpportunity();
-    console.log('theInsured loaded. Last updated 09/12/2025 14.31');
+    console.log('theInsured loaded. Last updated 09/12/2025 17.07');
   }
 
   loadOpportunity() {
@@ -162,7 +162,7 @@ export default class TheInsuredLWC extends LightningElement {
     ];
     this.clearLookup();
   }*/ 
-
+  /*
   handleSearchKeyChange(evt) {
     this.searchKey = evt.target.value;
     if (this.searchKey.length < 2) {
@@ -172,6 +172,33 @@ export default class TheInsuredLWC extends LightningElement {
     searchAccounts({ searchKey: this.searchKey })
       .then(results => {
         // Get IDs of accounts already in the members table
+        const existingAccountIds = new Set(
+          this.members.map(member => member.accountId)
+        );
+        
+        // Filter out accounts that are already in the table
+        this.searchResults = results.filter(
+          account => !existingAccountIds.has(account.Id)
+        );
+      })
+      .catch(error => console.error(error));
+    console.log("search result=", JSON.stringify(this.searchResults, null, 2));
+  } */ 
+
+  handleSearchKeyChange(evt) {
+    this.searchKey = evt.target.value;
+    if (this.searchKey.length < 2) {
+      this.searchResults = [];
+      return;
+    }
+    
+    // Pass the opportunityId to exclude accounts already linked to this opportunity
+    searchAccounts({ 
+      searchKey: this.searchKey,
+      opportunityId: this.recordId // Add this parameter
+    })
+      .then(results => {
+        // Get IDs of accounts already in the members table (client-side)
         const existingAccountIds = new Set(
           this.members.map(member => member.accountId)
         );
@@ -233,10 +260,10 @@ export default class TheInsuredLWC extends LightningElement {
   confirmDelete() {
     deleteTransactionData({ recordId: this.rowPendingDelete.recordId })
       .then(() => {
-        this.showToast('Deleted', 'Co-insurer removed.', 'success');
+        this.showToast('Deleted', 'QQ member removed.', 'success');
         return refreshApex(this.wiredMembersResult);
       })
-      .catch(error => this.showToast('Error deleting member', error))
+      .catch(error => this.showToast('Error deleting QQ member. Contact Administrator for more information', error))
       .finally(() => this.closeModal());
   }
 
