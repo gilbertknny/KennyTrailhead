@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
-    <!-- <applicationVisibilities>
+    <applicationVisibilities>
         <application>Aswata_Sales_App</application>
         <visible>true</visible>
-    </applicationVisibilities> -->
+    </applicationVisibilities>
+    <classAccesses>
+        <apexClass>LeadUpdateUnqualified</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
     <fieldPermissions>
         <editable>true</editable>
         <field>Account.AccountNumber</field>
@@ -1971,11 +1975,6 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
-        <field>Opportunity.Contract_Type__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
         <field>Opportunity.Coverage_Check__c</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -3036,10 +3035,10 @@
         <recordType>Contact.FinServ__IndustriesIndividual</recordType>
         <visible>true</visible>
     </recordTypeVisibilities>
-    <!-- <recordTypeVisibilities>
+    <recordTypeVisibilities>
         <recordType>Lead.FinServ__BusinessReferral</recordType>
         <visible>true</visible>
-    </recordTypeVisibilities> 
+    </recordTypeVisibilities>
     <recordTypeVisibilities>
         <recordType>Lead.FinServ__General</recordType>
         <visible>true</visible>
@@ -3051,7 +3050,7 @@
     <recordTypeVisibilities>
         <recordType>Lead.FinServ__RetirementPlanning</recordType>
         <visible>true</visible>
-    </recordTypeVisibilities>-->
+    </recordTypeVisibilities>
     <recordTypeVisibilities>
         <recordType>Location.Address</recordType>
         <visible>true</visible>
@@ -3084,7 +3083,7 @@
         <recordType>PersonAccount.PersonAccount</recordType>
         <visible>true</visible>
     </recordTypeVisibilities>
-    <!-- <tabSettings>
+    <tabSettings>
         <tab>standard-Account</tab>
         <visibility>Visible</visibility>
     </tabSettings>
@@ -3107,7 +3106,7 @@
     <tabSettings>
         <tab>standard-Product2</tab>
         <visibility>Visible</visibility>
-    </tabSettings> -->
+    </tabSettings>
     <userPermissions>
         <enabled>true</enabled>
         <name>ApiEnabled</name>
