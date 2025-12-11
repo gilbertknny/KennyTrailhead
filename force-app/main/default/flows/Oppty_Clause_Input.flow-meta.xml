@@ -11,7 +11,7 @@
             <assignToReference>ClauseSelected</assignToReference>
             <operator>Add</operator>
             <value>
-                <elementReference>Loop_1.Clause_Id__c</elementReference>
+                <elementReference>Loop_1.Clause_ID__c</elementReference>
             </value>
         </assignmentItems>
         <connector>
@@ -24,7 +24,62 @@
             <stringValue>{&quot;location&quot;:&quot;top&quot;,&quot;type&quot;:&quot;simple&quot;}</stringValue>
         </value>
     </customProperties>
+    <decisions>
+        <name>Check_Insurance_Policy</name>
+        <label>Check Insurance Policy</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Get_Insurance_Policy_Product_Clause</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Null</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>varCreateInsuracePolicy.Id</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Create_Insurace_Policy</targetReference>
+            </connector>
+            <label>Null</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_Warranty</name>
+        <label>Check Warranty</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Screen2</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Have_Warranty</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_oppty.Warranty__c</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue></stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>CreateTransactionData</targetReference>
+            </connector>
+            <label>Have Warranty</label>
+        </rules>
+    </decisions>
     <environments>Default</environments>
+    <formulas>
+        <name>textWarrantyLimit</name>
+        <dataType>String</dataType>
+        <expression>IF(LEN({!Warranty}) &gt; 32768, &apos;Teks yang dimasukkan tidak boleh melebihi batas 32.768 karakter.&apos;, &apos;&apos;)</expression>
+    </formulas>
     <interviewLabel>[Oppty]Clause Input {!$Flow.CurrentDateTime}</interviewLabel>
     <label>[Oppty]Clause Input</label>
     <loops>
@@ -32,7 +87,7 @@
         <label>Loop 1</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
-        <collectionReference>Get_Transaction_Data</collectionReference>
+        <collectionReference>Get_Insurance_Policy_Product_Clause</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
             <targetReference>Assignment0</targetReference>
@@ -61,15 +116,83 @@
     </processMetadataValues>
     <processType>Flow</processType>
     <recordCreates>
+        <name>Create_Insurace_Policy</name>
+        <label>Create Insurace Policy</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignRecordIdToReference>varCreateInsuracePolicy.Id</assignRecordIdToReference>
+        <connector>
+            <targetReference>Get_Insurance_Policy_Product_Clause</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Name</field>
+            <value>
+                <elementReference>Get_oppty.Name</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>NameInsuredId</field>
+            <value>
+                <elementReference>Get_oppty.AccountId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>SourceOpportunityId</field>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </inputAssignments>
+        <object>InsurancePolicy</object>
+    </recordCreates>
+    <recordCreates>
         <name>CreateTransactionData</name>
         <label>CreateTransactionData</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
-        <connector>
-            <targetReference>Screen2</targetReference>
-        </connector>
-        <inputReference>MappingClause</inputReference>
+        <inputReference>Mapping_Policy_Clause</inputReference>
     </recordCreates>
+    <recordLookups>
+        <name>Get_Insurance_Policy</name>
+        <label>Get Insurance Policy</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Check_Insurance_Policy</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>SourceOpportunityId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <object>InsurancePolicy</object>
+        <outputReference>varCreateInsuracePolicy</outputReference>
+        <queriedFields>Id</queriedFields>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Insurance_Policy_Product_Clause</name>
+        <label>Get Insurance Policy Product Clause</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Get_record_Type</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Opportunity__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>InsurancePolicyProductClause</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
     <recordLookups>
         <name>Get_oppty</name>
         <label>Get oppty</label>
@@ -77,7 +200,7 @@
         <locationY>0</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Get_Record_Type_Tr_data</targetReference>
+            <targetReference>Get_Insurance_Policy</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -120,62 +243,6 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordLookups>
-        <name>Get_Record_Type_Tr_data</name>
-        <label>Get Record Type Tr data</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
-        <connector>
-            <targetReference>Get_Transaction_Data</targetReference>
-        </connector>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>Name</field>
-            <operator>EqualTo</operator>
-            <value>
-                <stringValue>Clause</stringValue>
-            </value>
-        </filters>
-        <filters>
-            <field>SobjectType</field>
-            <operator>EqualTo</operator>
-            <value>
-                <stringValue>Transaction_Data__c</stringValue>
-            </value>
-        </filters>
-        <getFirstRecordOnly>true</getFirstRecordOnly>
-        <object>RecordType</object>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
-    </recordLookups>
-    <recordLookups>
-        <name>Get_Transaction_Data</name>
-        <label>Get Transaction Data</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
-        <connector>
-            <targetReference>Get_record_Type</targetReference>
-        </connector>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>Opportunity__c</field>
-            <operator>EqualTo</operator>
-            <value>
-                <elementReference>recordId</elementReference>
-            </value>
-        </filters>
-        <filters>
-            <field>RecordTypeId</field>
-            <operator>EqualTo</operator>
-            <value>
-                <elementReference>Get_Record_Type_Tr_data.Id</elementReference>
-            </value>
-        </filters>
-        <getFirstRecordOnly>false</getFirstRecordOnly>
-        <object>Transaction_Data__c</object>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
-    </recordLookups>
-    <recordLookups>
         <name>GetMasterData</name>
         <label>GetMasterData</label>
         <locationX>0</locationX>
@@ -204,12 +271,18 @@
         <queriedFields>ENG_NAME__c</queriedFields>
         <queriedFields>ENG_DESC_CL__c</queriedFields>
         <queriedFields>Is_Default__c</queriedFields>
+        <queriedFields>Name</queriedFields>
+        <queriedFields>BSN_ID__c</queriedFields>
+        <queriedFields>Clause_Id__c</queriedFields>
     </recordLookups>
     <recordUpdates>
         <name>Update_Oppty</name>
         <label>Update Oppty</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
+        <connector>
+            <targetReference>CreateTransactionData</targetReference>
+        </connector>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Id</field>
@@ -264,6 +337,10 @@
                     <stringValue>12</stringValue>
                 </width>
             </styleProperties>
+            <validationRule>
+                <errorMessage>&lt;p&gt;Teks yang dimasukkan tidak boleh melebihi batas 32.768 karakter.&lt;/p&gt;</errorMessage>
+                <formulaExpression>LEN({!Warranty}) &lt; 32768</formulaExpression>
+            </validationRule>
         </fields>
         <showFooter>true</showFooter>
         <showHeader>false</showHeader>
@@ -277,7 +354,7 @@
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
         <connector>
-            <targetReference>MappingClause</targetReference>
+            <targetReference>Mapping_Policy_Clause</targetReference>
         </connector>
         <fields>
             <name>Text</name>
@@ -327,7 +404,7 @@
             <inputParameters>
                 <name>columns</name>
                 <value>
-                    <stringValue>[{&quot;apiName&quot;:&quot;ENG_NAME__c&quot;,&quot;guid&quot;:&quot;column-903c&quot;,&quot;editable&quot;:false,&quot;hasCustomHeaderLabel&quot;:false,&quot;customHeaderLabel&quot;:&quot;&quot;,&quot;wrapText&quot;:true,&quot;order&quot;:0,&quot;label&quot;:&quot;ENG NAME&quot;,&quot;type&quot;:&quot;text&quot;}]</stringValue>
+                    <stringValue>[{&quot;apiName&quot;:&quot;ENG_NAME__c&quot;,&quot;guid&quot;:&quot;column-903c&quot;,&quot;editable&quot;:false,&quot;hasCustomHeaderLabel&quot;:false,&quot;customHeaderLabel&quot;:&quot;&quot;,&quot;wrapText&quot;:true,&quot;order&quot;:0,&quot;label&quot;:&quot;ENG NAME&quot;,&quot;type&quot;:&quot;text&quot;},{&quot;apiName&quot;:&quot;BSN_ID__c&quot;,&quot;guid&quot;:&quot;column-0c59&quot;,&quot;editable&quot;:false,&quot;hasCustomHeaderLabel&quot;:false,&quot;customHeaderLabel&quot;:&quot;&quot;,&quot;wrapText&quot;:true,&quot;order&quot;:1,&quot;label&quot;:&quot;BSN ID&quot;,&quot;type&quot;:&quot;text&quot;}]</stringValue>
                 </value>
             </inputParameters>
             <inputParameters>
@@ -360,52 +437,31 @@
     </start>
     <status>Active</status>
     <transforms>
-        <name>MappingClause</name>
-        <label>MappingClause</label>
+        <name>Mapping_Policy_Clause</name>
+        <label>Mapping Policy Clause</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>CreateTransactionData</targetReference>
+            <targetReference>Check_Warranty</targetReference>
         </connector>
         <dataType>SObject</dataType>
         <isCollection>true</isCollection>
-        <objectType>Transaction_Data__c</objectType>
+        <objectType>InsurancePolicyProductClause</objectType>
         <scale>0</scale>
         <storeOutputAutomatically>true</storeOutputAutomatically>
         <transformValues>
             <transformValueActions>
-                <outputFieldApiName>BSN_ID__c</outputFieldApiName>
-                <transformType>Map</transformType>
-                <value>
-                    <elementReference>TableClause.selectedRows[$EachItem].BSN_ID__c</elementReference>
-                </value>
-            </transformValueActions>
-            <transformValueActions>
-                <outputFieldApiName>Clause_Description__c</outputFieldApiName>
-                <transformType>Map</transformType>
-                <value>
-                    <elementReference>TableClause.selectedRows[$EachItem].ENG_DESC_CL__c</elementReference>
-                </value>
-            </transformValueActions>
-            <transformValueActions>
-                <outputFieldApiName>Clause_Id__c</outputFieldApiName>
+                <outputFieldApiName>Clause_ID__c</outputFieldApiName>
                 <transformType>Map</transformType>
                 <value>
                     <elementReference>TableClause.selectedRows[$EachItem].Clause_Id__c</elementReference>
                 </value>
             </transformValueActions>
             <transformValueActions>
-                <outputFieldApiName>Clauses_Name__c</outputFieldApiName>
+                <outputFieldApiName>Clause_Name__c</outputFieldApiName>
                 <transformType>Map</transformType>
                 <value>
                     <elementReference>TableClause.selectedRows[$EachItem].ENG_NAME__c</elementReference>
-                </value>
-            </transformValueActions>
-            <transformValueActions>
-                <outputFieldApiName>Opportunity__c</outputFieldApiName>
-                <transformType>Map</transformType>
-                <value>
-                    <elementReference>Get_oppty.Id</elementReference>
                 </value>
             </transformValueActions>
             <transformValueActions>
@@ -416,10 +472,17 @@
                 </value>
             </transformValueActions>
             <transformValueActions>
-                <outputFieldApiName>RecordTypeId</outputFieldApiName>
+                <outputFieldApiName>Opportunity__c</outputFieldApiName>
                 <transformType>Map</transformType>
                 <value>
-                    <elementReference>Get_Record_Type_Tr_data.Id</elementReference>
+                    <elementReference>Get_oppty.Id</elementReference>
+                </value>
+            </transformValueActions>
+            <transformValueActions>
+                <outputFieldApiName>InsurancePolicyId</outputFieldApiName>
+                <transformType>Map</transformType>
+                <value>
+                    <elementReference>varCreateInsuracePolicy.Id</elementReference>
                 </value>
             </transformValueActions>
             <transformValueActions>
@@ -427,6 +490,20 @@
                 <transformType>Map</transformType>
                 <value>
                     <elementReference>TableClause.selectedRows[$EachItem].Name</elementReference>
+                </value>
+            </transformValueActions>
+            <transformValueActions>
+                <outputFieldApiName>Clause_Description__c</outputFieldApiName>
+                <transformType>Map</transformType>
+                <value>
+                    <elementReference>TableClause.selectedRows[$EachItem].ENG_DESC_CL__c</elementReference>
+                </value>
+            </transformValueActions>
+            <transformValueActions>
+                <outputFieldApiName>BSN_ID__c</outputFieldApiName>
+                <transformType>Map</transformType>
+                <value>
+                    <elementReference>TableClause.selectedRows[$EachItem].BSN_ID__c</elementReference>
                 </value>
             </transformValueActions>
         </transformValues>
@@ -460,5 +537,23 @@
         <isCollection>false</isCollection>
         <isInput>true</isInput>
         <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>test</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <elementReference>TableClause.firstSelectedRow.BSN_ID__c</elementReference>
+        </value>
+    </variables>
+    <variables>
+        <name>varCreateInsuracePolicy</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>InsurancePolicy</objectType>
     </variables>
 </Flow>

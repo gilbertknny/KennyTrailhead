@@ -36,8 +36,8 @@ public class ClsChangeOwner_Test {
         insert ip;
         
         Lead ld = new Lead();
-        ld.FirstName = 'Lead Test';
-        ld.LastName = 'Dua';
+        ld.FirstName = 'A';
+        ld.LastName = 'B';
         ld.OwnerId = userId;
         insert ld;
         
@@ -94,6 +94,7 @@ public class ClsChangeOwner_Test {
             data += '}';
             string result = ClsChangeOwner.saveData(data);
             system.assertEquals(result,'Sukses');
+            ClsChangeOwner.getPermission();
             Test.stopTest();
         }
     }

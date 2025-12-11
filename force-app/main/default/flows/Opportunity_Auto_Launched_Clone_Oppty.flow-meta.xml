@@ -15,9 +15,9 @@
             </value>
         </inputParameters>
         <inputParameters>
-            <name>LintaswataSync</name>
+            <name>lintaswataSync</name>
             <value>
-                <booleanValue>true</booleanValue>
+                <booleanValue>false</booleanValue>
             </value>
         </inputParameters>
         <inputParameters>
@@ -252,6 +252,12 @@
             <targetReference>BatchRiskAssetCoverage</targetReference>
         </connector>
         <flowName>Transaction_Data_Clone</flowName>
+        <inputAssignments>
+            <name>AccountId</name>
+            <value>
+                <elementReference>Get_Opportunity.AccountId</elementReference>
+            </value>
+        </inputAssignments>
         <inputAssignments>
             <name>NewOptyId</name>
             <value>

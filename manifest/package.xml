@@ -5,16 +5,21 @@
 		<members>APILog2</members>
 		<members>APILogMock</members>
 		<members>APILog_Test</members>
+		<members>ApexDefinedFlow</members>
 		<members>ErrorLogRecord</members>
 		<members>ErrorLogRecord_Test</members>
 		<members>EventErrorLogHandler</members>
 		<members>InvocableClass</members>
 		<members>InvocableClass_Test</members>
+		<members>InvocableOmniFlow</members>
+		<members>InvocableOmniFlow_Test</members>
 		<members>SOQL_SOBJECT</members>
 		<members>SOQL_SOBJECT_Test</members>
 		<members>TriggerHandler</members>
 		<members>TriggerHandler_Test</members>
 		<members>VlocityMapping</members>
+		<members>VlocityMappingOmniFlow</members>
+		<members>VlocityMappingOmniFlow_Test</members>
 		<members>VlocityMapping_Test</members>
 		<members>WebserviceAPI</members>
 		<members>WebserviceAPI_Test</members>
@@ -25,6 +30,13 @@
 		<name>ApexTrigger</name>
 	</types>
 	<types>
+		<members>Account.Lintaswata_CreatedbyId__c</members>
+		<members>Account.Lintaswata_Createddate__c</members>
+		<members>Account.Lintaswata_LastmodifiedbyId__c</members>
+		<members>Account.Lintaswata_Lastmodifieddate__c</members>
+		<members>Asset.Lintaswata_Amount__c</members>
+		<members>Asset.Lintaswata_Currency__c</members>
+		<members>Asset.Lintaswata_Sync__c</members>
 		<members>Endpoint_Header_List__mdt.Additional_Value__c</members>
 		<members>Endpoint_Header_List__mdt.Algorithms2__c</members>
 		<members>Endpoint_Header_List__mdt.Algorithms__c</members>
@@ -84,11 +96,47 @@
 		<members>Error_Logs__e.String_To_Sign__c</members>
 		<members>Error_Logs__e.Type_Name__c</members>
 		<members>Error_Logs__e.User_Run__c</members>
+		<members>InsurancePolicy.Lintaswata_Currency__c</members>
+		<members>InsurancePolicy.Lintaswata_Premium__c</members>
+		<members>InsurancePolicy.Lintaswata_Sum_Insured__c</members>
+		<members>InsurancePolicy.Lintaswata_Sync__c</members>
+		<members>InsurancePolicyCoverage.Lintaswata_Agent_Comission__c</members>
+		<members>InsurancePolicyCoverage.Lintaswata_Banks_Fee_Comission__c</members>
+		<members>InsurancePolicyCoverage.Lintaswata_Broker_Comission__c</members>
+		<members>InsurancePolicyCoverage.Lintaswata_Claim_Loss_Amount__c</members>
+		<members>InsurancePolicyCoverage.Lintaswata_Deductible_PCT__c</members>
+		<members>InsurancePolicyCoverage.Lintaswata_Deductible__c</members>
+		<members>InsurancePolicyCoverage.Lintaswata_Discount__c</members>
+		<members>InsurancePolicyCoverage.Lintaswata_Final_Approved_Rate__c</members>
+		<members>InsurancePolicyCoverage.Lintaswata_Finance_Commision__c</members>
+		<members>InsurancePolicyCoverage.Lintaswata_Minimum_Cur_ID__c</members>
+		<members>InsurancePolicyCoverage.Lintaswata_Overdng_Comission__c</members>
+		<members>InsurancePolicyCoverage.Lintaswata_Proposed_Rate__c</members>
+		<members>InsurancePolicyCoverage.Lintaswata_Sync__c</members>
+		<members>InsurancePolicyProductClause.BSN_ID__c</members>
+		<members>InsurancePolicyProductClause.Business_Request_Number__c</members>
+		<members>InsurancePolicyProductClause.Busreq_ID__c</members>
+		<members>InsurancePolicyProductClause.Clause_Description__c</members>
+		<members>InsurancePolicyProductClause.Clause_ID__c</members>
+		<members>InsurancePolicyProductClause.Clause_Name__c</members>
+		<members>InsurancePolicyProductClause.Is_Additional__c</members>
+		<members>InsurancePolicyProductClause.Is_Changed__c</members>
+		<members>InsurancePolicyProductClause.Lintaswata_Last_Update__c</members>
+		<members>InsurancePolicyProductClause.Lintaswata_Sync__c</members>
+		<members>InsurancePolicyProductClause.Master_Data__c</members>
+		<members>InsurancePolicyProductClause.Opportunity__c</members>
+		<members>InsurancePolicyProductClause.Partition_Code__c</members>
+		<members>InsurancePolicyProductClause.Unique_ID__c</members>
+		<members>Opportunity.Lintaswata_Premium__c</members>
+		<members>Opportunity.Lintaswata_Rate__c</members>
+		<members>Opportunity.Lintaswata_Sum_Insured__c</members>
+		<members>Opportunity.Lintaswata_Sync__c</members>
 		<members>SFAWT05AssetCoverages__mdt.Coverage__c</members>
 		<members>SFAWT05__mdt.Integration_Procedure__c</members>
 		<members>SFAWT05__mdt.RecordType_DeveloperName__c</members>
 		<members>SFAWT05__mdt.RecordType_Object__c</members>
 		<members>SFAWT05__mdt.Start__c</members>
+		<members>Transaction_Data__c.Lintaswata_Sync__c</members>
 		<members>Upload_File_Mapping__mdt.Field__c</members>
 		<members>Upload_File_Mapping__mdt.Object__c</members>
 		<name>CustomField</name>
@@ -138,7 +186,7 @@
 		<members>Endpoint_Header_List.LintaswataSFAWT17_5</members>
 		<members>Endpoint_Header_List.SalesforceComposite1</members>
 		<members>Endpoint_Header_List.SalesforceComposite2</members>
-		<members>SFAWT05.Transhipment</members>
+		<members>SFAWT05.transhipments</members>
 		<members>SFAWT05.business_companies</members>
 		<members>SFAWT05.business_request_qq</members>
 		<members>SFAWT05.coverages</members>
@@ -165,6 +213,7 @@
 		<members>Endpoint__mdt</members>
 		<members>Error_Log__c</members>
 		<members>Error_Logs__e</members>
+		<members>InsurancePolicyProductClause</members>
 		<members>SFAWT05AssetCoverages__mdt</members>
 		<members>SFAWT05__mdt</members>
 		<members>Upload_File_Mapping__mdt</members>
@@ -179,15 +228,19 @@
 		<name>ExternalCredential</name>
 	</types>
 	<types>
+		<members>Clause_Before_Insert</members>
 		<members>Opportunity_Auto_Launched_Clone_Oppty</members>
 		<members>Risk_Asset_Clone</members>
 		<members>Transaction_Data_Clone</members>
+		<members>Upsert_Insurance_Policy_Product_Clause</members>
 		<name>Flow</name>
 	</types>
 	<types>
+		<members>Clause_Before_Insert</members>
 		<members>Opportunity_Auto_Launched_Clone_Oppty</members>
 		<members>Risk_Asset_Clone</members>
 		<members>Transaction_Data_Clone</members>
+		<members>Upsert_Insurance_Policy_Product_Clause</members>
 		<name>FlowDefinition</name>
 	</types>
 	<types>
@@ -195,6 +248,7 @@
 		<members>Endpoint_Header__mdt-Endpoint Header Layout</members>
 		<members>Endpoint__mdt-Endpoint Layout</members>
 		<members>Error_Log__c-Error Log Layout</members>
+		<members>InsurancePolicyProductClause-Insurance Policy Product Clause Layout</members>
 		<members>SFAWT05AssetCoverages__mdt-SFAWT05Coverages Layout</members>
 		<members>SFAWT05__mdt-SFAWT05 Layout</members>
 		<members>Upload_File_Mapping__mdt-Upload File Mapping Layout</members>

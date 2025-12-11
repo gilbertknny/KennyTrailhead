@@ -92,6 +92,22 @@
 		<members>Account.Zip_Code_Name__c</members>
 		<members>Account.Master_Duplicate_data__c</members>
 		<members>Asset.Purchase_Doc_Type__c</members>
+		<members>InsurancePolicyProductClause.BSN_ID__c</members>
+		<members>InsurancePolicyProductClause.Business_Request_Number__c</members>
+		<members>InsurancePolicyProductClause.Busreq_ID__c</members>
+		<members>InsurancePolicyProductClause.Clause_Description__c</members>
+		<members>InsurancePolicyProductClause.Clause_ID__c</members>
+		<members>InsurancePolicyProductClause.Clause_Name__c</members>
+		<members>InsurancePolicyProductClause.Is_Additional__c</members>
+		<members>InsurancePolicyProductClause.Is_Changed__c</members>
+		<members>InsurancePolicyProductClause.Lintaswata_Last_Update__c</members>
+		<members>InsurancePolicyProductClause.Lintaswata_Sync__c</members>
+		<members>InsurancePolicyProductClause.Master_Data__c</members>
+		<members>InsurancePolicyProductClause.Opportunity__c</members>
+		<members>InsurancePolicyProductClause.Partition_Code__c</members>
+		<members>InsurancePolicyProductClause.Unique_ID__c</members>
+		<members>Master_Data__c.Clause_Unique__c</members>
+		<members>Account.OwnerF__c</members>
 		<name>CustomField</name>
 	</types>
 	<types>
@@ -112,6 +128,7 @@
         <members>Case_Record_Page</members>
 		<members>Claim_Record_Page</members>
 		<members>Location_Record_Page1</members>
+		<members>Insurance_Policy_Product_Clause_Record_Page</members>
 		<name>FlexiPage</name>
 	</types>
 	<types>
@@ -350,6 +367,10 @@
 		<name>Group</name>
 	</types>
 	<types>
+		<members>Re_Submit_Quote</members>
+		<name>Flow</name>
+	</types>
+	<types>
 		<members>Accumulation__c-Accumulation Layout</members>
 		<members>Account-Account Insurance</members>
 		<members>Account-Account Loss Adjuster</members>
@@ -416,9 +437,31 @@
 		<members>Transaction_Data__c-Treaty Distribution</members>
 		<members>Master_Data__c-Round Robin Member Account Matrix</members>
 		<members>Master_Data__c-Risk Location</members>
+		<members>Account-Account Business Layout</members>
+		<members>Account-Account Individual Layout</members>
+		<members>Account-Account Insurance</members>
+		<members>Account-Account Loss Adjuster</members>
+		<members>Account-Account Surveyor</members>
+		<members>Account-Account Workshop</members>
+		<members>Contact-Contact Business Layout</members>
+		<members>Master_Data__c-Clause</members>
 		<name>Layout</name>
 	</types>
 	<types>
+	<types>
+		<members>Account.All</members>
+		<members>Account.All_Account_Type_Agent</members>
+		<members>Account.All_Account_Type_Bank</members>
+		<members>Account.All_Account_Type_Broker</members>
+		<members>Account.All_Account_Type_Finance_Leasing</members>
+		<members>Account.All_Account_Type_General</members>
+		<members>Account.All_Account_Type_Group</members>
+		<members>Account.All_Account_Type_Other</members>
+		<members>Account.Clients</members>
+		<members>Account.FinServ__My_Businesses</members>
+		<members>Account.Insurance_Type_Account</members>
+		<members>Account.MyAccounts</members>
+		<members>Account.My_Individual</members>
 		<members>Account.Clients</members>
 		<members>Account.FinServ__My_Businesses</members>
 		<members>Account.FinServ__My_Clients</members>
@@ -1334,6 +1377,8 @@
 	</types>
 	<types>
 		<members>Account.AccountEmail</members>
+		<members>Account.Send_Email2</members>
+		<members>Opportunity.Re_Submit_Quote</members>
 		<members>Opportunity.OpportunityEmail</members>
 		<members>New_Opportunity</members>
 		<name>QuickAction</name>

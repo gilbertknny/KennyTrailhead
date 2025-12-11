@@ -3,7 +3,21 @@
 	<types>
 		<members>VlocityMapping</members>
 		<members>VlocityMapping_Test</members>
+		<members>renewalNoticeController</members>
+		<members>renewalNoticeControllerTest</members>
 		<name>ApexClass</name>
+	</types>
+	<types>
+		<members>RenewalNoticePDF</members>
+		<name>ApexComponent</name>
+	</types>
+	<types>
+		<members>renewalNotice</members>
+		<name>ApexPage</name>
+	</types>
+	<types>
+		<members>InsurancePolicy.IP_Renewal_Underwriting</members>
+		<name>ApprovalProcess</name>
 	</types>
 	<types>
 		<members>Endpoint_Header_List__mdt.Additional_Value__c</members>
@@ -26,9 +40,16 @@
 		<members>InsurancePolicy.Approval_Status__c</members>
 		<members>InsurancePolicy.Aswata_Policy_Number__c</members>
 		<members>InsurancePolicy.BUSREQ_ID__c</members>
+		<members>InsurancePolicy.COB__c</members>
+		<members>InsurancePolicy.Lintaswata_Currency__c</members>
+		<members>InsurancePolicy.Lintaswata_Premium__c</members>
+		<members>InsurancePolicy.Lintaswata_Sum_Insured__c</members>
+		<members>InsurancePolicy.Lintaswata_Sync__c</members>
 		<members>InsurancePolicy.Notice_ID__c</members>
 		<members>InsurancePolicy.Status_Notice__c</members>
 		<members>InsurancePolicy.Status_Renewal__c</members>
+		<members>InsurancePolicy.Underwriting_User__c</members>
+		<members>InsurancePolicy.lintas_last_updated__c</members>
 		<name>CustomField</name>
 	</types>
 	<types>
@@ -82,16 +103,35 @@
 		<name>CustomObject</name>
 	</types>
 	<types>
+		<members>unfiled$public/VFP_Renewal</members>
+		<name>EmailTemplate</name>
+	</types>
+	<types>
+		<members>InsurancePolicy_Approval</members>
+		<members>InsurancePolicy_Send_Notification_For_Sales_User_and_UW_After_Created</members>
 		<members>Opportunity_Auto_Launched_Clone_Oppty</members>
 		<members>Risk_Asset_Clone</members>
 		<members>Transaction_Data_Clone</members>
 		<name>Flow</name>
 	</types>
 	<types>
-		<members>Opportunity_Auto_Launched_Clone_Oppty</members>
-		<members>Risk_Asset_Clone</members>
-		<members>Transaction_Data_Clone</members>
+		<members>InsurancePolicy_Approval</members>
+		<members>InsurancePolicy_Send_Notification_For_Sales_User_and_UW_After_Created</members>
 		<name>FlowDefinition</name>
+	</types>
+	<types>
+		<members>InsurancePolicy</members>
+		<name>Workflow</name>
+	</types>
+	<types>
+		<members>InsurancePolicy.EA_Insurance_Policy_Renewal_Notice</members>
+		<name>WorkflowAlert</name>
+	</types>
+	<types>
+		<members>InsurancePolicy.IP_Decision_Underwriting_Submitted</members>
+		<members>InsurancePolicy.Reject_Update_Status</members>
+		<members>InsurancePolicy.Update_Status_Approve</members>
+		<name>WorkflowFieldUpdate</name>
 	</types>
 	<version>65.0</version>
 </Package>

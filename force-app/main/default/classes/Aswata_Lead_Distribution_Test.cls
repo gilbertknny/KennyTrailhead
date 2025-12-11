@@ -28,6 +28,7 @@ public class Aswata_Lead_Distribution_Test {
         roundRobin.Salesman_Branch__c = masterBranch.Id;
         update roundRobin;
         
+        
         // Create Lead
         Lead lead = Aswata_TestDataFactory.createLead('John', 'Doe', 'Aswata Company');
         lead.Zip__c = zipCodeLocation.Id;
@@ -35,6 +36,9 @@ public class Aswata_Lead_Distribution_Test {
         update lead;
         
         Lead leadResult = [SELECT Id, Branch__c, Zip__c FROM Lead WHERE Id = :lead.Id];
+        
+        
+       
         
         Master_Data__c masterBranchResult = [
             SELECT Id, Branch_ID__c, Name, RecordType.Name 
@@ -146,7 +150,7 @@ public class Aswata_Lead_Distribution_Test {
         roundRobin.Account_Segment__c = 'I';
         roundRobin.Account_Pipeline_Status__c = 'Direct';
         roundRobin.Business_Segmentation__c = 'Corporate';
-        roundRobin.Branch__c = masterBranch.Id; // IMPORTANT: Link to Master Branch for SOQL query
+        roundRobin.Salesman_Branch__c = masterBranch.Id; // IMPORTANT: Link to Master Branch for SOQL query
         roundRobin.Round_Robin_Member__c = UserInfo.getUserId(); // Use current user
         roundRobin.Round_Robin_Counter_Branch__c = 0; // Initialize counter
         update roundRobin;
@@ -165,15 +169,15 @@ public class Aswata_Lead_Distribution_Test {
         System.debug('Lead Branch__c: ' + leadBefore.Branch__c);
         System.debug('Lead Owner ID (Before): ' + initialOwnerId);
         System.debug('Round Robin Member ID: ' + UserInfo.getUserId());
-        System.debug('Round Robin Branch__c: ' + roundRobin.Branch__c);
+        System.debug('Round Robin Branch__c: ' + roundRobin.Salesman_Branch__c);
         System.debug('Master Branch ID: ' + masterBranch.Id);
         System.debug('Master Branch BRANCH_ID__c: ' + masterBranch.Branch_ID__c);
         
         // Test the query that distributeLead will use
         List<Master_Data__c> queryTest = [
-            SELECT Id, Round_Robin_Member__c, Branch__c, Round_Robin_Counter_Branch__c
+            SELECT Id, Round_Robin_Member__c, Salesman_Branch__c, Round_Robin_Counter_Branch__c
             FROM Master_Data__c
-            WHERE Branch__r.BRANCH_ID__c = :leadBefore.Branch__c
+            WHERE Salesman_Branch__r.BRANCH_ID__c = :leadBefore.Branch__c
             ORDER BY Round_Robin_Counter_Branch__c ASC
             LIMIT 1
         ];
@@ -270,7 +274,7 @@ public class Aswata_Lead_Distribution_Test {
         roundRobin.Account_Segment__c = 'I';
         roundRobin.Account_Pipeline_Status__c = 'Direct';
         roundRobin.Business_Segmentation__c = 'Corporate';
-        roundRobin.Branch__c = masterBranch.Id; // IMPORTANT: Link to Master Branch for SOQL query
+        roundRobin.Salesman_Branch__c = masterBranch.Id; // IMPORTANT: Link to Master Branch for SOQL query
         roundRobin.Round_Robin_Member__c = UserInfo.getUserId(); // Use current user
         roundRobin.Round_Robin_Counter_Branch__c = 0; // Initialize counter
         update roundRobin;
@@ -295,9 +299,9 @@ public class Aswata_Lead_Distribution_Test {
         
         // Test the query that distributeLead will use
         List<Master_Data__c> queryTest = [
-            SELECT Id, Round_Robin_Member__c, Branch__c, Round_Robin_Counter_Branch__c
+            SELECT Id, Round_Robin_Member__c, Salesman_Branch__c, Round_Robin_Counter_Branch__c
             FROM Master_Data__c
-            WHERE Branch__r.BRANCH_ID__c = :leadBefore.Branch__c
+            WHERE Salesman_Branch__r.BRANCH_ID__c = :leadBefore.Branch__c
             ORDER BY Round_Robin_Counter_Branch__c ASC
             LIMIT 1
         ];
@@ -393,7 +397,7 @@ public class Aswata_Lead_Distribution_Test {
         roundRobin.Account_Segment__c = 'I';
         roundRobin.Account_Pipeline_Status__c = 'Direct';
         roundRobin.Business_Segmentation__c = 'Corporate';
-        roundRobin.Branch__c = masterBranch.Id; // IMPORTANT: Link to Master Branch for SOQL query
+        roundRobin.Salesman_Branch__c = masterBranch.Id; // IMPORTANT: Link to Master Branch for SOQL query
         roundRobin.Round_Robin_Member__c = UserInfo.getUserId(); // Use current user
         roundRobin.Round_Robin_Counter_Branch__c = 0; // Initialize counter
         update roundRobin;

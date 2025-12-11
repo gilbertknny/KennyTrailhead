@@ -1,0 +1,43 @@
+/* wrapper scroll */
+.scroll-container {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
+}
+
+/* biarkan tabel melebar sesuai konten -> maka scroll muncul */
+.responsive-table {
+  width: max-content;   /* tabel mengikuti lebar isinya */
+  min-width: 100%;      /* tetap minimal full container */
+  table-layout: auto;
+  border-collapse: collapse;
+}
+
+/* jangan wrap isi sel -> akan paksa horizontal scroll */
+.responsive-table th,
+.responsive-table td {
+  white-space: nowrap;
+  padding: 0.75rem 1rem;
+  text-align: left;
+  vertical-align: middle;
+}
+
+/* header styling */
+.responsive-table thead th {
+  background: #f4f6f9;
+  font-weight: 600;
+}
+
+/* optional: batasi lebar kolom action */
+.responsive-table th:last-child,
+.responsive-table td:last-child {
+  width: 72px;
+  text-align: center;
+}
+
+/* Total row styling */
+.total-row td {
+  background-color: #f4f6f9;
+  font-weight: 600;
+  border-top: 2px solid #dddbda;
+}
