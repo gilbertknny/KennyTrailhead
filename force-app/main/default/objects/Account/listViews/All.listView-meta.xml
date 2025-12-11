@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ListView xmlns="http://soap.sforce.com/2006/04/metadata">
-    <fullName>MyAccounts</fullName>
+    <fullName>All</fullName>
     <columns>ACCOUNT.NAME</columns>
     <columns>ACCOUNT.PHONE1</columns>
     <columns>Client_ID__c</columns>
     <columns>ACCOUNT.TYPE</columns>
-    <columns>Account_Sub_Segment__c</columns>
+    <columns>Account_Segment__c</columns>
     <columns>Branch__c</columns>
-    <columns>OwnerF__c</columns>
-    <filterScope>Mine</filterScope>
-    <label>My Accounts</label>
+    <columns>CORE.USERS.LAST_NAME</columns>
+    <filterScope>Everything</filterScope>
+    <label>All</label>
 </ListView>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>OwnerF__c</fullName>
+    <externalId>false</externalId>
+    <formula>Owner.FirstName &amp; &quot; &quot; &amp; Owner.LastName &amp;
+&quot; (&quot; &amp;
+CASE(
+    TEXT(Owner.Branch__c),
+    &quot;0&quot;,&quot;Head Office&quot;,
+    &quot;-1&quot;,&quot;Regional Khusus&quot;,
+    &quot;1&quot;,&quot;Jakarta Kalibesar&quot;,
+    &quot;2&quot;,&quot;Semarang&quot;,
+    &quot;3&quot;,&quot;Cirebon&quot;,
+    &quot;4&quot;,&quot;Padang&quot;,
+    &quot;5&quot;,&quot;Pontianak&quot;,
+    &quot;6&quot;,&quot;Medan&quot;,
+    &quot;8&quot;,&quot;Bandar Lampung&quot;,
+    &quot;9&quot;,&quot;Surabaya Tunjungan&quot;,
+    &quot;11&quot;,&quot;Bandung&quot;,
+    &quot;12&quot;,&quot;Denpasar&quot;,
+    &quot;14&quot;,&quot;Palembang&quot;,
+    &quot;15&quot;,&quot;Jakarta Rasuna&quot;,
+    &quot;16&quot;,&quot;Makassar&quot;,
+    &quot;17&quot;,&quot;Jakarta Senen&quot;,
+    &quot;18&quot;,&quot;Surakarta&quot;,
+    &quot;19&quot;,&quot;Malang&quot;,
+    &quot;20&quot;,&quot;Batam&quot;,
+    &quot;21&quot;,&quot;Agency Office&quot;,
+    &quot;22&quot;,&quot;Jakarta Pondok Indah&quot;,
+    &quot;23&quot;,&quot;Pekanbaru&quot;,
+    &quot;24&quot;,&quot;Tangerang&quot;,
+    &quot;25&quot;,&quot;Bekasi&quot;,
+    &quot;26&quot;,&quot;Yogyakarta&quot;,
+    &quot;27&quot;,&quot;Surabaya Jemursari&quot;,
+    &quot;28&quot;,&quot;Jambi&quot;,
+    &quot;29&quot;,&quot;Balikpapan&quot;,
+    &quot;30&quot;,&quot;Manado&quot;,
+    &quot;31&quot;,&quot;Banjarmasin&quot;,
+    &quot;32&quot;,&quot;Jember&quot;,
+    &quot;33&quot;,&quot;Bogor&quot;,
+    &quot;34&quot;,&quot;Samarinda&quot;,
+    &quot;35&quot;,&quot;Jakarta Kayu Putih&quot;,
+    &quot;36&quot;,&quot;Tasikmalaya&quot;,
+    &quot;37&quot;,&quot;Gorontalo&quot;,
+    &quot;38&quot;,&quot;Pematang Siantar&quot;,
+    &quot;39&quot;,&quot;Puri Kembangan&quot;,
+    &quot;40&quot;,&quot;Cilegon&quot;,
+    &quot;41&quot;,&quot;Bukittinggi&quot;,
+    &quot;42&quot;,&quot;Kediri&quot;,
+    &quot;71&quot;,&quot;Regional Tengah&quot;,
+    &quot;72&quot;,&quot;Regional Jakarta&quot;,
+    &quot;73&quot;,&quot;Regional Barat&quot;,
+    &quot;74&quot;,&quot;Regional Timur&quot;,
+    &quot;77&quot;,&quot;Alternative Distribution&quot;,
+    &quot;87&quot;,&quot;PT ASURANSI WAHANA TATA (JCC)&quot;,
+    &quot;90&quot;,&quot;Special Regional&quot;,
+    &quot;91&quot;,&quot;Oil &amp; Gas&quot;,
+    &quot;96&quot;,&quot;Global Business&quot;,
+    &quot;97&quot;,&quot;Aswata Workshop&quot;,
+    &quot;98&quot;,&quot;Broker &amp; Special Risk Division&quot;,
+    &quot;99&quot;,&quot;Head Office Inward Priority&quot;,
+    &quot;100&quot;,&quot;Micro Insurance&quot;,
+    TEXT(Owner.Branch__c) 
+)
+&amp; &quot;)&quot;</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Owner</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>
