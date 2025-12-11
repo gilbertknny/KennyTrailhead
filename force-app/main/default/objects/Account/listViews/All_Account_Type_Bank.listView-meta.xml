@@ -1,21 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ListView xmlns="http://soap.sforce.com/2006/04/metadata">
-    <fullName>Insurance_Type_Account</fullName>
+    <fullName>All_Account_Type_Bank</fullName>
     <columns>ACCOUNT.NAME</columns>
     <columns>ACCOUNT.PHONE1</columns>
     <columns>Client_ID__c</columns>
     <columns>ACCOUNT.TYPE</columns>
     <columns>Account_Sub_Segment__c</columns>
     <columns>Branch__c</columns>
-    <columns>Address__c</columns>
-    <columns>CORE.USERS.ALIAS</columns>
-    <columns>ACCOUNT.CREATED_DATE</columns>
-    <columns>ACCOUNT.LAST_UPDATE</columns>
+    <columns>OwnerF__c</columns>
     <filterScope>Everything</filterScope>
     <filters>
         <field>ACCOUNT.TYPE</field>
         <operation>equals</operation>
-        <value>INSURANCE,REINSURANCE,BROKER</value>
+        <value>1</value>
     </filters>
-    <label>Insurance Type Account</label>
+    <label>All Account Type Bank</label>
 </ListView>
