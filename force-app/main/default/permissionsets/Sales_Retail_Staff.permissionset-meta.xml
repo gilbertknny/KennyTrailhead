@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
-    <!-- <applicationVisibilities>
+    <applicationVisibilities>
         <application>Aswata_Sales_App</application>
         <visible>true</visible>
-    </applicationVisibilities> 
-    <classAccesses>
+    </applicationVisibilities>
+    <!-- <classAccesses>
         <apexClass>AddFacultative_Controller</apexClass>
         <enabled>true</enabled>
-    </classAccesses>-->
+    </classAccesses> -->
     <classAccesses>
         <apexClass>Aswata_AddFacultative_Controller</apexClass>
         <enabled>true</enabled>
@@ -76,10 +76,10 @@
         <apexClass>Aswata_Lead_Distribution_Queueable</apexClass>
         <enabled>true</enabled>
     </classAccesses>
-    <!-- <classAccesses>
+    <classAccesses>
         <apexClass>Aswata_QuotationSlip_Controller</apexClass>
         <enabled>true</enabled>
-    </classAccesses> -->
+    </classAccesses>
     <classAccesses>
         <apexClass>Aswata_Reset_RoundRobinCounter</apexClass>
         <enabled>true</enabled>
@@ -164,14 +164,18 @@
         <apexClass>ClsUserLimit_Test</apexClass>
         <enabled>true</enabled>
     </classAccesses>
-    <!-- <classAccesses>
+    <classAccesses>
         <apexClass>EmailMessageTriggerHandler</apexClass>
         <enabled>true</enabled>
-    </classAccesses> 
+    </classAccesses>
     <classAccesses>
         <apexClass>EmailServiceReceived</apexClass>
         <enabled>true</enabled>
-    </classAccesses> -->
+    </classAccesses>
+    <classAccesses>
+        <apexClass>LeadUpdateUnqualified</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
     <classAccesses>
         <apexClass>TriggerHandler_Task</apexClass>
         <enabled>true</enabled>
@@ -180,7 +184,7 @@
         <apexClass>addressDisplayController</apexClass>
         <enabled>true</enabled>
     </classAccesses>
-    <!-- <classAccesses>
+    <classAccesses>
         <apexClass>omnistudio__AccessTokenController</apexClass>
         <enabled>true</enabled>
     </classAccesses>
@@ -1599,7 +1603,7 @@
     <classAccesses>
         <apexClass>omnistudio__ZippexTests</apexClass>
         <enabled>true</enabled>
-    </classAccesses> -->
+    </classAccesses>
     <customMetadataTypeAccesses>
         <enabled>true</enabled>
         <name>Endpoint_Header_List__mdt</name>
@@ -2500,11 +2504,6 @@
         <field>Account.Zip__c</field>
         <readable>true</readable>
     </fieldPermissions>
-    <!-- <fieldPermissions>
-        <editable>true</editable>
-        <field>Account.testFebrian__c</field>
-        <readable>true</readable>
-    </fieldPermissions> -->
     <fieldPermissions>
         <editable>true</editable>
         <field>Asset.Absolute_Nett_Retention_Amount__c</field>
@@ -2568,11 +2567,6 @@
     <fieldPermissions>
         <editable>true</editable>
         <field>Asset.BPPDAN__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
-        <field>Asset.COB__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -3887,11 +3881,6 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
-        <field>InsurancePolicy.Quote__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
         <field>InsurancePolicy.RatingDate</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -4248,11 +4237,6 @@
     <fieldPermissions>
         <editable>true</editable>
         <field>InsurancePolicyCoverage.IncomeOptionType</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
-        <field>InsurancePolicyCoverage.Indemnity_Type__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -5013,11 +4997,6 @@
     <fieldPermissions>
         <editable>true</editable>
         <field>Opportunity.ContractId</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
-        <field>Opportunity.Contract_Type__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -6625,7 +6604,7 @@
     <objectPermissions>
         <allowCreate>false</allowCreate>
         <allowDelete>false</allowDelete>
-        <allowEdit>false</allowEdit>
+        <allowEdit>true</allowEdit>
         <allowRead>true</allowRead>
         <modifyAllRecords>false</modifyAllRecords>
         <object>Master_Data__c</object>
@@ -6750,10 +6729,10 @@
         <recordType>Contact.FinServ__IndustriesIndividual</recordType>
         <visible>true</visible>
     </recordTypeVisibilities>
-    <!-- <recordTypeVisibilities>
+    <recordTypeVisibilities>
         <recordType>Lead.FinServ__General</recordType>
         <visible>true</visible>
-    </recordTypeVisibilities> -->
+    </recordTypeVisibilities>
     <recordTypeVisibilities>
         <recordType>Location.Address</recordType>
         <visible>true</visible>
@@ -6938,7 +6917,7 @@
         <recordType>Transaction_Data__c.Treaty_Distribution</recordType>
         <visible>true</visible>
     </recordTypeVisibilities>
-    <!-- <tabSettings>
+    <tabSettings>
         <tab>Aswata_Survey__c</tab>
         <visibility>Visible</visibility>
     </tabSettings>
@@ -6989,7 +6968,7 @@
     <tabSettings>
         <tab>standard-Quote</tab>
         <visibility>Visible</visibility>
-    </tabSettings> -->
+    </tabSettings>
     <userPermissions>
         <enabled>true</enabled>
         <name>ApiEnabled</name>
