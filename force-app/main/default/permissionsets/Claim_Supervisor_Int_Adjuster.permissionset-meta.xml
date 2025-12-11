@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <classAccesses>
+        <apexClass>ClsChangeOwner</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
     <fieldPermissions>
         <editable>true</editable>
         <field>Case.AccountId</field>
@@ -885,11 +889,11 @@
         <field>Claim.VisitSite</field>
         <readable>true</readable>
     </fieldPermissions>
-    <!-- <fieldPermissions>
+    <fieldPermissions>
         <editable>true</editable>
         <field>ClaimCoverage.Asset__c</field>
         <readable>true</readable>
-    </fieldPermissions> -->
+    </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
         <field>ClaimCoverage.ClaimItemId</field>
@@ -1571,7 +1575,7 @@
         <recordType>Transaction_Data__c.Treaty_Distribution</recordType>
         <visible>true</visible>
     </recordTypeVisibilities>
-    <!-- <tabSettings>
+    <tabSettings>
         <tab>Master_Data__c</tab>
         <visibility>Visible</visibility>
     </tabSettings>
@@ -1630,7 +1634,7 @@
     <tabSettings>
         <tab>standard-Quote</tab>
         <visibility>Visible</visibility>
-    </tabSettings> -->
+    </tabSettings>
     <userPermissions>
         <enabled>true</enabled>
         <name>ApiEnabled</name>

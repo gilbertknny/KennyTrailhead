@@ -4,6 +4,10 @@
         <enabled>true</enabled>
         <name>ByPassFlow</name>
     </customPermissions>
+    <!-- <customPermissions>
+        <enabled>true</enabled>
+        <name>Data_Migrasi</name>
+    </customPermissions> -->
     <fieldPermissions>
         <editable>true</editable>
         <field>InsurancePolicyCoverage.Agent_Comission__c</field>
@@ -212,11 +216,6 @@
     <fieldPermissions>
         <editable>true</editable>
         <field>InsurancePolicyCoverage.IncomeOptionType</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
-        <field>InsurancePolicyCoverage.Indemnity_Type__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -1479,6 +1478,26 @@
         <allowRead>true</allowRead>
         <modifyAllRecords>true</modifyAllRecords>
         <object>DelegatedAccount</object>
+        <viewAllFields>false</viewAllFields>
+        <viewAllRecords>true</viewAllRecords>
+    </objectPermissions>
+    <objectPermissions>
+        <allowCreate>true</allowCreate>
+        <allowDelete>true</allowDelete>
+        <allowEdit>true</allowEdit>
+        <allowRead>true</allowRead>
+        <modifyAllRecords>true</modifyAllRecords>
+        <object>DevopsEnvironment</object>
+        <viewAllFields>false</viewAllFields>
+        <viewAllRecords>true</viewAllRecords>
+    </objectPermissions>
+    <objectPermissions>
+        <allowCreate>true</allowCreate>
+        <allowDelete>true</allowDelete>
+        <allowEdit>true</allowEdit>
+        <allowRead>true</allowRead>
+        <modifyAllRecords>true</modifyAllRecords>
+        <object>DevopsRequestInfo</object>
         <viewAllFields>false</viewAllFields>
         <viewAllRecords>true</viewAllRecords>
     </objectPermissions>
@@ -4126,10 +4145,10 @@
         <recordType>Location.Zip_Code</recordType>
         <visible>true</visible>
     </recordTypeVisibilities>
-    <!-- <tabSettings>
+    <tabSettings>
         <tab>standard-Location</tab>
         <visibility>Visible</visibility>
-    </tabSettings> -->
+    </tabSettings>
     <userPermissions>
         <enabled>true</enabled>
         <name>AllowViewEditConvertedLeads</name>
@@ -4258,11 +4277,11 @@
         <enabled>true</enabled>
         <name>ManageReportsInPubFolders</name>
     </userPermissions>
-    <!--<userPermissions>
+    <!-- <userPermissions>
         <enabled>true</enabled>
         <name>ManageTerritories</name>
     </userPermissions>
-     <userPermissions>
+    <userPermissions>
         <enabled>true</enabled>
         <name>ManageTranslation</name>
     </userPermissions> -->
