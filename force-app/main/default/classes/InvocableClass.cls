@@ -18,8 +18,10 @@ public without sharing class InvocableClass {
                     listout.add(ov);
                 }
             }
-        } catch (Exception error) {
-            System.debug(LoggingLevel.WARN, 'Error occured'+error.getMessage());
+        } catch (Exception exc) {
+            System.debug(LoggingLevel.WARN, 'Error occured'+exc.getMessage());
+            ErrorLogRecord.DebugLog dl = ErrorLogRecord.setError(null, 'InvocableClass', exc);
+            ErrorLogRecord.seteventerror(JSON.serialize(dl));
         } 
         return listout;
     }
@@ -30,15 +32,15 @@ public without sharing class InvocableClass {
         Database.executeBatch(batch,1);
     }
 
-    /*** @description Invocablevoid @param iv */
-    public static String UnderwritingApproval(inputVariable iv){
+    /*** @description Invocablevoid @param iv @return cond */
+    public static String underwritingApproval(inputVariable iv){
         String cond ='';
         if(String.isNotBlank(iv.cob)){
             List<Master_Data__c> listmd = [SELECT Id,showData__c FROM Master_Data__c WHERE BSN_ID__c =:iv.cob AND RecordType.Name = 'User Limit' AND Status__c = 'Active' WITH SECURITY_ENFORCED];
             if(!listmd.isEmpty() && String.isNotBlank(iv.oldoptyId)){
-                List<Object> untypedList = (List<Object>) JSON.deserializeUntyped(listmd[0]?.showData__c);
                 String dpquery = getQuery('Opportunity', 'Id', iv.oldoptyId);
                 List<Opportunity> listopp = (List<Opportunity>) database.query(dpquery);
+                List<Object> untypedList = String.isNotBlank(listmd[0]?.showData__c) ? (List<Object>) JSON.deserializeUntyped(listmd[0]?.showData__c) : new List<Object>();
                 for (Object item : untypedList) {
                     Map<String, Object> itemMap = (Map<String, Object>) item;
                     if(itemMap.containsKey('param1') && itemMap.containsKey('param2')){
@@ -46,7 +48,7 @@ public without sharing class InvocableClass {
                     }
                 }
             }
-            else{
+            if(String.isBlank(cond)){
                 cond  = ' AND BSN_ID__c = '+'\''+iv.cob+'\'';
             }
         }
@@ -55,13 +57,13 @@ public without sharing class InvocableClass {
 
      /** @description getClause  @param sobjnm @param param @param paramval @return lippc */
     public static String getQuery(String sobjnm,String param,String paramval){
-        String cond = param+'=:paramval';
+        String cond = param+'='+'\''+paramval+'\'';
         String dpFields = SOQL_SOBJECT.getallfield(sobjnm);
         SOQL_SOBJECT.SOQL_Param sp = new SOQL_SOBJECT.SOQL_Param();
         sp.sobjectName = sobjnm;
         sp.condition = cond;
         sp.fields = dpFields;
-        String dpquery = SOQL_SOBJECT.SOQL(sp)+' WITH SECURITY_ENFORCED';
+        String dpquery = SOQL_SOBJECT.SOQL(sp);//+' WITH SECURITY_ENFORCED';
         return dpquery;
     }
 

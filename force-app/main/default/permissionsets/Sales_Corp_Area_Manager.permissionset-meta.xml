@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
-    <!-- <applicationVisibilities>
+    <applicationVisibilities>
         <application>Aswata_Sales_App</application>
         <visible>true</visible>
-    </applicationVisibilities> -->
+    </applicationVisibilities>
+    <classAccesses>
+        <apexClass>ClsChangeOwner</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
     <customPermissions>
         <enabled>true</enabled>
         <name>KYC</name>
@@ -892,11 +896,6 @@
         <field>Account.Zip__c</field>
         <readable>true</readable>
     </fieldPermissions>
-    <!-- <fieldPermissions>
-        <editable>true</editable>
-        <field>Account.testFebrian__c</field>
-        <readable>true</readable>
-    </fieldPermissions> -->
     <fieldPermissions>
         <editable>true</editable>
         <field>Asset.Absolute_Nett_Retention_Amount__c</field>
@@ -1000,11 +999,6 @@
     <fieldPermissions>
         <editable>true</editable>
         <field>Asset.Builder_Yard_Name__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
-        <field>Asset.COB__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -2974,11 +2968,6 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
-        <field>InsurancePolicyCoverage.Indemnity_Type__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
         <field>InsurancePolicyCoverage.InsurancePolicyAssetId</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -3904,22 +3893,12 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
-        <field>Master_Data__c.Category_Id__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
         <field>Master_Data__c.Category__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
         <field>Master_Data__c.Channel__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
-        <field>Master_Data__c.Class_of_Business__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -4454,11 +4433,6 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
-        <field>Master_Data__c.Product_Type__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
         <field>Master_Data__c.Proposed_Rate__c</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -4840,11 +4814,6 @@
     <fieldPermissions>
         <editable>true</editable>
         <field>Opportunity.ContractId</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
-        <field>Opportunity.Contract_Type__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -6387,10 +6356,10 @@
         <recordType>Contact.FinServ__IndustriesIndividual</recordType>
         <visible>true</visible>
     </recordTypeVisibilities>
-    <!-- <recordTypeVisibilities>
+    <recordTypeVisibilities>
         <recordType>Lead.FinServ__BusinessReferral</recordType>
         <visible>true</visible>
-    </recordTypeVisibilities> 
+    </recordTypeVisibilities>
     <recordTypeVisibilities>
         <recordType>Lead.FinServ__General</recordType>
         <visible>true</visible>
@@ -6402,7 +6371,7 @@
     <recordTypeVisibilities>
         <recordType>Lead.FinServ__RetirementPlanning</recordType>
         <visible>true</visible>
-    </recordTypeVisibilities>-->
+    </recordTypeVisibilities>
     <recordTypeVisibilities>
         <recordType>Location.Address</recordType>
         <visible>true</visible>
@@ -6599,7 +6568,7 @@
         <recordType>Transaction_Data__c.Treaty_Distribution</recordType>
         <visible>true</visible>
     </recordTypeVisibilities>
-    <!-- <tabSettings>
+    <tabSettings>
         <tab>Aswata_Survey__c</tab>
         <visibility>Visible</visibility>
     </tabSettings>
@@ -6658,7 +6627,7 @@
     <tabSettings>
         <tab>standard-Quote</tab>
         <visibility>Visible</visibility>
-    </tabSettings> -->
+    </tabSettings>
     <userPermissions>
         <enabled>true</enabled>
         <name>ApexRestServices</name>

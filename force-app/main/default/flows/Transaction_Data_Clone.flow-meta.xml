@@ -740,6 +740,9 @@
         <flowName>Upsert_Insurance_Policy_Product_Clause</flowName>
         <inputAssignments>
             <name>LintaswataDateTime</name>
+            <value>
+                <elementReference>$Flow.CurrentDateTime</elementReference>
+            </value>
         </inputAssignments>
         <inputAssignments>
             <name>LintaswataSync</name>

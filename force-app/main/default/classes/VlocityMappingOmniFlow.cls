@@ -65,7 +65,7 @@ global without sharing class VlocityMappingOmniFlow implements callable{
         sp.sobjectName = sobjnm;
         sp.condition = cond;
         sp.fields = dpFields;
-        String dpquery = SOQL_SOBJECT.SOQL(sp) +' WITH SECURITY_ENFORCED';
+        String dpquery = SOQL_SOBJECT.SOQL(sp);// +' WITH SECURITY_ENFORCED';
         lippc = (List<InsurancePolicyProductClause>) database.query(dpquery);
         return lippc;
     }
