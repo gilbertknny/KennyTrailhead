@@ -1,0 +1,78 @@
+<template>
+    <lightning-modal-header label="Coverage"></lightning-modal-header>
+    <lightning-modal-body>
+        <template if:true={isLoading}>
+            <lightning-spinner alternative-text="Loading" size="medium" variant="brand"></lightning-spinner>
+        </template>
+        <div class="slds-p-around_medium">
+            <div class="slds-grid slds-wrap slds-gutters_small">
+                <div class="slds-col slds-size_1-of-2">
+                    <lightning-combobox 
+                        label="Coverage"
+                        options={coverage}
+                        onchange={handleCoverage}
+                        value={coverageId} 
+                        required>
+                    </lightning-combobox> 
+                </div>
+                <template if:true={dataCoverage} for:each={dataCoverage} for:item="data" for:index="index">
+                    <lightning-accordion key={data.id} allow-multiple-sections-open style="width:100%;">
+                        <lightning-accordion-section name={data.sectionId} label={data.sectionLabel}>
+                            <div class="slds-grid slds-wrap slds-gutters_small">
+                                <div key={data.id} class="slds-col slds-size_1-of-2">
+                                    <lightning-input type="number" label="Proposed Rate" value={data.proposedFixedAmount} disabled></lightning-input>
+                                </div>
+                                <div key={data.id} class="slds-col slds-size_1-of-2">
+                                    <lightning-input type="number" formatter="percent-fixed" label="Deductible PCT (%)" value={data.deductiblePCT} disabled></lightning-input>
+                                </div>
+                                <div key={data.id} class="slds-col slds-size_1-of-2">
+                                    <lightning-input type="text" label="Deductible Flag" value={data.deductibleName} disabled></lightning-input>
+                                </div>
+                                <div key={data.id} class="slds-col slds-size_1-of-2">
+                                    <lightning-input type="text" label="Minimum Currency" value={data.minimumCurName} disabled></lightning-input>
+                                </div>
+                                <div key={data.id} class="slds-col slds-size_1-of-2">
+                                    <lightning-input type="number" label="Minimum Amount" value={data.minimumAmount} disabled></lightning-input>
+                                </div>
+                                <div key={data.id} class="slds-col slds-size_1-of-2">
+                                    <lightning-input type="number" formatter="percent-fixed" label="Banks Fee (%)" value={data.banksFee} disabled></lightning-input>
+                                </div>
+                                <div key={data.id} class="slds-col slds-size_1-of-2">
+                                    <lightning-input type="number" formatter="percent-fixed" label="Agent Comission (%)" value={data.agentComission} disabled></lightning-input>
+                                </div>
+                                <div key={data.id} class="slds-col slds-size_1-of-2">
+                                    <lightning-input type="number" formatter="percent-fixed" label="Broker Comission (%)" value={data.brokerComission} disabled></lightning-input>
+                                </div>
+                                <div key={data.id} class="slds-col slds-size_1-of-2">
+                                    <lightning-input type="number" formatter="percent-fixed" label="Commision (%)" value={data.generalRPremiumPCT} disabled></lightning-input>
+                                </div>
+                                <div key={data.id} class="slds-col slds-size_1-of-2">
+                                    <lightning-input type="number" formatter="percent-fixed" step="0.0001" label="Overiding (%)" value={data.overdngComission} disabled></lightning-input>
+                                </div>
+                                <div key={data.id} class="slds-col slds-size_1-of-2">
+                                    <lightning-input type="number" label="Max Person" value={data.maxPerson} disabled></lightning-input>
+                                </div>
+                            </div>
+                        </lightning-accordion-section>
+                    </lightning-accordion>
+                </template>
+            </div>
+        </div>
+    </lightning-modal-body>
+    <lightning-modal-footer>
+        <div class="slds-m-top_small slds-align_absolute-center">
+            <lightning-button 
+                variant="Neutral" 
+                label="Cancel" 
+                class="slds-m-left_x-small" 
+                onclick={handleCancel}>
+            </lightning-button>
+            <lightning-button 
+                variant="brand" 
+                class="slds-m-left_x-small" 
+                label={labelAdd}
+                onclick={handleAdd}>
+            </lightning-button>
+        </div>
+    </lightning-modal-footer>
+</template>
