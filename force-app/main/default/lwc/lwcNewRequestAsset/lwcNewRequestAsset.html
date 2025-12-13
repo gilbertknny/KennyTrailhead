@@ -1,0 +1,67 @@
+<template>
+    <lightning-modal-header label="Asset"></lightning-modal-header>
+    <lightning-modal-body>
+        <template if:true={isLoading}>
+            <lightning-spinner alternative-text="Loading" size="medium" variant="brand"></lightning-spinner>
+        </template>
+        <div class="slds-p-around_medium">
+            <div class="slds-grid slds-wrap slds-gutters_small">
+                <div class="slds-col slds-size_1-of-2">
+                    <lightning-combobox 
+                        data-name="section"
+                        label="Section"
+                        options={section}
+                        value={sectionId}
+                        onchange={handleChange}
+                        disabled={disabledSection}
+                        required>
+                    </lightning-combobox>
+                </div>
+                <div class="slds-col slds-size_1-of-2">
+                    <lightning-combobox 
+                        data-name="category"
+                        label="Category"
+                        options={category}
+                        value={categoryId}
+                        onchange={handleChange}
+                        required>
+                    </lightning-combobox>
+                </div>
+                <div class="slds-col slds-size_1-of-2">
+                    <lightning-combobox 
+                        data-name="currency"
+                        label="Currency"
+                        options={currency}
+                        value={currencyId}
+                        onchange={handleChange}
+                        required>
+                    </lightning-combobox>
+                </div> 
+                <div class="slds-col slds-size_1-of-2">
+                    <lightning-input data-name="sumInsured" value={sumInsured} type="number" label="Sum Insured" onchange={handleChange} required></lightning-input>
+                </div>
+                <div class="slds-col slds-size_1-of-2">
+                    <template if:true={showIDR}>
+                        <lightning-input type="number" label="Sum Insured IDR" value={sumInsuredIDR} disabled></lightning-input>
+                    </template>
+                </div>   
+            </div>    
+        </div>
+    </lightning-modal-body>
+    <lightning-modal-footer>
+        <div class="slds-m-top_small slds-align_absolute-center">
+            <lightning-button 
+                variant="Neutral" 
+                label="Cancel" 
+                class="slds-m-left_x-small" 
+                onclick={handleCancel}>
+            </lightning-button>
+            <lightning-button 
+                variant="brand" 
+                class="slds-m-left_x-small" 
+                label={labelAdd}
+                onclick={handleAdd}>
+            </lightning-button>
+        </div>
+    </lightning-modal-footer>
+</template>
