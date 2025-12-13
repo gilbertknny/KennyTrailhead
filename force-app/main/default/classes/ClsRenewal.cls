@@ -9,9 +9,7 @@ public without sharing class ClsRenewal {
     public static String getUserId() {
         String result = '';
         User u = [SELECT Id,Profile.Name FROM User WHERE Id=:UserInfo.getUserId()];
-        if(u.Profile.Name != 'System Administrator'){
-            result = u.Id;
-        } 
+        if(u.Profile.Name != 'System Administrator'){result = u.Id;} 
         return result;
     }
     
@@ -38,18 +36,7 @@ public without sharing class ClsRenewal {
         try{
             if(refid != null && opptype != null){
                 InsurancePolicy ip = [SELECT Id,SourceOpportunityId FROM InsurancePolicy WHERE Id =:refid];
-                //String objectApiName = 'Opportunity';
-                //List<String> fields = getAllFields(objectApiName); String.join(fields, ',')
-                //String query = 'SELECT Id FROM ' + objectApiName + ' WHERE Ref_Policy_Number__c = \'' + String.escapeSingleQuotes(refid) + '\' ORDER BY Id LIMIT 1';
-            	//LIST<Opportunity> listopp = Database.query(query);
                 if(ip.SourceOpportunityId != null){
-                    //Opportunity opp = ip.SourceOpportunityId;
-                    /*Opportunity newopp = opp.clone(false,true,false,false);
-                    newopp.Opportunity_Type__c = opptype;
-                    newopp.Ref_Policy_Number__c = null;
-                    newopp.StageName = 'Opportunity';
-                    Database.SaveResult sr = Database.insert(newopp);
-                    result = sr.Id;*/
                     Map<String,Object> params = new Map<String,Object>();
                     params.put('recordId',ip.SourceOpportunityId);
                     params.put('OpportunityType',opptype);
@@ -70,8 +57,6 @@ public without sharing class ClsRenewal {
                     system.debug(LoggingLevel.WARN,'oppresult:'+oppresult);
                     
                     if(opptype == 'RN'){
-                        //InsurancePolicy ip = New InsurancePolicy();
-                        //ip.Id = refid;
                         ip.Status_Renewal__c = statusrenewalid;
                         Database.SaveResult sr = Database.update(ip);
                     }
@@ -82,16 +67,4 @@ public without sharing class ClsRenewal {
         system.debug(LoggingLevel.WARN,'result:'+result);
         return result;
     }
-    
-    /*public static List<String> getAllFields(String objectApiName) {
-        List<String> fieldNames = new List<String>();
-        Map<String, SObjectField> fieldMap = Schema.getGlobalDescribe().get(objectApiName).getDescribe().fields.getMap();
-        for (String fieldName : fieldMap.keySet()) {
-            // Optionally, filter for creatable or updateable fields if needed
-            // if (fieldMap.get(fieldName).getDescribe().isCreateable()) {
-                fieldNames.add(fieldName);
-            // }
-        }
-        return fieldNames;
-    }*/
 }
