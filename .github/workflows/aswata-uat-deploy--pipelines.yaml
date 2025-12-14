@@ -122,7 +122,7 @@ jobs:
             DEPLOY_EXIT=$?
           else
             #sf project deploy start --manifest package/package.xml --wait 1000 --target-org uat --verbose -l RunLocalTests
-            sf project deploy start --manifest package/package.xml --wait 1000 --target-org uat --verbose -l RunSpecifiedTests --tests ContentVersion_Test InvocableClass_Test InvocableOmniFlow_Test OpportunityControllerTest renewalNoticeControllerTest SOQL_SOBJECT_Test VlocityMapping_Test VlocityMappingOmniFlow_Test
+            sf project deploy start --manifest package/package.xml --wait 1000 --target-org uat --verbose -l RunSpecifiedTests --tests ClsNewRequest_Test ClsRenewal_Test
             DEPLOY_EXIT=$?
           fi
           set -e
