@@ -136,6 +136,7 @@ public with sharing class LeadController {
    * @param villageId Village location ID
    * @param customerType Customer segment type
    * @param userDescription User-provided description
+   * @param leadReferralName Referral name for enterprise leads
    * @return Id of the newly created Lead record
    * @throws AuraHandledException if lead creation fails
    */
@@ -152,8 +153,10 @@ public with sharing class LeadController {
       String zipCodeId,
       String villageId,
       String customerType,
-      String userDescription
+      String userDescription,
+      String leadReferralName
   ) {
+      
     try {
       Lead newLead = new Lead(
         FirstName        = firstName,
@@ -172,6 +175,14 @@ public with sharing class LeadController {
         Account_Pipeline_Status__c = 'Direct',
         User_Description__c = userDescription
       );
+      
+      // Set Lead_Referral_Name__c, Lead_Referral_Email__c, and Lead_Referral_Phone__c if provided (for Enterprise leads)
+      if (String.isNotBlank(leadReferralName)) {
+        newLead.Lead_Referral_Name__c = leadReferralName;
+        newLead.Lead_Referral_Email__c = email;
+        newlead.Lead_Referral_Phone__c = phone;
+      }
+      
       insert newLead;
       return newLead.Id;
     } catch (Exception e) {

@@ -22,7 +22,11 @@ export default class WebToLeadLWC extends LightningElement {
   @track cityName    = null;
   @track villageId   = null;
 
-  // Static resource URLs (only logos now)
+  // For storing original names (for Enterprise customer type)
+  @track originalFirstName = '';
+  @track originalLastName = '';
+
+  // Static resource URLs
   aswataLogo = ASWATA_LOGO;
 
   // for lookup
@@ -41,7 +45,7 @@ export default class WebToLeadLWC extends LightningElement {
   }
 
   connectedCallback() {
-    console.log('Last updated 19-11-2025 16.01');
+    console.log('Last updated 15/12/2025 14:14 by Marco');
   }
 
   get backgroundStyle() {
@@ -59,6 +63,14 @@ export default class WebToLeadLWC extends LightningElement {
   // Generic input handler
   handleInputChange(event) {
     this.leadData[event.target.name] = event.target.value;
+    
+    // Store original names separately
+    if (event.target.name === 'FirstName') {
+      this.originalFirstName = event.target.value;
+    }
+    if (event.target.name === 'LastName') {
+      this.originalLastName = event.target.value;
+    }
   }
 
   // Handle Customer Type → toggle Enterprise
@@ -171,36 +183,159 @@ export default class WebToLeadLWC extends LightningElement {
   }
 
   // Submit the Lead
+  /* old code 
   handleSubmit() {
     this.error = undefined;
 
     // run validation check only
     if (this.isSubmitDisabled) {
-        this.error = 'Please fill in all mandatory fields.';
+        this.error = 'Mohon mengisi seluruh data yang diatas.';
         return;
     }
 
     this.isSubmitting = true; // lock the button
 
+    // Prepare data based on customer type
+    let firstName, lastName, company, leadReferralName;
+    console.log('customer type = '+this.leadData.Customer_Type__c);
+    if (this.leadData.Customer_Type__c === 'E') {
+      // Enterprise: Company becomes First & Last Name
+      // Original names go to Lead_Referral_Name__c
+      firstName = this.leadData.Company || '';
+      lastName = this.leadData.Company || '';
+      company = this.leadData.Company || '';
+      leadReferralName = `${this.originalFirstName || ''} ${this.originalLastName || ''}`.trim();
+    } else {
+      // Individual: Use original names
+      firstName = this.originalFirstName || '';
+      lastName = this.originalLastName || '';
+      company = `${this.originalFirstName || ''} ${this.originalLastName || ''}`.trim();
+      leadReferralName = null;
+    }
+
+
     createLead({
-      firstName:     this.leadData.FirstName,
-      lastName:      this.leadData.LastName,
+      firstName:     firstName,
+      lastName:      lastName,
       email:         this.leadData.Email,
       phone:         this.leadData.Phone,
-      company:       this.leadData.Company,
+      company:       company,
       provinceId:    this.provinceId,
       cityId:        this.leadData.City__c,
       zipCodeId:     this.leadData.ZipCode__c,
       villageId:     this.leadData.Village__c,
       customerType:  this.leadData.Customer_Type__c,
-      userDescription: this.leadData.User_Description__c
+      userDescription: this.leadData.User_Description__c,
+      leadReferralName: leadReferralName  // Add this parameter
     })
       .then(() => {
         this.isSubmitted = true;
       })
       .catch((err) => {
-        this.error = err?.body?.message || 'Lead creation failed.';
+        this.error = err?.body?.message || 'Submit data gagal. Terjadi kesalahan.';
         this.isSubmitting = false;
       });
+  } */ 
+  handleSubmit() {
+    this.error = undefined;
+
+    // run validation check only
+    if (this.isSubmitDisabled) {
+        this.error = 'Mohon mengisi seluruh data yang diatas.';
+        console.log('Submit blocked: Validation failed');
+        return;
+    }
+
+    this.isSubmitting = true; // lock the button
+    console.log('Submit button locked. Starting submission process...');
+
+    // Prepare data based on customer type
+    let firstName, lastName, company, leadReferralName;
+    
+    console.log('=== CUSTOMER TYPE PROCESSING ===');
+    console.log('Customer Type = ' + this.leadData.Customer_Type__c);
+    console.log('Original First Name = "' + this.originalFirstName + '"');
+    console.log('Original Last Name = "' + this.originalLastName + '"');
+    console.log('Company Name = "' + this.leadData.Company + '"');
+
+    if (this.leadData.Customer_Type__c === 'E') {
+        // Enterprise: Company becomes First & Last Name
+        // Original names go to Lead_Referral_Name__c
+        firstName = this.leadData.Company || '';
+        lastName = this.leadData.Company || '';
+        company = this.leadData.Company || '';
+        leadReferralName = `${this.originalFirstName || ''} ${this.originalLastName || ''}`.trim();
+        
+        console.log('ENTERPRISE CUSTOMER DETECTED - TRANSFORMING DATA:');
+        console.log('  FirstName will be set to: "' + firstName + '" (Company name)');
+        console.log('  LastName will be set to: "' + lastName + '" (Company name)');
+        console.log('  Company will be set to: "' + company + '"');
+        console.log('  Lead_Referral_Name__c will be set to: "' + leadReferralName + '" (Original person name)');
+    } else {
+        // Individual: Use original names
+        firstName = this.originalFirstName || '';
+        lastName = this.originalLastName || '';
+        company = `${this.originalFirstName || ''} ${this.originalLastName || ''}`.trim();
+        leadReferralName = null;
+        
+        console.log('INDIVIDUAL CUSTOMER DETECTED - USING ORIGINAL NAMES:');
+        console.log('  FirstName will be set to: "' + firstName + '"');
+        console.log('  LastName will be set to: "' + lastName + '"');
+        console.log('  Company will be set to: "' + company + '" (Combined names)');
+        console.log('  Lead_Referral_Name__c will be set to: null');
+    }
+
+    // Prepare the data object for Apex call
+    const leadDataToSend = {
+        firstName: firstName,
+        lastName: lastName,
+        email: this.leadData.Email,
+        phone: this.leadData.Phone,
+        company: company,
+        provinceId: this.provinceId,
+        cityId: this.leadData.City__c,
+        zipCodeId: this.leadData.ZipCode__c,
+        villageId: this.leadData.Village__c,
+        customerType: this.leadData.Customer_Type__c,
+        userDescription: this.leadData.User_Description__c,
+        leadReferralName: leadReferralName
+    };
+
+    console.log('=== FINAL DATA BEING SENT TO APEX ===');
+    console.log('JSON payload:', JSON.stringify(leadDataToSend, null, 2));
+    console.log('---------------------------------------');
+    console.log('Key field mappings for Lead object:');
+    console.log('  Lead.FirstName = "' + leadDataToSend.firstName + '"');
+    console.log('  Lead.LastName = "' + leadDataToSend.lastName + '"');
+    console.log('  Lead.Company = "' + leadDataToSend.company + '"');
+    console.log('  Lead.Lead_Referral_Name__c = "' + leadDataToSend.leadReferralName + '"');
+    console.log('  Lead.Account_Segment__c = "' + leadDataToSend.customerType + '"');
+    console.log('=======================================');
+
+    // For debugging: Compare with original form data
+    console.log('=== ORIGINAL FORM DATA (for reference only) ===');
+    console.log('Original FirstName field: "' + this.leadData.FirstName + '"');
+    console.log('Original LastName field: "' + this.leadData.LastName + '"');
+    console.log('Original Company field: "' + this.leadData.Company + '"');
+
+    createLead(leadDataToSend)
+    .then((leadId) => {
+        console.log('✅ Lead created successfully!');
+        console.log('Lead ID:', leadId);
+        console.log('Data transformation completed:');
+        console.log('  - For Enterprise (E): Company name becomes First/Last Name');
+        console.log('  - Person name stored in Lead_Referral_Name__c');
+        
+        // Query the created lead to verify (this would be a separate call in real scenario)
+        console.log('Note: To verify the actual saved data, query the Lead with ID:', leadId);
+        
+        this.isSubmitted = true;
+    })
+    .catch((err) => {
+        console.error('❌ Lead creation failed:');
+        console.error('Error details:', err);
+        this.error = err?.body?.message || 'Submit data gagal. Terjadi kesalahan.';
+        this.isSubmitting = false;
+    });
   }
 }
