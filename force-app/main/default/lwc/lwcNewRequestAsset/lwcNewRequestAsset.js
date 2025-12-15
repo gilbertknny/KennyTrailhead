@@ -5,6 +5,7 @@ import getRate from '@salesforce/apex/ClsNewRequest.getRate';
 import getSection from '@salesforce/apex/ClsNewRequest.getAssetSectionMOU';
 import getCategory from '@salesforce/apex/ClsNewRequest.getAssetCategoryMOU';
 import getCurrency from '@salesforce/apex/ClsNewRequest.getCurrency';
+import getSectionAmount from '@salesforce/apex/ClsNewRequest.getSectionAmount';
 
 export default class LwcNewRequestAsset extends LightningModal {
     @api records;
@@ -27,6 +28,7 @@ export default class LwcNewRequestAsset extends LightningModal {
     @track sumInsuredIDR;
     @track showIDR;
     @track rate;
+    @track limitAmount;
 
     connectedCallback() {
         //console.log('records:'+JSON.stringify(this.records));
@@ -113,6 +115,19 @@ export default class LwcNewRequestAsset extends LightningModal {
         });
     }
 
+    getDataSectionAmount(){
+        getSectionAmount({
+            recordid : this.recordid,
+            sectionid : this.sectionId
+        })
+        .then(result => {
+            this.limitAmount = result;
+        })
+        .catch(error => {
+            console.log('error-getDataSectionAmount:'+ error.message);
+        });
+    }
+
     handleChange(e){
         let name = e.target.dataset.name;
         let value = e.detail.value;
@@ -122,6 +137,9 @@ export default class LwcNewRequestAsset extends LightningModal {
             this.getPicklistCategory();
             this.categoryId = undefined;
             this.categoryName = undefined;
+            if(this.type == 'realisasi'){
+                this.getDataSectionAmount();
+            }
         }else if(name == 'category'){
             this.categoryId = value;
             this.categoryName = this.category.find(item => item.value === this.categoryId).label;
@@ -158,6 +176,8 @@ export default class LwcNewRequestAsset extends LightningModal {
             LightningAlert.open({message: 'Please Select Currency!',theme: 'error',label: 'Error!'});
         }else if(this.sumInsured === undefined || this.sumInsured === ''){
             LightningAlert.open({message: 'Please Fill Sum Insured!',theme: 'error',label: 'Error!'});
+        }else if(this.type === 'realisasi' && (this.sumInsuredIDR > this.limitAmount)){
+            LightningAlert.open({message: 'Please Change Sum Insured, over limit!',theme: 'error',label:'Error!'});
         }else{
             if(this.record != undefined){
                 try{

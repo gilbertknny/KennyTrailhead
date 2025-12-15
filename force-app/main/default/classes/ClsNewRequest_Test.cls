@@ -230,6 +230,7 @@ public class ClsNewRequest_Test {
         ClsNewRequest.saveDataMOU(data);
         ClsNewRequest.deleteFile(cd.Id);
         ClsNewRequest.getOpportunity(result);
+        ClsNewRequest.getSectionAmount(result,'Material Damage');
     }
     
     @IsTest

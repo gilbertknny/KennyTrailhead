@@ -760,6 +760,24 @@ public without sharing class ClsNewRequest {
         return listmd;
     }
     
+    @AuraEnabled(cacheable=false)
+    public static Decimal getSectionAmount(string recordid,string sectionid){
+        Decimal result;
+        if(recordid != null && sectionid != null){
+            List<Asset> listAsset = [SELECT Id,Amount_Insured__c 
+                                     FROM Asset 
+                                     WHERE Opportunity__c =:recordid
+                                    AND Section__c =:sectionid
+                                    AND RecordType.Name = 'Asset'];
+            if(listAsset.size()>0){
+                Asset at = listAsset[0];
+                result = at.Amount_Insured__c;
+            }
+        }
+        return result;
+    }
+    
+    
     @AuraEnabled
     public static string saveData(String data){
         String result = '';
@@ -1623,7 +1641,7 @@ public without sharing class ClsNewRequest {
             result.Broker_Comission_Section_2__c = brokerComission;
             result.General_RPremium_PCT_Section_2__c = generalRPremiumPCT;
             result.Overdng_Comission_Section_2__c = overdngComission;
-            result.max_person_section_2__c = maxPerson;
+            result.Max_Person_Section_2__c = maxPerson;
         }else if(section == 3){
             result.Proposed_Fixed_Amount_Section_3__c = proposedFixedAmount;
             result.Deductible_PCT_Section_3__c = deductiblePCT;
@@ -1635,7 +1653,7 @@ public without sharing class ClsNewRequest {
             result.Broker_Comission_Section_3__c = brokerComission;
             result.General_RPremium_PCT_Section_3__c = generalRPremiumPCT;
             result.Overdng_Comission_Section_3__c = overdngComission;
-            result.max_person_section_3__c = maxPerson;
+            result.Max_Person_Section_3__c = maxPerson;
         }else if(section == 4){
             result.Proposed_Fixed_Amount_Section_4__c = proposedFixedAmount;
             result.Deductible_PCT_Section_4__c = deductiblePCT;
@@ -1647,7 +1665,7 @@ public without sharing class ClsNewRequest {
             result.Broker_Comission_Section_4__c = brokerComission;
             result.General_RPremium_PCT_Section_4__c = generalRPremiumPCT;
             result.Overdng_Comission_Section_4__c = overdngComission;
-            result.max_person_section_4__c = maxPerson;
+            result.Max_Person_Section_4__c = maxPerson;
         }
         return result;
     }
