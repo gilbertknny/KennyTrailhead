@@ -760,6 +760,24 @@ public without sharing class ClsNewRequest {
         return listmd;
     }
     
+    @AuraEnabled(cacheable=false)
+    public static Decimal getSectionAmount(string recordid,string sectionid){
+        Decimal result;
+        if(recordid != null && sectionid != null){
+            List<Asset> listAsset = [SELECT Id,Amount_Insured__c 
+                                     FROM Asset 
+                                     WHERE Opportunity__c =:recordid
+                                    AND Section__c =:sectionid
+                                    AND RecordType.Name = 'Asset'];
+            if(listAsset.size()>0){
+                Asset at = listAsset[0];
+                result = at.Amount_Insured__c;
+            }
+        }
+        return result;
+    }
+    
+    
     @AuraEnabled
     public static string saveData(String data){
         String result = '';
