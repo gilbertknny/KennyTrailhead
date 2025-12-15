@@ -952,7 +952,7 @@
                                         <div class="slds-col slds-size_1-of-1">
                                             <lightning-combobox 
                                                     label="Premium Calculation"
-                                                    options={premiumCalculation}
+                                                    options={premiumCalculation2}
                                                     onchange={handlePremiumCalculation2} 
                                                     value={premiumCalculationId2}
                                                     >
@@ -1073,17 +1073,6 @@
                                     </div>
                                 </lightning-accordion-section>    
                             </lightning-accordion>
-                            <!-- PREMIUM CALCULATION-->
-                            <template if:true={showPremium2}>
-                                <div class="slds-col slds-size_1-of-1">
-                                    <lightning-combobox 
-                                            label="Premium Calculation"
-                                            options={premiumCalculation2}
-                                            onchange={handlePremiumCalculation2} 
-                                            >
-                                    </lightning-combobox>
-                                </div>
-                            </template>
                             <!-- RISK NAME-->
                             <div class="slds-col slds-size_1-of-1">
                                 <lightning-input type="text" label="Risk Name" value={riskName2} onchange={handleRiskName2} required></lightning-input>
