@@ -622,7 +622,7 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
     getShowRealisasi(){
         this.realisasiId1 = undefined;
         this.showFieldRealisasi1 = false;
-        if(this.opportunityTypeId == 'NB' && this.cob1 == '101' && this.contractTypeId != undefined){
+        if(this.opportunityTypeId == 'NB' && this.cob1 == '101' && this.contractTypeId != undefined && this.accountId != undefined){
             this.showFieldRealisasi1 = true;
             this.filterRealisasi1 = {
                 criteria : [
@@ -667,6 +667,7 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
             this.getAccountDetail(this.accountId);
         }
         this.getShowMOU();
+        this.getShowRealisasi();
     }
     //GET ACCOUNT DETAIL
     getAccountDetail(recordid){
@@ -826,6 +827,10 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
         let value = event.detail.value;
         this.cob1 = value;
         this.showPremium = false;
+        this.assetSectionId = undefined;
+        this.assetSection = [];
+        this.assetCategoryId = undefined;
+        this.assetCategory = [];
         if(value != '' && value != undefined){
             this.changeCOB(value,'change');
             if(this.cob1  == '301' || this.cob1  == '302' || this.cob1  == '303'){
@@ -1003,6 +1008,10 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
         let value = event.detail.value;
         this.cob2 = value;
         this.showPremium2 = false;
+        this.assetSectionId2 = undefined;
+        this.assetSection2 = [];
+        this.assetCategoryId2 = undefined;
+        this.assetCategory2 = [];
         if(value != '' && value != undefined){
             this.changeCOB2(value,'change');
             if(value == '301' || value == '302' || value == '303'){
@@ -2955,7 +2964,6 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
     }
 
     getPicklistAssetSection(cob){
-        this.assetSectionId = undefined;
         getAssetSection({
             cob : cob
         })
@@ -2972,7 +2980,6 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
     }
 
     getPicklistAssetSection2(cob){
-        this.assetSectionId2 = undefined;
         getAssetSection({
             cob : cob
         })
