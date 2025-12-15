@@ -1,0 +1,80 @@
+.custom-path {
+    padding: 10px;
+}
+
+/* --- ICON ROW --- */
+.icon-row {
+    display: flex;
+    flex-wrap: wrap;          /* ⬅️ Bisa turun ke baris berikutnya di mobile */
+    justify-content: space-between;
+    gap: 10px;                /* Jarak antar box */
+    margin-bottom: 12px;
+}
+
+/* --- BOX WRAPPER (DESKTOP DEFAULT) --- */
+.icon-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    width: 110px;
+    padding: 10px 8px;
+    border-radius: 10px;
+    cursor: pointer;
+
+    transition: all 0.2s ease-in-out;
+}
+
+/* INACTIVE */
+.inactive-box {
+    border: 1px solid #d8dde6;
+    background: #ffffff;
+}
+
+/* ACTIVE */
+.active-box {
+    border: 2px solid #1b96ff;
+    background: #e5f3ff;
+    box-shadow: 0 0 6px rgba(0, 128, 255, 0.3);
+}
+
+/* LABEL */
+.icon-label {
+    margin-top: 4px;
+    font-size: 0.75rem;
+    text-align: center;
+    font-weight: 600;
+}
+
+/* -----------------------------------------
+   🔥 RESPONSIVE MOBILE VIEW
+   ----------------------------------------- */
+
+/* Mobile breakpoint */
+@media (max-width: 600px) {
+
+    .icon-row {
+        justify-content: center;   /* Tengah semua */
+    }
+
+    .icon-box {
+        width: 45%;                /* 2 box per row */
+        padding: 12px 6px;
+    }
+
+    .icon-label {
+        font-size: 0.70rem;        /* Sedikit kecil */
+    }
+}
+
+/* Small mobile (iPhone SE, older phones) */
+@media (max-width: 400px) {
+
+    .icon-box {
+        width: 100%;               /* 1 box per row */
+    }
+
+    .icon-label {
+        font-size: 0.68rem;
+    }
+}

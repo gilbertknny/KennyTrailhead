@@ -52,16 +52,6 @@
                             </visibilityRule>
                         </valueListItems>
                         <valueListItems>
-                            <value>Lead.Change_To_Unqualified</value>
-                            <visibilityRule>
-                                <criteria>
-                                    <leftValue>{!Record.Status}</leftValue>
-                                    <operator>NE</operator>
-                                    <rightValue>Unqualified</rightValue>
-                                </criteria>
-                            </visibilityRule>
-                        </valueListItems>
-                        <valueListItems>
                             <value>ChangeOwnerOne</value>
                             <visibilityRule>
                                 <booleanFilter>1 OR 2</booleanFilter>
@@ -77,6 +67,12 @@
                                 </criteria>
                             </visibilityRule>
                         </valueListItems>
+                        <!-- <valueListItems>
+                            <value>Lead.Edit_Account_Information</value>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>Lead.Unqualified</value>
+                        </valueListItems> -->
                     </valueList>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
@@ -195,6 +191,36 @@
                 </fieldInstanceProperties>
                 <fieldItem>Record.Interest_COB__c</fieldItem>
                 <identifier>RecordInterest_COB2_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Lead_Referral_Name__c</fieldItem>
+                <identifier>RecordLead_Referral_Name_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Lead_Referral_Email__c</fieldItem>
+                <identifier>RecordLead_Referral_Email_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Lead_Referral_Phone__c</fieldItem>
+                <identifier>RecordLead_Referral_Phone_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <name>Facet-9ed1e977-35b4-4c9d-9639-60b444703f9d</name>
