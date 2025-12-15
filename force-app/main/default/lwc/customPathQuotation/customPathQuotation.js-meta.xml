@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>63.0</apiVersion>
+    <isExposed>true</isExposed>
+
+    <targets>
+        <target>lightning__RecordPage</target>
+        <target>lightning__AppPage</target>
+        <target>lightning__RecordAction</target>
+    </targets>
+
+    <!-- Restrict component to Opportunity & Quote record pages only -->
+    <targetConfigs>
+
+        <!-- Record Page -->
+        <targetConfig targets="lightning__RecordPage">
+
+            <objects>
+                <object>Opportunity</object>
+                <object>Quote</object>
+            </objects>
+
+            <supportedFormFactors>
+                <supportedFormFactor type="Small"/>
+                <supportedFormFactor type="Large"/>
+            </supportedFormFactors>
+
+            <property 
+                name="objectApiName"
+                type="String"
+                label="Object API Name"
+                description="Masukkan API Name object (Opportunity / Quote)"
+            />
+
+            <property 
+                name="fieldApiName"
+                type="String"
+                label="Picklist Field API Name"
+                description="Masukkan API Name field picklist (Quote_Status__c)"
+            />
+
+        </targetConfig>
+
+        <!-- App Page or Home Page -->
+        <targetConfig targets="lightning__AppPage">
+
+            <supportedFormFactors>
+                <supportedFormFactor type="Small"/>
+                <supportedFormFactor type="Large"/>
+            </supportedFormFactors>
+
+            <property 
+                name="objectApiName"
+                type="String"
+                label="Object API Name"
+            />
+
+            <property 
+                name="fieldApiName"
+                type="String"
+                label="Picklist Field API Name"
+            />
+
+        </targetConfig>
+
+    </targetConfigs>
+</LightningComponentBundle>
