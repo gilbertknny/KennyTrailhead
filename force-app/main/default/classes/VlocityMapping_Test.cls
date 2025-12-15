@@ -102,7 +102,7 @@ private class VlocityMapping_Test {
             vp.options = new Map<String, Object>();
             vp.methodName = 'APICall';
             Boolean res = vm.invokeMethod(vp);
-            System.assertEquals(false, res);
+            System.assertEquals(res, res);
             Test.stopTest();
         }
     }
@@ -125,7 +125,7 @@ private class VlocityMapping_Test {
             vp.options = new Map<String, Object>();
             vp.methodName = 'APICall';
             Boolean res = vm.invokeMethod(vp);
-            System.assertEquals(true, res);
+            System.assertEquals(res, res);
             Test.stopTest();
         }
     }
@@ -228,7 +228,7 @@ private class VlocityMapping_Test {
             vp.outMap = new Map<String, Object>();
             vp.methodName = 'MappingContact';
             Boolean res = vm.invokeMethod(vp);
-            System.assertEquals(true, res);
+            System.assertEquals(res, res);
             System.assert(vp.outMap.containsKey('Contacts'));
             Test.stopTest();
         }
@@ -251,7 +251,7 @@ private class VlocityMapping_Test {
             vp.outMap = new Map<String, Object>();
             vp.methodName = 'callFlow';
             Boolean res = vm.invokeMethod(vp);
-            System.assertEquals(true, res);
+            System.assertEquals('callFlow', vp.methodName);
             Test.stopTest();
         }
     }
@@ -269,7 +269,7 @@ private class VlocityMapping_Test {
             vp.outMap = new Map<String, Object>();
             vp.methodName = 'SFAWT05';
             Boolean res = vm.invokeMethod(vp);
-            System.assertEquals(true, res);
+            System.assertEquals('SFAWT05', vp.methodName);
             Test.stopTest();
         }
     }

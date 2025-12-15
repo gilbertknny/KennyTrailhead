@@ -190,6 +190,22 @@
         </connector>
     </assignments>
     <assignments>
+        <name>Assignment_Policy</name>
+        <label>Assignment Policy</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>NewInsurancePolicyId</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Insurance_Policy.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Get_Coverage</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
         <name>Assignment_Risk</name>
         <label>Assignment Risk</label>
         <locationX>0</locationX>
@@ -321,7 +337,7 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <defaultConnector>
-            <targetReference>Insurance_Policy</targetReference>
+            <targetReference>Get_Insurance_Policy</targetReference>
         </defaultConnector>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
@@ -360,6 +376,31 @@
                 <targetReference>LoopCoverage</targetReference>
             </connector>
             <label>Coverage Found</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_Insurance_Policy</name>
+        <label>Check Insurance Policy</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Insurance_Policy</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Insurance_Policy_Found</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Insurance_Policy</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assignment_Policy</targetReference>
+            </connector>
+            <label>Insurance Policy Found</label>
         </rules>
     </decisions>
     <environments>Default</environments>
@@ -428,7 +469,7 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Insurance_Policy</targetReference>
+            <targetReference>Get_Insurance_Policy</targetReference>
         </connector>
         <inputReference>ListAsset</inputReference>
     </recordCreates>
@@ -600,6 +641,27 @@
         <queriedFields>Minimum_Amount__c</queriedFields>
         <queriedFields>Opportunity__c</queriedFields>
         <queriedFields>Partition_Code__c</queriedFields>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Insurance_Policy</name>
+        <label>Get Insurance Policy</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Check_Insurance_Policy</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>SourceOpportunityId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>NewOptyId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>InsurancePolicy</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordLookups>

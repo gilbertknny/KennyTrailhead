@@ -3,14 +3,16 @@
     <fullName>Clients</fullName>
     <columns>ACCOUNT.NAME</columns>
     <columns>ACCOUNT.PHONE1</columns>
-    <columns>ACCOUNT.TYPE</columns>
-    <columns>FinServ__TotalFinancialAccounts__c</columns>
     <columns>Client_ID__c</columns>
+    <columns>ACCOUNT.TYPE</columns>
+    <columns>Account_Sub_Segment__c</columns>
+    <columns>Branch__c</columns>
+    <columns>OwnerF__c</columns>
     <filterScope>Everything</filterScope>
     <filters>
         <field>ACCOUNT.TYPE</field>
         <operation>equals</operation>
         <value>0,General,1,2,3,4,5</value>
     </filters>
-    <label>Clients</label>
+    <label>All Clients</label>
 </ListView>

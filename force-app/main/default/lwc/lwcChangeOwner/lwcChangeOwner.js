@@ -1,4 +1,5 @@
 import { LightningElement,track } from 'lwc';
+import getPermission from '@salesforce/apex/ClsChangeOwner.getPermission';
 import getUser from '@salesforce/apex/ClsChangeOwner.getUser';
 import getAccounts from '@salesforce/apex/ClsChangeOwner.getAccounts';
 import getOpportunity from '@salesforce/apex/ClsChangeOwner.getOpportunity';
@@ -14,6 +15,7 @@ export default class LwcChangeOwner extends LightningElement {
     currentStep = '1';
     maxStep = 8;
 
+    @track showData;
     @track tabId;
     @track user;
     @track isLoading = false;
@@ -55,6 +57,7 @@ export default class LwcChangeOwner extends LightningElement {
             setTabLabel(this.tabId, 'Change Owner');
             setTabIcon(this.tabId, 'standard:app', { iconAlt: 'Change Owner' });
         }); 
+        this.onLoadGetPermission();
     }
 
     renderedCallback() {
@@ -95,6 +98,19 @@ export default class LwcChangeOwner extends LightningElement {
         filterLogic: '1 AND 2 AND 3', 
         orderBy: [{fieldPath: 'Name', direction: 'asc'}]
     };
+
+    onLoadGetPermission(){
+        this.isLoading = true;
+        getPermission({})
+        .then(result => {
+            this.isLoading = false;
+            this.showData = result;
+        })
+        .catch(error => {
+            this.isLoading = false;
+            console.log('error:'+ error.message);
+        }); 
+    }
 
     async handleUser(event){
         this.isLoading = true;

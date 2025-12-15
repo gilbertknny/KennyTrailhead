@@ -132,10 +132,22 @@ public class ClsNewRequest_Test {
         ClsNewRequest.getMasterDataSection(cob,null);
         ClsNewRequest.getCurrency();
         ClsNewRequest.getContract(acc.Id);
-        ClsNewRequest.getAssetSectionMOU(null);
-        ClsNewRequest.getAssetCategoryMOU(null,null);
-        ClsNewRequest.getCoverage(null,null,null,null);
-        ClsNewRequest.getCoverageDetail(null,null);
+        ClsNewRequest.getAssetSectionMOU(null,'mou');
+        ClsNewRequest.getAssetCategoryMOU(null,null,'mou');
+        List<String> assetsection = new List<String>();
+        assetsection.add('Material Damage');
+        ClsNewRequest.getCoverage(null,assetsection,null,null,'mou');
+        ClsNewRequest.getCoverageDetail(null,null,assetsection,'mou');
+        Map<String,Object> mapObj = new Map<String,Object>();
+        mapObj.put('section',1);
+        InsurancePolicyCoverage ipc = new InsurancePolicyCoverage();
+        ClsNewRequest.createCoverage(mapObj,ipc);
+        mapObj.put('section',2);
+        ClsNewRequest.createCoverage(mapObj,ipc);
+        mapObj.put('section',3);
+        ClsNewRequest.createCoverage(mapObj,ipc);
+        mapObj.put('section',4);
+        ClsNewRequest.createCoverage(mapObj,ipc);
 
         List<String> listdata1 = new List<String>();
         listdata1.add('Name');
@@ -218,6 +230,7 @@ public class ClsNewRequest_Test {
         ClsNewRequest.saveDataMOU(data);
         ClsNewRequest.deleteFile(cd.Id);
         ClsNewRequest.getOpportunity(result);
+        ClsNewRequest.getSectionAmount(result,'Material Damage');
     }
     
     @IsTest

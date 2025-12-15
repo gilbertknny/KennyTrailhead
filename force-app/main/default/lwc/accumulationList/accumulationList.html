@@ -1,0 +1,59 @@
+<template>
+    <lightning-card title="Accumulation" icon-name="custom:custom18">
+        <template if:true={isLoading}>
+            <div class="slds-text-align_center slds-p-around_medium">
+                <lightning-spinner alternative-text="Loading" size="small"></lightning-spinner>
+            </div>
+        </template>
+
+        <template if:true={hasAccumulations}>
+            <div class="slds-p-horizontal_medium slds-p-vertical_small">
+                <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered">
+                    <thead>
+                        <tr class="slds-line-height_reset">
+                            <th scope="col" style="width: 50%;">
+                                <div class="slds-truncate" title="Name">Name</div>
+                            </th>
+                            <th scope="col" style="width: 50%;">
+                                <div class="slds-truncate" title="Group Name">Group Name</div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={accumulationList} for:item="acc">
+                            <tr key={acc.id} class="slds-hint-parent">
+                                <td>
+                                    <a href="#" 
+                                       data-id={acc.id} 
+                                       onclick={handleNavigate}
+                                       class="slds-truncate">
+                                        {acc.name}
+                                    </a>
+                                </td>
+                                <td>
+                                    <div class="slds-truncate">{acc.groupId}</div>
+                                </td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+            </div>
+        </template>
+
+        <template if:true={noAccumulations}>
+            <div class="slds-text-align_center slds-p-around_medium">
+                <lightning-icon icon-name="utility:info" size="small" alternative-text="Info"></lightning-icon>
+                <p class="slds-m-top_small">No accumulation records found for this quote.</p>
+            </div>
+        </template>
+
+        <template if:true={error}>
+            <div class="slds-text-align_center slds-p-around_medium">
+                <lightning-icon icon-name="utility:error" size="small" variant="error" alternative-text="Error"></lightning-icon>
+                <p class="slds-m-top_small slds-text-color_error">
+                    Error loading accumulations. Please contact your administrator.
+                </p>
+            </div>
+        </template>
+    </lightning-card>
+</template>

@@ -1,0 +1,409 @@
+<template>
+    <template if:true={isLoading}>
+        <lightning-spinner alternative-text="Loading..." size="medium" class="slds-is-fixed"></lightning-spinner>
+    </template>
+
+    <lightning-card title="">
+        <div class="slds-p-around_medium">
+
+            <div class="slds-box slds-theme_default slds-m-bottom_medium" if:true={showAccumulationList}>
+                <div class="slds-text-title_caps slds-m-bottom_small">
+                    LIST OF ACCUMULATION
+                </div>
+                <div class="scroll-container">
+                    <table class="slds-table slds-table_cell-buffer slds-table_bordered responsive-table">
+                        <thead>
+                            <tr class="slds-line-height_reset">
+                                <th>GROUP</th>
+                                <th>REQUEST NUM</th>
+                                <th>POLICY NUM</th>
+                                <th>THE INSURED NAME</th>
+                                <th>ADDRESS</th>
+                                <th>CUR</th>
+                                <th>SUM INSURED</th>
+                                <th>RISK ID</th>
+                                <th>INCEPTION/ENDORST EFFECTIVE DATE</th>
+                                <th>ACTION</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template for:each={accumulationList} for:item="item">
+                                <tr key={item.id}>
+                                    <td>
+                                        <template if:true={item.groupId}>
+                                            <lightning-badge label={item.groupId}></lightning-badge>
+                                        </template>
+                                        <template if:false={item.groupId}>
+                                            -
+                                        </template>
+                                    </td>
+                                    <td>{item.requestNum}</td>
+                                    <td>{item.policyNum}</td>
+                                    <td>{item.insuredName}</td>
+                                    <td>{item.address}</td>
+                                    <td>{item.cur}</td>
+                                    <td class="slds-text-align_right">
+                                        <lightning-formatted-number 
+                                            value={item.sumInsured} 
+                                            format-style="currency" 
+                                            currency-code={item.cur}>
+                                        </lightning-formatted-number>
+                                        <template if:true={item.showConversion}>
+                                            <br/>
+                                            <span class="slds-text-color_weak" style="font-size: 0.75rem;">
+                                                (≈ IDR <lightning-formatted-number 
+                                                    value={item.sumInsuredIDR} 
+                                                    format-style="decimal"
+                                                    minimum-fraction-digits="2"
+                                                    maximum-fraction-digits="2">
+                                                </lightning-formatted-number>)
+                                            </span>
+                                        </template>
+                                    </td>
+                                    <td>{item.riskId}</td>
+                                    <td>{item.effectiveDate}</td>
+                                    <td>
+                                        <template if:true={item.canDelete}>
+                                            <lightning-button-icon 
+                                                icon-name="utility:delete"
+                                                alternative-text="Remove" 
+                                                title="Remove" 
+                                                data-id={item.id}
+                                                onclick={handleRemove}>
+                                            </lightning-button-icon>
+                                        </template>
+                                        <template if:false={item.canDelete}>
+                                            <lightning-button-icon 
+                                                icon-name="utility:lock"
+                                                alternative-text="Cannot Remove - Not Owner" 
+                                                title="You don't have permission to remove this risk (Owner only)"
+                                                variant="border-filled"
+                                                disabled>
+                                            </lightning-button-icon>
+                                        </template>
+                                    </td>
+                                </tr>
+                            </template>
+                        </tbody>
+                        <tfoot>
+                            <tr class="slds-line-height_reset">
+                                <td colspan="6" class="slds-text-align_right slds-text-title_bold">
+                                    TOTAL TSI:
+                                </td>
+                                <td class="slds-text-align_right slds-text-title_bold" style="background-color: #f3f3f3;">
+                                    <lightning-formatted-number 
+                                        value={totalTSI} 
+                                        format-style="currency" 
+                                        currency-code="IDR">
+                                    </lightning-formatted-number>
+                                </td>
+                                <td colspan="3"></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+
+            <div class="slds-box slds-theme_default slds-m-bottom_medium">
+                <div class="slds-text-title_caps slds-m-bottom_small">
+                    SELECTION CRITERIA
+                    <template if:true={isLimitReached}>
+                        <span class="slds-text-color_error slds-m-left_small">(Join Limit Reached)</span>
+                    </template>
+                </div>
+                
+                <template if:true={showInsurancePeriod}>
+                    <div class="slds-grid slds-wrap slds-gutters">
+                        <div class="slds-col slds-size_1-of-2">
+                            <lightning-input 
+                                label="START DATE PERIODE" 
+                                type="date"
+                                name="startDatePeriode" 
+                                value={searchCriteria.startDatePeriode} 
+                                onchange={handleSearchCriteriaChange}
+                                disabled={isSearchDisabled}>
+                            </lightning-input>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <lightning-input 
+                                label="END DATE PERIODE" 
+                                type="date"
+                                name="endDatePeriode" 
+                                value={searchCriteria.endDatePeriode} 
+                                onchange={handleSearchCriteriaChange}
+                                disabled={isSearchDisabled}>
+                            </lightning-input>
+                        </div>
+                    </div>
+                </template>
+
+                <template if:true={showMarineFields}>
+                    <div class="slds-grid slds-wrap slds-gutters slds-m-top_small">
+                        <div class="slds-col slds-size_1-of-2">
+                            <lightning-input 
+                                label="VESSEL NAME" 
+                                name="vesselName" 
+                                value={searchCriteria.vesselName} 
+                                onchange={handleSearchCriteriaChange}
+                                disabled={isSearchDisabled}>
+                            </lightning-input>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <lightning-input 
+                                label="VOYAGE NUMBER" 
+                                name="voyageNumber" 
+                                value={searchCriteria.voyageNumber} 
+                                onchange={handleSearchCriteriaChange}
+                                disabled={isSearchDisabled}>
+                            </lightning-input>
+                        </div>
+                    </div>
+                </template>
+
+                <template if:true={showBasicFields}>
+                    <div class="slds-grid slds-wrap slds-gutters slds-m-top_small">
+                        <div class="slds-col slds-size_1-of-3">
+                            <lightning-input 
+                                label="RISK NAME" 
+                                name="riskName" 
+                                value={searchCriteria.riskName} 
+                                onchange={handleSearchCriteriaChange}
+                                disabled={isSearchDisabled}>
+                            </lightning-input>
+                        </div>
+                        <div class="slds-col slds-size_1-of-3">
+                            <lightning-input 
+                                label="ADDRESS" 
+                                name="address" 
+                                value={searchCriteria.address} 
+                                onchange={handleSearchCriteriaChange}
+                                disabled={isSearchDisabled}>
+                            </lightning-input>
+                        </div>
+                        <div class="slds-col slds-size_1-of-3">
+                            <lightning-input 
+                                label="CITY" 
+                                value={city} 
+                                readonly>
+                            </lightning-input>
+                        </div>
+                    </div>
+                    
+                    <div class="slds-grid slds-wrap slds-gutters slds-m-top_small">
+                        <div class="slds-col slds-size_1-of-3">
+                            <lightning-input 
+                                label="ZIP CODE" 
+                                name="zipCode" 
+                                value={searchCriteria.zipCode} 
+                                onchange={handleSearchCriteriaChange}
+                                disabled={isSearchDisabled}>
+                            </lightning-input>
+                        </div>
+                        <div class="slds-col slds-size_1-of-3">
+                            <lightning-input 
+                                label="N.K.R" 
+                                name="nkr" 
+                                value={searchCriteria.nkr} 
+                                onchange={handleSearchCriteriaChange}
+                                disabled={isSearchDisabled}>
+                            </lightning-input>
+                        </div>
+                        <div class="slds-col slds-size_1-of-3">
+                            <lightning-input 
+                                label="COB" 
+                                value={bsnId} 
+                                readonly>
+                            </lightning-input>
+                        </div>
+                    </div>
+                </template>
+
+                <template if:true={showCatastropheFields}>
+                    <div class="slds-grid slds-wrap slds-gutters slds-m-top_small">
+                        <div class="slds-col slds-size_1-of-3">
+                            <lightning-input 
+                                label="RISK NAME" 
+                                name="riskName" 
+                                value={searchCriteria.riskName} 
+                                onchange={handleSearchCriteriaChange}
+                                disabled={isSearchDisabled}>
+                            </lightning-input>
+                        </div>
+                        <div class="slds-col slds-size_1-of-3">
+                            <lightning-input 
+                                label="ADDRESS" 
+                                name="address" 
+                                value={searchCriteria.address} 
+                                onchange={handleSearchCriteriaChange}
+                                disabled={isSearchDisabled}>
+                            </lightning-input>
+                        </div>
+                        <div class="slds-col slds-size_1-of-3">
+                            <lightning-input 
+                                label="CITY" 
+                                value={city} 
+                                readonly>
+                            </lightning-input>
+                        </div>
+                    </div>
+                    
+                    <div class="slds-grid slds-wrap slds-gutters slds-m-top_small">
+                        <div class="slds-col slds-size_1-of-3">
+                            <lightning-input 
+                                label="ZIP CODE" 
+                                name="zipCode" 
+                                value={searchCriteria.zipCode} 
+                                onchange={handleSearchCriteriaChange}
+                                disabled={isSearchDisabled}>
+                            </lightning-input>
+                        </div>
+                        <div class="slds-col slds-size_1-of-3">
+                             </div>
+                        <div class="slds-col slds-size_1-of-3">
+                            <lightning-input 
+                                label="COB" 
+                                value={bsnId} 
+                                readonly>
+                            </lightning-input>
+                        </div>
+                    </div>
+                </template>
+
+                <template if:true={showInsuredNameOnly}>
+                    <div class="slds-grid slds-wrap slds-gutters slds-m-top_small">
+                        <div class="slds-col slds-size_1-of-2">
+                            <lightning-input 
+                                label="THE INSURED NAME" 
+                                name="insuredName" 
+                                value={searchCriteria.insuredName} 
+                                onchange={handleSearchCriteriaChange}
+                                disabled={isSearchDisabled}>
+                            </lightning-input>
+                        </div>
+                    </div>
+                </template>
+
+                <div class="slds-grid slds-m-top_small">
+                    <div class="slds-col">
+                        <lightning-button 
+                            label="SEARCH" 
+                            variant="brand" 
+                            onclick={handleSearch}
+                            disabled={isSearchDisabled}>
+                        </lightning-button>
+                        <lightning-button 
+                            label="RESET" 
+                            class="slds-m-left_small" 
+                            onclick={handleReset}
+                            disabled={isLimitReached}>
+                        </lightning-button>
+                    </div>
+                    <div class="slds-col slds-text-align_right">
+                        <lightning-button 
+                            label={buttonLabel}
+                            variant="brand" 
+                            onclick={handleSetAccumulation}
+                            disabled={isSaveDisabled}>
+                        </lightning-button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slds-box slds-theme_default slds-m-bottom_medium" if:true={showRequestList}>
+                <div class="slds-text-title_caps slds-m-bottom_small">
+                    REQUEST LIST
+                </div>
+                <div class="scroll-container">
+                    <table class="slds-table slds-table_cell-buffer slds-table_bordered responsive-table">
+                        <thead>
+                            <tr class="slds-line-height_reset">
+                                <th>GROUP</th>
+                                <th>REQUEST NUM.</th>
+                                
+                                <template if:true={isStandardColumn}>
+                                    <th>POLICY NUM.</th>
+                                    <th>RISK NAME</th>
+                                    <th>ADDRESS</th>
+                                    <th>RISK ID</th>
+                                </template>
+
+                                <template if:true={showMarineFields}>
+                                    <th>VESSEL NAME</th>
+                                    <th>VOYAGE NUMBER</th>
+                                    <th>POLICY NUM.</th>
+                                </template>
+
+                                <template if:true={showInsuredNameOnly}>
+                                    <th>POLICY NUM.</th>
+                                    <th>THE INSURED NAME</th>
+                                </template>
+                                
+                                <template if:true={showInsurancePeriod}>
+                                    <th>START DATE</th>
+                                    <th>END DATE</th>
+                                </template>
+
+                                <th>ACTION</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template for:each={requestList} for:item="req">
+                                <tr key={req.id}>
+                                    <td>
+                                        <template if:true={req.groupId}>
+                                            <lightning-badge label={req.groupId} icon-name="utility:groups"></lightning-badge>
+                                        </template>
+                                        <template if:false={req.groupId}>
+                                            -
+                                        </template>
+                                    </td>
+                                    <td>{req.requestNum}</td>
+
+                                    <template if:true={isStandardColumn}>
+                                        <td>{req.policyNum}</td>
+                                        <td>{req.riskName}</td>
+                                        <td>{req.address}</td>
+                                        <td>{req.riskId}</td>
+                                    </template>
+
+                                    <template if:true={showMarineFields}>
+                                        <td>{req.vesselName}</td>
+                                        <td>{req.voyageNumber}</td>
+                                        <td>{req.policyNum}</td>
+                                    </template>
+
+                                    <template if:true={showInsuredNameOnly}>
+                                        <td>{req.policyNum}</td>
+                                        <td>{req.insuredName}</td>
+                                    </template>
+                                    
+                                    <template if:true={showInsurancePeriod}>
+                                        <td>
+                                            <lightning-formatted-date-time value={req.startDatePeriode}></lightning-formatted-date-time>
+                                        </td>
+                                        <td>
+                                            <lightning-formatted-date-time value={req.endDatePeriode}></lightning-formatted-date-time>
+                                        </td>
+                                    </template>
+
+                                    <td>
+                                        <lightning-button 
+                                            label="Join" 
+                                            data-id={req.id} 
+                                            onclick={handleJoin}
+                                            disabled={isLimitReached}>
+                                        </lightning-button>
+                                    </td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="slds-text-body_small slds-m-top_small">
+                    <i>note: Only displaying request/policy which its insurance-start-date is in the same Treaty year.</i>
+                </div>
+            </div>
+
+        </div>
+    </lightning-card>
+</template>

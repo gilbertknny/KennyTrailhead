@@ -3,6 +3,57 @@
     <apiVersion>65.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <assignments>
+        <name>Assignment_Clause</name>
+        <label>Assignment Clause</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>ClauseWrp.insurancepolicyid</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>PolicyID</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>ClauseWrp.opportunityid</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>NewOptyId</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>ClauseWrp.clausedesccl</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Loop_Clause.Clause_Description__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>ClauseWrp.clausename</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Loop_Clause.Clause_Name__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>ClauseWrp.clausaid</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Loop_Clause.Clause_ID__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>LClauseWrp</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>ClauseWrp</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_Clause</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
         <name>Assignment_CoInsurer</name>
         <label>Assignment CoInsurer</label>
         <locationX>0</locationX>
@@ -93,6 +144,22 @@
         </connector>
     </assignments>
     <assignments>
+        <name>Assignment_Policy</name>
+        <label>Assignment Policy</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>PolicyID</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Insurance_Policy_New.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Get_Clause</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
         <name>Assignment_QQ</name>
         <label>Assignment QQ</label>
         <locationX>0</locationX>
@@ -122,36 +189,6 @@
             <targetReference>Loop_QQ</targetReference>
         </connector>
     </assignments>
-    <assignments>
-        <name>AssignmentClause</name>
-        <label>AssignmentClause</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <assignmentItems>
-            <assignToReference>ClauseObj</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>LoopClause</elementReference>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>ClauseObj.Opportunity__c</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>NewOptyId</elementReference>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>ListClauseObj</assignToReference>
-            <operator>Add</operator>
-            <value>
-                <elementReference>ClauseObj</elementReference>
-            </value>
-        </assignmentItems>
-        <connector>
-            <targetReference>LoopClause</targetReference>
-        </connector>
-    </assignments>
     <decisions>
         <name>Check_Clause</name>
         <label>Check Clause</label>
@@ -165,14 +202,14 @@
             <name>Clause_Found</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>GetRecordClause</leftValueReference>
+                <leftValueReference>Get_Clause</leftValueReference>
                 <operator>IsNull</operator>
                 <rightValue>
                     <booleanValue>false</booleanValue>
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>LoopClause</targetReference>
+                <targetReference>Loop_Clause</targetReference>
             </connector>
             <label>Clause Found</label>
         </rules>
@@ -250,6 +287,31 @@
         </rules>
     </decisions>
     <decisions>
+        <name>Check_Policy</name>
+        <label>Check Policy</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Create_Policy</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Policy_Found</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Insurance_Policy_New</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assignment_Policy</targetReference>
+            </connector>
+            <label>Policy Found</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>Check_QQ</name>
         <label>Check QQ</label>
         <locationX>0</locationX>
@@ -278,6 +340,20 @@
     <environments>Default</environments>
     <interviewLabel>Transaction Data Clone {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Transaction Data Clone</label>
+    <loops>
+        <name>Loop_Clause</name>
+        <label>Loop Clause</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <collectionReference>Get_Clause</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Assignment_Clause</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>Upsert_Clause</targetReference>
+        </noMoreValuesConnector>
+    </loops>
     <loops>
         <name>Loop_CoInsurer</name>
         <label>Loop CoInsurer</label>
@@ -334,20 +410,6 @@
             <targetReference>Create_QQ</targetReference>
         </noMoreValuesConnector>
     </loops>
-    <loops>
-        <name>LoopClause</name>
-        <label>LoopClause</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <collectionReference>GetRecordClause</collectionReference>
-        <iterationOrder>Asc</iterationOrder>
-        <nextValueConnector>
-            <targetReference>AssignmentClause</targetReference>
-        </nextValueConnector>
-        <noMoreValuesConnector>
-            <targetReference>CreateClause</targetReference>
-        </noMoreValuesConnector>
-    </loops>
     <processMetadataValues>
         <name>BuilderType</name>
         <value>
@@ -395,6 +457,35 @@
         <inputReference>ListInstallmentObj</inputReference>
     </recordCreates>
     <recordCreates>
+        <name>Create_Policy</name>
+        <label>Create Policy</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignRecordIdToReference>PolicyID</assignRecordIdToReference>
+        <connector>
+            <targetReference>Get_Clause</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>NameInsuredId</field>
+            <value>
+                <elementReference>AccountId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>PolicyName</field>
+            <value>
+                <stringValue>Clone</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>SourceOpportunityId</field>
+            <value>
+                <elementReference>NewOptyId</elementReference>
+            </value>
+        </inputAssignments>
+        <object>InsurancePolicy</object>
+    </recordCreates>
+    <recordCreates>
         <name>Create_QQ</name>
         <label>Create QQ</label>
         <locationX>0</locationX>
@@ -404,16 +495,60 @@
         </connector>
         <inputReference>ListQQObj</inputReference>
     </recordCreates>
-    <recordCreates>
-        <name>CreateClause</name>
-        <label>CreateClause</label>
+    <recordLookups>
+        <name>Get_Clause</name>
+        <label>Get Clause</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>GetRecordCoInsurer</targetReference>
+            <targetReference>Check_Clause</targetReference>
         </connector>
-        <inputReference>ListClauseObj</inputReference>
-    </recordCreates>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Opportunity__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>OldOptyId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>InsurancePolicyProductClause</object>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>BSN_ID__c</queriedFields>
+        <queriedFields>Master_Data__c</queriedFields>
+        <queriedFields>Clause_Description__c</queriedFields>
+        <queriedFields>Clause_ID__c</queriedFields>
+        <queriedFields>Clause_Name__c</queriedFields>
+        <queriedFields>InsurancePolicyId</queriedFields>
+        <queriedFields>Is_Additional__c</queriedFields>
+        <queriedFields>Is_Changed__c</queriedFields>
+        <queriedFields>Name</queriedFields>
+        <queriedFields>Opportunity__c</queriedFields>
+        <queriedFields>Partition_Code__c</queriedFields>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Insurance_Policy_New</name>
+        <label>Get Insurance Policy New</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Check_Policy</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>SourceOpportunityId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>NewOptyId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>InsurancePolicy</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
     <recordLookups>
         <name>Get_Record_Consignee_Beneficiary</name>
         <label>Get Record Consignee / Beneficiary</label>
@@ -451,51 +586,6 @@
         <queriedFields>Name</queriedFields>
         <queriedFields>Consignee_Beneficiary_Name__c</queriedFields>
         <queriedFields>Consignee_Beneficiary_Address__c</queriedFields>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
-    </recordLookups>
-    <recordLookups>
-        <name>GetRecordClause</name>
-        <label>GetRecordClause</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
-        <connector>
-            <targetReference>Check_Clause</targetReference>
-        </connector>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>Recordtype_Developername__c</field>
-            <operator>EqualTo</operator>
-            <value>
-                <stringValue>Clause</stringValue>
-            </value>
-        </filters>
-        <filters>
-            <field>Opportunity__c</field>
-            <operator>EqualTo</operator>
-            <value>
-                <elementReference>OldOptyId</elementReference>
-            </value>
-        </filters>
-        <filters>
-            <field>Lintaswata_Sync__c</field>
-            <operator>EqualTo</operator>
-            <value>
-                <booleanValue>true</booleanValue>
-            </value>
-        </filters>
-        <getFirstRecordOnly>false</getFirstRecordOnly>
-        <object>Transaction_Data__c</object>
-        <queriedFields>Id</queriedFields>
-        <queriedFields>Opportunity__c</queriedFields>
-        <queriedFields>Master_Data__c</queriedFields>
-        <queriedFields>Name</queriedFields>
-        <queriedFields>Clauses_Name__c</queriedFields>
-        <queriedFields>Clause_Description__c</queriedFields>
-        <queriedFields>Is_Additional__c</queriedFields>
-        <queriedFields>Is_Changed__c</queriedFields>
-        <queriedFields>Partition_Code__c</queriedFields>
-        <queriedFields>RecordTypeId</queriedFields>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordLookups>
@@ -635,17 +725,52 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>GetRecordClause</targetReference>
+            <targetReference>Get_Insurance_Policy_New</targetReference>
         </connector>
     </start>
     <status>Active</status>
+    <subflows>
+        <name>Upsert_Clause</name>
+        <label>Upsert Clause</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>GetRecordCoInsurer</targetReference>
+        </connector>
+        <flowName>Upsert_Insurance_Policy_Product_Clause</flowName>
+        <inputAssignments>
+            <name>LintaswataDateTime</name>
+            <value>
+                <elementReference>$Flow.CurrentDateTime</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>LintaswataSync</name>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>ListClause</name>
+            <value>
+                <elementReference>LClauseWrp</elementReference>
+            </value>
+        </inputAssignments>
+    </subflows>
     <variables>
-        <name>ClauseObj</name>
-        <dataType>SObject</dataType>
+        <name>AccountId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>ClauseWrp</name>
+        <apexClass>ApexDefinedFlow</apexClass>
+        <dataType>Apex</dataType>
         <isCollection>false</isCollection>
         <isInput>false</isInput>
         <isOutput>false</isOutput>
-        <objectType>Transaction_Data__c</objectType>
     </variables>
     <variables>
         <name>CoInsurerObj</name>
@@ -672,12 +797,12 @@
         <objectType>Transaction_Data__c</objectType>
     </variables>
     <variables>
-        <name>ListClauseObj</name>
-        <dataType>SObject</dataType>
+        <name>LClauseWrp</name>
+        <apexClass>ApexDefinedFlow</apexClass>
+        <dataType>Apex</dataType>
         <isCollection>true</isCollection>
         <isInput>false</isInput>
         <isOutput>false</isOutput>
-        <objectType>Transaction_Data__c</objectType>
     </variables>
     <variables>
         <name>ListCoInsurerObj</name>
@@ -723,6 +848,13 @@
         <dataType>String</dataType>
         <isCollection>false</isCollection>
         <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>PolicyID</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
         <isOutput>false</isOutput>
     </variables>
     <variables>

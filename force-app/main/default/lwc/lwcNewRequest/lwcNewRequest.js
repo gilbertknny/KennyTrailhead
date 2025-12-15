@@ -22,19 +22,18 @@ import getObject from '@salesforce/apex/ClsNewRequest.getObject';
 import getRate from '@salesforce/apex/ClsNewRequest.getRate';
 import getValidateDouble from '@salesforce/apex/ClsNewRequest.getValidateDouble';
 import getContract from '@salesforce/apex/ClsNewRequest.getContract';
-import getAssetSectionMOU from '@salesforce/apex/ClsNewRequest.getAssetSectionMOU';
-import getAssetCategoryMOU from '@salesforce/apex/ClsNewRequest.getAssetCategoryMOU';
 import getCurrency from '@salesforce/apex/ClsNewRequest.getCurrency';
 import { getFocusedTabInfo,setTabLabel,closeTab,setTabIcon,refreshTab} from 'lightning/platformWorkspaceApi';
 import { NavigationMixin,CurrentPageReference } from "lightning/navigation";
-import urlCreateAccount from '@salesforce/label/c.URL_Create_Account';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import getWording from '@salesforce/apex/ClsNewRequest.getWording';
 import LightningAlert from 'lightning/alert';
 import { CloseActionScreenEvent } from 'lightning/actions';
 import myModal from 'c/lwcRenewal';
 import LightningConfirm from 'lightning/confirm';
-import modalMOU from 'c/lwcNewRequestMOU';
+import modalRealisasi from 'c/lwcNewRequestAsset';
+import modalCoverage from 'c/lwcNewRequestCoverage';
+
 
 export default class LwcNewRequest extends NavigationMixin(LightningElement) {
     activeSections = [];//['A'];
@@ -111,8 +110,7 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
     @track disabledAccount = false;
     @track showFull = false;
     @track showDouble = false;
-    @track showMOU = false;
-    @track showFieldMOU = false;
+    @track showStandard = true;
     
     //REQUESTOR
     @track requestorType;
@@ -187,22 +185,24 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
     @track showPremium2;
 
     //MOU
+    @track showMOU;
+    @track showFieldMOU;
     @track datafieldMOU1 = [];
     @track mapInputMOU1 = new Map();
     @track filterMOU1;
     @track mouId1;
-    @track assetSection1MOU;
-    @track assetCategory1MOU;
-    @track assetSectionId1MOU;
-    @track assetCategoryId1MOU;
-    @track coverage1 = [];
-    @track dataAsset1 = [
-        {
-            id : '1',
-            assetCategory : [],
-            coverage : []
-        }
-    ];
+    @track dataAssetMOU1 = [];
+    @track dataCoverageMOU1 = [];
+
+    //REALISASI
+    @track showRealisasi1;
+    @track showFieldRealisasi1;
+    @track datafieldRealisasi1 = [];
+    @track mapInputRealisasi1 = new Map();
+    @track filterRealisasi1;
+    @track realisasiId1;
+    @track dataAssetRealisasi1 = [];
+    @track dataCoverageRealisasi1 = [];
 
     //SUMMARY
     @track rate;
@@ -274,8 +274,44 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
         { label: 'Delete', name: 'delete' }
     ];
 
-    columnscoverage1 = [
+    columnsAssetRealisasi1 = [
         {type: 'action', typeAttributes: { rowActions: this.actions} },
+        {label:'Section',fieldName:'sectionName',type:'text'},
+        {label:'Category',fieldName:'categoryName',type:'text'},
+        {label:'Currency',fieldName:'currencyName',type:'text'},
+        {label:'Sum Insured',fieldName:'sumInsured',type:'number'},
+        {label:'Sum Insured IDR',fieldName:'sumInsuredIDR',type:'number'}
+    ];
+
+    columnsCoverageRealisasi1 = [
+        {type: 'action', typeAttributes: { rowActions: this.actions} },
+        {label:'Section',fieldName:'sectionName',type:'text'},
+        {label:'Coverage',fieldName:'coverageName',type:'text'},
+        {label:'Proposed Rate',fieldName:'proposedFixedAmount',type:'number'},
+        {label:'Deductible PCT (%)',fieldName:'deductiblePCT',type:'number' },
+        {label:'Deductible Flag',fieldName:'deductibleName',type:'text'},
+        {label:'Minimum Curr',fieldName:'minimumCurId',type:'text'},
+        {label:'Minimum Amount',fieldName:'minimumAmount',type:'number'},
+        {label:'Banks Fee (%)',fieldName:'banksFee',type:'number'},
+        {label:'Agent Comission (%)',fieldName:'agentComission',type:'number'},
+        {label:'Broker Comission (%)',fieldName:'brokerComission',type:'number'},
+        {label:'Commision (%)',fieldName:'generalRPremiumPCT',type:'number'},
+        {label:'Overiding (%)',fieldName:'overdngComission',type:'number'},
+        {label:'Max Person',fieldName:'maxPerson',type:'number'}
+    ];
+
+    columnsAssetMOU1 = [
+        {type: 'action', typeAttributes: { rowActions: this.actions} },
+        {label:'Section',fieldName:'sectionName',type:'text'},
+        {label:'Category',fieldName:'categoryName',type:'text'},
+        {label:'Currency',fieldName:'currencyName',type:'text'},
+        {label:'Sum Insured',fieldName:'sumInsured',type:'number'},
+        {label:'Sum Insured IDR',fieldName:'sumInsuredIDR',type:'number'}
+    ];
+
+    columnsCoverageMOU1 = [
+        {type: 'action', typeAttributes: { rowActions: this.actions} },
+        {label:'Section',fieldName:'sectionName',type:'text'},
         {label:'Coverage',fieldName:'coverageName',type:'text'},
         {label:'Proposed Rate',fieldName:'proposedFixedAmount',type:'number'},
         {label:'Deductible PCT (%)',fieldName:'deductiblePCT',type:'number' },
@@ -317,7 +353,7 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
     };
 
     matchingInfo = {
-        primaryField: { fieldPath: 'Name', mode: 'startsWith' },
+        primaryField: { fieldPath: 'Name', mode: 'contains' },
         additionalFields: [{ fieldPath: 'Phone' }],
     };
 
@@ -328,6 +364,16 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
 
     matchingInfoMOU = {
         primaryField: { fieldPath: 'ContractNumber', mode: 'contains' },
+        additionalFields: [{ fieldPath: 'Additional__c' }],
+    };
+
+    displayInfoRealisasi = {
+        primaryField: 'Name',
+        additionalFields: ['Additional__c'],
+    };
+
+    matchingInfoRealisasi = {
+        primaryField: { fieldPath: 'Name', mode: 'contains' },
         additionalFields: [{ fieldPath: 'Additional__c' }],
     };
 
@@ -366,6 +412,7 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
 
     currentPageReference = null;
 
+    //<-- START ONLOAD
     @wire(CurrentPageReference)
     getPageReferenceParameters(currentPageReference) {
        if (currentPageReference) {
@@ -384,7 +431,41 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
           }
        }
     }
-
+    //GET OPPORTUNITY DETAIL
+    getOpportunityDetail(recordid){
+        this.isLoading = true;
+        getOpportunity({ recordId: recordid })
+        .then(rec => {
+            this.isLoading = false;
+            this.showrecord = false;
+            this.opportunityTypeId = rec.Opportunity_Type__c;
+            this.accountId = rec.AccountId;
+            this.getAccountDetail(this.accountId);
+            if(this.accountId != undefined) this.disabledAccount = true;
+            //const single = this.template.querySelector('input[data-id="1"]');
+            //single.checked = true;
+            this.insuredId = rec.The_Insured_Name__c;
+            this.getInsuredDetail(this.insuredId);
+            this.showSingle = true;
+            this.showMultiple = false;
+            this.contractTypeId = undefined;
+            this.contractTypeId2 = undefined;
+            this.getPicklistContractType();
+            this.cob1 = rec.COB__c;
+            this.description = rec.Description;
+            //const optyname = recName.split(' - ');
+            //if(optyname[1] != undefined) this.riskName = rec.Name;
+            this.changeCOB(this.cob1,'');
+            this.productTypeId = rec.Product_Type_Id__c;
+            this.productTypeName = rec.Product_Type__c;
+            this.getPicklistPolicy('',1,this.productTypeId);
+        })
+        .catch(error => {
+            this.isLoading = false;
+            console.error('Error fetching Opportunity details:', error.message);
+        });
+    }
+    //ONLOAD
     connectedCallback() {
         this.showFull = false;
         if(this.recordId == undefined){
@@ -402,11 +483,28 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
             if(this.accountId != undefined) this.disabledAccount = true;
             this.showFull = false;
         }
-        //console.log('recordId:'+this.recordId);
-        //console.log('account:'+this.account);
         console.log('Gerry3');
     }
+    //GET PICKLIST OPPORTUNITY TYPE
+    getPicklistOpportunityType(){
+        getPicklistSTD({
+            objectName : 'Opportunity',
+            fieldName : 'Opportunity_Type__c'
+        })
+        .then(result => {
+            this.opportunityType = [];
+            for (var key in result) {
+                if(key != 'RN' && key != 'ED') this.opportunityType.push({label:result[key], value:key});
+            }
+            return this.opportunityType;
+        })
+        .catch(error => {
+            console.log('error:'+ error.message);
+        });
+    }
+    //--> END ONLOAD
 
+    //<-- START CLOSE
     disconnectedCallback(){
         if(this.actionsave != 'yes'){
             //this.successMessage('See u again!');
@@ -453,7 +551,9 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
             }
         }
     }
+    //--> END CLOSE
 
+    //BUTTON RENEWAL
     async handleRenewal(event){
         const result = await myModal.open({});
         console.log('result:'+result);
@@ -472,21 +572,226 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
         }
     }
 
-    handleAddClick(event){
-        let url = urlCreateAccount;
-        this.navigateToURL(url);
+    //<-- START OPPORTUNITY TYPE
+    //CHANGE OPPORTUNITY TYPE
+    handleOpportunityType(event){
+        this.opportunityTypeId = event.detail.value;
+        this.getShowMOU();
+        this.getShowRealisasi();
     }
-
-    handleSectionToggle(event) {
-        const openSections = event.detail.openSections;
-
-        if (openSections.length === 0) {
-            this.activeSectionsMessage = 'All sections are closed';
-        } else {
-            this.activeSectionsMessage = 'Open sections: ' + openSections.join(', ');
+    //GET SHOW FIELD MOU
+    getShowMOU(){
+        this.mouId1 = undefined;
+        this.showFieldMOU = false;
+        if(this.opportunityTypeId == 'NB' && this.cob1 == '301' && this.accountId != undefined){
+            this.getContractData(this.accountId);
         }
     }
+    //GET DATA MOU
+    getContractData(recordId){
+        this.isLoading = true;
+        getContract ({
+            recordId: recordId
+        }).then(result =>{
+            this.isLoading = false;
+            this.showFieldMOU = result;
+            if(result == true){
+                this.filterMOU1 = {
+                    criteria : [
+                        {
+                            fieldPath : 'AccountId',
+                            operator : 'eq',
+                            value : this.accountId
+                        },
+                        {
+                            fieldPath : 'Status',
+                            operator : 'eq',
+                            value : 'Activated'
+                        }
+                    ],
+                    filterLogic: '1 AND 2', 
+                    orderBy: [{fieldPath: 'Name', direction: 'asc'}]
+                };
+            }
+        }).catch(error => {
+            this.isLoading = false;
+            console.error('Error - getContractData:', error.message);
+        });
+    }
+    //GET SHOW FIELD REALISASI
+    getShowRealisasi(){
+        this.realisasiId1 = undefined;
+        this.showFieldRealisasi1 = false;
+        if(this.opportunityTypeId == 'NB' && this.cob1 == '101' && this.contractTypeId != undefined && this.accountId != undefined){
+            this.showFieldRealisasi1 = true;
+            this.filterRealisasi1 = {
+                criteria : [
+                    {
+                        fieldPath : 'Policy_Closing_Type__c',
+                        operator : 'eq',
+                        value : this.contractTypeId
+                    },
+                    {
+                        fieldPath : 'StageName',
+                        operator : 'eq',
+                        value : 'Closed Won'
+                    },
+                    {
+                        fieldPath : 'COB__c',
+                        operator : 'eq',
+                        value : this.cob1
+                    },
+                    {
+                        fieldPath : 'Parent_Opportunity__c',
+                        operator : 'eq',
+                        value : null
+                    },
+                    {
+                        fieldPath : 'AccountId',
+                        operator : 'eq',
+                        value : this.accountId
+                    },
+                ],
+                filterLogic: '1 AND 2 AND 3 AND 4 AND 5', 
+                orderBy: [{fieldPath: 'Name', direction: 'asc'}]
+            };
+        }
+    }
+    //--> END OPPORTUNITY TYPE
 
+    //<-- START ACCOUNT
+    //CHANGE ACCOUNT
+    handleAccountSelected(event) {
+        this.accountId = event.detail.recordId;
+        if(this.accountId){
+            this.getAccountDetail(this.accountId);
+        }
+        this.getShowMOU();
+        this.getShowRealisasi();
+    }
+    //GET ACCOUNT DETAIL
+    getAccountDetail(recordid){
+        this.isLoading = true;
+        this.getPicklistRequestorType();
+        this.getPicklistRequestorSegment();
+        this.getPicklistRequestorSubSegment();
+        this.getPicklistRequestorBusinessSegmentation();
+        this.getPicklistRequestorPipelineStatus();
+        this.getPicklistRequestorChannel();
+        this.requestorChannelId = undefined;
+        getAccountDetail({ accountId: recordid })
+        .then(acc => {
+            this.isLoading = false;
+            this.requestorTypeId = acc.Type;
+            this.requestorSegmentId = acc.Account_Segment__c;
+            this.requestorSubSegmentId = acc.Account_Sub_Segment__c;
+            this.requestorBusinessSegmentationId = acc.Business_Segmentation__c;
+            this.requestorPipelineStatusId = acc.Account_Pipeline_Status__c;
+            this.requestorAddress = acc.Address__c;
+            if(this.requestorPipelineStatusId == 'Channel'){
+                this.showChannel = true;
+                this.requestorChannelId = acc.Account_Channel__c;
+            }
+            if(this.requestorPipelineStatusId == 'Direct'){
+                this.insuredId = this.accountId;
+                this.getInsuredDetail(this.insuredId);
+            }
+        })
+        .catch(error => {
+            this.isLoading = false;
+            console.error('Error fetching Account details', error);
+        });
+    }
+    //CHANGE Account Pipeline Status
+    handleRequestorPipelineStatus(event){
+        this.requestorPipelineStatusId = event.detail.value;
+        
+        if(this.requestorPipelineStatusId == 'Channel'){
+            this.showChannel = true;
+        }else{
+            this.showChannel = false;
+            this.requestorChannelId - undefined;
+        }
+        if(this.requestorPipelineStatusId == 'Direct'){
+            this.insuredId = this.accountId;
+            this.getInsuredDetail(this.insuredId);
+        }
+    }
+    //CHANGE ACCOUNT TYPE
+    handleRequestorType(event){
+        this.requestorTypeId = event.detail.value;
+    }
+    //CHANGE ACCOUNT SEGMENT
+    handleRequestorSegment(event){
+        this.requestorSegmentId = event.detail.value;
+    }
+    //CHANGE ACCOUNT SUB SEGMENT
+    handleRequestorSubSegment(event){
+        this.requestorSubSegmentId = event.detail.value;
+    }
+    //CHANGE ACCOUNT Business Segmentation
+    handleRequestorBusinessSegmentation(event){
+        this.requestorBusinessSegmentationId = event.detail.value;
+    }
+    //CHANGE Account Channel
+    handleRequestorChannel(event){
+        this.requestorChannelId = event.detail.value;
+    }
+    //CHANGE Account Address
+    handleRequestorAddress(event){
+        this.requestorAddress = event.detail.value;
+    }
+    //--> END ACCOUNT
+
+    //<-- START QQ MEMBER
+    //CHANGE QQ MEMBER
+    handleSearchKeyChange(event) {
+        this.searchKey = event.target.value;
+        if (this.searchKey.length < 2) {
+            this.searchResults = [];
+            return;
+        }
+        this.isLoading = true;
+        searchAccounts({ searchKey: this.searchKey })
+            .then(results => {
+                this.isLoading = false;
+                this.searchResults = results;
+            })
+            .catch(error => {
+                this.isLoading = false;
+                console.error('Error searching Accounts:', error);
+            });
+    }
+    //SELECT QQ MEMBER FROM TABLE
+    handleSelectAccount(event) {
+        const { id, name, address, type } = event.currentTarget.dataset;
+        if (this.members.some(m => m.id === id)) {
+            this.clearLookup();
+            return;
+        }
+        this.members = [
+            ...this.members,
+            { id, name, address, type }
+        ];
+        this.originalMemberIds.add(id);
+        this.clearLookup();
+    }
+    //CLEAR SEARCH INPUT
+    clearLookup() {
+        this.searchKey     = '';
+        this.searchResults = [];
+    }
+    //ROW ACTION TABLE QQ MEMBER
+    handleRowAction(event) {
+        if (event.detail.action.name === 'remove') {
+            const remId = event.detail.row.id;
+            this.members = this.members.filter(m => m.id !== remId);
+            this.originalMemberIds.delete(remId);
+        }
+    }
+    //--> END QQ MEMBER
+
+    //SINGLE / MULTIPLE
     handleSelected(event){
         const single = this.template.querySelector('input[data-id="1"]');
         const multiple = this.template.querySelector('input[data-id="2"]');
@@ -505,187 +810,39 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
         }
     }
 
-    //SUMMARY / SPECIFIC (1)
-    handleFormat(event){
-        const summary = this.template.querySelector('input[data-id="Summary"]');
-        const specific = this.template.querySelector('input[data-id="Specific"]');
-        if(summary.checked == true){
-            this.dataFormat1 = 'Summary';
-            this.showSummary = true;
-            this.getPicklistCurrency();
-            this.assetSectionId = undefined;
-            this.assetCategoryId = undefined;
-            this.currencyId = undefined;
-            this.rate = undefined;
-            this.showIDR = false;
-            this.sumInsured = undefined;
-            this.sumInsuredIDR = undefined;
-            this.premium = undefined;
-            this.premiumIDR = undefined;
-            this.numberOfRisk = undefined;
-            this.closedDate = undefined;
-            this.description = undefined;
-        }else if(specific.checked == true){
-            this.showSummary = false;
-            this.dataSummary1 = [];
-            this.dataFormat1 = 'Specific';
-        }
-        if(this.showSummary == true){
-            this.isLoading = true;
-            getMasterData({
-                cob: this.cob1,
-                description : "Profile",
-                contracttype : this.contractTypeId
-            })
-            .then(result => {
-                this.isLoading = false;
-                let field1 = [];
-                for(let i=0; i<result.length; i++){
-                    let setValue = undefined;
-                    field1.push({
-                        object : result[i].dataobject,
-                        field : result[i].datafield,
-                        label : result[i].datalabel,
-                        type : result[i].datatype,
-                        lookup : result[i].datalookup,
-                        filter : result[i].datafilter,
-                        required : result[i].datarequired,
-                        value : setValue,
-                        showdata : result[i].showdata
-                    });
-                }
-                this.dataSummary1 = field1;
-            })
-            .catch(error => {
-                this.isLoading = false;
-                console.log('error-handleFormat:'+ error.message);
-            });  
+    //CLICK SECTION ACCORDION
+    handleSectionToggle(event) {
+        const openSections = event.detail.openSections;
+
+        if (openSections.length === 0) {
+            this.activeSectionsMessage = 'All sections are closed';
+        } else {
+            this.activeSectionsMessage = 'Open sections: ' + openSections.join(', ');
         }
     }
 
-    //SUMMARY / SPECIFIC (2)
-    handleFormat2(event){
-        const summary = this.template.querySelector('input[data-id="Summary2"]');
-        const specific = this.template.querySelector('input[data-id="Specific2"]');
-        if(summary.checked == true){
-            this.showSummary2 = true;
-            this.dataFormat2 = 'Summary';
-            this.getPicklistCurrency2();
-            this.assetSectionId2 = undefined;
-            this.assetCategoryId2 = undefined;
-            this.currencyId2 = undefined;
-            this.rate2 = undefined;
-            this.showIDR2 = false;
-            this.sumInsured2 = undefined;
-            this.sumInsuredIDR2 = undefined;
-            this.premium2 = undefined;
-            this.premiumIDR2 = undefined;
-            this.numberOfRisk2 = undefined;
-            this.closedDate2 = undefined;
-            this.description2 = undefined;
-        }else if(specific.checked == true){
-            this.showSummary2 = false;
-            this.dataSummary2 = [];
-            this.dataFormat2 = 'Specific';
-        }
-        if(this.showSummary2 == true){
-            this.isLoading = true;
-            let field1 = [];
-            getMasterData({
-                cob: this.cob2,
-                description : "Profile",
-                contracttype : this.contractTypeId2
-            })
-            .then(result => {
-                this.isLoading = false;
-                let field1 = [];
-                for(let i=0; i<result.length; i++){
-                    let setValue = undefined;
-                    field1.push({
-                        object : result[i].dataobject,
-                        field : result[i].datafield,
-                        label : result[i].datalabel,
-                        type : result[i].datatype,
-                        lookup : result[i].datalookup,
-                        filter : result[i].datafilter,
-                        required : result[i].datarequired,
-                        value : setValue,
-                        showdata : result[i].showdata
-                    });
-                }
-                this.dataSummary2 = field1;
-            })
-            .catch(error => {
-                this.isLoading = false;
-                console.log('error-handleFormat2:'+ error.message);
-            });  
-        }
-    }
-
-    handleOpportunityType(event){
-        this.opportunityTypeId = event.detail.value;
-        if(this.opportunityTypeId == 'NB' && this.accountId != undefined){
-                this.getContractData(this.accountId);
-            }
-    }
-
-    handleRequestorType(event){
-        this.requestorTypeId = event.detail.value;
-    }
-
-    handleRequestorSegment(event){
-        this.requestorSegmentId = event.detail.value;
-    }
-
-    handleRequestorSubSegment(event){
-        this.requestorSubSegmentId = event.detail.value;
-    }
-
-    handleRequestorBusinessSegmentation(event){
-        this.requestorBusinessSegmentationId = event.detail.value;
-    }
-
-    handleRequestorPipelineStatus(event){
-        this.requestorPipelineStatusId = event.detail.value;
-        
-        if(this.requestorPipelineStatusId == 'Channel'){
-            this.showChannel = true;
-        }else{
-            this.showChannel = false;
-            this.requestorChannelId - undefined;
-        }
-        if(this.requestorPipelineStatusId == 'Direct'){
-            this.insuredId = this.accountId;
-            this.getInsuredDetail(this.insuredId);
-        }
-    }
-
-    handleRequestorChannel(event){
-        this.requestorChannelId = event.detail.value;
-    }
-
-    handleRequestorAddress(event){
-        this.requestorAddress = event.detail.value;
-    }
-
-    handleChange(event) {
-        //let value = event.detail.value;
-    }
-
+    //<-- START COB 1
+    //CHANGE COB 1
     handleChangeCOB1(event) {
         let value = event.detail.value;
         this.cob1 = value;
         this.showPremium = false;
+        this.assetSectionId = undefined;
+        this.assetSection = [];
+        this.assetCategoryId = undefined;
+        this.assetCategory = [];
         if(value != '' && value != undefined){
             this.changeCOB(value,'change');
-            if(value == '301' || value == '302' || value == '303'){
+            if(this.cob1  == '301' || this.cob1  == '302' || this.cob1  == '303'){
                 this.showPremium = true;
                 this.getPremiumCalculation();
                 this.adjustPremiumCalculationBasedOnDuration();
             }
         }
+        this.getShowMOU();
+        this.getShowRealisasi();
     }
-
+    //FUNCTION CHANGE COB 1
     changeCOB(value,type){
         this.isLoading = true;
         if(type == 'change'){
@@ -703,7 +860,18 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
             this.policyWording = [];
             this.getPicklist(this.cob1,1);
         }
-        if(this.showMOU == false){
+        if(this.showMOU == true){
+            this.mapInputMOU1 = new Map();
+            this.mapInputMOU1.set('COB__C',value);
+            this.datafieldMOU1 = [];
+            this.getRisk1();
+        }else if(this.showRealisasi1 == true){
+            this.mapInputRealisasi1 = new Map();
+            this.mapInputRealisasi1.set('COB__C',value);
+            this.datafieldRealisasi1 = [];
+            this.dataAssetRealisasi1 = [];
+            this.getRiskRealisasi();
+        }else{
             this.mapInput = new Map();
             this.mapInput.set('COB__C',value);
             this.datafield1 = [];
@@ -711,18 +879,12 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
             this.getDescription(value);
             this.getSituation(value);
             this.getPicklistAssetSection(value);
-        }else{
-            this.mapInputMOU1 = new Map();
-            this.mapInputMOU1.set('COB__C',value);
-            this.datafieldMOU1 = [];
-            this.dataAsset1 = [];
-            this.getRisk1();
         }
-        if(value != '101'){
+        if(this.cob1  != '101'){
             this.contractTypeId = '1';
         }
     }
-
+    //GET FIELD SITUATION 1
     async getSituation(value){
         await getMasterData({
             cob: value,
@@ -755,7 +917,7 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
             console.log('error-handleChangeCOB1:'+ error.message);
         }); 
     }
-
+    //GET FIELD DESCRIPTION 1
     async getDescription(value){
         await getMasterData({
             cob: value,
@@ -787,7 +949,7 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
             console.log('error-getDescription:'+ error.message);
         }); 
     }
-
+    //GET FIELD RISK - MOU 1
     async getRisk1(){
         let value = this.cob1;
         if(value!= '' && value != undefined){
@@ -813,11 +975,43 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
             }); 
         }
     }
+    //GET FIELD RISK - REALISASI 1
+    async getRiskRealisasi(){
+        let value = this.cob1;
+        if(value!= '' && value != undefined){
+            await getMasterDataSection({
+                cob: value,
+                contracttype : this.contractTypeId
+            })
+            .then(result => {
+                this.isLoading = false;
+                let field1 = [];
+                for(let i=0; i<result.length; i++){
+                    field1.push({
+                        name : result[i].name,
+                        data : result[i].data
+                    });
+                }
+                this.datafieldRealisasi1 = field1;
+            })
+            .catch(error => {
+                this.isLoading = false;
+                console.log('error-getRiskRealisasi:'+ error.message);
+            }); 
+        }
+    }
+    //--> END COB 1
 
+    //<-- START COB 2
+    //CHANGE COB 2
     handleChangeCOB2(event) {
         let value = event.detail.value;
         this.cob2 = value;
         this.showPremium2 = false;
+        this.assetSectionId2 = undefined;
+        this.assetSection2 = [];
+        this.assetCategoryId2 = undefined;
+        this.assetCategory2 = [];
         if(value != '' && value != undefined){
             this.changeCOB2(value,'change');
             if(value == '301' || value == '302' || value == '303'){
@@ -827,7 +1021,7 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
             }
         }
     }
-
+    //FUNCTION COB 2
     changeCOB2(value,type){
         this.isLoading = true;
         if(type == 'change'){
@@ -851,7 +1045,7 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
             this.contractTypeId2 = '1';
         }
     }
-
+    //GET FIELD SITUATION 2
     async getSituation2(value){
         await getMasterData({
             cob: value,
@@ -881,7 +1075,7 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
             console.log('error-handleChangeCOB2:'+ error.message);
         }); 
     }
-
+    //GET FIELD DESCRIPTION 2
     async getDescription2(value){
         await getMasterData({
             cob: value,
@@ -912,116 +1106,10 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
             console.log('error-getDescription2:'+ error.message);
         }); 
     }
+    //--> END COB 2
 
-
-    handleAccountSelected(event) {
-        this.accountId = event.detail.recordId;
-        if(this.accountId){
-            this.getAccountDetail(this.accountId);
-            if(this.opportunityTypeId == 'NB'){
-                this.getContractData(this.accountId);
-            }
-        }
-    }
-
-    getContractData(recordId){
-        this.isLoading = true;
-        getContract ({
-            recordId: recordId
-        }).then(result =>{
-            this.isLoading = false;
-            this.showFieldMOU = result;
-            if(result == true){
-                this.filterMOU1 = {
-                    criteria : [
-                        {
-                            fieldPath : 'AccountId',
-                            operator : 'eq',
-                            value : this.accountId
-                        },
-                        {
-                            fieldPath : 'Status',
-                            operator : 'eq',
-                            value : 'Activated'
-                        }
-                    ],
-                    filterLogic: '1 AND 2', 
-                    orderBy: [{fieldPath: 'Name', direction: 'asc'}]
-                };
-            }
-        }).catch(error => {
-            this.isLoading = false;
-            console.error('Error - getContractData:', error.message);
-        });
-    }
-
-    getOpportunityDetail(recordid){
-        this.isLoading = true;
-        getOpportunity({ recordId: recordid })
-        .then(rec => {
-            this.isLoading = false;
-            this.showrecord = false;
-            this.opportunityTypeId = rec.Opportunity_Type__c;
-            this.accountId = rec.AccountId;
-            this.getAccountDetail(this.accountId);
-            if(this.accountId != undefined) this.disabledAccount = true;
-            //const single = this.template.querySelector('input[data-id="1"]');
-            //single.checked = true;
-            this.insuredId = rec.The_Insured_Name__c;
-            this.getInsuredDetail(this.insuredId);
-            this.showSingle = true;
-            this.showMultiple = false;
-            this.contractTypeId = undefined;
-            this.contractTypeId2 = undefined;
-            this.getPicklistContractType();
-            this.cob1 = rec.COB__c;
-            this.description = rec.Description;
-            //const optyname = recName.split(' - ');
-            //if(optyname[1] != undefined) this.riskName = rec.Name;
-            this.changeCOB(this.cob1,'');
-            this.productTypeId = rec.Product_Type_Id__c;
-            this.productTypeName = rec.Product_Type__c;
-            this.getPicklistPolicy('',1,this.productTypeId);
-        })
-        .catch(error => {
-            this.isLoading = false;
-            console.error('Error fetching Opportunity details:', error.message);
-        });
-    }
-
-    getAccountDetail(recordid){
-        this.isLoading = true;
-        this.getPicklistRequestorType();
-        this.getPicklistRequestorSegment();
-        this.getPicklistRequestorSubSegment();
-        this.getPicklistRequestorBusinessSegmentation();
-        this.getPicklistRequestorPipelineStatus();
-        this.getPicklistRequestorChannel();
-        this.requestorChannelId = undefined;
-        getAccountDetail({ accountId: this.accountId })
-        .then(acc => {
-            this.isLoading = false;
-            this.requestorTypeId = acc.Type;
-            this.requestorSegmentId = acc.Account_Segment__c;
-            this.requestorSubSegmentId = acc.Account_Sub_Segment__c;
-            this.requestorBusinessSegmentationId = acc.Business_Segmentation__c;
-            this.requestorPipelineStatusId = acc.Account_Pipeline_Status__c;
-            this.requestorAddress = acc.Address__c;
-            if(this.requestorPipelineStatusId == 'Channel'){
-                this.showChannel = true;
-                this.requestorChannelId = acc.Account_Channel__c;
-            }
-            if(this.requestorPipelineStatusId == 'Direct'){
-                this.insuredId = this.accountId;
-                this.getInsuredDetail(this.insuredId);
-            }
-        })
-        .catch(error => {
-            this.isLoading = false;
-            console.error('Error fetching Account details', error);
-        });
-    }
-
+    //<-- START INSURED
+    //CHANGE THE INSURED NAME
     handleInsuredSelected(event){
         this.insuredId = event.detail.recordId;
         if (this.insuredId) {
@@ -1031,7 +1119,7 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
             this.showInsured = false;
         }
     }
-
+    //GET INSURED DETAIL
     getInsuredDetail(recordid){
         getAccountDetail({ accountId: recordid })
         .then(acc => {
@@ -1054,52 +1142,29 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
             console.error('Error fetching Account details', error);
         });
     }
-
-    handleSearchKeyChange(event) {
-        this.searchKey = event.target.value;
-        if (this.searchKey.length < 2) {
-            this.searchResults = [];
-            return;
-        }
-        this.isLoading = true;
-        searchAccounts({ searchKey: this.searchKey })
-            .then(results => {
-                this.isLoading = false;
-                this.searchResults = results;
-            })
-            .catch(error => {
-                this.isLoading = false;
-                console.error('Error searching Accounts:', error);
-            });
+    //CHANGE The Insured Address
+    handleInsuredAddress(event){
+        this.accountAddress = event.detail.value;
     }
+    //--> END INSURED
 
-    handleSelectAccount(event) {
-        const { id, name, address, type } = event.currentTarget.dataset;
-        if (this.members.some(m => m.id === id)) {
-            this.clearLookup();
-            return;
-        }
-        this.members = [
-            ...this.members,
-            { id, name, address, type }
-        ];
-        this.originalMemberIds.add(id);
-        this.clearLookup();
+    //<-- PRODUCT TYPE 1
+    //CHANGE PRODUCT TYPE
+    handleProductType(event){
+        this.policyWording = [];
+        this.policyWordingId = undefined;
+        this.policyWordingName = undefined;
+        this.productTypeId = event.detail.value;
+        this.getProductType();
     }
-
-    clearLookup() {
-        this.searchKey     = '';
-        this.searchResults = [];
+    //GET PRODUCT TYPE
+    getProductType(){
+        this.productTypeName = this.productType.find(opt => opt.value === this.productTypeId).label;
+        this.getPicklistPolicy('',1,this.productTypeId);
     }
+    //--> PRODUCT TYPE 1
 
-    handleRowAction(event) {
-        if (event.detail.action.name === 'remove') {
-            const remId = event.detail.row.id;
-            this.members = this.members.filter(m => m.id !== remId);
-            this.originalMemberIds.delete(remId);
-        }
-    }
-
+    //CHANGE POLICY WORDING 1
     handlePolicyWording(event){
         this.policyWordingId = event.detail.value;
         this.policyWordingName = this.policyWording.find(opt => opt.value === this.policyWordingId).label;
@@ -1114,616 +1179,7 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
         }
     }
 
-    handleFireType(event){
-        this.fireTypeId = event.detail.value;
-    }
-
-    handleWording(event){
-        this.wordingId = event.detail.value;
-        this.wordingName = this.wording.find(opt => opt.value === this.wordingId).label;
-    }
-
-    handlePolicyWording2(event){
-        this.policyWordingId2 = event.detail.value;
-        this.policyWordingName2 = this.policyWording2.find(opt => opt.value === this.policyWordingId2).label;
-        this.showIAR2 = false;
-        this.fireTypeId2 = undefined;
-        this.wordingId2 = undefined;
-        this.wordingName2 = undefined;
-        if(this.policyWordingName2 == 'IAR/PAR'){
-            this.showIAR2 = true;
-            //this.getPicklistFireType2();
-            this.getPicklistWording2(this.policyWordingId2);
-        }
-    }
-
-    handleFireType2(event){
-        this.fireTypeId2 = event.detail.value;
-    }
-
-    handleWording2(event){
-        this.wordingId2 = event.detail.value;
-        this.wordingName2 = this.wording2.find(opt => opt.value === this.wordingId2).label;
-    }
-
-    handleCInput(event){
-        let value = event.detail.value;
-        let fieldName = event.target.fieldName;
-        let cob = this.cob1;
-        let result = this.datafield1;
-        let mapIn = this.mapInput;
-        //console.log('fieldName:'+fieldName);
-        //console.log('value:'+value);
-        this.setCInput(result,cob,fieldName,value,mapIn,'1');
-    }
-
-    handleInputDesc(event){
-        let value = event.detail.value;
-        let fieldName = event.target.fieldName;
-        let cob = this.cob1;
-        let result = this.dataDescription1;
-        let mapIn = this.mapInput;
-        //console.log('fieldName:'+fieldName);
-        //console.log('value:'+value);
-        this.setCInput(result,cob,fieldName,value,mapIn,'1');
-    }
-
-    handleCInput2(event){
-        let value = event.detail.value;
-        let fieldName = event.target.fieldName;
-        let cob = this.cob2;
-        let result = this.datafield2;
-        let mapIn = this.mapInput2;
-        this.setCInput(result,cob,fieldName,value,mapIn,'2');
-    }
-
-    handleInputDesc2(event){
-        let value = event.detail.value;
-        let fieldName = event.target.fieldName;
-        let cob = this.cob2;
-        let result = this.dataDescription2;
-        let mapIn = this.mapInput2;
-        //console.log('fieldName:'+fieldName);
-        //console.log('value:'+value);
-        this.setCInput(result,cob,fieldName,value,mapIn,'2');
-    }
-
-    setCInput(result,cob,fieldName,value,mapIn,type){
-        const field = result.find(item => item.field === fieldName);
-        //console.log('field:'+JSON.stringify(field));
-        //console.log('field-showdata:'+field.showdata);
-        if(value == undefined && fieldName != undefined && field.showdata != undefined){ //fieldName == 'Address__c'
-            let resultid = mapIn.get(fieldName);
-            //console.log('resultid:'+resultid);
-            //console.log('this.datafield1:'+JSON.stringify(result));
-            let mapData = new Map();
-            for(let i=0; i<result.length; i++){
-                if(result[i].field == fieldName){
-                    let showdata = result[i].showdata;
-                    //console.log('showdata:'+showdata);
-                    let data = JSON.parse(showdata);
-                    //console.log('data:'+data);
-                    for(let j=0;j<data.length;j++){
-                        //console.log('param1:'+data[j].param1);
-                        mapData.set(data[j].param1,data[j].param2);
-                    }
-                    break;
-                }
-            }
-
-            if(resultid != undefined && resultid != ''){
-                const childCmp = this.template.querySelectorAll('c-input');
-                if (childCmp) {
-                    for(let i=0;i<childCmp.length;i++){
-                        let fieldName = childCmp[i].getName();
-                        let fieldDepend = mapData.get(fieldName);
-                        //console.log('fieldDepend:'+fieldDepend);
-                        if(fieldDepend == ''){
-                            childCmp[i].setFilter(resultid);
-                        }
-                    }
-                }
-
-                getObject({
-                    fieldname: fieldName,
-                    cob : cob,
-                    recordId : resultid
-                })
-                .then(obj => {
-                    //console.log('obj:'+JSON.stringify(obj));
-                    let mapObj = new Map(Object.entries(obj[0]));
-                    //console.log('mapObj:'+mapObj.get('Id'));
-                    for(let i=0; i<result.length; i++){
-                        //console.log('i:'+i);
-                        let fKey = result[i].field;
-                        //console.log('fKey:'+fKey);
-                        let fName = mapData.get(fKey);
-                        //console.log('fName:'+fName);
-                        if(fName != undefined){
-                            let fValue = mapObj.get(fName);
-                            if(fValue == undefined) fValue = '';
-                            //console.log('fValue:'+fValue);
-                            result[i].value = fValue;
-                            if(type == '1') this.mapInput.set(fKey,fValue);
-                            else if(type == '2') this.mapInput2.set(fKey,fValue);
-                            else if(type == '3') this.mapSummary1.set(fKey,fValue);
-                            else if(type == '4') this.mapSummary2.set(fKey,fValue);
-                        }
-                    }
-                    console.log('result:'+JSON.stringify(result));
-                })
-                .catch(error => {
-                    console.log('error-getObject:'+ error.message);
-                });
-            }else{
-                for(let i=0; i<result.length; i++){
-                    let fKey = result[i].field;
-                    let fName = mapData.get(fKey);
-                    console.log(fKey+':'+fName);
-                    if(fName != undefined){
-                        console.log(fName);
-                        result[i].value = '';
-                        if(type == '1') this.mapInput.set(fKey,'');
-                        else if(type == '2') this.mapInput2.set(fKey,'');
-                        else if(type == '3') this.mapSummary1.set(fKey,'');
-                        else if(type == '4') this.mapSummary2.set(fKey,'');
-                    }
-                }
-                const childCmp = this.template.querySelectorAll('c-input');
-                if (childCmp) {
-                    for(let i=0;i<childCmp.length;i++){
-                        let fieldName = childCmp[i].getName();
-                        let fieldDepend = mapData.get(fieldName);
-                        if(fieldDepend == ''){
-                            childCmp[i].clearLookup();
-                        }
-                    }
-                }
-                console.log('result:'+JSON.stringify(result));
-            }
-        }
-    }
-
-    handleInputProfile(event){
-        let value = event.detail.value;
-        let fieldName = event.target.fieldName;
-        let cob = this.cob1;
-        let result = this.dataSummary1;
-        let mapIn = this.mapSummary1;
-        this.setCInput(result,cob,fieldName,value,mapIn,'3');
-    }
-
-    handleInputProfile2(event){
-        let value = event.detail.value;
-        let fieldName = event.target.fieldName;
-        let cob = this.cob2;
-        let result = this.dataSummary2;
-        let mapIn = this.mapSummary2;
-        this.setCInput(result,cob,fieldName,value,mapIn,'4');
-    }
-
-    //MOU
-    handleInputMOU1(event){
-        let value = event.detail.value;
-        let fieldName = event.target.fieldName;
-        let cob = this.cob1;
-        let result = this.datafieldMOU1;
-        let mapIn = this.mapInputMOU1;
-        this.setCInputMOU(result,cob,fieldName,value,mapIn,'1');
-    }
-
-    setCInputMOU(result,cob,fieldName,value,mapIn,type){
-        let field,resultdata;
-        for(let x=0;x<result.length;x++){
-            resultdata = result[x].data;
-            field = resultdata.find(item => item.datafield === fieldName);
-            if(field != undefined) break;
-        }
-        if(value == undefined && fieldName != undefined && field.showdata != undefined){
-            let resultid = mapIn.get(fieldName);
-            let mapData = new Map();
-            for(let i=0; i<resultdata.length; i++){
-                if(resultdata[i].datafield == fieldName){
-                    let showdata = resultdata[i].showdata;
-                    let data = JSON.parse(showdata);
-                    for(let j=0;j<data.length;j++){
-                        mapData.set(data[j].param1,data[j].param2);
-                    }
-                    break;
-                }
-            }
-            if(resultid != undefined && resultid != ''){
-                const childCmp = this.template.querySelectorAll('c-input');
-                if (childCmp) {
-                    for(let i=0;i<childCmp.length;i++){
-                        let fieldName = childCmp[i].getName();
-                        let fieldDepend = mapData.get(fieldName);
-                        if(fieldDepend == ''){
-                            childCmp[i].setFilter(resultid);
-                        }
-                    }
-                }
-                getObject({
-                    fieldname: fieldName,
-                    cob : cob,
-                    recordId : resultid
-                })
-                .then(obj => {
-                    let mapObj = new Map(Object.entries(obj[0]));
-                    for(let i=0; i<resultdata.length; i++){
-                        let fKey = resultdata[i].datafield;
-                        let fName = mapData.get(fKey);
-                        if(fName != undefined){
-                            let fValue = mapObj.get(fName);
-                            if(fValue == undefined) fValue = '';
-                            resultdata[i].value = fValue;
-                            if(type == '1') this.mapInputMOU1.set(fKey,fValue);
-                        }
-                    }
-                    //console.log('resultdata:'+JSON.stringify(resultdata));
-                })
-                .catch(error => {
-                    console.log('error-getObject:'+ error.message);
-                });
-            }else{
-                console.log('clear');
-                for(let i=0; i<resultdata.length; i++){
-                    let fKey = resultdata[i].datafield;
-                    let fName = mapData.get(fKey);
-                    //console.log(fKey+':'+fName);
-                    if(fName != undefined){
-                        //console.log(fName);
-                        resultdata[i].value = '';
-                        if(type == '1') this.mapInputMOU1.set(fKey,'');
-                    }
-                }
-                const childCmp = this.template.querySelectorAll('c-input');
-                if (childCmp) {
-                    for(let i=0;i<childCmp.length;i++){
-                        let fieldName = childCmp[i].getName();
-                        let fieldDepend = mapData.get(fieldName);
-                        if(fieldDepend == ''){
-                            childCmp[i].clearLookup();
-                        }
-                    }
-                }
-                console.log('resultdata:'+JSON.stringify(resultdata));
-            }
-        }
-    }
-
-    handleMOUSelected1(event){
-        console.log('handleMOUSelected1');
-        this.mouId1 = event.detail.recordId;
-        console.log('mouId1:'+this.mouId1);
-        this.showMOU = false;
-        if(this.mouId1 != undefined && this.mouId1 != ''){
-            this.showMOU = true;
-            this.getRisk1();
-            this.getPicklistCurrency();
-            this.getPicklistAssetSection1MOU(this.mouId1);
-        }
-    }
-
-    handleAssetSection1MOU(event){
-        this.assetSectionId1MOU = event.detail.value;
-        if(this.assetSectionId1MOU){
-            this.getPicklistAssetCategory1MOU(this.mouId1,this.assetSectionId1MOU);
-        }
-    }
-
-    handleAssetCategory1MOU(event){
-        this.assetCategoryId1MOU = event.detail.value;
-    }
-
-    getPicklistAssetSection1MOU(contractid){
-        this.assetSectionId1MOU = undefined;
-        getAssetSectionMOU({
-            contractid : contractid
-        })
-        .then(result => {
-            this.assetSection1MOU = [];
-            for (var key in result) {
-                this.assetSection1MOU.push({label:result[key], value:key});
-            }
-            return this.assetSection1MOU;
-        })
-        .catch(error => {
-            console.log('error-getPicklistAssetSection1MOU:'+ error.message);
-        });
-    }
-
-    getPicklistAssetCategory1MOU(contractid,assetsection){
-        this.assetCategoryId1MOU = undefined;
-        getAssetCategoryMOU({
-            contractid : contractid,
-            assetsection : assetsection
-        })
-        .then(result => {
-            this.assetCategory1MOU = [];
-            for (var key in result) {
-                this.assetCategory1MOU.push({label:result[key], value:key});
-            }
-            return this.assetCategory1MOU;
-        })
-        .catch(error => {
-            console.log('error-getPicklistAssetCategory1MOU:'+ error.message);
-        });
-    }
-
-    handleAddCoverage1(event){
-        console.log('handleAddCoverage1');
-        this.coverage1 = this.showModalMOU(undefined,this.coverage1);
-    }
-
-    handleRowActionMOU(event) {
-        //console.log('handleRowActionMOU');
-        const action = event.detail.action;
-        const row = event.detail.row;
-        //console.log('row:'+JSON.stringify(row));
-        switch (action.name) {
-            case 'show_details':
-                this.coverage1 = this.showModalMOU(row,this.coverage1);
-                break;
-            case 'delete':
-                LightningConfirm.open({
-                    message: 'Are your sure want to delete this coverage?',
-                    label: 'Warning', 
-                    variant : 'headerless'
-                }).then((result) => {
-                    if(result == true){
-                        const rowIndex = this.coverage1.findIndex(r => r.Id === row.Id);
-                        this.coverage1.splice(rowIndex, 1);
-                        this.coverage1 = [...this.coverage1];
-                    }
-                });
-                break;
-        }
-    }
-
-    async showModalMOU(row,records){
-        let data = [];
-        const result = await modalMOU.open({
-            records : records,
-            record : row,
-            contractId : this.mouId1
-        });
-        console.log('result:'+JSON.stringify(result));
-        if(result != 'cancel' && result != undefined){
-            data = result;
-        }
-        return data;
-    }
-
-    handleAddAsset1(event){
-        let records = this.dataAsset1;
-        let i = records.length;
-        let id = '1';
-        if(i>0){
-            id = parseInt(records[i-1].id,10)+1;
-        }
-
-        let data = {
-                id:id,
-                assetCategory : [],
-                coverage : []
-            };
-        this.dataAsset1 = [...this.dataAsset1,data];
-        console.log('this.dataAsset1:'+JSON.stringify(this.dataAsset1));
-    }
-
-    handleDeleteAsset1(event){
-        let id = event.target.dataset.id;
-        const rowIndex = this.dataAsset1.findIndex(r => r.id === id);
-        this.dataAsset1.splice(rowIndex, 1);
-        this.dataAsset1 = [...this.dataAsset1];
-        console.log('this.dataAsset1:'+JSON.stringify(this.dataAsset1));
-    }
-
-    handleDataAsset(event){
-        let id = event.target.dataset.id;
-        let name = event.target.dataset.name;
-        let value = event.detail.value;
-        this.setDatasetValue(id,name,value);
-    }
-
-    setDatasetValue(id,name,value){
-        let records = this.dataAsset1;
-        let newrecords = [];
-        let record = {};
-        for(let i=0;i<records.length;i++){
-            if(records[i].id == id){
-                record = {};
-                record.id = id;
-                record.assetSectionId = this.setDataValue(name,'assetSection',value,records[i].assetSectionId);
-                if(name=='assetSection'){
-                    record.assetCategoryId = undefined;
-                    record.assetCategory = [];
-                }else{
-                    record.assetCategoryId = this.setDataValue(name,'assetCategory',value,records[i].assetCategoryId);
-                    record.assetCategory = records[i].assetCategory;
-                }
-                record.currencyId = this.setDataValue(name,'currency',value,records[i].currencyId);
-                if(record.currencyId != undefined) record.currencyName = this.currency.find(item => item.value === record.currencyId).label;
-                record.sumInsured = this.setDataValue(name,'sumInsured',value,records[i].sumInsured);
-                record.showIDR = false;
-                if(record.currencyName == 'IDR'){
-                    record.rate = 1;
-                    record.sumInsuredIDR = record.sumInsured;
-                }else if(record.currencyName != 'IDR' && record.currencyName != undefined){
-                    record.showIDR = true;
-                }
-                record.coverage = records[i].coverage;
-                newrecords = [...newrecords,record];
-            }else{
-                newrecords = [...newrecords,records[i]];
-            }
-        }
-        this.dataAsset1 = newrecords;
-        console.log('dataAsset1:'+JSON.stringify(this.dataAsset1));
-        if(name=='assetSection'){
-            this.getPicklistDataAssetCategory(this.mouId1,value,record);
-        }else if((name == 'currency' || name == 'sumInsured') && record.currencyName != 'IDR' && record.currencyName != undefined){
-            this.getDataAmountRate(record.currencyName,record);
-        }
-    }
-
-    setDataValue(name1,name2,value,record){
-        let newrecord;
-        if(name1 == name2) newrecord = value;
-        else newrecord = record;
-        return newrecord;
-    }
-
-    getPicklistDataAssetCategory(contractid,assetsection,record){
-        getAssetCategoryMOU({
-            contractid : contractid,
-            assetsection : assetsection
-        })
-        .then(result => {
-            let data = [];
-            for (var key in result) {
-                data.push({label:result[key], value:key});
-            }
-            let newrecords = [];
-            let records = this.dataAsset1;
-            for(let i=0;i<records.length;i++){
-                if(records[i].id == record.id){
-                    record.assetCategory = data;
-                    newrecords = [...newrecords,record];
-                }else{
-                    newrecords = [...newrecords,records[i]];
-                }
-            }
-            this.dataAsset1 = newrecords;
-            console.log('dataAsset1:'+JSON.stringify(this.dataAsset1));
-        })
-        .catch(error => {
-            console.log('error-getPicklistDataAssetCategory:'+ error.message);
-        });
-    }
-
-    getDataAmountRate(curr,record){
-        getRate({
-            curr : curr
-        })
-        .then(result => {
-            let newrecords = [];
-            let records = this.dataAsset1;
-            for(let i=0;i<records.length;i++){
-                if(records[i].id == record.id){
-                    record.currencyName = this.currency.find(item => item.value === record.currencyId).label;
-                    record.rate = result;
-                    if(record.sumInsured) record.sumInsuredIDR = record.sumInsured * record.rate;
-                    newrecords = [...newrecords,record];
-                }else{
-                    newrecords = [...newrecords,records[i]];
-                }
-            }
-            this.dataAsset1 = newrecords;
-            console.log('dataAsset1:'+JSON.stringify(this.dataAsset1));
-        })
-        .catch(error => {
-            console.log('error-getAmountRate:'+ error.message);
-        });
-    }
-
-    handleAddAssetCoverage1(event){
-        console.log('handleAddAssetCoverage1');
-        let id = event.target.dataset.id;
-        let records = this.dataAsset1;
-        const rowIndex = records.findIndex(r => r.id === id);
-        let record = records[rowIndex];
-        if(record.assetSectionId == undefined || record.assetSectionId == ''){
-            this.errorMessage('Please Select Asset Section!');
-        }else if(record.currencyId == undefined || record.currencyId == ''){
-            this.errorMessage('Please Select Currency!');
-        }else if(record.sumInsured == undefined || record.sumInsured == ''){
-            this.errorMessage('Please Fill Sum Insured!');
-        }else{
-            this.showModalCoverage(undefined,records,record);
-        }
-    }
-
-    async showModalCoverage(row,records,record){
-        const result = await modalMOU.open({
-            records : record.coverage,
-            record : row,
-            contractId : this.mouId1,
-            data : record
-        });
-        console.log('result:'+JSON.stringify(result));
-        if(result != 'cancel' && result != undefined){
-            try{
-                let newrecords = [];
-                for(let i=0;i<records.length;i++){
-                    if(records[i].id == record.id){
-                        record.coverage = result;
-                        newrecords = [...newrecords,record];
-                    }else{
-                        newrecords = [...newrecords,records[i]];
-                    }
-                }
-                this.dataAsset1 = newrecords;
-                console.log('dataAsset1:'+JSON.stringify(this.dataAsset1));
-            }catch(e){
-                console.log('error-showModalCoverage:'+e);
-            }
-        }
-    }
-
-    handleRowActionCoverage(event){
-        const action = event.detail.action;
-        const row = event.detail.row;
-        let id = event.target.dataset.id;
-        let records = this.dataAsset1;
-        const rowIndex = records.findIndex(r => r.id === id);
-        let record = records[rowIndex];
-        console.log('id:'+id);
-        switch (action.name) {
-            case 'show_details':
-                this.showModalCoverage(row,records,record);
-                break;
-            case 'delete':
-                LightningConfirm.open({
-                    message: 'Are your sure want to delete this coverage?',
-                    label: 'Warning', 
-                    variant : 'headerless'
-                }).then((result) => {
-                    if(result == true){
-                        const rowIndex = record.coverage.findIndex(r => r.Id === row.Id);
-                        record.coverage.splice(rowIndex, 1);
-                        record.coverage = [...record.coverage];
-                        console.log('record:'+JSON.stringify(this.dataAsset1));
-                    }
-                });
-                break;
-        }
-    }
-
-
-    handleProductType(event){
-        this.policyWording = [];
-        this.policyWordingId = undefined;
-        this.policyWordingName = undefined;
-        this.productTypeId = event.detail.value;
-        this.getProductType();
-    }
-
-    getProductType(){
-        this.productTypeName = this.productType.find(opt => opt.value === this.productTypeId).label;
-        this.getPicklistPolicy('',1,this.productTypeId);
-    }
-
-    handleProductType2(event){
-        this.policyWording2 = [];
-        this.policyWordingId2 = undefined;
-        this.policyWordingName2 = undefined;
-        this.productTypeId2 = event.detail.value;
-        this.productTypeName2 = this.productType2.find(opt => opt.value === this.productTypeId2).label;
-        this.getPicklistPolicy('',2,this.productTypeId2);
-    }
-
+    //CHANGE CONTRACT TYPE 1
     handleContractType(event){
         this.contractTypeId = event.detail.value;
         if(this.cob1 != undefined && this.cob1 != ''){
@@ -1731,499 +1187,21 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
                 this.changeCOB(this.cob1,'contract');
             }
         }
+        this.getShowRealisasi();
     }
 
-    handleContractType2(event){
-        this.contractTypeId2 = event.detail.value;
-        if(this.cob2 != undefined && this.cob2 != ''){
-            if(this.cob2 == '101'){
-                this.changeCOB2(this.cob2,'contract');
-            }
-        }
+    //CHANGE Wording Standard 1
+    handleWording(event){
+        this.wordingId = event.detail.value;
+        this.wordingName = this.wording.find(opt => opt.value === this.wordingId).label;
     }
 
-    handleAssetSection(event){
-        this.assetSectionId = event.detail.value;
-        if(this.assetSectionId){
-            this.getPicklistAssetCategory(this.cob1,this.assetSectionId);
-        }
-    }
-
-    handleAssetSection2(event){
-        this.assetSectionId2 = event.detail.value;
-        if(this.assetSectionId2){
-            this.getPicklistAssetCategory2(this.cob2,this.assetSectionId2);
-        }
-    }
-
-    handleAssetCategory(event){
-        this.assetCategoryId = event.detail.value;
-    }
-
-    handleAssetCategory2(event){
-        this.assetCategoryId2 = event.detail.value;
-    }
-
-    handleCurrency(event){
-        this.currencyId = event.detail.value;
-        this.currencyName = this.currency.find(item => item.value === this.currencyId).label;
-        this.showIDR = false;
-        this.sumInsuredIDR = undefined;
-        this.premiumIDR = undefined;
-        this.rate = undefined;
-        if(this.currencyName == 'IDR'){
-            this.rate = 1;
-            if(this.sumInsured) this.sumInsuredIDR = this.sumInsured;
-            if(this.premium) this.premiumIDR = this.premium;
-        }else if(this.currencyName != 'IDR'){
-            this.showIDR = true;
-            this.getAmountRate(this.currencyName,'1');
-        }
-    }
-
-    handleCurrency2(event){
-        this.currencyId2 = event.detail.value;
-        this.currencyName2 = this.currency2.find(item => item.value === this.currencyId2).label;
-        this.showIDR2 = false;
-        this.sumInsuredIDR2 = undefined;
-        this.premiumIDR2 = undefined;
-        this.rate2 = undefined;
-        if(this.currencyName2 == 'IDR'){
-            this.rate2 = 1;
-            if(this.sumInsured2) this.sumInsuredIDR2 = this.sumInsured2;
-            if(this.premium2) this.premiumIDR2 = this.premium2;
-        }else if(this.currencyName2 != 'IDR'){
-            this.showIDR2 = true;
-            this.getAmountRate(this.currencyName2,'2');
-        }
-    }
-
+    //CHANGE PREMIUM CALCULATION 1
     handlePremiumCalculation(event){
         this.premiumCalculationId = event.detail.value;
     }
 
-    handlePremiumCalculation2(event){
-        this.premiumCalculationId2 = event.detail.value;
-    }
-
-    getPicklist(cob,type){
-        getProductType({
-            filter: cob
-        })
-        .then(result => {
-            if(type == 1) this.productType = [];
-            else if(type == 2) this.productType2 = [];
-            for (var key in result) {
-                if(type == 1) this.productType.push({label:result[key], value:key});
-                if(type == 2) this.productType2.push({label:result[key], value:key});
-            }
-            if(type == 1) return this.productType;
-            else if(type == 2) return this.productType2;
-        })
-        .catch(error => {
-            console.log('error-getPicklist:'+ error.message);
-        });
-    }
-
-    getPicklistPolicy(cob,type,producttype){
-        getPolicyWording({
-            filter: cob,
-            producttype:producttype
-        })
-        .then(result => {
-            if(type == 1) this.policyWording = [];
-            else if(type == 2) this.policyWording2 = [];
-            for (var key in result) {
-                if(type == 1) this.policyWording.push({label:result[key], value:key});
-                if(type == 2) this.policyWording2.push({label:result[key], value:key});
-            }
-            if(type == 1) return this.policyWording;
-            else if(type == 2) return this.policyWording2;
-        })
-        .catch(error => {
-            console.log('error:'+ error.message);
-        });
-    }
-
-    getPicklistOpportunityType(){
-        getPicklistSTD({
-            objectName : 'Opportunity',
-            fieldName : 'Opportunity_Type__c'
-        })
-        .then(result => {
-            this.opportunityType = [];
-            for (var key in result) {
-                if(key != 'RN' && key != 'ED') this.opportunityType.push({label:result[key], value:key});
-            }
-            return this.opportunityType;
-        })
-        .catch(error => {
-            console.log('error:'+ error.message);
-        });
-    }
-
-    getPicklistRequestorType(){
-        getPicklistSTD({
-            objectName : 'Opportunity',
-            fieldName : 'Requestor_Type__c'
-        })
-        .then(result => {
-            this.requestorType = [];
-            for (var key in result) {
-                this.requestorType.push({label:result[key], value:key});
-            }
-            return this.requestorType;
-        })
-        .catch(error => {
-            console.log('error:'+ error.message);
-        });
-    }
-
-    getPicklistRequestorSegment(){
-        getPicklistSTD({
-            objectName : 'Opportunity',
-            fieldName : 'Requestor_Segment__c'
-        })
-        .then(result => {
-            this.requestorSegment = [];
-            for (var key in result) {
-                this.requestorSegment.push({label:result[key], value:key});
-            }
-            return this.requestorSegment;
-        })
-        .catch(error => {
-            console.log('error:'+ error.message);
-        });
-    }
-
-    getPicklistRequestorSubSegment(){
-        getPicklistSTD({
-            objectName : 'Opportunity',
-            fieldName : 'Requestor_Sub_Segment__c'
-        })
-        .then(result => {
-            this.requestorSubSegment = [];
-            for (var key in result) {
-                this.requestorSubSegment.push({label:result[key], value:key});
-            }
-            return this.requestorSubSegment;
-        })
-        .catch(error => {
-            console.log('error:'+ error.message);
-        });
-    }
-
-    getPicklistRequestorBusinessSegmentation(){
-        getPicklistSTD({
-            objectName : 'Opportunity',
-            fieldName : 'Requestor_Business_Segmentation__c'
-        })
-        .then(result => {
-            this.requestorBusinessSegmentation = [];
-            for (var key in result) {
-                this.requestorBusinessSegmentation.push({label:result[key], value:key});
-            }
-            return this.requestorBusinessSegmentation;
-        })
-        .catch(error => {
-            console.log('error:'+ error.message);
-        });
-    }
-
-    getPicklistRequestorPipelineStatus(){
-        getPicklistSTD({
-            objectName : 'Opportunity',
-            fieldName : 'Requestor_Pipeline_Status__c'
-        })
-        .then(result => {
-            this.requestorPipelineStatus = [];
-            for (var key in result) {
-                this.requestorPipelineStatus.push({label:result[key], value:key});
-            }
-            return this.requestorPipelineStatus;
-        })
-        .catch(error => {
-            console.log('error:'+ error.message);
-        });
-    }
-
-    getPicklistRequestorChannel(){
-        getPicklistSTD({
-            objectName : 'Opportunity',
-            fieldName : 'Requestor_Channel__c'
-        })
-        .then(result => {
-            this.requestorChannel = [];
-            for (var key in result) {
-                this.requestorChannel.push({label:result[key], value:key});
-            }
-            return this.requestorChannel;
-        })
-        .catch(error => {
-            console.log('error:'+ error.message);
-        });
-    }
-
-    getPicklistContractType(){
-        getPicklistSTD({
-            objectName : 'Opportunity',
-            fieldName : 'Policy_Closing_Type__c'
-        })
-        .then(result => {
-            this.contractType = [];
-            for (var key in result) {
-                this.contractType.push({label:result[key], value:key});
-            }
-            return this.contractType;
-        })
-        .catch(error => {
-            console.log('error-getPicklistContractType:'+ error.message);
-        });
-    }
-
-    getPicklistContractType2(){
-        getPicklistSTD({
-            objectName : 'Opportunity',
-            fieldName : 'Policy_Closing_Type__c'
-        })
-        .then(result => {
-            this.contractType2 = [];
-            for (var key in result) {
-                this.contractType2.push({label:result[key], value:key});
-            }
-            return this.contractType2;
-        })
-        .catch(error => {
-            console.log('error:'+ error.message);
-        });
-    }
-
-    getPicklistAssetSection(cob){
-        this.assetSectionId = undefined;
-        getAssetSection({
-            cob : cob
-        })
-        .then(result => {
-            this.assetSection = [];
-            for (var key in result) {
-                this.assetSection.push({label:result[key], value:key});
-            }
-            return this.assetSection;
-        })
-        .catch(error => {
-            console.log('error-getPicklistAssetSection:'+ error.message);
-        });
-    }
-
-    getPicklistAssetSection2(cob){
-        this.assetSectionId2 = undefined;
-        getAssetSection({
-            cob : cob
-        })
-        .then(result => {
-            this.assetSection2 = [];
-            for (var key in result) {
-                this.assetSection2.push({label:result[key], value:key});
-            }
-            return this.assetSection2;
-        })
-        .catch(error => {
-            console.log('error-getPicklistAssetSection2:'+ error.message);
-        });
-    }
-
-    getPicklistAssetCategory(cob,assetsection){
-        this.assetCategoryId = undefined;
-        getAssetCategory({
-            cob : cob,
-            assetsection : assetsection
-        })
-        .then(result => {
-            this.assetCategory = [];
-            for (var key in result) {
-                this.assetCategory.push({label:result[key], value:key});
-            }
-            return this.assetCategory;
-        })
-        .catch(error => {
-            console.log('error-getPicklistAssetCategory:'+ error.message);
-        });
-    }
-
-    getPicklistAssetCategory2(cob,assetsection){
-        this.assetCategoryId2 = undefined;
-        getAssetCategory({
-            cob : cob,
-            assetsection : assetsection
-        })
-        .then(result => {
-            this.assetCategory2 = [];
-            for (var key in result) {
-                this.assetCategory2.push({label:result[key], value:key});
-            }
-            return this.assetCategory2;
-        })
-        .catch(error => {
-            console.log('error-getPicklistAssetCategory2:'+ error.message);
-        });
-    }
-
-    getPicklistCurrency(){
-        this.currencyId = undefined;
-        this.currencyName = undefined;
-        getCurrency({})
-        .then(result => {
-            this.currency = [];
-            for (var key in result) {
-                this.currency.push({label:result[key], value:key});
-            }
-            //console.log('this.currency:'+JSON.stringify(this.currency));
-            return this.currency;
-        })
-        .catch(error => {
-            console.log('error:'+ error.message);
-        });
-    }
-
-    getPicklistCurrency2(){
-        this.currencyId2 = undefined;
-        this.currencyName2 = undefined;
-        getCurrency({})
-        .then(result => {
-            this.currency2 = [];
-            for (var key in result) {
-                this.currency2.push({label:result[key], value:key});
-            }
-            return this.currency2;
-        })
-        .catch(error => {
-            console.log('error:'+ error.message);
-        });
-    }
-
-    getPicklistFireType(){
-        getPicklistSTD({
-            objectName : 'Opportunity',
-            fieldName : 'FIRE_TYPE__c'
-        })
-        .then(result => {
-            this.fireType = [];
-            for (var key in result) {
-                this.fireType.push({label:result[key], value:key});
-            }
-            return this.fireType;
-        })
-        .catch(error => {
-            console.log('error-getPicklistFireType:'+ error.message);
-        });
-    }
-
-    getPicklistFireType2(){
-        getPicklistSTD({
-            objectName : 'Opportunity',
-            fieldName : 'FIRE_TYPE__c'
-        })
-        .then(result => {
-            this.fireType2 = [];
-            for (var key in result) {
-                this.fireType2.push({label:result[key], value:key});
-            }
-            return this.fireType2;
-        })
-        .catch(error => {
-            console.log('error-getPicklistFireType2:'+ error.message);
-        });
-    }
-
-    getPicklistWording(recordid){
-        getWording({
-            recordId : recordid,
-        })
-        .then(result => {
-            this.wording = [];
-            for (var key in result) {
-                this.wording.push({label:result[key], value:key});
-            }
-            return this.wording;
-        })
-        .catch(error => {
-            console.log('error-getPicklistWording:'+ error.message);
-        });
-    }
-
-    getPicklistWording2(recordid){
-        getWording({
-            recordId : recordid,
-        })
-        .then(result => {
-            this.wording2 = [];
-            for (var key in result) {
-                this.wording2.push({label:result[key], value:key});
-            }
-            return this.wording2;
-        })
-        .catch(error => {
-            console.log('error-getPicklistWording2:'+ error.message);
-        });
-    }
-
-    getPremiumCalculation(){
-        this.premiumCalculationId = undefined;
-        getPicklistSTD({
-            objectName : 'Opportunity',
-            fieldName : 'premium_calculation__c'
-        })
-        .then(result => {
-            this.premiumCalculation = [];
-            for (var key in result) {
-                this.premiumCalculation.push({label:result[key], value:key});
-            }
-            return this.premiumCalculation;
-        })
-        .catch(error => {
-            console.log('error-getPremiumCalculation:'+ error.message);
-        });
-    }
-
-    getPremiumCalculation2(){
-        this.premiumCalculationId2 = undefined;
-        getPicklistSTD({
-            objectName : 'Opportunity',
-            fieldName : 'premium_calculation__c'
-        })
-        .then(result => {
-            this.premiumCalculation2 = [];
-            for (var key in result) {
-                this.premiumCalculation2.push({label:result[key], value:key});
-            }
-            return this.premiumCalculation2;
-        })
-        .catch(error => {
-            console.log('error-getPremiumCalculation2:'+ error.message);
-        });
-    }
-
-    getAmountRate(curr,type){
-        getRate({
-            curr : curr
-        })
-        .then(result => {
-            if(type == '1'){
-                this.rate = result;
-                if(this.sumInsured) this.sumInsuredIDR = this.sumInsured * this.rate;
-                if(this.premium) this.premiumIDR = this.premium * this.rate;
-            }else if(type == '2'){
-                this.rate2 = result;
-                if(this.sumInsured2) this.sumInsuredIDR2 = this.sumInsured2 * this.rate2;
-                if(this.premium2) this.premiumIDR2 = this.premium2 * this.rate2;
-            }
-        })
-        .catch(error => {
-            console.log('error-getAmountRate:'+ error.message);
-        });
-    }
-
-    //INSURANCE PERIOD
+    //<-- INSURANCE PERIOD 1
     handleSchemaChange(event) { this.schemaType = event.detail.value; this.calculateDuration(); }
     handleInsurance(event) {
         const newType = event.detail ? event.detail.value : event.target.value;
@@ -2508,8 +1486,884 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
             this.premiumCalculationId = newPremiumCalculation;
         }
     }
+    //--> INSURANCE PERIOD 1
 
-    // PERIOD 2
+    //CHANGE RISK NAME 1
+    handleRiskName(event){
+        this.riskName = event.detail.value;
+    }
+
+    //<-- STANDARD 1
+    //CHANGE RISK DESCRIPTION 1
+    handleInputDesc(event){
+        let value = event.detail.value;
+        let fieldName = event.target.fieldName;
+        let cob = this.cob1;
+        let result = this.dataDescription1;
+        let mapIn = this.mapInput;
+        this.setCInput(result,cob,fieldName,value,mapIn,'1');
+    }
+
+    //CHANGE RISK SITUATION 1
+    handleCInput(event){
+        let value = event.detail.value;
+        let fieldName = event.target.fieldName;
+        let cob = this.cob1;
+        let result = this.datafield1;
+        let mapIn = this.mapInput;
+        //console.log('fieldName:'+fieldName);
+        //console.log('value:'+value);
+        this.setCInput(result,cob,fieldName,value,mapIn,'1');
+    }
+    //SET INPUT FROM DYNAMIC FIELD
+    setCInput(result,cob,fieldName,value,mapIn,type){
+        const field = result.find(item => item.field === fieldName);
+        //console.log('field:'+JSON.stringify(field));
+        //console.log('field-showdata:'+field.showdata);
+        if(value == undefined && fieldName != undefined && field.showdata != undefined){ //fieldName == 'Address__c'
+            let resultid = mapIn.get(fieldName);
+            //console.log('resultid:'+resultid);
+            //console.log('this.datafield1:'+JSON.stringify(result));
+            let mapData = new Map();
+            for(let i=0; i<result.length; i++){
+                if(result[i].field == fieldName){
+                    let showdata = result[i].showdata;
+                    //console.log('showdata:'+showdata);
+                    let data = JSON.parse(showdata);
+                    //console.log('data:'+data);
+                    for(let j=0;j<data.length;j++){
+                        //console.log('param1:'+data[j].param1);
+                        mapData.set(data[j].param1,data[j].param2);
+                    }
+                    break;
+                }
+            }
+
+            if(resultid != undefined && resultid != ''){
+                const childCmp = this.template.querySelectorAll('c-input');
+                if (childCmp) {
+                    for(let i=0;i<childCmp.length;i++){
+                        let fieldName = childCmp[i].getName();
+                        let fieldDepend = mapData.get(fieldName);
+                        //console.log('fieldDepend:'+fieldDepend);
+                        if(fieldDepend == ''){
+                            childCmp[i].setFilter(resultid);
+                        }
+                    }
+                }
+
+                getObject({
+                    fieldname: fieldName,
+                    cob : cob,
+                    recordId : resultid
+                })
+                .then(obj => {
+                    //console.log('obj:'+JSON.stringify(obj));
+                    let mapObj = new Map(Object.entries(obj[0]));
+                    //console.log('mapObj:'+mapObj.get('Id'));
+                    for(let i=0; i<result.length; i++){
+                        //console.log('i:'+i);
+                        let fKey = result[i].field;
+                        //console.log('fKey:'+fKey);
+                        let fName = mapData.get(fKey);
+                        //console.log('fName:'+fName);
+                        if(fName != undefined){
+                            let fValue = mapObj.get(fName);
+                            if(fValue == undefined) fValue = '';
+                            //console.log('fValue:'+fValue);
+                            result[i].value = fValue;
+                            if(type == '1') this.mapInput.set(fKey,fValue);
+                            else if(type == '2') this.mapInput2.set(fKey,fValue);
+                            else if(type == '3') this.mapSummary1.set(fKey,fValue);
+                            else if(type == '4') this.mapSummary2.set(fKey,fValue);
+                        }
+                    }
+                    console.log('result:'+JSON.stringify(result));
+                })
+                .catch(error => {
+                    console.log('error-getObject:'+ error.message);
+                });
+            }else{
+                for(let i=0; i<result.length; i++){
+                    let fKey = result[i].field;
+                    let fName = mapData.get(fKey);
+                    console.log(fKey+':'+fName);
+                    if(fName != undefined){
+                        console.log(fName);
+                        result[i].value = '';
+                        if(type == '1') this.mapInput.set(fKey,'');
+                        else if(type == '2') this.mapInput2.set(fKey,'');
+                        else if(type == '3') this.mapSummary1.set(fKey,'');
+                        else if(type == '4') this.mapSummary2.set(fKey,'');
+                    }
+                }
+                const childCmp = this.template.querySelectorAll('c-input');
+                if (childCmp) {
+                    for(let i=0;i<childCmp.length;i++){
+                        let fieldName = childCmp[i].getName();
+                        let fieldDepend = mapData.get(fieldName);
+                        if(fieldDepend == ''){
+                            childCmp[i].clearLookup();
+                        }
+                    }
+                }
+                console.log('result:'+JSON.stringify(result));
+            }
+        }
+    }
+
+    //CHANGE SUMMARY / SPECIFIC (1)
+    handleFormat(event){
+        const summary = this.template.querySelector('input[data-id="Summary"]');
+        const specific = this.template.querySelector('input[data-id="Specific"]');
+        if(summary.checked == true){
+            this.dataFormat1 = 'Summary';
+            this.showSummary = true;
+            this.getPicklistCurrency();
+            this.assetSectionId = undefined;
+            this.assetCategoryId = undefined;
+            this.currencyId = undefined;
+            this.rate = undefined;
+            this.showIDR = false;
+            this.sumInsured = undefined;
+            this.sumInsuredIDR = undefined;
+            this.premium = undefined;
+            this.premiumIDR = undefined;
+            this.numberOfRisk = undefined;
+            this.closedDate = undefined;
+            this.description = undefined;
+        }else if(specific.checked == true){
+            this.showSummary = false;
+            this.dataSummary1 = [];
+            this.dataFormat1 = 'Specific';
+        }
+        if(this.showSummary == true){
+            this.isLoading = true;
+            getMasterData({
+                cob: this.cob1,
+                description : "Profile",
+                contracttype : this.contractTypeId
+            })
+            .then(result => {
+                this.isLoading = false;
+                let field1 = [];
+                for(let i=0; i<result.length; i++){
+                    let setValue = undefined;
+                    field1.push({
+                        object : result[i].dataobject,
+                        field : result[i].datafield,
+                        label : result[i].datalabel,
+                        type : result[i].datatype,
+                        lookup : result[i].datalookup,
+                        filter : result[i].datafilter,
+                        required : result[i].datarequired,
+                        value : setValue,
+                        showdata : result[i].showdata
+                    });
+                }
+                this.dataSummary1 = field1;
+            })
+            .catch(error => {
+                this.isLoading = false;
+                console.log('error-handleFormat:'+ error.message);
+            });  
+        }
+    }
+
+    //CHANGE ASSET SECTION 1
+    handleAssetSection(event){
+        this.assetSectionId = event.detail.value;
+        if(this.assetSectionId){
+            this.getPicklistAssetCategory(this.cob1,this.assetSectionId);
+        }
+    }
+
+    //CHANGE ASSET CATEGORY 1
+    handleAssetCategory(event){
+        this.assetCategoryId = event.detail.value;
+    }
+
+    //CHANGE CURRENCY 1
+    handleCurrency(event){
+        this.currencyId = event.detail.value;
+        this.currencyName = this.currency.find(item => item.value === this.currencyId).label;
+        this.showIDR = false;
+        this.sumInsuredIDR = undefined;
+        this.premiumIDR = undefined;
+        this.rate = undefined;
+        if(this.currencyName == 'IDR'){
+            this.rate = 1;
+            if(this.sumInsured) this.sumInsuredIDR = this.sumInsured;
+            if(this.premium) this.premiumIDR = this.premium;
+        }else if(this.currencyName != 'IDR'){
+            this.showIDR = true;
+            this.getAmountRate(this.currencyName,'1');
+        }
+    }
+
+    //CHANGE SUM INSURED 1
+    handleSumInsured(event){
+        this.sumInsured = event.detail.value;
+        this.sumInsuredIDR = undefined;
+        if(this.sumInsured){
+            this.sumInsuredIDR = this.sumInsured * this.rate;
+        }
+    }
+
+    //CHANGE PREMIUM 1
+    handlePremium(event){
+        this.premium = event.detail.value;
+        this.premiumIDR = undefined;
+        if(this.premium){
+            this.premiumIDR = this.premium * this.rate;
+        }
+    }
+
+    //CHANGE RISK PROFILE 1
+    handleInputProfile(event){
+        let value = event.detail.value;
+        let fieldName = event.target.fieldName;
+        let cob = this.cob1;
+        let result = this.dataSummary1;
+        let mapIn = this.mapSummary1;
+        this.setCInput(result,cob,fieldName,value,mapIn,'3');
+    }
+
+    //CHANGE QUANTITY OF RISK 1
+    handleNumberOfRisk(event){
+        this.numberOfRisk = event.detail.value;
+    }
+
+    //CHANGE Expected Date Of Closing 1
+    handleClosedDate(event){
+        this.closedDate = event.detail.value;
+    }
+
+    //CHANGE DESCRIPTION 1
+    handleDescription(event){
+        this.description = event.detail.value;
+    }
+
+    //<-- UPLOAD FILE 1
+    //UPLOAD QUOTATION
+    handleUploadFinished(event){
+        const uploadedFiles = event.detail.files;
+        for(const item of uploadedFiles){
+            this.filequote1.push(item);    
+        }
+    }
+    //UPLOAD CLOSING
+    handleUploadFinished1(event){
+        const uploadedFiles = event.detail.files;
+        for(const item of uploadedFiles){
+            this.fileclosing1.push(item);    
+        }
+    }
+    //UPLOAD SURVEY
+    handleUploadFinished2(event){
+        const uploadedFiles = event.detail.files;
+        for(const item of uploadedFiles){
+            this.filesurvey1.push(item);    
+        }
+    }
+    //--> UPLOAD FILE 1
+    //--> STANDARD 1
+
+    //<-- REALISASI 1
+    //CHANGE REALISASI 1
+    handleRealisasiSelected1(event){
+        this.realisasiId1 = event.detail.recordId;
+        this.showRealisasi1 = false;
+        this.showStandard = true;
+        if(this.realisasiId1 != undefined && this.realisasiId1 != ''){
+            this.showRealisasi1 = true;
+            this.showStandard = false;
+            this.getRiskRealisasi();
+        }
+    }
+    //CHANGE FIELD REALISASI 1
+    handleInputRealisasi1(event){
+        let value = event.detail.value;
+        let fieldName = event.target.fieldName;
+        let cob = this.cob1;
+        let result = this.datafieldRealisasi1;
+        let mapIn = this.mapInputRealisasi1;
+        this.setCInputRealisasi(result,cob,fieldName,value,mapIn,'1');
+    }
+    //SET INPUT REALISASI 1
+    setCInputRealisasi(result,cob,fieldName,value,mapIn,type){
+        let field,resultdata;
+        for(let x=0;x<result.length;x++){
+            resultdata = result[x].data;
+            field = resultdata.find(item => item.datafield === fieldName);
+            if(field != undefined) break;
+        }
+        if(value == undefined && fieldName != undefined && field.showdata != undefined){
+            let resultid = mapIn.get(fieldName);
+            let mapData = new Map();
+            for(let i=0; i<resultdata.length; i++){
+                if(resultdata[i].datafield == fieldName){
+                    let showdata = resultdata[i].showdata;
+                    let data = JSON.parse(showdata);
+                    for(let j=0;j<data.length;j++){
+                        mapData.set(data[j].param1,data[j].param2);
+                    }
+                    break;
+                }
+            }
+            if(resultid != undefined && resultid != ''){
+                const childCmp = this.template.querySelectorAll('c-input');
+                if (childCmp) {
+                    for(let i=0;i<childCmp.length;i++){
+                        let fieldName = childCmp[i].getName();
+                        let fieldDepend = mapData.get(fieldName);
+                        if(fieldDepend == ''){
+                            childCmp[i].setFilter(resultid);
+                        }
+                    }
+                }
+                getObject({
+                    fieldname: fieldName,
+                    cob : cob,
+                    recordId : resultid
+                })
+                .then(obj => {
+                    let mapObj = new Map(Object.entries(obj[0]));
+                    for(let i=0; i<resultdata.length; i++){
+                        let fKey = resultdata[i].datafield;
+                        let fName = mapData.get(fKey);
+                        if(fName != undefined){
+                            let fValue = mapObj.get(fName);
+                            if(fValue == undefined) fValue = '';
+                            resultdata[i].value = fValue;
+                            if(type == '1') this.mapInputRealisasi1.set(fKey,fValue);
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.log('error-getObject:'+ error.message);
+                });
+            }else{
+                console.log('clear');
+                for(let i=0; i<resultdata.length; i++){
+                    let fKey = resultdata[i].datafield;
+                    let fName = mapData.get(fKey);
+                    //console.log(fKey+':'+fName);
+                    if(fName != undefined){
+                        //console.log(fName);
+                        resultdata[i].value = '';
+                        if(type == '1') this.mapInputRealisasi1.set(fKey,'');
+                    }
+                }
+                const childCmp = this.template.querySelectorAll('c-input');
+                if (childCmp) {
+                    for(let i=0;i<childCmp.length;i++){
+                        let fieldName = childCmp[i].getName();
+                        let fieldDepend = mapData.get(fieldName);
+                        if(fieldDepend == ''){
+                            childCmp[i].clearLookup();
+                        }
+                    }
+                }
+                console.log('resultdata:'+JSON.stringify(resultdata));
+            }
+        }
+    }
+    //ROW ACTION REALISASI ASSET 1
+    handleRowActionAssetRealisasi1(event){
+        console.log('handleRowActionAssetRealisasi1');
+        const action = event.detail.action;
+        const row = event.detail.row;
+        let records = this.dataAssetRealisasi1;
+        const rowIndex = records.findIndex(r => r.Id === row.Id);
+        let record = records[rowIndex];
+        console.log('row:'+JSON.stringify(row));
+        switch (action.name) {
+            case 'show_details':
+                this.showModalAsset1(records,record,this.realisasiId1);
+                break;
+            case 'delete':
+                LightningConfirm.open({
+                    message: 'Are your sure want to delete this asset?',
+                    label: 'Warning', 
+                    variant : 'headerless'
+                }).then((result) => {
+                    if(result == true){
+                        const rowIndex = records.findIndex(r => r.Id === row.Id);
+                        records.splice(rowIndex, 1);
+                        this.dataAssetRealisasi1 = [...records];
+                        this.dataCoverageRealisasi1 = [];
+                        console.log('record:'+JSON.stringify(this.dataAssetRealisasi1));
+                    }
+                });
+                break;
+        }
+    }
+    //BUTTON ADD ASSET REALISASI 1
+    handleAddAssetRealisasi1(event){
+        console.log('handleAddAssetRealisasi1');
+        let records = this.dataAssetRealisasi1;
+        this.showModalAsset1(records,undefined,this.realisasiId1);
+    }
+    //ROW ACTION REALISASI COVERAGE 1
+    handleRowActionCoverageRealisasi1(event){
+        console.log('handleRowActionCoverageRealisasi1');
+        const action = event.detail.action;
+        const row = event.detail.row;
+        let assets = this.dataAssetRealisasi1;
+        let records = this.dataCoverageRealisasi1;
+        const rowIndex = records.findIndex(r => r.Id === row.Id);
+        let record = records[rowIndex];
+        console.log('row:'+JSON.stringify(row));
+        switch (action.name) {
+            case 'show_details':
+                this.showModalCoverage1(records,record,this.realisasiId1,assets);
+                break;
+            case 'delete':
+                LightningConfirm.open({
+                    message: 'Are your sure want to delete this coverage?',
+                    label: 'Warning', 
+                    variant : 'headerless'
+                }).then((result) => {
+                    if(result == true){
+                        let data = [];
+                        for(let i=0;i<records.length;i++){
+                            if(records[i].Id != row.Id){
+                                data = [...data,records[i]];
+                            }
+                        }
+                        this.dataCoverageRealisasi1 = [...data];
+                        console.log('record:'+JSON.stringify(this.dataCoverageRealisasi1));
+                    }
+                });
+                break;
+        }
+    }
+    //BUTTON ADD REALISASI COVERAGE 1
+    handleAddCoverageRealisasi1(event){
+        console.log('handleAddCoverageRealisasi1');
+        let assets = this.dataAssetRealisasi1;
+        let records = this.dataCoverageRealisasi1;
+        if(assets.length == 0){
+            LightningAlert.open({message: 'Please Add Asset!',theme: 'error',label: 'Error!'});
+        }else{
+            this.showModalCoverage1(records,undefined,this.realisasiId1,assets);
+        }
+    }
+    //SHOW MODAL ASSET REALISASI 1
+    async showModalAsset1(records,record,recordid){
+        const result = await modalRealisasi.open({
+            records : records,
+            record : record,
+            recordid : recordid,
+            type : 'realisasi'
+        });
+        console.log('result:'+JSON.stringify(result));
+        if(result != 'cancel' && result != undefined){
+            this.dataAssetRealisasi1 = result;
+            this.dataCoverageRealisasi1 = [];
+        }
+    }
+    //SHOW MODAL REALISASI COVERAGE 1
+    async showModalCoverage1(records,record,recordid,assets){
+        const result = await modalCoverage.open({
+            records : records,
+            record : record,
+            recordid : recordid,
+            assets : assets,
+            type : 'realisasi'
+        });
+        console.log('result:'+JSON.stringify(result));
+        if(result != 'cancel' && result != undefined){
+            this.dataCoverageRealisasi1 = result;
+        }
+    }
+    //--> REALISASI 1
+
+    //--> MOU 1
+    //CHANGE MOU 1
+    handleMOUSelected1(event){
+        console.log('handleMOUSelected1');
+        this.mouId1 = event.detail.recordId;
+        console.log('mouId1:'+this.mouId1);
+        this.showMOU = false;
+        this.showStandard = true;
+        if(this.mouId1 != undefined && this.mouId1 != ''){
+            this.showMOU = true;
+            this.showStandard = false;
+            this.getRisk1();
+        }
+    }
+    //CHANGE FIELD MOU 1
+    handleInputMOU1(event){
+        let value = event.detail.value;
+        let fieldName = event.target.fieldName;
+        let cob = this.cob1;
+        let result = this.datafieldMOU1;
+        let mapIn = this.mapInputMOU1;
+        this.setCInputMOU(result,cob,fieldName,value,mapIn,'1');
+    }
+    //SET INPUT MOU 1
+    setCInputMOU(result,cob,fieldName,value,mapIn,type){
+        let field,resultdata;
+        for(let x=0;x<result.length;x++){
+            resultdata = result[x].data;
+            field = resultdata.find(item => item.datafield === fieldName);
+            if(field != undefined) break;
+        }
+        if(value == undefined && fieldName != undefined && field.showdata != undefined){
+            let resultid = mapIn.get(fieldName);
+            let mapData = new Map();
+            for(let i=0; i<resultdata.length; i++){
+                if(resultdata[i].datafield == fieldName){
+                    let showdata = resultdata[i].showdata;
+                    let data = JSON.parse(showdata);
+                    for(let j=0;j<data.length;j++){
+                        mapData.set(data[j].param1,data[j].param2);
+                    }
+                    break;
+                }
+            }
+            if(resultid != undefined && resultid != ''){
+                const childCmp = this.template.querySelectorAll('c-input');
+                if (childCmp) {
+                    for(let i=0;i<childCmp.length;i++){
+                        let fieldName = childCmp[i].getName();
+                        let fieldDepend = mapData.get(fieldName);
+                        if(fieldDepend == ''){
+                            childCmp[i].setFilter(resultid);
+                        }
+                    }
+                }
+                getObject({
+                    fieldname: fieldName,
+                    cob : cob,
+                    recordId : resultid
+                })
+                .then(obj => {
+                    let mapObj = new Map(Object.entries(obj[0]));
+                    for(let i=0; i<resultdata.length; i++){
+                        let fKey = resultdata[i].datafield;
+                        let fName = mapData.get(fKey);
+                        if(fName != undefined){
+                            let fValue = mapObj.get(fName);
+                            if(fValue == undefined) fValue = '';
+                            resultdata[i].value = fValue;
+                            if(type == '1') this.mapInputMOU1.set(fKey,fValue);
+                        }
+                    }
+                    //console.log('resultdata:'+JSON.stringify(resultdata));
+                })
+                .catch(error => {
+                    console.log('error-getObject:'+ error.message);
+                });
+            }else{
+                console.log('clear');
+                for(let i=0; i<resultdata.length; i++){
+                    let fKey = resultdata[i].datafield;
+                    let fName = mapData.get(fKey);
+                    //console.log(fKey+':'+fName);
+                    if(fName != undefined){
+                        //console.log(fName);
+                        resultdata[i].value = '';
+                        if(type == '1') this.mapInputMOU1.set(fKey,'');
+                    }
+                }
+                const childCmp = this.template.querySelectorAll('c-input');
+                if (childCmp) {
+                    for(let i=0;i<childCmp.length;i++){
+                        let fieldName = childCmp[i].getName();
+                        let fieldDepend = mapData.get(fieldName);
+                        if(fieldDepend == ''){
+                            childCmp[i].clearLookup();
+                        }
+                    }
+                }
+                console.log('resultdata:'+JSON.stringify(resultdata));
+            }
+        }
+    }
+    //ROW ACTION ASSET MOU 1
+    handleRowActionAssetMOU1(event){
+        console.log('handleRowActionAssetMOU1');
+        const action = event.detail.action;
+        const row = event.detail.row;
+        let records = this.dataAssetMOU1;
+        const rowIndex = records.findIndex(r => r.Id === row.Id);
+        let record = records[rowIndex];
+        console.log('row:'+JSON.stringify(row));
+        switch (action.name) {
+            case 'show_details':
+                this.showModalAssetMOU1(records,record,this.mouId1);
+                break;
+            case 'delete':
+                LightningConfirm.open({
+                    message: 'Are your sure want to delete this asset?',
+                    label: 'Warning', 
+                    variant : 'headerless'
+                }).then((result) => {
+                    if(result == true){
+                        const rowIndex = records.findIndex(r => r.Id === row.Id);
+                        records.splice(rowIndex, 1);
+                        this.dataAssetMOU1 = [...records];
+                        this.dataCoverageMOU1 = [];
+                        console.log('record:'+JSON.stringify(this.dataAssetMOU1));
+                    }
+                });
+                break;
+        }
+    }
+    //BUTTON ADD ASSET MOU 1
+    handleAddAssetMOU1(event){
+        console.log('handleAddAssetMOU1');
+        let records = this.dataAssetMOU1;
+        this.showModalAssetMOU1(records,undefined,this.mouId1);
+    }
+    //ROW ACTION COVERAGE MOU 1
+    handleRowActionCoverageMOU1(event){
+        console.log('handleRowActionCoverageMOU1');
+        const action = event.detail.action;
+        const row = event.detail.row;
+        let assets = this.dataAssetMOU1;
+        let records = this.dataCoverageMOU1;
+        const rowIndex = records.findIndex(r => r.Id === row.Id);
+        let record = records[rowIndex];
+        console.log('row:'+JSON.stringify(row));
+        switch (action.name) {
+            case 'show_details':
+                this.showModalCoverageMOU1(records,record,this.mouId1,assets);
+                break;
+            case 'delete':
+                LightningConfirm.open({
+                    message: 'Are your sure want to delete this coverage?',
+                    label: 'Warning', 
+                    variant : 'headerless'
+                }).then((result) => {
+                    if(result == true){
+                        let data = [];
+                        for(let i=0;i<records.length;i++){
+                            if(records[i].Id != row.Id){
+                                data = [...data,records[i]];
+                            }
+                        }
+                        this.dataCoverageMOU1 = [...data];
+                        console.log('record:'+JSON.stringify(this.dataCoverageMOU1));
+                    }
+                });
+                break;
+        }
+    }
+    //BUTTON ADD COVERAGE MOU 1
+    handleAddCoverageMOU1(event){
+        console.log('handleAddCoverageMOU1');
+        let assets = this.dataAssetMOU1;
+        let records = this.dataCoverageMOU1;
+        if(assets.length == 0){
+            LightningAlert.open({message: 'Please Add Asset!',theme: 'error',label: 'Error!'});
+        }else{
+            this.showModalCoverageMOU1(records,undefined,this.mouId1,assets);
+        }
+    }
+    //SHOW MODAL ASSET MOU 1
+    async showModalAssetMOU1(records,record,recordid){
+        const result = await modalRealisasi.open({
+            records : records,
+            record : record,
+            recordid : recordid,
+            type : 'mou'
+        });
+        console.log('result:'+JSON.stringify(result));
+        if(result != 'cancel' && result != undefined){
+            this.dataAssetMOU1 = result;
+            this.dataCoverageMOU1 = [];
+        }
+    }
+    //SHOW MODAL REALISASI MOU 1
+    async showModalCoverageMOU1(records,record,recordid,assets){
+        const result = await modalCoverage.open({
+            records : records,
+            record : record,
+            recordid : recordid,
+            assets : assets,
+            type : 'mou'
+        });
+        console.log('result:'+JSON.stringify(result));
+        if(result != 'cancel' && result != undefined){
+            this.dataCoverageMOU1 = result;
+        }
+    }
+    //--> MOU 1
+
+    //CHANGE POLICY WORDING 2
+    handlePolicyWording2(event){
+        this.policyWordingId2 = event.detail.value;
+        this.policyWordingName2 = this.policyWording2.find(opt => opt.value === this.policyWordingId2).label;
+        this.showIAR2 = false;
+        this.fireTypeId2 = undefined;
+        this.wordingId2 = undefined;
+        this.wordingName2 = undefined;
+        if(this.policyWordingName2 == 'IAR/PAR'){
+            this.showIAR2 = true;
+            //this.getPicklistFireType2();
+            this.getPicklistWording2(this.policyWordingId2);
+        }
+    }
+
+    //CHANGE Wording Standard 2
+    handleWording2(event){
+        this.wordingId2 = event.detail.value;
+        this.wordingName2 = this.wording2.find(opt => opt.value === this.wordingId2).label;
+    }
+
+    //CHANGE RISK SITUATION 2
+    handleCInput2(event){
+        let value = event.detail.value;
+        let fieldName = event.target.fieldName;
+        let cob = this.cob2;
+        let result = this.datafield2;
+        let mapIn = this.mapInput2;
+        this.setCInput(result,cob,fieldName,value,mapIn,'2');
+    }
+
+    //CHANGE RISK DESCRIPTION 2
+    handleInputDesc2(event){
+        let value = event.detail.value;
+        let fieldName = event.target.fieldName;
+        let cob = this.cob2;
+        let result = this.dataDescription2;
+        let mapIn = this.mapInput2;
+        //console.log('fieldName:'+fieldName);
+        //console.log('value:'+value);
+        this.setCInput(result,cob,fieldName,value,mapIn,'2');
+    }
+
+    //CHANGE SUMMARY / SPECIFIC (2)
+    handleFormat2(event){
+        const summary = this.template.querySelector('input[data-id="Summary2"]');
+        const specific = this.template.querySelector('input[data-id="Specific2"]');
+        if(summary.checked == true){
+            this.showSummary2 = true;
+            this.dataFormat2 = 'Summary';
+            this.getPicklistCurrency2();
+            this.assetSectionId2 = undefined;
+            this.assetCategoryId2 = undefined;
+            this.currencyId2 = undefined;
+            this.rate2 = undefined;
+            this.showIDR2 = false;
+            this.sumInsured2 = undefined;
+            this.sumInsuredIDR2 = undefined;
+            this.premium2 = undefined;
+            this.premiumIDR2 = undefined;
+            this.numberOfRisk2 = undefined;
+            this.closedDate2 = undefined;
+            this.description2 = undefined;
+        }else if(specific.checked == true){
+            this.showSummary2 = false;
+            this.dataSummary2 = [];
+            this.dataFormat2 = 'Specific';
+        }
+        if(this.showSummary2 == true){
+            this.isLoading = true;
+            let field1 = [];
+            getMasterData({
+                cob: this.cob2,
+                description : "Profile",
+                contracttype : this.contractTypeId2
+            })
+            .then(result => {
+                this.isLoading = false;
+                let field1 = [];
+                for(let i=0; i<result.length; i++){
+                    let setValue = undefined;
+                    field1.push({
+                        object : result[i].dataobject,
+                        field : result[i].datafield,
+                        label : result[i].datalabel,
+                        type : result[i].datatype,
+                        lookup : result[i].datalookup,
+                        filter : result[i].datafilter,
+                        required : result[i].datarequired,
+                        value : setValue,
+                        showdata : result[i].showdata
+                    });
+                }
+                this.dataSummary2 = field1;
+            })
+            .catch(error => {
+                this.isLoading = false;
+                console.log('error-handleFormat2:'+ error.message);
+            });  
+        }
+    }
+
+    //CHANGE RISK PROFILE 2
+    handleInputProfile2(event){
+        let value = event.detail.value;
+        let fieldName = event.target.fieldName;
+        let cob = this.cob2;
+        let result = this.dataSummary2;
+        let mapIn = this.mapSummary2;
+        this.setCInput(result,cob,fieldName,value,mapIn,'4');
+    }
+
+
+    //CHANGE PRODUCT TYPE 2
+    handleProductType2(event){
+        this.policyWording2 = [];
+        this.policyWordingId2 = undefined;
+        this.policyWordingName2 = undefined;
+        this.productTypeId2 = event.detail.value;
+        this.productTypeName2 = this.productType2.find(opt => opt.value === this.productTypeId2).label;
+        this.getPicklistPolicy('',2,this.productTypeId2);
+    }
+
+    //CHANGE CONTRACT TYPE 2
+    handleContractType2(event){
+        this.contractTypeId2 = event.detail.value;
+        if(this.cob2 != undefined && this.cob2 != ''){
+            if(this.cob2 == '101'){
+                this.changeCOB2(this.cob2,'contract');
+            }
+        }
+    }
+
+    //CHANGE ASSET SECTION 2
+    handleAssetSection2(event){
+        this.assetSectionId2 = event.detail.value;
+        if(this.assetSectionId2){
+            this.getPicklistAssetCategory2(this.cob2,this.assetSectionId2);
+        }
+    }
+
+    //CHANGE ASSET CATEGORY 2
+    handleAssetCategory2(event){
+        this.assetCategoryId2 = event.detail.value;
+    }
+
+    //CHANGE CURRENCY 2
+    handleCurrency2(event){
+        this.currencyId2 = event.detail.value;
+        this.currencyName2 = this.currency2.find(item => item.value === this.currencyId2).label;
+        this.showIDR2 = false;
+        this.sumInsuredIDR2 = undefined;
+        this.premiumIDR2 = undefined;
+        this.rate2 = undefined;
+        if(this.currencyName2 == 'IDR'){
+            this.rate2 = 1;
+            if(this.sumInsured2) this.sumInsuredIDR2 = this.sumInsured2;
+            if(this.premium2) this.premiumIDR2 = this.premium2;
+        }else if(this.currencyName2 != 'IDR'){
+            this.showIDR2 = true;
+            this.getAmountRate(this.currencyName2,'2');
+        }
+    }
+
+    //CHANGE PREMIUM CALCULATION 2
+    handlePremiumCalculation2(event){
+        this.premiumCalculationId2 = event.detail.value;
+    }
+
+    //<-- INSURANCE PERIOD 2
     handleSchemaChange2(event) { this.schemaType2 = event.detail.value; this.calculateDuration2(); }
     handleInsurance2(event) {
         const newType = event.detail ? event.detail.value : event.target.value;
@@ -2783,53 +2637,18 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
             this.premiumCalculationId2 = newPremiumCalculation;
         }
     }
+    //--> INSURANCE PERIOD 2
 
-    handleInsuredAddress(event){
-        this.accountAddress = event.detail.value;
-    }
-
-    handleDescription(event){
-        this.description = event.detail.value;
-    }
-
+    //CHANGE DESCRIPTION 2
     handleDescription2(event){
         this.description2 = event.detail.value;
     }
 
-    //SUMMARY
-    handleRiskName(event){
-        this.riskName = event.detail.value;
-    }
-
+    //CHANGE RISK NAME 2
     handleRiskName2(event){
         this.riskName2 = event.detail.value;
     }
-
-    handleSumInsured(event){
-        this.sumInsured = event.detail.value;
-        this.sumInsuredIDR = undefined;
-        if(this.sumInsured){
-            this.sumInsuredIDR = this.sumInsured * this.rate;
-        }
-    }
-
-    handlePremium(event){
-        this.premium = event.detail.value;
-        this.premiumIDR = undefined;
-        if(this.premium){
-            this.premiumIDR = this.premium * this.rate;
-        }
-    }
-
-    handleNumberOfRisk(event){
-        this.numberOfRisk = event.detail.value;
-    }
-    
-    handleClosedDate(event){
-        this.closedDate = event.detail.value;
-    }
-
-    //SUMMARY2
+    //CHANGE SUM INSURED 2
     handleSumInsured2(event){
         this.sumInsured2 = event.detail.value;
         this.sumInsuredIDR2 = undefined;
@@ -2837,7 +2656,7 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
             this.sumInsuredIDR2 = this.sumInsured2 * this.rate2;
         }
     }
-
+    //CHANGE PREMIUM 2
     handlePremium2(event){
         this.premium2 = event.detail.value;
         this.premiumIDR2 = undefined;
@@ -2845,58 +2664,41 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
             this.premiumIDR2 = this.premium2 * this.rate2;
         }
     }
-
+    //CHANGE QUANTITY OF RISK 2
     handleNumberOfRisk2(event){
         this.numberOfRisk2 = event.detail.value;
     }
-    
+    //CHANGE EXPECTED DATE OF CLOSING 2
     handleClosedDate2(event){
         this.closedDate2 = event.detail.value;
     }
 
-    //FILE
-    handleUploadFinished(event){
-        const uploadedFiles = event.detail.files;
-        for(const item of uploadedFiles){
-            this.filequote1.push(item);    
-        }
-    }
-
-    handleUploadFinished1(event){
-        const uploadedFiles = event.detail.files;
-        for(const item of uploadedFiles){
-            this.fileclosing1.push(item);    
-        }
-    }
-
-    handleUploadFinished2(event){
-        const uploadedFiles = event.detail.files;
-        for(const item of uploadedFiles){
-            this.filesurvey1.push(item);    
-        }
-    }
-
+    //<-- UPLOAD FILE 2
+    //UPLOAD QUOTATION 2
     handleUploadFinished3(event){
         const uploadedFiles = event.detail.files;
         for(const item of uploadedFiles){
             this.filequote2.push(item);    
         }
     }
-
+    //UPLOAD CLOSING 2
     handleUploadFinished4(event){
         const uploadedFiles = event.detail.files;
         for(const item of uploadedFiles){
             this.fileclosing2.push(item);    
         }
     }
-
+    //UPLOAD SURVEY 2
     handleUploadFinished5(event){
         const uploadedFiles = event.detail.files;
         for(const item of uploadedFiles){
             this.filesurvey2.push(item);    
         }
     }
+    //--> UPLOAD FILE 2
 
+    //<-- DELETE FILE 1
+    //DELETE QUOTATION 1
     handleDelete(event){
         const documentId = event.target.dataset.id;
         this.isLoading = true;
@@ -2910,7 +2712,7 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
                 console.log('error:'+error.body.message);
             });
     }
-
+    //DELETE CLOSING 1
     handleDelete1(event){
         const documentId = event.target.dataset.id;
         this.isLoading = true;
@@ -2924,7 +2726,7 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
                 console.log('error:'+error.body.message);
             });
     }
-
+    //DELETE SURVEY 1
     handleDelete2(event){
         const documentId = event.target.dataset.id;
         this.isLoading = true;
@@ -2938,7 +2740,10 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
                 console.log('error:'+error.body.message);
             });
     }
+    //--> DELETE FILE 1
 
+    //<-- DELETE FILE 2
+    //DELETE QUOTATION 2
     handleDelete3(event){
         const documentId = event.target.dataset.id;
         this.isLoading = true;
@@ -2952,7 +2757,7 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
                 console.log('error:'+error.body.message);
             });
     }
-
+    //DELETE CLOSING 2
     handleDelete4(event){
         const documentId = event.target.dataset.id;
         this.isLoading = true;
@@ -2966,7 +2771,7 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
                 console.log('error:'+error.body.message);
             });
     }
-
+    //DELETE SURVEY 2
     handleDelete5(event){
         const documentId = event.target.dataset.id;
         this.isLoading = true;
@@ -2980,7 +2785,410 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
                 console.log('error:'+error.body.message);
             });
     }   
+    //--> DELETE FILE 2
 
+    //<-- GET DATA FROM CLASS
+    getPicklist(cob,type){
+        getProductType({
+            filter: cob
+        })
+        .then(result => {
+            if(type == 1) this.productType = [];
+            else if(type == 2) this.productType2 = [];
+            for (var key in result) {
+                if(type == 1) this.productType.push({label:result[key], value:key});
+                if(type == 2) this.productType2.push({label:result[key], value:key});
+            }
+            if(type == 1) return this.productType;
+            else if(type == 2) return this.productType2;
+        })
+        .catch(error => {
+            console.log('error-getPicklist:'+ error.message);
+        });
+    }
+
+    getPicklistPolicy(cob,type,producttype){
+        getPolicyWording({
+            filter: cob,
+            producttype:producttype
+        })
+        .then(result => {
+            if(type == 1) this.policyWording = [];
+            else if(type == 2) this.policyWording2 = [];
+            for (var key in result) {
+                if(type == 1) this.policyWording.push({label:result[key], value:key});
+                if(type == 2) this.policyWording2.push({label:result[key], value:key});
+            }
+            if(type == 1) return this.policyWording;
+            else if(type == 2) return this.policyWording2;
+        })
+        .catch(error => {
+            console.log('error:'+ error.message);
+        });
+    }
+
+    getPicklistRequestorType(){
+        getPicklistSTD({
+            objectName : 'Opportunity',
+            fieldName : 'Requestor_Type__c'
+        })
+        .then(result => {
+            this.requestorType = [];
+            for (var key in result) {
+                this.requestorType.push({label:result[key], value:key});
+            }
+            return this.requestorType;
+        })
+        .catch(error => {
+            console.log('error:'+ error.message);
+        });
+    }
+
+    getPicklistRequestorSegment(){
+        getPicklistSTD({
+            objectName : 'Opportunity',
+            fieldName : 'Requestor_Segment__c'
+        })
+        .then(result => {
+            this.requestorSegment = [];
+            for (var key in result) {
+                this.requestorSegment.push({label:result[key], value:key});
+            }
+            return this.requestorSegment;
+        })
+        .catch(error => {
+            console.log('error:'+ error.message);
+        });
+    }
+
+    getPicklistRequestorSubSegment(){
+        getPicklistSTD({
+            objectName : 'Opportunity',
+            fieldName : 'Requestor_Sub_Segment__c'
+        })
+        .then(result => {
+            this.requestorSubSegment = [];
+            for (var key in result) {
+                this.requestorSubSegment.push({label:result[key], value:key});
+            }
+            return this.requestorSubSegment;
+        })
+        .catch(error => {
+            console.log('error:'+ error.message);
+        });
+    }
+
+    getPicklistRequestorBusinessSegmentation(){
+        getPicklistSTD({
+            objectName : 'Opportunity',
+            fieldName : 'Requestor_Business_Segmentation__c'
+        })
+        .then(result => {
+            this.requestorBusinessSegmentation = [];
+            for (var key in result) {
+                this.requestorBusinessSegmentation.push({label:result[key], value:key});
+            }
+            return this.requestorBusinessSegmentation;
+        })
+        .catch(error => {
+            console.log('error:'+ error.message);
+        });
+    }
+
+    getPicklistRequestorPipelineStatus(){
+        getPicklistSTD({
+            objectName : 'Opportunity',
+            fieldName : 'Requestor_Pipeline_Status__c'
+        })
+        .then(result => {
+            this.requestorPipelineStatus = [];
+            for (var key in result) {
+                this.requestorPipelineStatus.push({label:result[key], value:key});
+            }
+            return this.requestorPipelineStatus;
+        })
+        .catch(error => {
+            console.log('error:'+ error.message);
+        });
+    }
+
+    getPicklistRequestorChannel(){
+        getPicklistSTD({
+            objectName : 'Opportunity',
+            fieldName : 'Requestor_Channel__c'
+        })
+        .then(result => {
+            this.requestorChannel = [];
+            for (var key in result) {
+                this.requestorChannel.push({label:result[key], value:key});
+            }
+            return this.requestorChannel;
+        })
+        .catch(error => {
+            console.log('error:'+ error.message);
+        });
+    }
+
+    getPicklistContractType(){
+        getPicklistSTD({
+            objectName : 'Opportunity',
+            fieldName : 'Policy_Closing_Type__c'
+        })
+        .then(result => {
+            this.contractType = [];
+            for (var key in result) {
+                this.contractType.push({label:result[key], value:key});
+            }
+            return this.contractType;
+        })
+        .catch(error => {
+            console.log('error-getPicklistContractType:'+ error.message);
+        });
+    }
+
+    getPicklistContractType2(){
+        getPicklistSTD({
+            objectName : 'Opportunity',
+            fieldName : 'Policy_Closing_Type__c'
+        })
+        .then(result => {
+            this.contractType2 = [];
+            for (var key in result) {
+                this.contractType2.push({label:result[key], value:key});
+            }
+            return this.contractType2;
+        })
+        .catch(error => {
+            console.log('error:'+ error.message);
+        });
+    }
+
+    getPicklistAssetSection(cob){
+        getAssetSection({
+            cob : cob
+        })
+        .then(result => {
+            this.assetSection = [];
+            for (var key in result) {
+                this.assetSection.push({label:result[key], value:key});
+            }
+            return this.assetSection;
+        })
+        .catch(error => {
+            console.log('error-getPicklistAssetSection:'+ error.message);
+        });
+    }
+
+    getPicklistAssetSection2(cob){
+        getAssetSection({
+            cob : cob
+        })
+        .then(result => {
+            this.assetSection2 = [];
+            for (var key in result) {
+                this.assetSection2.push({label:result[key], value:key});
+            }
+            return this.assetSection2;
+        })
+        .catch(error => {
+            console.log('error-getPicklistAssetSection2:'+ error.message);
+        });
+    }
+
+    getPicklistAssetCategory(cob,assetsection){
+        this.assetCategoryId = undefined;
+        getAssetCategory({
+            cob : cob,
+            assetsection : assetsection
+        })
+        .then(result => {
+            this.assetCategory = [];
+            for (var key in result) {
+                this.assetCategory.push({label:result[key], value:key});
+            }
+            return this.assetCategory;
+        })
+        .catch(error => {
+            console.log('error-getPicklistAssetCategory:'+ error.message);
+        });
+    }
+
+    getPicklistAssetCategory2(cob,assetsection){
+        this.assetCategoryId2 = undefined;
+        getAssetCategory({
+            cob : cob,
+            assetsection : assetsection
+        })
+        .then(result => {
+            this.assetCategory2 = [];
+            for (var key in result) {
+                this.assetCategory2.push({label:result[key], value:key});
+            }
+            return this.assetCategory2;
+        })
+        .catch(error => {
+            console.log('error-getPicklistAssetCategory2:'+ error.message);
+        });
+    }
+
+    getPicklistCurrency(){
+        this.currencyId = undefined;
+        this.currencyName = undefined;
+        getCurrency({})
+        .then(result => {
+            this.currency = [];
+            for (var key in result) {
+                this.currency.push({label:result[key], value:key});
+            }
+            //console.log('this.currency:'+JSON.stringify(this.currency));
+            return this.currency;
+        })
+        .catch(error => {
+            console.log('error:'+ error.message);
+        });
+    }
+
+    getPicklistCurrency2(){
+        this.currencyId2 = undefined;
+        this.currencyName2 = undefined;
+        getCurrency({})
+        .then(result => {
+            this.currency2 = [];
+            for (var key in result) {
+                this.currency2.push({label:result[key], value:key});
+            }
+            return this.currency2;
+        })
+        .catch(error => {
+            console.log('error:'+ error.message);
+        });
+    }
+
+    getPicklistFireType(){
+        getPicklistSTD({
+            objectName : 'Opportunity',
+            fieldName : 'FIRE_TYPE__c'
+        })
+        .then(result => {
+            this.fireType = [];
+            for (var key in result) {
+                this.fireType.push({label:result[key], value:key});
+            }
+            return this.fireType;
+        })
+        .catch(error => {
+            console.log('error-getPicklistFireType:'+ error.message);
+        });
+    }
+
+    getPicklistFireType2(){
+        getPicklistSTD({
+            objectName : 'Opportunity',
+            fieldName : 'FIRE_TYPE__c'
+        })
+        .then(result => {
+            this.fireType2 = [];
+            for (var key in result) {
+                this.fireType2.push({label:result[key], value:key});
+            }
+            return this.fireType2;
+        })
+        .catch(error => {
+            console.log('error-getPicklistFireType2:'+ error.message);
+        });
+    }
+
+    getPicklistWording(recordid){
+        getWording({
+            recordId : recordid,
+        })
+        .then(result => {
+            this.wording = [];
+            for (var key in result) {
+                this.wording.push({label:result[key], value:key});
+            }
+            return this.wording;
+        })
+        .catch(error => {
+            console.log('error-getPicklistWording:'+ error.message);
+        });
+    }
+
+    getPicklistWording2(recordid){
+        getWording({
+            recordId : recordid,
+        })
+        .then(result => {
+            this.wording2 = [];
+            for (var key in result) {
+                this.wording2.push({label:result[key], value:key});
+            }
+            return this.wording2;
+        })
+        .catch(error => {
+            console.log('error-getPicklistWording2:'+ error.message);
+        });
+    }
+
+    getPremiumCalculation(){
+        this.premiumCalculationId = undefined;
+        getPicklistSTD({
+            objectName : 'Opportunity',
+            fieldName : 'premium_calculation__c'
+        })
+        .then(result => {
+            this.premiumCalculation = [];
+            for (var key in result) {
+                this.premiumCalculation.push({label:result[key], value:key});
+            }
+            return this.premiumCalculation;
+        })
+        .catch(error => {
+            console.log('error-getPremiumCalculation:'+ error.message);
+        });
+    }
+
+    getPremiumCalculation2(){
+        this.premiumCalculationId2 = undefined;
+        getPicklistSTD({
+            objectName : 'Opportunity',
+            fieldName : 'premium_calculation__c'
+        })
+        .then(result => {
+            this.premiumCalculation2 = [];
+            for (var key in result) {
+                this.premiumCalculation2.push({label:result[key], value:key});
+            }
+            return this.premiumCalculation2;
+        })
+        .catch(error => {
+            console.log('error-getPremiumCalculation2:'+ error.message);
+        });
+    }
+
+    getAmountRate(curr,type){
+        getRate({
+            curr : curr
+        })
+        .then(result => {
+            if(type == '1'){
+                this.rate = result;
+                if(this.sumInsured) this.sumInsuredIDR = this.sumInsured * this.rate;
+                if(this.premium) this.premiumIDR = this.premium * this.rate;
+            }else if(type == '2'){
+                this.rate2 = result;
+                if(this.sumInsured2) this.sumInsuredIDR2 = this.sumInsured2 * this.rate2;
+                if(this.premium2) this.premiumIDR2 = this.premium2 * this.rate2;
+            }
+        })
+        .catch(error => {
+            console.log('error-getAmountRate:'+ error.message);
+        });
+    }
+    //--> GET DATA FROM CLASS
+
+    
+    //BUTTIN SUBMIT STANDARD
     handleSubmit(event){
         const qqmember = [];
         let risksituation1 = "";
@@ -3268,7 +3476,7 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
         //    this.errorMessage('Please input Fire Type!');
         }else if(this.showIAR === true && (data.wording === undefined || data.wording === '')){
             this.errorMessage('Please input Wording Standard!');
-        }else if(data.insuranceperiod === undefined || data.insuranceperiod === '' || data.insuranceperiod  == null){
+        }else if(this.showPremium == false && (data.insuranceperiod === undefined || data.insuranceperiod === '' || data.insuranceperiod  == null)){
             this.errorMessage('Please input Insurance Period!');
         }else if(data.insuranceperiod == '1' && (data.yearperiod === undefined || data.yearperiod === '' || data.yearperiod === null)){ // Annual
             this.errorMessage('Please input Number of Years!');
@@ -3292,8 +3500,16 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
             this.errorMessage('Please Input Currency!'); 
         }else if(data.format1 === 'Summary' && (data.sumInsured === '' || data.sumInsured === undefined)){
             this.errorMessage('Please Input Top Risk Sum Insured!');  
+        }else if(data.format1 === 'Summary' && (data.sumInsured.length > 16)){
+            this.errorMessage('Please Change Top Risk Sum Insured, max 16 digit!');
+        }else if(data.format1 === 'Summary' && (data.sumInsuredIDR.toString().length > 16)){
+            this.errorMessage('Please Change Top Risk Sum Insured IDR, max 16 digit!');
         }else if(data.format1 === 'Summary' && (data.premium === '' || data.premium === undefined)){
             this.errorMessage('Please Input Top Gross Premium!'); 
+        }else if(data.format1 === 'Summary' && (data.premium.length > 16)){
+            this.errorMessage('Please Change Top Gross Premium, max 16 digit!');
+        }else if(data.format1 === 'Summary' && (data.premiumIDR.toString().length > 16)){
+            this.errorMessage('Please Change Top Gross Premium IDR, max 16 digit!');
         }else if(msgSummary1 != ''){
             this.errorMessage('Please Input Opportunity Format : '+ msgSummary1 +'!');
         }else if(data.format1 === 'Summary' && (data.numberOfRisk === '' || data.numberOfRisk === undefined)){
@@ -3316,7 +3532,7 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
         //    this.errorMessage('Please input Fire Type (2)!');
         }else if(data.risk == 'multiple' && this.showIAR2 === true && (data.wording2 === undefined || data.wording2 === '')){
             this.errorMessage('Please input Wording Standard (2)!');
-        }else if(data.risk == 'multiple' && (data.insuranceperiod2 === undefined || data.insuranceperiod2 === '' || data.insuranceperiod2 === null)){
+        }else if(data.risk == 'multiple' && this.showPremium2 == false && (data.insuranceperiod2 === undefined || data.insuranceperiod2 === '' || data.insuranceperiod2 === null)){
             this.errorMessage('Please input Insurance Period (2)!');
         }else if(data.risk == 'multiple' && data.insuranceperiod2 == '1' && (data.yearperiod2 === undefined || data.yearperiod2 === '' || data.yearperiod2 === null)){ // Annual
             this.errorMessage('Please input Number of Years (2)!');
@@ -3340,8 +3556,16 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
             this.errorMessage('Please Input Currency (2)!'); 
         }else if(data.risk == 'multiple' && (data.format2 === 'Summary' && (data.sumInsured2 === '' || data.sumInsured2 === undefined))){
             this.errorMessage('Please Input Top Risk Sum Insured (2)!');  
+        }else if(data.risk == 'multiple' && (data.format2 === 'Summary' && (data.sumInsured2.length > 16))){
+            this.errorMessage('Please Change Top Risk Sum Insured (2), max 16 digit!'); 
+        }else if(data.risk == 'multiple' && (data.format2 === 'Summary' && (data.sumInsuredIDR2.toString().length > 16))){
+            this.errorMessage('Please Change Top Risk Sum Insured IDR (2), max 16 digit!');   
         }else if(data.risk == 'multiple' && (data.format2 === 'Summary' && (data.premium2 === '' || data.premium2 === undefined))){
             this.errorMessage('Please Input Top Gross Premium (2)!'); 
+        }else if(data.risk == 'multiple' && (data.format2 === 'Summary' && (data.premium2.length > 16))){
+            this.errorMessage('Please Change Top Gross Premium (2), max 16 digit!'); 
+        }else if(data.risk == 'multiple' && (data.format2 === 'Summary' && (data.premiumIDR2.toString().length > 16))){
+            this.errorMessage('Please Change Top Gross Premium IDR (2), max 16 digit!'); 
         }else if(data.risk == 'multiple' && (msgSummary2 != '')){
             this.errorMessage('Please Input Opportunity Format (2): '+ msgSummary2 +'!');
         }else if(data.risk == 'multiple' && (data.format2 === 'Summary' && (data.numberOfRisk2 === '' || data.numberOfRisk2 === undefined))){
@@ -3390,6 +3614,7 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
         }
     }
 
+    //BUTTON SUBMIT MOU
     handleSubmitMOU(event){
         console.log('handleSubmitMOU');
         const qqmember = [];
@@ -3448,18 +3673,12 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
         data.producttype = this.productTypeId;
         data.producttypename = this.productTypeName;
         data.contracttype = this.contractTypeId;
-        data.asset1 = this.dataAsset1;
-        /*data.assetsection = this.assetSectionId1MOU;
-        data.assetcategory = this.assetCategoryId1MOU;
-        data.currency = this.currencyId;
-        data.rate = this.rate;
-        data.sumInsured = this.sumInsured;
-        data.sumInsuredIDR = this.sumInsuredIDR;*/
         if(this.showMultiple == true) data.risk = 'multiple';
         else if(this.showSingle == true) data.risk = 'single';
         data.risk1 = risk1;
-        //data.coverage1 = this.coverage1;
         data.mouId1 = this.mouId1;
+        data.asset1 = this.dataAssetMOU1;
+        data.coverage1 = this.dataCoverageMOU1;
         /*if(data.risk == 'multiple'){
             data.policywording2 = this.policyWordingName2;
             data.policywordingId2 = this.policyWordingId2;
@@ -3520,23 +3739,7 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
             });
         }
 
-        let msgAsset1 = '';
-        for(let i=0;i<data.asset1.length;i++){
-            if(data.asset1[i].assetSectionId === undefined || data.asset1[i].assetSectionId === ''){
-                msgAsset1 = 'Please Select Asset Section!';
-                break;
-            }else if(data.asset1[i].currencyId === undefined || data.asset1[i].currencyId === ''){
-                msgAsset1 = 'Please Select Currency!';
-                break;
-            }else if(data.asset1[i].sumInsured === undefined || data.asset1[i].sumInsured === ''){
-                msgAsset1 = 'Please Input Sum Insured!';
-                break;
-            }else if(data.asset1[i].coverage.length == 0){
-                msgAsset1 = 'Please Add Coverage!';
-                break;
-            }
-        }
-        
+        console.log('data:'+JSON.stringify(data));
 
         if(data.opportunitytype === undefined || data.opportunitytype === ''){
             this.errorMessage('Please Select Opportunity Type!');
@@ -3586,16 +3789,8 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
             this.errorMessage('Please Input Risk : '+ msg1 +'!');
         }else if(data.asset1.length == 0){
             this.errorMessage('Please Add Asset!');
-        }else if(msgAsset1 != ''){
-            this.errorMessage(msgAsset1);
-        /*}else if(data.assetsection === '' || data.assetsection === undefined){
-            this.errorMessage('Please Input Asset Section!'); 
-        }else if(data.currency === '' || data.currency === undefined){
-            this.errorMessage('Please Input Currency!'); 
-        }else if(data.sumInsured === '' || data.sumInsured === undefined){
-            this.errorMessage('Please Input Sum Insured!');  
-        }else if(data.coverage1.length === 0){
-            this.errorMessage('Please Add Coverage!');*/ 
+        }else if(data.coverage1.length == 0){
+            this.errorMessage('Please Add Coverage!');
         }else{
             if(data.insuranceperiod  == '2' && data.shortperiod == '1'){ // Short & Percentage
                 data.rateperiod = null;
@@ -3622,8 +3817,6 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
                     data.rateperiod2 = null;
                 }
             }*/
-            console.log('saveMOU');
-            console.log('data:'+JSON.stringify(data));
             this.isLoading = true;
             saveDataMOU({ data: JSON.stringify(data)})
             .then(result => {
@@ -3651,6 +3844,12 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
         }
     }
 
+    //BUTTON SUBMIT REALISASI
+    handleSubmitRealisasi(event){
+        console.log('handleSubmitRealisasi');
+    }
+
+    //VALIDATE FOR DOUBLE PROSPECT
     submitIsValidateDouble(data){
         this.isLoading = true;
         getValidateDouble({ data: JSON.stringify(data)})
@@ -3681,6 +3880,7 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
             });
     }
 
+    //FUNCTION CALL SAVEDATA
     submitSaveData(data){
         console.log('data (after validation):'+JSON.stringify(data));
         console.log('do save-data');
@@ -3710,6 +3910,7 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
             });
     }
 
+    //ERROR MESSAGE
     errorMessage(msg){
         if(this.account == undefined && this.recordId == undefined){
             this.dispatchEvent(new ShowToastEvent({ title: 'Error', message: msg, variant: 'error' }));
@@ -3717,7 +3918,7 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
             LightningAlert.open({message: msg,theme: 'error',label: 'Error!'});
         }
     }
-
+    //SUCCESS MESSAGE
     successMessage(msg){
         if(this.account == undefined && this.recordId == undefined){
             this.dispatchEvent(new ShowToastEvent({ title: 'Success', message: msg, variant: 'success' }));   
@@ -3725,13 +3926,13 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
             LightningAlert.open({message: msg,theme: 'success',label: 'Success!'});
         }            
     }
-
+    //REFRESH TAB
     async refreshTabPage(){
         await refreshTab(this.tabId, {
             includeAllSubtabs: true
         });
     }
-
+    //NAVIGATE TO RECORD VIEW PAGE
     navigateToRecordViewPage(recordId) {
         this[NavigationMixin.Navigate]({
             type: "standard__recordPage",
@@ -3742,7 +3943,7 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
             },
         });
     }
-
+    //NAVIGATE TO URL
     navigateToURL(url) {
         this[NavigationMixin.Navigate]({
             type: "standard__webPage",
