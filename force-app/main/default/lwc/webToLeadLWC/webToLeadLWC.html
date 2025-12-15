@@ -25,6 +25,27 @@
         <!-- Form -->
         <template if:false={isSubmitted}>
 
+          <!-- Customer Type -->
+          <lightning-combobox
+            name="Customer_Type__c"
+            label="Jenis Pelanggan"
+            placeholder="Pilih Jenis Pelanggan"
+            options={customerTypeOptions}
+            value={leadData.Customer_Type__c}
+            onchange={handleCustomerTypeChange}
+            required
+          ></lightning-combobox>
+
+          <!-- Company Name for Enterprise -->
+          <template if:true={isEnterprise}>
+            <lightning-input
+              name="Company"
+              label="Nama Perusahaan / Bisnis"
+              onchange={handleInputChange} 
+              required={isEnterprise}
+            ></lightning-input>
+          </template>
+
           <lightning-input
             name="FirstName"
             label="Nama Depan"
@@ -62,7 +83,7 @@
 
           <!-- City lookup -->
           <div class="slds-form-element">
-            <label class="slds-form-element__label" for="cityLookup">City</label>
+            <label class="slds-form-element__label" for="cityLookup">Nama Kota</label>
             <div class="slds-form-element__control">
               <input
                 data-id="cityLookup"
@@ -116,26 +137,6 @@
             name="villageId"
             value={villageId}
           />
-
-          <!-- Customer Type -->
-          <lightning-combobox
-            name="Customer_Type__c"
-            label="Jenis Pelanggan"
-            placeholder="Pilih Jenis Pelanggan"
-            options={customerTypeOptions}
-            value={leadData.Customer_Type__c}
-            onchange={handleCustomerTypeChange}
-            required
-          ></lightning-combobox>
-
-          <!-- Company Name for Enterprise -->
-          <template if:true={isEnterprise}>
-            <lightning-input
-              name="Company"
-              label="Nama Perusahaan / Bisnis"
-              onchange={handleInputChange}
-            ></lightning-input>
-          </template>
 
           <lightning-textarea
             name="User_Description__c"

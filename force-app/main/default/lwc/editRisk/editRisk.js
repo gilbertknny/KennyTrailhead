@@ -23,6 +23,7 @@ export default class EditRisk extends LightningElement {
     @track recordTypeId;
     @track isLoading = true;
     @track dynamicFields = [];
+    @track contractType;
     
     picklistValues;
     activeFieldData;
@@ -34,7 +35,7 @@ export default class EditRisk extends LightningElement {
     // First, get COB to know which fields to load
     @wire(getRecord, { 
         recordId: '$recordId', 
-        fields: ['Asset.Id', 'Asset.Name', 'Asset.COB__c', 'Asset.Opportunity__c', 'Asset.RecordTypeId']
+        fields: ['Asset.Id', 'Asset.Name', 'Asset.COB__c', 'Asset.Opportunity__c', 'Asset.RecordTypeId', 'Asset.Opportunity__r.Policy_Closing_Type__c']
     })
     wiredAsset(result) {
         this.wiredAssetResult = result;
@@ -48,12 +49,13 @@ export default class EditRisk extends LightningElement {
             this.cobLabel = getFieldValue(data, 'Asset.COB__c');
             this.opportunityId = getFieldValue(data, 'Asset.Opportunity__c');
             this.recordTypeId = getFieldValue(data, 'Asset.RecordTypeId');
+            this.contractType = getFieldValue(data, 'Asset.Opportunity__r.Policy_Closing_Type__c');
             
             // Initialize formData with basic fields
             this.formData = {
                 Id: this.recordId,
                 Name: getFieldValue(data, 'Asset.Name'),
-                COB__c: this.cobValue,
+                //COB__c: this.cobValue,
                 Opportunity__c: this.opportunityId,
                 RecordTypeId: this.recordTypeId
             };
@@ -67,7 +69,7 @@ export default class EditRisk extends LightningElement {
     }
 
     // Wire Apex fields configuration
-    @wire(getActiveFields, { objectName: '$objectName', interestCob: '$cobValue' })
+    @wire(getActiveFields, { objectName: '$objectName', interestCob: '$cobValue', contractType: '$contractType'})
     wiredFields({ error, data }) {
         if (data) {
             console.log('Active fields loaded:', data);

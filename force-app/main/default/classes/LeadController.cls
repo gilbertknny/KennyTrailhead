@@ -136,6 +136,7 @@ public with sharing class LeadController {
    * @param villageId Village location ID
    * @param customerType Customer segment type
    * @param userDescription User-provided description
+   * @param leadReferralName Referral name for enterprise leads
    * @return Id of the newly created Lead record
    * @throws AuraHandledException if lead creation fails
    */
@@ -152,8 +153,10 @@ public with sharing class LeadController {
       String zipCodeId,
       String villageId,
       String customerType,
-      String userDescription
+      String userDescription,
+      String leadReferralName
   ) {
+      
     try {
       Lead newLead = new Lead(
         FirstName        = firstName,
@@ -172,30 +175,19 @@ public with sharing class LeadController {
         Account_Pipeline_Status__c = 'Direct',
         User_Description__c = userDescription
       );
+      
+      // Set Lead_Referral_Name__c if provided (for Enterprise leads)
+      // Note: Only set referral name, not email/phone since they're already captured in main fields
+      if (String.isNotBlank(leadReferralName)) {
+          newLead.Lead_Referral_Name__c = leadReferralName;
+          newLead.Lead_Referral_Email__c = email;
+          newLead.Lead_Referral_Phone__c = phone;
+      }
+      
       insert newLead;
       return newLead.Id;
     } catch (Exception e) {
-      throw new AuraHandledException(e.getMessage());
+      throw new AuraHandledException('Error creating lead: ' + e.getMessage());
     }
   }
 }
-
-/*
- -- Draft solution if Location object simplyfied structure --
-
-// 1. Query the database ONE time.
-// The database does all the hard work and returns only 514 aggregate results.
-List<AggregateResult> uniqueCityResults = [SELECT City__c
-                                         FROM Master_Location__c
-                                         WHERE City__c != null
-                                         GROUP BY City__c];
-
-// 2. Loop IN MEMORY.
-// This is perfectly safe and fast. It doesn't use any more queries.
-// It will run 514 times, which takes less than 2 milliseconds.
-List<String> uniqueCities = new List<String>();
-for (AggregateResult ar : uniqueCityResults) {
-    uniqueCities.add((String)ar.get('City__c'));
-}
-
- */

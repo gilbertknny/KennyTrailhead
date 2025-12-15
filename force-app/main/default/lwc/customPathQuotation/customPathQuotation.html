@@ -1,0 +1,43 @@
+<template>
+    <lightning-card>
+        <template if:true={steps}>
+            <div class="custom-path">
+
+                <div class="icon-row">
+                    <template for:each={computedSteps} for:item="s">
+                        <div key={s.value}
+                             class={s.combinedBoxClass}
+                             data-value={s.value}
+                             >
+
+                            <lightning-icon
+                                icon-name={s.icon}
+                                size="small"
+                                variant={s.variant}>
+                            </lightning-icon>
+
+                            <div class="icon-label">
+                                {s.label}
+                            </div>
+                        </div>
+                    </template>
+                </div>
+
+                <!--lightning-progress-indicator
+                    current-step={currentStep}
+                    type="base"
+                    variant="base">
+                    <template for:each={steps} for:item="s">
+                        <lightning-progress-step
+                            key={s.value}
+                            value={s.value}
+                            label={s.label}
+                            onclick={handleStepClick}>
+                        </lightning-progress-step>
+                    </template>
+                </lightning-progress-indicator-->
+
+            </div>
+        </template>
+    </lightning-card>
+</template>

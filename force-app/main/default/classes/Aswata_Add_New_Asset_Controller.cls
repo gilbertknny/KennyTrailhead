@@ -6,7 +6,7 @@
  */
 
 public with sharing class Aswata_Add_New_Asset_Controller {
-    @AuraEnabled(cacheable=true)
+    @AuraEnabled
     public static List<AssetWrapper> getAssetsByOpportunity(String opportunityId) {
         List<AssetWrapper> results = new List<AssetWrapper>();
         for (Asset a : [
@@ -30,6 +30,7 @@ public with sharing class Aswata_Add_New_Asset_Controller {
     @AuraEnabled
     public static String upsertAsset(Map<String, Object> fieldValues) {
 
+       
         List<RecordType> lstRt = [Select id from RecordType where SObjectType = 'Asset' and DeveloperName = 'Risk' WITH SECURITY_ENFORCED limit 1];
         
         if(lstRt.size() == 0){
@@ -49,9 +50,14 @@ public with sharing class Aswata_Add_New_Asset_Controller {
         //Auto-generate Risk_ID__c for new records
         if(String.isBlank((String)a.get('Id'))){
             // This is INSERT (new record)
-            System.debug('📝 Creating new Asset (INSERT)');
             
+        
+            System.debug('📝 Creating new Asset (INSERT)');
             String opportunityId = (String)a.get('Opportunity__c');
+            //Tambahan Fikri untuk membuat Insurance Policy otomatis saat buat Risk baru
+            String policyId = Aswata_GlobalFunction.createInsurancePolicy(opportunityId);
+            a.Insurance_Policy__c = policyId;
+            System.debug('Policy Id: ' + policyId);
             if(String.isNotBlank(opportunityId)) {
                 a.Risk_ID__c = generateNextRiskId(opportunityId);
                 System.debug('Generated Risk_ID__c: ' + a.Risk_ID__c);
@@ -154,17 +160,24 @@ public with sharing class Aswata_Add_New_Asset_Controller {
 ///////////////////////////////////// DYNAMIC CUSTOM UI/////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
     @AuraEnabled(cacheable=true)
-    public static List<DynamicFieldConfig> getActiveFields(String objectName, String interestCob) {
+    public static List<DynamicFieldConfig> getActiveFields(String objectName, String interestCob, String contractType) {
         List<DynamicFieldConfig> results = new List<DynamicFieldConfig>();
-        //System.debug('objectName:' + objectName);
-        //System.debug('interestCob:' + interestCob);
+        // System.debug('objectName:' + objectName);
+        // System.debug('interestCob:' + interestCob);
+       
+        if(contractType == '1'){
+            contractType = '';
+        }
+        // System.debug('contractType:' + contractType);
+
         List<Master_Data__c> configs = [
             SELECT Name, Label__c, Data_Type__c, Lookup_Object__c, Filter__c, 
                    Status__c, Object__c, Order__c, showData__c
             FROM Master_Data__c
             WHERE Status__c = 'Active'
               AND Object__c = :objectName
-              AND BSN_ID__c = :interestCob WITH SECURITY_ENFORCED
+              AND BSN_ID__c = :interestCob
+              AND Contract_Type__c = :contractType WITH SECURITY_ENFORCED
             ORDER BY Order__c ASC
         ];
 

@@ -137,11 +137,11 @@ public with sharing class Aswata_Add_New_Asset_Controller_Test {
     static void testGetActiveFields() {
         Test.startTest();
         List<Aswata_Add_New_Asset_Controller.DynamicFieldConfig> fields1 = 
-            Aswata_Add_New_Asset_Controller.getActiveFields('Asset', '201');
+            Aswata_Add_New_Asset_Controller.getActiveFields('Asset', '201','1');
         List<Aswata_Add_New_Asset_Controller.DynamicFieldConfig> fields2 = 
-            Aswata_Add_New_Asset_Controller.getActiveFields('Asset', 'NoExist');
+            Aswata_Add_New_Asset_Controller.getActiveFields('Asset', 'NoExist','');
         List<Aswata_Add_New_Asset_Controller.DynamicFieldConfig> fields3 = 
-            Aswata_Add_New_Asset_Controller.getActiveFields('', '201');
+            Aswata_Add_New_Asset_Controller.getActiveFields('', '201','');
         Test.stopTest();
         
         System.assertNotEquals(null, fields1);
