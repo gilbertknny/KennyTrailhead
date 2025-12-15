@@ -364,6 +364,7 @@ public without sharing class ClsNewRequest {
         Date dtStart = isDate((String)dataMap.get('startdateperiod'));
         Date dtEnd = isDate((String)dataMap.get('enddateperiod'));
         String strInsuredId = (String)dataMap.get('insuredId');
+        String contractType = (String)dataMap.get('contracttype');
         String lineCOB;
         Asset ass = new Asset();
         if(strRisk1 != null){
@@ -389,6 +390,7 @@ public without sharing class ClsNewRequest {
                             String strType = getFieldType('Asset', key);
                             if(strType != null){
                                 if(strType == 'DOUBLE'){ ass.put(key,DOUBLE.valueOf(value)); }
+                                else if(strType == 'DATE'){ ass.put(key,DATE.valueOf(value)); }
                                 else{ ass.put(key,value); }
                                 if(key == 'Address__c'){
                                     Schema.Location lc = [SELECT Id,Name FROM Location WHERE Id=:value LIMIT 1];
@@ -403,12 +405,24 @@ public without sharing class ClsNewRequest {
         String strDescription,strSituation;
         List<String> listDescription = new List<String>();
         List<String> listSituation = new List<String>();
+        if(contracttype == NULL || contracttype == ''){ contracttype = NULL; }
         //GET MASTER VALIDATE
         List<Master_Data__c> listmd = [SELECT Risk_Description__c,Risk_Situation__c,QQ_Member__c,Period_Date__c,The_Insured__c 
                                        FROM Master_Data__c 
                                        WHERE BSN_Id__c =:lineCOB 
+                                       AND Contract_Type__c =:contractType
                                        AND RecordType.Name = 'Double Prospect' 
                                        LIMIT 1];
+        if(listmd.size()==0){
+            listmd = [SELECT Risk_Description__c,Risk_Situation__c,QQ_Member__c,Period_Date__c,The_Insured__c 
+                      FROM Master_Data__c 
+                      WHERE BSN_Id__c =:lineCOB 
+                      AND Contract_Type__c = NULL
+                      AND RecordType.Name = 'Double Prospect' 
+                      LIMIT 1];	    
+        }
+        
+            
         if(listmd.size()>0){
             Master_Data__c md = listmd[0];
             strDescription = md.Risk_Description__c;
@@ -436,8 +450,8 @@ public without sharing class ClsNewRequest {
                     dataDuplicate dd = new dataDuplicate();
                     dd.id= at.Id;
                     dd.cob= lineCOB;
-                    dd.description = setData(listDescription,at);
-                    dd.situation = setData(listSituation,at);
+                    if(strDescription != null){ dd.description = setData(listDescription,at); }
+                    if(strSituation != null){ dd.situation = setData(listSituation,at); }
                     listdd.add(dd);
                     mapOppId.put(at.Id,at.Opportunity__c);
                 }
@@ -458,8 +472,9 @@ public without sharing class ClsNewRequest {
                 }
             }
             
-            String riskDescription = setData(listDescription,ass);
-            String riskSituation = setData(listSituation,ass);
+            String riskDescription,riskSituation;
+            if(strDescription != null) riskDescription = setData(listDescription,ass);
+            if(strSituation != null) riskSituation = setData(listSituation,ass);
             List<dataDuplicate> listnewdd = mapDuplicate.get(lineCOB);
             if(listnewdd != null){
                 if(listnewdd.size()>0){
@@ -467,7 +482,6 @@ public without sharing class ClsNewRequest {
                     for(dataDuplicate dd : listnewdd){
                         String optyId = mapOppId.get(dd.Id);
                         List<String> listQQMember = mapQQMember.get(optyId);
-                        
                         if(dd.description == riskDescription && dd.description != ''
                            && dd.situation == riskSituation && dd.situation != ''){
                                if(md.QQ_Member__c == TRUE){
@@ -488,6 +502,7 @@ public without sharing class ClsNewRequest {
             String riskName2 = (String)dataMap.get('riskName2');
             Date dtStart2 = isDate((String)dataMap.get('startdateperiod2'));
             Date dtEnd2 = isDate((String)dataMap.get('enddateperiod2'));
+            String contractType2 = (String)dataMap.get('contracttype2');
             String lineCOB2;
             Asset ass2 = new Asset();
             if(strRisk2 != null){
@@ -513,6 +528,7 @@ public without sharing class ClsNewRequest {
                                 String strType = getFieldType('Asset', key);
                                 if(strType != null){
                                     if(strType == 'DOUBLE'){ ass2.put(key,DOUBLE.valueOf(value)); }
+                                    else if(strType == 'DATE'){ ass2.put(key,DATE.valueOf(value)); }
                                     else{ ass2.put(key,value); }
                                     if(key == 'Address__c'){
                                         Schema.Location lc = [SELECT Id,Name FROM Location WHERE Id=:value LIMIT 1];
@@ -531,14 +547,24 @@ public without sharing class ClsNewRequest {
             List<Master_Data__c> listmd2 = [SELECT Risk_Description__c,Risk_Situation__c,QQ_Member__c,Period_Date__c,The_Insured__c 
                                             FROM Master_Data__c 
                                             WHERE BSN_Id__c =:lineCOB2 
-                                            AND RecordType.Name = 'Double Prospect' WITH SECURITY_ENFORCED  
+                                            AND Contract_Type__c =:contractType2
+                                            AND RecordType.Name = 'Double Prospect' 
                                             LIMIT 1];
+            if(listmd2.size()==0){
+                listmd2 = [SELECT Risk_Description__c,Risk_Situation__c,QQ_Member__c,Period_Date__c,The_Insured__c 
+                          FROM Master_Data__c 
+                          WHERE BSN_Id__c =:lineCOB2
+                          AND Contract_Type__c = NULL
+                          AND RecordType.Name = 'Double Prospect' 
+                          LIMIT 1];	    
+            }
+
             if(listmd2.size()>0){
                 Master_Data__c md = listmd2[0];
                 strDescription2 = md.Risk_Description__c;
                 strSituation2 = md.Risk_Situation__c;
-                listDescription2 = strDescription2.split(',');
-                listSituation2 = strSituation2.split(',');
+                if(strDescription2 != null){ listDescription2 = strDescription2.split(','); }
+                if(strSituation2 != null){ listSituation2 = strSituation2.split(','); }
                 
                 Map<String,List<dataDuplicate>> mapDuplicate = new Map<String,List<dataDuplicate>>();
                 String sQueryValidate = 'SELECT Id,Opportunity__c,COB__c';
@@ -560,8 +586,8 @@ public without sharing class ClsNewRequest {
                         dataDuplicate dd = new dataDuplicate();
                         dd.id= at.Id;
                         dd.cob= lineCOB2;
-                        dd.description = setData(listDescription2,at);
-                        dd.situation = setData(listSituation2,at);
+                        if(strDescription2 != null){ dd.description = setData(listDescription2,at); }
+                        if(strSituation2 != null){ dd.situation = setData(listSituation2,at); }
                         listdd.add(dd);
                         mapOppId.put(at.Id,at.Opportunity__c);
                     }
@@ -582,8 +608,9 @@ public without sharing class ClsNewRequest {
                     }
                 }
                 
-                String riskDescription = setData(listDescription2,ass2);
-                String riskSituation = setData(listSituation2,ass2);
+                String riskDescription,riskSituation; 
+                if(strDescription2 != null){ riskDescription = setData(listDescription2,ass2); }
+                if(strSituation2 != null){ riskSituation = setData(listSituation2,ass2); }
                 List<dataDuplicate> listnewdd = mapDuplicate.get(lineCOB2);
                 if(listnewdd != null){
                     if(listnewdd.size()>0){
@@ -875,6 +902,7 @@ public without sharing class ClsNewRequest {
                                 String strType = getFieldType('Asset', key);
                                 if(strType != null){
                                     if(strType == 'DOUBLE'){ at1.put(key,DOUBLE.valueOf(value)); }
+                                    else if(strType == 'DATE'){ at1.put(key,DATE.valueOf(value)); }
                                     else{ at1.put(key,value); }
                                     if(key == 'Address__c'){
                                         Schema.Location lc = [SELECT Id,Name FROM Location WHERE Id=:value LIMIT 1];
@@ -1134,6 +1162,7 @@ public without sharing class ClsNewRequest {
                                     String strType = getFieldType('Asset', key);
                                     if(strType != null){
                                         if(strType == 'DOUBLE'){ at2.put(key,DOUBLE.valueOf(value)); }
+                                        else if(strType == 'DATE'){ at2.put(key,DATE.valueOf(value)); }
                                         else{ at2.put(key,value); }
                                         if(key == 'Address__c'){
                                             Schema.Location lc = [SELECT Id,Name FROM Location WHERE Id=:value LIMIT 1];
@@ -1785,7 +1814,7 @@ public without sharing class ClsNewRequest {
         if(listdata != null){
             if(listdata.size()>0){
                 for(String str : listdata){
-                    String value = (String)ass.get(str);
+                    String value = (String)ass.get(str.trim());
                     if(value != null){result += value;}
                 }
             }
