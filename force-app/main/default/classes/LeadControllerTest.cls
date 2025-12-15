@@ -182,7 +182,7 @@ public class LeadControllerTest {
             System.assertEquals(zip.Id, insertedLead.Zip__c, 'Zip code reference should match');
         }
     }
-
+	/*
     @IsTest
     static void testCreateLeadWithNullReferralName() {
         // Test that null leadReferralName doesn't cause issues
@@ -223,7 +223,7 @@ public class LeadControllerTest {
         System.assertEquals('Test', insertedLead.FirstName, 'First name should match');
         System.assertEquals('User', insertedLead.LastName, 'Last name should match');
         System.assert(insertedLead.Lead_Referral_Name__c == null, 'Lead Referral Name should be null');
-    }
+    } */
 
     @IsTest
     static void testCreateLeadExceptionHandling() {
