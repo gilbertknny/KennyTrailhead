@@ -363,6 +363,7 @@ public without sharing class ClsNewRequest {
         }
         Date dtStart = isDate((String)dataMap.get('startdateperiod'));
         Date dtEnd = isDate((String)dataMap.get('enddateperiod'));
+        String strInsuredId = (String)dataMap.get('insuredId');
         String lineCOB;
         Asset ass = new Asset();
         if(strRisk1 != null){
@@ -403,7 +404,7 @@ public without sharing class ClsNewRequest {
         List<String> listDescription = new List<String>();
         List<String> listSituation = new List<String>();
         //GET MASTER VALIDATE
-        List<Master_Data__c> listmd = [SELECT Risk_Description__c,Risk_Situation__c,QQ_Member__c,Period_Date__c 
+        List<Master_Data__c> listmd = [SELECT Risk_Description__c,Risk_Situation__c,QQ_Member__c,Period_Date__c,The_Insured__c 
                                        FROM Master_Data__c 
                                        WHERE BSN_Id__c =:lineCOB 
                                        AND RecordType.Name = 'Double Prospect' 
@@ -412,14 +413,17 @@ public without sharing class ClsNewRequest {
             Master_Data__c md = listmd[0];
             strDescription = md.Risk_Description__c;
             strSituation = md.Risk_Situation__c;
-            listDescription = strDescription.split(',');
-            listSituation = strSituation.split(',');
+            if(strDescription != null) listDescription = strDescription.split(',');
+            if(strSituation != null) listSituation = strSituation.split(',');
             
             Map<String,List<dataDuplicate>> mapDuplicate = new Map<String,List<dataDuplicate>>();
             String sQueryValidate = 'SELECT Id,Opportunity__c,COB__c';
             if(strDescription != null) sQueryValidate += ','+strDescription;
             if(strSituation != null) sQueryValidate += ','+strSituation;
             sQueryValidate += ' FROM Asset WHERE COB__c=:lineCOB AND Opportunity__c != NULL';
+            if(md.The_Insured__c == TRUE){
+                sQueryValidate += ' AND Opportunity__r.The_Insured_Name__c =:strInsuredId';
+            }
             if(md.Period_Date__c == TRUE){
                 sQueryValidate += ' AND ((Opportunity__r.Start_Date_Periode__c <=:dtStart AND Opportunity__r.End_Date_Periode__c >=:dtStart )';
                 sQueryValidate += ' OR (Opportunity__r.Start_Date_Periode__c <=:dtEnd AND Opportunity__r.End_Date_Periode__c >=:dtEnd ))';
@@ -467,9 +471,11 @@ public without sharing class ClsNewRequest {
                         if(dd.description == riskDescription && dd.description != ''
                            && dd.situation == riskSituation && dd.situation != ''){
                                if(md.QQ_Member__c == TRUE){
-                                   for(String strQQ : listQQMember){
-                                       if(strQQ == qqId){result= true; break;}
-                                   }
+                                   if(listQQMember != null){
+                                       for(String strQQ : listQQMember){
+                                           if(strQQ == qqId){result= true; break;}
+                                       }
+                                   }else{result= true;}
                                }else{result= true;}
                                if(result == true){break;}
                            }
@@ -522,7 +528,7 @@ public without sharing class ClsNewRequest {
             List<String> listDescription2 = new List<String>();
             List<String> listSituation2 = new List<String>();
             //GET MASTER VALIDATE
-            List<Master_Data__c> listmd2 = [SELECT Risk_Description__c,Risk_Situation__c,QQ_Member__c,Period_Date__c 
+            List<Master_Data__c> listmd2 = [SELECT Risk_Description__c,Risk_Situation__c,QQ_Member__c,Period_Date__c,The_Insured__c 
                                             FROM Master_Data__c 
                                             WHERE BSN_Id__c =:lineCOB2 
                                             AND RecordType.Name = 'Double Prospect' WITH SECURITY_ENFORCED  
@@ -539,6 +545,9 @@ public without sharing class ClsNewRequest {
                 if(strDescription2 != null) sQueryValidate += ','+strDescription2;
                 if(strSituation2 != null) sQueryValidate += ','+strSituation2;
                 sQueryValidate += ' FROM Asset WHERE COB__c=:lineCOB2 AND Opportunity__c != NULL';
+                if(md.The_Insured__c == TRUE){
+                    sQueryValidate += ' AND Opportunity__r.The_Insured_Name__c =:strInsuredId';
+                }
                 if(md.Period_Date__c == TRUE){
                     sQueryValidate += ' AND ((Opportunity__r.Start_Date_Periode__c <=:dtStart2 AND Opportunity__r.End_Date_Periode__c >=:dtStart2 )';
                     sQueryValidate += ' OR (Opportunity__r.Start_Date_Periode__c <=:dtEnd2 AND Opportunity__r.End_Date_Periode__c >=:dtEnd2 ))';
@@ -586,9 +595,11 @@ public without sharing class ClsNewRequest {
                             if(dd.description == riskDescription && dd.description != ''
                                && dd.situation == riskSituation && dd.situation != ''){
                                    if(md.QQ_Member__c == TRUE){
-                                       for(String strQQ : listQQMember){
-                                           if(strQQ == qqId){result= true; break;}
-                                       }
+                                       if(listQQMember != null){
+                                           for(String strQQ : listQQMember){
+                                               if(strQQ == qqId){result= true; break;}
+                                           }
+                                       }else{result= true;}
                                    }else{result= true;}
                                    if(result == true){break;}
                                }
@@ -1771,10 +1782,12 @@ public without sharing class ClsNewRequest {
     
     public static String setData(List<String> listdata,Asset ass){
         String result = '';
-        if(listdata.size()>0){
-            for(String str : listdata){
-                String value = (String)ass.get(str);
-                if(value != null){result += value;}
+        if(listdata != null){
+            if(listdata.size()>0){
+                for(String str : listdata){
+                    String value = (String)ass.get(str);
+                    if(value != null){result += value;}
+                }
             }
         }
         return result;
