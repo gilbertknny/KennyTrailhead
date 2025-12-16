@@ -157,7 +157,7 @@ global without sharing class VlocityMapping implements callable{
     /** @description setAssetMatrix  @param inputMap @param param @param extid @return setmapObjmap */
     public static Map<String,Object> getmapobject(Map<String,Object> inputMap,String param,String extid){
         List<Object> lobj = inputMap.containsKey(param) ? (List<Object>) inputMap.get(param) :new List<Object>() ;
-        if(lobj!=null ){
+        if(lobj!=null){
             if(!lobj.isEmpty()){
                 SFAWT05 sfawt = setSFAWT5(lobj, param, extid);
                 return setmapObjmap(sfawt);
@@ -267,7 +267,7 @@ global without sharing class VlocityMapping implements callable{
                 }
             }
         }
-        return lasset; 
+        return lasset;
     }
     /** @description setAssetMatrix  @param sfawt @return mapobj */
     public static Map<String,Object> setmapObjmap(SFAWT05 sfawt){
@@ -346,6 +346,11 @@ global without sharing class VlocityMapping implements callable{
         wr.token = reqapi.token;
         APILog.WrapperAPI wapi = APILog.getResponseAPI(wr);
         Map<String,Object> mapres = (Map<String, Object>) JSON.deserializeUntyped(wapi.res.getBody()) ;
+        Map<String,Object> maphd = new Map<String,Object>();       
+        for(String hd:wapi.res.getHeaderKeys()){
+            maphd.put(hd,wapi.res.getHeader(hd));
+        }
+        mapres.put('responseheaders',maphd);
         return mapres;
     }
     /** @description VlocityMapping  @param reqapi @return map */
