@@ -122,7 +122,7 @@ jobs:
             DEPLOY_EXIT=$?
           else
             #sf project deploy start --dry-run --manifest package/package.xml --wait 1000 --target-org uat --verbose  --ignore-conflicts -l RunSpecifiedTests --tests $APEX_CLASSES
-            sf project deploy start --dry-run --manifest package/package.xml --wait 1000 --target-org uat --verbose  --ignore-conflicts -l RunSpecifiedTests --tests Aswata_Add_New_Asset_Controller_Test ClsNewRequest_Test LeadControllerTest
+            sf project deploy start --dry-run --manifest package/package.xml --wait 1000 --target-org uat --verbose  --ignore-conflicts -l RunSpecifiedTests --tests ClsApprovalMasterData_Test
             DEPLOY_EXIT=$?
           fi
           set -e
