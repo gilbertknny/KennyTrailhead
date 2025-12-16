@@ -7,6 +7,7 @@ import getRecordTypeIdByObject from '@salesforce/apex/Aswata_Add_New_Asset_Contr
 import { getRecord } from 'lightning/uiRecordApi';
 import COB_FIELD from '@salesforce/schema/Opportunity.COB__c';
 import NUMBER_OF_RISK from '@salesforce/schema/Opportunity.Number_Of_Risk__c';
+import CLOSING_TYPE from '@salesforce/schema/Opportunity.Policy_Closing_Type__c';
 
 import { CloseActionScreenEvent } from 'lightning/actions';
 
@@ -18,6 +19,7 @@ export default class AddNewRisk extends LightningElement {
     @api cobLabel;
     @api recordId;
     @api noRisk;
+    @api closingType;
 
     @track addressDescription = '';
     @track formData = {};
@@ -62,15 +64,16 @@ export default class AddNewRisk extends LightningElement {
         });
     }
 
-    @wire(getRecord, { recordId: '$recordId', fields: [COB_FIELD, NUMBER_OF_RISK] })
+    @wire(getRecord, { recordId: '$recordId', fields: [COB_FIELD, NUMBER_OF_RISK,CLOSING_TYPE] })
     wiredOpportunity({ error, data }) {
         if (data) {
             this.cobValue = data.fields.COB__c.value;
             this.cobLabel = data.fields.COB__c.displayValue;
             this.noRisk = data.fields.Number_Of_Risk__c.value;
+            this.closingType = data.fields.Policy_Closing_Type__c.value;
             this.formData = {
                 ...this.formData,
-                COB__c: this.cobValue,
+                //COB__c: this.cobValue,
                 Opportunity__c: this.recordId
             };
         } else if (error) {
@@ -125,7 +128,7 @@ export default class AddNewRisk extends LightningElement {
         }
     }
 
-    @wire(getActiveFields, { objectName: '$objectName', interestCob: '$cobValue' })
+    @wire(getActiveFields, { objectName: '$objectName', interestCob: '$cobValue', contractType: '$closingType' })
     wiredFields({ error, data }) {
         if (data) {
             this.activeFieldData = data;
