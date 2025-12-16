@@ -122,7 +122,7 @@ jobs:
             DEPLOY_EXIT=$?
           else
             #sf project deploy start --manifest package/package.xml --wait 1000 --target-org uat --verbose -l RunLocalTests
-            sf project deploy start --manifest package/package.xml --wait 1000 --target-org uat --verbose -l RunSpecifiedTests --tests ClsApprovalMasterData_Test
+            sf project deploy start --manifest package/package.xml --wait 1000 --target-org uat --verbose -l RunSpecifiedTests --tests VlocityMapping_Test
             DEPLOY_EXIT=$?
           fi
           set -e
