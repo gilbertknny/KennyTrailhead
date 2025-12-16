@@ -233,12 +233,13 @@
                                     </div>
                                     <!-- CONTRACT TYPE-->
                                     <div class="slds-col slds-size_1-of-2">
-                                    <lightning-combobox 
-                                            label="Contract Type"
-                                            options={contractType}
-                                            onchange={handleContractType}
-                                            value={contractTypeId}>
-                                    </lightning-combobox>
+                                        <lightning-combobox 
+                                                label="Contract Type"
+                                                options={contractType}
+                                                onchange={handleContractType}
+                                                value={contractTypeId}
+                                                disabled={isDisabledContractType}>
+                                        </lightning-combobox>
                                     </div>
                                     <template if:true={showIAR}>
                                         <!-- IAR/PAR-->
@@ -896,7 +897,8 @@
                                         label="Contract Type"
                                         options={contractType2}
                                         onchange={handleContractType2}
-                                        value={contractTypeId2}>
+                                        value={contractTypeId2}
+                                        disabled={isDisabledContractType2}>
                                 </lightning-combobox> 
                             </div>
                             <template if:true={showIAR2}>
@@ -1428,27 +1430,11 @@
                     </lightning-accordion>
                 </div>
                 <div class="slds-m-top_medium">
-                    <template if:true={showStandard}>
-                        <lightning-button
-                            variant="brand"
-                            label="Submit"
-                            onclick={handleSubmit}>
-                        </lightning-button>
-                    </template>
-                    <template if:true={showMOU}>
-                        <lightning-button
-                            variant="brand"
-                            label="Submit"
-                            onclick={handleSubmitMOU}>
-                        </lightning-button>
-                    </template>
-                    <template if:true={showRealisasi1}>
-                        <lightning-button
-                            variant="brand"
-                            label="Submit"
-                            onclick={handleSubmitRealisasi}>
-                        </lightning-button>
-                    </template>
+                    <lightning-button
+                        variant="brand"
+                        label="Submit"
+                        onclick={handleSubmit}>
+                    </lightning-button>
                 </div>
             </div>
         </lightning-card>

@@ -11,6 +11,15 @@ public without sharing class ClsApprovalMasterData {
         String userId = UserInfo.getUserId();
         User us = [SELECT Id,Profile.Name FROM User WHERE Id=:userId];
         if(us.Profile.Name == 'System Administrator'){ result = true; }
+        else{
+            //Capacity_Management_DeptHead_Group, Claim_Depthead_Group, UW_DeptHead_Group
+        	List<PermissionSetAssignment> listPSA = [SELECT Id,AssigneeId
+                                                 FROM PermissionSetAssignment 
+												WHERE PermissionSet.Name IN ('Capacity_Management_DeptHead_Group','Claim_Depthead_Group','UW_DeptHead_Group')
+                                                 AND AssigneeId =:userId
+                                                 AND IsActive = TRUE];
+            if(listPSA.size()>0){ result = true; }
+        }
         return result;
     }
     

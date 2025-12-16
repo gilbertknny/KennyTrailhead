@@ -12,7 +12,6 @@ import searchAccounts from '@salesforce/apex/ClsNewRequest.searchQQAccounts';
 import deleteFile from '@salesforce/apex/ClsNewRequest.deleteFile';
 import deleteFiles from '@salesforce/apex/ClsNewRequest.deleteFiles';
 import saveData from '@salesforce/apex/ClsNewRequest.saveData';
-import saveDataMOU from '@salesforce/apex/ClsNewRequest.saveDataMOU';
 import getPicklistSTD from '@salesforce/apex/ClsNewRequest.getPicklist';
 import getProductType from '@salesforce/apex/ClsNewRequest.getProductType';
 import getPolicyWording from '@salesforce/apex/ClsNewRequest.getPolicyWording';
@@ -112,6 +111,8 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
     @track showDouble = false;
     @track showStandard = true;
     @track showStandard2 = true;
+    @track isDisabledContractType;
+    @track isDisabledContractType2;
     
     //REQUESTOR
     @track requestorType;
@@ -931,8 +932,12 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
             this.getSituation(value);
             this.getPicklistAssetSection(value);
         }
+        this.isDisabledContractType = false;
         if(this.cob1  != '101'){
             this.contractTypeId = '1';
+            if(this.cob1 == '201' || this.cob1 == '301'){
+                this.isDisabledContractType = true;
+            }
         }
     }
     //GET FIELD SITUATION 1
@@ -1093,8 +1098,12 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
         this.getDescription2(value);
         this.getSituation2(value);
         this.getPicklistAssetSection2(value);
+        this.isDisabledContractType2 = false;
         if(value != '101'){
             this.contractTypeId2 = '1';
+            if(this.cob2 == '201' || this.cob2 == '301'){
+                this.isDisabledContractType2 = true;
+            }
         }
     }
     //GET FIELD SITUATION 2
@@ -3398,65 +3407,118 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
     }
     //--> GET DATA FROM CLASS
 
-    
-    //BUTTIN SUBMIT STANDARD
+    //BUTTIN SUBMIT
     handleSubmit(event){
-        const qqmember = [];
-        let risksituation1 = "";
-        let risksituation2 = "";
-        let summary1 = "";
-        let summary2 = "";
-        let i = 0;
+        let type1,type2;
         let cob1,cob2;
-        
+        if(this.showStandard == true){type1 = 'Standard';}
+        else if(this.showMOU == true){type1 = 'MOU';}
+        else if(this.showRealisasi1 == true){type1 = 'Realisasi';}
+
+        if(this.showStandard2 == true){type2 = 'Standard';}
+        else if(this.showMOU2 == true){type2 = 'MOU';}
+        //else if(this.showRealisasi2 == true){type1 = 'Realisasi';}
+        console.log('type1:'+type1);
+        console.log('type2:'+type2);
+
+        let i = 0;
+        const qqmember = [];
         for(const item of this.originalMemberIds){
             qqmember.push({Id:item});
         }
-        risksituation1 += "{";
-        i = 0;
-        this.mapInput.forEach((value, key) => {
-            if(key == 'COB__c' && this.cob1 != undefined) value = this.cob1;
-            if(i > 0) risksituation1 += ',';
-            let cValue = '"'+value+'"';
-            if(value.indexOf('{')!=-1) cValue = value;
-            risksituation1 += '"'+key+'":'+cValue;
-            i++;
-            if(key == 'COB__c') cob1 = value;
-        });
-        risksituation1 += "}";
-        summary1 += "{";
-        i = 0;
-        this.mapSummary1.forEach((value, key) => {
-            if(i > 0) summary1 += ',';
-            let cValue = '"'+value+'"';
-            if(value.indexOf('{')!=-1) cValue = value;
-            summary1 += '"'+key+'":'+cValue;
-            i++;
-        });
-        summary1 += "}";
-        risksituation2 += "{";
-        i = 0;
-        this.mapInput2.forEach((value, key) => {
-            if(i > 0) risksituation2 += ',';
-            let cValue = '"'+value+'"';
-            if(value.indexOf('{')!=-1) cValue = value;
-            risksituation2 += '"'+key+'":'+cValue;
-            i++;
-            if(key == 'COB__c') cob2 = value;
-        });
-        risksituation2 += "}";
-        summary2 += "{";
-        i = 0;
-        this.mapSummary2.forEach((value, key) => {
-            if(i > 0) summary2 += ',';
-            let cValue = '"'+value+'"';
-            if(value.indexOf('{')!=-1) cValue = value;
-            summary2 += '"'+key+'":'+cValue;
-            i++;
-        });
-        summary2 += "}";
+
+        let risksituation1,summary1,risk1;
+        if(type1 == 'Standard'){
+            //<-- FIELD STANDARD 1
+            risksituation1 = "{";
+            i = 0;
+            this.mapInput.forEach((value, key) => {
+                if(key == 'COB__c' && this.cob1 != undefined) value = this.cob1;
+                if(i > 0) risksituation1 += ',';
+                let cValue = '"'+value+'"';
+                if(value.indexOf('{')!=-1) cValue = value;
+                risksituation1 += '"'+key+'":'+cValue;
+                i++;
+                if(key == 'COB__c') cob1 = value;
+            });
+            risksituation1 += "}";
+            summary1 = "{";
+            i = 0;
+            this.mapSummary1.forEach((value, key) => {
+                if(i > 0) summary1 += ',';
+                let cValue = '"'+value+'"';
+                if(value.indexOf('{')!=-1) cValue = value;
+                summary1 += '"'+key+'":'+cValue;
+                i++;
+            });
+            summary1 += "}";
+            //--> FIELD STANDARD 1
+        }else if(type1 == 'MOU'){
+            risk1 = "{";
+            i = 0;
+            this.mapInputMOU1.forEach((value, key) => {
+                if(i > 0) risk1 += ',';
+                let cValue = '"'+value+'"';
+                if(value.indexOf('{')!=-1) cValue = value;
+                risk1 += '"'+key+'":'+cValue;
+                i++;
+            });
+            risk1 += "}";
+        }else if(type1 == 'Realisasi'){
+            risk1 = "{";
+            i = 0;
+            this.mapInputRealisasi1.forEach((value, key) => {
+                if(i > 0) risk1 += ',';
+                let cValue = '"'+value+'"';
+                if(value.indexOf('{')!=-1) cValue = value;
+                risk1 += '"'+key+'":'+cValue;
+                i++;
+            });
+            risk1 += "}";
+        }
+
+        let risksituation2,summary2,risk2;
+        if(type2 == 'Standard'){
+            //<-- FIELD STANDARD 2
+            risksituation2 = "{";
+            i = 0;
+            this.mapInput2.forEach((value, key) => {
+                if(i > 0) risksituation2 += ',';
+                let cValue = '"'+value+'"';
+                if(value.indexOf('{')!=-1) cValue = value;
+                risksituation2 += '"'+key+'":'+cValue;
+                i++;
+                if(key == 'COB__c') cob2 = value;
+            });
+            risksituation2 += "}";
+            summary2 = "{";
+            i = 0;
+            this.mapSummary2.forEach((value, key) => {
+                if(i > 0) summary2 += ',';
+                let cValue = '"'+value+'"';
+                if(value.indexOf('{')!=-1) cValue = value;
+                summary2 += '"'+key+'":'+cValue;
+                i++;
+            });
+            summary2 += "}";
+            //--> FIELD STANDARD 2
+        }else if(type2 == 'MOU'){
+            risk2 = "{";
+            i = 0;
+            this.mapInputMOU2.forEach((value, key) => {
+                if(i > 0) risk2 += ',';
+                let cValue = '"'+value+'"';
+                if(value.indexOf('{')!=-1) cValue = value;
+                risk2 += '"'+key+'":'+cValue;
+                i++;
+            });
+            risk2 += "}";
+        }else if(type2 == 'Realisasi'){
+
+        }
 
         const data = {};
+        data.type = type1;
         data.id = this.recordId;
         data.opportunitytype = this.opportunityTypeId;
         data.accountId = this.accountId;
@@ -3470,19 +3532,20 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
         data.insuredId = this.insuredId;
         data.insuredAddress = this.accountAddress;
         data.qqmember = qqmember;
+        data.cob = this.cob1;
+        data.producttype = this.productTypeId;
+        data.producttypename = this.productTypeName;
         data.policywording = this.policyWordingName;
         data.policywordingId = this.policyWordingId;
         data.firetype = this.fireTypeId;
         data.wording = this.wordingId;
         data.wordingname = this.wordingName;
-        data.premiumcalculation = this.premiumCalculationId;
-        data.riskName = this.riskName;
+        data.contracttype = this.contractTypeId;
         data.insuranceperiod = this.periodType;
         data.startdateperiod = this.startDate;
         data.enddateperiod = this.endDate;
         data.schematype = this.schemaType;
         data.transactionRows = this.adjustmentRows;
-        data.description = this.description;
         data.totalyear = this._computedYears;
         data.totalmonth = this._computedMonths;
         if(data.insuranceperiod == '1'){
@@ -3492,43 +3555,57 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
             data.percentageperiod = this.isPercentageBasis ? this.percentage : undefined;
             data.rateperiod = this.calculatedRate;
         }
-        data.risksituation1 = risksituation1;
-        data.producttype = this.productTypeId;
-        data.producttypename = this.productTypeName;
-        data.contracttype = this.contractTypeId;
-        data.format1 = this.dataFormat1;
-        if(this.showSummary == true){
-            data.assetsection = this.assetSectionId;
-            data.assetcategory = this.assetCategoryId;
-            data.currency = this.currencyId;
-            data.rate = this.rate;
-            data.sumInsured = this.sumInsured;
-            data.sumInsuredIDR = this.sumInsuredIDR;
-            data.premium = this.premium;
-            data.premiumIDR = this.premiumIDR;
-            data.summary1 = summary1;
-            data.numberOfRisk = this.numberOfRisk;
-            data.closedDate = this.closedDate;
-            data.filequote1 = this.filequote1;
-            data.fileclosing1 = this.fileclosing1;
-            data.filesurvey1 = this.filesurvey1;
+        data.premiumcalculation = this.premiumCalculationId;
+        data.riskName = this.riskName;
+        if(type1 == 'Standard'){
+            data.risksituation1 = risksituation1;
+            data.format1 = this.dataFormat1;
+            if(this.showSummary == true){
+                data.assetsection = this.assetSectionId;
+                data.assetcategory = this.assetCategoryId;
+                data.currency = this.currencyId;
+                data.rate = this.rate;
+                data.sumInsured = this.sumInsured;
+                data.sumInsuredIDR = this.sumInsuredIDR;
+                data.premium = this.premium;
+                data.premiumIDR = this.premiumIDR;
+                if(summary1 != undefined){ data.summary1 = summary1; }
+                data.numberOfRisk = this.numberOfRisk;
+                data.closedDate = this.closedDate;
+                data.description = this.description;
+                data.filequote1 = this.filequote1;
+                data.fileclosing1 = this.fileclosing1;
+                data.filesurvey1 = this.filesurvey1;
+            }
+        }else if(type1 == 'MOU'){
+            data.risk1 = risk1;
+            data.mouId1 = this.mouId1;
+            data.asset1 = this.dataAssetMOU1;
+            data.coverage1 = this.dataCoverageMOU1;
+        }else if(type1 == 'Realisasi'){
+            data.risk1 = risk1;
+            data.realisasiId1 = this.realisasiId1;
+            data.asset1 = this.dataAssetRealisasi1;
+            data.coverage1 = this.dataCoverageRealisasi1;
         }
-        if(this.showMultiple == true) data.risk = 'multiple';
-        else if(this.showSingle == true) data.risk = 'single';
+        if(this.showMultiple == true){ data.risk = 'multiple'; }
+        else if(this.showSingle == true){ data.risk = 'single'; }
         if(data.risk == 'multiple'){
+            data.type2 = type2;
+            data.cob2 = this.cob2;
+            data.producttype2 = this.productTypeId2;
+            data.producttypename2 = this.productTypeName2;
             data.policywording2 = this.policyWordingName2;
             data.policywordingId2 = this.policyWordingId2;
             data.firetype2 = this.fireTypeId2;
             data.wording2 = this.wordingId2;
             data.wordingname2 = this.wordingName2;
-            data.premiumcalculation2 = this.premiumCalculationId2;
-            data.riskName2 = this.riskName2;
+            data.contracttype2 = this.contractTypeId2;
             data.insuranceperiod2 = this.periodType2;
             data.startdateperiod2 = this.startDate2;
             data.enddateperiod2 = this.endDate2;
             data.schematype2 = this.schemaType2;
             data.transactionRows2 = this.adjustmentRows2;
-            data.description2 = this.description2;
             data.totalyear2 = this._computedYears2;
             data.totalmonth2 = this._computedMonths2;
             if(data.insuranceperiod2 == '1'){
@@ -3538,119 +3615,184 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
                 data.percentageperiod2 = this.isPercentageBasis2 ? this.percentage2 : undefined;
                 data.rateperiod2 = this.calculatedRate2;
             }
-            data.risksituation2 = risksituation2;
-            data.producttype2 = this.productTypeId2;
-            data.producttypename2 = this.productTypeName2;
-            data.contracttype2 = this.contractTypeId2;
-            data.format2 = this.dataFormat2;
-            if(this.showSummary2 == true){
-                data.assetsection2 = this.assetSectionId2;
-                data.assetcategory2 = this.assetCategoryId2;
-                data.currency2 = this.currencyId2;
-                data.rate2 = this.rate2;
-                data.sumInsured2 = this.sumInsured2;
-                data.sumInsuredIDR2 = this.sumInsuredIDR2;
-                data.premium2 = this.premium2;
-                data.premiumIDR2 = this.premiumIDR2;
-                data.summary2 = summary2;
-                data.numberOfRisk2 = this.numberOfRisk2;
-                data.closedDate2 = this.closedDate2;
-                data.filequote2 = this.filequote2;
-                data.fileclosing2 = this.fileclosing2;
-                data.filesurvey2 = this.filesurvey2;
+            data.premiumcalculation2 = this.premiumCalculationId2;
+            data.riskName2 = this.riskName2;
+            if(type2 == 'Standard'){
+                data.risksituation2 = risksituation2;
+                data.format2 = this.dataFormat2;
+                if(this.showSummary2 == true){
+                    data.assetsection2 = this.assetSectionId2;
+                    data.assetcategory2 = this.assetCategoryId2;
+                    data.currency2 = this.currencyId2;
+                    data.rate2 = this.rate2;
+                    data.sumInsured2 = this.sumInsured2;
+                    data.sumInsuredIDR2 = this.sumInsuredIDR2;
+                    data.premium2 = this.premium2;
+                    data.premiumIDR2 = this.premiumIDR2;
+                    if(summary2 != undefined){ data.summary2 = summary2; }
+                    data.numberOfRisk2 = this.numberOfRisk2;
+                    data.closedDate2 = this.closedDate2;
+                    data.description2 = this.description2;
+                    data.filequote2 = this.filequote2;
+                    data.fileclosing2 = this.fileclosing2;
+                    data.filesurvey2 = this.filesurvey2;
+                }
+            }else if(type2 == 'MOU'){
+                data.risk2 = risk2;
+                data.mouId2 = this.mouId2;
+                data.asset2 = this.dataAssetMOU2;
+                data.coverage2 = this.dataCoverageMOU2;
             }
         }
+
+        console.log('data (before):'+JSON.stringify(data));
+
         let msg1 = '';
-        if(data.risksituation1 != '{}'){
-            this.mapInput.forEach((value, key) => {
-                if(value == undefined || value == ''){
-                    for(let j=0;j<this.datafield1.length;j++){
-                        if(this.datafield1[j].field == key && this.datafield1[j].type != 'Readonly' && this.datafield1[j].required == true) msg1 += '['+this.datafield1[j].label+']';
-                    }
-                    for(let j=0;j<this.dataDescription1.length;j++){
-                        if(this.dataDescription1[j].field == key && this.dataDescription1[j].type != 'Readonly' && this.dataDescription1[j].required == true) msg1 += '['+this.dataDescription1[j].label+']';
-                    }
-                }else if(value.indexOf('{')!=-1){
-                    let mapData = JSON.parse(value);
-                    if(mapData.latitude == undefined || mapData.latitude == '' 
-                        || mapData.longitude == undefined || mapData.longitude == ''
-                        || mapData.latitude > 90 || mapData.latitude < -90
-                        || mapData.longitude > 180 || mapData.longitude < -180){
+        let msgSummary1 = '';
+        let file1, file2, file3;
+        if(type1 == 'Standard'){
+            if(data.risksituation1 != '{}' && data.risksituation1 != undefined){
+                this.mapInput.forEach((value, key) => {
+                    if(value == undefined || value == ''){
                         for(let j=0;j<this.datafield1.length;j++){
-                            if(this.datafield1[j].field == key) msg1 += '['+this.datafield1[j].label+']';
+                            if(this.datafield1[j].field == key && this.datafield1[j].type != 'Readonly' && this.datafield1[j].required == true) msg1 += '['+this.datafield1[j].label+']';
                         }
                         for(let j=0;j<this.dataDescription1.length;j++){
-                            if(this.dataDescription1[j].field == key) msg1 += '['+this.dataDescription1[j].label+']';
+                            if(this.dataDescription1[j].field == key && this.dataDescription1[j].type != 'Readonly' && this.dataDescription1[j].required == true) msg1 += '['+this.dataDescription1[j].label+']';
+                        }
+                    }else if(value.indexOf('{')!=-1){
+                        let mapData = JSON.parse(value);
+                        if(mapData.latitude == undefined || mapData.latitude == '' 
+                            || mapData.longitude == undefined || mapData.longitude == ''
+                            || mapData.latitude > 90 || mapData.latitude < -90
+                            || mapData.longitude > 180 || mapData.longitude < -180){
+                            for(let j=0;j<this.datafield1.length;j++){
+                                if(this.datafield1[j].field == key) msg1 += '['+this.datafield1[j].label+']';
+                            }
+                            for(let j=0;j<this.dataDescription1.length;j++){
+                                if(this.dataDescription1[j].field == key) msg1 += '['+this.dataDescription1[j].label+']';
+                            }
                         }
                     }
-                }
-            });
-        }
-
-        let msgSummary1 = '';
-        if(data.summary1 != '{}'){
-            this.mapSummary1.forEach((value, key) => {
-                if(value == undefined || value == ''){
-                    for(let j=0;j<this.dataSummary1.length;j++){
-                        if(this.dataSummary1[j].field == key && this.dataSummary1[j].required == true) msgSummary1 += '['+this.dataSummary1[j].label+']';
+                });
+            }
+            
+            if(data.summary1 != '{}' && data.summary1 != undefined){
+                this.mapSummary1.forEach((value, key) => {
+                    if(value == undefined || value == ''){
+                        for(let j=0;j<this.dataSummary1.length;j++){
+                            if(this.dataSummary1[j].field == key && this.dataSummary1[j].required == true) msgSummary1 += '['+this.dataSummary1[j].label+']';
+                        }
                     }
-                }
-            });
+                });
+            }
+            
+            if(data.format1 === 'Summary'){
+                if(data.filequote1.length === 0) file1 = 'no';
+                //if(data.fileclosing1.length === 0) file2 = 'no';
+                //if(data.filesurvey1.length === 0) file3 = 'no';
+            }
+        }else if(type1 == 'MOU'){
+            if(data.risk1 != '{}'){
+                this.mapInputMOU1.forEach((value, key) => {
+                    if(value == undefined || value == ''){
+                        for(let j=0;j<this.datafieldMOU1.length;j++){
+                            let field = this.datafieldMOU1[j].data;
+                            for(let i=0;i<field.length;i++){
+                                if(field[i].datafield == key && field[i].datatype != 'Readonly' && field[i].datarequired == true) msg1 += '['+field[i].datalabel+']';
+                            } 
+                        }
+                    }else if(value.indexOf('{')!=-1){
+                        let mapData = JSON.parse(value);
+                        if(mapData.latitude == undefined || mapData.latitude == '' 
+                            || mapData.longitude == undefined || mapData.longitude == ''
+                            || mapData.latitude > 90 || mapData.latitude < -90
+                            || mapData.longitude > 180 || mapData.longitude < -180){
+                            for(let j=0;j<this.datafieldMOU1.length;j++){
+                                let field = this.datafieldMOU1[j].data;
+                                for(let i=0;i<field.length;i++){
+                                    if(field[i].datafield == key) msg1 += '['+field[i].datalabel+']';
+                                }
+                            }
+                        }
+                    }
+                });
+            }
         }
 
         let msg2 = '';
-        if(data.risk == 'multiple' && (data.risksituation2 != '{}')){
-            this.mapInput2.forEach((value, key) => {
-                if(value == undefined || value == ''){
-                    for(let j=0;j<this.datafield2.length;j++){
-                        if(this.datafield2[j].field == key && this.datafield2[j].type != 'Readonly' && this.datafield2[j].required == true) msg2 += '['+this.datafield2[j].label+']';
-                    }
-                    for(let j=0;j<this.dataDescription2.length;j++){
-                        if(this.dataDescription2[j].field == key && this.dataDescription2[j].type != 'Readonly' && this.dataDescription2[j].required == true) msg2 += '['+this.dataDescription2[j].label+']';
-                    }
-
-                }else if(value.indexOf('{')!=-1){
-                    let mapData = JSON.parse(value);
-                    if(mapData.latitude == undefined || mapData.latitude == '' 
-                        || mapData.longitude == undefined || mapData.longitude == ''
-                        || mapData.latitude > 90 || mapData.latitude < -90
-                        || mapData.longitude > 180 || mapData.longitude < -180){
+        let msgSummary2 = '';
+        let file4, file5, file6;
+        if(type2 == 'Standard'){
+            if(data.risk == 'multiple' && (data.risksituation2 != '{}' && data.risksituation2 != undefined)){
+                this.mapInput2.forEach((value, key) => {
+                    if(value == undefined || value == ''){
                         for(let j=0;j<this.datafield2.length;j++){
-                            if(this.datafield2[j].field == key) msg2 += '['+this.datafield2[j].label+']';
+                            if(this.datafield2[j].field == key && this.datafield2[j].type != 'Readonly' && this.datafield2[j].required == true) msg2 += '['+this.datafield2[j].label+']';
                         }
                         for(let j=0;j<this.dataDescription2.length;j++){
-                            if(this.dataDescription2[j].field == key) msg2 += '['+this.dataDescription2[j].label+']';
+                            if(this.dataDescription2[j].field == key && this.dataDescription2[j].type != 'Readonly' && this.dataDescription2[j].required == true) msg2 += '['+this.dataDescription2[j].label+']';
+                        }
+
+                    }else if(value.indexOf('{')!=-1){
+                        let mapData = JSON.parse(value);
+                        if(mapData.latitude == undefined || mapData.latitude == '' 
+                            || mapData.longitude == undefined || mapData.longitude == ''
+                            || mapData.latitude > 90 || mapData.latitude < -90
+                            || mapData.longitude > 180 || mapData.longitude < -180){
+                            for(let j=0;j<this.datafield2.length;j++){
+                                if(this.datafield2[j].field == key) msg2 += '['+this.datafield2[j].label+']';
+                            }
+                            for(let j=0;j<this.dataDescription2.length;j++){
+                                if(this.dataDescription2[j].field == key) msg2 += '['+this.dataDescription2[j].label+']';
+                            }
                         }
                     }
-                }
-            });
-        }
-
-        let msgSummary2 = '';
-        if(data.risk == 'multiple' && (data.summary2 != '{}')){
-            this.mapSummary2.forEach((value, key) => {
-                if(value == undefined || value == ''){
-                    for(let j=0;j<this.dataSummary2.length;j++){
-                        if(this.dataSummary2[j].field == key && this.dataSummary2[j].required == true) msgSummary2 += '['+this.dataSummary2[j].label+']';
+                });
+            }
+            if(data.risk == 'multiple' && (data.summary2 != '{}' && data.summary2 != undefined)){
+                this.mapSummary2.forEach((value, key) => {
+                    if(value == undefined || value == ''){
+                        for(let j=0;j<this.dataSummary2.length;j++){
+                            if(this.dataSummary2[j].field == key && this.dataSummary2[j].required == true) msgSummary2 += '['+this.dataSummary2[j].label+']';
+                        }
                     }
-                }
-            });
+                });
+            }
+            if(data.risk == 'multiple' && (data.format2 === 'Summary')){
+                if(data.filequote2.length === 0) file4 = 'no';
+                //if(data.fileclosing2.length === 0) file5 = 'no';
+                //if(data.filesurvey2.length === 0) file6 = 'no';
+            }
+        }else if(type2 == 'MOU'){
+            if(data.risk2 != '{}'){
+                this.mapInputMOU2.forEach((value, key) => {
+                    if(value == undefined || value == ''){
+                        for(let j=0;j<this.datafieldMOU2.length;j++){
+                            let field = this.datafieldMOU2[j].data;
+                            for(let i=0;i<field.length;i++){
+                                if(field[i].datafield == key && field[i].datatype != 'Readonly' && field[i].datarequired == true) msg2 += '['+field[i].datalabel+']';
+                            } 
+                        }
+                    }else if(value.indexOf('{')!=-1){
+                        let mapData = JSON.parse(value);
+                        if(mapData.latitude == undefined || mapData.latitude == '' 
+                            || mapData.longitude == undefined || mapData.longitude == ''
+                            || mapData.latitude > 90 || mapData.latitude < -90
+                            || mapData.longitude > 180 || mapData.longitude < -180){
+                            for(let j=0;j<this.datafieldMOU2.length;j++){
+                                let field = this.datafieldMOU2[j].data;
+                                for(let i=0;i<field.length;i++){
+                                    if(field[i].datafield == key) msg2 += '['+field[i].datalabel+']';
+                                }
+                            }
+                        }
+                    }
+                });
+            }
         }
 
-        let file1, file2, file3, file4, file5, file6;
-        if(data.format1 === 'Summary'){
-            if(data.filequote1.length === 0) file1 = 'no';
-            //if(data.fileclosing1.length === 0) file2 = 'no';
-            //if(data.filesurvey1.length === 0) file3 = 'no';
-        }
-
-        if(data.risk == 'multiple' && (data.format2 === 'Summary')){
-            if(data.filequote2.length === 0) file4 = 'no';
-            //if(data.fileclosing2.length === 0) file5 = 'no';
-            //if(data.filesurvey2.length === 0) file6 = 'no';
-        }
-        
-        console.log('data (before):'+JSON.stringify(data));
+        let isValid,isValid2;
         if(data.opportunitytype === undefined || data.opportunitytype === ''){
             this.errorMessage('Please Select Opportunity Type!');
         }else if(data.accountId === undefined || data.accountId === ''){
@@ -3677,7 +3819,7 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
             //this.errorMessage('Please Add QQ Member!');
         }else if(data.risk === undefined || data.risk === ''){
             this.errorMessage('Please Choose Single / Multiple!');
-        }else if(this.cob1 === undefined || this.cob1 === ''){
+        }else if(data.cob === undefined || data.cob === ''){
             this.errorMessage('Please Select Line (COB)!');
         }else if(data.producttype === undefined || data.producttype === ''){
             this.errorMessage('Please Select Product Type!');
@@ -3703,36 +3845,56 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
             this.errorMessage('Please input Risk Name!');
         }else if(msg1 != ''){
             this.errorMessage('Please Input Risk : '+ msg1 +'!');
-        }else if(data.format1 === undefined || data.format1 === ''){
-            this.errorMessage('Please Choose Summary / Specific!'); 
-        }else if(data.format1 === 'Summary' && (data.assetsection === '' || data.assetsection === undefined)){
-            this.errorMessage('Please Input Asset Section!'); 
-        }else if(data.format1 === 'Summary' && (data.currency === '' || data.currency === undefined)){
-            this.errorMessage('Please Input Currency!'); 
-        }else if(data.format1 === 'Summary' && (data.sumInsured === '' || data.sumInsured === undefined)){
-            this.errorMessage('Please Input Top Risk Sum Insured!');  
-        }else if(data.format1 === 'Summary' && (data.sumInsured.length > 16)){
-            this.errorMessage('Please Change Top Risk Sum Insured, max 16 digit!');
-        }else if(data.format1 === 'Summary' && (data.sumInsuredIDR.toString().length > 16)){
-            this.errorMessage('Please Change Top Risk Sum Insured IDR, max 16 digit!');
-        }else if(data.format1 === 'Summary' && (data.premium === '' || data.premium === undefined)){
-            this.errorMessage('Please Input Top Gross Premium!'); 
-        }else if(data.format1 === 'Summary' && (data.premium.length > 16)){
-            this.errorMessage('Please Change Top Gross Premium, max 16 digit!');
-        }else if(data.format1 === 'Summary' && (data.premiumIDR.toString().length > 16)){
-            this.errorMessage('Please Change Top Gross Premium IDR, max 16 digit!');
-        }else if(msgSummary1 != ''){
-            this.errorMessage('Please Input Opportunity Format : '+ msgSummary1 +'!');
-        }else if(data.format1 === 'Summary' && (data.numberOfRisk === '' || data.numberOfRisk === undefined)){
-            this.errorMessage('Please Input Quantity Of Risk!');
-        }else if(data.format1 === 'Summary' && (data.closedDate === '' || data.closedDate === undefined)){
-            this.errorMessage('Please Input Expected Date Of Closing!');
-        }else if(file1 === 'no'){
-            this.errorMessage('Please Upload Quotation & Supporting Document!');
-        //}else if(file2 === 'no'){
-        //    this.errorMessage('Please Upload Closing Slip!');
-        //}else if(file3 === 'no'){
-        //    this.errorMessage('Please Upload Survey Report!');
+        }else if(data.type === 'Standard'){
+            if(data.format1 === undefined || data.format1 === ''){
+                this.errorMessage('Please Choose Summary / Specific!'); 
+            }else if(data.format1 === 'Summary' && (data.assetsection === '' || data.assetsection === undefined)){
+                this.errorMessage('Please Input Asset Section!'); 
+            }else if(data.format1 === 'Summary' && (data.currency === '' || data.currency === undefined)){
+                this.errorMessage('Please Input Currency!'); 
+            }else if(data.format1 === 'Summary' && (data.sumInsured === '' || data.sumInsured === undefined)){
+                this.errorMessage('Please Input Top Risk Sum Insured!');  
+            }else if(data.format1 === 'Summary' && (data.sumInsured.length > 16)){
+                this.errorMessage('Please Change Top Risk Sum Insured, max 16 digit!');
+            }else if(data.format1 === 'Summary' && (data.sumInsuredIDR.toString().length > 16)){
+                this.errorMessage('Please Change Top Risk Sum Insured IDR, max 16 digit!');
+            }else if(data.format1 === 'Summary' && (data.premium === '' || data.premium === undefined)){
+                this.errorMessage('Please Input Top Gross Premium!'); 
+            }else if(data.format1 === 'Summary' && (data.premium.length > 16)){
+                this.errorMessage('Please Change Top Gross Premium, max 16 digit!');
+            }else if(data.format1 === 'Summary' && (data.premiumIDR.toString().length > 16)){
+                this.errorMessage('Please Change Top Gross Premium IDR, max 16 digit!');
+            }else if(msgSummary1 != ''){
+                this.errorMessage('Please Input Opportunity Format : '+ msgSummary1 +'!');
+            }else if(data.format1 === 'Summary' && (data.numberOfRisk === '' || data.numberOfRisk === undefined)){
+                this.errorMessage('Please Input Quantity Of Risk!');
+            }else if(data.format1 === 'Summary' && (data.closedDate === '' || data.closedDate === undefined)){
+                this.errorMessage('Please Input Expected Date Of Closing!');
+            }else if(file1 === 'no'){
+                this.errorMessage('Please Upload Quotation & Supporting Document!');
+            }else{
+                isValid = true;
+            }
+        }else if(data.type === 'MOU'){
+            if(data.asset1.length == 0){
+                this.errorMessage('Please Add Asset!');
+            }else if(data.coverage1.length == 0){
+                this.errorMessage('Please Add Coverage!');
+            }else{
+                isValid = true;
+            }
+        }else if(data.type === 'Realisasi'){
+            if(data.asset1.length == 0){
+                this.errorMessage('Please Add Asset!');
+            }else if(data.coverage1.length == 0){
+                this.errorMessage('Please Add Coverage!');
+            }else{
+                isValid = true;
+            }
+        }
+
+        if(data.risk == 'single'){
+            isValid2 = true;
         }else if(data.risk == 'multiple' && (this.cob2 === undefined || this.cob2 === '')){
             this.errorMessage('Please Select Line (COB) (2)!');
         }else if(data.risk == 'multiple' && (data.producttype2 === undefined || data.producttype2 === '')){
@@ -3759,37 +3921,47 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
             this.errorMessage('Please input Risk Name (2)!');
         }else if(data.risk == 'multiple' && (msg2 != '')){
             this.errorMessage('Please Input Risk (2): '+ msg2 +'!');
-        }else if(data.risk == 'multiple' && (data.format2 === undefined || data.format2 === '')){
-            this.errorMessage('Please Choose Summary / Specific (2)!'); 
-        }else if(data.risk == 'multiple' && (data.format2 === 'Summary' && (data.assetsection2 === '' || data.assetsection2 === undefined))){
-            this.errorMessage('Please Input Asset Section (2)!'); 
-        }else if(data.risk == 'multiple' && (data.format2 === 'Summary' && (data.currency2 === '' || data.currency2 === undefined))){
-            this.errorMessage('Please Input Currency (2)!'); 
-        }else if(data.risk == 'multiple' && (data.format2 === 'Summary' && (data.sumInsured2 === '' || data.sumInsured2 === undefined))){
-            this.errorMessage('Please Input Top Risk Sum Insured (2)!');  
-        }else if(data.risk == 'multiple' && (data.format2 === 'Summary' && (data.sumInsured2.length > 16))){
-            this.errorMessage('Please Change Top Risk Sum Insured (2), max 16 digit!'); 
-        }else if(data.risk == 'multiple' && (data.format2 === 'Summary' && (data.sumInsuredIDR2.toString().length > 16))){
-            this.errorMessage('Please Change Top Risk Sum Insured IDR (2), max 16 digit!');   
-        }else if(data.risk == 'multiple' && (data.format2 === 'Summary' && (data.premium2 === '' || data.premium2 === undefined))){
-            this.errorMessage('Please Input Top Gross Premium (2)!'); 
-        }else if(data.risk == 'multiple' && (data.format2 === 'Summary' && (data.premium2.length > 16))){
-            this.errorMessage('Please Change Top Gross Premium (2), max 16 digit!'); 
-        }else if(data.risk == 'multiple' && (data.format2 === 'Summary' && (data.premiumIDR2.toString().length > 16))){
-            this.errorMessage('Please Change Top Gross Premium IDR (2), max 16 digit!'); 
-        }else if(data.risk == 'multiple' && (msgSummary2 != '')){
-            this.errorMessage('Please Input Opportunity Format (2): '+ msgSummary2 +'!');
-        }else if(data.risk == 'multiple' && (data.format2 === 'Summary' && (data.numberOfRisk2 === '' || data.numberOfRisk2 === undefined))){
-            this.errorMessage('Please Input Quantity Of Risk (2)!');
-        }else if(data.risk == 'multiple' && (data.format2 === 'Summary' && (data.closedDate2 === '' || data.closedDate2 === undefined))){
-            this.errorMessage('Please Input Expected Date Of Closing (2)!');
-        }else if(file4 === 'no'){
-            this.errorMessage('Please Upload Quotation & Supporting Document (2)!');
-        //}else if(file5 === 'no'){
-        //    this.errorMessage('Please Upload Closing Slip (2)!');
-        //}else if(file6 === 'no'){
-        //    this.errorMessage('Please Upload Survey Report (2)!');
-        }else{
+        }else if(type2 == 'Standard'){
+            if(data.risk == 'multiple' && (data.format2 === undefined || data.format2 === '')){
+                this.errorMessage('Please Choose Summary / Specific (2)!'); 
+            }else if(data.risk == 'multiple' && (data.format2 === 'Summary' && (data.assetsection2 === '' || data.assetsection2 === undefined))){
+                this.errorMessage('Please Input Asset Section (2)!'); 
+            }else if(data.risk == 'multiple' && (data.format2 === 'Summary' && (data.currency2 === '' || data.currency2 === undefined))){
+                this.errorMessage('Please Input Currency (2)!'); 
+            }else if(data.risk == 'multiple' && (data.format2 === 'Summary' && (data.sumInsured2 === '' || data.sumInsured2 === undefined))){
+                this.errorMessage('Please Input Top Risk Sum Insured (2)!');  
+            }else if(data.risk == 'multiple' && (data.format2 === 'Summary' && (data.sumInsured2.length > 16))){
+                this.errorMessage('Please Change Top Risk Sum Insured (2), max 16 digit!'); 
+            }else if(data.risk == 'multiple' && (data.format2 === 'Summary' && (data.sumInsuredIDR2.toString().length > 16))){
+                this.errorMessage('Please Change Top Risk Sum Insured IDR (2), max 16 digit!');   
+            }else if(data.risk == 'multiple' && (data.format2 === 'Summary' && (data.premium2 === '' || data.premium2 === undefined))){
+                this.errorMessage('Please Input Top Gross Premium (2)!'); 
+            }else if(data.risk == 'multiple' && (data.format2 === 'Summary' && (data.premium2.length > 16))){
+                this.errorMessage('Please Change Top Gross Premium (2), max 16 digit!'); 
+            }else if(data.risk == 'multiple' && (data.format2 === 'Summary' && (data.premiumIDR2.toString().length > 16))){
+                this.errorMessage('Please Change Top Gross Premium IDR (2), max 16 digit!'); 
+            }else if(data.risk == 'multiple' && (msgSummary2 != '')){
+                this.errorMessage('Please Input Opportunity Format (2): '+ msgSummary2 +'!');
+            }else if(data.risk == 'multiple' && (data.format2 === 'Summary' && (data.numberOfRisk2 === '' || data.numberOfRisk2 === undefined))){
+                this.errorMessage('Please Input Quantity Of Risk (2)!');
+            }else if(data.risk == 'multiple' && (data.format2 === 'Summary' && (data.closedDate2 === '' || data.closedDate2 === undefined))){
+                this.errorMessage('Please Input Expected Date Of Closing (2)!');
+            }else if(file4 === 'no'){
+                this.errorMessage('Please Upload Quotation & Supporting Document (2)!');
+            }else{
+                isValid2 = true;
+            }
+        }else if(type2 == 'MOU'){
+            if(data.asset2.length == 0){
+                this.errorMessage('Please Add Asset (2)!');
+            }else if(data.coverage2.length == 0){
+                this.errorMessage('Please Add Coverage (2)!');
+            }else{
+                isValid2 = true;
+            }
+        }
+        
+        if(isValid == true && isValid2 == true){
             // data validation before submit
             if(data.insuranceperiod  == '2' && data.shortperiod == '1'){ // Short & Percentage
                 data.rateperiod = null;
@@ -3823,241 +3995,6 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
                 this.submitIsValidateDouble(data);
             }
         }
-    }
-
-    //BUTTON SUBMIT MOU
-    handleSubmitMOU(event){
-        console.log('handleSubmitMOU');
-        const qqmember = [];
-        let risk1 = "";
-        let i = 0;
-        for(const item of this.originalMemberIds){
-            qqmember.push({Id:item});
-        }
-        risk1 += "{";
-        i = 0;
-        this.mapInputMOU1.forEach((value, key) => {
-            if(i > 0) risk1 += ',';
-            let cValue = '"'+value+'"';
-            if(value.indexOf('{')!=-1) cValue = value;
-            risk1 += '"'+key+'":'+cValue;
-            i++;
-        });
-        risk1 += "}";
-
-        const data = {};
-        data.id = this.recordId;
-        data.opportunitytype = this.opportunityTypeId;
-        data.accountId = this.accountId;
-        data.requestorTypeId = this.requestorTypeId;
-        data.requestorSegmentId = this.requestorSegmentId;
-        data.requestorSubSegmentId = this.requestorSubSegmentId;
-        data.requestorBusinessSegmentationId = this.requestorBusinessSegmentationId;
-        data.requestorPipelineStatusId = this.requestorPipelineStatusId;
-        data.requestorChannelId = this.requestorChannelId;
-        data.requestorAddress = this.requestorAddress;
-        data.insuredId = this.insuredId;
-        data.insuredAddress = this.accountAddress;
-        data.qqmember = qqmember;
-        data.cob = this.cob1;
-        data.policywording = this.policyWordingName;
-        data.policywordingId = this.policyWordingId;
-        data.firetype = this.fireTypeId;
-        data.wording = this.wordingId;
-        data.wordingname = this.wordingName;
-        data.premiumcalculation = this.premiumCalculationId;
-        data.riskName = this.riskName;
-        data.insuranceperiod = this.periodType;
-        data.startdateperiod = this.startDate;
-        data.enddateperiod = this.endDate;
-        data.schematype = this.schemaType;
-        data.transactionRows = this.adjustmentRows;
-        data.totalyear = this._computedYears;
-        data.totalmonth = this._computedMonths;
-        if(data.insuranceperiod == '1'){
-            data.yearperiod = this.years;
-        }else{
-            data.shortperiod = this.shortBasis;
-            data.percentageperiod = this.isPercentageBasis ? this.percentage : undefined;
-            data.rateperiod = this.calculatedRate;
-        }
-        data.producttype = this.productTypeId;
-        data.producttypename = this.productTypeName;
-        data.contracttype = this.contractTypeId;
-        if(this.showMultiple == true) data.risk = 'multiple';
-        else if(this.showSingle == true) data.risk = 'single';
-        data.risk1 = risk1;
-        data.mouId1 = this.mouId1;
-        data.asset1 = this.dataAssetMOU1;
-        data.coverage1 = this.dataCoverageMOU1;
-        /*if(data.risk == 'multiple'){
-            data.policywording2 = this.policyWordingName2;
-            data.policywordingId2 = this.policyWordingId2;
-            data.firetype2 = this.fireTypeId2;
-            data.wording2 = this.wordingId2;
-            data.wordingname2 = this.wordingName2;
-            data.premiumcalculation2 = this.premiumCalculationId2;
-            data.riskName2 = this.riskName2;
-            data.insuranceperiod2 = this.periodType2;
-            data.startdateperiod2 = this.startDate2;
-            data.enddateperiod2 = this.endDate2;
-            data.schematype2 = this.schemaType2;
-            data.transactionRows2 = this.adjustmentRows2;
-            data.totalyear2 = this._computedYears2;
-            data.totalmonth2 = this._computedMonths2;
-            if(data.insuranceperiod2 == '1'){
-                data.yearperiod2 = this.years2;
-            }else{
-                data.shortperiod2 = this.shortBasis2;
-                data.percentageperiod2 = this.isPercentageBasis2 ? this.percentage2 : undefined;
-                data.rateperiod2 = this.calculatedRate2;
-            }
-            data.producttype2 = this.productTypeId2;
-            data.producttypename2 = this.productTypeName2;
-            data.contracttype2 = this.contractTypeId2;
-            data.assetsection2 = this.assetSectionId2;
-            data.assetcategory2 = this.assetCategoryId2;
-            data.currency2 = this.currencyId2;
-            data.rate2 = this.rate2;
-            data.sumInsured2 = this.sumInsured2;
-            data.sumInsuredIDR2 = this.sumInsuredIDR2;
-        }*/
-
-        let msg1 = '';
-        if(data.risk1 != '{}'){
-            this.mapInputMOU1.forEach((value, key) => {
-                if(value == undefined || value == ''){
-                    for(let j=0;j<this.datafieldMOU1.length;j++){
-                        let field = this.datafieldMOU1[j].data;
-                        for(let i=0;i<field.length;i++){
-                            if(field[i].datafield == key && field[i].datatype != 'Readonly' && field[i].datarequired == true) msg1 += '['+field[i].datalabel+']';
-                        } 
-                    }
-                }else if(value.indexOf('{')!=-1){
-                    let mapData = JSON.parse(value);
-                    if(mapData.latitude == undefined || mapData.latitude == '' 
-                        || mapData.longitude == undefined || mapData.longitude == ''
-                        || mapData.latitude > 90 || mapData.latitude < -90
-                        || mapData.longitude > 180 || mapData.longitude < -180){
-                        for(let j=0;j<this.datafieldMOU1.length;j++){
-                            let field = this.datafieldMOU1[j].data;
-                            for(let i=0;i<field.length;i++){
-                                if(field[i].datafield == key) msg1 += '['+field[i].datalabel+']';
-                            }
-                        }
-                    }
-                }
-            });
-        }
-
-        console.log('data:'+JSON.stringify(data));
-
-        if(data.opportunitytype === undefined || data.opportunitytype === ''){
-            this.errorMessage('Please Select Opportunity Type!');
-        }else if(data.accountId === undefined || data.accountId === ''){
-            this.errorMessage('Please Select Account Name!');
-        }else if(data.requestorTypeId === undefined || data.requestorTypeId === ''){
-            this.errorMessage('Please Select Account Type!');
-        }else if(data.requestorSegmentId === undefined || data.requestorSegmentId === ''){
-            this.errorMessage('Please Select Account Segment!');
-        }else if(data.requestorSubSegmentId === undefined || data.requestorSubSegmentId === ''){
-            this.errorMessage('Please Select Account Sub Segment!');
-        }else if(data.requestorBusinessSegmentationId === undefined || data.requestorBusinessSegmentationId === ''){
-            this.errorMessage('Please Select Account Business Segmentation!');
-        }else if(data.requestorPipelineStatusId === undefined || data.requestorPipelineStatusId === ''){
-            this.errorMessage('Please Select Account Pipeline Status!');
-        }else if(data.requestorPipelineStatusId == 'Channel' && (data.requestorChannelId === undefined || data.requestorChannelId === '')){
-            this.errorMessage('Please Select Account Channel!');
-        }else if(data.requestorAddress === undefined || data.requestorAddress === ''){
-            this.errorMessage('Please Select Account Address!');
-        }else if(data.insuredId === undefined || data.insuredId === ''){
-            this.errorMessage('Please Select The Insured Name!');
-        }else if(data.insuredAddress === undefined || data.insuredAddress === ''){
-            this.errorMessage('Please input The Insured Address!');
-        }else if(data.cob === undefined || data.cob === ''){
-            this.errorMessage('Please Select Line (COB)!');
-        }else if(data.producttype === undefined || data.producttype === ''){
-            this.errorMessage('Please Select Product Type!');
-        }else if(data.policywording === undefined || data.policywording === ''){
-            this.errorMessage('Please input Wording Type!');
-        }else if(this.showIAR === true && (data.wording === undefined || data.wording === '')){
-            this.errorMessage('Please input Wording Standard!');
-        }else if(data.insuranceperiod === undefined || data.insuranceperiod === ''){
-            this.errorMessage('Please input Insurance Period!');
-        }else if(data.insuranceperiod == '1' && (data.yearperiod === undefined || data.yearperiod === '' || data.yearperiod === null)){ // Annual
-            this.errorMessage('Please input Number of Years!');
-        }else if(data.insuranceperiod == '2' && (data.shortperiod === undefined || data.shortperiod === '' || data.shortperiod === null)){ // Short
-            this.errorMessage('Please input Short-Period Basis!');
-        }else if(data.insuranceperiod == '2' && data.shortperiod === '1' && (data.percentageperiod === undefined || data.percentageperiod === '' || data.percentageperiod === null)){ // Short & Percentage
-            this.errorMessage('Please input Percentage (%)!');
-        }else if(data.startdateperiod === undefined || data.startdateperiod === '' || data.startdateperiod === null){
-            this.errorMessage('Please input Start Date Period!');
-        }else if(data.enddateperiod === undefined || data.enddateperiod === '' || data.enddateperiod === null){
-            this.errorMessage('Please input End Date Period!');
-        }else if(data.riskName === undefined || data.riskName === ''){
-            this.errorMessage('Please input Risk Name!');
-        }else if(msg1 != ''){
-            this.errorMessage('Please Input Risk : '+ msg1 +'!');
-        }else if(data.asset1.length == 0){
-            this.errorMessage('Please Add Asset!');
-        }else if(data.coverage1.length == 0){
-            this.errorMessage('Please Add Coverage!');
-        }else{
-            if(data.insuranceperiod  == '2' && data.shortperiod == '1'){ // Short & Percentage
-                data.rateperiod = null;
-                data.yearperiod = null;
-                data.totalyear = null;
-            }else if(data.insuranceperiod == '2' && data.shortperiod == '2'){ // Short & Pro-Rata Basis
-                data.percentageperiod = null;
-                data.yearperiod = null;
-                data.totalyear = null;
-            }else if(this.periodType == '1'){
-                data.rateperiod = null;
-            }
-
-            /*if(data.risk == 'multiple'){
-                if(data.insuranceperiod2  == '2' && data.shortperiod2 == '1'){ // Short & Percentage
-                    data.rateperiod2 = null;
-                    data.yearperiod2 = null;
-                    data.totalyear2 = null;
-                }else if(data.insuranceperiod2 == '2' && data.shortperiod2 == '2'){ // Short & Pro-Rata Basis
-                    data.percentageperiod2 = null;
-                    data.yearperiod2 = null;
-                    data.totalyear2 = null;
-                }else if(this.periodType2 == '1'){
-                    data.rateperiod2 = null;
-                }
-            }*/
-            this.isLoading = true;
-            saveDataMOU({ data: JSON.stringify(data)})
-            .then(result => {
-                this.isLoading = false;
-                console.log('result:'+result);
-
-                if(result.indexOf('006')!=-1){
-                    this.actionsave = 'yes';
-                    this.successMessage('Opportunity has been saved!');
-                    this.refreshTabPage();
-                    if(this.recordId != undefined) this.dispatchEvent(new CloseActionScreenEvent());
-                    else{
-                        if(this.accountId != undefined) window.location.href = "/"+result;
-                        this.navigateToRecordViewPage(result);
-                    }
-                }else{
-                    this.errorMessage('Error: '+result);
-                }
-            })
-            .catch(error => {
-                this.isLoading = false;
-                console.log('Error:'+error.body.message);
-                this.errorMessage('Error: '+error.body.message);
-            });
-        }
-    }
-
-    //BUTTON SUBMIT REALISASI
-    handleSubmitRealisasi(event){
-        console.log('handleSubmitRealisasi');
     }
 
     //VALIDATE FOR DOUBLE PROSPECT
