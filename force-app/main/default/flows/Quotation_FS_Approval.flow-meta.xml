@@ -38,44 +38,20 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </actionCalls>
     <actionCalls>
-        <name>getUserLimit</name>
-        <label>getUserLimit</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <actionName>ClsUserLimit</actionName>
-        <actionType>apex</actionType>
-        <connector>
-            <targetReference>Check_User</targetReference>
-        </connector>
-        <flowTransactionModel>Automatic</flowTransactionModel>
-        <inputParameters>
-            <name>ids</name>
-            <value>
-                <elementReference>recordId</elementReference>
-            </value>
-        </inputParameters>
-        <nameSegment>ClsUserLimit</nameSegment>
-        <offset>0</offset>
-        <outputParameters>
-            <assignToReference>userId</assignToReference>
-            <name>output</name>
-        </outputParameters>
-    </actionCalls>
-    <actionCalls>
-        <name>Notif</name>
-        <label>Notif</label>
+        <name>Send_Notif</name>
+        <label>Send Notif</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <actionName>customNotificationAction</actionName>
         <actionType>customNotificationAction</actionType>
         <connector>
-            <targetReference>Run_Quote_Approval</targetReference>
+            <targetReference>Message_Approval_Result</targetReference>
         </connector>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>customNotifTypeId</name>
             <value>
-                <stringValue>Get</stringValue>
+                <elementReference>Get_Notification.Id</elementReference>
             </value>
         </inputParameters>
         <inputParameters>
@@ -87,71 +63,40 @@
         <inputParameters>
             <name>title</name>
             <value>
-                <elementReference>NotifTitle</elementReference>
+                <elementReference>notificationTitleTemplate</elementReference>
             </value>
         </inputParameters>
         <inputParameters>
             <name>body</name>
             <value>
-                <elementReference>NotifBody</elementReference>
+                <elementReference>notificationBodyTitle</elementReference>
             </value>
         </inputParameters>
         <inputParameters>
             <name>targetId</name>
             <value>
-                <elementReference>recordId</elementReference>
+                <elementReference>Get_Quotation.Id</elementReference>
             </value>
         </inputParameters>
         <nameSegment>customNotificationAction</nameSegment>
         <offset>0</offset>
     </actionCalls>
-    <actionCalls>
-        <description>Apex Class: Aswata_ApprovalProcess_Logic</description>
-        <name>Run_Quote_Approval</name>
-        <label>Run Quote Approval</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <actionName>Aswata_ApprovalProcess_Logic</actionName>
-        <actionType>apex</actionType>
-        <connector>
-            <targetReference>Submit_Result</targetReference>
-        </connector>
-        <faultConnector>
-            <targetReference>Fault_Path_1</targetReference>
-        </faultConnector>
-        <flowTransactionModel>Automatic</flowTransactionModel>
-        <inputParameters>
-            <name>action</name>
-            <value>
-                <stringValue>Submit</stringValue>
-            </value>
-        </inputParameters>
-        <inputParameters>
-            <name>recordId</name>
-            <value>
-                <elementReference>recordId</elementReference>
-            </value>
-        </inputParameters>
-        <nameSegment>Aswata_ApprovalProcess_Logic</nameSegment>
-        <offset>0</offset>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
-    </actionCalls>
     <apiVersion>64.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <assignments>
-        <name>Set_List_User</name>
-        <label>Set List User</label>
+        <name>Assigment_List_User</name>
+        <label>Assigment List User</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <assignmentItems>
             <assignToReference>ListUser</assignToReference>
             <operator>Add</operator>
             <value>
-                <elementReference>userId</elementReference>
+                <elementReference>Get_Quotation.Opportunity.OwnerId</elementReference>
             </value>
         </assignmentItems>
         <connector>
-            <targetReference>Get_Notif</targetReference>
+            <targetReference>Get_Notification</targetReference>
         </connector>
     </assignments>
     <choices>
@@ -180,7 +125,7 @@
     </choices>
     <choices>
         <name>ContraQuote</name>
-        <choiceText>&lt;span style=&quot;color: rgb(0, 0, 0); font-family: Arial, Helvetica, sans-serif; font-size: 11.36px; background-color: rgb(255, 255, 255);&quot;&gt;Contra Quote&lt;/span&gt;</choiceText>
+        <choiceText>Contra Quote</choiceText>
         <dataType>String</dataType>
         <value>
             <stringValue>Contra Quote</stringValue>
@@ -192,6 +137,14 @@
         <dataType>String</dataType>
         <value>
             <stringValue>Rejected</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>test</name>
+        <choiceText>contra</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>test</stringValue>
         </value>
     </choices>
     <customProperties>
@@ -220,7 +173,7 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Message_Approval_Result</targetReference>
+                <targetReference>Assigment_List_User</targetReference>
             </connector>
             <label>Result Approval</label>
         </rules>
@@ -251,6 +204,13 @@
                     <stringValue>System Administrator</stringValue>
                 </rightValue>
             </conditions>
+            <conditions>
+                <leftValueReference>$Profile.Name</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Underwriting</stringValue>
+                </rightValue>
+            </conditions>
             <connector>
                 <targetReference>ScrApproval1</targetReference>
             </connector>
@@ -263,28 +223,6 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
-        <rules>
-            <name>Draft</name>
-            <conditionLogic>or</conditionLogic>
-            <conditions>
-                <leftValueReference>Get_Quotation.Status</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <stringValue>Draft</stringValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>Get_Quotation.Status</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <stringValue>Contra Quote</stringValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Approval</targetReference>
-            </connector>
-            <label>Draft &amp; reQuote</label>
-        </rules>
         <rules>
             <name>Waiting_Approval</name>
             <conditionLogic>and</conditionLogic>
@@ -301,66 +239,17 @@
             <label>Waiting Approval</label>
         </rules>
     </decisions>
-    <decisions>
-        <name>Check_User</name>
-        <label>Check User</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <defaultConnector>
-            <targetReference>ScrError</targetReference>
-        </defaultConnector>
-        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
-        <rules>
-            <name>User_Yes</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>userId</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>false</booleanValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Update_Quote</targetReference>
-            </connector>
-            <label>User Yes</label>
-        </rules>
-    </decisions>
-    <decisions>
-        <name>Submit_Result</name>
-        <label>Submit Result</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <defaultConnector>
-            <targetReference>Failed_Submit_Message</targetReference>
-        </defaultConnector>
-        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
-        <rules>
-            <name>Result</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>Run_Quote_Approval.success</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <booleanValue>true</booleanValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Submit_Notif</targetReference>
-            </connector>
-            <label>Result</label>
-        </rules>
-    </decisions>
+    <description>Additional : Update Opportunity Quote Status For UW</description>
     <environments>Default</environments>
     <formulas>
         <name>NotifBody</name>
         <dataType>String</dataType>
-        <expression>&apos;You have 1 approval for Quote No. &apos; + {!Get_Quotation.QuoteNumber}</expression>
+        <expression>&apos;Please check this quote number:  &apos; + {!Get_Quotation.QuoteNumber}</expression>
     </formulas>
     <formulas>
         <name>NotifTitle</name>
         <dataType>String</dataType>
-        <expression>&apos;Approval Quote&apos;</expression>
+        <expression>&apos;Notification Quote: &apos; + {!Status}</expression>
     </formulas>
     <interviewLabel>[Quotation]_FS_Approval {!$Flow.CurrentDateTime}</interviewLabel>
     <label>[Quotation]_FS_Approval</label>
@@ -384,17 +273,17 @@
     </processMetadataValues>
     <processType>Flow</processType>
     <recordLookups>
-        <name>Get_Notif</name>
-        <label>Get Notif</label>
+        <name>Get_Notification</name>
+        <label>Get Notification</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Notif</targetReference>
+            <targetReference>Send_Notif</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
-            <field>DeveloperName</field>
+            <field>MasterLabel</field>
             <operator>EqualTo</operator>
             <value>
                 <stringValue>Aswata</stringValue>
@@ -425,146 +314,17 @@
         <object>Quote</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
-    <recordUpdates>
-        <name>Update_Quote</name>
-        <label>Update Quote</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <connector>
-            <targetReference>Set_List_User</targetReference>
-        </connector>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>Id</field>
-            <operator>EqualTo</operator>
-            <value>
-                <elementReference>recordId</elementReference>
-            </value>
-        </filters>
-        <inputAssignments>
-            <field>Assigned_Underwriting__c</field>
-            <value>
-                <elementReference>userId</elementReference>
-            </value>
-        </inputAssignments>
-        <object>Quote</object>
-    </recordUpdates>
-    <recordUpdates>
-        <name>Update_Status1</name>
-        <label>Update Status</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <connector>
-            <targetReference>Approve_Reject_or_Contra_Quote</targetReference>
-        </connector>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>Id</field>
-            <operator>EqualTo</operator>
-            <value>
-                <elementReference>recordId</elementReference>
-            </value>
-        </filters>
-        <inputAssignments>
-            <field>Remark__c</field>
-            <value>
-                <elementReference>Remark</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Status</field>
-            <value>
-                <elementReference>Status</elementReference>
-            </value>
-        </inputAssignments>
-        <object>Quote</object>
-    </recordUpdates>
-    <screens>
-        <name>Approval</name>
-        <label>Approval</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <allowBack>false</allowBack>
-        <allowFinish>true</allowFinish>
-        <allowPause>false</allowPause>
-        <connector>
-            <targetReference>getUserLimit</targetReference>
-        </connector>
-        <fields>
-            <name>ScrApproval</name>
-            <fieldText>&lt;p&gt;&lt;strong style=&quot;font-size: 16px;&quot;&gt;Are you sure want to submit approval?&lt;/strong&gt;&lt;/p&gt;</fieldText>
-            <fieldType>DisplayText</fieldType>
-            <styleProperties>
-                <verticalAlignment>
-                    <stringValue>top</stringValue>
-                </verticalAlignment>
-                <width>
-                    <stringValue>12</stringValue>
-                </width>
-            </styleProperties>
-        </fields>
-        <showFooter>true</showFooter>
-        <showHeader>true</showHeader>
-    </screens>
     <screens>
         <name>Failed_Approval_Message</name>
         <label>Failed_Approval_Message</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
-        <allowBack>true</allowBack>
+        <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
-        <allowPause>true</allowPause>
+        <allowPause>false</allowPause>
         <fields>
             <name>Copy_1_of_failedSubmitMessage</name>
             <fieldText>&lt;p style=&quot;text-align: center;&quot;&gt;&lt;strong style=&quot;font-size: 16px;&quot;&gt;Failed to Submit the Quote, Please Contact Admin !!&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p style=&quot;text-align: center;&quot;&gt;&lt;strong&gt;{!Approve_Reject_or_Contra_Quote.message}&lt;/strong&gt;&lt;/p&gt;</fieldText>
-            <fieldType>DisplayText</fieldType>
-            <styleProperties>
-                <verticalAlignment>
-                    <stringValue>top</stringValue>
-                </verticalAlignment>
-                <width>
-                    <stringValue>12</stringValue>
-                </width>
-            </styleProperties>
-        </fields>
-        <showFooter>true</showFooter>
-        <showHeader>true</showHeader>
-    </screens>
-    <screens>
-        <name>Failed_Submit_Message</name>
-        <label>Failed_Submit_Message</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <allowBack>true</allowBack>
-        <allowFinish>true</allowFinish>
-        <allowPause>true</allowPause>
-        <fields>
-            <name>failedSubmitMessage</name>
-            <fieldText>&lt;p style=&quot;text-align: center;&quot;&gt;&lt;strong style=&quot;font-size: 16px;&quot;&gt;Failed to Submit the Quote, Please Contact Admin !!&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p style=&quot;text-align: center;&quot;&gt;&lt;strong&gt;{!Run_Quote_Approval.message}&lt;/strong&gt;&lt;/p&gt;</fieldText>
-            <fieldType>DisplayText</fieldType>
-            <styleProperties>
-                <verticalAlignment>
-                    <stringValue>top</stringValue>
-                </verticalAlignment>
-                <width>
-                    <stringValue>12</stringValue>
-                </width>
-            </styleProperties>
-        </fields>
-        <showFooter>true</showFooter>
-        <showHeader>true</showHeader>
-    </screens>
-    <screens>
-        <name>Fault_Path_1</name>
-        <label>Fault Path 1</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <allowBack>true</allowBack>
-        <allowFinish>true</allowFinish>
-        <allowPause>true</allowPause>
-        <fields>
-            <name>FaultMessage1</name>
-            <fieldText>&lt;p style=&quot;text-align: center;&quot;&gt;&lt;strong style=&quot;background-color: rgb(255, 255, 255); font-size: 16px; color: rgb(68, 68, 68);&quot;&gt;Error fault exception, please contact admin!&lt;/strong&gt;&lt;/p&gt;&lt;p style=&quot;text-align: center;&quot;&gt;&lt;br&gt;&lt;/p&gt;&lt;p style=&quot;text-align: center;&quot;&gt;{!$Flow.FaultMessage}&lt;/p&gt;</fieldText>
             <fieldType>DisplayText</fieldType>
             <styleProperties>
                 <verticalAlignment>
@@ -583,9 +343,9 @@
         <label>Fault Path 2</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
-        <allowBack>true</allowBack>
+        <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
-        <allowPause>true</allowPause>
+        <allowPause>false</allowPause>
         <fields>
             <name>FaultMessage2</name>
             <fieldText>&lt;p style=&quot;text-align: center;&quot;&gt;&lt;strong style=&quot;background-color: rgb(255, 255, 255); font-size: 16px; color: rgb(68, 68, 68);&quot;&gt;Error fault exception, please contact admin!&lt;/strong&gt;&lt;/p&gt;&lt;p style=&quot;text-align: center;&quot;&gt;&lt;br&gt;&lt;/p&gt;&lt;p style=&quot;text-align: center;&quot;&gt;{!$Flow.FaultMessage}&lt;/p&gt;</fieldText>
@@ -607,12 +367,12 @@
         <label>Message Approval Result</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
-        <allowBack>true</allowBack>
+        <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
-        <allowPause>true</allowPause>
+        <allowPause>false</allowPause>
         <fields>
             <name>textApprovalResult</name>
-            <fieldText>&lt;p style=&quot;text-align: center;&quot;&gt;&lt;strong style=&quot;font-size: 16px;&quot;&gt;{!Status} Berhasil !&lt;/strong&gt;&lt;/p&gt;</fieldText>
+            <fieldText>&lt;p style=&quot;text-align: center;&quot;&gt;&lt;strong style=&quot;font-size: 16px; font-family: sans-serif;&quot;&gt;{!Status} Berhasil !&lt;/strong&gt;&lt;/p&gt;</fieldText>
             <fieldType>DisplayText</fieldType>
             <styleProperties>
                 <verticalAlignment>
@@ -635,17 +395,17 @@
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
         <connector>
-            <targetReference>Update_Status1</targetReference>
+            <targetReference>Approve_Reject_or_Contra_Quote</targetReference>
         </connector>
         <fields>
             <name>Status</name>
             <choiceReferences>Approve</choiceReferences>
             <choiceReferences>Reject</choiceReferences>
-            <choiceReferences>ContraQuote</choiceReferences>
             <choiceReferences>Approve_On_Hold_Binding</choiceReferences>
             <choiceReferences>Cancel</choiceReferences>
+            <choiceReferences>ContraQuote</choiceReferences>
             <dataType>String</dataType>
-            <fieldText>Status</fieldText>
+            <fieldText>Underwriting Decision</fieldText>
             <fieldType>DropdownBox</fieldType>
             <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
             <isRequired>true</isRequired>
@@ -678,64 +438,16 @@
         <showHeader>true</showHeader>
     </screens>
     <screens>
-        <name>ScrError</name>
-        <label>ScrError</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <allowBack>true</allowBack>
-        <allowFinish>true</allowFinish>
-        <allowPause>true</allowPause>
-        <fields>
-            <name>DspError</name>
-            <fieldText>&lt;p style=&quot;text-align: center;&quot;&gt;&lt;strong style=&quot;color: rgb(68, 68, 68); font-size: 16px; background-color: rgb(255, 255, 255);&quot;&gt;Assigned Approver cannot find, please contact admin!&lt;/strong&gt;&lt;/p&gt;</fieldText>
-            <fieldType>DisplayText</fieldType>
-            <styleProperties>
-                <verticalAlignment>
-                    <stringValue>top</stringValue>
-                </verticalAlignment>
-                <width>
-                    <stringValue>12</stringValue>
-                </width>
-            </styleProperties>
-        </fields>
-        <showFooter>true</showFooter>
-        <showHeader>true</showHeader>
-    </screens>
-    <screens>
         <name>ScrError2</name>
         <label>ScrError2</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
-        <allowBack>true</allowBack>
+        <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
-        <allowPause>true</allowPause>
+        <allowPause>false</allowPause>
         <fields>
             <name>DspError2</name>
             <fieldText>&lt;p style=&quot;text-align: center;&quot;&gt;&lt;strong style=&quot;font-size: 16px;&quot;&gt;Approval is in progress &lt;/strong&gt;&lt;/p&gt;</fieldText>
-            <fieldType>DisplayText</fieldType>
-            <styleProperties>
-                <verticalAlignment>
-                    <stringValue>top</stringValue>
-                </verticalAlignment>
-                <width>
-                    <stringValue>12</stringValue>
-                </width>
-            </styleProperties>
-        </fields>
-        <showFooter>true</showFooter>
-        <showHeader>true</showHeader>
-    </screens>
-    <screens>
-        <name>Submit_Notif</name>
-        <label>Submit_Notif</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <allowBack>true</allowBack>
-        <allowFinish>true</allowFinish>
-        <allowPause>true</allowPause>
-        <fields>
-            <name>Submit_Success</name>
-            <fieldText>&lt;p style=&quot;text-align: center;&quot;&gt;&lt;strong style=&quot;color: rgb(68, 68, 68); font-size: 16px; background-color: rgb(255, 255, 255);&quot;&gt;The Quote has been submitted !&lt;/strong&gt;&lt;/p&gt;</fieldText>
             <fieldType>DisplayText</fieldType>
             <styleProperties>
                 <verticalAlignment>
@@ -756,7 +468,17 @@
             <targetReference>Get_Quotation</targetReference>
         </connector>
     </start>
-    <status>Draft</status>
+    <status>Active</status>
+    <textTemplates>
+        <name>notificationBodyTitle</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>Please check this quote number: {!Get_Quotation.QuoteNumber}</text>
+    </textTemplates>
+    <textTemplates>
+        <name>notificationTitleTemplate</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>Notification Quote: {!Status}</text>
+    </textTemplates>
     <variables>
         <name>ListUser</name>
         <dataType>String</dataType>
