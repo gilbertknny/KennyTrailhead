@@ -8,7 +8,7 @@
         <actionName>customNotificationAction</actionName>
         <actionType>customNotificationAction</actionType>
         <connector>
-            <targetReference>Run_Quote_Approval</targetReference>
+            <targetReference>Update_Opportunity_Stage</targetReference>
         </connector>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
@@ -75,6 +75,33 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </actionCalls>
     <actionCalls>
+        <name>Send_Busreq_When_Quote_Created</name>
+        <label>Send Busreq When Quote Created</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <actionName>VlocityMappingFlowBridge</actionName>
+        <actionType>apex</actionType>
+        <connector>
+            <targetReference>Screen_Success</targetReference>
+        </connector>
+        <flowTransactionModel>Automatic</flowTransactionModel>
+        <inputParameters>
+            <name>ipName</name>
+            <value>
+                <stringValue>SFAWT01_CreateBusreq</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>jsonInput</name>
+            <value>
+                <elementReference>jsonInput</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>VlocityMappingFlowBridge</nameSegment>
+        <offset>0</offset>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </actionCalls>
+    <actionCalls>
         <name>User_Limit_Action_1</name>
         <label>User Limit Action 1</label>
         <locationX>0</locationX>
@@ -132,12 +159,69 @@
             <targetReference>Transform_Opportunity_to_Quote</targetReference>
         </connector>
     </assignments>
+    <assignments>
+        <name>Use_Account_From_Partner</name>
+        <label>Use Account From Partner</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>newAccountId</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Partner.AccountToId</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Get_RecordType_Quote</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Use_Existing_Account</name>
+        <label>Use Existing Account</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>newAccountId</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Opportunity.AccountId</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Get_RecordType_Quote</targetReference>
+        </connector>
+    </assignments>
     <customProperties>
         <name>ScreenProgressIndicator</name>
         <value>
             <stringValue>{&quot;location&quot;:&quot;top&quot;,&quot;type&quot;:&quot;simple&quot;}</stringValue>
         </value>
     </customProperties>
+    <decisions>
+        <name>Cek_Update</name>
+        <label>Cek Update</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Use_Existing_Account</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Outcome_1_of_Decision_5</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Partner.Id</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Use_Account_From_Partner</targetReference>
+            </connector>
+            <label>If Partner not null</label>
+        </rules>
+    </decisions>
     <decisions>
         <name>Check_Account_KYC</name>
         <label>Check Account KYC</label>
@@ -174,12 +258,19 @@
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>Stage_Opportunity</name>
-            <conditionLogic>and</conditionLogic>
+            <conditionLogic>or</conditionLogic>
             <conditions>
                 <leftValueReference>Get_Opportunity.StageName</leftValueReference>
                 <operator>EqualTo</operator>
                 <rightValue>
                     <stringValue>Opportunity</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_Opportunity.StageName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Quote</stringValue>
                 </rightValue>
             </conditions>
             <connector>
@@ -233,11 +324,13 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Screen_Success</targetReference>
+                <targetReference>Notif</targetReference>
             </connector>
             <label>Result</label>
         </rules>
     </decisions>
+    <description>04/12/2025 : add update opportunity =&gt; assigned underwriting
+09/12/2025 : add get primary partner Id and update to opty</description>
     <dynamicChoiceSets>
         <name>stampDutyOptions</name>
         <dataType>String</dataType>
@@ -299,6 +392,41 @@
     </processMetadataValues>
     <processType>Flow</processType>
     <recordCreates>
+        <name>Add_UW_to_Opportunity_Teams</name>
+        <label>Add UW to Opportunity Teams</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Send_Busreq_When_Quote_Created</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>OpportunityAccessLevel</field>
+            <value>
+                <stringValue>Edit</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>OpportunityId</field>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>TeamMemberRole</field>
+            <value>
+                <stringValue>Underwriting User</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>UserId</field>
+            <value>
+                <elementReference>userId</elementReference>
+            </value>
+        </inputAssignments>
+        <object>OpportunityTeamMember</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordCreates>
         <name>Create_Records</name>
         <label>Create Records</label>
         <locationX>0</locationX>
@@ -336,7 +464,7 @@
         <locationY>0</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Notif</targetReference>
+            <targetReference>Run_Quote_Approval</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -357,7 +485,7 @@
         <locationY>0</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Get_RecordType_Quote</targetReference>
+            <targetReference>Get_Partner</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -369,6 +497,34 @@
         </filters>
         <getFirstRecordOnly>true</getFirstRecordOnly>
         <object>Opportunity</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Partner</name>
+        <label>Get Partner</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Cek_Update</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>IsPrimary</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>OpportunityId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Opportunity.Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Partner</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordLookups>
@@ -428,6 +584,48 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordUpdates>
+        <name>Update_Opportunity_Stage</name>
+        <label>Update Opportunity Stage</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Add_UW_to_Opportunity_Teams</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>AccountId</field>
+            <value>
+                <elementReference>newAccountId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Assigned_Underwriting__c</field>
+            <value>
+                <elementReference>userId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Incoming_Request_Approval__c</field>
+            <value>
+                <elementReference>$Flow.CurrentDateTime</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>StageName</field>
+            <value>
+                <stringValue>Underwriting Approval</stringValue>
+            </value>
+        </inputAssignments>
+        <object>Opportunity</object>
+    </recordUpdates>
+    <recordUpdates>
         <name>Update_Records</name>
         <label>Update Records</label>
         <locationX>0</locationX>
@@ -456,9 +654,9 @@
         <label>Fault Screen</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
-        <allowBack>true</allowBack>
+        <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
-        <allowPause>true</allowPause>
+        <allowPause>false</allowPause>
         <fields>
             <name>faultDisplayText</name>
             <fieldText>&lt;p style=&quot;text-align: center;&quot;&gt;&lt;strong style=&quot;background-color: rgb(255, 255, 255); font-size: 16px; color: rgb(68, 68, 68);&quot;&gt;Error fault exception, please contact admin!&lt;/strong&gt;&lt;/p&gt;&lt;p style=&quot;text-align: center;&quot;&gt;&lt;br&gt;&lt;/p&gt;&lt;p style=&quot;text-align: center;&quot;&gt;{!$Flow.FaultMessage}&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;</fieldText>
@@ -480,9 +678,9 @@
         <label>Input Quote Name</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
-        <allowBack>true</allowBack>
+        <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
-        <allowPause>true</allowPause>
+        <allowPause>false</allowPause>
         <connector>
             <targetReference>Set_Quote_Name</targetReference>
         </connector>
@@ -527,9 +725,9 @@
         <label>Screen Failed</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
-        <allowBack>true</allowBack>
+        <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
-        <allowPause>true</allowPause>
+        <allowPause>false</allowPause>
         <fields>
             <name>textFailed</name>
             <fieldText>&lt;p style=&quot;text-align: center;&quot;&gt;&lt;strong style=&quot;background-color: rgb(255, 255, 255); font-size: 16px;&quot;&gt;Failed to Submit the Quote, Please Contact Admin !!&lt;/strong&gt;&lt;strong style=&quot;background-color: rgb(255, 255, 255); font-size: 16px; color: rgb(68, 68, 68);&quot;&gt;The Quote has been submitted !&lt;/strong&gt;&lt;/p&gt;&lt;p style=&quot;text-align: center;&quot;&gt;&lt;br&gt;&lt;/p&gt;&lt;p style=&quot;text-align: center;&quot;&gt;&lt;strong style=&quot;background-color: rgb(255, 255, 255); font-size: 12px; color: rgb(68, 68, 68);&quot;&gt;{!Run_Quote_Approval.message}&lt;/strong&gt;&lt;/p&gt;</fieldText>
@@ -551,9 +749,9 @@
         <label>Screen Success</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
-        <allowBack>true</allowBack>
+        <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
-        <allowPause>true</allowPause>
+        <allowPause>false</allowPause>
         <fields>
             <name>successText</name>
             <fieldText>&lt;p style=&quot;text-align: center;&quot;&gt;&lt;strong style=&quot;color: rgb(68, 68, 68); font-size: 16px; background-color: rgb(255, 255, 255);&quot;&gt;The Quote has been submitted !&lt;/strong&gt;&lt;/p&gt;</fieldText>
@@ -575,9 +773,9 @@
         <label>Screen UW not Found</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
-        <allowBack>true</allowBack>
+        <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
-        <allowPause>true</allowPause>
+        <allowPause>false</allowPause>
         <fields>
             <name>uwNotFountDisplayText</name>
             <fieldText>&lt;p&gt;&lt;strong style=&quot;background-color: rgb(255, 255, 255); font-size: 16px; color: rgb(68, 68, 68);&quot;&gt;Underwriter user cannot be find, please contact admin!&lt;/strong&gt;&lt;/p&gt;</fieldText>
@@ -599,9 +797,9 @@
         <label>Show Error KYC</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
-        <allowBack>true</allowBack>
+        <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
-        <allowPause>true</allowPause>
+        <allowPause>false</allowPause>
         <fields>
             <name>KCYDisplay</name>
             <fieldText>&lt;p&gt;Anda belum melakukan KYC untuk customer:&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;strong&gt;{!Get_Account.Name}&lt;/strong&gt;&lt;/p&gt;</fieldText>
@@ -623,12 +821,12 @@
         <label>Show Error Stage</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
-        <allowBack>true</allowBack>
+        <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
-        <allowPause>true</allowPause>
+        <allowPause>false</allowPause>
         <fields>
             <name>Copy_1_of_KCYDisplay</name>
-            <fieldText>&lt;p&gt;Request harus berada didalam stage : &lt;strong&gt;Opportunity&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;</fieldText>
+            <fieldText>&lt;p&gt;Request harus berada didalam stage : &lt;strong&gt;Opportunity atau Quote&lt;/strong&gt;&lt;/p&gt;</fieldText>
             <fieldType>DisplayText</fieldType>
             <styleProperties>
                 <verticalAlignment>
@@ -650,6 +848,11 @@
         </connector>
     </start>
     <status>Active</status>
+    <textTemplates>
+        <name>jsonInput</name>
+        <isViewedAsPlainText>false</isViewedAsPlainText>
+        <text>&lt;p&gt;{&quot;recordId&quot;: &quot;{!recordId}&quot;}&lt;/p&gt;</text>
+    </textTemplates>
     <transforms>
         <name>Transform_Opportunity_to_Quote</name>
         <label>Transform Opportunity to Quote</label>
@@ -727,6 +930,13 @@
                     <elementReference>Get_RecordType_Quote.Id</elementReference>
                 </value>
             </transformValueActions>
+            <transformValueActions>
+                <outputFieldApiName>AccountId</outputFieldApiName>
+                <transformType>Map</transformType>
+                <value>
+                    <elementReference>newAccountId</elementReference>
+                </value>
+            </transformValueActions>
         </transformValues>
     </transforms>
     <variables>
@@ -741,6 +951,13 @@
         <name>ListUser</name>
         <dataType>String</dataType>
         <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>newAccountId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
         <isInput>false</isInput>
         <isOutput>false</isOutput>
     </variables>
