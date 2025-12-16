@@ -111,6 +111,7 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
     @track showFull = false;
     @track showDouble = false;
     @track showStandard = true;
+    @track showStandard2 = true;
     
     //REQUESTOR
     @track requestorType;
@@ -193,6 +194,14 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
     @track mouId1;
     @track dataAssetMOU1 = [];
     @track dataCoverageMOU1 = [];
+    @track showMOU2;
+    @track showFieldMOU2;
+    @track datafieldMOU2 = [];
+    @track mapInputMOU2 = new Map();
+    @track filterMOU2;
+    @track mouId2;
+    @track dataAssetMOU2 = [];
+    @track dataCoverageMOU2 = [];
 
     //REALISASI
     @track showRealisasi1;
@@ -578,8 +587,9 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
         this.opportunityTypeId = event.detail.value;
         this.getShowMOU();
         this.getShowRealisasi();
+        this.getShowMOU2();
     }
-    //GET SHOW FIELD MOU
+    //GET SHOW FIELD MOU 1
     getShowMOU(){
         this.mouId1 = undefined;
         this.showFieldMOU = false;
@@ -587,7 +597,16 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
             this.getContractData(this.accountId);
         }
     }
-    //GET DATA MOU
+     //GET SHOW FIELD MOU 2
+    getShowMOU2(){
+        this.mouId2 = undefined;
+        this.showFieldMOU2 = false;
+        if(this.opportunityTypeId == 'NB' && this.cob2 == '301' && this.accountId != undefined){
+            this.getContractData2(this.accountId);
+        }
+    }
+
+    //GET DATA MOU 1
     getContractData(recordId){
         this.isLoading = true;
         getContract ({
@@ -616,6 +635,37 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
         }).catch(error => {
             this.isLoading = false;
             console.error('Error - getContractData:', error.message);
+        });
+    }
+    //GET DATA MOU 2
+    getContractData2(recordId){
+        this.isLoading = true;
+        getContract ({
+            recordId: recordId
+        }).then(result =>{
+            this.isLoading = false;
+            this.showFieldMOU2 = result;
+            if(result == true){
+                this.filterMOU2 = {
+                    criteria : [
+                        {
+                            fieldPath : 'AccountId',
+                            operator : 'eq',
+                            value : this.accountId
+                        },
+                        {
+                            fieldPath : 'Status',
+                            operator : 'eq',
+                            value : 'Activated'
+                        }
+                    ],
+                    filterLogic: '1 AND 2', 
+                    orderBy: [{fieldPath: 'Name', direction: 'asc'}]
+                };
+            }
+        }).catch(error => {
+            this.isLoading = false;
+            console.error('Error - getContractData2:', error.message);
         });
     }
     //GET SHOW FIELD REALISASI
@@ -668,6 +718,7 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
         }
         this.getShowMOU();
         this.getShowRealisasi();
+        this.getShowMOU2();
     }
     //GET ACCOUNT DETAIL
     getAccountDetail(recordid){
@@ -1020,6 +1071,7 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
                 this.adjustPremiumCalculationBasedOnDuration2();
             }
         }
+        this.getShowMOU2();
     }
     //FUNCTION COB 2
     changeCOB2(value,type){
@@ -1105,6 +1157,31 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
             this.isLoading = false;
             console.log('error-getDescription2:'+ error.message);
         }); 
+    }
+    //GET FIELD RISK - MOU 2
+    async getRisk2(){
+        let value = this.cob2;
+        if(value!= '' && value != undefined){
+            await getMasterDataSection({
+                cob: value,
+                contracttype : this.contractTypeId2
+            })
+            .then(result => {
+                this.isLoading = false;
+                let field1 = [];
+                for(let i=0; i<result.length; i++){
+                    field1.push({
+                        name : result[i].name,
+                        data : result[i].data
+                    });
+                }
+                this.datafieldMOU2 = field1;
+            })
+            .catch(error => {
+                this.isLoading = false;
+                console.log('error-getRisk2:'+ error.message);
+            }); 
+        }
     }
     //--> END COB 2
 
@@ -2003,7 +2080,7 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
         let mapIn = this.mapInputMOU1;
         this.setCInputMOU(result,cob,fieldName,value,mapIn,'1');
     }
-    //SET INPUT MOU 1
+    //SET INPUT MOU
     setCInputMOU(result,cob,fieldName,value,mapIn,type){
         let field,resultdata;
         for(let x=0;x<result.length;x++){
@@ -2050,6 +2127,7 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
                             if(fValue == undefined) fValue = '';
                             resultdata[i].value = fValue;
                             if(type == '1') this.mapInputMOU1.set(fKey,fValue);
+                            else if(type == '2') this.mapInputMOU2.set(fKey,fValue);
                         }
                     }
                     //console.log('resultdata:'+JSON.stringify(resultdata));
@@ -2067,6 +2145,7 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
                         //console.log(fName);
                         resultdata[i].value = '';
                         if(type == '1') this.mapInputMOU1.set(fKey,'');
+                        else if(type == '2') this.mapInputMOU2.set(fKey,'');
                     }
                 }
                 const childCmp = this.template.querySelectorAll('c-input');
@@ -2194,6 +2273,139 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
     }
     //--> MOU 1
 
+    //<-- MOU 2
+    //CHANGE MOU 2
+    handleMOUSelected2(event){
+        console.log('handleMOUSelected2');
+        this.mouId2 = event.detail.recordId;
+        this.showMOU2 = false;
+        this.showStandard2 = true;
+        if(this.mouId2 != undefined && this.mouId2 != ''){
+            this.showMOU2 = true;
+            this.showStandard2 = false;
+            this.getRisk2();
+        }
+    }
+    //CHANGE FIELD MOU 2
+    handleInputMOU2(event){
+        let value = event.detail.value;
+        let fieldName = event.target.fieldName;
+        let cob = this.cob2;
+        let result = this.datafieldMOU2;
+        let mapIn = this.mapInputMOU2;
+        this.setCInputMOU(result,cob,fieldName,value,mapIn,'2');
+    }
+    //ROW ACTION ASSET MOU 2
+    handleRowActionAssetMOU2(event){
+        console.log('handleRowActionAssetMOU2');
+        const action = event.detail.action;
+        const row = event.detail.row;
+        let records = this.dataAssetMOU2;
+        const rowIndex = records.findIndex(r => r.Id === row.Id);
+        let record = records[rowIndex];
+        console.log('row:'+JSON.stringify(row));
+        switch (action.name) {
+            case 'show_details':
+                this.showModalAssetMOU2(records,record,this.mouId2);
+                break;
+            case 'delete':
+                LightningConfirm.open({
+                    message: 'Are your sure want to delete this asset?',
+                    label: 'Warning', 
+                    variant : 'headerless'
+                }).then((result) => {
+                    if(result == true){
+                        const rowIndex = records.findIndex(r => r.Id === row.Id);
+                        records.splice(rowIndex, 1);
+                        this.dataAssetMOU2 = [...records];
+                        this.dataCoverageMOU2 = [];
+                        console.log('record2:'+JSON.stringify(this.dataAssetMOU2));
+                    }
+                });
+                break;
+        }
+    }
+    //BUTTON ADD ASSET MOU 2
+    handleAddAssetMOU2(event){
+        console.log('handleAddAssetMOU2');
+        let records = this.dataAssetMOU2;
+        this.showModalAssetMOU2(records,undefined,this.mouId2);
+    }
+    //ROW ACTION COVERAGE MOU 2
+    handleRowActionCoverageMOU2(event){
+        console.log('handleRowActionCoverageMOU2');
+        const action = event.detail.action;
+        const row = event.detail.row;
+        let assets = this.dataAssetMOU2;
+        let records = this.dataCoverageMOU2;
+        const rowIndex = records.findIndex(r => r.Id === row.Id);
+        let record = records[rowIndex];
+        console.log('row:'+JSON.stringify(row));
+        switch (action.name) {
+            case 'show_details':
+                this.showModalCoverageMOU2(records,record,this.mouId2,assets);
+                break;
+            case 'delete':
+                LightningConfirm.open({
+                    message: 'Are your sure want to delete this coverage?',
+                    label: 'Warning', 
+                    variant : 'headerless'
+                }).then((result) => {
+                    if(result == true){
+                        let data = [];
+                        for(let i=0;i<records.length;i++){
+                            if(records[i].Id != row.Id){
+                                data = [...data,records[i]];
+                            }
+                        }
+                        this.dataCoverageMOU2 = [...data];
+                        console.log('record2:'+JSON.stringify(this.dataCoverageMOU2));
+                    }
+                });
+                break;
+        }
+    }
+    //BUTTON ADD COVERAGE MOU 2
+    handleAddCoverageMOU2(event){
+        console.log('handleAddCoverageMOU2');
+        let assets = this.dataAssetMOU2;
+        let records = this.dataCoverageMOU2;
+        if(assets.length == 0){
+            LightningAlert.open({message: 'Please Add Asset!',theme: 'error',label: 'Error!'});
+        }else{
+            this.showModalCoverageMOU2(records,undefined,this.mouId2,assets);
+        }
+    }
+    //SHOW MODAL ASSET MOU 2
+    async showModalAssetMOU2(records,record,recordid){
+        const result = await modalRealisasi.open({
+            records : records,
+            record : record,
+            recordid : recordid,
+            type : 'mou'
+        });
+        console.log('result:'+JSON.stringify(result));
+        if(result != 'cancel' && result != undefined){
+            this.dataAssetMOU2 = result;
+            this.dataCoverageMOU2 = [];
+        }
+    }
+    //SHOW MODAL REALISASI MOU 2
+    async showModalCoverageMOU2(records,record,recordid,assets){
+        const result = await modalCoverage.open({
+            records : records,
+            record : record,
+            recordid : recordid,
+            assets : assets,
+            type : 'mou'
+        });
+        console.log('result:'+JSON.stringify(result));
+        if(result != 'cancel' && result != undefined){
+            this.dataCoverageMOU2 = result;
+        }
+    }
+    //--> MOU 2
+
     //CHANGE POLICY WORDING 2
     handlePolicyWording2(event){
         this.policyWordingId2 = event.detail.value;
@@ -2305,7 +2517,6 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
         let mapIn = this.mapSummary2;
         this.setCInput(result,cob,fieldName,value,mapIn,'4');
     }
-
 
     //CHANGE PRODUCT TYPE 2
     handleProductType2(event){
