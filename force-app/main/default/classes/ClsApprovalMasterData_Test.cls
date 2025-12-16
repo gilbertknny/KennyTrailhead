@@ -43,6 +43,7 @@ public class ClsApprovalMasterData_Test {
             strAuth = 'UW';
             List<Master_Data__c> listmd2 = ClsApprovalMasterData.getMasterData(strType,strAuth);
             system.assertEquals(listmd2.size(),1);
+            ClsApprovalMasterData.getPermission();
             Test.stopTest();
         }
     }
