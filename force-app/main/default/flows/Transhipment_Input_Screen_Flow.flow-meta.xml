@@ -65,6 +65,19 @@
         </connector>
     </assignments>
     <assignments>
+        <name>Reset_Error_Message</name>
+        <label>Reset Error Message</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>varVesselErrMsg</assignToReference>
+            <operator>Assign</operator>
+        </assignmentItems>
+        <connector>
+            <targetReference>Check_Vessel_Input_Type</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
         <name>Reset_variable</name>
         <label>Reset variable</label>
         <locationX>0</locationX>
@@ -84,8 +97,59 @@
             <assignToReference>varRadioSelect</assignToReference>
             <operator>Assign</operator>
         </assignmentItems>
+        <assignmentItems>
+            <assignToReference>varCountry</assignToReference>
+            <operator>Assign</operator>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>varTranshipmentAt</assignToReference>
+            <operator>Assign</operator>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>varVesselErrMsg</assignToReference>
+            <operator>Assign</operator>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>varVesselNumber</assignToReference>
+            <operator>Assign</operator>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <name>Set_Error_Message_Vessel_Input</name>
+        <label>Set Error Message Vessel Input</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>varVesselErrMsg</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Vessel belum dipilih. Mohon pilih terlebih dahulu, atau input Vessel Name secara manual</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>varTranshipmentAt</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Transhipment_At</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>varCountry</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Country.selectedChoiceValues</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>varVesselNumber</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Vessel_Aircraft_Carrier_Number</elementReference>
+            </value>
+        </assignmentItems>
         <connector>
-            <targetReference>finalScreen</targetReference>
+            <isGoTo>true</isGoTo>
+            <targetReference>Transhipment</targetReference>
         </connector>
     </assignments>
     <choices>
@@ -111,29 +175,6 @@
         </value>
     </customProperties>
     <decisions>
-        <name>Check_Clicked_Button</name>
-        <label>Check Clicked Button</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <defaultConnectorLabel>Selesai</defaultConnectorLabel>
-        <rules>
-            <name>Click_Add</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>lastButton.value</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <stringValue>Add</stringValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <isGoTo>true</isGoTo>
-                <targetReference>Risk_Detail</targetReference>
-            </connector>
-            <label>Click Add</label>
-        </rules>
-    </decisions>
-    <decisions>
         <name>Check_Vessel_Input_Type</name>
         <label>Check Vessel Input Type</label>
         <locationX>0</locationX>
@@ -158,7 +199,39 @@
             <label>Master Data Input</label>
         </rules>
     </decisions>
-    <description>change relation from Oppty to Risk. Still using Transaction Data</description>
+    <decisions>
+        <name>Check_Vessel_Name_Selection</name>
+        <label>Check Vessel Name Selection</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Reset_Error_Message</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Lookup_Input</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Vessel_Input</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <elementReference>vesselFromMasterData</elementReference>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Vessel_Aircraft_Carrier_Name.selectedChoiceValues</leftValueReference>
+                <operator>IsBlank</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Set_Error_Message_Vessel_Input</targetReference>
+            </connector>
+            <label>Lookup Input</label>
+        </rules>
+    </decisions>
+    <description>Add validation when select Vessel search Lookup but not select anything (null)</description>
     <dynamicChoiceSets>
         <name>countryList</name>
         <collectionReference>Get_Country_List</collectionReference>
@@ -214,7 +287,7 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Reset_variable</targetReference>
+            <targetReference>finalScreen</targetReference>
         </connector>
         <inputAssignments>
             <field>Country__c</field>
@@ -226,6 +299,12 @@
             <field>Name</field>
             <value>
                 <elementReference>formulaTransactionDataName</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Opportunity__c</field>
+            <value>
+                <elementReference>Risk_Detail.Opportunity__c</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -431,6 +510,9 @@
         </filters>
         <getFirstRecordOnly>true</getFirstRecordOnly>
         <object>Asset</object>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>Opportunity__c</queriedFields>
+        <queriedFields>Name</queriedFields>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <screens>
@@ -442,58 +524,12 @@
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
         <connector>
-            <targetReference>Check_Clicked_Button</targetReference>
+            <targetReference>Reset_variable</targetReference>
         </connector>
         <fields>
             <name>finalConfirmationText</name>
             <fieldText>&lt;p&gt;Transhipment berhasil disimpan.&lt;/p&gt;</fieldText>
             <fieldType>DisplayText</fieldType>
-            <styleProperties>
-                <verticalAlignment>
-                    <stringValue>top</stringValue>
-                </verticalAlignment>
-                <width>
-                    <stringValue>12</stringValue>
-                </width>
-            </styleProperties>
-        </fields>
-        <fields>
-            <name>lastButton</name>
-            <extensionName>c:fsc_flowButtonBar</extensionName>
-            <fieldType>ComponentInstance</fieldType>
-            <inputParameters>
-                <name>alignment</name>
-                <value>
-                    <stringValue>center</stringValue>
-                </value>
-            </inputParameters>
-            <inputParameters>
-                <name>orientation</name>
-                <value>
-                    <stringValue>horizontal</stringValue>
-                </value>
-            </inputParameters>
-            <inputParameters>
-                <name>showLines</name>
-                <value>
-                    <stringValue>neither</stringValue>
-                </value>
-            </inputParameters>
-            <inputParameters>
-                <name>actionMode</name>
-                <value>
-                    <stringValue>navigation</stringValue>
-                </value>
-            </inputParameters>
-            <inputParameters>
-                <name>buttons</name>
-                <value>
-                    <stringValue>[{&quot;label&quot;:&quot;Add New Transhipment&quot;,&quot;value&quot;:&quot;Add&quot;,&quot;iconPosition&quot;:&quot;left&quot;,&quot;variant&quot;:&quot;brand-outline&quot;,&quot;iconName&quot;:&quot;utility:add&quot;,&quot;index&quot;:0}]</stringValue>
-                </value>
-            </inputParameters>
-            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-            <isRequired>true</isRequired>
-            <storeOutputAutomatically>true</storeOutputAutomatically>
             <styleProperties>
                 <verticalAlignment>
                     <stringValue>top</stringValue>
@@ -516,7 +552,7 @@
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
         <connector>
-            <targetReference>Check_Vessel_Input_Type</targetReference>
+            <targetReference>Check_Vessel_Name_Selection</targetReference>
         </connector>
         <fields>
             <name>textTitle</name>
@@ -534,6 +570,9 @@
         <fields>
             <name>Transhipment_At</name>
             <dataType>String</dataType>
+            <defaultValue>
+                <elementReference>varTranshipmentAt</elementReference>
+            </defaultValue>
             <fieldText>Transhipment At</fieldText>
             <fieldType>InputField</fieldType>
             <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
@@ -550,6 +589,9 @@
         <fields>
             <name>Country</name>
             <choiceReferences>countryList</choiceReferences>
+            <defaultValue>
+                <elementReference>varCountry</elementReference>
+            </defaultValue>
             <extensionName>flowruntime:choiceLookup</extensionName>
             <fieldText>Country</fieldText>
             <fieldType>ComponentChoice</fieldType>
@@ -631,6 +673,29 @@
             </visibilityRule>
         </fields>
         <fields>
+            <name>vesselErrMsg</name>
+            <fieldText>&lt;p&gt;&lt;span style=&quot;color: rgb(255, 0, 0);&quot;&gt;{!varVesselErrMsg}&lt;/span&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+            <visibilityRule>
+                <conditionLogic>and</conditionLogic>
+                <conditions>
+                    <leftValueReference>varVesselErrMsg</leftValueReference>
+                    <operator>IsNull</operator>
+                    <rightValue>
+                        <booleanValue>false</booleanValue>
+                    </rightValue>
+                </conditions>
+            </visibilityRule>
+        </fields>
+        <fields>
             <name>Vessel_Aircraft_Carrier_Name_manual</name>
             <dataType>String</dataType>
             <fieldText>Vessel/Aircraft/Carrier Name</fieldText>
@@ -659,6 +724,9 @@
         <fields>
             <name>Vessel_Aircraft_Carrier_Number</name>
             <dataType>String</dataType>
+            <defaultValue>
+                <elementReference>varVesselNumber</elementReference>
+            </defaultValue>
             <fieldText>Vessel/Aircraft/Carrier Number</fieldText>
             <fieldType>InputField</fieldType>
             <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
@@ -837,7 +905,7 @@
             <targetReference>Risk_Detail</targetReference>
         </connector>
     </start>
-    <status>Draft</status>
+    <status>Active</status>
     <variables>
         <name>countAllTranshipment</name>
         <dataType>Number</dataType>
@@ -857,6 +925,13 @@
         <isOutput>false</isOutput>
     </variables>
     <variables>
+        <name>varCountry</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
         <name>varRadioSelect</name>
         <dataType>String</dataType>
         <isCollection>false</isCollection>
@@ -864,7 +939,28 @@
         <isOutput>false</isOutput>
     </variables>
     <variables>
+        <name>varTranshipmentAt</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>varVesselErrMsg</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
         <name>varVesselName</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>varVesselNumber</name>
         <dataType>String</dataType>
         <isCollection>false</isCollection>
         <isInput>false</isInput>
