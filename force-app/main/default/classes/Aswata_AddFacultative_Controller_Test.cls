@@ -14,15 +14,17 @@ public with sharing class Aswata_AddFacultative_Controller_Test {
         Account acc = (Account) data.get('Account');
         Opportunity opp = (Opportunity) data.get('Opportunity');
 
+        Facultative_Share__c facShare = Aswata_TestDataFactory.createFacultativeShare('Folder Test');
         // Create Risk Asset (tanpa folder)
         Asset risk1 = Aswata_TestDataFactory.createRisk(opp, 'Risk 1');
         risk1.Has_Facultative__c = true;
+        risk1.Facultative_Owner__c = UserInfo.getUserId();
         update risk1;
 
         // Create Risk Asset (dengan folder)
         Asset risk2 = Aswata_TestDataFactory.createRisk(opp, 'Risk 2');
         risk2.Has_Facultative__c = true;
-        risk2.Facultative_Folder__c = opp.Id;
+        risk2.Facultative_Folder__c = facShare.Id;
         update risk2;
 
         // Create Reinsurance Account (for searchAccounts)
@@ -50,16 +52,16 @@ public with sharing class Aswata_AddFacultative_Controller_Test {
     }
 
     /* =========================
-       getRiskAssets
+       getRiskByFolder
     ========================= */
     @IsTest
     static void testGetRiskAssets() {
 
-        Opportunity opp = [SELECT Id FROM Opportunity LIMIT 1];
+        Facultative_Share__c folder = [SELECT Id FROM Facultative_Share__c LIMIT 1];
 
         Test.startTest();
         List<Asset> risks =
-            Aswata_AddFacultative_Controller.getRiskAssets(opp.Id);
+            Aswata_AddFacultative_Controller.getRiskByFolder(folder.Id);
         Test.stopTest();
 
         System.assertNotEquals(null, risks);
@@ -75,7 +77,7 @@ public with sharing class Aswata_AddFacultative_Controller_Test {
     @IsTest
     static void testUpdateSelectedRisks() {
 
-        Opportunity opp = [SELECT Id FROM Opportunity LIMIT 1];
+        Facultative_Share__c folder = [SELECT Id FROM Facultative_Share__c LIMIT 1];
 
         Asset risk = [
             SELECT Id, Facultative_Folder__c
@@ -87,7 +89,7 @@ public with sharing class Aswata_AddFacultative_Controller_Test {
         Test.startTest();
         Aswata_AddFacultative_Controller.updateSelectedRisks(
             new List<Id>{ risk.Id },
-            opp.Id
+            folder.Id
         );
         Test.stopTest();
 
@@ -98,7 +100,7 @@ public with sharing class Aswata_AddFacultative_Controller_Test {
         ];
 
         System.assertEquals(
-            opp.Id,
+            folder.Id,
             updated.Facultative_Folder__c,
             'Facultative folder should be updated'
         );
@@ -137,7 +139,7 @@ public with sharing class Aswata_AddFacultative_Controller_Test {
         Test.startTest();
         Aswata_AddFacultative_Controller.updateFacultativeStatus(
             opp.Id,
-            'Submitted'
+            'Offering'
         );
         Test.stopTest();
 
@@ -148,7 +150,7 @@ public with sharing class Aswata_AddFacultative_Controller_Test {
         ];
 
         System.assertEquals(
-            'Submitted',
+            'Offering',
             updated.Offering_status__c,
             'Offering status should be updated'
         );
