@@ -1,0 +1,410 @@
+<!--
+  @description       : Untuk Isi Rate Coverage
+  @author            : Ahmad Yazid Munif
+  @group             : 
+  @last modified on  : 12-15-2025
+  @last modified by  : Ahmad Yazid Munif
+-->
+<template>
+    <div class="slds-p-around_medium slds-scrollable_x">
+        <lightning-radio-group
+            label="Coverage & Rate Setting"
+            options={modeOptions}
+            value={selectedMode}
+            onchange={handleModeChange}
+            required
+            class="slds-m-bottom_medium"
+            disabled=true>
+        </lightning-radio-group>
+        <template if:true={coverageData}>
+            <table class="slds-table slds-table_cell-buffer slds-table_bordered"
+                style="width: max-content;">
+                <thead>
+                    <tr class="slds-line-height_reset">
+                        <th class="slds-text-align_left" scope="col" style="width: 70px;"> 
+                            <div class="wrap-header" title="ID Coverage">ID</div>
+                        </th>
+                        <th class="slds-text-align_left" scope="col" style="width: 150px;">
+                            <div class="slds-cell-wrap" title="Nama Cakupan">Coverage Name</div>
+                        </th>
+                        <th class="slds-text-align_center" scope="col" style="width: 100px;">
+                            <div class="slds-cell-wrap" title="Batas Bawah">Batas Bawah (%)</div>
+                        </th>
+                        <th class="slds-text-align_center" scope="col" style="width: 100px;">
+                            <div class="slds-cell-wrap" title="Batas Bawah">Section</div>
+                        </th>
+                        <th class="slds-text-align_center" scope="col" style="width: 100px;">
+                            <div class="slds-cell-wrap" title="Proposed Rate 1">Proposed Rate (%)</div>
+                        </th>
+                        <th class="slds-text-align_center" scope="col" style="width: 180px;">
+                            <div class="slds-cell-wrap" title="Fixed Amount 1">Premi Amount (Rp)</div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template for:each={filteredCoverageData} for:item="row">
+                        <template if:false={row.isSingleRate}> 
+                            <tr key={row.id}>
+                                <td data-label="ID Coverage">{row.coverageId}</td>
+                                <td data-label="Coverage Name" class="slds-cell-wrap">{row.coverageName}</td>
+                                <td data-label="Batas Bawah">
+                                    <lightning-input 
+                                        type="number"
+                                        value={row.batasBawah}
+                                        data-id={row.id}
+                                        data-fieldname="batasBawah"
+                                        onchange={handleInputChange}
+                                        placeholder="%"
+                                        min="0"
+                                        max="100"
+                                        step="0.01"
+                                        class="full-width-input"
+                                        disabled=true
+                                        variant="label-hidden">
+                                    </lightning-input>
+                                </td>
+                                <td data-label="Section" class="slds-text-align_center">
+                                    Section 1
+                                </td>
+                                <td data-label="Coverage Rate">
+                                    <lightning-input 
+                                        type="number"
+                                        value={row.rate.coverageRate}
+                                        data-id={row.id}
+                                        data-fieldname="coverageRate"
+                                        onchange={handleInputChange}
+                                        disabled={row.isDisabledInput}
+                                        placeholder="%"
+                                        min="0"
+                                        max="100"
+                                        step="0.01"
+                                        class="full-width-input"
+                                        variant="label-hidden">
+                                    </lightning-input>
+                                </td>
+                                <td data-label="Premi Amount">
+                                    <lightning-input
+                                        type="text"
+                                        onkeydown={handleNumericKeyDown}
+                                        value={row.rate.fixedAmount}
+                                        data-id={row.id}
+                                        data-fieldname="fixedAmount"
+                                        onchange={handleInputChange}
+                                        class="full-width-input"
+                                        label=""
+                                        disabled=true
+                                        variant="label-hidden">
+                                    </lightning-input>
+                                </td>
+                            </tr>
+                            <template if:true={hasSection2}>
+                                <tr key={row.id2}>
+                                    <td colspan="3"></td>
+                                    <td data-label="Section" class="slds-text-align_center">Section 2</td>
+                                    <td data-label="Coverage Rate">
+                                        <lightning-input 
+                                            type="number"
+                                            value={row.rate.coverageRate2}
+                                            data-id={row.id}
+                                            data-fieldname="coverageRate2"
+                                            onchange={handleInputChange}
+                                            disabled={row.isDisabledInput}
+                                            placeholder="%"
+                                            min="0"
+                                            max="100"
+                                            step="0.01"
+                                            class="full-width-input"
+                                            variant="label-hidden">
+                                        </lightning-input>
+                                    </td>
+                                    <td data-label="Premi Amount">
+                                        <lightning-input
+                                            type="text"
+                                            onkeydown={handleNumericKeyDown}
+                                            value={row.rate.fixedAmount2}
+                                            data-id={row.id}
+                                            data-fieldname="fixedAmount2"
+                                            onchange={handleInputChange}
+                                            class="full-width-input"
+                                            label=""
+                                            disabled=true
+                                            variant="label-hidden">
+                                        </lightning-input>
+                                    </td>
+                                </tr>
+                            </template>
+                        </template>
+                    </template>
+                    <template if:false={isModeBreakdown}>
+                        <template for:each={thisCoverageData} for:item="row">
+                            <template if:true={row.isSingleRate}> 
+                                <tr key={row.id}>
+                                    <td data-label="ID Coverage">{row.coverageId}</td>
+                                    <td data-label="Coverage Name" class="slds-text-title_bold">{row.coverageName}</td>
+                                    <td></td>
+                                    <td class="slds-text-align_center">
+                                        Section 1
+                                    </td>
+                                    <!-- <td data-label="Batas Bawah">
+                                        <lightning-input 
+                                            type="number"
+                                            value={row.batasBawah}
+                                            data-id={row.id}
+                                            data-fieldname="batasBawah"
+                                            onchange={handleInputChange}
+                                            placeholder="%"
+                                            min="0"
+                                            max="100"
+                                            step="0.01"
+                                            class="full-width-input"
+                                            variant="label-hidden"
+                                            disabled=true>
+                                        </lightning-input>
+                                    </td> -->
+                                    <td data-label="Coverage Rate">
+                                        <lightning-input 
+                                            type="number"
+                                            value={row.rate.coverageRate}
+                                            data-id={row.id}
+                                            data-fieldname="coverageRate"
+                                            onchange={handleInputChange}
+                                            disabled={row.isDisabledInput}
+                                            placeholder="%"
+                                            min="0"
+                                            max="100"
+                                            step="0.01"
+                                            class="full-width-input"
+                                            variant="label-hidden">
+                                        </lightning-input>
+                                    </td>
+                                    <td data-label="Premi Amount">
+                                        <lightning-input
+                                            type="text"
+                                            onkeydown={handleNumericKeyDown}
+                                            value={row.rate.fixedAmount}
+                                            data-id={row.id}
+                                            data-fieldname="fixedAmount"
+                                            onchange={handleInputChangeSingle}
+                                            class="full-width-input"
+                                            label=""
+                                            disabled=true
+                                            variant="label-hidden">
+                                        </lightning-input>
+                                    </td>
+                                </tr>
+                                <template if:true={hasSection2}>
+                                    <tr key={row.id2}>
+                                        <td colspan="3"></td>
+                                        <td data-label="Section" class="slds-text-align_center">Section 2</td>
+                                        <td>
+                                            <lightning-input 
+                                                type="number"
+                                                value={row.rate.coverageRate2}
+                                                data-id={row.id}
+                                                data-fieldname="coverageRate2"
+                                                onchange={handleInputChange}
+                                                disabled={row.isDisabledInput}
+                                                placeholder="%"
+                                                min="0"
+                                                max="100"
+                                                step="0.01"
+                                                class="full-width-input"
+                                                variant="label-hidden">
+                                            </lightning-input>
+                                        </td>
+                                        <td data-label="Premi Amount Section 2">
+                                            <lightning-input
+                                                type="text"
+                                                onkeydown={handleNumericKeyDown}
+                                                value={row.rate.fixedAmount2}
+                                                data-id={row.id}
+                                                data-fieldname="fixedAmount2"
+                                                onchange={handleInputChangeSingle}
+                                                class="full-width-input"
+                                                label=""
+                                                disabled=true
+                                                variant="label-hidden">
+                                            </lightning-input>
+                                        </td>
+                                    </tr>
+                                </template>
+                                <template if:true={hasSection3}>
+                                    <tr key={row.id3}>
+                                        <td colspan="3"></td>
+                                        <td data-label="Section" class="slds-text-align_center">Section 3</td>
+                                        <td>
+                                            <lightning-input 
+                                                type="number"
+                                                value={row.rate.coverageRate3}
+                                                data-id={row.id}
+                                                data-fieldname="coverageRate3"
+                                                onchange={handleInputChange}
+                                                disabled={row.isDisabledInput}
+                                                placeholder="%"
+                                                min="0"
+                                                max="100"
+                                                step="0.01"
+                                                class="full-width-input"
+                                                variant="label-hidden">
+                                            </lightning-input>
+                                        </td>
+                                        <td data-label="Premi Amount Section 3">
+                                            <lightning-input
+                                                type="text"
+                                                onkeydown={handleNumericKeyDown}
+                                                value={row.rate.fixedAmount3}
+                                                data-id={row.id}
+                                                data-fieldname="fixedAmount3"
+                                                onchange={handleInputChangeSingle}
+                                                class="full-width-input"
+                                                label=""
+                                                disabled=true
+                                                variant="label-hidden">
+                                            </lightning-input>
+                                        </td>
+                                    </tr>
+                                </template>
+                                <template if:true={hasSection4}>
+                                    <tr key={row.id4}>
+                                        <td colspan="3"></td>
+                                        <td data-label="Section" class="slds-text-align_center">Section 4</td>
+                                        <td>
+                                            <lightning-input 
+                                                type="number"
+                                                value={row.rate.coverageRate4}
+                                                data-id={row.id}
+                                                data-fieldname="coverageRate4"
+                                                onchange={handleInputChange}
+                                                disabled={row.isDisabledInput}
+                                                placeholder="%"
+                                                min="0"
+                                                max="100"
+                                                step="0.01"
+                                                class="full-width-input"
+                                                variant="label-hidden">
+                                            </lightning-input>
+                                        </td>
+                                        <td data-label="Premi Amount Section 4">
+                                            <lightning-input
+                                                type="text"
+                                                onkeydown={handleNumericKeyDown}
+                                                value={row.rate.fixedAmount4}
+                                                data-id={row.id}
+                                                data-fieldname="fixedAmount4"
+                                                onchange={handleInputChangeSingle}
+                                                class="full-width-input"
+                                                label=""
+                                                disabled=true
+                                                variant="label-hidden">
+                                            </lightning-input>
+                                        </td>
+                                    </tr>
+                                </template>
+                            </template>
+                        </template>
+                        <tr class="slds-line-height_reset slds-text-color_default">
+                            <td>
+                            </td>
+                            <th class="slds-text-align_left" scope="col" style="width: 280px;">
+                                <div class="slds-cell-wrap">Description</div>
+                            </th>
+                            <th colspan="3" class="slds-text-align_left" scope="col">
+                                <lightning-input
+                                    type="text" 
+                                    value={descriptionRate}
+                                    data-fieldname="descriptionRate"
+                                    onchange={handleChangeDesc}
+                                    variant="label-hidden"
+                                    class="full-width-input">
+                                </lightning-input>
+                            </th>
+                        </tr>
+                    </template>
+                    <template if:true={isModeBreakdown}>
+                        <tr class="slds-line-height_reset total-row">
+                            <td class="slds-text-align_right slds-text-title_bold">
+                            </td>
+                            <td class="slds-text-align_left slds-text-title_bold">
+                                Composite/Total Rate
+                            </td>
+                            <td data-label="Total Insured" class="slds-text-align_center slds-text-title_bold">
+                                <!-- {totalRateSum} -->
+                            </td>
+                            <td class="slds-text-align_center">
+                                Section 1
+                            </td>
+                            <td class="slds-text-align_center slds-text-title_bold">
+                                {totacoverageRate}
+                            </td>
+                            <td data-label="Total Fix Amount" class="slds-text-align_center slds-text-title_bold">
+                                {totalFixedAmount}
+                            </td>
+                        </tr>
+                        <template if:true={hasSection2}>
+                            <tr>
+                                <td colspan="3" class="slds-text-align_right slds-text-title_bold">
+                                </td>
+                                <td class="slds-text-align_center">
+                                    Section 2
+                                </td>
+                                <td class="slds-text-align_center slds-text-title_bold">
+                                    {totacoverageRate2}
+                                </td>
+                                <td data-label="Total Fix Amount" class="slds-text-align_center slds-text-title_bold">
+                                    {totalFixedAmount2}
+                                </td>
+                            </tr>
+                        </template>
+                        <template if:true={hasSection3}>
+                            <tr>
+                                <td colspan="3" class="slds-text-align_right slds-text-title_bold">
+                                </td>
+                                <td class="slds-text-align_center">
+                                    Section 3
+                                </td>
+                                <td class="slds-text-align_center slds-text-title_bold">
+                                    {totacoverageRate3}
+                                </td>
+                                <td data-label="Total Fix Amount" class="slds-text-align_center slds-text-title_bold">
+                                    {totalFixedAmount3}
+                                </td>
+                            </tr>
+                        </template>
+                        <template if:true={hasSection4}>
+                            <tr>
+                                <td colspan="3" class="slds-text-align_right slds-text-title_bold">
+                                </td>
+                                <td class="slds-text-align_center">
+                                    Section 4
+                                </td>
+                                <td class="slds-text-align_center slds-text-title_bold">
+                                    {totacoverageRate4}
+                                </td>
+                                <td data-label="Total Fix Amount" class="slds-text-align_center slds-text-title_bold">
+                                    {totalFixedAmount4}
+                                </td>
+                            </tr>
+                        </template>
+                    </template>
+                </tbody>
+            </table>
+        </template>
+    </div>
+    <footer class="slds-modal__footer">
+        <div class="slds-grid slds-grid_align-end slds-m-top_large">
+            <div class="slds-grid slds-grid_align-center slds-gap_small">
+                <lightning-button 
+                    label="Previous" 
+                    onclick={handlePrevious} 
+                    variant="neutral">
+                </lightning-button>
+                <lightning-button 
+                    label="Next" 
+                    onclick={handleNext} 
+                    class="slds-m-left_small"
+                    variant="brand">
+                </lightning-button>
+            </div>
+        </div>
+    </footer>
+</template>
