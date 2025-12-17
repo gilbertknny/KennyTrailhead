@@ -15,7 +15,7 @@
 			<members>InsurancePolicyCoverage.Agent_Comission_Section_4__c</members>
 			<members>InsurancePolicyCoverage.Banks_Fee_Section_2__c</members>
 			<members>InsurancePolicyCoverage.Banks_Fee_Section_3__c</members>
-			<members>InsurancePolicyCoverage.Banks_Fee_Section_3__c</members>
+			<members>InsurancePolicyCoverage.Banks_Fee_Section_4__c</members>
 			<members>InsurancePolicyCoverage.Broker_Comission_Section_2__c</members>
 			<members>InsurancePolicyCoverage.Broker_Comission_Section_3__c</members>
 			<members>InsurancePolicyCoverage.Broker_Comission_Section_4__c</members>
@@ -26,7 +26,7 @@
 			<members>InsurancePolicyCoverage.Deductible_Currency_Section_3__c</members>
 			<members>InsurancePolicyCoverage.Deductible_PCT_Section_2__c</members>
 			<members>InsurancePolicyCoverage.Deductible_PCT_Section_3__c</members>
-			<members>InsurancePolicyCoverage.Deductible_PCT_Section_3__c</members>
+			<members>InsurancePolicyCoverage.Deductible_PCT_Section_4__c</members>
 			<members>InsurancePolicyCoverage.Deductible_Section_2__c</members>
 			<members>InsurancePolicyCoverage.Deductible_Section_3__c</members>
 			<members>InsurancePolicyCoverage.Deductible_Section_4__c</members>
@@ -67,6 +67,10 @@
 		<name>Flow</name>
 	</types>
 	<types>
+        <members>addNewCoverage</members>
+        <members>addNewCoverageDeductible</members>
+		<members>addNewCoverageRate</members>
+		<members>addNewCoverageRebate</members>
 		<members>newFacultative</members>
 		<name>LightningComponentBundle</name>
 	</types>
@@ -74,5 +78,15 @@
 		<members>Quote</members>
 		<name>PathAssistant</name>
 	</types>
+    <types>
+		<members>Sales_Corp_Staff</members>
+		<members>Sales_Retail_Staff</members>
+		<name>PermissionSet</name>
+	</types>
+    <types>
+		<members>Admin</members>
+		<name>Profile</name>
+	</types>
+
 	<version>65.0</version>
 </Package>

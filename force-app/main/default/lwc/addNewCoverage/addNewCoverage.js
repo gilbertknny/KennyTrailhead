@@ -1,6 +1,4 @@
 import { LightningElement, api, track, wire  } from 'lwc';
-import getCoverageFields from '@salesforce/apex/Aswata_Coverage_Data_Handler.getCoverageFields';
-import getExistingCoverage from '@salesforce/apex/Aswata_Coverage_Data_Handler.getExistingCoverage';
 import { FlowAttributeChangeEvent, FlowNavigationNextEvent } from 'lightning/flowSupport';
 export default class AddNewCoverageRate extends LightningElement {
     @api recordTypeIdCoverage;
@@ -24,13 +22,12 @@ export default class AddNewCoverageRate extends LightningElement {
     @track selectedMode = 'BREAKDOWN_DEDUCTIBLE';
     @api descriptionRate = '';
     @api buttonClickedValue;
-    @track searchTerm = '';
-    @track selectedCoverageId = '0';
     @track counterYear = 0;
     get settingCoverage(){
         return this.disableModeCoverage;
     }
     get filteredCoverageData() {
+        return this.coverageDataFormated;
         if (!this.searchTerm && this.selectedCoverageId == '0') {
             if(this.bsnId == '301'){
                 return this.coverageDataFormated.filter(row =>
@@ -64,8 +61,31 @@ export default class AddNewCoverageRate extends LightningElement {
             );
         }
     }
-    handleSearchChange(event) {
-        this.searchTerm = event.target.value;
+    connectedCallback() {
+        if (this.jsonString) {
+            let parsedData = JSON.parse(this.jsonString);
+            this.descriptionRate = parsedData[0].rate.descriptionRate;
+            console.log('this.descriptionRate',this.descriptionRate);
+            this.setSectionAsset(parsedData[0].sectionList);
+            this.selectedMode = parsedData[0].coverageSetting ? parsedData[0].coverageSetting:'BREAKDOWN_DEDUCTIBLE';
+            // this.disableModeCoverage = parsedData[0].disableModeCoverage;
+            this.coverageData = parsedData.map(row => {
+                const setting = row.deductibleSetting;
+                // const shouldBeDisabled = (row.id === 'SINGLE_RATE_ID');
+                return {
+                    ...row,
+                    ddtibleSetting: this.selectedMode,
+                    // compositeDisable: shouldBeDisabled,
+                    deductibleSetting: setting,
+                };
+            });
+            this.jsonString = JSON.stringify(this.coverageData);
+            // this.applyDisableLogic(null);
+            this.coverageDataFormated = this.formatDeepClone(JSON.parse(JSON.stringify(this.coverageData)));
+            console.log('✅ InitializeCoverageRateData After:', this.jsonString);
+        } else {
+            console.log('Waiting for all required data (picklist or json) to initialize.');
+        }
     }
     get modeOptions() {
         return [
@@ -84,261 +104,21 @@ export default class AddNewCoverageRate extends LightningElement {
     get isCOB301() {
         return this.bsnId === '301';
     }
-    async getCoverageData(){
-        try {
-            return await getExistingCoverage({riskId : this.riskId });
-        }
-        catch (error) {
-            console.error(`Error di getCoverageData: ${error}`);
-            throw error; 
-        }
-    }
+    // async getCoverageData(){
+    //     try {
+    //         return await getExistingCoverage({riskId : this.riskId });
+    //     }
+    //     catch (error) {
+    //         console.error(`Error di getCoverageData: ${error}`);
+    //         throw error; 
+    //     }
+    // }
     setSectionAsset(sectionList){
         this.hasSection1 = sectionList.includes(1);
         this.hasSection2 = sectionList.includes(2);
         this.hasSection3 = sectionList.includes(3);
         this.hasSection4 = sectionList.includes(4);
         console.log('this.hasSection',this.hasSection1);
-    }
-    @wire(getCoverageFields, { rtId: '$recordTypeIdCoverage', cob: '$bsnId',riskId:'$riskId'})
-    wiredCoverages({ error, data }) {
-        if (data) {
-            this.counterYear = this.buttonClickedValue;
-            console.log('counterYear: ', this.buttonClickedValue);
-            console.log('Data Coverage: ', data.length);
-            console.log('Policy:', this.policyId);
-            this.setSectionAsset(data[0].sectionList);
-            // const matrixBools = this.getMatrixBooleans(this.groupMatrix);
-            let dynamicRows = data.map((item, index) => ({
-                ...item,
-                id: item.coverageId,
-                id2: item.coverageId+'SEC2',
-                id3: item.coverageId+'SEC3',
-                id4: item.coverageId+'SEC4',
-                riskId:this.riskId,
-                policyId:this.policyId,
-                amountInsurance: this.amountInsurance,
-                isDisabledSelection: false,
-                rowType: 'BREAKDOWN_RATE',
-                covTahun: this.buttonClickedValue,
-                isSelected: false,
-                isDisabledInput: true,
-                isSingleRate: false,
-                coverageSetting:'BREAKDOWN_DEDUCTIBLE',
-                fixedAmount: null,
-                selfInsurace: null,
-                coverageRate: null,
-                rate:{
-                    fixedAmount: null,
-                    fixedAmount2: null,
-                    fixedAmount3: null,
-                    fixedAmount4: null,
-                    selfInsurace: null,
-                    coverageRate: null,
-                    coverageRate2: null,
-                    coverageRate3: null,
-                    coverageRate4: null,
-                },
-                deductible:{
-                    descriptionDeductible: ''
-                },
-                rebate:{
-                    totalRebate: 0
-                },
-                rebateSetting:'',
-                isDisabledTotalRebate: true,
-                isDisabledInputRebate: false,
-                commisionAllRate: null
-            }));
-            const singleRateRow = {
-                id: 'SINGLE_RATE_ID',
-                id2: 'SINGLE_RATE_ID'+'SEC2',
-                id3: 'SINGLE_RATE_ID'+'SEC3',
-                id4: 'SINGLE_RATE_ID'+'SEC4',
-                riskId:this.riskId,
-                policyId:this.policyId,
-                amountInsurance: this.amountInsurance,
-                coverageId: ' ',
-                coverageName: 'Single/Package Rate',
-                // coverageRate: 0,
-                isSelected: true,
-                isDisabledInput: true,
-                isDisabledSelection: true,
-                rowType: 'SINGLE_RATE',
-                isSingleRate: true,
-                coverageSetting:'BREAKDOWN_DEDUCTIBLE',
-                rate:{
-                    fixedAmount: null,
-                    fixedAmount2: null,
-                    fixedAmount3: null,
-                    fixedAmount4: null,
-                    selfInsurace: null,
-                    coverageRate: null,
-                    coverageRate2: null,
-                    coverageRate3: null,
-                    coverageRate4: null,
-                },
-                deductible:{
-                    descriptionDeductible: ''
-                },
-                rebate:{
-                    totalRebate: 0,
-                    totalRebate2: 0,
-                    totalRebate3: 0,
-                    totalRebate4: 0,
-                },
-                rebateSetting:'',
-                isDisabledTotalRebate: true,
-                isDisabledInputRebate: false,
-                commisionAllRate: null
-            };
-            let baseDataList = [...dynamicRows, singleRateRow];
-            const idList = baseDataList.map(item => item.id);
-            console.log('Daftar semua ID:', JSON.stringify(idList));
-            if (this.jsonString) {
-                console.log('✅ Success parsing JSON from Flow CoverageRate:', this.jsonString);
-                const parsedData = JSON.parse(this.jsonString);
-                try {
-                    let currentDataList = baseDataList;
-                    this.setSectionAsset(parsedData[0].sectionList);
-                    if (this.bsnId === '301') {
-                        const selectedParent = parsedData.find(item => 
-                            item.parentCoverageId == '0' && item.isSelected == true
-                        );
-                        if (selectedParent) {
-                            console.log('✅ CoverageRate selectedParent IF');
-                            this.selectedCoverageId = selectedParent.coverageId;
-                        }
-                    }
-                    parsedData.forEach(newItem => {
-                        this.descriptionRate = newItem.rate.descriptionRate;
-                        const targetId = newItem.id;
-                        // console.log('✅ CoverageRate targetId',targetId);
-                        const targetItem = currentDataList.find(item => item.id === targetId);
-                        // console.log('✅ CoverageRate targetItem',targetItem);
-                        if (targetItem) {
-                            for (const key in newItem) {
-                                if (newItem.hasOwnProperty(key)) {
-                                    // console.log('✅ CoverageRate hasOwnProperty',key);
-                                    if (key !== 'id' && key !== 'riskId' && key !== 'policyId') {
-                                        if (typeof newItem[key] === 'object' && newItem[key] !== null && 
-                                            (key === 'rate' || key === 'deductible' || key === 'rebate')) {
-                                                if (Object.keys(newItem[key]).length > 0) {
-                                                    Object.assign(targetItem[key], newItem[key]);
-                                                }
-                                        } 
-                                        else {
-                                            // targetItem[key] = newItem[key];
-                                            if(key != 'covTahun') {
-                                                // console.log('✅ CoverageRate Key',key);
-                                                targetItem[key] = newItem[key];
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            this.selectedMode = targetItem.coverageSetting;
-                        }
-                    });
-                    console.log('✅ parsedData',parsedData);
-                } catch (e) {
-                    console.error('❌ Error parsing or merging JSON string:', e);
-                }
-                this.finalizeData(baseDataList);
-            }else{
-                // this.getCoverageData()
-                // .then(existingResult => {
-                //     if (existingResult && existingResult.length > 0) {
-                //         console.log('existingResult', existingResult);
-                //         this.disableModeCoverage = true;
-                //         this.selectedMode = existingResult[0].existing.coverageSetting;
-                //         const initialDataList = baseDataList;
-                //         let currentDataList = JSON.parse(JSON.stringify(initialDataList));
-                //         existingResult.forEach(existingItem => {
-                //             const targetId = existingItem.coverageId;
-                //             const selectedIdString = existingItem.existing.listSelectedId; 
-                //             const selectedIds = selectedIdString ? selectedIdString.split(',') : [];
-    
-                //             if (existingItem.coverageName.includes('+') || selectedIds.length > 1) {
-                //                 this.selectedCoverageNames.add(existingItem.coverageName);
-                                
-                //                 const singleTargetItem = currentDataList.find(item => item.id === 'SINGLE_RATE_ID');
-                //                 if (singleTargetItem) {
-                //                     const rateValue = existingItem.rate;
-                //                     let calculatedPremium1 =0;
-                //                     let calculatedPremium2 =0;
-                //                     let calculatedPremium3 =0;
-                //                     let calculatedPremium4 =0;
-                //                     if(rateValue && rateValue.coverageRate) calculatedPremium1 = (Number(rateValue.coverageRate) * singleTargetItem.amountInsurance) / 100;                                    
-                //                     if(rateValue && rateValue.coverageRate2) calculatedPremium2 = (Number(rateValue.coverageRate2) * singleTargetItem.amountInsurance) / 100;                                    
-                //                     if(rateValue && rateValue.coverageRate3) calculatedPremium3 = (Number(rateValue.coverageRate3) * singleTargetItem.amountInsurance) / 100;                                    
-                //                     if(rateValue && rateValue.coverageRate4) calculatedPremium4 = (Number(rateValue.coverageRate4) * singleTargetItem.amountInsurance) / 100;                                    
-                //                     singleTargetItem.isSelected = true;
-                //                     singleTargetItem.disableModeCoverage= true;
-                //                     // singleTargetItem.descriptionRate= existingItem.coverageName;
-                //                     singleTargetItem.rate = {
-                //                         ...rateValue,
-                //                         // descriptionRate:existingItem.coverageName,
-                //                         fixedAmount: calculatedPremium1,
-                //                         fixedAmount2: calculatedPremium2,
-                //                         fixedAmount3: calculatedPremium3,
-                //                         fixedAmount4: calculatedPremium4
-                //                     };
-                //                 }
-                //                 currentDataList.forEach(targetItem => {
-                //                     if (selectedIds.includes(targetItem.id)) {
-                //                         targetItem.isSelected = true; 
-                //                         targetItem.disableModeCoverage= true;
-                //                     }
-                //                 });
-                //             }else{
-                //                 const targetItem = currentDataList.find(item => item.id === targetId);
-                //                 console.log('existingResult targetItem', JSON.stringify(targetItem));
-                //                 if (targetItem) {
-                //                     const rateValue = existingItem.rate;
-                //                     let calculatedPremium1 =0;
-                //                     let calculatedPremium2 =0;
-                //                     let calculatedPremium3 =0;
-                //                     let calculatedPremium4 =0;
-                //                     if(rateValue.coverageRate) calculatedPremium1 = (Number(rateValue.coverageRate) * targetItem.amountInsurance) / 100;                                    
-                //                     if(rateValue.coverageRate2) calculatedPremium2 = (Number(rateValue.coverageRate2) * targetItem.amountInsurance) / 100;                                    
-                //                     if(rateValue.coverageRate3) calculatedPremium3 = (Number(rateValue.coverageRate3) * targetItem.amountInsurance) / 100;                                    
-                //                     if(rateValue.coverageRate4) calculatedPremium4 = (Number(rateValue.coverageRate4) * targetItem.amountInsurance) / 100;                                    
-                //                     targetItem.isSelected = true;
-                //                     targetItem.disableModeCoverage= true;
-                //                     // targetItem.rate = existingItem.rate;
-                //                     targetItem.rate = {
-                //                         ...rateValue,
-                //                         fixedAmount: calculatedPremium1,
-                //                         fixedAmount2: calculatedPremium2,
-                //                         fixedAmount3: calculatedPremium3,
-                //                         fixedAmount4: calculatedPremium4
-                //                     }
-                //                 }
-                //             } 
-                //         });
-                //         let finalDataList = [...currentDataList];
-                //         finalDataList = currentDataList.filter(item => 
-                //             (item.rowType == 'BREAKDOWN_RATE' && item.isSelected != true) || 
-                //             (item.id === 'SINGLE_RATE_ID') 
-                //         );
-                //         this.finalizeData(finalDataList);
-                //     }else{
-                //         this.finalizeData(baseDataList);
-                //     }
-                // })
-                // .catch(error => {
-                //     console.error('Error fetching existing coverage:', error);
-                // });
-                this.finalizeData(baseDataList);
-            }
-            // this.coverageData = [...dynamicRows, singleRateRow];
-            // this.coverageDataFormated = [...dynamicRows, singleRateRow];
-            // this.applyDisableLogic(null);
-        } else if (error) {
-            this.coverageData = undefined;
-            console.error('Error fetching coverage data:', error);
-        }
     }
     finalizeData(finalData) {
         this.coverageData = finalData; 
@@ -385,6 +165,7 @@ export default class AddNewCoverageRate extends LightningElement {
             let singleCoverageRate3 = item.rate.coverageRate3;
             let singleCoverageRate4 = item.rate.coverageRate4;
             let descriptionRate = item.descriptionRate;
+            
             // const originalItem = dynamicDataTemp.find(tempItem => tempItem.id === item.id);
             if (this.selectedMode === 'COMPOSITE') {
                 if (item.rowType == 'BREAKDOWN_RATE') {
@@ -445,8 +226,7 @@ export default class AddNewCoverageRate extends LightningElement {
                     coverageRate3: singleCoverageRate3,
                     coverageRate4: singleCoverageRate4,
                     descriptionRate: descriptionRate
-                },
-                descriptionRate: descriptionRate
+                }
             };
         });
         this.coverageDataFormated = this.formatDeepClone(JSON.parse(JSON.stringify(this.coverageData)));
