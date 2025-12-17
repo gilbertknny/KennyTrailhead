@@ -256,7 +256,7 @@
             <componentInstance>
                 <componentInstanceProperties>
                     <name>hideUpdateButton</name>
-                    <value>false</value>
+                    <value>true</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>variant</name>
@@ -379,24 +379,15 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>readonly</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Wording_Name__c</fieldItem>
-                <identifier>RecordWording_Name_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Policy_Wording_Name__c</fieldItem>
-                <identifier>RecordPolicy_Wording_Name_cField</identifier>
+                <fieldItem>Record.Facultative_Status__c</fieldItem>
+                <identifier>RecordFacultative_Status_cField</identifier>
                 <visibilityRule>
                     <criteria>
-                        <leftValue>{!Record.Policy_Wording_Name__c}</leftValue>
-                        <operator>NE</operator>
+                        <leftValue>{!Record.Has_Facultative__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>true</rightValue>
                     </criteria>
                 </visibilityRule>
             </fieldInstance>
@@ -407,13 +398,75 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Facultative_Status__c</fieldItem>
-                <identifier>RecordFacultative_Status_cField</identifier>
+                <fieldItem>Record.Expected_Close_Date__c</fieldItem>
+                <identifier>RecordExpected_Close_Date_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.View_Remarks_History_Sales__c</fieldItem>
+                <identifier>RecordView_Remarks_History_Sales_cField</identifier>
                 <visibilityRule>
+                    <booleanFilter>1 AND 2</booleanFilter>
                     <criteria>
-                        <leftValue>{!Record.Has_Facultative__c}</leftValue>
+                        <leftValue>{!Record.StageName}</leftValue>
                         <operator>EQUAL</operator>
-                        <rightValue>true</rightValue>
+                        <rightValue>Quote</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.Quote_Status__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Binding</rightValue>
+                    </criteria>
+                </visibilityRule>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.View_Remarks_History_UW__c</fieldItem>
+                <identifier>RecordView_Remarks_History_UW_cField</identifier>
+                <visibilityRule>
+                    <booleanFilter>1 AND 2</booleanFilter>
+                    <criteria>
+                        <leftValue>{!Record.StageName}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Quote</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.Quote_Status__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Binding</rightValue>
+                    </criteria>
+                </visibilityRule>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.renewal_notice_no__c</fieldItem>
+                <identifier>Recordrenewal_notice_no_cField</identifier>
+                <visibilityRule>
+                    <booleanFilter>1 OR 2</booleanFilter>
+                    <criteria>
+                        <leftValue>{!Record.Opportunity_Type__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>RN</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.Opportunity_Type__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>ED</rightValue>
                     </criteria>
                 </visibilityRule>
             </fieldInstance>
@@ -491,6 +544,16 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
+                <fieldItem>Record.COB__c</fieldItem>
+                <identifier>RecordCOB_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
                 <fieldItem>Record.Product_Type__c</fieldItem>
                 <identifier>RecordProduct_Type_cField2</identifier>
             </fieldInstance>
@@ -501,8 +564,24 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.COB__c</fieldItem>
-                <identifier>RecordCOB_cField</identifier>
+                <fieldItem>Record.Policy_Wording_Name__c</fieldItem>
+                <identifier>RecordPolicy_Wording_Name_cField</identifier>
+                <visibilityRule>
+                    <criteria>
+                        <leftValue>{!Record.Policy_Wording_Name__c}</leftValue>
+                        <operator>NE</operator>
+                    </criteria>
+                </visibilityRule>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>readonly</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Wording_Name__c</fieldItem>
+                <identifier>RecordWording_Name_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
@@ -567,69 +646,6 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.View_Remarks_History_Sales__c</fieldItem>
-                <identifier>RecordView_Remarks_History_Sales_cField</identifier>
-                <visibilityRule>
-                    <booleanFilter>1 AND 2</booleanFilter>
-                    <criteria>
-                        <leftValue>{!Record.StageName}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>Quote</rightValue>
-                    </criteria>
-                    <criteria>
-                        <leftValue>{!Record.Quote_Status__c}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>Binding</rightValue>
-                    </criteria>
-                </visibilityRule>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.View_Remarks_History_UW__c</fieldItem>
-                <identifier>RecordView_Remarks_History_UW_cField</identifier>
-                <visibilityRule>
-                    <booleanFilter>1 AND 2</booleanFilter>
-                    <criteria>
-                        <leftValue>{!Record.StageName}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>Quote</rightValue>
-                    </criteria>
-                    <criteria>
-                        <leftValue>{!Record.Quote_Status__c}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>Binding</rightValue>
-                    </criteria>
-                </visibilityRule>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Quote_Status__c</fieldItem>
-                <identifier>RecordQuote_Status_cField2</identifier>
-                <visibilityRule>
-                    <criteria>
-                        <leftValue>{!Record.StageName}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>Quote</rightValue>
-                    </criteria>
-                </visibilityRule>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
                 <fieldItem>Record.Submission_Format__c</fieldItem>
                 <identifier>RecordSubmission_Format_cField</identifier>
             </fieldInstance>
@@ -640,41 +656,8 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Expected_Close_Date__c</fieldItem>
-                <identifier>RecordExpected_Close_Date_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
                 <fieldItem>Record.ref_police_number_text__c</fieldItem>
                 <identifier>Recordref_police_number_text_cField</identifier>
-                <visibilityRule>
-                    <booleanFilter>1 OR 2</booleanFilter>
-                    <criteria>
-                        <leftValue>{!Record.Opportunity_Type__c}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>RN</rightValue>
-                    </criteria>
-                    <criteria>
-                        <leftValue>{!Record.Opportunity_Type__c}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>ED</rightValue>
-                    </criteria>
-                </visibilityRule>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.renewal_notice_no__c</fieldItem>
-                <identifier>Recordrenewal_notice_no_cField</identifier>
                 <visibilityRule>
                     <booleanFilter>1 OR 2</booleanFilter>
                     <criteria>
@@ -722,10 +705,10 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>readonly</value>
+                    <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Request_Number__c</fieldItem>
-                <identifier>RecordRequest_Number_cField</identifier>
+                <fieldItem>Record.Busreq_ID__c</fieldItem>
+                <identifier>RecordBusreq_ID_cField2</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
@@ -742,7 +725,7 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>readonly</value>
+                    <value>required</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.AccountId</fieldItem>
                 <identifier>RecordAccountIdField</identifier>
@@ -752,37 +735,51 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>readonly</value>
+                    <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Cur__c</fieldItem>
-                <identifier>RecordCUR__cField</identifier>
+                <fieldItem>Record.Currency__c</fieldItem>
+                <identifier>RecordCurrency_cField2</identifier>
+                <visibilityRule>
+                    <criteria>
+                        <leftValue>{!Record.Submission_Format__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Summary</rightValue>
+                    </criteria>
+                </visibilityRule>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>readonly</value>
+                    <value>none</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.Premium__c</fieldItem>
                 <identifier>RecordPremium_cField</identifier>
+                <visibilityRule>
+                    <criteria>
+                        <leftValue>{!Record.Submission_Format__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Summary</rightValue>
+                    </criteria>
+                </visibilityRule>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>readonly</value>
+                    <value>none</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.Total_Sum_Insured__c</fieldItem>
-                <identifier>RecordTotal_Sum_Insured_IDR__cField</identifier>
+                <identifier>RecordTotal_Sum_Insured_cField2</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>readonly</value>
+                    <value>none</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.Amount</fieldItem>
                 <identifier>RecordAmountField</identifier>
@@ -792,7 +789,7 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>readonly</value>
+                    <value>none</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.Number_Of_Risk__c</fieldItem>
                 <identifier>RecordNumber_Of_Risk_cField</identifier>
@@ -802,7 +799,7 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>readonly</value>
+                    <value>none</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.Description</fieldItem>
                 <identifier>RecordDescriptionField</identifier>
@@ -812,50 +809,10 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>readonly</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Policy_Wording__c</fieldItem>
-                <identifier>RecordPolicy_Wording__cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>readonly</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Coverage_Group_ID__c</fieldItem>
-                <identifier>RecordCOVERAGE_GROUP_ID__cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>readonly</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Opportunity_Type__c</fieldItem>
-                <identifier>RecordOpportunity_Type_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>readonly</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.COB__c</fieldItem>
-                <identifier>RecordCOB__cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>readonly</value>
+                    <value>none</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.Facultative_Status__c</fieldItem>
-                <identifier>RecordFacultative_Status__cField</identifier>
+                <identifier>RecordFacultative_Status_cField2</identifier>
                 <visibilityRule>
                     <criteria>
                         <leftValue>{!Record.Has_Facultative__c}</leftValue>
@@ -869,33 +826,82 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>readonly</value>
+                    <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Sub_Stage__c</fieldItem>
-                <identifier>RecordSub_Stage__cField</identifier>
+                <fieldItem>Record.View_Remarks_History_Sales__c</fieldItem>
+                <identifier>RecordView_Remarks_History_Sales_cField2</identifier>
+                <visibilityRule>
+                    <booleanFilter>1 AND 2</booleanFilter>
+                    <criteria>
+                        <leftValue>{!Record.StageName}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Quote</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.Quote_Status__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Binding</rightValue>
+                    </criteria>
+                </visibilityRule>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>readonly</value>
+                    <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Requestor_ID__c</fieldItem>
-                <identifier>RecordREQUESTOR_ID__cField</identifier>
+                <fieldItem>Record.View_Remarks_History_UW__c</fieldItem>
+                <identifier>RecordView_Remarks_History_UW_cField2</identifier>
+                <visibilityRule>
+                    <booleanFilter>1 AND 2</booleanFilter>
+                    <criteria>
+                        <leftValue>{!Record.StageName}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Quote</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.Quote_Status__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Binding</rightValue>
+                    </criteria>
+                </visibilityRule>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>readonly</value>
+                    <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Warranty__c</fieldItem>
-                <identifier>RecordWarranty_cField2</identifier>
+                <fieldItem>Record.Submission_Format__c</fieldItem>
+                <identifier>RecordSubmission_Format_cField2</identifier>
             </fieldInstance>
         </itemInstances>
-        <name>Facet-60fdc8d8-f609-4d48-9d80-1b1def1bc007</name>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.renewal_notice_no__c</fieldItem>
+                <identifier>Recordrenewal_notice_no_cField2</identifier>
+                <visibilityRule>
+                    <booleanFilter>1 OR 2</booleanFilter>
+                    <criteria>
+                        <leftValue>{!Record.Opportunity_Type__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>RN</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.Opportunity_Type__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>ED</rightValue>
+                    </criteria>
+                </visibilityRule>
+            </fieldInstance>
+        </itemInstances>
+        <name>Facet-duzz81nxt4</name>
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
@@ -916,7 +922,7 @@
                     <value>none</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.Account_Servicing_Office__c</fieldItem>
-                <identifier>RecordAccount_Servicing_Office__cField</identifier>
+                <identifier>RecordAccount_Servicing_Office_cField2</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
@@ -943,17 +949,40 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>readonly</value>
+                    <value>none</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.Parent_Opportunity__c</fieldItem>
-                <identifier>RecordParent_Opportunity__cField</identifier>
+                <identifier>RecordParent_Opportunity_cField2</identifier>
+                <visibilityRule>
+                    <booleanFilter>1 OR 2</booleanFilter>
+                    <criteria>
+                        <leftValue>{!Record.Opportunity_Type__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>RN</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.Opportunity_Type__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>ED</rightValue>
+                    </criteria>
+                </visibilityRule>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>readonly</value>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.COB__c</fieldItem>
+                <identifier>RecordCOB_cField2</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.Product_Type__c</fieldItem>
                 <identifier>RecordProduct_Type_cField</identifier>
@@ -963,20 +992,26 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>readonly</value>
+                    <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Busreq_ID__c</fieldItem>
-                <identifier>RecordBUSREQ_Id__cField</identifier>
+                <fieldItem>Record.Policy_Wording_Name__c</fieldItem>
+                <identifier>RecordPolicy_Wording_Name_cField2</identifier>
+                <visibilityRule>
+                    <criteria>
+                        <leftValue>{!Record.Policy_Wording_Name__c}</leftValue>
+                        <operator>NE</operator>
+                    </criteria>
+                </visibilityRule>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>none</value>
+                    <value>readonly</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.ExpectedRevenue</fieldItem>
-                <identifier>RecordExpectedRevenueField</identifier>
+                <fieldItem>Record.Wording_Name__c</fieldItem>
+                <identifier>RecordWording_Name_cField2</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
@@ -993,10 +1028,10 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>readonly</value>
+                    <value>none</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.Operation_Remarks_for_Sales__c</fieldItem>
-                <identifier>RecordOperation_Remarks_for_Sales__cField</identifier>
+                <identifier>RecordOperation_Remarks_for_Sales_cField2</identifier>
                 <visibilityRule>
                     <booleanFilter>1 AND 2</booleanFilter>
                     <criteria>
@@ -1010,122 +1045,6 @@
                         <rightValue>Binding</rightValue>
                     </criteria>
                 </visibilityRule>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>readonly</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Operation_Remarks_for_Underwriting__c</fieldItem>
-                <identifier>RecordOperation_Remarks_for_Underwriting__cField</identifier>
-                <visibilityRule>
-                    <booleanFilter>1 AND 2</booleanFilter>
-                    <criteria>
-                        <leftValue>{!Record.StageName}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>Quote</rightValue>
-                    </criteria>
-                    <criteria>
-                        <leftValue>{!Record.Quote_Status__c}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>Binding</rightValue>
-                    </criteria>
-                </visibilityRule>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>readonly</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.View_Remarks_History_Sales__c</fieldItem>
-                <identifier>RecordOperation_Remarks_History_for_Sales__cField</identifier>
-                <visibilityRule>
-                    <booleanFilter>1 AND 2</booleanFilter>
-                    <criteria>
-                        <leftValue>{!Record.StageName}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>Quote</rightValue>
-                    </criteria>
-                    <criteria>
-                        <leftValue>{!Record.Quote_Status__c}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>Binding</rightValue>
-                    </criteria>
-                </visibilityRule>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>readonly</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.View_Remarks_History_UW__c</fieldItem>
-                <identifier>RecordOperation_Remarks_History_for_UW__cField</identifier>
-                <visibilityRule>
-                    <booleanFilter>1 AND 2</booleanFilter>
-                    <criteria>
-                        <leftValue>{!Record.StageName}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>Quote</rightValue>
-                    </criteria>
-                    <criteria>
-                        <leftValue>{!Record.Quote_Status__c}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>Binding</rightValue>
-                    </criteria>
-                </visibilityRule>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>readonly</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Quote_Status__c</fieldItem>
-                <identifier>RecordQuote_Status_cField</identifier>
-                <visibilityRule>
-                    <criteria>
-                        <leftValue>{!Record.StageName}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>Quote</rightValue>
-                    </criteria>
-                </visibilityRule>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>readonly</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Insurance_Endorsdate__c</fieldItem>
-                <identifier>RecordInsurance_Endorsdate_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>readonly</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Submission_Format__c</fieldItem>
-                <identifier>RecordSubmission_Format__cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>readonly</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Expected_Close_Date__c</fieldItem>
-                <identifier>RecordExpected_Close_Date__cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
@@ -1134,11 +1053,57 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Ref_Policy_Number__c</fieldItem>
-                <identifier>RecordRef_Policy_Number_cField2</identifier>
+                <fieldItem>Record.Operation_Remarks_for_Underwriting__c</fieldItem>
+                <identifier>RecordOperation_Remarks_for_Underwriting_cField2</identifier>
+                <visibilityRule>
+                    <booleanFilter>1 AND 2</booleanFilter>
+                    <criteria>
+                        <leftValue>{!Record.StageName}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Quote</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.Quote_Status__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Binding</rightValue>
+                    </criteria>
+                </visibilityRule>
             </fieldInstance>
         </itemInstances>
-        <name>Facet-0638db5b-6060-4cad-85d4-342e8d39f033</name>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Expected_Close_Date__c</fieldItem>
+                <identifier>RecordExpected_Close_Date_cField2</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.ref_police_number_text__c</fieldItem>
+                <identifier>Recordref_police_number_text_cField2</identifier>
+                <visibilityRule>
+                    <booleanFilter>1 OR 2</booleanFilter>
+                    <criteria>
+                        <leftValue>{!Record.Opportunity_Type__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>RN</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.Opportunity_Type__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>ED</rightValue>
+                    </criteria>
+                </visibilityRule>
+            </fieldInstance>
+        </itemInstances>
+        <name>Facet-oon6c15v4q</name>
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
@@ -1146,23 +1111,23 @@
             <componentInstance>
                 <componentInstanceProperties>
                     <name>body</name>
-                    <value>Facet-60fdc8d8-f609-4d48-9d80-1b1def1bc007</value>
+                    <value>Facet-duzz81nxt4</value>
                 </componentInstanceProperties>
                 <componentName>flexipage:column</componentName>
-                <identifier>flexipage_column11</identifier>
+                <identifier>flexipage_column</identifier>
             </componentInstance>
         </itemInstances>
         <itemInstances>
             <componentInstance>
                 <componentInstanceProperties>
                     <name>body</name>
-                    <value>Facet-0638db5b-6060-4cad-85d4-342e8d39f033</value>
+                    <value>Facet-oon6c15v4q</value>
                 </componentInstanceProperties>
                 <componentName>flexipage:column</componentName>
-                <identifier>flexipage_column12</identifier>
+                <identifier>flexipage_column2</identifier>
             </componentInstance>
         </itemInstances>
-        <name>Facet-9c4b68a4-03f2-4566-95fc-fd1581e7ade0</name>
+        <name>Facet-hz5qx9tqcqa</name>
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
@@ -1202,16 +1167,6 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Requestor_Segment__c</fieldItem>
-                <identifier>RecordRequestor_Segment__cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
                 <fieldItem>Record.Requestor_Business_Segmentation__c</fieldItem>
                 <identifier>RecordRequestor_Business_Segmentation__cField</identifier>
             </fieldInstance>
@@ -1226,28 +1181,8 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.The_Insured_Address__c</fieldItem>
-                <identifier>RecordThe_Insured_Address_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.The_Insured_Name__c</fieldItem>
-                <identifier>RecordThe_Insured_Name_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.The_Insured_Status__c</fieldItem>
-                <identifier>RecordThe_Insured_Status_cField</identifier>
+                <fieldItem>Record.Requestor_Segment__c</fieldItem>
+                <identifier>RecordRequestor_Segment__cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
@@ -1334,16 +1269,6 @@
                     <name>uiBehavior</name>
                     <value>readonly</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Requestor_Segment__c</fieldItem>
-                <identifier>RecordRequestor_Segment_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>readonly</value>
-                </fieldInstanceProperties>
                 <fieldItem>Record.Requestor_Business_Segmentation__c</fieldItem>
                 <identifier>RecordRequestor_Business_Segmentation_cField</identifier>
             </fieldInstance>
@@ -1358,28 +1283,8 @@
                     <name>uiBehavior</name>
                     <value>readonly</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.The_Insured_Address__c</fieldItem>
-                <identifier>RecordThe_Insured_Address_cField3</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>readonly</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.The_Insured_Name__c</fieldItem>
-                <identifier>RecordThe_Insured_Name_cField3</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.The_Insured_Status__c</fieldItem>
-                <identifier>RecordThe_Insured_Status_cField3</identifier>
+                <fieldItem>Record.Requestor_Segment__c</fieldItem>
+                <identifier>RecordRequestor_Segment_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
@@ -1427,290 +1332,6 @@
             </componentInstance>
         </itemInstances>
         <name>Facet-bb6lkydf4ec</name>
-        <type>Facet</type>
-    </flexiPageRegions>
-    <flexiPageRegions>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Insurance_Period_Type__c</fieldItem>
-                <identifier>RecordInsurance_Period_Type__cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Start_Date_Periode__c</fieldItem>
-                <identifier>RecordStart_Date_Periode__cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Percentage__c</fieldItem>
-                <identifier>RecordPercentage__cField</identifier>
-                <visibilityRule>
-                    <booleanFilter>1 AND 2</booleanFilter>
-                    <criteria>
-                        <leftValue>{!Record.Insurance_Period_Type__c}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>2</rightValue>
-                    </criteria>
-                    <criteria>
-                        <leftValue>{!Record.Short_Period_Basis__c}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>1</rightValue>
-                    </criteria>
-                </visibilityRule>
-            </fieldInstance>
-        </itemInstances>
-        <name>Facet-bbaf187f-86d1-4ee7-8bd8-5386a60aa14e</name>
-        <type>Facet</type>
-    </flexiPageRegions>
-    <flexiPageRegions>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Short_Period_Basis__c</fieldItem>
-                <identifier>RecordShort_Period_Basis__cField</identifier>
-                <visibilityRule>
-                    <criteria>
-                        <leftValue>{!Record.Insurance_Period_Type__c}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>2</rightValue>
-                    </criteria>
-                </visibilityRule>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Number_of_Years__c</fieldItem>
-                <identifier>RecordNumber_of_Years__cField</identifier>
-                <visibilityRule>
-                    <criteria>
-                        <leftValue>{!Record.Insurance_Period_Type__c}</leftValue>
-                        <operator>NE</operator>
-                        <rightValue>2</rightValue>
-                    </criteria>
-                </visibilityRule>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Period_Rate__c</fieldItem>
-                <identifier>RecordPeriod_Rate__cField</identifier>
-                <visibilityRule>
-                    <booleanFilter>1 AND 2</booleanFilter>
-                    <criteria>
-                        <leftValue>{!Record.Insurance_Period_Type__c}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>2</rightValue>
-                    </criteria>
-                    <criteria>
-                        <leftValue>{!Record.Short_Period_Basis__c}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>2</rightValue>
-                    </criteria>
-                </visibilityRule>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.End_Date_Periode__c</fieldItem>
-                <identifier>RecordEnd_Date_Periode_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <name>Facet-92d5123a-7ff8-4cf1-b7a4-30ec822a9e42</name>
-        <type>Facet</type>
-    </flexiPageRegions>
-    <flexiPageRegions>
-        <itemInstances>
-            <componentInstance>
-                <componentInstanceProperties>
-                    <name>body</name>
-                    <value>Facet-bbaf187f-86d1-4ee7-8bd8-5386a60aa14e</value>
-                </componentInstanceProperties>
-                <componentName>flexipage:column</componentName>
-                <identifier>flexipage_column</identifier>
-            </componentInstance>
-        </itemInstances>
-        <itemInstances>
-            <componentInstance>
-                <componentInstanceProperties>
-                    <name>body</name>
-                    <value>Facet-92d5123a-7ff8-4cf1-b7a4-30ec822a9e42</value>
-                </componentInstanceProperties>
-                <componentName>flexipage:column</componentName>
-                <identifier>flexipage_column2</identifier>
-            </componentInstance>
-        </itemInstances>
-        <name>Facet-4e0e498e-bdc6-4931-b4a3-3d0f3b52bb7a</name>
-        <type>Facet</type>
-    </flexiPageRegions>
-    <flexiPageRegions>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Insurance_Period_Type__c</fieldItem>
-                <identifier>RecordInsurance_Period_Type_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Start_Date_Periode__c</fieldItem>
-                <identifier>RecordStart_Date_Periode_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Percentage__c</fieldItem>
-                <identifier>RecordPercentage_cField</identifier>
-                <visibilityRule>
-                    <booleanFilter>1 AND 2</booleanFilter>
-                    <criteria>
-                        <leftValue>{!Record.Insurance_Period_Type__c}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>2</rightValue>
-                    </criteria>
-                    <criteria>
-                        <leftValue>{!Record.Short_Period_Basis__c}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>1</rightValue>
-                    </criteria>
-                </visibilityRule>
-            </fieldInstance>
-        </itemInstances>
-        <name>Facet-gtecgu6od78</name>
-        <type>Facet</type>
-    </flexiPageRegions>
-    <flexiPageRegions>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Short_Period_Basis__c</fieldItem>
-                <identifier>RecordShort_Period_Basis_cField</identifier>
-                <visibilityRule>
-                    <criteria>
-                        <leftValue>{!Record.Insurance_Period_Type__c}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>2</rightValue>
-                    </criteria>
-                </visibilityRule>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Number_of_Years__c</fieldItem>
-                <identifier>RecordNumber_of_Years_cField</identifier>
-                <visibilityRule>
-                    <criteria>
-                        <leftValue>{!Record.Insurance_Period_Type__c}</leftValue>
-                        <operator>NE</operator>
-                        <rightValue>2</rightValue>
-                    </criteria>
-                </visibilityRule>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Period_Rate__c</fieldItem>
-                <identifier>RecordPeriod_Rate_cField</identifier>
-                <visibilityRule>
-                    <booleanFilter>1 AND 2</booleanFilter>
-                    <criteria>
-                        <leftValue>{!Record.Insurance_Period_Type__c}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>2</rightValue>
-                    </criteria>
-                    <criteria>
-                        <leftValue>{!Record.Short_Period_Basis__c}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>2</rightValue>
-                    </criteria>
-                </visibilityRule>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.End_Date_Periode__c</fieldItem>
-                <identifier>RecordEnd_Date_Periode_cField2</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <name>Facet-uc9g2b81t8</name>
-        <type>Facet</type>
-    </flexiPageRegions>
-    <flexiPageRegions>
-        <itemInstances>
-            <componentInstance>
-                <componentInstanceProperties>
-                    <name>body</name>
-                    <value>Facet-gtecgu6od78</value>
-                </componentInstanceProperties>
-                <componentName>flexipage:column</componentName>
-                <identifier>flexipage_column25</identifier>
-            </componentInstance>
-        </itemInstances>
-        <itemInstances>
-            <componentInstance>
-                <componentInstanceProperties>
-                    <name>body</name>
-                    <value>Facet-uc9g2b81t8</value>
-                </componentInstanceProperties>
-                <componentName>flexipage:column</componentName>
-                <identifier>flexipage_column26</identifier>
-            </componentInstance>
-        </itemInstances>
-        <name>Facet-n53zoqstufl</name>
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
@@ -1928,16 +1549,6 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.NextStep</fieldItem>
-                <identifier>RecordNextStepField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
                     <value>required</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.CloseDate</fieldItem>
@@ -2020,16 +1631,6 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>readonly</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.NextStep</fieldItem>
-                <identifier>RecordNextStepField2</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
                     <value>required</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.CloseDate</fieldItem>
@@ -2095,82 +1696,6 @@
             </componentInstance>
         </itemInstances>
         <name>Facet-dsfd8ikgx3r</name>
-        <type>Facet</type>
-    </flexiPageRegions>
-    <flexiPageRegions>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Closing_Class__c</fieldItem>
-                <identifier>RecordClosing_Class_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Policy_Closing_Type__c</fieldItem>
-                <identifier>RecordPolicy_Closing_Type_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <name>Facet-66174d97-d807-4198-8699-3cda39509a0d</name>
-        <type>Facet</type>
-    </flexiPageRegions>
-    <flexiPageRegions>
-        <itemInstances>
-            <componentInstance>
-                <componentInstanceProperties>
-                    <name>body</name>
-                    <value>Facet-66174d97-d807-4198-8699-3cda39509a0d</value>
-                </componentInstanceProperties>
-                <componentName>flexipage:column</componentName>
-                <identifier>flexipage_column15</identifier>
-            </componentInstance>
-        </itemInstances>
-        <name>Facet-acd05050-4bf4-4f8c-9116-4c9fabacd568</name>
-        <type>Facet</type>
-    </flexiPageRegions>
-    <flexiPageRegions>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>readonly</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Closing_Class__c</fieldItem>
-                <identifier>RecordClosing_Class_cField2</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>readonly</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Policy_Closing_Type__c</fieldItem>
-                <identifier>RecordPolicy_Closing_Type_cField2</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <name>Facet-de66vhxotal</name>
-        <type>Facet</type>
-    </flexiPageRegions>
-    <flexiPageRegions>
-        <itemInstances>
-            <componentInstance>
-                <componentInstanceProperties>
-                    <name>body</name>
-                    <value>Facet-de66vhxotal</value>
-                </componentInstanceProperties>
-                <componentName>flexipage:column</componentName>
-                <identifier>flexipage_column29</identifier>
-            </componentInstance>
-        </itemInstances>
-        <name>Facet-b6t3pxs0yl</name>
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
@@ -2409,7 +1934,7 @@
             <componentInstance>
                 <componentInstanceProperties>
                     <name>columns</name>
-                    <value>Facet-9c4b68a4-03f2-4566-95fc-fd1581e7ade0</value>
+                    <value>Facet-hz5qx9tqcqa</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>horizontalAlignment</name>
@@ -2420,7 +1945,7 @@
                     <value>@@@SFDCOpportunity_InformationSFDC@@@</value>
                 </componentInstanceProperties>
                 <componentName>flexipage:fieldSection</componentName>
-                <identifier>flexipage_fieldSection7</identifier>
+                <identifier>flexipage_fieldSection</identifier>
                 <visibilityRule>
                     <criteria>
                         <leftValue>{!Record.IsClosed}</leftValue>
@@ -2442,7 +1967,7 @@
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>label</name>
-                    <value>Requestor and The Insured</value>
+                    <value>Account</value>
                 </componentInstanceProperties>
                 <componentName>flexipage:fieldSection</componentName>
                 <identifier>flexipage_fieldSection2</identifier>
@@ -2467,60 +1992,10 @@
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>label</name>
-                    <value>Requestor and The Insured</value>
+                    <value>Account</value>
                 </componentInstanceProperties>
                 <componentName>flexipage:fieldSection</componentName>
                 <identifier>flexipage_fieldSection14</identifier>
-                <visibilityRule>
-                    <criteria>
-                        <leftValue>{!Record.IsClosed}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>true</rightValue>
-                    </criteria>
-                </visibilityRule>
-            </componentInstance>
-        </itemInstances>
-        <itemInstances>
-            <componentInstance>
-                <componentInstanceProperties>
-                    <name>columns</name>
-                    <value>Facet-4e0e498e-bdc6-4931-b4a3-3d0f3b52bb7a</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>horizontalAlignment</name>
-                    <value>false</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>label</name>
-                    <value>Insurance Periode</value>
-                </componentInstanceProperties>
-                <componentName>flexipage:fieldSection</componentName>
-                <identifier>flexipage_fieldSection</identifier>
-                <visibilityRule>
-                    <criteria>
-                        <leftValue>{!Record.IsClosed}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>false</rightValue>
-                    </criteria>
-                </visibilityRule>
-            </componentInstance>
-        </itemInstances>
-        <itemInstances>
-            <componentInstance>
-                <componentInstanceProperties>
-                    <name>columns</name>
-                    <value>Facet-n53zoqstufl</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>horizontalAlignment</name>
-                    <value>false</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>label</name>
-                    <value>Insurance Periode</value>
-                </componentInstanceProperties>
-                <componentName>flexipage:fieldSection</componentName>
-                <identifier>flexipage_fieldSection15</identifier>
                 <visibilityRule>
                     <criteria>
                         <leftValue>{!Record.IsClosed}</leftValue>
@@ -2708,56 +2183,6 @@
             <componentInstance>
                 <componentInstanceProperties>
                     <name>columns</name>
-                    <value>Facet-acd05050-4bf4-4f8c-9116-4c9fabacd568</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>horizontalAlignment</name>
-                    <value>false</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>label</name>
-                    <value>Insurance Contract Type</value>
-                </componentInstanceProperties>
-                <componentName>flexipage:fieldSection</componentName>
-                <identifier>flexipage_fieldSection9</identifier>
-                <visibilityRule>
-                    <criteria>
-                        <leftValue>{!Record.IsClosed}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>false</rightValue>
-                    </criteria>
-                </visibilityRule>
-            </componentInstance>
-        </itemInstances>
-        <itemInstances>
-            <componentInstance>
-                <componentInstanceProperties>
-                    <name>columns</name>
-                    <value>Facet-b6t3pxs0yl</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>horizontalAlignment</name>
-                    <value>false</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>label</name>
-                    <value>Insurance Contract Type</value>
-                </componentInstanceProperties>
-                <componentName>flexipage:fieldSection</componentName>
-                <identifier>flexipage_fieldSection17</identifier>
-                <visibilityRule>
-                    <criteria>
-                        <leftValue>{!Record.IsClosed}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>true</rightValue>
-                    </criteria>
-                </visibilityRule>
-            </componentInstance>
-        </itemInstances>
-        <itemInstances>
-            <componentInstance>
-                <componentInstanceProperties>
-                    <name>columns</name>
                     <value>Facet-f88caf09-0392-4852-8c18-c845d4cea3af</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
@@ -2910,6 +2335,32 @@
         <itemInstances>
             <componentInstance>
                 <componentInstanceProperties>
+                    <name>parentFieldApiName</name>
+                    <value>Opportunity.Id</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>relatedListApiName</name>
+                    <value>OpportunityPartnersFrom</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>relatedListComponentOverride</name>
+                    <value>NONE</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>rowsToDisplay</name>
+                    <value>10</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>showActionBar</name>
+                    <value>true</value>
+                </componentInstanceProperties>
+                <componentName>force:relatedListSingleContainer</componentName>
+                <identifier>force_relatedListSingleContainer5</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
                     <name>recordId</name>
                 </componentInstanceProperties>
                 <componentName>theInsuredLWC</componentName>
@@ -2917,6 +2368,58 @@
             </componentInstance>
         </itemInstances>
         <name>Facet-9d1af8ca-3deb-4184-b279-4ae941a11a00</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Closing_Class__c</fieldItem>
+                <identifier>RecordClosing_Class_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <name>Facet-79472b4f-0297-4f38-99e2-8ad6ff426039</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Policy_Closing_Type__c</fieldItem>
+                <identifier>RecordPolicy_Closing_Type_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <name>Facet-11536f74-f172-4ad1-82ee-d4e4f178e8b1</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>body</name>
+                    <value>Facet-79472b4f-0297-4f38-99e2-8ad6ff426039</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:column</componentName>
+                <identifier>flexipage_column7</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>body</name>
+                    <value>Facet-11536f74-f172-4ad1-82ee-d4e4f178e8b1</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:column</componentName>
+                <identifier>flexipage_column8</identifier>
+            </componentInstance>
+        </itemInstances>
+        <name>Facet-816478d2-d4f9-4b68-8279-9938082e2e02</name>
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
@@ -2944,6 +2447,24 @@
                 </componentInstanceProperties>
                 <componentName>force:relatedListSingleContainer</componentName>
                 <identifier>force_relatedListSingleContainer2</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>columns</name>
+                    <value>Facet-816478d2-d4f9-4b68-8279-9938082e2e02</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>horizontalAlignment</name>
+                    <value>false</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>label</name>
+                    <value>Insurance Contract Type</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:fieldSection</componentName>
+                <identifier>flexipage_fieldSection5</identifier>
             </componentInstance>
         </itemInstances>
         <name>Facet-54c1a7f3-7181-454e-b565-90843c2d3964</name>
@@ -3013,6 +2534,10 @@
                 <identifier>lst_dynamicRelatedList4</identifier>
             </componentInstance>
         </itemInstances>
+        <name>Facet-048f3170-3e34-4916-ae1d-a8650d37030d</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
         <itemInstances>
             <componentInstance>
                 <componentInstanceProperties>
@@ -3082,6 +2607,10 @@
                 <identifier>lst_dynamicRelatedList3</identifier>
             </componentInstance>
         </itemInstances>
+        <name>Facet-ceafb562-a3eb-46f2-992d-27fd17659ab8</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
         <itemInstances>
             <componentInstance>
                 <componentInstanceProperties>
@@ -3144,6 +2673,74 @@
                 </componentInstanceProperties>
                 <componentName>lst:dynamicRelatedList</componentName>
                 <identifier>lst_dynamicRelatedList5</identifier>
+            </componentInstance>
+        </itemInstances>
+        <name>Facet-2a5c24a9-0136-495d-9900-957595f6e03a</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>active</name>
+                    <value>true</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>body</name>
+                    <value>Facet-048f3170-3e34-4916-ae1d-a8650d37030d</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>title</name>
+                    <value>Risk</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:tab</componentName>
+                <identifier>flexipage_tab13</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>body</name>
+                    <value>Facet-ceafb562-a3eb-46f2-992d-27fd17659ab8</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>title</name>
+                    <value>Asset</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:tab</componentName>
+                <identifier>flexipage_tab14</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>body</name>
+                    <value>Facet-2a5c24a9-0136-495d-9900-957595f6e03a</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>title</name>
+                    <value>Coverage</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:tab</componentName>
+                <identifier>flexipage_tab15</identifier>
+            </componentInstance>
+        </itemInstances>
+        <name>Facet-590042cf-7d9d-4f98-8fae-0031d87e5d3b</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>label</name>
+                    <value>Tabs</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>tabs</name>
+                    <value>Facet-590042cf-7d9d-4f98-8fae-0031d87e5d3b</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:tabset</componentName>
+                <identifier>flexipage_tabset3</identifier>
             </componentInstance>
         </itemInstances>
         <name>Facet-f608bfe8-378d-41ea-a5e3-44e2eedfc4af</name>
@@ -4032,7 +3629,7 @@
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>title</name>
-                    <value>Risk, Asset &amp; Term Condition</value>
+                    <value>Risk, Interest &amp; Coverage</value>
                 </componentInstanceProperties>
                 <componentName>flexipage:tab</componentName>
                 <identifier>flexipage_tab9</identifier>
@@ -4151,6 +3748,48 @@
         <itemInstances>
             <componentInstance>
                 <componentInstanceProperties>
+                    <name>fieldApiName</name>
+                    <value>Quote_Status__c</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>objectApiName</name>
+                    <value>Opportunity</value>
+                </componentInstanceProperties>
+                <componentName>customPathQuotation</componentName>
+                <identifier>c_customPathQuotation</identifier>
+                <visibilityRule>
+                    <booleanFilter>1 OR 2 OR 3 OR 4 OR 5</booleanFilter>
+                    <criteria>
+                        <leftValue>{!Record.StageName}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Underwriting Approval</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.StageName}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Quote</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.StageName}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Bind</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.StageName}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Closed Won</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.StageName}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Closed Lost</rightValue>
+                    </criteria>
+                </visibilityRule>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
                     <name>label</name>
                     <value>Tabs</value>
                 </componentInstanceProperties>
@@ -4239,71 +3878,6 @@
                 <identifier>force_relatedListSingleContainer4</identifier>
             </componentInstance>
         </itemInstances>
-        <itemInstances>
-            <componentInstance>
-                <componentInstanceProperties>
-                    <name>actionNames</name>
-                    <valueList>
-                        <valueListItems>
-                            <value>New</value>
-                        </valueListItems>
-                    </valueList>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>adminFilters</name>
-                    <valueList>
-                        <valueListItems>
-                            <value>RECORDTYPE|EQUALS|[&quot;CoInsurer&quot;]</value>
-                        </valueListItems>
-                    </valueList>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>maxRecordsToDisplay</name>
-                    <value>5</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>parentFieldApiName</name>
-                    <value>Opportunity.Id</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>relatedListApiName</name>
-                    <value>Transactions_Data__r</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>relatedListDisplayType</name>
-                    <value>ADVGRID</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>relatedListFieldAliases</name>
-                    <valueList>
-                        <valueListItems>
-                            <value>NAME</value>
-                        </valueListItems>
-                        <valueListItems>
-                            <value>Co_Insurance_Company__c</value>
-                        </valueListItems>
-                    </valueList>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>relatedListLabel</name>
-                    <value>Co-Insurer List</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>showActionBar</name>
-                    <value>true</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>sortFieldAlias</name>
-                    <value>__DEFAULT__</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>sortFieldOrder</name>
-                    <value>Default</value>
-                </componentInstanceProperties>
-                <componentName>lst:dynamicRelatedList</componentName>
-                <identifier>lst_dynamicRelatedList</identifier>
-            </componentInstance>
-        </itemInstances>
         <name>Facet-cadf7152-cc3e-464b-956b-b71e7d3b37c3</name>
         <type>Facet</type>
     </flexiPageRegions>
@@ -4340,32 +3914,6 @@
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
-        <itemInstances>
-            <componentInstance>
-                <componentInstanceProperties>
-                    <name>parentFieldApiName</name>
-                    <value>Opportunity.Id</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>relatedListApiName</name>
-                    <value>OpportunityParticipants</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>relatedListComponentOverride</name>
-                    <value>NONE</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>rowsToDisplay</name>
-                    <value>10</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>showActionBar</name>
-                    <value>true</value>
-                </componentInstanceProperties>
-                <componentName>force:relatedListSingleContainer</componentName>
-                <identifier>force_relatedListSingleContainer</identifier>
-            </componentInstance>
-        </itemInstances>
         <itemInstances>
             <componentInstance>
                 <componentInstanceProperties>
