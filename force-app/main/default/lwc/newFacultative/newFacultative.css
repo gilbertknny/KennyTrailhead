@@ -1,0 +1,87 @@
+/* HEADER MIRIP "Folder Information" */
+.section-header {
+    background-color: #f3f3f3;
+    padding: 0.75rem 1rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+    border: 1px solid #dddbda;
+    border-radius: 4px 4px 0 0;
+}
+
+/* BODY CONTAINER */
+.section-body {
+    border: 1px solid #dddbda;
+    border-top: 0;
+    border-radius: 0 0 4px 4px;
+    padding: 0.75rem;
+}
+
+/* OPTIONAL: table header sedikit abu */
+.section-body thead th {
+    background-color: #fafaf9;
+    font-weight: 600;
+}
+
+.risk-link {
+    color: #0176d3;
+    cursor: pointer;
+    font-weight: 500;
+    text-decoration: underline;
+}
+
+.risk-link:hover {
+    text-decoration: none;
+}
+
+.section-header {
+    background-color: #f3f3f3;
+    padding: 0.75rem 1rem;
+    border: 1px solid #dddbda;
+    border-radius: 4px 4px 0 0;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-left {
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+/* ICON CONTAINER */
+.header-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.icon-btn {
+    display: flex;
+    flex-direction: column;      /* ICON DI ATAS, TEXT DI BAWAH */
+    align-items: center;
+    justify-content: center;
+
+    background: transparent;
+    border: none;
+    padding: 0.25rem;             /* bikin button lebih kecil */
+    cursor: pointer;
+}
+
+/* Perbesar icon, walaupun size="small" */
+.icon-btn lightning-icon {
+    transform: scale(1.4);        /* adjust: 1.2 / 1.4 / 1.6 */
+}
+
+/* Text di bawah icon */
+.icon-label {
+    margin-top: 0.25rem;
+    font-size: 0.7rem;            /* text kecil */
+    line-height: 1;
+    color: #0176d3;
+    font-weight: 500;
+}
+
+/* Hover effect (optional tapi cakep) */
+.icon-btn:hover .icon-label {
+    text-decoration: underline;
+}
