@@ -15,6 +15,10 @@ export default class AddNewCoverageDeductible extends LightningElement {
     @track exchangeRate = 1;
     @track disableModeCoverage = false;
     @api buttonClickedValue;
+    @track hasSection1 = false;
+    @track hasSection2 = false;
+    @track hasSection3 = false;
+    @track hasSection4 = false;
     get modeOptions() {
         return [
             { label: 'Breakdown', value: 'BREAKDOWN_DEDUCTIBLE' },
@@ -213,35 +217,54 @@ export default class AddNewCoverageDeductible extends LightningElement {
             console.error('Error fetching picklist values from Apex:', error);
         }
     }
+    setSectionAsset(sectionList){
+        this.hasSection1 = sectionList.includes(1);
+        this.hasSection2 = sectionList.includes(2);
+        this.hasSection3 = sectionList.includes(3);
+        this.hasSection4 = sectionList.includes(4);
+        // console.log('this.hasSection',this.hasSection1);
+    }
     initializeCoverageData() {
         if (this.jsonString) {
             let parsedData = JSON.parse(this.jsonString);
             this.descriptionDeductible = parsedData[0].deductible.descriptionDeductible;
+            this.setSectionAsset(parsedData[0].sectionList);
             console.log('this.descriptionDeductible',this.descriptionDeductible);
-            
+
             this.selectedMode = parsedData[0].coverageSetting ? parsedData[0].coverageSetting:'BREAKDOWN_DEDUCTIBLE';
             // this.disableModeCoverage = parsedData[0].disableModeCoverage;
             this.coverageData = parsedData.map(row => {
                 const setting = row.deductibleSetting;
+                const setting2 = row.deductibleSetting2;
+                const setting3 = row.deductibleSetting3;
+                const setting4 = row.deductibleSetting4;
                 const shouldBeDisabled = (row.id === 'SINGLE_RATE_ID');
                 return { 
                     ...row, 
                     ddtibleSetting: this.selectedMode,
                     compositeDisable: shouldBeDisabled,
                     deductibleSetting: setting,
+                    deductibleSetting2: setting2,
+                    deductibleSetting3: setting3,
+                    deductibleSetting4: setting4,
                     // deductibleAmount:row.deductibleAmount,
                     // deductibleFlag:row.deductibleFlag,
                     // currencyName: this.selectedCurrency,
                     deductible : {
                         ...row.deductible,
                         currencyName: row.deductible.currencyName?row.deductible.currencyName: this.selectedCurrency,
+                        currencyName2: row.deductible.currencyName2?row.deductible.currencyName2: this.selectedCurrency,
+                        currencyName3: row.deductible.currencyName3?row.deductible.currencyName3: this.selectedCurrency,
+                        currencyName4: row.deductible.currencyName4?row.deductible.currencyName4: this.selectedCurrency,
                     },
-                    get isFlat() {
-                        return setting === 'Flat';
-                    },
-                    get isPercent() {
-                        return setting === 'Percentage';
-                    }
+                    get isFlat() { return setting === 'Flat'; },
+                    get isFlat2() { return setting2 === 'Flat'; },
+                    get isFlat3() { return setting3 === 'Flat'; },
+                    get isFlat4() { return setting4 === 'Flat'; },
+                    get isPercent() { return setting === 'Percentage';},
+                    get isPercent2() { return setting2 === 'Percentage';},
+                    get isPercent3() { return setting3 === 'Percentage';},
+                    get isPercent4() { return setting4 === 'Percentage';}
                 };
             });
             this.jsonString = JSON.stringify(this.coverageData);
@@ -293,7 +316,7 @@ export default class AddNewCoverageDeductible extends LightningElement {
         const inputValue = event.target.value;
         const numericValue = this.cleanNumber(inputValue);
         this.coverageData = this.coverageData.map(item => {
-            if (item.id === rowId) {
+            if (item.id === rowId || item.id2 === rowId || item.id3 === rowId || item.id4 === rowId) {
                 let updatedItem = { ...item };
                 let updatedSubObject = { ...updatedItem[objectName] };
                 updatedSubObject[field] = numericValue; 
@@ -303,16 +326,6 @@ export default class AddNewCoverageDeductible extends LightningElement {
             return item;
         });
         this.coverageDataFormated = this.formatDeepClone(JSON.parse(JSON.stringify(this.coverageData)));
-        // this.coverageDataFormated = this.coverageDataFormated.map(item => {
-        //     if (item.id === rowId) {
-        //         let updatedItem = { ...item };
-        //         let updatedSubObject = { ...updatedItem[objectName] };
-        //         updatedSubObject[field] = formattedString; 
-        //         updatedItem[objectName] = updatedSubObject;
-        //         return updatedItem;
-        //     }
-        //     return item;
-        // });
         this.jsonString = JSON.stringify(this.coverageData);
         console.log('Final Data to Flow (Numeric):', this.jsonString);
     }
@@ -341,6 +354,52 @@ export default class AddNewCoverageDeductible extends LightningElement {
                         deductible : {
                             ...updatedItem.deductible,
                             deductibleSetting: value,
+                            minimumAmount: isFlatSelected ? 0 : updatedItem.deductible.minimumAmount
+                        }
+                    };
+                }
+                else if (fieldName === 'deductibleSetting2') {
+                    const isFlatSelected = (value === 'Flat');
+                    const isPercentSelected = (value === 'Percentage');
+                    updatedItem = {
+                        ...updatedItem, 
+                        deductibleSetting2: value,
+                        isFlat2: isFlatSelected,
+                        isPercent2: isPercentSelected,
+                        deductible : {
+                            ...updatedItem.deductible,
+                            deductibleSetting2: value,
+                            minimumAmount2: isFlatSelected ? 0 : updatedItem.deductible.minimumAmount2
+                        }
+                    };
+                }
+                else if (fieldName === 'deductibleSetting3') {
+                    const isFlatSelected = (value === 'Flat');
+                    const isPercentSelected = (value === 'Percentage');
+                    updatedItem = {
+                        ...updatedItem, 
+                        deductibleSetting3: value,
+                        isFlat3: isFlatSelected,
+                        isPercent3: isPercentSelected,
+                        deductible : {
+                            ...updatedItem.deductible,
+                            deductibleSetting3: value,
+                            minimumAmount3: isFlatSelected ? 0 : updatedItem.deductible.minimumAmount3
+                        }
+                    };
+                }
+                else if (fieldName === 'deductibleSetting4') {
+                    const isFlatSelected = (value === 'Flat');
+                    const isPercentSelected = (value === 'Percentage');
+                    updatedItem = {
+                        ...updatedItem, 
+                        deductibleSetting4: value,
+                        isFlat4: isFlatSelected,
+                        isPercent4: isPercentSelected,
+                        deductible : {
+                            ...updatedItem.deductible,
+                            deductibleSetting4: value,
+                            minimumAmount4: isFlatSelected ? 0 : updatedItem.deductible.minimumAmount4
                         }
                     };
                 }
@@ -570,6 +629,7 @@ export default class AddNewCoverageDeductible extends LightningElement {
             return;
         }
         if(validation){
+            console.log('this.coverageData',JSON.stringify(this.coverageData));
             this.showValidationMessage = false;
             this.buttonClickedValue = 'Next';
             const attributeChangeEvent = new FlowAttributeChangeEvent('buttonClickedValue', this.buttonClickedValue);
@@ -597,7 +657,12 @@ export default class AddNewCoverageDeductible extends LightningElement {
         return parseFloat(cleanValue);
     }
     formatDeepClone(sourceObject) {
-        const fixedAmountKeys = ['deductibleAmount','minimumAmount'];
+        const fixedAmountKeys = [
+            'deductibleAmount','minimumAmount',
+            'deductibleAmount2','minimumAmount2',
+            'deductibleAmount3','minimumAmount3',
+            'deductibleAmount4','minimumAmount4'
+        ];
         let formattedClone = sourceObject.map(item => {
             let formattedItem = { ...item };
             if (formattedItem.deductible) {
@@ -606,7 +671,11 @@ export default class AddNewCoverageDeductible extends LightningElement {
                     const amount = formattedDeductible[key];
                     if (amount !== null && amount !== undefined) {
                         if(item.isPercent && key == 'deductibleAmount'){
-                        }else{
+                        }else if(item.isPercent2 && key == 'deductibleAmount2'){   
+                        }else if(item.isPercent3 && key == 'deductibleAmount3'){   
+                        }else if(item.isPercent4 && key == 'deductibleAmount4'){   
+                        }
+                        else{
                             formattedDeductible[key] = this.formatNumber(amount);
                         }
                     }
