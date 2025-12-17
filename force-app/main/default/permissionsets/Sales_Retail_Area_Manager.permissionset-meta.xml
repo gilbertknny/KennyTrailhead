@@ -195,7 +195,7 @@
     <!-- <classAccesses>
         <apexClass>CapchaController</apexClass>
         <enabled>true</enabled>
-    </classAccesses> 
+    </classAccesses>
     <classAccesses>
         <apexClass>CaseOwnerAssignment</apexClass>
         <enabled>true</enabled>
@@ -203,11 +203,11 @@
     <classAccesses>
         <apexClass>CaseOwnerAssignmentTest</apexClass>
         <enabled>true</enabled>
-    </classAccesses> 
+    </classAccesses>
     <classAccesses>
         <apexClass>ChangeOwnerController</apexClass>
         <enabled>true</enabled>
-    </classAccesses>-->
+    </classAccesses> -->
     <classAccesses>
         <apexClass>ChangePasswordController</apexClass>
         <enabled>true</enabled>
@@ -263,11 +263,11 @@
     <classAccesses>
         <apexClass>ClsLookup_Test</apexClass>
         <enabled>true</enabled>
-    </classAccesses> 
+    </classAccesses>
     <classAccesses>
         <apexClass>ClsNewAsset</apexClass>
         <enabled>true</enabled>
-    </classAccesses>-->
+    </classAccesses> -->
     <classAccesses>
         <apexClass>ClsNewRequest</apexClass>
         <enabled>true</enabled>
@@ -2945,11 +2945,6 @@
     <fieldPermissions>
         <editable>true</editable>
         <field>Asset.ExternalIdentifier</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
-        <field>Asset.Facultative_Folder__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -8129,7 +8124,15 @@
         <visible>true</visible>
     </recordTypeVisibilities>
     <recordTypeVisibilities>
+        <recordType>Master_Data__c.Double_Prospect</recordType>
+        <visible>true</visible>
+    </recordTypeVisibilities>
+    <recordTypeVisibilities>
         <recordType>Master_Data__c.Exchange_Rate</recordType>
+        <visible>true</visible>
+    </recordTypeVisibilities>
+    <recordTypeVisibilities>
+        <recordType>Master_Data__c.Exposure</recordType>
         <visible>true</visible>
     </recordTypeVisibilities>
     <recordTypeVisibilities>
@@ -8198,6 +8201,10 @@
     </recordTypeVisibilities>
     <recordTypeVisibilities>
         <recordType>Master_Data__c.Vehicle_Brand</recordType>
+        <visible>true</visible>
+    </recordTypeVisibilities>
+    <recordTypeVisibilities>
+        <recordType>Master_Data__c.Vehicle_Type</recordType>
         <visible>true</visible>
     </recordTypeVisibilities>
     <recordTypeVisibilities>

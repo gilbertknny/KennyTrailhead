@@ -23,6 +23,10 @@ export default class AddNewCoverageRebate extends LightningElement {
     @track descriptionRate= '';
     @track disableModeCoverage = false;
     @api buttonClickedValue;
+    @track hasSection1 = false;
+    @track hasSection2 = false;
+    @track hasSection3 = false;
+    @track hasSection4 = false;
     get modeOptions() {
         return [
             { label: 'Breakdown', value: 'BREAKDOWN_DEDUCTIBLE' },
@@ -39,23 +43,25 @@ export default class AddNewCoverageRebate extends LightningElement {
             let updateItem = { ...row};
             if (isCompositeMode) {
                 if(row.id == 'SINGLE_RATE_ID'){
-                    updateItem.isDisabledTotalRebate = false;
-                    updateItem.isDisabledInputRebate = true;
+                    updateItem.isDisabledTotalRebate = true;
+                    updateItem.isDisabledInputRebate = false;
                 }else{
                     updateItem.isDisabledTotalRebate = true;
                     updateItem.isDisabledInputRebate = true;
                     updateItem.rebate = {
-                        discountValue: null,
-                        commissionValue: null,
-                        agentCommissionValue: null,
-                        brokerCommissionValue: null,
-                        financialCommissionValue: null,
-                        leasingValue: null,
-                        bankFeeValue: null,
-                        overridingValue: null,
-                        bspValue: null,
-                        profitValue: null,
+                        discountValue: null,discountValue2: null,discountValue3: null,discountValue4: null,
+                        commissionValue: null,commissionValue2: null,commissionValue3: null,commissionValue4: null,
+                        agentCommissionValue: null,agentCommissionValue2: null,agentCommissionValue3: null,agentCommissionValue4: null,
+                        brokerCommissionValue: null,brokerCommissionValue2: null,brokerCommissionValue3: null,brokerCommissionValue4: null,
+                        financialCommissionValue: null,financialCommissionValue2: null,financialCommissionValue3: null,financialCommissionValue4: null,
+                        leasingValue: null,leasingValue2: null,leasingValue3: null,leasingValue4: null,
+                        bankFeeValue: null,bankFeeValue2: null,bankFeeValue3: null,bankFeeValue4: null,
+                        overridingValue: null,overridingValue2: null,overridingValue3: null,overridingValue4: null,
+                        bspValue: null,bspValue2: null,bspValue3: null,bspValue4: null,
                         totalRebate: null,
+                        totalRebate2: null,
+                        totalRebate3: null,
+                        totalRebate4: null,
                     }
                 }
             } else {
@@ -63,24 +69,26 @@ export default class AddNewCoverageRebate extends LightningElement {
                 updateItem.isDisabledInputRebate = false;
                 if(row.id == 'SINGLE_RATE_ID'){
                     updateItem.rebate = {
-                        discountValue: null,
-                        commissionValue: null,
-                        agentCommissionValue: null,
-                        brokerCommissionValue: null,
-                        financialCommissionValue: null,
-                        leasingValue: null,
-                        bankFeeValue: null,
-                        overridingValue: null,
-                        bspValue: null,
-                        profitValue: null,
+                        discountValue: null,discountValue2: null,discountValue3: null,discountValue4: null,
+                        commissionValue: null,commissionValue2: null,commissionValue3: null,commissionValue4: null,
+                        agentCommissionValue: null,agentCommissionValue2: null,agentCommissionValue3: null,agentCommissionValue4: null,
+                        brokerCommissionValue: null,brokerCommissionValue2: null,brokerCommissionValue3: null,brokerCommissionValue4: null,
+                        financialCommissionValue: null,financialCommissionValue2: null,financialCommissionValue3: null,financialCommissionValue4: null,
+                        leasingValue: null,leasingValue2: null,leasingValue3: null,leasingValue4: null,
+                        bankFeeValue: null,bankFeeValue2: null,bankFeeValue3: null,bankFeeValue4: null,
+                        overridingValue: null,overridingValue2: null,overridingValue3: null,overridingValue4: null,
+                        bspValue: null,bspValue2: null,bspValue3: null,bspValue4: null,
                         totalRebate: null,
+                        totalRebate2: null,
+                        totalRebate3: null,
+                        totalRebate4: null,
                     }
                 }
             }
            updateItem.rebateSetting=this.selectedMode;
             return updateItem;
         });
-        this.jsonString = JSON.stringify(this.coverageData);
+        // this.jsonString = JSON.stringify(this.coverageData);
         console.log('Mode diubah menjadi:', this.selectedMode);
     }
     @wire(getDeductiblePicklistValues)
@@ -97,9 +105,17 @@ export default class AddNewCoverageRebate extends LightningElement {
             console.error('Error fetching picklist values from Apex:', error);
         }
     }
+    setSectionAsset(sectionList){
+        this.hasSection1 = sectionList.includes(1);
+        this.hasSection2 = sectionList.includes(2);
+        this.hasSection3 = sectionList.includes(3);
+        this.hasSection4 = sectionList.includes(4);
+        // console.log('this.hasSection',this.hasSection1);
+    }
     initializeCoverageData() {
         if (this.jsonString) {
             let parsedData = JSON.parse(this.jsonString);
+            this.setSectionAsset(parsedData[0].sectionList);
             // this.disableModeCoverage = parsedData[0].disableModeCoverage;
             this.selectedMode = parsedData[0].coverageSetting ? parsedData[0].coverageSetting:'BREAKDOWN_DEDUCTIBLE';
             const isCompositeMode = (this.selectedMode === 'COMPOSITE');
@@ -110,17 +126,21 @@ export default class AddNewCoverageRebate extends LightningElement {
                     ...row, 
                     rebateSetting:this.selectedMode,
                     rebate:{
-                        totalRebate: rebateData.totalRebate,
-                        profitValue: rebateData.profitValue,
-                        bspValue:rebateData.bspValue,
-                        overridingValue:rebateData.overridingValue,
-                        leasingValue:rebateData.leasingValue,
-                        bankFeeValue:rebateData.bankFeeValue,
-                        commissionValue:rebateData.commissionValue,
-                        agentCommissionValue:rebateData.agentCommissionValue,
-                        brokerCommissionValue:rebateData.brokerCommissionValue,
-                        financialCommissionValue:rebateData.financialCommissionValue,
-                        discountValue:rebateData.discountValue
+                        ...rebateData,
+                        totalRebate: rebateData.totalRebate || 0,
+                        totalRebate2: rebateData.totalRebate2 || 0,
+                        totalRebate3: rebateData.totalRebate3 || 0,
+                        totalRebate4: rebateData.totalRebate4 || 0,
+                        // profitValue: rebateData.profitValue,
+                        // bspValue:rebateData.bspValue,
+                        // overridingValue:rebateData.overridingValue,
+                        // leasingValue:rebateData.leasingValue,
+                        // bankFeeValue:rebateData.bankFeeValue,
+                        // commissionValue:rebateData.commissionValue,
+                        // agentCommissionValue:rebateData.agentCommissionValue,
+                        // brokerCommissionValue:rebateData.brokerCommissionValue,
+                        // financialCommissionValue:rebateData.financialCommissionValue,
+                        // discountValue:rebateData.discountValue
                     }
                 }
                 if (isCompositeMode) {
@@ -141,7 +161,7 @@ export default class AddNewCoverageRebate extends LightningElement {
             
             // this.coverageData = parsedData;
             this.coverageDataTemp = JSON.parse(this.jsonString);
-            this.jsonString = JSON.stringify(this.coverageData);
+            // this.jsonString = JSON.stringify(this.coverageData);
             console.log('✅ Initializing Rebate Data:', JSON.stringify(this.coverageData));
         } else {
             console.log('Waiting for all required data (picklist or json) to initialize.');
@@ -184,7 +204,7 @@ export default class AddNewCoverageRebate extends LightningElement {
             }
             return item;
         });
-        this.jsonString = JSON.stringify(this.coverageData);
+        // this.jsonString = JSON.stringify(this.coverageData);
         console.log('Final Data to Flow:', this.jsonString);
         // this.logFinalData();
     }
@@ -215,11 +235,32 @@ export default class AddNewCoverageRebate extends LightningElement {
             // }
             // return item;
         });
-        this.jsonString = JSON.stringify(this.coverageData);
+        // this.jsonString = JSON.stringify(this.coverageData);
         console.log('Final Data to Flow:', this.jsonString);
         // this.logFinalData();
     }
-    
+    calculateTotalRebate = (rebate, sectionNumber) => {
+        const suffix = sectionNumber === 1 ? '' : sectionNumber;
+        const fields = [
+            'bankFeeValue',
+            'commissionValue',
+            'agentCommissionValue',
+            'brokerCommissionValue',
+            'financialCommissionValue',
+            'discountValue',
+            'leasingValue',
+            'overridingValue',
+            'bspValue'
+        ];
+        let total = 0;
+        fields.forEach(field => {
+            const fieldName = field + suffix;
+            const value = Number(rebate[fieldName]) || 0;
+            total += value;
+        });
+
+        return total;
+    };
     handleInputChange(event) {
         console.log('Change Data from Flow:');
         const rowId = event.target.dataset.id;
@@ -237,27 +278,19 @@ export default class AddNewCoverageRebate extends LightningElement {
                         [fieldName]: Number(value)
                     }
                 };
-
-                const bankFee = Number(updatedItem.rebate.bankFeeValue) || 0;
-                const commission = Number(updatedItem.rebate.commissionValue) || 0;
-                const agentCommissionValue = Number(updatedItem.rebate.agentCommissionValue) || 0;
-                const brokerCommissionValue = Number(updatedItem.rebate.brokerCommissionValue) || 0;
-                const financialCommissionValue = Number(updatedItem.rebate.financialCommissionValue) || 0;
-                const discount = Number(updatedItem.rebate.discountValue) || 0;
-                const leasing = Number(updatedItem.rebate.leasingValue) || 0;
-                const overriding = Number(updatedItem.rebate.overridingValue) || 0;
-                const bsp = Number(updatedItem.rebate.bspValue) || 0;
-                const profit = Number(updatedItem.rebate.profitValue) || 0;
-                let total = agentCommissionValue+ brokerCommissionValue + financialCommissionValue + bankFee + commission + discount + leasing + overriding + bsp + profit;
-                // updatedItem.totalRebate = total;
+                const rebate = updatedItem.rebate;
                 updatedItem.rebate={
                     ...updatedItem.rebate,
-                    totalRebate : total
+                    totalRebate : Number(this.calculateTotalRebate(rebate, 1)) || 0,
+                    totalRebate2 : Number(this.calculateTotalRebate(rebate, 2)) || 0,
+                    totalRebate3 : Number(this.calculateTotalRebate(rebate, 3)) || 0,
+                    totalRebate4 : Number(this.calculateTotalRebate(rebate, 4)) || 0
                 }
                 return updatedItem;
             }
             return item;
         });
+        /* // Commission Average 
         if (fieldName === 'commissionValue') {
             const filteredBreakdownRates = this.coverageData.filter(item => 
                 item.isSelected && item.rowType === "BREAKDOWN_RATE"
@@ -277,7 +310,8 @@ export default class AddNewCoverageRebate extends LightningElement {
                 commisionAllRate: newAverageRate
             }));
         }
-        this.jsonString = JSON.stringify(this.coverageData);
+        */
+        // this.jsonString = JSON.stringify(this.coverageData);
         this.coverageDataFinal = this.coverageData.filter(item => item.Id !== 'SINGLE_RATE_ID');
         console.log('Final Data to Flow:', this.jsonString);
         // this.logFinalData();
@@ -299,28 +333,19 @@ export default class AddNewCoverageRebate extends LightningElement {
                         [fieldName]: Number(value)
                     }
                 };
-
-                const bankFee = Number(updatedItem.rebate.bankFeeValue) || 0;
-                const commission = Number(updatedItem.rebate.commissionValue) || 0;
-                const agentCommissionValue = Number(updatedItem.rebate.agentCommissionValue) || 0;
-                const brokerCommissionValue = Number(updatedItem.rebate.brokerCommissionValue) || 0;
-                const financialCommissionValue = Number(updatedItem.rebate.financialCommissionValue) || 0;
-                const discount = Number(updatedItem.rebate.discountValue) || 0;
-                const leasing = Number(updatedItem.rebate.leasingValue) || 0;
-                const overriding = Number(updatedItem.rebate.overridingValue) || 0;
-                const bsp = Number(updatedItem.rebate.bspValue) || 0;
-                const profit = Number(updatedItem.rebate.profitValue) || 0;
-                let total = agentCommissionValue+ brokerCommissionValue + financialCommissionValue + bankFee + commission + discount + leasing + overriding + bsp + profit;
-                // updatedItem.totalRebate = total;
+                const rebate = updatedItem.rebate;
                 updatedItem.rebate={
                     ...updatedItem.rebate,
-                    totalRebate : total
+                    totalRebate : Number(this.calculateTotalRebate(rebate, 1)) || 0,
+                    totalRebate2 : Number(this.calculateTotalRebate(rebate, 2)) || 0,
+                    totalRebate3 : Number(this.calculateTotalRebate(rebate, 3)) || 0,
+                    totalRebate4 : Number(this.calculateTotalRebate(rebate, 4)) || 0
                 }
                 return updatedItem;
             }
             return item;
         });
-        this.jsonString = JSON.stringify(this.coverageData);
+        // this.jsonString = JSON.stringify(this.coverageData);
         this.coverageDataFinal = this.coverageData.filter(item => item.Id !== 'SINGLE_RATE_ID');
         console.log('Final Data to Flow:', this.jsonString);
     }
@@ -425,12 +450,62 @@ export default class AddNewCoverageRebate extends LightningElement {
                 }
             };
         });
-        this.jsonString = JSON.stringify(this.coverageData.filter(item => item.isSelected));
-        console.log('Final Data to Flow:', this.jsonString);
+        // this.jsonString = JSON.stringify(this.coverageData.filter(item => item.isSelected));
+        // console.log('Final Data to Flow:', this.jsonString);
     }
     
     handleNext() {
-        // this.insertCoverageData();
+        const flattenDeductibles = (deductibleObj) => {
+            const deductiblesArray = [];
+            for (let i = 2; i <= 4; i++) {
+                const suffix = String(i);
+                const deductibleItem = {
+                    deductibleAmount: deductibleObj['deductibleAmount' + suffix],
+                    minimumAmount: deductibleObj['minimumAmount' + suffix],
+                    currencyId: deductibleObj['currencyId' + suffix],
+                    currencyName: deductibleObj['currencyName' + suffix],
+                    deductibleSetting: deductibleObj['deductibleSetting' + suffix],
+                    deductibleFlag: deductibleObj['deductibleFlag' + suffix],
+                    descriptionValue: deductibleObj['descriptionValue' + suffix],
+                    descriptionDeductible: deductibleObj['descriptionDeductible' + suffix]
+                };
+                deductiblesArray.push(deductibleItem);
+            }
+            return deductiblesArray;
+        };
+        const flattenRebates = (rebateObj) => {
+            const rebatesArray = [];
+            for (let i = 2; i <= 4; i++) {
+                const suffix = String(i);
+                const rebateItem = {
+                    totalRebate: rebateObj['totalRebate' + suffix],
+                    bspValue: rebateObj['bspValue' + suffix],
+                    overridingValue: rebateObj['overridingValue' + suffix],
+                    leasingValue: rebateObj['leasingValue' + suffix],
+                    bankFeeValue: rebateObj['bankFeeValue' + suffix],
+                    commissionValue: rebateObj['commissionValue' + suffix],
+                    agentCommissionValue: rebateObj['agentCommissionValue' + suffix],
+                    brokerCommissionValue: rebateObj['brokerCommissionValue' + suffix],
+                    financialCommissionValue: rebateObj['financialCommissionValue' + suffix],
+                    discountValue: rebateObj['discountValue' + suffix],
+                };
+                rebatesArray.push(rebateItem);
+            }
+            return rebatesArray;
+        };
+        this.coverageData = this.coverageData.map(item => {
+            const deductibleObj = item.deductible || {};
+            const rebateObj = item.rebate || {};
+            const newDeductibles = flattenDeductibles(deductibleObj);
+            const newRebates = flattenRebates(rebateObj);
+            return {
+                ...item,
+                deductibles: newDeductibles,
+                rebates: newRebates,
+            };
+        });
+        this.jsonString = JSON.stringify(this.coverageData);
+        console.log('Final Data to Flow:', this.jsonString);
         this.buttonClickedValue = 'Next';
         const attributeChangeEvent = new FlowAttributeChangeEvent('buttonClickedValue', this.buttonClickedValue);
         this.dispatchEvent(attributeChangeEvent);

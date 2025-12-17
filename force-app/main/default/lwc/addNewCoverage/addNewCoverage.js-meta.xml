@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+        <apiVersion>64.0</apiVersion>
+        <isExposed>true</isExposed>
+        <targets>
+            <target>lightning__RecordPage</target>
+            <target>lightning__RecordAction</target>
+            <target>lightning__FlowScreen</target>
+            <target>lightningCommunity__Page</target>
+        </targets>
+        <targetConfigs>
+            <targetConfig targets="lightning__FlowScreen">
+                <property name="jsonString" type="String" label="Store Data" />
+                <property name="buttonClickedValue" type="String" label="Button Clicked Value"/> 
+                <!-- <property name="recordTypeIdCoverage" type="String" label="Record Type Coverage" /> -->
+                <!-- <property name="bsnId" type="String" label="COB" /> -->
+                <!-- <property name="riskId" type="String" label="RiskId" /> -->
+                <!-- <property name="policyId" type="String" label="InsuredPolicyId" /> -->
+                <!-- <property name="groupMatrix" type="String" label="Group Matrix" /> -->
+                <!-- <property name="amountInsurance" type="String" label="Amount Insured" /> -->
+            </targetConfig>
+        </targetConfigs>
+    </LightningComponentBundle>

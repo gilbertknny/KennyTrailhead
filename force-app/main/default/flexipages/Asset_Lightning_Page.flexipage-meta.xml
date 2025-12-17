@@ -89,6 +89,23 @@
                 <identifier>RecordSection__cField</identifier>
             </fieldInstance>
         </itemInstances>
+        <!-- <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Commodity_Type_Id__c</fieldItem>
+                <identifier>RecordCommodity_Type_Id_cField</identifier>
+                <visibilityRule>
+                    <criteria>
+                        <leftValue>{!Record.COB__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>101</rightValue>
+                    </criteria>
+                </visibilityRule>
+            </fieldInstance>
+        </itemInstances> -->
         <name>Facet-c4cac6fd-2d50-4693-af3b-769ceaf4e0e4</name>
         <type>Facet</type>
     </flexiPageRegions>
@@ -141,6 +158,23 @@
                 </fieldInstanceProperties>
                 <fieldItem>Record.COB__c</fieldItem>
                 <identifier>RecordCOB__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Quantity</fieldItem>
+                <identifier>RecordQuantityField</identifier>
+                <visibilityRule>
+                    <criteria>
+                        <leftValue>{!Record.COB__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>101</rightValue>
+                    </criteria>
+                </visibilityRule>
             </fieldInstance>
         </itemInstances>
         <name>Facet-e868cca7-5bb8-40e0-ad76-869fbaef8487</name>

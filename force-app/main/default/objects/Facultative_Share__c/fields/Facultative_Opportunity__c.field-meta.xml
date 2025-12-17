@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Facultative_Opportunity__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
     <label>Facultative Opportunity</label>
     <referenceTo>Opportunity</referenceTo>
-    <relationshipLabel>Facultative Shares</relationshipLabel>
+    <relationshipLabel>Facultatives</relationshipLabel>
     <relationshipName>Facultative_Shares</relationshipName>
-    <relationshipOrder>0</relationshipOrder>
-    <reparentableMasterDetail>false</reparentableMasterDetail>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
     <trackTrending>false</trackTrending>
-    <type>MasterDetail</type>
-    <writeRequiresMasterRead>false</writeRequiresMasterRead>
+    <type>Lookup</type>
 </CustomField>

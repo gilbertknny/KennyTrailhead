@@ -2,7 +2,7 @@
   @description       : 
   @author            : Ahmad Yazid Munif
   @group             : 
-  @last modified on  : 11-19-2025
+  @last modified on  : 12-16-2025
   @last modified by  : Ahmad Yazid Munif
 -->
 <template>
@@ -16,11 +16,6 @@
             class="slds-m-bottom_medium"
             disabled=true>
         </lightning-radio-group>
-        <!-- <div class="slds-m-vertical_medium">
-            <h2 class="slds-text-heading_small slds-text-align_center slds-p-bottom_small">
-                Rebate
-            </h2>
-        </div> -->
         <template if:true={coverageData}>
             <div class="vertical-scroll-container">
                 <table class="slds-table slds-table_cell-buffer slds-table_bordered" 
@@ -32,6 +27,9 @@
                             </th>
                             <th class="slds-text-align_left" scope="col">
                                 <div class="wrap-header" title="Coverage Name">Name</div>
+                            </th>
+                            <th class="slds-text-align_left" scope="col">
+                                <div class="wrap-header" title="Section No">Section</div>
                             </th>
                             <template if:true={showCommission}>
                                 <th class="slds-text-align_left" scope="col" style="width: 120px;">
@@ -78,11 +76,6 @@
                                     <div class="slds-cell-wrap" title="Risk/ BSP">Risk/Closing Survey Fee / BSP</div>
                                 </th>
                             </template>
-                            <!-- <template if:true={showProfit}>
-                                <th class="slds-text-align_left" scope="col" style="width: 120px;">
-                                    <div class="slds-cell-wrap" title="Profit Sharing">Profit Sharing</div>
-                                </th>
-                            </template> -->
                             <th class="slds-text-align_left" scope="col" style="width: 120px;">
                                 <div class="slds-cell-wrap" title="Total Rebate">Total Rebate</div>
                             </th>
@@ -94,6 +87,7 @@
                                 <tr key={row.id}> 
                                     <td data-label="ID Coverage">{row.coverageId}</td>
                                     <td data-label="Coverage Name" class="slds-cell-wrap">{row.coverageName}</td>
+                                    <td data-label="Section No" class="slds-cell-wrap">Section 1</td>
                                     <template if:true={showCommission}>
                                         <td data-label="Commission">
                                             <lightning-input
@@ -211,19 +205,6 @@
                                             </lightning-input>
                                         </td>
                                     </template>
-                                    <!-- <template if:true={showProfit}>
-                                        <td data-label="Profit">
-                                            <lightning-input
-                                                    type="number" placeholder="%" min="0" max="100" step="0.01"
-                                                    value={row.profitValue}
-                                                    data-id={row.id}
-                                                    data-fieldname="profitValue"
-                                                    onchange={handleInputChange}
-                                                    disabled={row.isDisabledInputRebate}
-                                                    variant="label-hidden">
-                                            </lightning-input>
-                                        </td>
-                                    </template> -->
                                     <td data-label="Total Rebate">
                                         <lightning-input
                                                 type="number" placeholder="%" min="0" max="100" step="0.01"
@@ -235,6 +216,405 @@
                                         </lightning-input>
                                     </td>
                                 </tr>
+                                <template if:true={hasSection2}>
+                                    <tr key={row.id2}> 
+                                        <td colspan="2"></td>
+                                        <td data-label="Section No" class="slds-cell-wrap">Section 2</td>
+                                        <template if:true={showCommission}>
+                                            <td data-label="Commission">
+                                                <lightning-input
+                                                        type="number" placeholder="%" min="0" max="100" step="0.01"
+                                                        value={row.rebate.commissionValue2}
+                                                        data-id={row.id}
+                                                        data-fieldname="commissionValue2"
+                                                        onchange={handleInputChange}
+                                                        disabled={row.isDisabledInputRebate}
+                                                        variant="label-hidden">
+                                                </lightning-input>
+                                            </td>
+                                        </template>
+                                        <template if:true={showAgentCommission}>
+                                            <td data-label="Agent Commission">
+                                                <lightning-input
+                                                        type="number" placeholder="%" min="0" max="100" step="0.01"
+                                                        value={row.rebate.agentCommissionValue2}
+                                                        data-id={row.id}
+                                                        data-fieldname="agentCommissionValue2"
+                                                        onchange={handleInputChange}
+                                                        disabled={row.isDisabledInputRebate}
+                                                        variant="label-hidden">
+                                                </lightning-input>
+                                            </td>
+                                        </template>
+                                        <template if:true={showBrokerCommission}>
+                                            <td data-label="Broker Commission">
+                                                <lightning-input
+                                                        type="number" placeholder="%" min="0" max="100" step="0.01"
+                                                        value={row.rebate.brokerCommissionValue2}
+                                                        data-id={row.id}
+                                                        data-fieldname="brokerCommissionValue2"
+                                                        onchange={handleInputChange}
+                                                        disabled={row.isDisabledInputRebate}
+                                                        variant="label-hidden">
+                                                </lightning-input>
+                                            </td>
+                                        </template>
+                                        <template if:true={showFinancialCommission}>
+                                            <td data-label="Financial Commission">
+                                                <lightning-input
+                                                        type="number" placeholder="%" min="0" max="100" step="0.01"
+                                                        value={row.rebate.financialCommissionValue2}
+                                                        data-id={row.id}
+                                                        data-fieldname="financialCommissionValue2"
+                                                        onchange={handleInputChange}
+                                                        disabled={row.isDisabledInputRebate}
+                                                        variant="label-hidden">
+                                                </lightning-input>
+                                            </td>
+                                        </template>
+                                        <template if:true={showDiscount}>
+                                            <td data-label="Discount">
+                                                <lightning-input
+                                                        type="number" placeholder="%" min="0" max="100" step="0.01"
+                                                        value={row.rebate.discountValue2}
+                                                        data-id={row.id}
+                                                        data-fieldname="discountValue2"
+                                                        onchange={handleInputChange}
+                                                        disabled={row.isDisabledInputRebate}
+                                                        variant="label-hidden">
+                                                </lightning-input>
+                                            </td>
+                                        </template>
+                                        <template if:true={showBankFeeBool}>
+                                            <td data-label="Bank Fee">
+                                                <lightning-input
+                                                        type="number" placeholder="%" min="0" max="100" step="0.01"
+                                                        value={row.rebate.bankFeeValue2}
+                                                        data-id={row.id}
+                                                        data-fieldname="bankFeeValue2"
+                                                        onchange={handleInputChange}
+                                                        disabled={row.isDisabledInputRebate}
+                                                        variant="label-hidden">
+                                                </lightning-input>
+                                            </td>
+                                        </template>
+                                        <template if:true={showLeasing}>
+                                            <td data-label="Leasing Fee">
+                                                <lightning-input
+                                                        type="number" placeholder="%" min="0" max="100" step="0.01"
+                                                        value={row.rebate.leasingValue2}
+                                                        data-id={row.id2}
+                                                        data-fieldname="leasingValue2"
+                                                        onchange={handleInputChange}
+                                                        disabled={row.isDisabledInputRebate}
+                                                        variant="label-hidden">
+                                                </lightning-input>
+                                            </td>
+                                        </template>
+                                        <template if:true={showOverriding}>
+                                            <td data-label="Overriding">
+                                                <lightning-input
+                                                        type="number" placeholder="%" min="0" max="100" step="0.01"
+                                                        value={row.rebate.overridingValue2}
+                                                        data-id={row.id}
+                                                        data-fieldname="overridingValue2"
+                                                        onchange={handleInputChange}
+                                                        disabled={row.isDisabledInputRebate}
+                                                        variant="label-hidden">
+                                                </lightning-input>
+                                            </td>
+                                        </template>
+                                        <template if:true={showBSP}>
+                                            <td data-label="BSP">
+                                                <lightning-input
+                                                        type="number" placeholder="%" min="0" max="100" step="0.01"
+                                                        value={row.rebate.bspValue2}
+                                                        data-id={row.id}
+                                                        data-fieldname="bspValue2"
+                                                        onchange={handleInputChange}
+                                                        disabled={row.isDisabledInputRebate}
+                                                        variant="label-hidden">
+                                                </lightning-input>
+                                            </td>
+                                        </template>
+                                        <td data-label="Total Rebate">
+                                            <lightning-input
+                                                    type="number" placeholder="%" min="0" max="100" step="0.01"
+                                                    value={row.rebate.totalRebate2}
+                                                    data-id={row.id2}
+                                                    data-fieldname="totalRebate2"
+                                                    disabled={row.isDisabledTotalRebate}
+                                                    variant="label-hidden">
+                                            </lightning-input>
+                                        </td>
+                                    </tr>
+                                </template>
+                                <template if:true={hasSection3}>
+                                    <tr key={row.id3}> 
+                                        <td colspan="2"></td>
+                                        <td data-label="Section No" class="slds-cell-wrap">Section 3</td>
+                                        <template if:true={showCommission}>
+                                            <td data-label="Commission">
+                                                <lightning-input
+                                                        type="number" placeholder="%" min="0" max="100" step="0.01"
+                                                        value={row.rebate.commissionValue3}
+                                                        data-id={row.id}
+                                                        data-fieldname="commissionValue3"
+                                                        onchange={handleInputChange}
+                                                        disabled={row.isDisabledInputRebate}
+                                                        variant="label-hidden">
+                                                </lightning-input>
+                                            </td>
+                                        </template>
+                                        <template if:true={showAgentCommission}>
+                                            <td data-label="Agent Commission">
+                                                <lightning-input
+                                                        type="number" placeholder="%" min="0" max="100" step="0.01"
+                                                        value={row.rebate.agentCommissionValue3}
+                                                        data-id={row.id}
+                                                        data-fieldname="agentCommissionValue3"
+                                                        onchange={handleInputChange}
+                                                        disabled={row.isDisabledInputRebate}
+                                                        variant="label-hidden">
+                                                </lightning-input>
+                                            </td>
+                                        </template>
+                                        <template if:true={showBrokerCommission}>
+                                            <td data-label="Broker Commission">
+                                                <lightning-input
+                                                        type="number" placeholder="%" min="0" max="100" step="0.01"
+                                                        value={row.rebate.brokerCommissionValue3}
+                                                        data-id={row.id}
+                                                        data-fieldname="brokerCommissionValue3"
+                                                        onchange={handleInputChange}
+                                                        disabled={row.isDisabledInputRebate}
+                                                        variant="label-hidden">
+                                                </lightning-input>
+                                            </td>
+                                        </template>
+                                        <template if:true={showFinancialCommission}>
+                                            <td data-label="Financial Commission">
+                                                <lightning-input
+                                                        type="number" placeholder="%" min="0" max="100" step="0.01"
+                                                        value={row.rebate.financialCommissionValue3}
+                                                        data-id={row.id}
+                                                        data-fieldname="financialCommissionValue3"
+                                                        onchange={handleInputChange}
+                                                        disabled={row.isDisabledInputRebate}
+                                                        variant="label-hidden">
+                                                </lightning-input>
+                                            </td>
+                                        </template>
+                                        <template if:true={showDiscount}>
+                                            <td data-label="Discount">
+                                                <lightning-input
+                                                        type="number" placeholder="%" min="0" max="100" step="0.01"
+                                                        value={row.rebate.discountValue3}
+                                                        data-id={row.id}
+                                                        data-fieldname="discountValue3"
+                                                        onchange={handleInputChange}
+                                                        disabled={row.isDisabledInputRebate}
+                                                        variant="label-hidden">
+                                                </lightning-input>
+                                            </td>
+                                        </template>
+                                        <template if:true={showBankFeeBool}>
+                                            <td data-label="Bank Fee">
+                                                <lightning-input
+                                                        type="number" placeholder="%" min="0" max="100" step="0.01"
+                                                        value={row.rebate.bankFeeValue3}
+                                                        data-id={row.id}
+                                                        data-fieldname="bankFeeValue3"
+                                                        onchange={handleInputChange}
+                                                        disabled={row.isDisabledInputRebate}
+                                                        variant="label-hidden">
+                                                </lightning-input>
+                                            </td>
+                                        </template>
+                                        <template if:true={showLeasing}>
+                                            <td data-label="Leasing Fee">
+                                                <lightning-input
+                                                        type="number" placeholder="%" min="0" max="100" step="0.01"
+                                                        value={row.rebate.leasingValue3}
+                                                        data-id={row.id}
+                                                        data-fieldname="leasingValue3"
+                                                        onchange={handleInputChange}
+                                                        disabled={row.isDisabledInputRebate}
+                                                        variant="label-hidden">
+                                                </lightning-input>
+                                            </td>
+                                        </template>
+                                        <template if:true={showOverriding}>
+                                            <td data-label="Overriding">
+                                                <lightning-input
+                                                        type="number" placeholder="%" min="0" max="100" step="0.01"
+                                                        value={row.rebate.overridingValue3}
+                                                        data-id={row.id}
+                                                        data-fieldname="overridingValue3"
+                                                        onchange={handleInputChange}
+                                                        disabled={row.isDisabledInputRebate}
+                                                        variant="label-hidden">
+                                                </lightning-input>
+                                            </td>
+                                        </template>
+                                        <template if:true={showBSP}>
+                                            <td data-label="BSP">
+                                                <lightning-input
+                                                        type="number" placeholder="%" min="0" max="100" step="0.01"
+                                                        value={row.rebate.bspValue3}
+                                                        data-id={row.id}
+                                                        data-fieldname="bspValue3"
+                                                        onchange={handleInputChange}
+                                                        disabled={row.isDisabledInputRebate}
+                                                        variant="label-hidden">
+                                                </lightning-input>
+                                            </td>
+                                        </template>
+                                        <td data-label="Total Rebate">
+                                            <lightning-input
+                                                    type="number" placeholder="%" min="0" max="100" step="0.01"
+                                                    value={row.rebate.totalRebate3}
+                                                    data-id={row.id3}
+                                                    data-fieldname="totalRebate3"
+                                                    disabled={row.isDisabledTotalRebate}
+                                                    variant="label-hidden">
+                                            </lightning-input>
+                                        </td>
+                                    </tr>
+                                </template>
+                                <template if:true={hasSection4}>
+                                    <tr key={row.id4}> 
+                                        <td colspan="2"></td>
+                                        <td data-label="Section No" class="slds-cell-wrap">Section 4</td>
+                                        <template if:true={showCommission}>
+                                            <td data-label="Commission">
+                                                <lightning-input
+                                                        type="number" placeholder="%" min="0" max="100" step="0.01"
+                                                        value={row.rebate.commissionValue4}
+                                                        data-id={row.id}
+                                                        data-fieldname="commissionValue4"
+                                                        onchange={handleInputChange}
+                                                        disabled={row.isDisabledInputRebate}
+                                                        variant="label-hidden">
+                                                </lightning-input>
+                                            </td>
+                                        </template>
+                                        <template if:true={showAgentCommission}>
+                                            <td data-label="Agent Commission">
+                                                <lightning-input
+                                                        type="number" placeholder="%" min="0" max="100" step="0.01"
+                                                        value={row.rebate.agentCommissionValue4}
+                                                        data-id={row.id}
+                                                        data-fieldname="agentCommissionValue4"
+                                                        onchange={handleInputChange}
+                                                        disabled={row.isDisabledInputRebate}
+                                                        variant="label-hidden">
+                                                </lightning-input>
+                                            </td>
+                                        </template>
+                                        <template if:true={showBrokerCommission}>
+                                            <td data-label="Broker Commission">
+                                                <lightning-input
+                                                        type="number" placeholder="%" min="0" max="100" step="0.01"
+                                                        value={row.rebate.brokerCommissionValue4}
+                                                        data-id={row.id}
+                                                        data-fieldname="brokerCommissionValue4"
+                                                        onchange={handleInputChange}
+                                                        disabled={row.isDisabledInputRebate}
+                                                        variant="label-hidden">
+                                                </lightning-input>
+                                            </td>
+                                        </template>
+                                        <template if:true={showFinancialCommission}>
+                                            <td data-label="Financial Commission">
+                                                <lightning-input
+                                                        type="number" placeholder="%" min="0" max="100" step="0.01"
+                                                        value={row.rebate.financialCommissionValue4}
+                                                        data-id={row.id}
+                                                        data-fieldname="financialCommissionValue4"
+                                                        onchange={handleInputChange}
+                                                        disabled={row.isDisabledInputRebate}
+                                                        variant="label-hidden">
+                                                </lightning-input>
+                                            </td>
+                                        </template>
+                                        <template if:true={showDiscount}>
+                                            <td data-label="Discount">
+                                                <lightning-input
+                                                        type="number" placeholder="%" min="0" max="100" step="0.01"
+                                                        value={row.rebate.discountValue4}
+                                                        data-id={row.id}
+                                                        data-fieldname="discountValue4"
+                                                        onchange={handleInputChange}
+                                                        disabled={row.isDisabledInputRebate}
+                                                        variant="label-hidden">
+                                                </lightning-input>
+                                            </td>
+                                        </template>
+                                        <template if:true={showBankFeeBool}>
+                                            <td data-label="Bank Fee">
+                                                <lightning-input
+                                                        type="number" placeholder="%" min="0" max="100" step="0.01"
+                                                        value={row.rebate.bankFeeValue4}
+                                                        data-id={row.id}
+                                                        data-fieldname="bankFeeValue4"
+                                                        onchange={handleInputChange}
+                                                        disabled={row.isDisabledInputRebate}
+                                                        variant="label-hidden">
+                                                </lightning-input>
+                                            </td>
+                                        </template>
+                                        <template if:true={showLeasing}>
+                                            <td data-label="Leasing Fee">
+                                                <lightning-input
+                                                        type="number" placeholder="%" min="0" max="100" step="0.01"
+                                                        value={row.rebate.leasingValue4}
+                                                        data-id={row.id}
+                                                        data-fieldname="leasingValue4"
+                                                        onchange={handleInputChange}
+                                                        disabled={row.isDisabledInputRebate}
+                                                        variant="label-hidden">
+                                                </lightning-input>
+                                            </td>
+                                        </template>
+                                        <template if:true={showOverriding}>
+                                            <td data-label="Overriding">
+                                                <lightning-input
+                                                        type="number" placeholder="%" min="0" max="100" step="0.01"
+                                                        value={row.rebate.overridingValue4}
+                                                        data-id={row.id}
+                                                        data-fieldname="overridingValue4"
+                                                        onchange={handleInputChange}
+                                                        disabled={row.isDisabledInputRebate}
+                                                        variant="label-hidden">
+                                                </lightning-input>
+                                            </td>
+                                        </template>
+                                        <template if:true={showBSP}>
+                                            <td data-label="BSP">
+                                                <lightning-input
+                                                        type="number" placeholder="%" min="0" max="100" step="0.01"
+                                                        value={row.rebate.bspValue4}
+                                                        data-id={row.id}
+                                                        data-fieldname="bspValue4"
+                                                        onchange={handleInputChange}
+                                                        disabled={row.isDisabledInputRebate}
+                                                        variant="label-hidden">
+                                                </lightning-input>
+                                            </td>
+                                        </template>
+                                        <td data-label="Total Rebate">
+                                            <lightning-input
+                                                    type="number" placeholder="%" min="0" max="100" step="0.01"
+                                                    value={row.rebate.totalRebate4}
+                                                    data-id={row.id4}
+                                                    data-fieldname="totalRebate4"
+                                                    disabled={row.isDisabledTotalRebate}
+                                                    variant="label-hidden">
+                                            </lightning-input>
+                                        </td>
+                                    </tr>
+                                </template>
                             </template>
                             <template if:false={isModeBreakdown}>
                                 <template if:true={row.isSingleRate}>
@@ -302,7 +682,7 @@
                                                     data-id={row.id}
                                                     data-fieldname="discountValue"
                                                     onchange={handleInputChangeSingle}
-                                                    disabled={row.isDisabledTotalRebate}
+                                                    disabled={row.isDisabledInputRebate}
                                                     variant="label-hidden">
                                                 </lightning-input>
                                             </th>
@@ -315,7 +695,7 @@
                                                     data-id={row.id}
                                                     data-fieldname="bankFeeValue"
                                                     onchange={handleInputChangeSingle}
-                                                    disabled={row.isDisabledTotalRebate}
+                                                    disabled={row.isDisabledInputRebate}
                                                     variant="label-hidden">
                                                 </lightning-input>
                                             </th>
@@ -327,7 +707,7 @@
                                                         value={row.rebate.leasingValue}
                                                         data-id={row.id}
                                                         data-fieldname="leasingValue"
-                                                        disabled={row.isDisabledTotalRebate}
+                                                        disabled={row.isDisabledInputRebate}
                                                         onchange={handleInputChangeSingle}
                                                         variant="label-hidden">
                                                 </lightning-input>
@@ -340,7 +720,7 @@
                                                         value={row.rebate.overridingValue}
                                                         data-id={row.id}
                                                         data-fieldname="overridingValue"
-                                                        disabled={row.isDisabledTotalRebate}
+                                                        disabled={row.isDisabledInputRebate}
                                                         onchange={handleInputChangeSingle}
                                                         variant="label-hidden">
                                                 </lightning-input>
@@ -353,7 +733,7 @@
                                                         value={row.rebate.bspValue}
                                                         data-id={row.id}
                                                         data-fieldname="bspValue"
-                                                        disabled={row.isDisabledTotalRebate}
+                                                        disabled={row.isDisabledInputRebate}
                                                         onchange={handleInputChangeSingle}
                                                         variant="label-hidden">
                                                 </lightning-input>
@@ -370,6 +750,405 @@
                                             </lightning-input>
                                         </th>
                                     </tr>
+                                    <template if:true={hasSection2}>
+                                        <tr key={row.id2}> 
+                                            <td colspan="2"></td>
+                                            <td data-label="Section No" class="slds-cell-wrap">Section 2</td>
+                                            <template if:true={showCommission}>
+                                                <td data-label="Commission">
+                                                    <lightning-input
+                                                            type="number" placeholder="%" min="0" max="100" step="0.01"
+                                                            value={row.rebate.commissionValue2}
+                                                            data-id={row.id}
+                                                            data-fieldname="commissionValue2"
+                                                            onchange={handleInputChange}
+                                                            disabled={row.isDisabledInputRebate}
+                                                            variant="label-hidden">
+                                                    </lightning-input>
+                                                </td>
+                                            </template>
+                                            <template if:true={showAgentCommission}>
+                                                <td data-label="Agent Commission">
+                                                    <lightning-input
+                                                            type="number" placeholder="%" min="0" max="100" step="0.01"
+                                                            value={row.rebate.agentCommissionValue2}
+                                                            data-id={row.id}
+                                                            data-fieldname="agentCommissionValue2"
+                                                            onchange={handleInputChange}
+                                                            disabled={row.isDisabledInputRebate}
+                                                            variant="label-hidden">
+                                                    </lightning-input>
+                                                </td>
+                                            </template>
+                                            <template if:true={showBrokerCommission}>
+                                                <td data-label="Broker Commission">
+                                                    <lightning-input
+                                                            type="number" placeholder="%" min="0" max="100" step="0.01"
+                                                            value={row.rebate.brokerCommissionValue2}
+                                                            data-id={row.id}
+                                                            data-fieldname="brokerCommissionValue2"
+                                                            onchange={handleInputChange}
+                                                            disabled={row.isDisabledInputRebate}
+                                                            variant="label-hidden">
+                                                    </lightning-input>
+                                                </td>
+                                            </template>
+                                            <template if:true={showFinancialCommission}>
+                                                <td data-label="Financial Commission">
+                                                    <lightning-input
+                                                            type="number" placeholder="%" min="0" max="100" step="0.01"
+                                                            value={row.rebate.financialCommissionValue2}
+                                                            data-id={row.id}
+                                                            data-fieldname="financialCommissionValue2"
+                                                            onchange={handleInputChange}
+                                                            disabled={row.isDisabledInputRebate}
+                                                            variant="label-hidden">
+                                                    </lightning-input>
+                                                </td>
+                                            </template>
+                                            <template if:true={showDiscount}>
+                                                <td data-label="Discount">
+                                                    <lightning-input
+                                                            type="number" placeholder="%" min="0" max="100" step="0.01"
+                                                            value={row.rebate.discountValue2}
+                                                            data-id={row.id}
+                                                            data-fieldname="discountValue2"
+                                                            onchange={handleInputChange}
+                                                            disabled={row.isDisabledInputRebate}
+                                                            variant="label-hidden">
+                                                    </lightning-input>
+                                                </td>
+                                            </template>
+                                            <template if:true={showBankFeeBool}>
+                                                <td data-label="Bank Fee">
+                                                    <lightning-input
+                                                            type="number" placeholder="%" min="0" max="100" step="0.01"
+                                                            value={row.rebate.bankFeeValue2}
+                                                            data-id={row.id}
+                                                            data-fieldname="bankFeeValue2"
+                                                            onchange={handleInputChange}
+                                                            disabled={row.isDisabledInputRebate}
+                                                            variant="label-hidden">
+                                                    </lightning-input>
+                                                </td>
+                                            </template>
+                                            <template if:true={showLeasing}>
+                                                <td data-label="Leasing Fee">
+                                                    <lightning-input
+                                                            type="number" placeholder="%" min="0" max="100" step="0.01"
+                                                            value={row.rebate.leasingValue2}
+                                                            data-id={row.id}
+                                                            data-fieldname="leasingValue2"
+                                                            onchange={handleInputChange}
+                                                            disabled={row.isDisabledInputRebate}
+                                                            variant="label-hidden">
+                                                    </lightning-input>
+                                                </td>
+                                            </template>
+                                            <template if:true={showOverriding}>
+                                                <td data-label="Overriding">
+                                                    <lightning-input
+                                                            type="number" placeholder="%" min="0" max="100" step="0.01"
+                                                            value={row.rebate.overridingValue2}
+                                                            data-id={row.id}
+                                                            data-fieldname="overridingValue2"
+                                                            onchange={handleInputChange}
+                                                            disabled={row.isDisabledInputRebate}
+                                                            variant="label-hidden">
+                                                    </lightning-input>
+                                                </td>
+                                            </template>
+                                            <template if:true={showBSP}>
+                                                <td data-label="BSP">
+                                                    <lightning-input
+                                                            type="number" placeholder="%" min="0" max="100" step="0.01"
+                                                            value={row.rebate.bspValue2}
+                                                            data-id={row.id}
+                                                            data-fieldname="bspValue2"
+                                                            onchange={handleInputChange}
+                                                            disabled={row.isDisabledInputRebate}
+                                                            variant="label-hidden">
+                                                    </lightning-input>
+                                                </td>
+                                            </template>
+                                            <td data-label="Total Rebate">
+                                                <lightning-input
+                                                        type="number" placeholder="%" min="0" max="100" step="0.01"
+                                                        value={row.rebate.totalRebate2}
+                                                        data-id={row.id2}
+                                                        data-fieldname="totalRebate2"
+                                                        disabled={row.isDisabledTotalRebate}
+                                                        variant="label-hidden">
+                                                </lightning-input>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                    <template if:true={hasSection3}>
+                                        <tr key={row.id3}> 
+                                            <td colspan="2"></td>
+                                            <td data-label="Section No" class="slds-cell-wrap">Section 3</td>
+                                            <template if:true={showCommission}>
+                                                <td data-label="Commission">
+                                                    <lightning-input
+                                                            type="number" placeholder="%" min="0" max="100" step="0.01"
+                                                            value={row.rebate.commissionValue3}
+                                                            data-id={row.id}
+                                                            data-fieldname="commissionValue3"
+                                                            onchange={handleInputChange}
+                                                            disabled={row.isDisabledInputRebate}
+                                                            variant="label-hidden">
+                                                    </lightning-input>
+                                                </td>
+                                            </template>
+                                            <template if:true={showAgentCommission}>
+                                                <td data-label="Agent Commission">
+                                                    <lightning-input
+                                                            type="number" placeholder="%" min="0" max="100" step="0.01"
+                                                            value={row.rebate.agentCommissionValue3}
+                                                            data-id={row.id}
+                                                            data-fieldname="agentCommissionValue3"
+                                                            onchange={handleInputChange}
+                                                            disabled={row.isDisabledInputRebate}
+                                                            variant="label-hidden">
+                                                    </lightning-input>
+                                                </td>
+                                            </template>
+                                            <template if:true={showBrokerCommission}>
+                                                <td data-label="Broker Commission">
+                                                    <lightning-input
+                                                            type="number" placeholder="%" min="0" max="100" step="0.01"
+                                                            value={row.rebate.brokerCommissionValue3}
+                                                            data-id={row.id}
+                                                            data-fieldname="brokerCommissionValue3"
+                                                            onchange={handleInputChange}
+                                                            disabled={row.isDisabledInputRebate}
+                                                            variant="label-hidden">
+                                                    </lightning-input>
+                                                </td>
+                                            </template>
+                                            <template if:true={showFinancialCommission}>
+                                                <td data-label="Financial Commission">
+                                                    <lightning-input
+                                                            type="number" placeholder="%" min="0" max="100" step="0.01"
+                                                            value={row.rebate.financialCommissionValue3}
+                                                            data-id={row.id}
+                                                            data-fieldname="financialCommissionValue3"
+                                                            onchange={handleInputChange}
+                                                            disabled={row.isDisabledInputRebate}
+                                                            variant="label-hidden">
+                                                    </lightning-input>
+                                                </td>
+                                            </template>
+                                            <template if:true={showDiscount}>
+                                                <td data-label="Discount">
+                                                    <lightning-input
+                                                            type="number" placeholder="%" min="0" max="100" step="0.01"
+                                                            value={row.rebate.discountValue3}
+                                                            data-id={row.id}
+                                                            data-fieldname="discountValue3"
+                                                            onchange={handleInputChange}
+                                                            disabled={row.isDisabledInputRebate}
+                                                            variant="label-hidden">
+                                                    </lightning-input>
+                                                </td>
+                                            </template>
+                                            <template if:true={showBankFeeBool}>
+                                                <td data-label="Bank Fee">
+                                                    <lightning-input
+                                                            type="number" placeholder="%" min="0" max="100" step="0.01"
+                                                            value={row.rebate.bankFeeValue3}
+                                                            data-id={row.id}
+                                                            data-fieldname="bankFeeValue3"
+                                                            onchange={handleInputChange}
+                                                            disabled={row.isDisabledInputRebate}
+                                                            variant="label-hidden">
+                                                    </lightning-input>
+                                                </td>
+                                            </template>
+                                            <template if:true={showLeasing}>
+                                                <td data-label="Leasing Fee">
+                                                    <lightning-input
+                                                            type="number" placeholder="%" min="0" max="100" step="0.01"
+                                                            value={row.rebate.leasingValue3}
+                                                            data-id={row.id}
+                                                            data-fieldname="leasingValue3"
+                                                            onchange={handleInputChange}
+                                                            disabled={row.isDisabledInputRebate}
+                                                            variant="label-hidden">
+                                                    </lightning-input>
+                                                </td>
+                                            </template>
+                                            <template if:true={showOverriding}>
+                                                <td data-label="Overriding">
+                                                    <lightning-input
+                                                            type="number" placeholder="%" min="0" max="100" step="0.01"
+                                                            value={row.rebate.overridingValue3}
+                                                            data-id={row.id}
+                                                            data-fieldname="overridingValue3"
+                                                            onchange={handleInputChange}
+                                                            disabled={row.isDisabledInputRebate}
+                                                            variant="label-hidden">
+                                                    </lightning-input>
+                                                </td>
+                                            </template>
+                                            <template if:true={showBSP}>
+                                                <td data-label="BSP">
+                                                    <lightning-input
+                                                            type="number" placeholder="%" min="0" max="100" step="0.01"
+                                                            value={row.rebate.bspValue3}
+                                                            data-id={row.id}
+                                                            data-fieldname="bspValue3"
+                                                            onchange={handleInputChange}
+                                                            disabled={row.isDisabledInputRebate}
+                                                            variant="label-hidden">
+                                                    </lightning-input>
+                                                </td>
+                                            </template>
+                                            <td data-label="Total Rebate">
+                                                <lightning-input
+                                                        type="number" placeholder="%" min="0" max="100" step="0.01"
+                                                        value={row.rebate.totalRebate3}
+                                                        data-id={row.id3}
+                                                        data-fieldname="totalRebate3"
+                                                        disabled={row.isDisabledTotalRebate}
+                                                        variant="label-hidden">
+                                                </lightning-input>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                    <template if:true={hasSection4}>
+                                        <tr key={row.id4}> 
+                                            <td colspan="2"></td>
+                                            <td data-label="Section No" class="slds-cell-wrap">Section 4</td>
+                                            <template if:true={showCommission}>
+                                                <td data-label="Commission">
+                                                    <lightning-input
+                                                            type="number" placeholder="%" min="0" max="100" step="0.01"
+                                                            value={row.rebate.commissionValue4}
+                                                            data-id={row.id}
+                                                            data-fieldname="commissionValue4"
+                                                            onchange={handleInputChange}
+                                                            disabled={row.isDisabledInputRebate}
+                                                            variant="label-hidden">
+                                                    </lightning-input>
+                                                </td>
+                                            </template>
+                                            <template if:true={showAgentCommission}>
+                                                <td data-label="Agent Commission">
+                                                    <lightning-input
+                                                            type="number" placeholder="%" min="0" max="100" step="0.01"
+                                                            value={row.rebate.agentCommissionValue4}
+                                                            data-id={row.id}
+                                                            data-fieldname="agentCommissionValue4"
+                                                            onchange={handleInputChange}
+                                                            disabled={row.isDisabledInputRebate}
+                                                            variant="label-hidden">
+                                                    </lightning-input>
+                                                </td>
+                                            </template>
+                                            <template if:true={showBrokerCommission}>
+                                                <td data-label="Broker Commission">
+                                                    <lightning-input
+                                                            type="number" placeholder="%" min="0" max="100" step="0.01"
+                                                            value={row.rebate.brokerCommissionValue4}
+                                                            data-id={row.id}
+                                                            data-fieldname="brokerCommissionValue4"
+                                                            onchange={handleInputChange}
+                                                            disabled={row.isDisabledInputRebate}
+                                                            variant="label-hidden">
+                                                    </lightning-input>
+                                                </td>
+                                            </template>
+                                            <template if:true={showFinancialCommission}>
+                                                <td data-label="Financial Commission">
+                                                    <lightning-input
+                                                            type="number" placeholder="%" min="0" max="100" step="0.01"
+                                                            value={row.rebate.financialCommissionValue4}
+                                                            data-id={row.id}
+                                                            data-fieldname="financialCommissionValue4"
+                                                            onchange={handleInputChange}
+                                                            disabled={row.isDisabledInputRebate}
+                                                            variant="label-hidden">
+                                                    </lightning-input>
+                                                </td>
+                                            </template>
+                                            <template if:true={showDiscount}>
+                                                <td data-label="Discount">
+                                                    <lightning-input
+                                                            type="number" placeholder="%" min="0" max="100" step="0.01"
+                                                            value={row.rebate.discountValue4}
+                                                            data-id={row.id}
+                                                            data-fieldname="discountValue4"
+                                                            onchange={handleInputChange}
+                                                            disabled={row.isDisabledInputRebate}
+                                                            variant="label-hidden">
+                                                    </lightning-input>
+                                                </td>
+                                            </template>
+                                            <template if:true={showBankFeeBool}>
+                                                <td data-label="Bank Fee">
+                                                    <lightning-input
+                                                            type="number" placeholder="%" min="0" max="100" step="0.01"
+                                                            value={row.rebate.bankFeeValue4}
+                                                            data-id={row.id}
+                                                            data-fieldname="bankFeeValue4"
+                                                            onchange={handleInputChange}
+                                                            disabled={row.isDisabledInputRebate}
+                                                            variant="label-hidden">
+                                                    </lightning-input>
+                                                </td>
+                                            </template>
+                                            <template if:true={showLeasing}>
+                                                <td data-label="Leasing Fee">
+                                                    <lightning-input
+                                                            type="number" placeholder="%" min="0" max="100" step="0.01"
+                                                            value={row.rebate.leasingValue4}
+                                                            data-id={row.id}
+                                                            data-fieldname="leasingValue4"
+                                                            onchange={handleInputChange}
+                                                            disabled={row.isDisabledInputRebate}
+                                                            variant="label-hidden">
+                                                    </lightning-input>
+                                                </td>
+                                            </template>
+                                            <template if:true={showOverriding}>
+                                                <td data-label="Overriding">
+                                                    <lightning-input
+                                                            type="number" placeholder="%" min="0" max="100" step="0.01"
+                                                            value={row.rebate.overridingValue4}
+                                                            data-id={row.id}
+                                                            data-fieldname="overridingValue4"
+                                                            onchange={handleInputChange}
+                                                            disabled={row.isDisabledInputRebate}
+                                                            variant="label-hidden">
+                                                    </lightning-input>
+                                                </td>
+                                            </template>
+                                            <template if:true={showBSP}>
+                                                <td data-label="BSP">
+                                                    <lightning-input
+                                                            type="number" placeholder="%" min="0" max="100" step="0.01"
+                                                            value={row.rebate.bspValue4}
+                                                            data-id={row.id}
+                                                            data-fieldname="bspValue4"
+                                                            onchange={handleInputChange}
+                                                            disabled={row.isDisabledInputRebate}
+                                                            variant="label-hidden">
+                                                    </lightning-input>
+                                                </td>
+                                            </template>
+                                            <td data-label="Total Rebate">
+                                                <lightning-input
+                                                        type="number" placeholder="%" min="0" max="100" step="0.01"
+                                                        value={row.rebate.totalRebate4}
+                                                        data-id={row.id4}
+                                                        data-fieldname="totalRebate4"
+                                                        disabled={row.isDisabledTotalRebate}
+                                                        variant="label-hidden">
+                                                </lightning-input>
+                                            </td>
+                                        </tr>
+                                    </template>
                                 </template>
                             </template>
                         </template>
