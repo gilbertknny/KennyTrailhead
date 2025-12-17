@@ -1,7 +1,7 @@
 /**
  * @description       : Generate Data for Insert Coverage
  * @author            : Ahmad Yazid Munif
- * @last modified on  : 11-25-2025
+ * @last modified on  : 12-16-2025
  * @last modified by  : Ahmad Yazid Munif
 **/
 public without sharing class Aswata_Coverage_Data_Handler {
@@ -26,16 +26,14 @@ public without sharing class Aswata_Coverage_Data_Handler {
         // Rate
         coverage.Proposed_Fixed_Amount__c = wrapper.rate.coverageRate;
         coverage.Premi_Amount__c = wrapper.rate.fixedAmount;
+        coverage.Proposed_Fixed_Amount_Section_2__c = wrapper.rate.coverageRate2;
+        coverage.Premi_Amount_Section_2__c = wrapper.rate.fixedAmount2;
+        coverage.Proposed_Fixed_Amount_Section_3__c = wrapper.rate.coverageRate3;
+        coverage.Premi_Amount_Section_3__c = wrapper.rate.fixedAmount3;
+        coverage.Proposed_Fixed_Amount_Section_4__c = wrapper.rate.coverageRate4;
+        coverage.Premi_Amount_Section_4__c = wrapper.rate.fixedAmount4;
         // deductible
-        InsurancePolicyCoverage getDeductible = wrapperDeductible(wrapper,risk);
-        coverage.Deductible_Type__c = getDeductible.Deductible_Type__c;
-        coverage.Deductible__c = getDeductible.Deductible__c;
-        coverage.DeductibleAmount = getDeductible.DeductibleAmount;
-        coverage.Minimum_Cur_ID__c = getDeductible.Minimum_Cur_ID__c;
-        coverage.Deductible_PCT__c = getDeductible.Deductible_PCT__c;
-        coverage.Description = getDeductible.Description;
-        coverage.Description__c = getDeductible.Description__c;
-        coverage.Minimum_Amount__c = getDeductible.Minimum_Amount__c;
+        coverage = wrapperDeductible(coverage,wrapper,risk);
         // rebate
         if(wrapper.rebate!=null){
             coverage.Total_Rebate__c = wrapper.rebate.totalRebate;
@@ -43,25 +41,30 @@ public without sharing class Aswata_Coverage_Data_Handler {
             coverage.Commision__c = wrapper.rebate.commissionValue;
             coverage.Banks_Fee_Comission__c = wrapper.rebate.bankFeeValue;
             coverage.Risk_Closing_Survey_Fee_BSP__c = wrapper.rebate.bspValue;
-            coverage.Profit_Sharing__c = wrapper.rebate.profitValue;
             coverage.Leasing_Fee__c = wrapper.rebate.leasingValue;
             coverage.Overdng_Comission__c = wrapper.rebate.overridingValue;
             coverage.Agent_Comission__c = wrapper.rebate.agentCommissionValue;
             coverage.Broker_Comission__c = wrapper.rebate.brokerCommissionValue;
             coverage.Finance_Commision_PCT__c = wrapper.rebate.financialCommissionValue;
         }
+        if(wrapper.rebates.size()>0){
+            coverage = Aswata_Coverage_SectionData_Handler.wrapperRebate4(coverage,wrapper,risk);
+        }
         return coverage;
     }
     /**
      * @description function for generate data deductible
+     * @param coverage
      * @param wrapper list of Json String after deserialize
      * @param risk
      * @return InsurancePolicyCoverage
      */
-    public static InsurancePolicyCoverage wrapperDeductible(Aswata_Coverage_Data_Wrapper.CoverageDetailWrapper wrapper,Asset risk){
-        InsurancePolicyCoverage coverage = new InsurancePolicyCoverage();
-        // System.debug('## AWT Deductible'+wrapper.deductible);
-        if(wrapper.deductible!=null && wrapper.deductible.deductibleSetting!=null){
+    public static InsurancePolicyCoverage wrapperDeductible(InsurancePolicyCoverage coverage,Aswata_Coverage_Data_Wrapper.CoverageDetailWrapper wrapper,Asset risk){
+        // InsurancePolicyCoverage coverage = new InsurancePolicyCoverage();
+        System.debug('## AWT Deductible'+wrapper.deductible);
+        System.debug('## AWT wrapper.deductibles'+wrapper.deductibles);
+        // if(wrapper.deductible!=null && wrapper.deductible.deductibleSetting!=null){
+        if(wrapper.deductible!=null){
             coverage.Deductible_Type__c = wrapper.deductible.deductibleSetting;
             coverage.Deductible__c = wrapper.deductible.deductibleFlag;
             coverage.Minimum_Cur_ID__c = wrapper.deductible.currencyName;
@@ -75,6 +78,10 @@ public without sharing class Aswata_Coverage_Data_Handler {
             coverage.Description = wrapper.deductible.descriptionDeductible;
             coverage.Description__c = wrapper.deductible.descriptionValue;
             coverage.Minimum_Amount__c = wrapper.deductible.minimumAmount;
+
+            if(wrapper.deductibles.size()>0){
+                coverage = Aswata_Coverage_SectionData_Handler.wrapperDeductible4(coverage,wrapper,risk);
+            }
         }
         return coverage;
     }
@@ -228,5 +235,48 @@ public without sharing class Aswata_Coverage_Data_Handler {
             access = false;
         }
         return access;
+    }
+    /**
+     * @description function for get Record Type Exchange Rate
+     * @return recordType
+     */
+    public static RecordType queryRecordType() {
+        SOQL_SOBJECT.SOQL_Param sp = new SOQL_SOBJECT.SOQL_Param();
+        sp.sobjectName = 'RecordType';
+        sp.condition = 'SobjectType = \'Master_Data__c\' AND Name = \'Exchange Rate\'';
+        sp.fields = 'Id, Name';
+        String dpquery = SOQL_SOBJECT.SOQL(sp)+' WITH SECURITY_ENFORCED LIMIT 1';
+        RecordType rtExRate = Database.query(dpquery);
+        // RecordType rtExRate = [
+        //     SELECT Id, Name
+        //     FROM RecordType
+        //     WHERE SobjectType = 'Master_Data__c' AND Name = 'Exchange Rate'
+        //     WITH SECURITY_ENFORCED LIMIT 1
+        // ];
+        return rtExRate;
+    }
+    /**
+     * @description function for get Asset by RiskId
+     * @param riskId
+     * @return Asset
+     */
+    public static Asset queryAssetByRiskId(String riskId) {
+        SOQL_SOBJECT.SOQL_Param sp = new SOQL_SOBJECT.SOQL_Param();
+        sp.sobjectName = 'Asset';
+        sp.condition = 'Id = :riskId';
+        sp.fields = 'Id, Amount_Insured__c, Opportunity__c,COB__c,Model__c';
+        sp.addField = ',Opportunity__r.Busreq_ID__c,Opportunity__r.Start_Date_Periode__c, Opportunity__r.End_Date_Periode__c';
+        String dpquery = SOQL_SOBJECT.SOQL(sp)+' WITH SECURITY_ENFORCED LIMIT 1';
+        Asset rawData = Database.query(dpquery);
+        // Asset risk = [
+        //     SELECT Id, Amount_Insured__c, Opportunity__c,
+        //     COB__c,
+        //     Opportunity__r.Busreq_ID__c,Model__c,
+        //     Opportunity__r.Start_Date_Periode__c, Opportunity__r.End_Date_Periode__c
+        //     FROM Asset
+        //     WHERE Id = :riskId
+        //     WITH SECURITY_ENFORCED
+        // ];
+        return rawData;
     }
 }
