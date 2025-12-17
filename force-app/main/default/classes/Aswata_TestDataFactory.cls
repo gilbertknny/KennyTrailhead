@@ -393,4 +393,16 @@ public class Aswata_TestDataFactory {
         insert adminUser;
         return adminUser;
     }
+
+    /**
+     * @description function for Folder Facultative
+     * @return Returning Facultative_Share__c
+     */
+    public static Facultative_Share__c createFacultativeShare(String folderName) {
+        Facultative_Share__c share = new Facultative_Share__c(
+            Name = folderName
+        );
+        insert share;
+        return share;
+    }
 }

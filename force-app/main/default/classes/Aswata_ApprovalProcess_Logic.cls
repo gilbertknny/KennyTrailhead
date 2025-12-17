@@ -23,7 +23,14 @@ public with sharing class Aswata_ApprovalProcess_Logic {
     public static List<ApprovalRequestOutput> runApproval(List<ApprovalRequestInput> requests) {
         List<ApprovalRequestOutput> results = new List<ApprovalRequestOutput>();
 
+        String recordId = '';
+        String action = '';
+        String comments = '';
+        String stageAction = '';
         for (ApprovalRequestInput req : requests) {
+            recordId = req.recordId;
+            action = req.action;
+            comments = req.comments;
             ApprovalRequestOutput res = new ApprovalRequestOutput();
             try {
                 if (req.action == 'Submit') {
@@ -39,9 +46,11 @@ public with sharing class Aswata_ApprovalProcess_Logic {
                 else if (req.action == 'Approved' || req.action == 'Rejected' || req.action == 'Contra Quote' || req.action == 'Approve On Hold Binding' || req.action == 'Cancel') {
                     if(req.action == 'Approved' || req.action == 'Approve On Hold Binding'){
                         req.action = 'Approve';
+                        stageAction = 'Quote';
                     }
                     else {
                         req.action = 'Reject';
+                        stageAction = 'Closed';
                     }
                     
                     ProcessInstanceWorkitem workItem = [
@@ -57,17 +66,12 @@ public with sharing class Aswata_ApprovalProcess_Logic {
 
                     Approval.ProcessResult pr = Approval.process(workReq);
 
-                    // Extra update for Contra Quote
-                    /*if (req.action == 'Contra Quote' && pr.isSuccess()) {
-                        SObject recordToUpdate = req.recordId.getSObjectType().newSObject(req.recordId);
-                        recordToUpdate.put('Remark__c', req.comments);
-                        update recordToUpdate;
-                    }*/
-
                     res.success = pr.isSuccess();
                     res.message = pr.isSuccess() 
                         ? 'Record ' + req.action + 'ed successfully' 
                         : 'Approval process failed to ' + req.action;
+
+                    
                 }
                 else {
                     res.success = false;
@@ -79,6 +83,24 @@ public with sharing class Aswata_ApprovalProcess_Logic {
                 res.message = 'Error: ' + e.getMessage();
             }
             results.add(res);
+        }
+
+        if(String.isNotBlank(recordId)){
+            
+            if(action == 'Submit'){
+                action = 'Waiting for Approval';
+            } 
+            System.debug('RecordId: '+ recordId + ' Action: '+ action + ' Comments: '+ comments);
+            Quote upQuo = new Quote();
+            upQuo.Id = recordId;
+            upQuo.Stage__c = stageAction;
+            upQuo.Status = action;
+            upQuo.Remark__c = comments;
+            if (Schema.sObjectType.Quote.isUpdateable()) {
+                Database.update(upQuo, false); 
+            } else {
+                System.debug('No permission to update Quote');
+            }
         }
         return results;
     }
