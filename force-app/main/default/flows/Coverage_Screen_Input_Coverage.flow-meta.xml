@@ -8,7 +8,7 @@
         <actionName>Aswata_Add_New_CoverageRate</actionName>
         <actionType>apex</actionType>
         <connector>
-            <targetReference>RecordSaved</targetReference>
+            <targetReference>CheckCounterPeriod</targetReference>
         </connector>
         <faultConnector>
             <targetReference>Error_Screen</targetReference>
@@ -25,6 +25,23 @@
     </actionCalls>
     <apiVersion>64.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <name>addCounter</name>
+        <label>addCounter</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>counterYear</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <numberValue>1.0</numberValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <isGoTo>true</isGoTo>
+            <targetReference>cobBerapa</targetReference>
+        </connector>
+    </assignments>
     <assignments>
         <name>AssignOutput_to_Input</name>
         <label>AssignOutput to Input</label>
@@ -54,7 +71,7 @@
             </value>
         </assignmentItems>
         <connector>
-            <targetReference>Screen_Input_CoverageRate</targetReference>
+            <targetReference>cobBerapa</targetReference>
         </connector>
     </assignments>
     <assignments>
@@ -70,7 +87,7 @@
             </value>
         </assignmentItems>
         <connector>
-            <targetReference>Screen_Input_CoverageRate</targetReference>
+            <targetReference>cobBerapa</targetReference>
         </connector>
     </assignments>
     <assignments>
@@ -96,28 +113,53 @@
             <targetReference>Screen_Input_Coverage_Rebate</targetReference>
         </connector>
     </assignments>
-    <assignments>
-        <name>namePolis</name>
-        <label>namePolis</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <assignmentItems>
-            <assignToReference>tempPolisName</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <stringValue>Insurance Policy - {!Get_Asset.Opportunity__r.Name}</stringValue>
-            </value>
-        </assignmentItems>
-        <connector>
-            <targetReference>GetInsurancePolicy</targetReference>
-        </connector>
-    </assignments>
+    <choices>
+        <name>inputNo</name>
+        <choiceText>Tidak</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Tidak</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>inputYes</name>
+        <choiceText>Ya</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Ya</stringValue>
+        </value>
+    </choices>
     <customProperties>
         <name>ScreenProgressIndicator</name>
         <value>
             <stringValue>{&quot;location&quot;:&quot;top&quot;,&quot;type&quot;:&quot;simple&quot;}</stringValue>
         </value>
     </customProperties>
+    <decisions>
+        <name>CheckCounterPeriod</name>
+        <label>CheckCounterPeriod</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>RecordSaved</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Done</defaultConnectorLabel>
+        <rules>
+            <name>NextYear</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>counterYear</leftValueReference>
+                <operator>LessThan</operator>
+                <rightValue>
+                    <elementReference>totalYearPeriod</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>ConfirmationNextYear2</targetReference>
+            </connector>
+            <label>NextYear</label>
+        </rules>
+    </decisions>
     <decisions>
         <name>checkJsonString</name>
         <label>checkJsonString</label>
@@ -138,7 +180,7 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Screen_Input_Coverage_Deductible</targetReference>
+                <targetReference>Screen_LWC_Add_Coverage</targetReference>
             </connector>
             <label>isHasSelected</label>
         </rules>
@@ -169,13 +211,115 @@
         </rules>
     </decisions>
     <decisions>
+        <name>cobBerapa</name>
+        <label>cobBerapa</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Screen_Input_CoverageRate</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>COB301</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Asset.COB__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>301</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Screen_Long_Period</targetReference>
+            </connector>
+            <label>COB301</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>DecisionConfirmatioInput</name>
+        <label>DecisionConfirmatioInput</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>RecordSaved</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Finish</defaultConnectorLabel>
+        <rules>
+            <name>to_Next_Year</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>ButtonConfirmation.value</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Ya</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>addCounter</targetReference>
+            </connector>
+            <label>to Next Year</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>NextCoverageRate</name>
+        <label>NextCoverageRate</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>cobBerapa</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>cob301</defaultConnectorLabel>
+        <rules>
+            <name>Next_to_Coverage_Rate</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>tempVarCliked</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Next</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>AssignOutput_to_Input</targetReference>
+            </connector>
+            <label>Next to Coverage Rate</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>NextDeductible</name>
+        <label>NextDeductible</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Screen_Input_CoverageRate</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>previousRate</defaultConnectorLabel>
+        <rules>
+            <name>Next_to_Deductile</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>tempVarCliked</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Next</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Screen_Input_Coverage_Deductible</targetReference>
+            </connector>
+            <label>Next to Deductile</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>PrevorNextRebate</name>
         <label>PrevorNextRebate</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <defaultConnector>
             <isGoTo>true</isGoTo>
-            <targetReference>Screen_Input_CoverageRate</targetReference>
+            <targetReference>Screen_LWC_Add_Coverage</targetReference>
         </defaultConnector>
         <defaultConnectorLabel>Previous</defaultConnectorLabel>
         <rules>
@@ -220,7 +364,7 @@
             <label>NextSavingData</label>
         </rules>
     </decisions>
-    <description>Activate</description>
+    <description>New Activate</description>
     <environments>Default</environments>
     <interviewLabel>[Coverage]Screen Input Coverage {!$Flow.CurrentDateTime}</interviewLabel>
     <label>[Coverage]Screen Input Coverage</label>
@@ -306,7 +450,7 @@
         <locationY>0</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>namePolis</targetReference>
+            <targetReference>GetInsurancePolicy</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -405,6 +549,79 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <screens>
+        <name>ConfirmationNextYear2</name>
+        <label>ConfirmationNextYear2</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>DecisionConfirmatioInput</targetReference>
+        </connector>
+        <fields>
+            <name>DisplayConfirmation</name>
+            <fieldText>&lt;h1 style=&quot;text-align: center;&quot;&gt;&lt;strong style=&quot;font-size: 16px;&quot;&gt;Apakah Anda ingin melanjutkan pengisian Coverage untuk tahun berikutnya?&lt;/strong&gt;&lt;/h1&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <fields>
+            <name>ButtonConfirmation</name>
+            <extensionName>c:fsc_flowButtonBar</extensionName>
+            <fieldType>ComponentInstance</fieldType>
+            <inputParameters>
+                <name>alignment</name>
+                <value>
+                    <stringValue>right</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>orientation</name>
+                <value>
+                    <stringValue>horizontal</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>showLines</name>
+                <value>
+                    <stringValue>neither</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>actionMode</name>
+                <value>
+                    <stringValue>navigation</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>buttons</name>
+                <value>
+                    <stringValue>[{&quot;label&quot;:&quot;Ya&quot;,&quot;value&quot;:&quot;Ya&quot;,&quot;iconPosition&quot;:&quot;left&quot;,&quot;variant&quot;:&quot;brand&quot;,&quot;index&quot;:0},{&quot;label&quot;:&quot;Tidak&quot;,&quot;value&quot;:&quot;Tidak&quot;,&quot;iconPosition&quot;:&quot;left&quot;,&quot;variant&quot;:&quot;neutral&quot;,&quot;index&quot;:1}]</stringValue>
+                </value>
+            </inputParameters>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>true</isRequired>
+            <storeOutputAutomatically>true</storeOutputAutomatically>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <showFooter>false</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
         <name>Error_Screen</name>
         <label>Error Screen</label>
         <locationX>0</locationX>
@@ -412,10 +629,6 @@
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
-        <connector>
-            <isGoTo>true</isGoTo>
-            <targetReference>Screen_Input_Coverage_Rebate</targetReference>
-        </connector>
         <fields>
             <name>errorMessage</name>
             <fieldText>&lt;p&gt;&lt;strong style=&quot;color: rgb(255, 13, 13); font-size: 14px;&quot;&gt;{!$Flow.FaultMessage}&lt;/strong&gt;&lt;/p&gt;</fieldText>
@@ -557,7 +770,7 @@
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
         <connector>
-            <targetReference>AssignOutput_to_Input</targetReference>
+            <targetReference>NextCoverageRate</targetReference>
         </connector>
         <fields>
             <name>lwc_coverage_rate</name>
@@ -605,6 +818,12 @@
                     <elementReference>Get_Asset.COB__c</elementReference>
                 </value>
             </inputParameters>
+            <inputParameters>
+                <name>buttonClickedValue</name>
+                <value>
+                    <elementReference>counterYear</elementReference>
+                </value>
+            </inputParameters>
             <inputsOnNextNavToAssocScrn>ResetValues</inputsOnNextNavToAssocScrn>
             <isRequired>true</isRequired>
             <outputParameters>
@@ -628,11 +847,94 @@
         <showHeader>true</showHeader>
     </screens>
     <screens>
+        <name>Screen_Long_Period</name>
+        <label>Screen Long Period</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>Screen_Input_CoverageRate</targetReference>
+        </connector>
+        <fields>
+            <name>warnYearPeriod</name>
+            <fieldText>&lt;p&gt;&lt;strong style=&quot;font-size: 14px; color: rgb(255, 124, 0);&quot;&gt;PERHATIAN:&lt;/strong&gt;&lt;span style=&quot;font-size: 14px;&quot;&gt; Anda akan menambahkan Coverage untuk periode &lt;/span&gt;&lt;strong style=&quot;font-size: 14px;&quot;&gt;{!totalYearPeriod} tahun&lt;/strong&gt;&lt;span style=&quot;font-size: 14px;&quot;&gt;. Mohon isi data Coverage untuk setiap tahun yang dibutuhkan.&lt;/span&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <fields>
+            <name>yearPeriod1</name>
+            <fieldText>&lt;p style=&quot;text-align: center;&quot;&gt;&lt;br&gt;&lt;/p&gt;&lt;p style=&quot;text-align: center;&quot;&gt;&lt;br&gt;&lt;/p&gt;&lt;p style=&quot;text-align: center;&quot;&gt;&lt;strong style=&quot;font-size: 16px;&quot;&gt;INPUT COVERAGE &lt;/strong&gt;&lt;/p&gt;&lt;p style=&quot;text-align: center;&quot;&gt;&lt;strong style=&quot;font-size: 16px;&quot;&gt;TAHUN KE - {!counterYear}&lt;/strong&gt;&lt;/p&gt;&lt;p style=&quot;text-align: center;&quot;&gt;&lt;br&gt;&lt;/p&gt;&lt;p style=&quot;text-align: center;&quot;&gt;&lt;strong style=&quot;font-size: 16px;&quot;&gt;﻿&lt;/strong&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <name>Screen_LWC_Add_Coverage</name>
+        <label>Screen LWC Add Coverage</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>true</allowPause>
+        <connector>
+            <targetReference>NextDeductible</targetReference>
+        </connector>
+        <fields>
+            <name>lwcAddCoverageRate</name>
+            <extensionName>c:addNewCoverage</extensionName>
+            <fieldType>ComponentInstance</fieldType>
+            <inputParameters>
+                <name>jsonString</name>
+                <value>
+                    <elementReference>CoverageRateOutput</elementReference>
+                </value>
+            </inputParameters>
+            <inputsOnNextNavToAssocScrn>ResetValues</inputsOnNextNavToAssocScrn>
+            <isRequired>true</isRequired>
+            <outputParameters>
+                <assignToReference>tempVarCliked</assignToReference>
+                <name>buttonClickedValue</name>
+            </outputParameters>
+            <outputParameters>
+                <assignToReference>CoverageRateOutput</assignToReference>
+                <name>jsonString</name>
+            </outputParameters>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <showFooter>false</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
         <name>ValidationData</name>
         <label>ValidationData</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
-        <allowBack>true</allowBack>
+        <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
         <connector>
@@ -678,6 +980,17 @@
         <isInput>false</isInput>
         <isOutput>false</isOutput>
         <objectType>InsurancePolicyCoverage</objectType>
+    </variables>
+    <variables>
+        <name>counterYear</name>
+        <dataType>Number</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <scale>0</scale>
+        <value>
+            <numberValue>1.0</numberValue>
+        </value>
     </variables>
     <variables>
         <name>CoverageRateInput</name>
@@ -758,5 +1071,16 @@
         <isCollection>false</isCollection>
         <isInput>false</isInput>
         <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>totalYearPeriod</name>
+        <dataType>Number</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <scale>0</scale>
+        <value>
+            <elementReference>Get_Asset.Opportunity__r.Number_of_Years__c</elementReference>
+        </value>
     </variables>
 </Flow>

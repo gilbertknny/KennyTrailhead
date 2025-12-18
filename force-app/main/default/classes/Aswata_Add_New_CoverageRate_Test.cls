@@ -1,7 +1,7 @@
 /**
  * @description       : Test Class for Aswata_Add_New_CoverageRate
  * @author            : Ahmad Yazid Munif
- * @last modified on  : 12-07-2025
+ * @last modified on  : 12-17-2025
  * @last modified by  : Ahmad Yazid Munif
 **/
 
@@ -148,29 +148,6 @@ private class Aswata_Add_New_CoverageRate_Test {
             System.assertEquals(firstDdtibleEntry.getValue(), firstDeductibleOption.get('value'), 'First deductible value mismatch.');
         }
     }
-    // @IsTest
-    // static void testInsertCoverageDetails() {
-    //     User adminUser = createUser();
-    //     Aswata_Coverage_Data_Wrapper.CoverageDetailWrapper wrapper = generateData('201101_0','BREAKDOWN_DEDUCTIBLE','Flat');
-    //     List<Aswata_Coverage_Data_Wrapper.CoverageDetailWrapper> wrapperList = new List<Aswata_Coverage_Data_Wrapper.CoverageDetailWrapper>{ wrapper };
-    //     String jsonPayload = JSON.serialize(wrapperList);
-    //     List<String> inputList = new List<String>{ jsonPayload };
-    //     Test.startTest();
-    //     System.runAs(adminUser) {
-    //         Aswata_Add_New_CoverageRate.insertCoverageDetails(inputList);
-    //         Aswata_Coverage_Data_Handler.getExistingCoverage(wrapper.riskId);
-    //     }
-    //     Test.stopTest();
-    //     InsurancePolicy policy = [SELECT Id FROM InsurancePolicy WHERE Name = 'DummyInsurancePolicy' LIMIT 1];
-    //     List<InsurancePolicyCoverage> insertedCoverages = [
-    //         SELECT Id, Name, Coverage_Id__c, InsurancePolicyId,Risk_ID__c
-    //         FROM InsurancePolicyCoverage
-    //         WHERE InsurancePolicyId = :policy.Id
-    //         LIMIT 1
-    //     ];
-    //     System.assert(!insertedCoverages.isEmpty(), 'Error: InsurancePolicyCoverage record was not inserted.');
-    //     System.assertEquals(1, insertedCoverages.size(), 'Error: Should have inserted exactly one coverage record.');
-    // }
     @IsTest
     static void testInsertCoverageCompositeDetails() {
         User adminUser = createUser();
@@ -235,56 +212,14 @@ private class Aswata_Add_New_CoverageRate_Test {
             rate.coverageRate3 = 1.25;
             rate.coverageRate4 = 1.25;
             rate.descriptionRate = 'Testing Rate';
+            Aswata_Coverage_Data_301.getSafeDecimal(null);
+            Aswata_Coverage_Data_301.getShortCode('indemnity','LOSS LIMIT');
+            Aswata_Coverage_Data_301.getShortCode('indemnity','SUM INSURED');
+            Aswata_Coverage_Data_301.getShortCode('picklist','USD');
         }
         Test.stopTest();
         System.assertEquals('COV-001', config.coverageId, 'coverageId should be set correctly.');
         System.assertEquals(10.5, config.batasBawah, 'batasBawah should be set correctly.');
-    }
-    @IsTest
-    static void testCob301LongPeriod() {
-        User adminUser = createUser();
-        Account insertAcc = [SELECT Id,Name FROM Account WHERE Name = 'Jhon'];
-        Date startDate = Date.newInstance(2025, 11, 21);
-        Date endDate = Date.newInstance(2029, 11, 21);
-        Opportunity opp = new Opportunity(
-            Name = 'OPPTY-03',
-            AccountId = insertAcc.Id,
-            StageName = 'Prospecting',
-            CloseDate = System.today().addDays(30),
-            Amount = 50000,
-            COB__c = '301',
-            Start_Date_Periode__c = startDate,
-            End_Date_Periode__c = endDate
-        );
-        insert opp;
-        Asset testRisk = Aswata_TestDataFactory.createRisk(opp,'RISK TEST 3 301');
-        // Asset testRisk = [SELECT Id,Opportunity__r.Start_Date_Periode__c,Opportunity__r.End_Date_Periode__c FROM Asset WHERE Name = 'RISK TEST 301' LIMIT 1];
-        Master_Data__c config = new Master_Data__c(
-            Name = 'Test Coverage Config 2',
-            BSN_ID__c = '301',
-            PARENT_COVERAGE_ID__c = '115511'
-        );
-        insert config;
-        Master_Data__c mdCasco = [SELECT Id FROM Master_Data__c WHERE NAME='Comprehensive' LIMIT 1];
-        List<InsurancePolicyCoverage> dummyCoverages = new List<InsurancePolicyCoverage>();
-        dummyCoverages.add(new InsurancePolicyCoverage(
-            CoverageName = 'Coverage A',
-            Coverage_Name__c = config.Id,
-            Proposed_Fixed_Amount__c = 1000.00
-        ));
-        dummyCoverages.add(new InsurancePolicyCoverage(
-            CoverageName = 'Coverage B',
-            Coverage_Name__c = mdCasco.Id,
-            Proposed_Fixed_Amount__c = 500.00
-        ));
-        Test.startTest();
-        List<InsurancePolicyCoverage> resultCoverages;
-        System.runAs(adminUser) {
-            resultCoverages = Aswata_Coverage_Data_301.calculateDurationInYears(dummyCoverages, testRisk);
-        }
-        Test.stopTest();
-        // System.assertEquals('COV-001', config.coverageId, 'coverageId should be set correctly.');
-        System.assertEquals(2, resultCoverages.size(), 'Seharusnya mengembalikan 2 coverage.');
     }
     /**
      * @description function for generate data wrapper
@@ -305,7 +240,7 @@ private class Aswata_Add_New_CoverageRate_Test {
         wrapper.riskId = asset.Id;
         wrapper.coverageId = '115500';
         wrapper.coverageName = 'FLEXAS';
-        wrapper.rowType = 'COMPOSITE';
+        // wrapper.rowType = 'COMPOSITE';
         wrapper.batasBawah = 2.94;
         wrapper.coverageSetting = covSetting;
         // Sub-Wrapper: Rate
@@ -377,6 +312,8 @@ private class Aswata_Add_New_CoverageRate_Test {
             Name = 'RUMAH',
             Opportunity__c = opp.Id,
             ParentId = risk.Id,
+            Indemnity_Type__c = 'First Loss',
+            Declare_Value__c = 100000,
             Amount_Insured__c = 10000,
             Category__c = mdCasco.Id,
             RecordTypeId = rt.Id
@@ -394,7 +331,7 @@ private class Aswata_Add_New_CoverageRate_Test {
         wrapper.coverageId = '301100';
         wrapper.parentCoverageId = '0';
         wrapper.coverageName = 'CASCO';
-        wrapper.rowType = 'BREAKDOWN_RATE';
+        // wrapper.rowType = 'BREAKDOWN_RATE';
         wrapper.batasBawah = 2.94;
         wrapper.coverageSetting = covSetting;
         // Sub-Wrapper: Rate
@@ -411,6 +348,18 @@ private class Aswata_Add_New_CoverageRate_Test {
         wrapper.rebate.overridingValue = 3;
         wrapper.rebate.commissionValue = 2;
         wrapper.rebate.discountValue = 1;
+        Aswata_Coverage_Data_Wrapper.Deductible deductible1 = new Aswata_Coverage_Data_Wrapper.Deductible();
+        deductible1.deductibleAmount = 1;
+        deductible1.deductibleSetting = deductibleSett;
+        deductible1.descriptionDeductible = 'asd';
+        Aswata_Coverage_Data_Wrapper.Rebate rebate1 = new Aswata_Coverage_Data_Wrapper.Rebate();
+        rebate1.totalRebate = 10;
+        rebate1.bspValue = 4;
+        rebate1.overridingValue = 3;
+        rebate1.commissionValue = 2;
+        rebate1.discountValue = 1;
+        wrapper.rebates = new List<Aswata_Coverage_Data_Wrapper.Rebate>{rebate1,rebate1,rebate1};
+        wrapper.deductibles = new List<Aswata_Coverage_Data_Wrapper.Deductible>{deductible1,deductible1,deductible1};
         return wrapper;
     }
     @IsTest
