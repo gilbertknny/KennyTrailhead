@@ -17,7 +17,6 @@ public with sharing class Aswata_AddFacultative_Controller {
         ];
     }
 
-    /*
     @AuraEnabled(cacheable=true)
     public static List<Asset> getRiskByFolder(Id recordId) {
         return [
@@ -56,7 +55,6 @@ public with sharing class Aswata_AddFacultative_Controller {
 
         update assetsToUpdate;
     }
-    */
 
     @AuraEnabled(cacheable=false)
     public static List<Account> searchAccounts(String searchKey) {
