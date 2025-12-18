@@ -1,4 +1,32 @@
-public class ClsPolicyDistribution {
+public without sharing class ClsPolicyDistribution {
+    @InvocableMethod(label='Policy Distribution' description='Returns user from policy distribution' )
+    public static List<string> getUserIds(List<ID> ids) {
+        List<string> result = new List<String>();
+        String recordId = ids[0];
+        if(recordId != null){
+            Quote qu = [SELECT Id,OpportunityId FROM Quote WHERE Id=:recordId WITH SECURITY_ENFORCED];
+            String oppId = qu.OpportunityId;
+            data dt = getUserIdFilter(oppId);
+            system.debug('dt:'+dt);
+            if(dt != null && oppId != null){
+                if(dt.id != null && dt.userid != null){
+                    Opportunity opp = new Opportunity();
+                    opp.Id = oppId;
+                    opp.Policy_Distribution__c = dt.id; 
+                    opp.User_PIC__c = dt.userid;
+                    Database.SaveResult sr1 = Database.update(opp);
+                    
+                    Master_Data__c md = new Master_Data__c();
+                    md.Id = dt.id;
+                    md.Counter_Date__c = DateTime.Now();
+                    Database.SaveResult sr2 = Database.update(md);
+                    result.add(dt.userid);
+                }
+            }
+        }
+        return result;
+    }
+    
     public static data getUserIdFilter(String recordId){
         Opportunity opp = [SELECT Id,COB__c FROM Opportunity WHERE Id=:recordId WITH SECURITY_ENFORCED];
         String strField = '';
