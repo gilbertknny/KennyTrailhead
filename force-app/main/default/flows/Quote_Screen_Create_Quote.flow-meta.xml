@@ -8,7 +8,7 @@
         <actionName>VlocityMappingFlowBridge</actionName>
         <actionType>apex</actionType>
         <connector>
-            <targetReference>Cek_Status_SFAWT17</targetReference>
+            <targetReference>Send_Busreq_When_Quote_Created</targetReference>
         </connector>
         <flowTransactionModel>Automatic</flowTransactionModel>
         <inputParameters>
@@ -116,7 +116,7 @@
         <actionName>VlocityMappingFlowBridge</actionName>
         <actionType>apex</actionType>
         <connector>
-            <targetReference>Screen_Success</targetReference>
+            <targetReference>Check_Stage_Opportunity</targetReference>
         </connector>
         <flowTransactionModel>Automatic</flowTransactionModel>
         <inputParameters>
@@ -247,7 +247,7 @@
                 <leftValueReference>jsonResponseSFAWT17</leftValueReference>
                 <operator>Contains</operator>
                 <rightValue>
-                    <stringValue>&quot;00&quot;</stringValue>
+                    <stringValue>200</stringValue>
                 </rightValue>
             </conditions>
             <connector>
@@ -301,9 +301,34 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Check_Stage_Opportunity</targetReference>
+                <targetReference>Check_Client_ID</targetReference>
             </connector>
             <label>Check Passed KYC</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_Client_ID</name>
+        <label>Check Client ID</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Send_Busreq_When_Quote_Created</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Client_ID_is_Null</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Account.Client_ID__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Client_ID</targetReference>
+            </connector>
+            <label>Client ID is Null</label>
         </rules>
     </decisions>
     <decisions>
@@ -326,7 +351,7 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Send_Busreq_When_Quote_Created</targetReference>
+                <targetReference>Screen_Success</targetReference>
             </connector>
             <label>Client ID Exist</label>
         </rules>
@@ -415,7 +440,8 @@
     </decisions>
     <description>04/12/2025 : add update opportunity =&gt; assigned underwriting
 09/12/2025 : add get primary partner Id and update to opty
-17/12/2025 : add call IP SFAWT-17</description>
+17/12/2025 : add call IP SFAWT-17
+18/12/2025: move callouts after DML</description>
     <dynamicChoiceSets>
         <name>stampDutyOptions</name>
         <dataType>String</dataType>
@@ -482,7 +508,7 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Get_Client_ID</targetReference>
+            <targetReference>Cek_Status_SFAWT17</targetReference>
         </connector>
         <inputAssignments>
             <field>OpportunityAccessLevel</field>
