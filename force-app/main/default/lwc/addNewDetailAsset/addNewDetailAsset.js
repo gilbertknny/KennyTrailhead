@@ -289,8 +289,14 @@ export default class AddNewPolicyDetailInsured extends LightningElement {
                 
                 };
             }
+            let declareValue = this.formData.Declare_Value__c;
             if (fieldName === 'Indemnity_Type__c') {
+                //remove declare value
                 this.controllingValue = value;
+                if(value != 'First Loss' && value != 'Lost Limit'){
+                    console.log('Indemnity_Type__c Change : ',value);
+                    declareValue = null;
+                }
             }
             if (fieldName === 'Interest_Insured_Detail_Description__c') {
                 this.formData = {
@@ -303,7 +309,8 @@ export default class AddNewPolicyDetailInsured extends LightningElement {
             // update formData
             this.formData = {
                 ...this.formData,
-                [fieldName]: value
+                [fieldName]: value,
+                Declare_Value__c: declareValue
             };
 
             // also update fields so UI re-renders safely
