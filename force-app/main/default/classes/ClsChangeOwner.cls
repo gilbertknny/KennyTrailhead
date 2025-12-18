@@ -12,10 +12,11 @@ public without sharing class ClsChangeOwner {
         User us = [SELECT Id,Profile.Name FROM User WHERE Id=:userId];
         if(us.Profile.Name == 'System Administrator'){ result = true; }
         else{
-            //SPV
+            //SPV & MANAGER
         	List<PermissionSetAssignment> listPSA = [SELECT Id,AssigneeId
                                                  FROM PermissionSetAssignment 
-												WHERE PermissionSet.Name LIKE '%SPV%' 
+												WHERE (PermissionSet.Name LIKE '%SPV%' 
+                                                 OR PermissionSet.Name LIKE '%Manager%')
                                                  AND AssigneeId =:userId
                                                  AND IsActive = TRUE];
             if(listPSA.size()>0){ result = true; }

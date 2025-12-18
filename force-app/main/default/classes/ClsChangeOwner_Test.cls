@@ -13,7 +13,7 @@ public class ClsChangeOwner_Test {
         
         String strRTIndividual = Schema.SObjectType.Account.getRecordTypeInfosByName().get('Insurance').getRecordTypeId();
         Account acc = new Account();
-        acc.Name = 'ACCOUNTA';
+        acc.Name = 'ACC12345';
         acc.RecordTypeId = strRTIndividual;
         acc.OwnerId = userId;
         insert acc;      
@@ -58,7 +58,7 @@ public class ClsChangeOwner_Test {
         insert ts;
         
         Task ts2 = new Task();
-        ts2.Subject = 'TestTest';
+        ts2.Subject = 'Test2';
         ts2.WhoId = ld.Id;
         ts2.Status = 'Open';
         insert ts2;
