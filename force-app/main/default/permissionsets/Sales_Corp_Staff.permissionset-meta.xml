@@ -108,10 +108,10 @@
         <apexClass>Aswata_Lead_Distribution</apexClass>
         <enabled>true</enabled>
     </classAccesses>
-    <!-- <classAccesses>
+    <classAccesses>
         <apexClass>Aswata_Lead_Distribution_Account_Matrix</apexClass>
         <enabled>true</enabled>
-    </classAccesses> -->
+    </classAccesses>
     <classAccesses>
         <apexClass>Aswata_Lead_Distribution_Queueable</apexClass>
         <enabled>true</enabled>
@@ -200,15 +200,15 @@
         <apexClass>ClsInput_Test</apexClass>
         <enabled>true</enabled>
     </classAccesses>
-    <!-- <classAccesses>
+    <classAccesses>
         <apexClass>ClsLookup</apexClass>
         <enabled>true</enabled>
     </classAccesses>
-    <classAccesses>
+    <!-- <classAccesses>
         <apexClass>ClsLookup_Test</apexClass>
         <enabled>true</enabled>
-    </classAccesses>
-    <classAccesses>
+    </classAccesses> -->
+    <!-- <classAccesses>
         <apexClass>ClsNewAsset</apexClass>
         <enabled>true</enabled>
     </classAccesses> -->
@@ -2191,11 +2191,11 @@
         <field>Account.Insurance_ID__c</field>
         <readable>true</readable>
     </fieldPermissions>
-    <!-- <fieldPermissions>
+    <fieldPermissions>
         <editable>true</editable>
         <field>Account.IsExcludedFromRealign</field>
         <readable>true</readable>
-    </fieldPermissions> -->
+    </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
         <field>Account.IsSchedule__c</field>
@@ -2869,11 +2869,6 @@
     <fieldPermissions>
         <editable>true</editable>
         <field>Asset.ExternalIdentifier</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
-        <field>Asset.Facultative_Owner__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -4970,386 +4965,6 @@
         <editable>true</editable>
         <field>InsurancePolicyCoverage.amount_insured__c</field>
         <readable>true</readable>
-    </fieldPermissions>
-        <fieldPermissions>
-        <editable>TRUE</editable>
-        <field>InsurancePolicyCoverage.Agent_Comission_Section_2__c</field>
-        <readable>TRUE</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-            <editable>TRUE</editable>
-            <field>InsurancePolicyCoverage.Agent_Comission_Section_3__c</field>
-            <readable>TRUE</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-            <editable>TRUE</editable>
-            <field>InsurancePolicyCoverage.Agent_Comission_Section_4__c</field>
-            <readable>TRUE</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-            <editable>TRUE</editable>
-            <field>InsurancePolicyCoverage.Banks_Fee_Section_2__c</field>
-            <readable>TRUE</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-            <editable>TRUE</editable>
-            <field>InsurancePolicyCoverage.Banks_Fee_Section_3__c</field>
-            <readable>TRUE</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-            <editable>TRUE</editable>
-            <field>InsurancePolicyCoverage.Banks_Fee_Section_3__c</field>
-            <readable>TRUE</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-            <editable>TRUE</editable>
-            <field>InsurancePolicyCoverage.Broker_Comission_Section_2__c</field>
-            <readable>TRUE</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-            <editable>TRUE</editable>
-            <field>InsurancePolicyCoverage.Broker_Comission_Section_3__c</field>
-            <readable>TRUE</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-            <editable>TRUE</editable>
-            <field>InsurancePolicyCoverage.Broker_Comission_Section_4__c</field>
-            <readable>TRUE</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-            <editable>TRUE</editable>
-            <field>InsurancePolicyCoverage.Deductible_Amount_Section_2__c</field>
-            <readable>TRUE</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-            <editable>TRUE</editable>
-            <field>InsurancePolicyCoverage.Deductible_Amount_Section_3__c</field>
-            <readable>TRUE</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-            <editable>TRUE</editable>
-            <field>InsurancePolicyCoverage.Deductible_Amount_Section_4__c</field>
-            <readable>TRUE</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-            <editable>TRUE</editable>
-            <field>InsurancePolicyCoverage.Deductible_Currency_Section_2__c</field>
-            <readable>TRUE</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-            <editable>TRUE</editable>
-            <field>InsurancePolicyCoverage.Deductible_Currency_Section_3__c</field>
-            <readable>TRUE</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-            <editable>TRUE</editable>
-            <field>InsurancePolicyCoverage.Deductible_PCT_Section_2__c</field>
-            <readable>TRUE</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-            <editable>TRUE</editable>
-            <field>InsurancePolicyCoverage.Deductible_PCT_Section_3__c</field>
-            <readable>TRUE</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-            <editable>TRUE</editable>
-            <field>InsurancePolicyCoverage.Deductible_PCT_Section_3__c</field>
-            <readable>TRUE</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-            <editable>TRUE</editable>
-            <field>InsurancePolicyCoverage.Deductible_Section_2__c</field>
-            <readable>TRUE</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-            <editable>TRUE</editable>
-            <field>InsurancePolicyCoverage.Deductible_Section_3__c</field>
-            <readable>TRUE</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-            <editable>TRUE</editable>
-            <field>InsurancePolicyCoverage.Deductible_Section_4__c</field>
-            <readable>TRUE</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-            <editable>TRUE</editable>
-            <field>InsurancePolicyCoverage.Deductible_Type_Section_2__c</field>
-            <readable>TRUE</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-            <editable>TRUE</editable>
-            <field>InsurancePolicyCoverage.Deductible_Type_Section_3__c</field>
-            <readable>TRUE</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-            <editable>TRUE</editable>
-            <field>InsurancePolicyCoverage.Deductible_Type_Section_4__c</field>
-            <readable>TRUE</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-            <editable>TRUE</editable>
-            <field>InsurancePolicyCoverage.Minimum_Amount_Section_2__c</field>
-            <readable>TRUE</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-            <editable>TRUE</editable>
-            <field>InsurancePolicyCoverage.Minimum_Amount_Section_3__c</field>
-            <readable>TRUE</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-            <editable>TRUE</editable>
-            <field>InsurancePolicyCoverage.Minimum_Amount_Section_4__c</field>
-            <readable>TRUE</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-            <editable>TRUE</editable>
-            <field>InsurancePolicyCoverage.Minimum_Cur_ID_Section_2__c</field>
-            <readable>TRUE</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-            <editable>TRUE</editable>
-            <field>InsurancePolicyCoverage.Minimum_Cur_ID_Section_3__c</field>
-            <readable>TRUE</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-            <editable>TRUE</editable>
-            <field>InsurancePolicyCoverage.Minimum_Cur_ID_Section_4__c</field>
-            <readable>TRUE</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-            <editable>TRUE</editable>
-            <field>InsurancePolicyCoverage.Overdng_Comission_Section_2__c</field>
-            <readable>TRUE</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-            <editable>TRUE</editable>
-            <field>InsurancePolicyCoverage.Overdng_Comission_Section_3__c</field>
-            <readable>TRUE</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-            <editable>TRUE</editable>
-            <field>InsurancePolicyCoverage.Overdng_Comission_Section_4__c</field>
-            <readable>TRUE</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-            <editable>TRUE</editable>
-            <field>InsurancePolicyCoverage.Premi_Amount_Section_2__c</field>
-            <readable>TRUE</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-            <editable>TRUE</editable>
-            <field>InsurancePolicyCoverage.Premi_Amount_Section_3__c</field>
-            <readable>TRUE</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-            <editable>TRUE</editable>
-            <field>InsurancePolicyCoverage.Premi_Amount_Section_4__c</field>
-            <readable>TRUE</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-            <editable>TRUE</editable>
-            <field>InsurancePolicyCoverage.Proposed_Fixed_Amount_Section_2__c</field>
-            <readable>TRUE</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-            <editable>TRUE</editable>
-            <field>InsurancePolicyCoverage.Proposed_Fixed_Amount_Section_3__c</field>
-            <readable>TRUE</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-            <editable>TRUE</editable>
-            <field>InsurancePolicyCoverage.Proposed_Fixed_Amount_Section_4__c</field>
-            <readable>TRUE</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>TRUE</editable>
-        <field>InsurancePolicyCoverage.Agent_Comission_Section_2__c</field>
-        <readable>TRUE</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-            <editable>TRUE</editable>
-            <field>InsurancePolicyCoverage.Agent_Comission_Section_3__c</field>
-            <readable>TRUE</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-            <editable>TRUE</editable>
-            <field>InsurancePolicyCoverage.Agent_Comission_Section_4__c</field>
-            <readable>TRUE</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-            <editable>TRUE</editable>
-            <field>InsurancePolicyCoverage.Banks_Fee_Section_2__c</field>
-            <readable>TRUE</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-            <editable>TRUE</editable>
-            <field>InsurancePolicyCoverage.Banks_Fee_Section_3__c</field>
-            <readable>TRUE</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-            <editable>TRUE</editable>
-            <field>InsurancePolicyCoverage.Banks_Fee_Section_4__c</field>
-            <readable>TRUE</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-            <editable>TRUE</editable>
-            <field>InsurancePolicyCoverage.Broker_Comission_Section_2__c</field>
-            <readable>TRUE</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-            <editable>TRUE</editable>
-            <field>InsurancePolicyCoverage.Broker_Comission_Section_3__c</field>
-            <readable>TRUE</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-            <editable>TRUE</editable>
-            <field>InsurancePolicyCoverage.Broker_Comission_Section_4__c</field>
-            <readable>TRUE</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-            <editable>TRUE</editable>
-            <field>InsurancePolicyCoverage.Deductible_Amount_Section_2__c</field>
-            <readable>TRUE</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-            <editable>TRUE</editable>
-            <field>InsurancePolicyCoverage.Deductible_Amount_Section_3__c</field>
-            <readable>TRUE</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-            <editable>TRUE</editable>
-            <field>InsurancePolicyCoverage.Deductible_Amount_Section_4__c</field>
-            <readable>TRUE</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-            <editable>TRUE</editable>
-            <field>InsurancePolicyCoverage.Deductible_Currency_Section_2__c</field>
-            <readable>TRUE</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-            <editable>TRUE</editable>
-            <field>InsurancePolicyCoverage.Deductible_Currency_Section_3__c</field>
-            <readable>TRUE</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-            <editable>TRUE</editable>
-            <field>InsurancePolicyCoverage.Deductible_PCT_Section_2__c</field>
-            <readable>TRUE</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-            <editable>TRUE</editable>
-            <field>InsurancePolicyCoverage.Deductible_PCT_Section_3__c</field>
-            <readable>TRUE</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-            <editable>TRUE</editable>
-            <field>InsurancePolicyCoverage.Deductible_PCT_Section_4__c</field>
-            <readable>TRUE</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-            <editable>TRUE</editable>
-            <field>InsurancePolicyCoverage.Deductible_Section_2__c</field>
-            <readable>TRUE</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-            <editable>TRUE</editable>
-            <field>InsurancePolicyCoverage.Deductible_Section_3__c</field>
-            <readable>TRUE</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-            <editable>TRUE</editable>
-            <field>InsurancePolicyCoverage.Deductible_Section_4__c</field>
-            <readable>TRUE</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-            <editable>TRUE</editable>
-            <field>InsurancePolicyCoverage.Deductible_Type_Section_2__c</field>
-            <readable>TRUE</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-            <editable>TRUE</editable>
-            <field>InsurancePolicyCoverage.Deductible_Type_Section_3__c</field>
-            <readable>TRUE</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-            <editable>TRUE</editable>
-            <field>InsurancePolicyCoverage.Deductible_Type_Section_4__c</field>
-            <readable>TRUE</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-            <editable>TRUE</editable>
-            <field>InsurancePolicyCoverage.Minimum_Amount_Section_2__c</field>
-            <readable>TRUE</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-            <editable>TRUE</editable>
-            <field>InsurancePolicyCoverage.Minimum_Amount_Section_3__c</field>
-            <readable>TRUE</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-            <editable>TRUE</editable>
-            <field>InsurancePolicyCoverage.Minimum_Amount_Section_4__c</field>
-            <readable>TRUE</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-            <editable>TRUE</editable>
-            <field>InsurancePolicyCoverage.Minimum_Cur_ID_Section_2__c</field>
-            <readable>TRUE</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-            <editable>TRUE</editable>
-            <field>InsurancePolicyCoverage.Minimum_Cur_ID_Section_3__c</field>
-            <readable>TRUE</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-            <editable>TRUE</editable>
-            <field>InsurancePolicyCoverage.Minimum_Cur_ID_Section_4__c</field>
-            <readable>TRUE</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-            <editable>TRUE</editable>
-            <field>InsurancePolicyCoverage.Overdng_Comission_Section_2__c</field>
-            <readable>TRUE</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-            <editable>TRUE</editable>
-            <field>InsurancePolicyCoverage.Overdng_Comission_Section_3__c</field>
-            <readable>TRUE</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-            <editable>TRUE</editable>
-            <field>InsurancePolicyCoverage.Overdng_Comission_Section_4__c</field>
-            <readable>TRUE</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-            <editable>TRUE</editable>
-            <field>InsurancePolicyCoverage.Premi_Amount_Section_2__c</field>
-            <readable>TRUE</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-            <editable>TRUE</editable>
-            <field>InsurancePolicyCoverage.Premi_Amount_Section_3__c</field>
-            <readable>TRUE</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-            <editable>TRUE</editable>
-            <field>InsurancePolicyCoverage.Premi_Amount_Section_4__c</field>
-            <readable>TRUE</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-            <editable>TRUE</editable>
-            <field>InsurancePolicyCoverage.Proposed_Fixed_Amount_Section_2__c</field>
-            <readable>TRUE</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-            <editable>TRUE</editable>
-            <field>InsurancePolicyCoverage.Proposed_Fixed_Amount_Section_3__c</field>
-            <readable>TRUE</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-            <editable>true</editable>
-            <field>InsurancePolicyCoverage.Proposed_Fixed_Amount_Section_4__c</field>
-            <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
@@ -7860,11 +7475,6 @@
         <editable>true</editable>
         <field>Quote.Status</field>
         <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>TRUE</editable>
-        <field>Quote.Stage__c</field>
-        <readable>TRUE</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
