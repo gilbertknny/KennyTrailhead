@@ -170,6 +170,7 @@ export default class Input extends LightningElement {
     }
 
     handleChange(event) {
+        //console.log('handleChange');
         let value;
         if (event.target.type === 'checkbox' || event.target.type === 'checkbox-button' || event.target.type === 'toggle') {
             value = event.target.checked;

@@ -673,7 +673,7 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
     getShowRealisasi(){
         this.realisasiId1 = undefined;
         this.showFieldRealisasi1 = false;
-        if(this.opportunityTypeId == 'NB' && this.cob1 == '101' && this.contractTypeId != undefined && this.accountId != undefined){
+        if(this.opportunityTypeId == 'Declaration' && this.cob1 == '101' && this.contractTypeId != undefined && this.accountId != undefined){
             this.showFieldRealisasi1 = true;
             this.filterRealisasi1 = {
                 criteria : [
@@ -2042,7 +2042,8 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
             records : records,
             record : record,
             recordid : recordid,
-            type : 'realisasi'
+            type : 'realisasi',
+            contracttypeid : this.contractTypeId
         });
         console.log('result:'+JSON.stringify(result));
         if(result != 'cancel' && result != undefined){
@@ -2258,7 +2259,8 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
             records : records,
             record : record,
             recordid : recordid,
-            type : 'mou'
+            type : 'mou',
+            contracttypeid : this.contractTypeId
         });
         console.log('result:'+JSON.stringify(result));
         if(result != 'cancel' && result != undefined){

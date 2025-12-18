@@ -6,6 +6,7 @@
         </template>
         <div class="slds-p-around_medium">
             <div class="slds-grid slds-wrap slds-gutters_small">
+                <!-- SECTION-->
                 <div class="slds-col slds-size_1-of-2">
                     <lightning-combobox 
                         data-name="section"
@@ -17,6 +18,7 @@
                         required>
                     </lightning-combobox>
                 </div>
+                <!-- CATEGORY-->
                 <div class="slds-col slds-size_1-of-2">
                     <lightning-combobox 
                         data-name="category"
@@ -27,6 +29,7 @@
                         required>
                     </lightning-combobox>
                 </div>
+                <!-- CURRENCY-->
                 <div class="slds-col slds-size_1-of-2">
                     <lightning-combobox 
                         data-name="currency"
@@ -37,14 +40,32 @@
                         required>
                     </lightning-combobox>
                 </div> 
+                <!-- SUM INSURED-->
                 <div class="slds-col slds-size_1-of-2">
                     <lightning-input data-name="sumInsured" value={sumInsured} type="number" label="Sum Insured" onchange={handleChange} required></lightning-input>
                 </div>
+                <!-- SUM INSURED IDR-->
                 <div class="slds-col slds-size_1-of-2">
                     <template if:true={showIDR}>
                         <lightning-input type="number" label="Sum Insured IDR" value={sumInsuredIDR} disabled></lightning-input>
                     </template>
                 </div>   
+                <!-- SECTION DETAIL ASSET-->
+                <template if:true={isShowSection}>
+                    <lightning-accordion allow-multiple-sections-open style="width:100%;">
+                        <lightning-accordion-section name={sectionId} label={sectionLabel}>
+                            <div class="slds-grid slds-wrap slds-gutters_small">
+                                <template if:true={data} for:each={data} for:item="item" for:index="index">
+                                    <template if:true={item.isshow}>
+                                        <div key={item.name} class="slds-col slds-size_1-of-2">
+                                            <c-input key={item.name} map-input={mapInputDetail} object-api-name={item.dataobject} field-name={item.datafield} field-type={item.datatype} field-label={item.datalabel} field-value={item.value} data-index={index} onchange={handleInputDetail}></c-input>
+                                        </div>
+                                    </template>
+                                </template>
+                            </div>
+                        </lightning-accordion-section>
+                    </lightning-accordion>
+                </template>
             </div>    
         </div>
     </lightning-modal-body>
