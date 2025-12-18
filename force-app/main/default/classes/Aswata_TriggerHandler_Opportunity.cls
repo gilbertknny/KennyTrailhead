@@ -6,12 +6,12 @@
  
 public class Aswata_TriggerHandler_Opportunity extends TriggerHandler {
     public override void beforeUpdate(){ 
-        for(Opportunity data : (List<Opportunity>) Trigger.new) {
+        /*for(Opportunity data : (List<Opportunity>) Trigger.new) {
             if(!System.isFuture() && !System.isBatch()) assignPICId(data.Id);
-        }
+        }*/
     } 
     
-    @future
+    /*@future
     public static void assignPICId(String recordId){
         ClsPolicyDistribution.data result = ClsPolicyDistribution.getUserIdFilter(recordId);
         Opportunity opp = new Opportunity();
@@ -19,5 +19,5 @@ public class Aswata_TriggerHandler_Opportunity extends TriggerHandler {
         opp.Policy_Distribution__c = result.Id; 
         if(result.userid != null){ opp.User_PIC__c = result.userid; }
         if(!Test.isRunningTest()){ update opp; }
-    }
+    }*/
 }
