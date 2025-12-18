@@ -1,9 +1,37 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
-	<types>	
-		<members>InsurancePolicyCoverage.Banks_Fee_Section_4__c</members>
-		<members>InsurancePolicyCoverage.Deductible_PCT_Section_4__c</members>
+	<types>
+		<members>Aswata_TriggerHandler_Opportunity</members>
+		<members>Aswata_TriggerHandler_Opportunity_Test</members>
+		<members>ClsPolicyDistribution</members>
+		<members>ClsPolicyDistribution_Test</members>
+		<members>TriggerHandler_MasterData</members>
+		<members>TriggerHandler_MasterData_Test</members>
+		<name>ApexClass</name>
+	</types>
+	<types>
+		<members>Aswata_Trigger_Opportunity</members>
+		<members>Trigger_MasterData</members>
+		<name>ApexTrigger</name>
+	</types>
+	<types>
+		<members>Master_Data__c.Product_Type__c</members>
+		<members>Opportunity.Policy_Distribution__c</members>
 		<name>CustomField</name>
+	</types>
+	<types>
+		<members>Master_Data__c-Policy Distribution</members>
+		<name>Layout</name>
+	</types>
+	<types>
+		<members>Master_Data__c.Filter_Policy_Distribution</members>
+		<members>Master_Data__c.Policy_Distribution_Approved</members>
+		<members>Master_Data__c.Policy_Distribution_Draft</members>
+		<name>ListView</name>
+	</types>
+	<types>
+		<members>Master_Data__c.Policy_Distribution</members>
+		<name>RecordType</name>
 	</types>
 	<version>65.0</version>
 </Package>
