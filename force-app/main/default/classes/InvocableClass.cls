@@ -27,7 +27,8 @@ public without sharing class InvocableClass {
     }
     /*** @description Invocablevoid @param iv */
     public static void batchRiskAssetCoverage(inputVariable iv){
-        String query = 'SELECT Id from Asset where Opportunity__c = '+'\''+iv.oldoptyId+'\' and Recordtype.Name = '+'\'Risk'+'\' and Lintaswata_Sync__c = '+iv.lintaswataSync;
+        String query = 'SELECT Id from Asset where Opportunity__c = '+'\''+iv.oldoptyId+'\' and Recordtype.Name = '+'\'Risk'+'\'';
+        query = iv.lintaswataSync == null ? query : query + ' and Lintaswata_Sync__c = '+iv.lintaswataSync;
         BatchRiskAssetCoverage batch = new BatchRiskAssetCoverage(query,iv.newoptyId,iv.accountId);
         Database.executeBatch(batch,1);
     }
