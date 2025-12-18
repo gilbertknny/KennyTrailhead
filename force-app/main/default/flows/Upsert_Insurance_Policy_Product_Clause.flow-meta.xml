@@ -123,6 +123,72 @@
             <targetReference>Loop</targetReference>
         </connector>
     </assignments>
+    <assignments>
+        <name>Assignment_UniqueId</name>
+        <label>Assignment UniqueId</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>IsUnique</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Assignment</targetReference>
+        </connector>
+    </assignments>
+    <decisions>
+        <name>Check_IsUnique</name>
+        <label>Check IsUnique</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Insert_Clause</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>IsUnique_is_true</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>IsUnique</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Upsert_Clause</targetReference>
+            </connector>
+            <label>IsUnique is true</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_UniqueId</name>
+        <label>Check UniqueId</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Assignment</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>UniqueId_Found</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop.uniqueid</leftValueReference>
+                <operator>IsBlank</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assignment_UniqueId</targetReference>
+            </connector>
+            <label>UniqueId Found</label>
+        </rules>
+    </decisions>
     <description>CreatedMethod removed</description>
     <environments>Default</environments>
     <interviewLabel>Upsert Insurance Policy Product Clause {!$Flow.CurrentDateTime}</interviewLabel>
@@ -135,10 +201,10 @@
         <collectionReference>ListClause</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
-            <targetReference>Assignment</targetReference>
+            <targetReference>Check_UniqueId</targetReference>
         </nextValueConnector>
         <noMoreValuesConnector>
-            <targetReference>Upsert_Clause</targetReference>
+            <targetReference>Check_IsUnique</targetReference>
         </noMoreValuesConnector>
     </loops>
     <processMetadataValues>
@@ -193,6 +259,17 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordCreates>
     <recordCreates>
+        <name>Insert_Clause</name>
+        <label>Insert Clause</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Error_Log</targetReference>
+        </faultConnector>
+        <inputReference>LClauseUpsert</inputReference>
+    </recordCreates>
+    <recordCreates>
         <name>Upsert_Clause</name>
         <label>Upsert Clause</label>
         <locationX>0</locationX>
@@ -219,6 +296,16 @@
         <isInput>false</isInput>
         <isOutput>false</isOutput>
         <objectType>InsurancePolicyProductClause</objectType>
+    </variables>
+    <variables>
+        <name>IsUnique</name>
+        <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <booleanValue>false</booleanValue>
+        </value>
     </variables>
     <variables>
         <name>LClauseUpsert</name>
