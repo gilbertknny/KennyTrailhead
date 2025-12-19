@@ -40,6 +40,11 @@ public class ClsPolicyDistribution_Test {
         md2.showData__c = '[{"param1":"BSN_ID__c","param2":"COB__c"}]';
         md2.RecordTypeId = strRT2;
         insert md2;
+        
+        Quote qu = new Quote();
+        qu.OpportunityId = opp.Id;
+        qu.Name = 'Test';
+        insert qu;
     }
     
     @IsTest
@@ -48,8 +53,12 @@ public class ClsPolicyDistribution_Test {
         System.runAs(u){
             Test.startTest();
             Opportunity opp = [SELECT Id FROM Opportunity LIMIT 1];
+            Quote qu = [SELECT Id FROM Quote LIMIT 1];
             ClsPolicyDistribution.data data = ClsPolicyDistribution.getUserIdFilter(opp.Id);
             system.assertNotEquals(data.userid,null);
+            List<ID> ids = new List<ID>();
+            ids.add(qu.Id);
+            ClsPolicyDistribution.getUserIds(ids);
             Test.stopTest();
         }
     }

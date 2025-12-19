@@ -4,10 +4,10 @@
         <application>Aswata_Sales_App</application>
         <visible>true</visible>
     </applicationVisibilities>
-    <classAccesses>
+    <!-- <classAccesses>
         <apexClass>AddFacultative_Controller</apexClass>
         <enabled>true</enabled>
-    </classAccesses>
+    </classAccesses> -->
     <classAccesses>
         <apexClass>Aswata_AddFacultative_Controller</apexClass>
         <enabled>true</enabled>
@@ -24,10 +24,10 @@
         <apexClass>Aswata_Add_New_Asset_Controller_Test</apexClass>
         <enabled>true</enabled>
     </classAccesses>
-    <classAccesses>
+    <!-- <classAccesses>
         <apexClass>Aswata_Add_New_Coverage</apexClass>
         <enabled>true</enabled>
-    </classAccesses>
+    </classAccesses> -->
     <classAccesses>
         <apexClass>Aswata_Add_New_CoverageRate</apexClass>
         <enabled>true</enabled>
@@ -80,10 +80,10 @@
         <apexClass>Aswata_Coverage_Data_Wrapper</apexClass>
         <enabled>true</enabled>
     </classAccesses>
-    <classAccesses>
+    <!-- <classAccesses>
         <apexClass>Aswata_DynamicsUpload_Controller</apexClass>
         <enabled>true</enabled>
-    </classAccesses>
+    </classAccesses> -->
     <classAccesses>
         <apexClass>Aswata_EditLeadInformation_Controller</apexClass>
         <enabled>true</enabled>
@@ -172,10 +172,10 @@
         <apexClass>Aswata_TriggerHandler_Asset_Test</apexClass>
         <enabled>true</enabled>
     </classAccesses>
-    <classAccesses>
+    <!-- <classAccesses>
         <apexClass>Aswata_TriggerHandler_Coverage</apexClass>
         <enabled>true</enabled>
-    </classAccesses>
+    </classAccesses> -->
     <classAccesses>
         <apexClass>Aswata_TriggerHandler_Lead</apexClass>
         <enabled>true</enabled>
@@ -208,14 +208,14 @@
         <apexClass>ClsLookup</apexClass>
         <enabled>true</enabled>
     </classAccesses>
-    <classAccesses>
+    <!-- <classAccesses>
         <apexClass>ClsLookup_Test</apexClass>
         <enabled>true</enabled>
-    </classAccesses>
-    <classAccesses>
+    </classAccesses> -->
+    <!-- <classAccesses>
         <apexClass>ClsNewAsset</apexClass>
         <enabled>true</enabled>
-    </classAccesses>
+    </classAccesses> -->
     <classAccesses>
         <apexClass>ClsNewRequest</apexClass>
         <enabled>true</enabled>
@@ -2348,11 +2348,11 @@
         <field>Account.Office_Type__c</field>
         <readable>true</readable>
     </fieldPermissions>
-    <fieldPermissions>
+    <!-- <fieldPermissions>
         <editable>true</editable>
         <field>Account.OperatingHoursId</field>
         <readable>true</readable>
-    </fieldPermissions>
+    </fieldPermissions> -->
     <fieldPermissions>
         <editable>true</editable>
         <field>Account.Original_Lead_ID__c</field>
@@ -7738,10 +7738,10 @@
         <field>Transaction_Data__c.Year__c</field>
         <readable>true</readable>
     </fieldPermissions>
-    <flowAccesses>
+    <!-- <flowAccesses>
         <enabled>true</enabled>
         <flow>Account_Change_Owner_Button</flow>
-    </flowAccesses>
+    </flowAccesses> -->
     <hasActivationRequired>false</hasActivationRequired>
     <label>Sales Retail Supervisor</label>
     <license>Salesforce</license>
