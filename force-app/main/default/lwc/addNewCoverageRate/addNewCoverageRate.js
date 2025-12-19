@@ -100,6 +100,17 @@ export default class AddNewCoverageRate extends LightningElement {
         this.hasSection4 = sectionList.includes(4);
         console.log('this.hasSection',this.hasSection1);
     }
+    formatPeriodRate(value) {
+        if (value < 1) {
+            return 1;
+        }
+        let decimalPart = value % 1;
+        if (decimalPart > 0.5) {
+            return Math.ceil(value);
+        } else {
+            return Math.floor(value);
+        }
+    }
     @wire(getCoverageFields, { rtId: '$recordTypeIdCoverage', cob: '$bsnId',riskId:'$riskId'})
     wiredCoverages({ error, data }) {
         if (data) {
@@ -120,7 +131,7 @@ export default class AddNewCoverageRate extends LightningElement {
                 amountInsurance: this.amountInsurance,
                 isDisabledSelection: false,
                 rowType: 'BREAKDOWN_RATE',
-                covTahun: this.buttonClickedValue,
+                covTahun: this.formatPeriodRate(this.buttonClickedValue),
                 isSelected: false,
                 isDisabledInput: true,
                 isSingleRate: false,
