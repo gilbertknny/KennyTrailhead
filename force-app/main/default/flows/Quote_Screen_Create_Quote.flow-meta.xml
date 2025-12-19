@@ -1,40 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <actionCalls>
-        <name>Get_Client_ID</name>
-        <label>Get Client ID</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <actionName>VlocityMappingFlowBridge</actionName>
-        <actionType>apex</actionType>
-        <connector>
-            <targetReference>Send_Busreq_When_Quote_Created</targetReference>
-        </connector>
-        <flowTransactionModel>Automatic</flowTransactionModel>
-        <inputParameters>
-            <name>ipName</name>
-            <value>
-                <stringValue>SFAWT17_Outbound</stringValue>
-            </value>
-        </inputParameters>
-        <inputParameters>
-            <name>jsonInput</name>
-            <value>
-                <elementReference>jsonSFAWT01</elementReference>
-            </value>
-        </inputParameters>
-        <nameSegment>VlocityMappingFlowBridge</nameSegment>
-        <offset>0</offset>
-        <outputParameters>
-            <assignToReference>errorMessageSFAWT17</assignToReference>
-            <name>errorMessage</name>
-        </outputParameters>
-        <outputParameters>
-            <assignToReference>jsonResponseSFAWT17</assignToReference>
-            <name>resultJson</name>
-        </outputParameters>
-    </actionCalls>
-    <actionCalls>
         <name>Notif</name>
         <label>Notif</label>
         <locationX>0</locationX>
@@ -116,7 +82,7 @@
         <actionName>VlocityMappingFlowBridge</actionName>
         <actionType>apex</actionType>
         <connector>
-            <targetReference>Check_Stage_Opportunity</targetReference>
+            <targetReference>Create_Records</targetReference>
         </connector>
         <flowTransactionModel>Automatic</flowTransactionModel>
         <inputParameters>
@@ -232,31 +198,6 @@
         </value>
     </customProperties>
     <decisions>
-        <name>Cek_Status_SFAWT17</name>
-        <label>Cek Status SFAWT17</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <defaultConnector>
-            <targetReference>showErrorMessageSFAWT17</targetReference>
-        </defaultConnector>
-        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
-        <rules>
-            <name>Status_Success</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>jsonResponseSFAWT17</leftValueReference>
-                <operator>Contains</operator>
-                <rightValue>
-                    <stringValue>200</stringValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Get_Account_After_API_Call</targetReference>
-            </connector>
-            <label>Status Success</label>
-        </rules>
-    </decisions>
-    <decisions>
         <name>Cek_Update</name>
         <label>Cek Update</label>
         <locationX>0</locationX>
@@ -301,34 +242,9 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Check_Client_ID</targetReference>
+                <targetReference>Check_Stage_Opportunity</targetReference>
             </connector>
             <label>Check Passed KYC</label>
-        </rules>
-    </decisions>
-    <decisions>
-        <name>Check_Client_ID</name>
-        <label>Check Client ID</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <defaultConnector>
-            <targetReference>Send_Busreq_When_Quote_Created</targetReference>
-        </defaultConnector>
-        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
-        <rules>
-            <name>Client_ID_is_Null</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>Get_Account.Client_ID__c</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>true</booleanValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Get_Client_ID</targetReference>
-            </connector>
-            <label>Client ID is Null</label>
         </rules>
     </decisions>
     <decisions>
@@ -508,7 +424,7 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Cek_Status_SFAWT17</targetReference>
+            <targetReference>Get_Account_After_API_Call</targetReference>
         </connector>
         <inputAssignments>
             <field>OpportunityAccessLevel</field>
@@ -979,34 +895,7 @@
         <allowPause>false</allowPause>
         <fields>
             <name>KCYDisplay</name>
-            <fieldText>&lt;p&gt;Anda belum melakukan KYC untuk customer:&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;strong&gt;{!Get_Account.Name}&lt;/strong&gt;&lt;/p&gt;</fieldText>
-            <fieldType>DisplayText</fieldType>
-            <styleProperties>
-                <verticalAlignment>
-                    <stringValue>top</stringValue>
-                </verticalAlignment>
-                <width>
-                    <stringValue>12</stringValue>
-                </width>
-            </styleProperties>
-        </fields>
-        <showFooter>true</showFooter>
-        <showHeader>true</showHeader>
-    </screens>
-    <screens>
-        <name>showErrorMessageSFAWT17</name>
-        <label>showErrorMessageSFAWT17</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <allowBack>true</allowBack>
-        <allowFinish>true</allowFinish>
-        <allowPause>true</allowPause>
-        <connector>
-            <targetReference>Roll_Back_In_Error</targetReference>
-        </connector>
-        <fields>
-            <name>errorMessageDisplay</name>
-            <fieldText>&lt;p&gt;An Error Occured During Client ID Processing, please contact administrator system for detail !&lt;/p&gt;</fieldText>
+            <fieldText>&lt;p&gt;Anda belum melakukan KYC untuk customer:&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;/{!Get_Account.Id}&quot; rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot;&gt;{!Get_Account.Name}&lt;/a&gt;&lt;/p&gt;</fieldText>
             <fieldType>DisplayText</fieldType>
             <styleProperties>
                 <verticalAlignment>
@@ -1068,7 +957,7 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Create_Records</targetReference>
+            <targetReference>Send_Busreq_When_Quote_Created</targetReference>
         </connector>
         <dataType>SObject</dataType>
         <isCollection>false</isCollection>
