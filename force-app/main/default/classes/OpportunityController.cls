@@ -366,7 +366,7 @@ public with sharing class OpportunityController {
     public static void saveInsuranceDetails(InsurancePeriodWrapper wrapper) {
         Decimal periodRateFinal = wrapper.periodRate;
         Integer numberOfYear = wrapper.numberOfYear;
-        if (wrapper.periodType == '3') { // 3 = long term
+        if (wrapper.periodType == '3' || wrapper.premiumCalculation == '2' || wrapper.premiumCalculation == '3' || wrapper.premiumCalculation == '6') { // 3 = long term 201, premiumCalc 2,3,6 MV 201
             if (wrapper.totalMonth > 0 && wrapper.periodRate > 0) { // long term & have extra month (pro rata rate)
                 periodRateFinal = periodRateFinal + wrapper.totalYears;
             } else { // long term with annual years / no extra month
@@ -563,6 +563,25 @@ public with sharing class OpportunityController {
                 result.message = 'Maximum 100 riskIds allowed per transaction';
                 return result;
             }
+            
+            // GET RECORDTYPE ID FOR FACULTATIVE_SHARE
+            Id facultativeShareRecordTypeId;
+            try {
+                facultativeShareRecordTypeId = Schema.SObjectType.Facultative_Share__c
+                    .getRecordTypeInfosByDeveloperName()
+                    .get('Facultative_Share')
+                    .getRecordTypeId();
+                
+                if (facultativeShareRecordTypeId == null) {
+                    result.isSuccess = false;
+                    result.message = 'RecordType "Facultative_Share" not found for Facultative_Share__c object';
+                    return result;
+                }
+            } catch (Exception e) {
+                result.isSuccess = false;
+                result.message = 'Error getting RecordType: ' + e.getMessage();
+                return result;
+            }
 
             // Validate Accounts exist
             List<Account> accounts = [
@@ -672,7 +691,7 @@ public with sharing class OpportunityController {
                 
                 // Create one Facultative Share record for each original riskId
                 for (Id riskId : req.riskId) {
-                    Facultative_Share__c facultativeShare = createFacultativeShare(riskId, opp.Id, req);
+                    Facultative_Share__c facultativeShare = createFacultativeShare(riskId, opp.Id, req, facultativeShareRecordTypeId);
                     facultativeSharesToInsert.add(facultativeShare);
                 }
             }
@@ -788,12 +807,13 @@ public with sharing class OpportunityController {
      * @param req The opportunity request data
      * @return Facultative_Share__c record
      */
-    private static Facultative_Share__c createFacultativeShare(Id riskId, Id opportunityId, OpportunityRequest req) {
+    private static Facultative_Share__c createFacultativeShare(Id riskId, Id opportunityId, OpportunityRequest req, Id recordTypeId) {
         Facultative_Share__c fs = new Facultative_Share__c();
         
         // Set required fields
         fs.Facultative_Opportunity__c = opportunityId;
         fs.Origin_Risk__c = riskId;
+        fs.RecordTypeId = recordTypeId; // SET RECORDTYPE ID
         
         // Set share and percentage fields with null safety
         fs.Commission__c = String.isNotBlank(req.commission) ? Decimal.valueOf(req.commission) : null;
