@@ -2,7 +2,7 @@
 public class ClsNewRequest_Test {
 	@TestSetup
     static void setTestData(){
-        Product2 pd = new Product2();
+        Product2 pd = new Product2(); 
         pd.Name = 'Test';
         pd.ProductCode = '123';
         insert pd;
@@ -91,7 +91,17 @@ public class ClsNewRequest_Test {
         md6.RecordTypeId = RT5;
         md6.Name = 'Test';
         md6.BSN_Id__c = '201';
+        md6.Section__c = 1;
         insert md6;
+        
+        String RT6 = Schema.SObjectType.Master_Data__c.getRecordTypeInfosByName().get('Detail Asset').getRecordTypeId();
+        Master_Data__c md7 = new Master_Data__c();
+        md7.RecordTypeId = RT6;
+        md7.Name = 'Test';
+        md7.BSN_Id__c = '201';
+        md7.Section__c = 1;
+        md7.Status__c = 'Active';
+        insert md7;
         
         ContentVersion contentVersion = new ContentVersion(
             Title          = 'a picture',
@@ -114,7 +124,7 @@ public class ClsNewRequest_Test {
         List<Account> listacc = ClsNewRequest.searchQQAccounts('ACC');
         String cob = '201';
         String description = 'test';
-        List<ClsNewRequest.data> listdata = ClsNewRequest.getMasterData(cob,description,null);
+        List<ClsNewRequest.data> listdata = ClsNewRequest.getMasterData(cob,description,'1');
         system.assertEquals(listdata.size(),1);
         ContentDocument cd = [SELECT Id FROM ContentDocument LIMIT 1];
         Product2 pd = [SELECT Id,ProductCode FROM Product2 LIMIT 1];
@@ -129,7 +139,7 @@ public class ClsNewRequest_Test {
         Map<String, String> mapAssetSection = ClsNewRequest.getAssetSection(cob);
         List<String> keysAssetSection = new List<String>(mapAssetSection.keySet());
         ClsNewRequest.getAssetCategory(cob,null);
-        ClsNewRequest.getMasterDataSection(cob,null);
+        ClsNewRequest.getMasterDataSection(cob,'1');
         ClsNewRequest.getCurrency();
         ClsNewRequest.getContract(acc.Id);
         ClsNewRequest.getAssetSectionMOU(null,'mou');
@@ -148,6 +158,12 @@ public class ClsNewRequest_Test {
         ClsNewRequest.createCoverage(mapObj,ipc);
         mapObj.put('section',4);
         ClsNewRequest.createCoverage(mapObj,ipc);
+        
+        Master_Data__c mdSection = [SELECT Id FROM Master_Data__c WHERE Name = 'Test' AND RecordType.Name = 'Asset Section' LIMIT 1];
+        ClsNewRequest.getMasterDataDetailAsset('1',mdSection.Id);
+        List<String> listSectionids = new List<String>();
+        listSectionids.add(mdSection.Id);
+        ClsNewRequest.getSectionDetail(listSectionids);
 
         List<String> listdata1 = new List<String>();
         listdata1.add('Name');
@@ -171,6 +187,7 @@ public class ClsNewRequest_Test {
         data += ',"insuredId":"'+acc.Id+'"';
         data += ',"qqmember":[{"Id":"'+acc.Id+'"}]';
         data += ',"risk":"multiple"';
+        data += ',"cob":"201"';
         data += ',"riskName":"Test"';
         data += ',"policywording":"Test"';
         data += ',"insuranceperiod":"1"';
@@ -184,6 +201,8 @@ public class ClsNewRequest_Test {
         data += ',"shortperiod":""';
         data += ',"percentageperiod":"1"';
         data += ',"rateperiod":1';
+        data += ',"type":"Standard"';
+        data += ',"contracttype":"1"';
         data += ',"risksituation1":' + JSON.serialize(situation1);
         data += ',"risk1":' + JSON.serialize(situation1);
         data += ',"producttype":"'+pd.Id+'"';
@@ -198,6 +217,7 @@ public class ClsNewRequest_Test {
         data += ',"fileclosing1":[{"documentId":"'+cd.Id+'","name":"Test"}]';
         data += ',"filesurvey1":[{"documentId":"'+cd.Id+'","name":"Test"}]';
         data += ',"riskName2":"Test"';
+        data += ',"cob2":"201"';
         data += ',"policywording2":"Test"';
         data += ',"insuranceperiod2":"1"';
         data += ',"startdateperiod2":"2025-01-01"';
@@ -210,6 +230,8 @@ public class ClsNewRequest_Test {
         data += ',"shortperiod2":""';
         data += ',"percentageperiod2":"1"';
         data += ',"rateperiod2":1';
+        data += ',"type2":"Standard"';
+        data += ',"contracttype2":"1"';
         data += ',"risksituation2":' + JSON.serialize(situation1);
         data += ',"producttype2":"'+pd.Id+'"';
         data += ',"assetsection2":"'+keysAssetSection.get(0)+'"';
@@ -221,16 +243,16 @@ public class ClsNewRequest_Test {
         data += ',"filequote2":[{"documentId":"'+cd.Id+'","name":"Test"}]';
         data += ',"fileclosing2":[{"documentId":"'+cd.Id+'","name":"Test"}]';
         data += ',"filesurvey2":[{"documentId":"'+cd.Id+'","name":"Test"}]';
-        
         data += '}';
         ClsNewRequest.getValidateDouble(data);
         string result = ClsNewRequest.saveData(data);
         system.debug('result:'+result);
         system.assertNotEquals(result,null);
-        ClsNewRequest.saveDataMOU(data);
+        String data2 = data.replaceAll('Standard','MOU');
+        string result2 = ClsNewRequest.saveData(data2);
         ClsNewRequest.deleteFile(cd.Id);
-        ClsNewRequest.getOpportunity(result);
-        ClsNewRequest.getSectionAmount(result,'Material Damage');
+        ClsNewRequest.getOpportunity(result); 
+        ClsNewRequest.getSectionAmount(result,'Material Damage',null);
     }
     
     @IsTest

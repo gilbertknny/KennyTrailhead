@@ -6,12 +6,14 @@ import getSection from '@salesforce/apex/ClsNewRequest.getAssetSectionMOU';
 import getCategory from '@salesforce/apex/ClsNewRequest.getAssetCategoryMOU';
 import getCurrency from '@salesforce/apex/ClsNewRequest.getCurrency';
 import getSectionAmount from '@salesforce/apex/ClsNewRequest.getSectionAmount';
+import getMasterDataDetailAsset from '@salesforce/apex/ClsNewRequest.getMasterDataDetailAsset';
 
 export default class LwcNewRequestAsset extends LightningModal {
     @api records;
     @api record;
     @api recordid;
     @api type;
+    @api contracttypeid;
     @track labelAdd = 'Add';
     @track isLoading;
     @track section = [];
@@ -20,6 +22,7 @@ export default class LwcNewRequestAsset extends LightningModal {
     @track disabledSection;
     @track sectionId;
     @track sectionName;
+    @track sectionLabel;
     @track categoryId;
     @track categoryName;
     @track currencyId;
@@ -28,7 +31,10 @@ export default class LwcNewRequestAsset extends LightningModal {
     @track sumInsuredIDR;
     @track showIDR;
     @track rate;
-    @track limitAmount;
+    @track balanceAmount;
+    @track data;
+    @track isShowSection;
+    @track mapInputDetail = new Map();
 
     connectedCallback() {
         //console.log('records:'+JSON.stringify(this.records));
@@ -42,6 +48,7 @@ export default class LwcNewRequestAsset extends LightningModal {
             this.sectionId = this.record.sectionId;
             this.sectionName = this.record.sectionName;
             if(this.sectionId != undefined) this.getPicklistCategory();
+            this.sectionLabel = 'Section ' + this.sectionName; 
             this.categoryId = this.record.categoryId;
             this.categoryName = this.record.categoryName;
             this.currencyId = this.record.currencyId;
@@ -50,6 +57,9 @@ export default class LwcNewRequestAsset extends LightningModal {
             this.sumInsuredIDR = this.record.sumInsuredIDR;
             this.rate = this.record.rate;
             this.showIDR = this.record.showIDR;
+            this.data = this.record.detail;
+            this.isShowSection = true;
+            this.balanceAmount = this.record.balanceAmount;
         }
     }
 
@@ -94,6 +104,11 @@ export default class LwcNewRequestAsset extends LightningModal {
             let data = [];
             for (var key in result) {
                 data.push({label:result[key], value:key});
+                if(result[key] == 'IDR' && this.currencyId == undefined){
+                    this.currencyId = key;
+                    this.currencyName = result[key];
+                    this.rate = 1;
+                }
             }
             this.currency = data;
         })
@@ -116,16 +131,42 @@ export default class LwcNewRequestAsset extends LightningModal {
     }
 
     getDataSectionAmount(){
+        let contractType = this.contracttypeid;
         getSectionAmount({
             recordid : this.recordid,
-            sectionid : this.sectionId
+            sectionid : this.sectionId,
+            contracttypeid : contractType
         })
         .then(result => {
-            this.limitAmount = result;
+            this.balanceAmount = result;
         })
         .catch(error => {
             console.log('error-getDataSectionAmount:'+ error.message);
         });
+    }
+
+    async getDataDetailAsset(){
+        this.isLoading = true;
+        await getMasterDataDetailAsset({
+            contracttype : this.contracttypeid,
+            sectionId : this.sectionId
+        })
+        .then(result => {
+            this.isLoading = false;
+            this.isShowSection = true;
+            this.sectionLabel = 'Section '+ this.sectionName;
+            for(let i=0;i<result.length;i++){
+                result[i].isshow = true;
+                if(result[i].datashow != undefined){
+                    result[i].isshow = false;
+                }
+            }
+            this.data = result;
+        })
+        .catch(error => {
+            this.isLoading = false;
+            console.log('error-getDataDetailAsset:'+ error.message);
+        }); 
     }
 
     handleChange(e){
@@ -139,6 +180,9 @@ export default class LwcNewRequestAsset extends LightningModal {
             this.categoryName = undefined;
             if(this.type == 'realisasi'){
                 this.getDataSectionAmount();
+            }
+            if(this.sectionId != undefined){
+                this.getDataDetailAsset();
             }
         }else if(name == 'category'){
             this.categoryId = value;
@@ -168,6 +212,25 @@ export default class LwcNewRequestAsset extends LightningModal {
     }
 
     handleAdd(e){
+        console.log('records:'+JSON.stringify(this.records));
+        let totalAmount = 0;
+        if(this.balanceAmount != undefined){
+            if(this.record != undefined){
+                for(let i=0;i<this.records.length;i++){
+                    if(this.records[i].Id == this.record.Id){
+                        totalAmount += this.sumInsuredIDR;
+                    }else{
+                        totalAmount += this.records[i].sumInsuredIDR;
+                    }
+                }
+            }else{
+                totalAmount += this.sumInsuredIDR;
+                for(let i=0;i<this.records.length;i++){
+                    totalAmount += this.records[i].sumInsuredIDR;
+                }
+            }
+        }
+        console.log('totalAmount:'+totalAmount);
         if(this.sectionId === undefined || this.sectionId === ''){
             LightningAlert.open({message: 'Please Select Section!',theme: 'error',label: 'Error!'});
         }else if(this.categoryId === undefined || this.categoryId === ''){
@@ -176,8 +239,8 @@ export default class LwcNewRequestAsset extends LightningModal {
             LightningAlert.open({message: 'Please Select Currency!',theme: 'error',label: 'Error!'});
         }else if(this.sumInsured === undefined || this.sumInsured === ''){
             LightningAlert.open({message: 'Please Fill Sum Insured!',theme: 'error',label: 'Error!'});
-        }else if(this.type === 'realisasi' && (this.sumInsuredIDR > this.limitAmount)){
-            LightningAlert.open({message: 'Please Change Sum Insured, over limit!',theme: 'error',label:'Error!'});
+        }else if(this.type === 'realisasi' && (this.balanceAmount != undefined && totalAmount > this.balanceAmount)){
+            LightningAlert.open({message: 'Please Change Sum Insured, over limit IDR '+ this.balanceAmount.toLocaleString('id-ID') +'!',theme: 'error',label:'Error!'});
         }else{
             if(this.record != undefined){
                 try{
@@ -195,7 +258,9 @@ export default class LwcNewRequestAsset extends LightningModal {
                                 sumInsured:this.sumInsured,
                                 sumInsuredIDR:this.sumInsuredIDR,
                                 rate:this.rate,
-                                showIDR:this.showIDR
+                                showIDR:this.showIDR,
+                                detail:this.data,
+                                balanceAmount:this.balanceAmount
                             }
                             newdata = [...newdata,data];
                         }else{
@@ -227,11 +292,68 @@ export default class LwcNewRequestAsset extends LightningModal {
                     sumInsured:this.sumInsured,
                     sumInsuredIDR:this.sumInsuredIDR,
                     rate:this.rate,
-                    showIDR:this.showIDR
+                    showIDR:this.showIDR,
+                    detail:this.data,
+                    balanceAmount:this.balanceAmount
                 };
                 this.records = [...this.records,data];
                 this.close(this.records);
             }
         }
+    }
+
+    handleInputDetail(e){
+        let rec = this.data;
+        let fieldName = e.target.fieldName;
+        let value = e.detail.value;
+        try{
+            let newrec = [];
+            for(let i=0;i<rec.length;i++){
+                if(rec[i].datafield == fieldName){
+                    newrec[i] = {
+                        dataobject : rec[i].dataobject,
+                        datafield : rec[i].datafield,
+                        datatype : rec[i].datatype,
+                        datalabel : rec[i].datalabel,
+                        datashow : rec[i].datashow,
+                        isshow : rec[i].isshow,
+                        value : value
+                    }
+                }else{
+                    newrec[i] = rec[i];
+                }
+                if(newrec[i].datashow != undefined){
+                    let detail = JSON.parse(newrec[i].datashow);
+                    let detailvalue = detail.value;
+                    if(fieldName == detail.field){
+                        if(detailvalue.includes(value)){
+                            newrec[i] = {
+                                dataobject : newrec[i].dataobject,
+                                datafield : newrec[i].datafield,
+                                datatype : newrec[i].datatype,
+                                datalabel : newrec[i].datalabel,
+                                datashow : newrec[i].datashow,
+                                isshow : true,
+                                value : newrec[i].value
+                            }
+                        }else{
+                            newrec[i] = {
+                                dataobject : newrec[i].dataobject,
+                                datafield : newrec[i].datafield,
+                                datatype : newrec[i].datatype,
+                                datalabel : newrec[i].datalabel,
+                                datashow : newrec[i].datashow,
+                                isshow : false,
+                                value : undefined
+                            }
+                        }
+                    }
+                }
+            }
+            this.data = newrec;
+        }catch(e){
+            console.log('error:'+e.message);
+        }
+        console.log('this.data:'+JSON.stringify(this.data));
     }
 }

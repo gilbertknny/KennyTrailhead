@@ -1,7 +1,7 @@
 /**
  * @description       : Controller for LWC Detail Asset
  * @author            : Ahmad Yazid Munif
- * @last modified on  : 12-05-2025
+ * @last modified on  : 12-18-2025
  * @last modified by  : Ahmad Yazid Munif
 **/
 public with sharing class Aswata_Add_New_DetailAsset_Controller {
@@ -67,7 +67,7 @@ public with sharing class Aswata_Add_New_DetailAsset_Controller {
                 continue;
             }
             Object value = formData.get(fieldApi);
-            if (value == null) {
+            if (value == null && fieldApi != 'Declare_Value__c') {
                 continue;
             }
             try {
@@ -281,6 +281,52 @@ public with sharing class Aswata_Add_New_DetailAsset_Controller {
         result.put('Section_Name__c', detailAsset.Section__r.Name);
         return result;
     }
+
+    /**
+     * @description Get all detail assets for a specific Risk
+     * @param riskId Id of the parent Risk record
+     * @return List<Asset> List of detail assets under this Risk
+     */
+    @AuraEnabled(cacheable=false)
+    public static List<Asset> getDetailAssetsByRisk(Id riskId) {
+        try {
+            if (riskId == null) {
+                return new List<Asset>();
+            }
+
+            List<Asset> assets = [
+                SELECT 
+                    Id, 
+                    Name, 
+                    Interest_Insured_Detail_Description__c,
+                    Section__c,
+                    Section__r.Name,
+                    Category__c,
+                    Category__r.Name,
+                    Amount_IDR__c,
+                    Amount__c,
+                    Currency__c,
+                    Exchange_Rate__c,
+                    Indemnity_Type__c,
+                    Declare_Value__c,
+                    Amount_Insured__c,
+                    CreatedDate
+                FROM Asset 
+                WHERE ParentId = :riskId
+                AND RecordType.Name = 'Asset'
+                WITH SECURITY_ENFORCED
+                ORDER BY CreatedDate DESC
+            ];
+            
+            System.debug('✅ Found ' + assets.size() + ' assets for Risk: ' + riskId);
+            return assets;
+            
+        } catch (Exception e) {
+            System.debug('❌ Error loading assets: ' + e.getMessage());
+            throw new AuraHandledException('Error loading assets: ' + e.getMessage());
+        }
+    }
+
     /**
      * @description function for checkPermission Access
      * @return boolean accessible
