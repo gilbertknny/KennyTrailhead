@@ -116,10 +116,10 @@
         <apexClass>Aswata_Lead_Distribution</apexClass>
         <enabled>true</enabled>
     </classAccesses>
-    <!-- <classAccesses>
+    <classAccesses>
         <apexClass>Aswata_Lead_Distribution_Account_Matrix</apexClass>
         <enabled>true</enabled>
-    </classAccesses> -->
+    </classAccesses>
     <classAccesses>
         <apexClass>Aswata_Lead_Distribution_Queueable</apexClass>
         <enabled>true</enabled>
@@ -195,19 +195,19 @@
     <!-- <classAccesses>
         <apexClass>CapchaController</apexClass>
         <enabled>true</enabled>
-    </classAccesses> 
-    <classAccesses>
+    </classAccesses> -->
+    <!-- <classAccesses>
         <apexClass>CaseOwnerAssignment</apexClass>
         <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
         <apexClass>CaseOwnerAssignmentTest</apexClass>
         <enabled>true</enabled>
-    </classAccesses> 
-    <classAccesses>
+    </classAccesses> -->
+    <!-- <classAccesses>
         <apexClass>ChangeOwnerController</apexClass>
         <enabled>true</enabled>
-    </classAccesses>-->
+    </classAccesses> -->
     <classAccesses>
         <apexClass>ChangePasswordController</apexClass>
         <enabled>true</enabled>
@@ -256,18 +256,18 @@
         <apexClass>ClsInput_Test</apexClass>
         <enabled>true</enabled>
     </classAccesses>
-    <!-- <classAccesses>
+    <classAccesses>
         <apexClass>ClsLookup</apexClass>
         <enabled>true</enabled>
     </classAccesses>
-    <classAccesses>
+    <!-- <classAccesses>
         <apexClass>ClsLookup_Test</apexClass>
         <enabled>true</enabled>
-    </classAccesses> 
-    <classAccesses>
+    </classAccesses> -->
+    <!-- <classAccesses>
         <apexClass>ClsNewAsset</apexClass>
         <enabled>true</enabled>
-    </classAccesses>-->
+    </classAccesses> -->
     <classAccesses>
         <apexClass>ClsNewRequest</apexClass>
         <enabled>true</enabled>
@@ -1716,10 +1716,10 @@
         <apexClass>omnistudio__ZippexTests</apexClass>
         <enabled>true</enabled>
     </classAccesses>
-    <!-- <classAccesses>
+    <classAccesses>
         <apexClass>opptyFluc</apexClass>
         <enabled>true</enabled>
-    </classAccesses> -->
+    </classAccesses>
     <classAccesses>
         <apexClass>renewalNoticeController</apexClass>
         <enabled>true</enabled>
@@ -2267,11 +2267,11 @@
         <field>Account.Insurance_ID__c</field>
         <readable>true</readable>
     </fieldPermissions>
-    <!-- <fieldPermissions>
+    <fieldPermissions>
         <editable>true</editable>
         <field>Account.IsExcludedFromRealign</field>
         <readable>true</readable>
-    </fieldPermissions> -->
+    </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
         <field>Account.IsSchedule__c</field>
@@ -2945,11 +2945,6 @@
     <fieldPermissions>
         <editable>true</editable>
         <field>Asset.ExternalIdentifier</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
-        <field>Asset.Facultative_Folder__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -8129,7 +8124,15 @@
         <visible>true</visible>
     </recordTypeVisibilities>
     <recordTypeVisibilities>
+        <recordType>Master_Data__c.Double_Prospect</recordType>
+        <visible>true</visible>
+    </recordTypeVisibilities>
+    <recordTypeVisibilities>
         <recordType>Master_Data__c.Exchange_Rate</recordType>
+        <visible>true</visible>
+    </recordTypeVisibilities>
+    <recordTypeVisibilities>
+        <recordType>Master_Data__c.Exposure</recordType>
         <visible>true</visible>
     </recordTypeVisibilities>
     <recordTypeVisibilities>
@@ -8198,6 +8201,10 @@
     </recordTypeVisibilities>
     <recordTypeVisibilities>
         <recordType>Master_Data__c.Vehicle_Brand</recordType>
+        <visible>true</visible>
+    </recordTypeVisibilities>
+    <recordTypeVisibilities>
+        <recordType>Master_Data__c.Vehicle_Type</recordType>
         <visible>true</visible>
     </recordTypeVisibilities>
     <recordTypeVisibilities>

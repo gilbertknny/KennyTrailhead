@@ -55,32 +55,62 @@
           </div>
         </template>
 
-        <!-- Insurance Type - Horizontal Layout -->
-        <template if:false={showPremiumCalculation}>
-        <div class="slds-m-vertical_small">
-          <lightning-radio-group
+        <!-- Insurance Type - ComboBox for all non-limited, non-premium calculation COBs -->
+        <template if:true={showInsuranceType}>
+          <!-- disabled version of periodType 
+          <lightning-combobox
             name="periodType"
             label="Insurance Type"
-            options={insuranceTypeOptions}
             value={periodType}
-            onchange={handleTypeChange}
-            type="button"
+            options={allowedInsuranceTypeOptions}
+            onchange={handlePeriodTypeChange}
+            disabled={isPeriodTypeComboboxDisabled}
+            class="slds-m-vertical_small">
+          </lightning-combobox> -->
+          <lightning-combobox
+            name="periodType"
+            label="Insurance Type"
+            value={periodType}
+            options={allowedInsuranceTypeOptions}
+            onchange={handlePeriodTypeChange}
             disabled={isReadOnly}
-            class="slds-radio_button-group">
-          </lightning-radio-group>
-        </div></template>
+            class="slds-m-vertical_small">
+          </lightning-combobox>
+          
+          <!-- Info for auto-determined COBs -->
+          <template if:true={isAutoDeterminePeriodType}>
+            <div class="slds-text-color_weak slds-m-bottom_small">
+              <small>Insurance Type is automatically determined based on the date range.</small>
+            </div>
+          </template>
+        </template>
 
         <!-- Premium Calculation -->
         <template if:true={showPremiumCalculation}>
-        <lightning-combobox
-          name="premiumCalculation"
-          label="Premium Calculation"
-          value={premiumCalculation}
-          options={allowedPremiumCalculationOptions}
-          onchange={handlePremiumCalculationChange}
-          disabled={isReadOnly}
-          class="slds-m-vertical_small">
-        </lightning-combobox>
+          <lightning-combobox
+            name="premiumCalculation"
+            label="Premium Calculation"
+            value={premiumCalculation}
+            options={allowedPremiumCalculationOptions}
+            onchange={handlePremiumCalculationChange}
+            disabled={isReadOnly}
+            class="slds-m-vertical_small">
+          </lightning-combobox>
+          
+          <!-- Percentage Input for Premium Calculation type 5 -->
+          <template if:true={isPremiumPercentageInput}>
+            <lightning-input
+              name="premiumPercentage"
+              label="Percentage (%)"
+              type="number"
+              min="0"
+              max="100"
+              step="0.00000001"
+              value={percentage}
+              onchange={handlePercentageChange}
+              disabled={isReadOnly}>
+            </lightning-input>
+          </template>
         </template>
 
         <!-- Annual -->
@@ -124,18 +154,40 @@
         <!-- Information: Days & Rate -->
         <template if:true={showInfo}>
           <div class="slds-box slds-theme_shade slds-p-around_small slds-m-vertical_small">
-            <template if:true={isProRataBasis}>
+            <!-- For Short Term only: Show Number of Days and Rate/Percentage as separate lines -->
+            <template if:true={isShort}>
               <p>Number of Days: {dayCount}</p>
-              <p>Rate: {calculatedRate}</p>
+              <template if:true={isProRataBasis}>
+                <p>Rate: {formattedCalculatedRate}</p>
+              </template>
+              <template if:true={isPercentageBasis}>
+                <p>Percentage: {percentage}%</p>
+              </template>
             </template>
-            <template if:true={isPercentageBasis}>
+            
+            <!-- For COB 201 Long Term -->
+            <template if:true={isLongTerm}>
+              <p class="slds-m-vertical_small">
+                {yearsMonthsInfo}
+              </p>
+            </template>
+            
+            <!-- NEW: For COB 301/302/303 with Pro Rata premium calculation (Short Term equivalent) -->
+            <template if:true={isPremiumProRata}>
+              <p>Number of Days: {dayCount}</p>
+              <p>Rate: {formattedCalculatedRate}</p>
+            </template>
+            
+            <!-- NEW: For COB 301/302/303 with Percentage premium calculation (Short Term equivalent) -->
+            <template if:true={isPremiumPercentage}>
               <p>Number of Days: {dayCount}</p>
               <p>Percentage: {percentage}%</p>
             </template>
             
-            <template if:true={isLongTerm}>
+            <!-- NEW: For COB 301/302/303 with Long Period, Decreasing Sum Insured, or Discount Rate (Long Term equivalent) -->
+            <template if:true={isPremiumLongTerm}>
               <p class="slds-m-vertical_small">
-                Duration: {yearsMonthsInfo}
+                {yearsMonthsInfo}
               </p>
             </template>
           </div>
@@ -178,7 +230,10 @@
                                   </lightning-combobox>
                               </template>
                               <lightning-input
-                                  type="text"
+                                  type="number"
+                                  min="0"
+                                  max="100"
+                                  step="0.00000001"
                                   name="rowPercentage"
                                   data-year={row.year}
                                   value={row.percentage}
@@ -187,9 +242,6 @@
                                   oninput={handleRowPercentageInput}
                                   onpaste={handleRowPercentagePaste}
                                   onchange={handleRowPercentageChange}
-                                  min="0"
-                                  max="100"
-                                  step="0.00000001"
                                   disabled={isReadOnly}>
                               </lightning-input>
                           </td>

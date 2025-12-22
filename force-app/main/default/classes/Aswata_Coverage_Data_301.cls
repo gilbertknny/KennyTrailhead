@@ -1,7 +1,7 @@
 /**
  * @description       : Class for create new Coverage 301
  * @author            : Ahmad Yazid Munif
- * @last modified on  : 12-05-2025
+ * @last modified on  : 12-11-2025
  * @last modified by  : Ahmad Yazid Munif
 **/
 public without sharing class Aswata_Coverage_Data_301 {
@@ -17,18 +17,13 @@ public without sharing class Aswata_Coverage_Data_301 {
      * @return InsurancePolicyCoverage
      */
     public static List<InsurancePolicyCoverage> coverageByAssetCategory(List<InsurancePolicyCoverage> listCoverage,Asset risk,List<String> idParentCoverage){
-        Decimal counter = 1;
+        // Decimal counter = 1;
         if((String)risk.COB__c != '301'){
             return listCoverage;
         }
         singleComposite = 'false';
         List<String> listCategoryId = new List<String>();
-        List<Asset> getByParentId = [
-            SELECT Id,Amount_Insured__c,Category__c,ParentId,Amount_IDR_new__c, Currency__r.Name
-            FROM Asset
-            WHERE ParentId = :risk.Id
-            WITH SECURITY_ENFORCED
-        ];
+        List<Asset> getByParentId = getAssetByParentId(risk);
         List<InsurancePolicyCoverage> newListCoverage = listCoverage;
         if(getByParentId.isEmpty()){
             return newListCoverage;
@@ -54,18 +49,89 @@ public without sharing class Aswata_Coverage_Data_301 {
             if (matchingMasterData != null) {
                 InsurancePolicyCoverage referenceCov = getReferenceCoverage(matchingMasterData, listCoverage, coverageMap);
                 // System.debug('### AWT referenceCov : '+referenceCov);
-                InsurancePolicyCoverage newCov = referenceCov.clone(false, true, false, false);
-                newCov.CoverageName = matchingMasterData.Name;
-                newCov.Coverage_Name__c = matchingMasterData.Id;
-                newCov.Coverage_Id__c = matchingMasterData.COVERAGE_REF_ID__c;
-                newCov.amount_insured__c = assetItem.Amount_IDR_new__c;
-                newCov.Currency__c = assetItem.Currency__r.Name;
-                // counter+=1;
-                newCov.cov_tahun_id__c = counter;
+                InsurancePolicyCoverage newCov = assignmentValue301(referenceCov.clone(false, true, false, false),matchingMasterData,assetItem);
+                newCov.cov_tahun_id__c = listCoverage[0].cov_tahun_id__c;
                 newListCoverage.add(newCov);
             }
         }
         return newListCoverage;
+    }
+    /**
+     * @description function for mapping from asset to coverage
+     * @param risk
+     * @return List<Asset>
+     */
+    public static List<Asset> getAssetByParentId(Asset risk){
+        List<Asset> getByParentId = [
+            SELECT Id,Amount_Insured__c,Category__c,ParentId,Amount_IDR_new__c, Currency__r.Name,
+            Indemnity_Type__c, Declare_Value__c
+            FROM Asset
+            WHERE ParentId = :risk.Id
+            WITH SECURITY_ENFORCED
+        ];
+        return getByParentId;
+    }
+    /**
+     * @description function for mapping from asset to coverage
+     * @param newCov
+     * @param matchingMasterData
+     * @param assetItem
+     * @return InsurancePolicyCoverage
+     */
+    public static InsurancePolicyCoverage assignmentValue301(InsurancePolicyCoverage newCov,Master_Data__c matchingMasterData,Asset assetItem){
+        newCov.CoverageName = matchingMasterData.Name;
+        newCov.Coverage_Name__c = matchingMasterData.Id;
+        newCov.Coverage_Id__c = matchingMasterData.COVERAGE_REF_ID__c;
+        newCov.amount_insured__c = assetItem.Amount_IDR_new__c;
+        newCov.Currency__c = assetItem.Currency__r.Name;
+        newCov.Claim_Options__c = getShortCode('indemnity',assetItem.Indemnity_Type__c);
+        newCov.Claim_Loss_Amount__c = getSafeDecimal(assetItem.Declare_Value__c);
+        newCov.Claim_UR_Id__c = getShortCode('currency',assetItem.Currency__r.Name);
+        return newCov;
+    }
+    /**
+     * @description function for mapping from asset to coverage
+     * @param type
+     * @param picklistValue
+     * @return String
+     */
+    public static String getShortCode(String type,String picklistValue){
+        if(type == 'indemnity'){
+            if (String.isBlank(picklistValue)) {
+                return null;
+            }
+            String normalizedValue = picklistValue.toUpperCase().trim();
+            if (normalizedValue.contains('FIRST LOSS')) {
+                return 'FL';
+            }else if (normalizedValue.contains('LOSS LIMIT')) {
+                return 'LL';
+            }else if (normalizedValue.contains('SUM INSURED')) {
+                return 'SI';
+            }
+        }else{
+            List<String> picklistCurrency = new List<String>();
+            Schema.DescribeFieldResult ddtibleField = InsurancePolicyCoverage.Claim_UR_Id__c.getDescribe();
+            for (Schema.PicklistEntry f : ddtibleField.getPicklistValues()) {
+                picklistCurrency.add(f.getValue());
+            }
+            if(picklistCurrency.contains(picklistValue)){
+                return picklistValue;
+            }else{
+                return 'IDR';
+            }
+        }
+        return null;
+    }
+    /**
+     * @description function for mapping from asset to coverage
+     * @param dataValue
+     * @return Decimal
+     */
+    public static Decimal getSafeDecimal(Decimal dataValue){
+        if(dataValue == null){
+            return 0;
+        }
+        return dataValue;
     }
     /**
      * @description function for get reference coverage Asset
@@ -85,85 +151,6 @@ public without sharing class Aswata_Coverage_Data_301 {
             // System.debug('### AWT matchingMasterData.Coverage_301__c : '+matchingMasterData.Coverage_301__c);
             return coverageMap.get(matchingMasterData.Coverage_301__c);
         }
-    }
-    /**
-     * @description Menghitung durasi antara tanggal mulai dan tanggal akhir dalam tahun.
-     * @param listCoverage
-     * @param risk
-     * @return List<InsurancePolicyCoverage>
-     */
-    public static List<InsurancePolicyCoverage> calculateDurationInYears(List<InsurancePolicyCoverage> listCoverage,Asset risk) {
-        List<InsurancePolicyCoverage> newListCoverage = listCoverage;
-        Date startDate = risk.Opportunity__r.Start_Date_Periode__c;
-        Date endDate = risk.Opportunity__r.End_Date_Periode__c;
-        Decimal counter = 1;
-        if (startDate == null || endDate == null) {
-            return newListCoverage;
-        }
-        Integer durationInYears = calculationYears(risk);
-        if (durationInYears <= 1) {
-            return newListCoverage;
-        }else{
-            counter = durationInYears;
-        }
-        List<InsurancePolicyCoverage> coverageToDuplicate = newListCoverage.clone();
-        List<String> check301Cov = generateListMasterCov301(newListCoverage);
-        for (Integer i = 2; i <= counter; i++) {
-            for (InsurancePolicyCoverage originalCoverage : coverageToDuplicate) {
-                if (!check301Cov.isEmpty() && !check301Cov.contains(originalCoverage.Coverage_Name__c)) {
-                    InsurancePolicyCoverage duplicatedCoverage = originalCoverage.clone(false, true, false, false);
-                    duplicatedCoverage.cov_tahun_id__c = i;
-                    newListCoverage.add(duplicatedCoverage);
-                }
-            }
-        }
-        return newListCoverage;
-    }
-    /**
-     * @description function for calculate Years Period
-     * @param risk
-     * @return Integer
-     */
-    public static Integer calculationYears(Asset risk){
-        Date startDate = risk.Opportunity__r.Start_Date_Periode__c;
-        Date endDate = risk.Opportunity__r.End_Date_Periode__c;
-        Integer durationInYears = endDate.year() - startDate.year();
-        Integer extraMonths = endDate.month() - startDate.month();
-        if (endDate.day() < startDate.day()) {
-            extraMonths--;
-        }
-        if (extraMonths < 0) {
-            durationInYears--;
-            extraMonths += 12;
-        }
-        if (extraMonths > 5) {
-            durationInYears += 1;
-        }
-        return durationInYears;
-    }
-    /**
-     * @description function for get masterData Coverage 301
-     * @param newListCoverage
-     * @return List<String>
-     */
-    public static List<String> generateListMasterCov301(List<InsurancePolicyCoverage> newListCoverage){
-        List<Id> coverageNameId = new List<Id>();
-        for (InsurancePolicyCoverage originalCoverage : newListCoverage) {
-            coverageNameId.add(originalCoverage.Coverage_Name__c);
-        }
-        List<Master_Data__c> check301Cov = [
-            SELECT Id,Name,COVERAGE_REF_ID__c,
-            PARENT_COVERAGE_ID__c,Coverage_301__c,Asset_Category__c
-            FROM Master_Data__c
-            WHERE Id IN :coverageNameId AND PARENT_COVERAGE_ID__c = '0'
-            WITH SECURITY_ENFORCED
-        ];
-        Set<String> mdCoverage301Set = new Set<String>();
-        for (Master_Data__c mdCov301 : check301Cov) {
-            mdCoverage301Set.add(mdCov301.Id);
-        }
-        List<String> mdCoverage301List = new List<String>(mdCoverage301Set);
-        return mdCoverage301List;
     }
     /**
      * @description function for get masterData Coverage 301

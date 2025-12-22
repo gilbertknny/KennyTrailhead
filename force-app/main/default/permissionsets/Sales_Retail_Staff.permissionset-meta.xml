@@ -68,10 +68,10 @@
         <apexClass>Aswata_Lead_Distribution</apexClass>
         <enabled>true</enabled>
     </classAccesses>
-    <!-- <classAccesses>
+    <classAccesses>
         <apexClass>Aswata_Lead_Distribution_Account_Matrix</apexClass>
         <enabled>true</enabled>
-    </classAccesses> -->
+    </classAccesses>
     <classAccesses>
         <apexClass>Aswata_Lead_Distribution_Queueable</apexClass>
         <enabled>true</enabled>
@@ -113,14 +113,6 @@
         <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
-        <apexClass>ClsChangeOwner</apexClass>
-        <enabled>true</enabled>
-    </classAccesses>
-    <classAccesses>
-        <apexClass>ClsChangeOwner_Test</apexClass>
-        <enabled>true</enabled>
-    </classAccesses>
-    <classAccesses>
         <apexClass>ClsInput</apexClass>
         <enabled>true</enabled>
     </classAccesses>
@@ -128,18 +120,18 @@
         <apexClass>ClsInput_Test</apexClass>
         <enabled>true</enabled>
     </classAccesses>
-    <!-- <classAccesses>
+    <classAccesses>
         <apexClass>ClsLookup</apexClass>
         <enabled>true</enabled>
     </classAccesses>
-    <classAccesses>
+    <!-- <classAccesses>
         <apexClass>ClsLookup_Test</apexClass>
         <enabled>true</enabled>
-    </classAccesses> 
-    <classAccesses>
+    </classAccesses> -->
+    <!-- <classAccesses>
         <apexClass>ClsNewAsset</apexClass>
         <enabled>true</enabled>
-    </classAccesses>-->
+    </classAccesses> -->
     <classAccesses>
         <apexClass>ClsNewRequest</apexClass>
         <enabled>true</enabled>
@@ -154,14 +146,6 @@
     </classAccesses>
     <classAccesses>
         <apexClass>ClsRenewal_Test</apexClass>
-        <enabled>true</enabled>
-    </classAccesses>
-    <classAccesses>
-        <apexClass>ClsUserLimit</apexClass>
-        <enabled>true</enabled>
-    </classAccesses>
-    <classAccesses>
-        <apexClass>ClsUserLimit_Test</apexClass>
         <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
@@ -2159,11 +2143,11 @@
         <field>Account.Insurance_ID__c</field>
         <readable>true</readable>
     </fieldPermissions>
-    <!-- <fieldPermissions>
+    <fieldPermissions>
         <editable>true</editable>
         <field>Account.IsExcludedFromRealign</field>
         <readable>true</readable>
-    </fieldPermissions> -->
+    </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
         <field>Account.IsSchedule__c</field>
@@ -6766,6 +6750,10 @@
         <visible>true</visible>
     </recordTypeVisibilities>
     <recordTypeVisibilities>
+        <recordType>Master_Data__c.Asset_Section</recordType>
+        <visible>true</visible>
+    </recordTypeVisibilities>
+    <recordTypeVisibilities>
         <recordType>Master_Data__c.Cause_Of_Loss</recordType>
         <visible>true</visible>
     </recordTypeVisibilities>
@@ -6786,11 +6774,31 @@
         <visible>true</visible>
     </recordTypeVisibilities>
     <recordTypeVisibilities>
+        <recordType>Master_Data__c.Detail_Asset</recordType>
+        <visible>true</visible>
+    </recordTypeVisibilities>
+    <recordTypeVisibilities>
+        <recordType>Master_Data__c.Double_Prospect</recordType>
+        <visible>true</visible>
+    </recordTypeVisibilities>
+    <recordTypeVisibilities>
         <recordType>Master_Data__c.Exchange_Rate</recordType>
         <visible>true</visible>
     </recordTypeVisibilities>
     <recordTypeVisibilities>
+        <recordType>Master_Data__c.Exposure</recordType>
+        <visible>true</visible>
+    </recordTypeVisibilities>
+    <recordTypeVisibilities>
         <recordType>Master_Data__c.Field_COB</recordType>
+        <visible>true</visible>
+    </recordTypeVisibilities>
+    <recordTypeVisibilities>
+        <recordType>Master_Data__c.Filter_Policy_Distribution</recordType>
+        <visible>true</visible>
+    </recordTypeVisibilities>
+    <recordTypeVisibilities>
+        <recordType>Master_Data__c.Limit_Reas</recordType>
         <visible>true</visible>
     </recordTypeVisibilities>
     <recordTypeVisibilities>
@@ -6851,6 +6859,10 @@
     </recordTypeVisibilities>
     <recordTypeVisibilities>
         <recordType>Master_Data__c.Vehicle_Brand</recordType>
+        <visible>true</visible>
+    </recordTypeVisibilities>
+    <recordTypeVisibilities>
+        <recordType>Master_Data__c.Vehicle_Type</recordType>
         <visible>true</visible>
     </recordTypeVisibilities>
     <recordTypeVisibilities>

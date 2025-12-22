@@ -82,7 +82,7 @@
         <actionName>VlocityMappingFlowBridge</actionName>
         <actionType>apex</actionType>
         <connector>
-            <targetReference>Screen_Success</targetReference>
+            <targetReference>Create_Records</targetReference>
         </connector>
         <flowTransactionModel>Automatic</flowTransactionModel>
         <inputParameters>
@@ -248,6 +248,31 @@
         </rules>
     </decisions>
     <decisions>
+        <name>Check_Client_ID_Exist</name>
+        <label>Check Client ID Exist</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>lblClientIDNull</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Client_ID_Exist</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Account_After_API_Call.Client_ID__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Screen_Success</targetReference>
+            </connector>
+            <label>Client ID Exist</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>Check_Stage_Opportunity</name>
         <label>Check Stage Opportunity</label>
         <locationX>0</locationX>
@@ -330,7 +355,9 @@
         </rules>
     </decisions>
     <description>04/12/2025 : add update opportunity =&gt; assigned underwriting
-09/12/2025 : add get primary partner Id and update to opty</description>
+09/12/2025 : add get primary partner Id and update to opty
+17/12/2025 : add call IP SFAWT-17
+18/12/2025: move callouts after DML</description>
     <dynamicChoiceSets>
         <name>stampDutyOptions</name>
         <dataType>String</dataType>
@@ -397,7 +424,7 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Send_Busreq_When_Quote_Created</targetReference>
+            <targetReference>Get_Account_After_API_Call</targetReference>
         </connector>
         <inputAssignments>
             <field>OpportunityAccessLevel</field>
@@ -451,6 +478,27 @@
             <operator>EqualTo</operator>
             <value>
                 <elementReference>Get_Opportunity.AccountId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Account</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Account_After_API_Call</name>
+        <label>Get Account After API Call</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Check_Client_ID_Exist</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Account.Id</elementReference>
             </value>
         </filters>
         <getFirstRecordOnly>true</getFirstRecordOnly>
@@ -583,6 +631,12 @@
         <object>RecordType</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
+    <recordRollbacks>
+        <name>Roll_Back_In_Error</name>
+        <label>Roll Back In Error</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+    </recordRollbacks>
     <recordUpdates>
         <name>Update_Opportunity_Stage</name>
         <label>Update Opportunity Stage</label>
@@ -615,6 +669,12 @@
             <field>Incoming_Request_Approval__c</field>
             <value>
                 <elementReference>$Flow.CurrentDateTime</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Quote_Status__c</field>
+            <value>
+                <stringValue>Waiting for Approval</stringValue>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -721,6 +781,33 @@
         <showHeader>true</showHeader>
     </screens>
     <screens>
+        <name>lblClientIDNull</name>
+        <label>lblClientIDNull</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>true</allowPause>
+        <connector>
+            <targetReference>Roll_Back_In_Error</targetReference>
+        </connector>
+        <fields>
+            <name>displayClientIdEmpty</name>
+            <fieldText>&lt;p&gt;Client ID is null !&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
         <name>Screen_Failed</name>
         <label>Screen Failed</label>
         <locationX>0</locationX>
@@ -728,6 +815,9 @@
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
+        <connector>
+            <targetReference>Roll_Back_In_Error</targetReference>
+        </connector>
         <fields>
             <name>textFailed</name>
             <fieldText>&lt;p style=&quot;text-align: center;&quot;&gt;&lt;strong style=&quot;background-color: rgb(255, 255, 255); font-size: 16px;&quot;&gt;Failed to Submit the Quote, Please Contact Admin !!&lt;/strong&gt;&lt;strong style=&quot;background-color: rgb(255, 255, 255); font-size: 16px; color: rgb(68, 68, 68);&quot;&gt;The Quote has been submitted !&lt;/strong&gt;&lt;/p&gt;&lt;p style=&quot;text-align: center;&quot;&gt;&lt;br&gt;&lt;/p&gt;&lt;p style=&quot;text-align: center;&quot;&gt;&lt;strong style=&quot;background-color: rgb(255, 255, 255); font-size: 12px; color: rgb(68, 68, 68);&quot;&gt;{!Run_Quote_Approval.message}&lt;/strong&gt;&lt;/p&gt;</fieldText>
@@ -776,6 +866,9 @@
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
+        <connector>
+            <targetReference>Roll_Back_In_Error</targetReference>
+        </connector>
         <fields>
             <name>uwNotFountDisplayText</name>
             <fieldText>&lt;p&gt;&lt;strong style=&quot;background-color: rgb(255, 255, 255); font-size: 16px; color: rgb(68, 68, 68);&quot;&gt;Underwriter user cannot be find, please contact admin!&lt;/strong&gt;&lt;/p&gt;</fieldText>
@@ -802,7 +895,7 @@
         <allowPause>false</allowPause>
         <fields>
             <name>KCYDisplay</name>
-            <fieldText>&lt;p&gt;Anda belum melakukan KYC untuk customer:&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;strong&gt;{!Get_Account.Name}&lt;/strong&gt;&lt;/p&gt;</fieldText>
+            <fieldText>&lt;p&gt;Anda belum melakukan KYC untuk customer:&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;/{!Get_Account.Id}&quot; rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot;&gt;{!Get_Account.Name}&lt;/a&gt;&lt;/p&gt;</fieldText>
             <fieldType>DisplayText</fieldType>
             <styleProperties>
                 <verticalAlignment>
@@ -850,8 +943,13 @@
     <status>Active</status>
     <textTemplates>
         <name>jsonInput</name>
-        <isViewedAsPlainText>false</isViewedAsPlainText>
-        <text>&lt;p&gt;{&quot;recordId&quot;: &quot;{!recordId}&quot;}&lt;/p&gt;</text>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>{&quot;recordId&quot;: &quot;{!recordId}&quot;}</text>
+    </textTemplates>
+    <textTemplates>
+        <name>jsonSFAWT01</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>{&quot;recId&quot;: &quot;{!Get_Account.Id}&quot;}</text>
     </textTemplates>
     <transforms>
         <name>Transform_Opportunity_to_Quote</name>
@@ -859,7 +957,7 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Create_Records</targetReference>
+            <targetReference>Send_Busreq_When_Quote_Created</targetReference>
         </connector>
         <dataType>SObject</dataType>
         <isCollection>false</isCollection>
@@ -946,6 +1044,20 @@
         <isInput>false</isInput>
         <isOutput>false</isOutput>
         <scale>2</scale>
+    </variables>
+    <variables>
+        <name>errorMessageSFAWT17</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>jsonResponseSFAWT17</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
     </variables>
     <variables>
         <name>ListUser</name>

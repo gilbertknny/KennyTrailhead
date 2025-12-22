@@ -7,6 +7,7 @@ export default class AddNewCoverageRate extends LightningElement {
     @api amountInsurance;
     @api recordId;
     @api bsnId;
+    @api cob301 = false;
     @api riskId;
     @api policyId;
     @api jsonString = '';
@@ -25,6 +26,7 @@ export default class AddNewCoverageRate extends LightningElement {
     @api buttonClickedValue;
     @track searchTerm = '';
     @track selectedCoverageId = '0';
+    @track counterYear = 0;
     get settingCoverage(){
         return this.disableModeCoverage;
     }
@@ -79,6 +81,9 @@ export default class AddNewCoverageRate extends LightningElement {
     get isModeBreakdown() {
         return this.selectedMode === 'BREAKDOWN_DEDUCTIBLE';
     }
+    get isCOB301() {
+        return this.bsnId === '301';
+    }
     async getCoverageData(){
         try {
             return await getExistingCoverage({riskId : this.riskId });
@@ -93,11 +98,19 @@ export default class AddNewCoverageRate extends LightningElement {
         this.hasSection2 = sectionList.includes(2);
         this.hasSection3 = sectionList.includes(3);
         this.hasSection4 = sectionList.includes(4);
-        console.log('this.hasSection',this.hasSection);
+        console.log('this.hasSection',this.hasSection1);
     }
+    // formatPeriodRate(value) {
+    //     if (value < 1) {
+    //         return 1;
+    //     }
+    //     return value;
+    // }
     @wire(getCoverageFields, { rtId: '$recordTypeIdCoverage', cob: '$bsnId',riskId:'$riskId'})
     wiredCoverages({ error, data }) {
         if (data) {
+            this.counterYear = this.buttonClickedValue;
+            console.log('counterYear: ', this.buttonClickedValue);
             console.log('Data Coverage: ', data.length);
             console.log('Policy:', this.policyId);
             this.setSectionAsset(data[0].sectionList);
@@ -105,11 +118,15 @@ export default class AddNewCoverageRate extends LightningElement {
             let dynamicRows = data.map((item, index) => ({
                 ...item,
                 id: item.coverageId,
+                id2: item.coverageId+'SEC2',
+                id3: item.coverageId+'SEC3',
+                id4: item.coverageId+'SEC4',
                 riskId:this.riskId,
                 policyId:this.policyId,
                 amountInsurance: this.amountInsurance,
                 isDisabledSelection: false,
                 rowType: 'BREAKDOWN_RATE',
+                covTahun: this.buttonClickedValue,
                 isSelected: false,
                 isDisabledInput: true,
                 isSingleRate: false,
@@ -130,10 +147,20 @@ export default class AddNewCoverageRate extends LightningElement {
                 },
                 deductible:{
                     descriptionDeductible: ''
-                }
+                },
+                rebate:{
+                    totalRebate: 0
+                },
+                rebateSetting:'',
+                isDisabledTotalRebate: true,
+                isDisabledInputRebate: false,
+                commisionAllRate: null
             }));
             const singleRateRow = {
                 id: 'SINGLE_RATE_ID',
+                id2: 'SINGLE_RATE_ID'+'SEC2',
+                id3: 'SINGLE_RATE_ID'+'SEC3',
+                id4: 'SINGLE_RATE_ID'+'SEC4',
                 riskId:this.riskId,
                 policyId:this.policyId,
                 amountInsurance: this.amountInsurance,
@@ -159,11 +186,23 @@ export default class AddNewCoverageRate extends LightningElement {
                 },
                 deductible:{
                     descriptionDeductible: ''
-                }
+                },
+                rebate:{
+                    totalRebate: 0,
+                    totalRebate2: 0,
+                    totalRebate3: 0,
+                    totalRebate4: 0,
+                },
+                rebateSetting:'',
+                isDisabledTotalRebate: true,
+                isDisabledInputRebate: false,
+                commisionAllRate: null
             };
             let baseDataList = [...dynamicRows, singleRateRow];
+            const idList = baseDataList.map(item => item.id);
+            console.log('Daftar semua ID:', JSON.stringify(idList));
             if (this.jsonString) {
-                console.log('✅ Success parsing JSON from Flow:', this.jsonString);
+                console.log('✅ Success parsing JSON from Flow CoverageRate:', this.jsonString);
                 const parsedData = JSON.parse(this.jsonString);
                 try {
                     let currentDataList = baseDataList;
@@ -173,22 +212,33 @@ export default class AddNewCoverageRate extends LightningElement {
                             item.parentCoverageId == '0' && item.isSelected == true
                         );
                         if (selectedParent) {
+                            console.log('✅ CoverageRate selectedParent IF');
                             this.selectedCoverageId = selectedParent.coverageId;
                         }
                     }
                     parsedData.forEach(newItem => {
                         this.descriptionRate = newItem.rate.descriptionRate;
                         const targetId = newItem.id;
+                        // console.log('✅ CoverageRate targetId',targetId);
                         const targetItem = currentDataList.find(item => item.id === targetId);
+                        // console.log('✅ CoverageRate targetItem',targetItem);
                         if (targetItem) {
                             for (const key in newItem) {
                                 if (newItem.hasOwnProperty(key)) {
+                                    // console.log('✅ CoverageRate hasOwnProperty',key);
                                     if (key !== 'id' && key !== 'riskId' && key !== 'policyId') {
                                         if (typeof newItem[key] === 'object' && newItem[key] !== null && 
                                             (key === 'rate' || key === 'deductible' || key === 'rebate')) {
-                                            Object.assign(targetItem[key], newItem[key]);
-                                        } else {
-                                            targetItem[key] = newItem[key];
+                                                if (Object.keys(newItem[key]).length > 0) {
+                                                    Object.assign(targetItem[key], newItem[key]);
+                                                }
+                                        } 
+                                        else {
+                                            // targetItem[key] = newItem[key];
+                                            if(key != 'covTahun') {
+                                                // console.log('✅ CoverageRate Key',key);
+                                                targetItem[key] = newItem[key];
+                                            }
                                         }
                                     }
                                 }
@@ -196,6 +246,7 @@ export default class AddNewCoverageRate extends LightningElement {
                             this.selectedMode = targetItem.coverageSetting;
                         }
                     });
+                    console.log('✅ parsedData',parsedData);
                 } catch (e) {
                     console.error('❌ Error parsing or merging JSON string:', e);
                 }
@@ -339,7 +390,7 @@ export default class AddNewCoverageRate extends LightningElement {
             let singleCoverageRate2 = item.rate.coverageRate2;
             let singleCoverageRate3 = item.rate.coverageRate3;
             let singleCoverageRate4 = item.rate.coverageRate4;
-            
+            let descriptionRate = item.descriptionRate;
             // const originalItem = dynamicDataTemp.find(tempItem => tempItem.id === item.id);
             if (this.selectedMode === 'COMPOSITE') {
                 if (item.rowType == 'BREAKDOWN_RATE') {
@@ -399,7 +450,9 @@ export default class AddNewCoverageRate extends LightningElement {
                     coverageRate2: singleCoverageRate2,
                     coverageRate3: singleCoverageRate3,
                     coverageRate4: singleCoverageRate4,
-                }
+                    descriptionRate: descriptionRate
+                },
+                descriptionRate: descriptionRate
             };
         });
         this.coverageDataFormated = this.formatDeepClone(JSON.parse(JSON.stringify(this.coverageData)));
@@ -436,8 +489,8 @@ export default class AddNewCoverageRate extends LightningElement {
                     calculatedPremium4 = (rate * item.amountInsurance) / 100;
                 }
             }
-            if (item.id === rowId) {
-                let newItem = { 
+            if (item.id === rowId || item.id2 === rowId || item.id3 === rowId || item.id4 === rowId) {
+                let newItem = {
                     ...item,
                     // [fieldName]: inputValue,
                     rate: {
@@ -454,6 +507,7 @@ export default class AddNewCoverageRate extends LightningElement {
             }
             return item;
         });
+        /* // Coverage Rate Average
         if (fieldName === 'coverageRate') {
             const filteredBreakdownRates = this.coverageData.filter(item => 
                 item.isSelected && item.rowType === "BREAKDOWN_RATE"
@@ -473,6 +527,7 @@ export default class AddNewCoverageRate extends LightningElement {
                 coverageAllRate: newAverageRate
             }));
         }
+        */
         // formated Data
         this.coverageDataFormated = this.formatDeepClone(JSON.parse(JSON.stringify(this.coverageData )));
         this.jsonString = JSON.stringify(this.coverageData.filter(item => item.isSelected));
@@ -506,8 +561,7 @@ export default class AddNewCoverageRate extends LightningElement {
                 }
                 return { 
                     ...item, 
-                    coverageAllRate: inputValue,
-                    // [fieldName]: Number(value),
+                    // coverageAllRate: inputValue,
                     rate:{
                         ...item.rate,
                         [fieldName] :inputValue,
@@ -827,6 +881,13 @@ export default class AddNewCoverageRate extends LightningElement {
     }
     handleNext() {
         this.buttonClickedValue = 'Next';
+        const attributeChangeEvent = new FlowAttributeChangeEvent('buttonClickedValue', this.buttonClickedValue);
+        this.dispatchEvent(attributeChangeEvent);
+        const navigateNextEvent = new FlowNavigationNextEvent();
+        this.dispatchEvent(navigateNextEvent);
+    }
+    handlePrevious() {
+        this.buttonClickedValue = 'Previous';
         const attributeChangeEvent = new FlowAttributeChangeEvent('buttonClickedValue', this.buttonClickedValue);
         this.dispatchEvent(attributeChangeEvent);
         const navigateNextEvent = new FlowNavigationNextEvent();

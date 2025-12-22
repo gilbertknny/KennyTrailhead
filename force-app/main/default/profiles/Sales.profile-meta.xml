@@ -19585,6 +19585,11 @@
         <field>Quote.ShippingName</field>
         <readable>true</readable>
     </fieldPermissions>
+     <fieldPermissions>
+        <editable>true</editable>
+        <field>Quote.Stage__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
         <field>Quote.Stamp_Duty__c</field>
@@ -23752,6 +23757,14 @@
     <layoutAssignments>
         <layout>Product2-Product Layout</layout>
         <recordType>Product2.Product</recordType>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Facultative_Share__c-Facultative Share Layout</layout>
+        <recordType>Facultative_Share__c.Facultative_Share</recordType>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Facultative_Share__c-Folder</layout>
+        <recordType>Facultative_Share__c.Folder</recordType>
     </layoutAssignments>
     <layoutAssignments>
         <layout>Transaction_Data__c-Clause</layout>

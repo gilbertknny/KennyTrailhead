@@ -19581,6 +19581,11 @@
         <field>Quote.ShippingName</field>
         <readable>true</readable>
     </fieldPermissions>
+     <fieldPermissions>
+        <editable>true</editable>
+        <field>Quote.Stage__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
         <field>Quote.Stamp_Duty__c</field>
@@ -25903,7 +25908,7 @@
         <visibility>DefaultOff</visibility>
     </tabVisibilities>
     <userLicense>Salesforce</userLicense>
-    <userPermissions>
+    <!-- <userPermissions>
         <enabled>true</enabled>
         <name>AccessOrchestrationObjects</name>
     </userPermissions>
@@ -26094,5 +26099,5 @@
     <userPermissions>
         <enabled>true</enabled>
         <name>ViewTrustMeasures</name>
-    </userPermissions>
+    </userPermissions> -->
 </Profile>

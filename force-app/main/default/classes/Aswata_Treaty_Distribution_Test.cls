@@ -1,7 +1,7 @@
 /**
  * @description       : Test Class for Aswata_Treaty_Distribution
  * @author            : Ahmad Yazid Munif
- * @last modified on  : 12-05-2025
+ * @last modified on  : 12-15-2025
  * @last modified by  : Ahmad Yazid Munif
 **/
 
@@ -45,38 +45,6 @@ private class Aswata_Treaty_Distribution_Test {
             AND Name = 'Risk'
             LIMIT 1
         ];
-        // RecordType rtZipCode = [SELECT Id FROM RecordType WHERE SObjectType = 'Location' AND Name = 'Zip Code' LIMIT 1];
-        // RecordType rtCity = [SELECT Id FROM RecordType WHERE SObjectType = 'Location' AND Name = 'City' LIMIT 1];
-        // RecordType rtVillage = [SELECT Id FROM RecordType WHERE SObjectType = 'Location' AND Name = 'Village' LIMIT 1];
-        // RecordType rtCountry = [SELECT Id FROM RecordType WHERE SObjectType = 'Location' AND Name = 'Country' LIMIT 1];
-        // RecordType rtAddress = [SELECT Id FROM RecordType WHERE SObjectType = 'Location' AND Name = 'Address' LIMIT 1];
-        // Location newZip = new Location();
-        // newZip.Name = '80811';
-        // newZip.RecordTypeId = rtZipCode.Id;
-        // insert newZip;
-
-        // Location newCity = new Location();
-        // newCity.Name = 'JKT';
-        // newCity.RecordTypeId = rtCity.Id;
-        // insert newCity;
-
-        // Location newVillage = new Location();
-        // newVillage.Name = 'Kampung';
-        // newVillage.RecordTypeId = rtVillage.Id;
-        // insert newVillage;
-
-        // Location newCountry = new Location();
-        // newCountry.Name = 'Indonesia';
-        // newCountry.RecordTypeId = rtCountry.Id;
-        // insert newCountry;
-
-        // Location newAddress = new Location();
-        // newAddress.Name = 'Kel. Punggawan ';
-        // newAddress.City__c = newCity.Id;
-        // newAddress.Country__c = newCountry.Id;
-        // newAddress.Zip_Code__c = newZip.Id;
-        // newAddress.RecordTypeId = rtAddress.Id;
-        // insert newAddress;
 
         Accumulation__c acc = new Accumulation__c(
             json_accumulation__c = '80811'
@@ -185,22 +153,11 @@ private class Aswata_Treaty_Distribution_Test {
         wrapper1.setFacultative = 2000;
         // wrapper1.totalSumInsured100 = 5000;
         wrapper1.bppda = subData;
-        // MasterDataWrapper wrapper2 = new MasterDataWrapper();
-        // wrapper2.busreqId = '015.1010.201.2025.000088.00';
-        // wrapper2.riskId = selectAsset.Id;
-        // wrapper2.setFacultative = 100;
-        // wrapper2.totalSumInsured100 = 80000;
-        // wrapper2.surplus = subData;
-        // List<MasterDataWrapper> masterDataList = new List<MasterDataWrapper>{ wrapper1 };
         String jsonDataString = JSON.serialize(wrapper1);
         IdListWrapper list1Wrapper = new IdListWrapper();
         list1Wrapper.busreqId='015.1010.201.2025.000099.00';
         list1Wrapper.riskId=selectAsset.Id;
         list1Wrapper.setFacultative=2000;
-        // IdListWrapper list1Wrapper2 = new IdListWrapper();
-        // list1Wrapper2.busreqId='015.1010.201.2025.000088.00';
-        // list1Wrapper2.riskId=selectAsset.Id;
-        // list1Wrapper2.setFacultative=2000;
         List<IdListWrapper> idList = new List<IdListWrapper>();
         idList.add(list1Wrapper);
         // idList.add(list1Wrapper2);
@@ -213,17 +170,7 @@ private class Aswata_Treaty_Distribution_Test {
             Test.stopTest();
         }
 
-        // --- ASSERT: VERIFIKASI HASIL ---
-        // 1. Verifikasi Return Value (Jika sukses, diasumsikan mengembalikan string 'Success')
         System.assertEquals('Success', result, 'Method seharusnya mengembalikan string "Success" saat berhasil.');
-
-        // 2. Verifikasi DML (PENTING untuk Sev3: Assert)
-        // Jika method ini melakukan DML (Insert/Update/Upsert record Treaty/Risk),
-        // Anda HARUS query database di sini untuk memverifikasi perubahan status.
-
-        // Contoh: Asumsikan Anda mengupdate field pada Asset
-        // Asset updatedAsset = [SELECT Id, Total_Facultative__c FROM Asset WHERE Id = :asset.Id];
-        // System.assertEquals(2000, updatedAsset.Total_Facultative__c, 'Field Asset seharusnya terupdate.');
     }
     /**
      * @description Class for set accumulation capacity
