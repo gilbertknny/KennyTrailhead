@@ -100,6 +100,12 @@ export default class AddNewCoverageRate extends LightningElement {
         this.hasSection4 = sectionList.includes(4);
         console.log('this.hasSection',this.hasSection1);
     }
+    // formatPeriodRate(value) {
+    //     if (value < 1) {
+    //         return 1;
+    //     }
+    //     return value;
+    // }
     @wire(getCoverageFields, { rtId: '$recordTypeIdCoverage', cob: '$bsnId',riskId:'$riskId'})
     wiredCoverages({ error, data }) {
         if (data) {
