@@ -1,7 +1,7 @@
 /**
  * @description       : Class for create new Coverage 301
  * @author            : Ahmad Yazid Munif
- * @last modified on  : 12-11-2025
+ * @last modified on  : 12-20-2025
  * @last modified by  : Ahmad Yazid Munif
 **/
 public without sharing class Aswata_Coverage_Data_301 {
@@ -40,6 +40,7 @@ public without sharing class Aswata_Coverage_Data_301 {
         if(mdCoverage301 == null){
             return listCoverage;
         }
+        newListCoverage = getAmountInsuredfromAsset(newListCoverage,getByParentId);
         // System.debug('### AWT mdCoverage301 : '+mdCoverage301);
         for(Asset assetItem : getByParentId){
             if(assetItem.Category__c == null){
@@ -57,6 +58,32 @@ public without sharing class Aswata_Coverage_Data_301 {
         return newListCoverage;
     }
     /**
+     * @description function for generate InsurancePolicyCoverage for 301
+     * @param listCoverage list of InsurancePolicyCoverage
+     * @param risk
+     * @param idParentCoverage
+     * @return InsurancePolicyCoverage
+     */
+    public static List<InsurancePolicyCoverage> getAmountInsuredfromAsset(List<InsurancePolicyCoverage> listCoverage,List<Asset> getByParentId){
+        Decimal totalSumAsset = 0;
+        Set<String> validAssetNames = new Set<String>{
+            'CASCO', 
+            'NON STANDARD EQUIPMENT', 
+            'Box/Truck Bed/Container'
+        };
+        for (Asset ast : getByParentId) {
+            if (ast.Category__r.Name != null && validAssetNames.contains(ast.Category__r.Name)) {
+                if (ast.Amount_IDR_new__c != null) {
+                    totalSumAsset += ast.Amount_IDR_new__c;
+                }
+            }
+        }
+        for (InsurancePolicyCoverage cov : listCoverage) {
+            cov.amount_insured__c = totalSumAsset;
+        }
+        return listCoverage;
+    }
+    /**
      * @description function for mapping from asset to coverage
      * @param risk
      * @return List<Asset>
@@ -64,7 +91,7 @@ public without sharing class Aswata_Coverage_Data_301 {
     public static List<Asset> getAssetByParentId(Asset risk){
         List<Asset> getByParentId = [
             SELECT Id,Amount_Insured__c,Category__c,ParentId,Amount_IDR_new__c, Currency__r.Name,
-            Indemnity_Type__c, Declare_Value__c
+            Indemnity_Type__c, Declare_Value__c, Category__r.Name
             FROM Asset
             WHERE ParentId = :risk.Id
             WITH SECURITY_ENFORCED
@@ -240,6 +267,45 @@ public without sharing class Aswata_Coverage_Data_301 {
             return updateRisk;
         }
         return risk;
+    }
+    /**
+     * @description function for generate ListCoverageId
+     * @param coverageList
+     * @param risk
+     * @return List<InsurancePolicyCoverage>
+     */
+    public static List<InsurancePolicyCoverage> getExistingIdCoverage(List<InsurancePolicyCoverage> coverageList,Asset risk){
+        List<String> listCovMasterData = new List<String>();
+        for (InsurancePolicyCoverage cov : coverageList) {
+            if(cov.Coverage_Name__c!=null){
+                listCovMasterData.add(cov.Coverage_Name__c);
+            }
+        }
+        List<InsurancePolicyCoverage> existingCoverage = [
+            SELECT Id,CoverageName,Coverage_Name__c
+            FROM InsurancePolicyCoverage
+            WHERE (Coverage_Name__c IN :listCovMasterData OR CoverageName LIKE '%+%')
+            AND Risk_ID__c =: risk.Id
+        ];
+        Map<String,String> mappExistingCoverage = new Map<String,String>();
+        for (InsurancePolicyCoverage cov : existingCoverage) {
+            if(cov.Coverage_Name__c!=null){
+                mappExistingCoverage.put(cov.Coverage_Name__c,cov.Id);
+            }else if(cov.CoverageName.contains('+')){
+                mappExistingCoverage.put('Single',cov.Id);
+            }
+        }
+        for (InsurancePolicyCoverage cov : coverageList) {
+            if (mappExistingCoverage.containsKey(cov.Coverage_Name__c)) {
+                cov.Id = mappExistingCoverage.get(cov.Coverage_Name__c);
+            }else if(cov.CoverageName.contains('+')){
+                cov.Id = mappExistingCoverage.get('Single');
+            }
+        }
+        for (InsurancePolicyCoverage cov : coverageList) {
+            System.debug('listCovMasterData >> '+cov.Id+' - '+cov.CoverageName);
+        }
+        return coverageList;
     }
 }
 // newCov.InsurancePolicyId = item.InsurancePolicyId;

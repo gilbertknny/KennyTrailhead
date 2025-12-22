@@ -1,7 +1,7 @@
 /**
  * @description       : Generate Data for Insert Coverage
  * @author            : Ahmad Yazid Munif
- * @last modified on  : 12-16-2025
+ * @last modified on  : 12-20-2025
  * @last modified by  : Ahmad Yazid Munif
 **/
 public without sharing class Aswata_Coverage_Data_Handler {
@@ -26,12 +26,12 @@ public without sharing class Aswata_Coverage_Data_Handler {
         // Rate
         coverage.Proposed_Fixed_Amount__c = wrapper.rate.coverageRate;
         coverage.Premi_Amount__c = wrapper.rate.fixedAmount;
-        coverage.Proposed_Fixed_Amount_Section_2__c = wrapper.rate.coverageRate2;
-        coverage.Premi_Amount_Section_2__c = wrapper.rate.fixedAmount2;
-        coverage.Proposed_Fixed_Amount_Section_3__c = wrapper.rate.coverageRate3;
-        coverage.Premi_Amount_Section_3__c = wrapper.rate.fixedAmount3;
-        coverage.Proposed_Fixed_Amount_Section_4__c = wrapper.rate.coverageRate4;
-        coverage.Premi_Amount_Section_4__c = wrapper.rate.fixedAmount4;
+        // coverage.Proposed_Fixed_Amount_Section_2__c = wrapper.rate.coverageRate2;
+        // coverage.Premi_Amount_Section_2__c = wrapper.rate.fixedAmount2;
+        // coverage.Proposed_Fixed_Amount_Section_3__c = wrapper.rate.coverageRate3;
+        // coverage.Premi_Amount_Section_3__c = wrapper.rate.fixedAmount3;
+        // coverage.Proposed_Fixed_Amount_Section_4__c = wrapper.rate.coverageRate4;
+        // coverage.Premi_Amount_Section_4__c = wrapper.rate.fixedAmount4;
         // deductible
         coverage = wrapperDeductible(coverage,wrapper,risk);
         // rebate
@@ -47,9 +47,9 @@ public without sharing class Aswata_Coverage_Data_Handler {
             coverage.Broker_Comission__c = wrapper.rebate.brokerCommissionValue;
             coverage.Finance_Commision_PCT__c = wrapper.rebate.financialCommissionValue;
         }
-        if(wrapper.rebates.size()>0){
-            coverage = Aswata_Coverage_SectionData_Handler.wrapperRebate4(coverage,wrapper,risk);
-        }
+        // if(wrapper.rebates.size()>0){
+        //     coverage = Aswata_Coverage_SectionData_Handler.wrapperRebate4(coverage,wrapper,risk);
+        // }
         return coverage;
     }
     /**
@@ -61,8 +61,8 @@ public without sharing class Aswata_Coverage_Data_Handler {
      */
     public static InsurancePolicyCoverage wrapperDeductible(InsurancePolicyCoverage coverage,Aswata_Coverage_Data_Wrapper.CoverageDetailWrapper wrapper,Asset risk){
         // InsurancePolicyCoverage coverage = new InsurancePolicyCoverage();
-        System.debug('## AWT Deductible'+wrapper.deductible);
-        System.debug('## AWT wrapper.deductibles'+wrapper.deductibles);
+        // System.debug('## AWT Deductible'+wrapper.deductible);
+        // System.debug('## AWT wrapper.deductibles'+wrapper.deductibles);
         // if(wrapper.deductible!=null && wrapper.deductible.deductibleSetting!=null){
         if(wrapper.deductible!=null){
             coverage.Deductible_Type__c = wrapper.deductible.deductibleSetting;
@@ -79,9 +79,9 @@ public without sharing class Aswata_Coverage_Data_Handler {
             coverage.Description__c = wrapper.deductible.descriptionValue;
             coverage.Minimum_Amount__c = wrapper.deductible.minimumAmount;
 
-            if(wrapper.deductibles.size()>0){
-                coverage = Aswata_Coverage_SectionData_Handler.wrapperDeductible4(coverage,wrapper,risk);
-            }
+            // if(wrapper.deductibles.size()>0){
+            //     coverage = Aswata_Coverage_SectionData_Handler.wrapperDeductible4(coverage,wrapper,risk);
+            // }
         }
         return coverage;
     }
@@ -95,7 +95,11 @@ public without sharing class Aswata_Coverage_Data_Handler {
         List<Aswata_Coverage_Data_Wrapper.DynamicFieldConfigure> results = new List<Aswata_Coverage_Data_Wrapper.DynamicFieldConfigure>();
         List<InsurancePolicyCoverage> existingCoverageList = [
             SELECT Id,CoverageName,Coverage_Name__c,
-            Coverage_Name__r.COVERAGE_REF_ID__c,Proposed_Fixed_Amount__c,Selected_Coverages_ID__c
+            Coverage_Name__r.COVERAGE_REF_ID__c,Proposed_Fixed_Amount__c,Selected_Coverages_ID__c,
+            Deductible_Type__c,DeductibleAmount,Deductible_PCT__c,Deductible__c,
+            Minimum_Cur_ID__c,Description,Description__c,Minimum_Amount__c,
+            Discount__c,Commision__c,Banks_Fee_Comission__c,Risk_Closing_Survey_Fee_BSP__c,
+            Leasing_Fee__c,Overdng_Comission__c,Agent_Comission__c,Broker_Comission__c,Finance_Commision_PCT__c
             FROM InsurancePolicyCoverage
             WHERE Risk_ID__c = :riskId
             WITH SECURITY_ENFORCED
@@ -105,6 +109,26 @@ public without sharing class Aswata_Coverage_Data_Handler {
             config.coverageId = cfg.Coverage_Name__r.COVERAGE_REF_ID__c;
             config.coverageName = cfg.CoverageName;
             config.rate.coverageRate = cfg.Proposed_Fixed_Amount__c;
+            config.deductible.deductibleSetting = cfg.Deductible_Type__c;
+            if(cfg.Deductible_Type__c == 'FLAT'){
+                config.deductible.deductibleAmount = cfg.DeductibleAmount;
+            }else{
+                config.deductible.deductibleAmount = cfg.Deductible_PCT__c;
+            }
+            config.deductible.deductibleFlag = cfg.Deductible__c;
+            config.deductible.currencyName = cfg.Minimum_Cur_ID__c;
+            config.deductible.descriptionDeductible = cfg.Description;
+            config.deductible.descriptionValue = cfg.Description__c;
+            config.deductible.minimumAmount = cfg.Minimum_Amount__c;
+            config.rebate.discountValue = cfg.Discount__c;
+            config.rebate.commissionValue = cfg.Commision__c;
+            config.rebate.bankFeeValue = cfg.Banks_Fee_Comission__c;
+            config.rebate.bspValue = cfg.Risk_Closing_Survey_Fee_BSP__c;
+            config.rebate.leasingValue = cfg.Leasing_Fee__c;
+            config.rebate.overridingValue = cfg.Overdng_Comission__c;
+            config.rebate.agentCommissionValue = cfg.Agent_Comission__c;
+            config.rebate.brokerCommissionValue = cfg.Broker_Comission__c;
+            config.rebate.financialCommissionValue = cfg.Finance_Commision_PCT__c;
             config.existing.idCoverage = cfg.Id;
             config.existing.listSelectedId = cfg.Selected_Coverages_ID__c;
             String modeCoverage = 'COMPOSITE';

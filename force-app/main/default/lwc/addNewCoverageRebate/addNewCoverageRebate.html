@@ -2,7 +2,7 @@
   @description       : 
   @author            : Ahmad Yazid Munif
   @group             : 
-  @last modified on  : 12-16-2025
+  @last modified on  : 12-20-2025
   @last modified by  : Ahmad Yazid Munif
 -->
 <template>
@@ -622,6 +622,7 @@
                                         <th colspan="2" class="slds-text-align_left" scope="col" style="width: 20%;">
                                             <div class="wrap-header" title="Composite Deductible">Composite/ Single Rebate</div>
                                         </th>
+                                        <td data-label="Section No" class="slds-cell-wrap">Section 1</td>
                                         <template if:true={showCommission}>
                                             <td data-label="Commission">
                                                 <lightning-input
@@ -630,7 +631,6 @@
                                                         data-id={row.id}
                                                         data-fieldname="commissionValue"
                                                         onchange={handleInputChangeSingle}
-                                                        disabled={row.isDisabledInputRebate}
                                                         variant="label-hidden">
                                                 </lightning-input>
                                             </td>
@@ -643,7 +643,6 @@
                                                         data-id={row.id}
                                                         data-fieldname="agentCommissionValue"
                                                         onchange={handleInputChangeSingle}
-                                                        disabled={row.isDisabledInputRebate}
                                                         variant="label-hidden">
                                                 </lightning-input>
                                             </td>
@@ -656,7 +655,6 @@
                                                         data-id={row.id}
                                                         data-fieldname="brokerCommissionValue"
                                                         onchange={handleInputChangeSingle}
-                                                        disabled={row.isDisabledInputRebate}
                                                         variant="label-hidden">
                                                 </lightning-input>
                                             </td>
@@ -669,7 +667,6 @@
                                                         data-id={row.id}
                                                         data-fieldname="financialCommissionValue"
                                                         onchange={handleInputChange}
-                                                        disabled={row.isDisabledInputRebate}
                                                         variant="label-hidden">
                                                 </lightning-input>
                                             </td>
@@ -682,7 +679,6 @@
                                                     data-id={row.id}
                                                     data-fieldname="discountValue"
                                                     onchange={handleInputChangeSingle}
-                                                    disabled={row.isDisabledInputRebate}
                                                     variant="label-hidden">
                                                 </lightning-input>
                                             </th>
@@ -695,7 +691,6 @@
                                                     data-id={row.id}
                                                     data-fieldname="bankFeeValue"
                                                     onchange={handleInputChangeSingle}
-                                                    disabled={row.isDisabledInputRebate}
                                                     variant="label-hidden">
                                                 </lightning-input>
                                             </th>
@@ -707,7 +702,6 @@
                                                         value={row.rebate.leasingValue}
                                                         data-id={row.id}
                                                         data-fieldname="leasingValue"
-                                                        disabled={row.isDisabledInputRebate}
                                                         onchange={handleInputChangeSingle}
                                                         variant="label-hidden">
                                                 </lightning-input>
@@ -720,7 +714,6 @@
                                                         value={row.rebate.overridingValue}
                                                         data-id={row.id}
                                                         data-fieldname="overridingValue"
-                                                        disabled={row.isDisabledInputRebate}
                                                         onchange={handleInputChangeSingle}
                                                         variant="label-hidden">
                                                 </lightning-input>
@@ -733,7 +726,6 @@
                                                         value={row.rebate.bspValue}
                                                         data-id={row.id}
                                                         data-fieldname="bspValue"
-                                                        disabled={row.isDisabledInputRebate}
                                                         onchange={handleInputChangeSingle}
                                                         variant="label-hidden">
                                                 </lightning-input>

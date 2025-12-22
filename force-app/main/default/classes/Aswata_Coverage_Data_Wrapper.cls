@@ -1,7 +1,7 @@
 /**
  * @description       : Wrapper Coverage
  * @author            : Ahmad Yazid Munif
- * @last modified on  : 12-16-2025
+ * @last modified on  : 12-20-2025
  * @last modified by  : Ahmad Yazid Munif
 **/
 public with sharing class Aswata_Coverage_Data_Wrapper {
@@ -15,11 +15,17 @@ public with sharing class Aswata_Coverage_Data_Wrapper {
         @AuraEnabled public Decimal batasBawah  {get;set;}
         /** @description wrapper coverage */
         @AuraEnabled public CoverageRate rate {get;set;}
+        /** @description wrapper Deductible */
+        @AuraEnabled public Deductible deductible {get;set;}
+        /** @description wrapper Rebate */
+        @AuraEnabled public Rebate rebate {get;set;}
         /** @description wrapper */
         @AuraEnabled public ExistingCoverage existing {get;set;}
         /** @description constructor */
         public DynamicFieldConfigure() {
             this.rate = new CoverageRate();
+            this.deductible = new Deductible();
+            this.rebate = new Rebate();
             this.existing = new ExistingCoverage();
         }
     }

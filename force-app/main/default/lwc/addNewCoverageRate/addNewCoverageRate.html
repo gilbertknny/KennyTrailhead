@@ -2,7 +2,7 @@
   @description       : Untuk Milih Coverage Saja
   @author            : Ahmad Yazid Munif
   @group             : 
-  @last modified on  : 12-15-2025
+  @last modified on  : 12-20-2025
   @last modified by  : Ahmad Yazid Munif
 -->
 <template>
@@ -52,6 +52,7 @@
                                             checked={row.isSelected}
                                             data-id={row.id}
                                             onchange={handleRowSelection}
+                                            disabled={row.isExisting}
                                             variant="label-hidden">
                                         </lightning-input>
                                     </template>

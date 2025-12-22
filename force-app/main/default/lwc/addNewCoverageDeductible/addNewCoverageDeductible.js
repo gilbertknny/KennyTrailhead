@@ -35,10 +35,14 @@ export default class AddNewCoverageDeductible extends LightningElement {
     }
     applyDisableLogic(event) {
         const isCompositeMode = (this.selectedMode === 'COMPOSITE');
+        console.log('isCompositeMode',isCompositeMode);
         const sourceRow = this.coverageData.find(row => row.id === 'SINGLE_RATE_ID');
-        const sourceDeductibleSetting = sourceRow?.deductible?.deductibleSetting || 'Flat'; 
+        // const sourceDeductibleSetting = sourceRow?.deductible?.deductibleSetting || 'Flat'; 
         this.coverageData = this.coverageData.map(row => {
             let updatedItem = { ...row };
+            const sourceDeductibleSetting = row?.deductible?.deductibleSetting; 
+            // const sourceDeductibleSetting = row?.deductible?.deductibleSetting || 'Flat'; 
+            console.log('deductibleSetting',sourceDeductibleSetting);
             const isSingleRateRow = (row.id === 'SINGLE_RATE_ID');
             let updatedDeductible = { ...row.deductible }; 
             if (isCompositeMode) {
@@ -53,10 +57,9 @@ export default class AddNewCoverageDeductible extends LightningElement {
                     updatedItem.Exchange_Rate__c= null;
                     updatedItem.minimumAmount= null;
                     // updatedItem.descriptionValue= null;
-                    const setting = sourceDeductibleSetting;
                     updatedDeductible = {
                         ...updatedDeductible,
-                        deductibleSetting: setting,
+                        deductibleSetting: sourceDeductibleSetting,
                     };
                     if (event === 'CHANGE') {
                         console.log('Composite Mode - Resetting Detail Rows');
@@ -69,8 +72,7 @@ export default class AddNewCoverageDeductible extends LightningElement {
                         };
                     }
                 }
-            } 
-            
+            }
             else {
                 updatedItem.ddtibleSetting = 'BREAKDOWN_DEDUCTIBLE';
                 updatedItem.compositeDisable = isSingleRateRow;
@@ -83,11 +85,11 @@ export default class AddNewCoverageDeductible extends LightningElement {
                         updatedItem.Exchange_Rate__c= null;
                         updatedItem.minimumAmount= null;
                         // updatedItem.descriptionValue= null;
-                        updatedItem.deductibleSetting= 'Flat';
+                        // updatedItem.deductibleSetting= sourceDeductibleSetting; 
                         console.log('Breakdown/Single Mode - Resetting Single Rate Row');
                         updatedDeductible = {
                             ...updatedDeductible,
-                            deductibleSetting: 'Flat',
+                            deductibleSetting: sourceDeductibleSetting,
                             deductibleAmount: null,
                             deductibleFlag: null,
                             minimumAmount: null,
@@ -234,15 +236,15 @@ export default class AddNewCoverageDeductible extends LightningElement {
             this.selectedMode = parsedData[0].coverageSetting ? parsedData[0].coverageSetting:'BREAKDOWN_DEDUCTIBLE';
             // this.disableModeCoverage = parsedData[0].disableModeCoverage;
             this.coverageData = parsedData.map(row => {
-                const setting = row.deductibleSetting;
-                const setting2 = row.deductibleSetting2;
-                const setting3 = row.deductibleSetting3;
-                const setting4 = row.deductibleSetting4;
+                const setting = row.deductible.deductibleSetting;
+                const setting2 = row.deductible.deductibleSetting2;
+                const setting3 = row.deductible.deductibleSetting3;
+                const setting4 = row.deductible.deductibleSetting4;
                 const shouldBeDisabled = (row.id === 'SINGLE_RATE_ID');
                 return { 
                     ...row, 
                     ddtibleSetting: this.selectedMode,
-                    compositeDisable: shouldBeDisabled,
+                    // compositeDisable: shouldBeDisabled,
                     deductibleSetting: setting,
                     deductibleSetting2: setting2,
                     deductibleSetting3: setting3,

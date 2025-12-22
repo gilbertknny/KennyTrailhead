@@ -2,7 +2,7 @@
   @description       : 
   @author            : Ahmad Yazid Munif
   @group             : 
-  @last modified on  : 12-16-2025
+  @last modified on  : 12-20-2025
   @last modified by  : Ahmad Yazid Munif
 -->
 <template>
@@ -63,7 +63,7 @@
                                     <lightning-combobox
                                         data-id={row.id}
                                         name="deductibleSetting"
-                                        value={row.deductibleSetting}
+                                        value={row.deductible.deductibleSetting}
                                         options={options}
                                         onchange={handleChange}
                                         disabled={row.compositeDisable}
@@ -280,7 +280,7 @@
                                         <lightning-combobox
                                             data-id={row.id}
                                             name="deductibleSetting2"
-                                            value={row.deductibleSetting2}
+                                            value={row.deductible.deductibleSetting2}
                                             options={options}
                                             onchange={handleChange}
                                             disabled={row.compositeDisable}
@@ -498,7 +498,7 @@
                                         <lightning-combobox
                                             data-id={row.id}
                                             name="deductibleSetting3"
-                                            value={row.deductibleSetting3}
+                                            value={row.deductible.deductibleSetting3}
                                             options={options}
                                             onchange={handleChange}
                                             disabled={row.compositeDisable}
@@ -716,7 +716,7 @@
                                         <lightning-combobox
                                             data-id={row.id4}
                                             name="deductibleSetting4"
-                                            value={row.deductibleSetting4}
+                                            value={row.deductible.deductibleSetting4}
                                             options={options}
                                             onchange={handleChange}
                                             disabled={row.compositeDisable}
@@ -934,15 +934,15 @@
                             <tr key={row.id}> 
                                 <td data-label="ID Coverage" style="width: 80px;">{row.coverageId}</td>
                                 <td data-label="Coverage Name" style="width: 280px;">{row.coverageName}</td>
+                                <td data-label="Section No">Section 1</td>
                                 <td data-label="Deductible Setting" style="width: 150px;">
                                     <div class="lookup-cell-adjust">
                                         <lightning-combobox
                                             data-id={row.id}
                                             name="deductibleSetting"
-                                            value={row.deductibleSetting}
+                                            value={row.deductible.deductibleSetting}
                                             options={options}
                                             onchange={handleChange}
-                                            disabled={row.compositeDisable}
                                             class="full-width-combobox"> 
                                         </lightning-combobox>
                                     </div>
@@ -1158,7 +1158,7 @@
                                             <lightning-combobox
                                                 data-id={row.id2}
                                                 name="deductibleSetting2"
-                                                value={row.deductibleSetting2}
+                                                value={row.deductible.deductibleSetting2}
                                                 options={options}
                                                 onchange={handleChange}
                                                 disabled={row.compositeDisable}
@@ -1376,7 +1376,7 @@
                                             <lightning-combobox
                                                 data-id={row.id3}
                                                 name="deductibleSetting3"
-                                                value={row.deductibleSetting3}
+                                                value={row.deductible.deductibleSetting3}
                                                 options={options}
                                                 onchange={handleChange}
                                                 disabled={row.compositeDisable}
@@ -1594,7 +1594,7 @@
                                             <lightning-combobox
                                                 data-id={row.id4}
                                                 name="deductibleSetting4"
-                                                value={row.deductibleSetting4}
+                                                value={row.deductible.deductibleSetting4}
                                                 options={options}
                                                 onchange={handleChange}
                                                 disabled={row.compositeDisable}
