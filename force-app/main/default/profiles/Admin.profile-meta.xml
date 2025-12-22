@@ -19589,7 +19589,7 @@
         <field>Quote.ShippingName</field>
         <readable>true</readable>
     </fieldPermissions>
-     <fieldPermissions>
+    <fieldPermissions>
         <editable>true</editable>
         <field>Quote.Stage__c</field>
         <readable>true</readable>
@@ -23776,6 +23776,14 @@
     <layoutAssignments>
         <layout>Product2-Product Layout</layout>
         <recordType>Product2.Product</recordType>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Quote-Facultative Share Layout</layout>
+        <recordType>Quote.Facultative_Share</recordType>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Quote-Folder</layout>
+        <recordType>Quote.Folder</recordType>
     </layoutAssignments>
     <layoutAssignments>
         <layout>Transaction_Data__c-Clause</layout>
@@ -28152,7 +28160,7 @@
         <visibility>DefaultOff</visibility>
     </tabVisibilities>
     <userLicense>Salesforce</userLicense>
-    <!-- <userPermissions>
+    <userPermissions>
         <enabled>true</enabled>
         <name>AIViewInsightObjects</name>
     </userPermissions>
@@ -28704,14 +28712,14 @@
         <enabled>true</enabled>
         <name>ManageSynonyms</name>
     </userPermissions>
-    <userPermissions>
+    <!-- <userPermissions>
         <enabled>true</enabled>
         <name>ManageTerritories</name>
     </userPermissions> 
     <userPermissions>
         <enabled>true</enabled>
         <name>ManageTranslation</name>
-    </userPermissions>
+    </userPermissions> -->
     <userPermissions>
         <enabled>true</enabled>
         <name>ManageTrustMeasures</name>
@@ -28720,10 +28728,10 @@
         <enabled>true</enabled>
         <name>ManageUnlistedGroups</name>
     </userPermissions>
-     <userPermissions>
+    <!-- <userPermissions>
         <enabled>true</enabled>
         <name>ManageUserAccessPolicies</name>
-    </userPermissions>
+    </userPermissions> -->
     <userPermissions>
         <enabled>true</enabled>
         <name>ManageUsers</name>
@@ -28983,5 +28991,5 @@
     <userPermissions>
         <enabled>true</enabled>
         <name>ViewUserPII</name>
-    </userPermissions> -->
+    </userPermissions>
 </Profile>
