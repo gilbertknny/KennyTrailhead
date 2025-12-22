@@ -1,40 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <actionCalls>
-        <name>Get_Client_ID</name>
-        <label>Get Client ID</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <actionName>VlocityMappingFlowBridge</actionName>
-        <actionType>apex</actionType>
-        <connector>
-            <targetReference>Cek_Status_SFAWT17</targetReference>
-        </connector>
-        <flowTransactionModel>Automatic</flowTransactionModel>
-        <inputParameters>
-            <name>ipName</name>
-            <value>
-                <stringValue>SFAWT17_Outbound</stringValue>
-            </value>
-        </inputParameters>
-        <inputParameters>
-            <name>jsonInput</name>
-            <value>
-                <elementReference>jsonSFAWT01</elementReference>
-            </value>
-        </inputParameters>
-        <nameSegment>VlocityMappingFlowBridge</nameSegment>
-        <offset>0</offset>
-        <outputParameters>
-            <assignToReference>errorMessageSFAWT17</assignToReference>
-            <name>errorMessage</name>
-        </outputParameters>
-        <outputParameters>
-            <assignToReference>jsonResponseSFAWT17</assignToReference>
-            <name>resultJson</name>
-        </outputParameters>
-    </actionCalls>
-    <actionCalls>
         <name>Notif</name>
         <label>Notif</label>
         <locationX>0</locationX>
@@ -116,7 +82,7 @@
         <actionName>VlocityMappingFlowBridge</actionName>
         <actionType>apex</actionType>
         <connector>
-            <targetReference>Screen_Success</targetReference>
+            <targetReference>Create_Records</targetReference>
         </connector>
         <flowTransactionModel>Automatic</flowTransactionModel>
         <inputParameters>
@@ -232,31 +198,6 @@
         </value>
     </customProperties>
     <decisions>
-        <name>Cek_Status_SFAWT17</name>
-        <label>Cek Status SFAWT17</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <defaultConnector>
-            <targetReference>showErrorMessageSFAWT17</targetReference>
-        </defaultConnector>
-        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
-        <rules>
-            <name>Status_Success</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>jsonResponseSFAWT17</leftValueReference>
-                <operator>Contains</operator>
-                <rightValue>
-                    <stringValue>&quot;00&quot;</stringValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Get_Account_After_API_Call</targetReference>
-            </connector>
-            <label>Status Success</label>
-        </rules>
-    </decisions>
-    <decisions>
         <name>Cek_Update</name>
         <label>Cek Update</label>
         <locationX>0</locationX>
@@ -326,7 +267,7 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Send_Busreq_When_Quote_Created</targetReference>
+                <targetReference>Screen_Success</targetReference>
             </connector>
             <label>Client ID Exist</label>
         </rules>
@@ -415,7 +356,8 @@
     </decisions>
     <description>04/12/2025 : add update opportunity =&gt; assigned underwriting
 09/12/2025 : add get primary partner Id and update to opty
-17/12/2025 : add call IP SFAWT-17</description>
+17/12/2025 : add call IP SFAWT-17
+18/12/2025: move callouts after DML</description>
     <dynamicChoiceSets>
         <name>stampDutyOptions</name>
         <dataType>String</dataType>
@@ -482,7 +424,7 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Get_Client_ID</targetReference>
+            <targetReference>Get_Account_After_API_Call</targetReference>
         </connector>
         <inputAssignments>
             <field>OpportunityAccessLevel</field>
@@ -953,34 +895,7 @@
         <allowPause>false</allowPause>
         <fields>
             <name>KCYDisplay</name>
-            <fieldText>&lt;p&gt;Anda belum melakukan KYC untuk customer:&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;strong&gt;{!Get_Account.Name}&lt;/strong&gt;&lt;/p&gt;</fieldText>
-            <fieldType>DisplayText</fieldType>
-            <styleProperties>
-                <verticalAlignment>
-                    <stringValue>top</stringValue>
-                </verticalAlignment>
-                <width>
-                    <stringValue>12</stringValue>
-                </width>
-            </styleProperties>
-        </fields>
-        <showFooter>true</showFooter>
-        <showHeader>true</showHeader>
-    </screens>
-    <screens>
-        <name>showErrorMessageSFAWT17</name>
-        <label>showErrorMessageSFAWT17</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <allowBack>true</allowBack>
-        <allowFinish>true</allowFinish>
-        <allowPause>true</allowPause>
-        <connector>
-            <targetReference>Roll_Back_In_Error</targetReference>
-        </connector>
-        <fields>
-            <name>errorMessageDisplay</name>
-            <fieldText>&lt;p&gt;An Error Occured During Client ID Processing, please contact administrator system for detail !&lt;/p&gt;</fieldText>
+            <fieldText>&lt;p&gt;Anda belum melakukan KYC untuk customer:&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;/{!Get_Account.Id}&quot; rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot;&gt;{!Get_Account.Name}&lt;/a&gt;&lt;/p&gt;</fieldText>
             <fieldType>DisplayText</fieldType>
             <styleProperties>
                 <verticalAlignment>
@@ -1028,13 +943,13 @@
     <status>Active</status>
     <textTemplates>
         <name>jsonInput</name>
-        <isViewedAsPlainText>false</isViewedAsPlainText>
-        <text>&lt;p&gt;{&quot;recordId&quot;: &quot;{!recordId}&quot;}&lt;/p&gt;</text>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>{&quot;recordId&quot;: &quot;{!recordId}&quot;}</text>
     </textTemplates>
     <textTemplates>
         <name>jsonSFAWT01</name>
-        <isViewedAsPlainText>false</isViewedAsPlainText>
-        <text>&lt;p&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255);&quot;&gt;{&quot;&lt;/span&gt;recId&lt;span style=&quot;background-color: rgb(255, 255, 255);&quot;&gt;&quot;: &quot;{!Get_Account.Id}&quot;} &lt;/span&gt;&lt;/p&gt;</text>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>{&quot;recId&quot;: &quot;{!Get_Account.Id}&quot;}</text>
     </textTemplates>
     <transforms>
         <name>Transform_Opportunity_to_Quote</name>
@@ -1042,7 +957,7 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Create_Records</targetReference>
+            <targetReference>Send_Busreq_When_Quote_Created</targetReference>
         </connector>
         <dataType>SObject</dataType>
         <isCollection>false</isCollection>

@@ -1,7 +1,7 @@
 /**
  * @description       : Data Handler for LWC Treaty Distribution
  * @author            : Ahmad Yazid Munif
- * @last modified on  : 12-05-2025
+ * @last modified on  : 12-15-2025
  * @last modified by  : Ahmad Yazid Munif
 **/
 public without sharing class Aswata_Treaty_Distribution {
@@ -78,24 +78,15 @@ public without sharing class Aswata_Treaty_Distribution {
             opptyQuote.riskName = item.Name;
             opptyQuote.opptyName = item.Opportunity__r.Name;
             opptyQuote.labelName = item.Opportunity__r.Busreq_ID__c+' - '+item.Risk_ID__c;
-            // opptyQuote.findId = item.Opportunity__r.Busreq_ID__c+item.Risk_ID__c;
-            // opptyQuote.labelName = item.Name;
             opptyQuote.findId = item.Id;
             opptyQuote.busreqId = item.Opportunity__r.Busreq_ID__c;
             opptyQuote.accumId = item.Accumulation_ID__c;
-            // opptyQuote.oppTotalSumInsured = item.Opportunity__r.Total_Sum_Insured__c;
             opptyQuote.oppTotalSumInsured = item.Amount_Insured__c;
             opptyQuote.oppStartDatePeriode = item.Opportunity__r.Start_Date_Periode__c;
             opptyQuote.oppEndDatePeriode = item.Opportunity__r.End_Date_Periode__c;
             opptyQuote.quoteReqDate = resultOppty.CreatedDate.date();
             opptyQuote.quoteNumber = resultOppty.QuoteNumber;
-            // opptyQuote.accumDate = item.Accumulation__r.CreatedDate;
             opptyQuote.addressRisk = generateFormattedAddress(item);
-            // opptyQuote.treatyResponse = resultOppty.Treaty_Distribution_Response__c;
-            // if(item.Opportunity__r.Busreq_ID__c != null &&
-            //     item.Risk_ID__c != null){
-            //     listOpptyQuote.add(opptyQuote);
-            // }
             listOpptyQuote.add(opptyQuote);
         }
         // System.debug('listOpptyQuote'+listOpptyQuote);
@@ -260,30 +251,17 @@ public without sharing class Aswata_Treaty_Distribution {
         List<String> riskIdList = new List<String>();
         // Set<String> targetCombinedIdSet = new Set<String>();
         for (RiskPairWrapper pair : riskPairs) {
-            // String safeBusreqId = String.escapeSingleQuotes(pair.busreqId);
-            // String safeRiskNumber = String.escapeSingleQuotes(pair.riskId);
-            // targetCombinedIdSet.add(safeBusreqId+safeRiskNumber);
-            // busreqIdList.add(safeBusreqId);
             String safeRiskId = String.escapeSingleQuotes(pair.riskId);
             riskIdList.add(safeRiskId);
         }
         // System.debug('### AWT busreqIdList'+busreqIdList);
         List<Asset> getAssetByBusreq = [
-            SELECT Id, Opportunity__r.Busreq_ID__c,Risk_ID__c, Accumulation__r.Group_ID__c
+            SELECT Id, Opportunity__r.Busreq_ID__c,Risk_ID__c,
+            Accumulation__r.Group_ID__c
             FROM Asset
             WHERE Id IN :riskIdList
-            // WHERE Opportunity__r.Busreq_ID__c IN :busreqIdList
             WITH SECURITY_ENFORCED
         ];
-        // List<Asset> finalFilteredAssets = new List<Asset>();
-        // for(Asset ass: getAssetByBusreq){
-        //     String queriedCombinedId = ass.Opportunity__r.Busreq_ID__c + ass.Risk_ID__c;
-        //     if (targetCombinedIdSet.contains(queriedCombinedId)) {
-        //         finalFilteredAssets.add(ass);
-        //     }
-        // }
-        // System.debug('### AWT finalFilteredAssets'+finalFilteredAssets);
-        // System.debug('### AWT finalFilteredAssets'+getAssetByBusreq);
         return getAssetByBusreq;
     }
     /**
