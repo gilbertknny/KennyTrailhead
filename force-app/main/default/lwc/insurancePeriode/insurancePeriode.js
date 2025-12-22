@@ -1,6 +1,8 @@
 import { LightningElement, api, track, wire } from 'lwc';
 import { NavigationMixin } from 'lightning/navigation';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+import { refreshApex } from '@salesforce/apex';  // Add this line
+
 import getOpportunity from '@salesforce/apex/OpportunityController.getOpportunityInsurancePeriod';
 import getTransactions from '@salesforce/apex/OpportunityController.getTransactionDataInsurancePeriod';
 import saveInsuranceDetails from '@salesforce/apex/OpportunityController.saveInsuranceDetails';
@@ -259,7 +261,7 @@ export default class InsurancePeriode extends NavigationMixin(LightningElement) 
     }
 
     connectedCallback() {
-        console.log('last update 17/12/2025 23.02');
+        console.log('last update 22/12/2025 12.00');
         console.log('opptyId: ' + this.recordId);
         console.log('isOwner: ' + this.isOwner);
     }
@@ -270,7 +272,27 @@ export default class InsurancePeriode extends NavigationMixin(LightningElement) 
         try {
             this.wiredOppResult = result;
             const { data, error } = result;
+            
+            console.log('📥 ======== OPPORTUNITY DATA WIRE ========');
+            console.log('   Status:', result.data ? '✅ Data received' : result.error ? '❌ Error' : '⏳ Loading');
+            console.log('   Loading:', result.loading);
+            
             if (data) {
+                console.log('   📊 OPPORTUNITY DATA OBJECT:');
+                console.log(JSON.stringify(data, null, 2));
+                
+                console.log('   🔍 KEY OPPORTUNITY FIELDS:');
+                console.log('      - Insurance_Period_Type__c:', data.Insurance_Period_Type__c);
+                console.log('      - Short_Period_Basis__c:', data.Short_Period_Basis__c);
+                console.log('      - Start_Date_Periode__c:', data.Start_Date_Periode__c);
+                console.log('      - End_Date_Periode__c:', data.End_Date_Periode__c);
+                console.log('      - Percentage__c:', data.Percentage__c);
+                console.log('      - StageName:', data.StageName);
+                console.log('      - COB__c:', data.COB__c);
+                console.log('      - premium_calculation__c:', data.premium_calculation__c);
+                console.log('      - isOwner__c:', data.isOwner__c);
+                console.log('      - Total fields received:', Object.keys(data).length);
+                
                 this.error = undefined;
                 this.oppRecord = data;
                 this.periodType = data.Insurance_Period_Type__c;
@@ -282,15 +304,26 @@ export default class InsurancePeriode extends NavigationMixin(LightningElement) 
                 this.cob = data.COB__c;
                 this.premiumCalculation = data.premium_calculation__c;
                 this.isOwner = data.isOwner__c;
+                
+                console.log('   🏷️ COMPONENT STATE AFTER OPPORTUNITY LOAD:');
+                console.log('      - periodType:', this.periodType);
+                console.log('      - cob:', this.cob);
+                console.log('      - stage:', this.stage);
+                console.log('      - isOwner:', this.isOwner);
+                console.log('      - premiumCalculation:', this.premiumCalculation);
+                console.log('      - percentage:', this.percentage);
+                
                 this.calculateDuration();
                 this.calculateExpectedPeriodType();
                 
                 // For auto-determined COBs, set period type based on dates
                 if (this.isAutoDeterminePeriodType && this.startDate && this.endDate) {
+                    console.log('   🔄 Auto-determining period type for COB:', this.cob);
                     this.calculateExpectedPeriodType();
                 }
                 
                 if (this.premiumCalculation === null || this.premiumCalculation === undefined) {
+                    console.log('   ⚙️ Premium calculation is null, adjusting based on duration');
                     this.adjustPremiumCalculationBasedOnDuration();
                 }
                 
@@ -304,18 +337,27 @@ export default class InsurancePeriode extends NavigationMixin(LightningElement) 
                     premiumCalculation: this.premiumCalculation
                 };
                 this.isTypeLocked = true;
-                console.log('COB='+this.cob);
-                console.log('premiumCalculation='+this.premiumCalculation);
-                console.log('percentage='+this.percentage);
-                console.log('stage='+this.stage);
-                console.log('PeriodType from Apex='+this.periodType);
+                
+                console.log('   📝 ORIGINAL FORM SNAPSHOT:');
+                console.log(JSON.stringify(this.originalForm, null, 2));
+                
             } else if (error) {
+                console.error('❌ OPPORTUNITY LOAD ERROR DETAILS:');
+                console.error('   Error object:', error);
+                console.error('   Error body:', error.body);
+                console.error('   Error message:', error.message);
+                console.error('   Stack trace:', error.stack);
+                
                 this.error = error;
                 this.isLoading = false;
-                console.error('Opportunity load error:', error);
             }
+            
+            console.log('===========================================');
+            
         } catch (err) {
-            console.error('Error in wiredOpportunity:', err);
+            console.error('❌ UNEXPECTED ERROR in wiredOpportunity:');
+            console.error(err);
+            this.error = err;
             this.isLoading = false;
         }
     }
@@ -323,32 +365,102 @@ export default class InsurancePeriode extends NavigationMixin(LightningElement) 
     @wire(getTransactions, { opportunityId: '$recordId' })
     wiredTransactions(result) {
         this.wiredTxnResult = result;
-        this.isLoading = false;
+        
+        console.log('📥 ======== TRANSACTIONS DATA WIRE ========');
+        console.log('   Status:', result.data ? '✅ Data received' : result.error ? '❌ Error' : '⏳ Loading');
+        console.log('   Loading:', result.loading);
+        
         const { data, error } = result;
 
         if (data) {
+            console.log('   📊 TRANSACTIONS DATA ARRAY:');
+            console.log(JSON.stringify(data, null, 2));
+            
+            console.log('   🔍 TRANSACTIONS SUMMARY:');
+            console.log('      - Number of transactions:', data.length);
+            
+            if (data.length > 0) {
+                console.log('      - First transaction:', JSON.stringify(data[0], null, 2));
+                console.log('      - Schema_Type__c from first transaction:', data[0].Schema_Type__c);
+                this.schemaType = data[0].Schema_Type__c;
+                console.log('      - schemaType set to:', this.schemaType);
+            } else {
+                console.log('      - No transactions found');
+                this.schemaType = null;
+            }
+            
             this.transactions = data;
             this.error = undefined;
-            if (data.length > 0) {
-                this.schemaType = data[0].Schema_Type__c;
-            }
 
             this.adjustmentRows = [];
             
             // Format existing values to 6 decimals for display
             if (this.schemaType === 'Sum Insured Adjustment' && data.length > 0) {
-                // You can format existing data here if needed
-                console.log('Formatting existing transaction data for display');
+                console.log('   ⚙️ Sum Insured Adjustment schema detected, formatting data');
             }
 
             if (this.oppRecord) {
+                console.log('   🔄 Calculating duration after transactions loaded');
                 this.calculateDuration();
                 this.calculateExpectedPeriodType();
             }
+            
+            this.isLoading = false;
+            console.log('   ✅ Component loading complete, isLoading set to false');
+            
         } else if (error) {
+            console.error('❌ TRANSACTIONS LOAD ERROR DETAILS:');
+            console.error('   Error object:', error);
+            console.error('   Error body:', error.body);
+            console.error('   Error message:', error.message);
+            console.error('   Stack trace:', error.stack);
+            
             this.error = error;
-            console.error('Transactions load error', error);
+            this.isLoading = false;
         }
+        
+        console.log('============================================');
+        
+        // Log final component state
+        console.log('🎯 ======== FINAL COMPONENT STATE ========');
+        console.log('   Basic Properties:');
+        console.log('      - recordId:', this.recordId);
+        console.log('      - periodType:', this.periodType);
+        console.log('      - cob:', this.cob);
+        console.log('      - stage:', this.stage);
+        console.log('      - isOwner:', this.isOwner);
+        console.log('      - isLoading:', this.isLoading);
+        console.log('      - isEditing:', this.isEditing);
+        console.log('      - isReadOnly:', this.isReadOnly);
+        console.log('      - isLimitedForm:', this.isLimitedForm);
+        
+        console.log('   Date Properties:');
+        console.log('      - startDate:', this.startDate);
+        console.log('      - endDate:', this.endDate);
+        console.log('      - dayCount:', this.dayCount);
+        
+        console.log('   Calculation Properties:');
+        console.log('      - premiumCalculation:', this.premiumCalculation);
+        console.log('      - percentage:', this.percentage);
+        console.log('      - shortBasis:', this.shortBasis);
+        console.log('      - calculatedRate:', this.calculatedRate);
+        console.log('      - yearsMonthsInfo:', this.yearsMonthsInfo);
+        
+        console.log('   Schema Properties:');
+        console.log('      - schemaType:', this.schemaType);
+        console.log('      - transaction count:', this.transactions.length);
+        console.log('      - adjustmentRows count:', this.adjustmentRows.length);
+        
+        console.log('   UI State:');
+        console.log('      - showInsuranceType:', this.showInsuranceType);
+        console.log('      - showPremiumCalculation:', this.showPremiumCalculation);
+        console.log('      - isAnnual:', this.isAnnual);
+        console.log('      - isShort:', this.isShort);
+        console.log('      - isLongTerm:', this.isLongTerm);
+        console.log('      - showInfo:', this.showInfo);
+        console.log('      - showPeriodTypeValidationError:', this.showPeriodTypeValidationError);
+        
+        console.log('==========================================');
     }
 
     // ------ NEW: Period Type Handler (ComboBox) ------
@@ -991,220 +1103,248 @@ export default class InsurancePeriode extends NavigationMixin(LightningElement) 
 
         console.log('Final yearsMonthsInfo: ' + this.yearsMonthsInfo);
     }
-
+    
     async handleSave() {
-        if (this.isLimitedForm) {
-            if (!this.startDate) {
-                this.isLoading = false;
-                this.dispatchEvent(new ShowToastEvent({
-                    title: 'Validation Error',
-                    message: 'Start Date is required.',
-                    variant: 'error'
-                }));
-                return;
+    // Validation for limited forms
+    if (this.isLimitedForm) {
+        if (!this.startDate) {
+            this.isLoading = false;
+            this.dispatchEvent(new ShowToastEvent({
+                title: 'Validation Error',
+                message: 'Start Date is required.',
+                variant: 'error'
+            }));
+            return;
+        }
+        
+        if (this.isEndDateRequired && !this.endDate) {
+            this.isLoading = false;
+            this.dispatchEvent(new ShowToastEvent({
+                title: 'Validation Error',
+                message: 'End Date is required.',
+                variant: 'error'
+            }));
+            return;
+        }
+    } else {
+        // Validation for non-limited forms
+        if (!this.startDate || !this.endDate) {
+            this.isLoading = false;
+            this.dispatchEvent(new ShowToastEvent({
+                title: 'Validation Error',
+                message: 'Start Date and End Date are required.',
+                variant: 'error'
+            }));
+            return;
+        }
+    }
+
+    // Validate date range
+    if (this.startDate && this.endDate) {
+        const start = new Date(this.startDate);
+        const end = new Date(this.endDate);
+        if (isNaN(start.getTime()) || isNaN(end.getTime()) || start > end) {
+            this.isLoading = false;
+            this.dispatchEvent(new ShowToastEvent({
+                title: 'Validation Error',
+                message: 'Start Date must be before or equal to End Date.',
+                variant: 'error'
+            }));
+            return;
+        }
+    }
+
+    // Check for period type validation warning
+    if (!this.isLimitedForm && this.showPeriodTypeValidationError) {
+        const userConfirmed = await this.confirmSaveWithValidationError();
+        if (!userConfirmed) {
+            this.isLoading = false;
+            return;
+        }
+    }
+
+    // Process based on period type for non-limited forms
+    if (!this.isLimitedForm) {
+        if (this.periodType === '2' && this.shortBasis === '1') {
+            // Short-Period with Percentage basis
+            this.calculatedRate = null;
+            this.years = null;
+            this._computedYears = null;
+        } else if (this.periodType === '2' && this.shortBasis === '2') {
+            // Short-Period with Pro-Rata basis
+            this.percentage = null;
+            this.years = null;
+            this._computedYears = null;
+            
+            if (this.calculatedRate !== null && this.calculatedRate !== undefined) {
+                this.calculatedRate = parseFloat(this.calculatedRate.toFixed(6));
+            }
+        } else if (this.periodType === '1') {
+            // Annual
+            this.calculatedRate = null;
+            this.years = 1;
+        } else if (this.periodType === '3') {
+            // Long Term
+            if (this.calculatedRate !== null && this.calculatedRate !== undefined) {
+                this.calculatedRate = parseFloat(this.calculatedRate.toFixed(6));
             }
             
-            if (this.isEndDateRequired && !this.endDate) {
-                this.isLoading = false;
-                this.dispatchEvent(new ShowToastEvent({
-                    title: 'Validation Error',
-                    message: 'End Date is required.',
-                    variant: 'error'
-                }));
-                return;
-            }
-        } else {
-            if (!this.startDate || !this.endDate) {
-                this.isLoading = false;
-                this.dispatchEvent(new ShowToastEvent({
-                    title: 'Validation Error',
-                    message: 'Start Date and End Date are required.',
-                    variant: 'error'
-                }));
-                return;
+            if (!this.years && this._computedYears) {
+                this.years = this._computedYears;
             }
         }
+    }
 
-        if (this.startDate && this.endDate) {
-            const start = new Date(this.startDate);
-            const end = new Date(this.endDate);
-            if (isNaN(start.getTime()) || isNaN(end.getTime()) || start > end) {
-                this.isLoading = false;
-                this.dispatchEvent(new ShowToastEvent({
-                    title: 'Validation Error',
-                    message: 'Start Date must be before or equal to End Date.',
-                    variant: 'error'
-                }));
-                return;
-            }
+    // Validate percentage for Short-Period with Percentage basis
+    if (!this.isLimitedForm && this.periodType === '2' && this.shortBasis === '1') {
+        if (this.percentage === null || this.percentage === undefined || this.percentage === '') {
+            this.isLoading = false;
+            this.dispatchEvent(new ShowToastEvent({
+                title: 'Validation Error',
+                message: 'Percentage is required for Short-Period with Percentage basis.',
+                variant: 'error'
+            }));
+            return;
         }
-
-        if (!this.isLimitedForm && this.showPeriodTypeValidationError) {
-            const userConfirmed = await this.confirmSaveWithValidationError();
-            if (!userConfirmed) {
-                this.isLoading = false;
-                return;
-            }
+        
+        const percentageNum = parseFloat(this.percentage);
+        if (isNaN(percentageNum) || percentageNum < 0 || percentageNum > 100) {
+            this.isLoading = false;
+            this.dispatchEvent(new ShowToastEvent({
+                title: 'Validation Error',
+                message: 'Percentage must be a number between 0 and 100.',
+                variant: 'error'
+            }));
+            return;
         }
+    }
+    
+    // Validate percentage for Premium Calculation with Percentage type
+    if (this.isPremiumPercentageInput) {
+        if (this.percentage === null || this.percentage === undefined || this.percentage === '') {
+            this.isLoading = false;
+            this.dispatchEvent(new ShowToastEvent({
+                title: 'Validation Error',
+                message: 'Percentage is required for Premium Calculation with Percentage type.',
+                variant: 'error'
+            }));
+            return;
+        }
+        
+        const percentageNum = parseFloat(this.percentage);
+        if (isNaN(percentageNum) || percentageNum < 0 || percentageNum > 100) {
+            this.isLoading = false;
+            this.dispatchEvent(new ShowToastEvent({
+                title: 'Validation Error',
+                message: 'Percentage must be a number between 0 and 100.',
+                variant: 'error'
+            }));
+            return;
+        }
+    }
 
-        if (!this.isLimitedForm) {
-            if(this.periodType == '2' && this.shortBasis == '1'){
-                this.calculatedRate = null;
-                this.years = null;
-                this._computedYears = null;
-            } else if(this.periodType == '2' && this.shortBasis == '2'){
-                this.percentage = null;
-                this.years = null;
-                this._computedYears = null;
-                
-                if (this.calculatedRate !== null && this.calculatedRate !== undefined) {
-                    this.calculatedRate = parseFloat(this.calculatedRate.toFixed(6));
+    // Start loading
+    this.isLoading = true;
+    
+    // Prepare transaction rows
+    const transactionRows = this.adjustmentRows.map(row => {
+        let rowPercentage = row.percentage;
+        let rowType = row.type;
+        
+        if (row.year > 1 && rowPercentage) {
+            if (this.schemaType === 'Sum Insured Adjustment') {
+                rowPercentage = String(rowPercentage);
+            } else if (this.schemaType === 'Discounted Premium') {
+                if (rowType === '2' && this.calculatedRate !== null) {
+                    rowPercentage = this.calculatedRate.toFixed(6);
+                } else {
+                    rowPercentage = parseFloat(rowPercentage).toFixed(6);
                 }
-            } else if(this.periodType == '1'){
-                this.calculatedRate = null;
-                this.years = 1;
-            } else if(this.periodType == '3') {
-                if (this.calculatedRate !== null && this.calculatedRate !== undefined) {
-                    this.calculatedRate = parseFloat(this.calculatedRate.toFixed(6));
-                }
-                
-                if (!this.years && this._computedYears) {
-                    this.years = this._computedYears;
-                }
-            }
-        }
-
-        if (!this.isLimitedForm && this.periodType == '2' && this.shortBasis == '1') {
-            if (this.percentage === null || this.percentage === undefined || this.percentage === '') {
-                this.isLoading = false;
-                this.dispatchEvent(new ShowToastEvent({
-                    title: 'Validation Error',
-                    message: 'Percentage is required for Short-Period with Percentage basis.',
-                    variant: 'error'
-                }));
-                return;
-            }
-            
-            const percentageNum = parseFloat(this.percentage);
-            if (isNaN(percentageNum) || percentageNum < 0 || percentageNum > 100) {
-                this.isLoading = false;
-                this.dispatchEvent(new ShowToastEvent({
-                    title: 'Validation Error',
-                    message: 'Percentage must be a number between 0 and 100.',
-                    variant: 'error'
-                }));
-                return;
             }
         }
         
-        if (this.isPremiumPercentageInput) {
-            if (this.percentage === null || this.percentage === undefined || this.percentage === '') {
-                this.isLoading = false;
-                this.dispatchEvent(new ShowToastEvent({
-                    title: 'Validation Error',
-                    message: 'Percentage is required for Premium Calculation with Percentage type.',
-                    variant: 'error'
-                }));
-                return;
-            }
-            
-            const percentageNum = parseFloat(this.percentage);
-            if (isNaN(percentageNum) || percentageNum < 0 || percentageNum > 100) {
-                this.isLoading = false;
-                this.dispatchEvent(new ShowToastEvent({
-                    title: 'Validation Error',
-                    message: 'Percentage must be a number between 0 and 100.',
-                    variant: 'error'
-                }));
-                return;
-            }
-        }
-
-        this.isLoading = true;
-        
-        const transactionRows = this.adjustmentRows.map(row => {
-            let rowPercentage = row.percentage;
-            let rowType = row.type;
-            
-            if (row.year > 1 && rowPercentage) {
-                if (this.schemaType === 'Sum Insured Adjustment') {
-                    rowPercentage = String(rowPercentage);
-                } else if (this.schemaType === 'Discounted Premium') {
-                    if (rowType === '2' && this.calculatedRate !== null) {
-                        rowPercentage = this.calculatedRate.toFixed(6);
-                    } else {
-                        rowPercentage = parseFloat(rowPercentage).toFixed(6);
-                    }
-                }
-            }
-            
-            return {
-                recordId: row.recordId,
-                year: row.year,
-                percentage: rowPercentage,
-                type: rowType
-            };
-        });
-
-        const dataToSave = {
-            opportunityId: this.recordId, 
-            periodType: this.periodType, 
-            startDate: this.startDate, 
-            endDate: this.endDate,
-            shortBasis: this.shortBasis, 
-            percentage: this.percentage, 
-            schemaType: this.schemaType, 
-            numberOfYear: this.years,
-            totalYears: this._computedYears, 
-            totalMonth: this._computedMonths, 
-            periodRate: this.calculatedRate !== null && this.calculatedRate !== undefined 
-                ? parseFloat(this.calculatedRate.toFixed(6)) 
-                : null,
-            premiumCalculation: this.premiumCalculation,
-            transactionRows: transactionRows
+        return {
+            recordId: row.recordId,
+            year: row.year,
+            percentage: rowPercentage,
+            type: rowType
         };
+    });
+
+    // Prepare data to save
+    const dataToSave = {
+        opportunityId: this.recordId, 
+        periodType: this.periodType, 
+        startDate: this.startDate, 
+        endDate: this.endDate,
+        shortBasis: this.shortBasis, 
+        percentage: this.percentage, 
+        schemaType: this.schemaType, 
+        numberOfYear: this.years,
+        totalYears: this._computedYears, 
+        totalMonth: this._computedMonths, 
+        periodRate: this.calculatedRate !== null && this.calculatedRate !== undefined 
+            ? parseFloat(this.calculatedRate.toFixed(6)) 
+            : null,
+        premiumCalculation: this.premiumCalculation,
+        transactionRows: transactionRows
+    };
+    
+    console.log('dataToSave: '+JSON.stringify(dataToSave, null, 2));
+    
+    try {
+        // Save data
+        await saveInsuranceDetails({ wrapper: dataToSave });
         
-        console.log('dataToSave: '+JSON.stringify(dataToSave, null, 2));
+        // Show success message
+        this.dispatchEvent(new ShowToastEvent({ 
+            title: 'Success', 
+            message: 'Insurance Period details have been saved.', 
+            variant: 'success' 
+        }));
+        
+        // Refresh wired data using refreshApex
+        await Promise.all([
+            refreshApex(this.wiredOppResult),
+            refreshApex(this.wiredTxnResult)
+        ]);
+        
+        // Exit edit mode
         this.isEditing = false;
         
-        saveInsuranceDetails({ wrapper: dataToSave })
-            .then(() => {
-                this.dispatchEvent(new ShowToastEvent({ 
-                    title: 'Success', 
-                    message: 'Insurance Period details have been saved.', 
-                    variant: 'success' 
-                }));
-                
-                this.refreshData();
-                
-                setTimeout(() => {
-                    this[NavigationMixin.Navigate]({ 
-                        type: 'standard__recordPage', 
-                        attributes: { 
-                            recordId: this.recordId, 
-                            actionName: 'view' 
-                        } 
-                    });
-                }, 1000);
-            })
-            .catch(error => {
-                this.isEditing = true;
-                let message = 'An unknown error occurred.';
-                if (error && error.body && error.body.message) {
-                    message = error.body.message;
-                } else if (error && error.message) {
-                    message = error.message;
-                }
-                this.dispatchEvent(new ShowToastEvent({ 
-                    title: 'Error Saving Record', 
-                    message: message, 
-                    variant: 'error' 
-                }));
-            })
-            .finally(() => { 
-                this.isLoading = false; 
+        // Navigate to record page after a brief delay
+        setTimeout(() => {
+            this[NavigationMixin.Navigate]({ 
+                type: 'standard__recordPage', 
+                attributes: { 
+                    recordId: this.recordId, 
+                    actionName: 'view' 
+                } 
             });
+        }, 1000);
+        
+    } catch (error) {
+        // Handle error - stay in edit mode
+        this.isEditing = true;
+        
+        let message = 'An unknown error occurred.';
+        if (error && error.body && error.body.message) {
+            message = error.body.message;
+        } else if (error && error.message) {
+            message = error.message;
+        }
+        
+        this.dispatchEvent(new ShowToastEvent({ 
+            title: 'Error Saving Record', 
+            message: message, 
+            variant: 'error' 
+        }));
+        
+        console.error('Save error:', error);
+    } finally { 
+        this.isLoading = false; 
     }
+}
 
     // Helper method to refresh data after save
     refreshData() {
