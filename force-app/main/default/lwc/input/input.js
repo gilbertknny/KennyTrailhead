@@ -86,6 +86,7 @@ export default class Input extends LightningElement {
             const myPicker = this.refs.myPicker;
             myPicker.clearSelection();
         }
+        
     }
 
     connectedCallback() {
