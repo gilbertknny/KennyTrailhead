@@ -1,12 +1,43 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
 	<types>
-		<members>Quote_Screen_Create_Quote</members>
+		<members>Account.KYC_Approval</members>
+		<name>ApprovalProcess</name>
+	</types>
+	<types>
+		<members>Account.Approval_Process__c</members>
+		<name>CustomField</name>
+	</types>
+	<types>
+		<members>Account_Final_Approve_KYC</members>
+		<members>KYC_Call_SFAWT_01_17</members>
 		<name>Flow</name>
 	</types>
 	<types>
-		<members>Quote_Screen_Create_Quote</members>
+		<members>Account_Final_Approve_KYC</members>
+		<members>KYC_Call_SFAWT_01_17</members>
 		<name>FlowDefinition</name>
+	</types>
+	<types>
+		<members>Account.FinServ__IndustriesBusiness</members>
+		<members>Account.Individual</members>
+		<members>Account.Insurance</members>
+		<members>Account.Loss_Adjuster</members>
+		<members>Account.Surveyor</members>
+		<members>Account.Workshop</members>
+		<name>RecordType</name>
+	</types>
+	<types>
+		<members>Account.Approve</members>
+		<members>Account.Reject_Status</members>
+		<members>Account.Submit_Status</members>
+		<members>Account.isSchedule_False</members>
+		<members>Account.isSchedule_True</members>
+		<name>WorkflowFieldUpdate</name>
+	</types>
+	<types>
+		<members>Account.KYC_Approval</members>
+		<name>WorkflowTask</name>
 	</types>
 	<version>65.0</version>
 </Package>
