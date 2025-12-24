@@ -1,33 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <actionCalls>
-        <name>Call_SFAWT01</name>
-        <label>Call SFAWT01</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <actionName>VlocityMappingFlowBridge</actionName>
-        <actionType>apex</actionType>
-        <connector>
-            <targetReference>Assignment</targetReference>
-        </connector>
-        <flowTransactionModel>Automatic</flowTransactionModel>
-        <inputParameters>
-            <name>ipName</name>
-            <value>
-                <stringValue>SFAWT01_CreateBusreq</stringValue>
-            </value>
-        </inputParameters>
-        <inputParameters>
-            <name>jsonInput</name>
-            <value>
-                <elementReference>sfawt01</elementReference>
-            </value>
-        </inputParameters>
-        <nameSegment>VlocityMappingFlowBridge</nameSegment>
-        <offset>0</offset>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
-    </actionCalls>
-    <actionCalls>
         <name>Call_SFAWT17</name>
         <label>Call SFAWT17</label>
         <locationX>0</locationX>
@@ -112,7 +85,7 @@
         <collectionReference>Get_Quote</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
-            <targetReference>Call_SFAWT01</targetReference>
+            <targetReference>Call_Flow_to_IP_API_Flow_1</targetReference>
         </nextValueConnector>
         <noMoreValuesConnector>
             <targetReference>Update_Quote</targetReference>
@@ -183,15 +156,38 @@
         </connector>
     </start>
     <status>Active</status>
-    <textTemplates>
-        <name>sfawt01</name>
-        <isViewedAsPlainText>false</isViewedAsPlainText>
-        <text>&lt;p&gt;{&quot;recordId&quot;: &quot;{!Loop_Quote.OpportunityId}&quot;}&lt;/p&gt;</text>
-    </textTemplates>
+    <subflows>
+        <name>Call_Flow_to_IP_API_Flow_1</name>
+        <label>Call Flow to IP API Flow 1</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Assignment</targetReference>
+        </connector>
+        <flowName>Call_Flow_to_IP_API</flowName>
+        <inputAssignments>
+            <name>ipname</name>
+            <value>
+                <stringValue>SFAWT01_CreateBusreq</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>param</name>
+            <value>
+                <stringValue>recordId</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>recordId</name>
+            <value>
+                <elementReference>Loop_Quote.OpportunityId</elementReference>
+            </value>
+        </inputAssignments>
+    </subflows>
     <textTemplates>
         <name>sfawt17</name>
-        <isViewedAsPlainText>false</isViewedAsPlainText>
-        <text>&lt;p&gt;{&quot;recId&quot;: &quot;&lt;span style=&quot;background-color: rgb(255, 255, 255);&quot;&gt;{!recordId}&lt;/span&gt;&quot;}&lt;/p&gt;</text>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>{ &quot;recId&quot; : &quot;{!recordId}&quot; }</text>
     </textTemplates>
     <variables>
         <name>ListQuote</name>
