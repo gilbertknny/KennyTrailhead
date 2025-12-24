@@ -1,0 +1,46 @@
+name: Run Apex Tests (Cron)
+
+on:
+  schedule:
+    # 16:30 WIB = 09:30 UTC
+    - cron: '30 9 * * *'
+  workflow_dispatch: # untuk manual run
+
+jobs:
+  run-apex-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout (opsional tapi best practice)
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      # 2. Install Salesforce CLI
+      - name: Setup Node.js and SF CLI
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: |
+          sudo apt-get update && sudo apt-get install -y unzip curl openjdk-17-jdk
+          npm install --global @salesforce/cli
+          echo "y" | sf plugins:install sfdx-git-delta
+
+      # 3. Authenticate Salesforce (JWT)
+      - name: Authenticate Salesforce
+        run: |
+          sf org login jwt \
+            --client-id ${{ secrets.CONSUMER_KEY }} \
+            --jwt-key-file server.key \
+            --username ${{ vars.USERNAME }} \
+            --instance-url ${{ vars.URL_INSTANCE }} \
+            --alias sit
+
+      # 4. Run Apex Test Result (Get Test)
+      - name: Get Apex Test Result
+        run: |
+          sf apex run test \
+          --test-level RunLocalTests \
+          --target-org sit \
+          --wait 60
+
+            
