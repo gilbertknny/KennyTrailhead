@@ -82,7 +82,7 @@
         <actionName>VlocityMappingFlowBridge</actionName>
         <actionType>apex</actionType>
         <connector>
-            <targetReference>Create_Records</targetReference>
+            <targetReference>Check_Status_From_SFAWT_01</targetReference>
         </connector>
         <flowTransactionModel>Automatic</flowTransactionModel>
         <inputParameters>
@@ -223,56 +223,6 @@
         </rules>
     </decisions>
     <decisions>
-        <name>Check_Account_KYC</name>
-        <label>Check Account KYC</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <defaultConnector>
-            <targetReference>Show_Error_KYC</targetReference>
-        </defaultConnector>
-        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
-        <rules>
-            <name>Check_Passed_KYC</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>Get_Account.Is_General__c</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <booleanValue>true</booleanValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Check_Stage_Opportunity</targetReference>
-            </connector>
-            <label>Check Passed KYC</label>
-        </rules>
-    </decisions>
-    <decisions>
-        <name>Check_Client_ID_Exist</name>
-        <label>Check Client ID Exist</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <defaultConnector>
-            <targetReference>lblClientIDNull</targetReference>
-        </defaultConnector>
-        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
-        <rules>
-            <name>Client_ID_Exist</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>Get_Account_After_API_Call.Client_ID__c</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>false</booleanValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Screen_Success</targetReference>
-            </connector>
-            <label>Client ID Exist</label>
-        </rules>
-    </decisions>
-    <decisions>
         <name>Check_Stage_Opportunity</name>
         <label>Check Stage Opportunity</label>
         <locationX>0</locationX>
@@ -302,6 +252,31 @@
                 <targetReference>Input_Quote_Name</targetReference>
             </connector>
             <label>Stage Opportunity</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_Status_From_SFAWT_01</name>
+        <label>Check Status From SFAWT-01</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Error_Integration_SFAWT01</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Status_Success</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>getStatusResponse</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <numberValue>0.0</numberValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Create_Records</targetReference>
+            </connector>
+            <label>Status Success</label>
         </rules>
     </decisions>
     <decisions>
@@ -383,6 +358,19 @@
     </dynamicChoiceSets>
     <environments>Default</environments>
     <formulas>
+        <name>getStatusResponse</name>
+        <dataType>Number</dataType>
+        <expression>VALUE(
+ MID(
+   {!Send_Busreq_When_Quote_Created.resultJson},
+   FIND(&apos;&quot;status&quot;:&quot;&apos;, {!Send_Busreq_When_Quote_Created.resultJson}) + 10,
+   FIND(&apos;&quot;&apos;, {!Send_Busreq_When_Quote_Created.resultJson}, FIND(&apos;&quot;status&quot;:&quot;&apos;, {!Send_Busreq_When_Quote_Created.resultJson}) + 10) - 
+   (FIND(&apos;&quot;status&quot;:&quot;&apos;, {!Send_Busreq_When_Quote_Created.resultJson}) + 10)
+ )
+)</expression>
+        <scale>0</scale>
+    </formulas>
+    <formulas>
         <name>NotifBody</name>
         <dataType>String</dataType>
         <expression>&apos;You have 1 approval for Quote No. &apos; + {!Transform_Opportunity_to_Quote.QuoteNumber}</expression>
@@ -424,8 +412,12 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Get_Account_After_API_Call</targetReference>
+            <targetReference>Screen_Success</targetReference>
         </connector>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Delete_Quote</targetReference>
+        </faultConnector>
         <inputAssignments>
             <field>OpportunityAccessLevel</field>
             <value>
@@ -463,48 +455,13 @@
         </connector>
         <inputReference>Transform_Opportunity_to_Quote</inputReference>
     </recordCreates>
-    <recordLookups>
-        <name>Get_Account</name>
-        <label>Get Account</label>
+    <recordDeletes>
+        <name>Delete_Quote</name>
+        <label>Delete Quote</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
-        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
-        <connector>
-            <targetReference>Check_Account_KYC</targetReference>
-        </connector>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>Id</field>
-            <operator>EqualTo</operator>
-            <value>
-                <elementReference>Get_Opportunity.AccountId</elementReference>
-            </value>
-        </filters>
-        <getFirstRecordOnly>true</getFirstRecordOnly>
-        <object>Account</object>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
-    </recordLookups>
-    <recordLookups>
-        <name>Get_Account_After_API_Call</name>
-        <label>Get Account After API Call</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
-        <connector>
-            <targetReference>Check_Client_ID_Exist</targetReference>
-        </connector>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>Id</field>
-            <operator>EqualTo</operator>
-            <value>
-                <elementReference>Get_Account.Id</elementReference>
-            </value>
-        </filters>
-        <getFirstRecordOnly>true</getFirstRecordOnly>
-        <object>Account</object>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
-    </recordLookups>
+        <inputReference>Transform_Opportunity_to_Quote</inputReference>
+    </recordDeletes>
     <recordLookups>
         <name>Get_Notif</name>
         <label>Get Notif</label>
@@ -514,6 +471,10 @@
         <connector>
             <targetReference>Run_Quote_Approval</targetReference>
         </connector>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Delete_Quote</targetReference>
+        </faultConnector>
         <filterLogic>and</filterLogic>
         <filters>
             <field>MasterLabel</field>
@@ -610,7 +571,7 @@
         <locationY>0</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Get_Account</targetReference>
+            <targetReference>Check_Stage_Opportunity</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -631,12 +592,6 @@
         <object>RecordType</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
-    <recordRollbacks>
-        <name>Roll_Back_In_Error</name>
-        <label>Roll Back In Error</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-    </recordRollbacks>
     <recordUpdates>
         <name>Update_Opportunity_Stage</name>
         <label>Update Opportunity Stage</label>
@@ -645,6 +600,10 @@
         <connector>
             <targetReference>Add_UW_to_Opportunity_Teams</targetReference>
         </connector>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Delete_Quote</targetReference>
+        </faultConnector>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Id</field>
@@ -693,6 +652,10 @@
         <connector>
             <targetReference>Assignment_List_User</targetReference>
         </connector>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Delete_Quote</targetReference>
+        </faultConnector>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Id</field>
@@ -709,6 +672,30 @@
         </inputAssignments>
         <object>Quote</object>
     </recordUpdates>
+    <screens>
+        <name>Error_Integration_SFAWT01</name>
+        <label>Error Integration SFAWT01</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>TextErrorSFAWT_01</name>
+            <fieldText>&lt;p&gt;&lt;strong style=&quot;color: rgb(68, 68, 68); font-size: 16px; background-color: rgb(255, 255, 255);&quot;&gt;Unable to get Request Number, Please Contact Administrator for The Detail !!&lt;/strong&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
     <screens>
         <name>Fault_Screen</name>
         <label>Fault Screen</label>
@@ -781,33 +768,6 @@
         <showHeader>true</showHeader>
     </screens>
     <screens>
-        <name>lblClientIDNull</name>
-        <label>lblClientIDNull</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <allowBack>true</allowBack>
-        <allowFinish>true</allowFinish>
-        <allowPause>true</allowPause>
-        <connector>
-            <targetReference>Roll_Back_In_Error</targetReference>
-        </connector>
-        <fields>
-            <name>displayClientIdEmpty</name>
-            <fieldText>&lt;p&gt;Client ID is null !&lt;/p&gt;</fieldText>
-            <fieldType>DisplayText</fieldType>
-            <styleProperties>
-                <verticalAlignment>
-                    <stringValue>top</stringValue>
-                </verticalAlignment>
-                <width>
-                    <stringValue>12</stringValue>
-                </width>
-            </styleProperties>
-        </fields>
-        <showFooter>true</showFooter>
-        <showHeader>true</showHeader>
-    </screens>
-    <screens>
         <name>Screen_Failed</name>
         <label>Screen Failed</label>
         <locationX>0</locationX>
@@ -816,7 +776,8 @@
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
         <connector>
-            <targetReference>Roll_Back_In_Error</targetReference>
+            <isGoTo>true</isGoTo>
+            <targetReference>Delete_Quote</targetReference>
         </connector>
         <fields>
             <name>textFailed</name>
@@ -867,35 +828,11 @@
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
         <connector>
-            <targetReference>Roll_Back_In_Error</targetReference>
+            <targetReference>Delete_Quote</targetReference>
         </connector>
         <fields>
             <name>uwNotFountDisplayText</name>
             <fieldText>&lt;p&gt;&lt;strong style=&quot;background-color: rgb(255, 255, 255); font-size: 16px; color: rgb(68, 68, 68);&quot;&gt;Underwriter user cannot be find, please contact admin!&lt;/strong&gt;&lt;/p&gt;</fieldText>
-            <fieldType>DisplayText</fieldType>
-            <styleProperties>
-                <verticalAlignment>
-                    <stringValue>top</stringValue>
-                </verticalAlignment>
-                <width>
-                    <stringValue>12</stringValue>
-                </width>
-            </styleProperties>
-        </fields>
-        <showFooter>true</showFooter>
-        <showHeader>true</showHeader>
-    </screens>
-    <screens>
-        <name>Show_Error_KYC</name>
-        <label>Show Error KYC</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <allowBack>false</allowBack>
-        <allowFinish>true</allowFinish>
-        <allowPause>false</allowPause>
-        <fields>
-            <name>KCYDisplay</name>
-            <fieldText>&lt;p&gt;Anda belum melakukan KYC untuk customer:&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;/{!Get_Account.Id}&quot; rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot;&gt;{!Get_Account.Name}&lt;/a&gt;&lt;/p&gt;</fieldText>
             <fieldType>DisplayText</fieldType>
             <styleProperties>
                 <verticalAlignment>
@@ -945,11 +882,6 @@
         <name>jsonInput</name>
         <isViewedAsPlainText>true</isViewedAsPlainText>
         <text>{&quot;recordId&quot;: &quot;{!recordId}&quot;}</text>
-    </textTemplates>
-    <textTemplates>
-        <name>jsonSFAWT01</name>
-        <isViewedAsPlainText>true</isViewedAsPlainText>
-        <text>{&quot;recId&quot;: &quot;{!Get_Account.Id}&quot;}</text>
     </textTemplates>
     <transforms>
         <name>Transform_Opportunity_to_Quote</name>
@@ -1046,14 +978,14 @@
         <scale>2</scale>
     </variables>
     <variables>
-        <name>errorMessageSFAWT17</name>
+        <name>errorMessageSFAWT1</name>
         <dataType>String</dataType>
         <isCollection>false</isCollection>
         <isInput>false</isInput>
         <isOutput>false</isOutput>
     </variables>
     <variables>
-        <name>jsonResponseSFAWT17</name>
+        <name>jsonResponseSFAWT1</name>
         <dataType>String</dataType>
         <isCollection>false</isCollection>
         <isInput>false</isInput>
