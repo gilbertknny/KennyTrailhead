@@ -29,8 +29,8 @@ jobs:
       - name: Authenticate Salesforce
         run: |
           sf org login jwt \
-            --client-id 3MVG9Za5EbktTiWb5_T5LWKQkUlaDEJY.iMGLRDnZDPs_pTIIVEyQuuF7BMkPs53K.kig5NzPjFWMzlhBrkuq \
-            --jwt-key-file server-sit2.key \
+            --client-id 3MVG9Za5EbktTiWZ.Mfg7ql0EEo61IpUKC0D7Jq0vQh02pIKcKHh7K.KEcT6AZkCA.o.F9w8tMp5Q551N1vqH \
+            --jwt-key-file server-production.key \
             --username rizki.nuriman@bfisupport.prod.sit2 \
             --instance-url https://test.salesforce.com \
             --alias sit
