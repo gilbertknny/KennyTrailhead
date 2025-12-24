@@ -29,18 +29,20 @@ jobs:
       - name: Authenticate Salesforce
         run: |
           sf org login jwt \
-            --client-id ${{ secrets.CONSUMER_KEY }} \
-            --jwt-key-file server.key \
-            --username ${{ vars.USERNAME }} \
-            --instance-url ${{ vars.URL_INSTANCE }} \
+            --client-id 3MVG9Za5EbktTiWb5_T5LWKQkUlaDEJY.iMGLRDnZDPs_pTIIVEyQuuF7BMkPs53K.kig5NzPjFWMzlhBrkuq \
+            --jwt-key-file server-sit2.key \
+            --username rizki.nuriman@bfisupport.prod.sit2 \
+            --instance-url https://test.salesforce.com \
             --alias sit
 
-      # 4. Run Apex Test Result (Get Test)
+      # 4. Run Apex Test (RunLocalTest)
       - name: Get Apex Test Result
         run: |
           sf apex run test \
           --test-level RunLocalTests \
+          --code-coverage \
           --target-org sit \
           --wait 60
+
 
             
