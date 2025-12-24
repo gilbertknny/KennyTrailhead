@@ -5,7 +5,7 @@
 /* --- ICON ROW --- */
 .icon-row {
     display: flex;
-    flex-wrap: wrap;          /* ⬅️ Bisa turun ke baris berikutnya di mobile */
+    flex-wrap: nowrap;          /* ⬅️ Bisa turun ke baris berikutnya di mobile */
     justify-content: space-between;
     gap: 10px;                /* Jarak antar box */
     margin-bottom: 12px;
@@ -28,7 +28,12 @@
 /* INACTIVE */
 .inactive-box {
     border: 1px solid #d8dde6;
-    background: #ffffff;
+    background: #d0d7e0;
+}
+
+.inactive-box lightning-icon {
+    --slds-c-icon-color-foreground-default: #c9c9c9;
+    --slds-c-icon-color-foreground: #c9c9c9;
 }
 
 /* ACTIVE */

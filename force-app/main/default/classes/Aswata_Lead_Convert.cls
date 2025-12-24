@@ -1,240 +1,185 @@
 public with sharing class Aswata_Lead_Convert {
-    
+
     @InvocableMethod(label='Convert Leads with Custom Mapping')
     public static List<LeadConvertResultWrapper> convertLeads(List<LeadIdWrapper> leadIdWrappers) {
+
         List<LeadConvertResultWrapper> results = new List<LeadConvertResultWrapper>();
-        Map<Id, LeadConvertResultWrapper> leadResultsMap = new Map<Id, LeadConvertResultWrapper>();
+        Map<Id, LeadConvertResultWrapper> resultMap = new Map<Id, LeadConvertResultWrapper>();
 
-        // Extract Lead IDs
         Set<Id> leadIds = new Set<Id>();
-        for (LeadIdWrapper wrapper : leadIdWrappers) {
-            leadIds.add(wrapper.leadId);
+        for (LeadIdWrapper w : leadIdWrappers) {
+            leadIds.add(w.leadId);
         }
 
-        // Query Leads
-        List<Lead> leads = [
-            SELECT Id, FirstName, LastName, Company, Email, Phone, Account_Segment__c, Account__c, Interest_COB__c,
-            Account_Sub_Segment__c, Account_Type__c,Account_Pipeline_Status__c, Channel__c, Business_Segmentation__c, 
-            Province__c, City__c, Village__c, Zip__c, Address__c, Description, OwnerId FROM Lead WHERE Id IN :leadIds
-        ];
+        Map<Id, Lead> leadMap = new Map<Id, Lead>([
+            SELECT Id, FirstName, LastName, Company, Email, Phone, OwnerId,
+                   Account__c, Interest_COB__c, Description, Address__c,
+                   Account_Segment__c, Account_Sub_Segment__c, Account_Type__c,
+                   Account_Pipeline_Status__c, Channel__c, Business_Segmentation__c,
+                   Province__c, City__c, Village__c, Zip__c,
+                   Company_Email__c, Company_Phone__c
+            FROM Lead
+            WHERE Id IN :leadIds
+        ]);
 
-        // Prepare Accounts and Contacts
-        List<Account> accountsToInsert = new List<Account>();
-        List<Contact> contactsToInsert = new List<Contact>();
-        Map<Id, Lead> leadMap = new Map<Id, Lead>();
-
-        Map<String, Id> recordTypeMap = new Map<String, Id>();
+        
+        Map<String, Id> accountRTMap = new Map<String, Id>();
         for (RecordType rt : [
-            SELECT Id, Name 
-            FROM RecordType 
-            WHERE SObjectType = 'Account' AND Name IN ('Individu', 'Business') and IsActive = true
+            SELECT Id, Name
+            FROM RecordType
+            WHERE SObjectType = 'Account'
+              AND Name IN ('Individu', 'Business')
+              AND IsActive = true
         ]) {
-            recordTypeMap.put(rt.Name, rt.Id);
+            accountRTMap.put(rt.Name, rt.Id);
         }
 
-         System.debug('recordTypeMap: ' +recordTypeMap);
+        List<Account> accountsToInsert = new List<Account>();
+        Map<Id, Account> leadToAccount = new Map<Id, Account>();
 
-        for (Lead lead : leads) {
-            leadMap.put(lead.Id, lead);
-            System.debug('Business Segment: ' + lead.Account_Segment__c);
-            Id recordTypeId = lead.Account_Segment__c == 'I' 
-                              ? recordTypeMap.get('Individu') 
-                              : recordTypeMap.get('Business');
-            System.debug('recordTypeId: ' + recordTypeId);
+        for (Lead l : leadMap.values()) {
+            Id rtId = l.Account_Segment__c == 'I'
+                ? accountRTMap.get('Individu')
+                : accountRTMap.get('Business');
 
-            String rawPhone = lead.Phone;
-            String phoneArea = '';
-            String phoneNumber = '';
-            System.debug('Process Account' + rawPhone);
-
-            if (!String.isBlank(rawPhone)) {
-                rawPhone = rawPhone != null ? rawPhone.trim() : '';
-
-                // If number starts with "0"
-                if (rawPhone.startsWith('0')) {
-                    phoneArea = '+62';
-                    phoneNumber = rawPhone.substring(1); 
-                    // remove leading zero
-                    System.debug('Process with 0' + phoneArea);
-                    System.debug('Process with 0' + phoneNumber);
-                } 
-                // If number already starts with +62
-                else if (rawPhone.startsWith('+62')) {
-                    phoneArea = '+62';
-                    phoneNumber = rawPhone.replace('+62', '');
-                    
-                    System.debug('Process with +62' + phoneArea);
-                    System.debug('Process with +62' + phoneNumber);
-                } 
-                // If number starts with 62 (no +)
-                else if (rawPhone.startsWith('62')) {
-                    phoneArea = '+62';
-                    phoneNumber = rawPhone.substring(2);
-                    
-                    System.debug('Process with 62' + phoneArea);
-                    System.debug('Process with 62' + phoneNumber);
-                } 
-                // Fallback: unknown format
-                else {
-                    phoneArea = '';
-                    phoneNumber = rawPhone;
-                    
-                    System.debug('Process with +62' + phoneArea);
-                    System.debug('Process with +62' + phoneNumber);
-                }
-            }
+            PhoneWrapper phone = parsePhone(
+                String.isBlank(l.Company) ? l.Phone : l.Company_Phone__c
+            );
 
             Account acc = new Account(
-                Name = lead.FirstName + ' ' + lead.LastName  ,
-                Phone = lead.Phone,
-                House_Phone__c = phoneNumber,
-                House_Phone_Area__c = phoneArea,
-                Email__c = lead.Email,
-                Account_Segment__c = lead.Account_Segment__c,
-                Account_Sub_Segment__c = lead.Account_Sub_Segment__c,
-                Type = lead.Account_Type__c,
-                Account_Channel__c = lead.Channel__c,
-                Account_Pipeline_Status__c = lead.Account_Pipeline_Status__c,
-                Business_Segmentation__c = lead.Business_Segmentation__c,
-                Province__c = lead.Province__c,
-                City__c = lead.City__c,
-                Village__c = lead.Village__c,
-                Zip__c = lead.Zip__c,
-                Address__c = lead.Description,
-                Address_LU__c = lead.Address__c,
-                recordTypeId = recordTypeId,
-                OwnerId = lead.OwnerId, 
-                ParentId = lead.Account__c,
+                Name = String.isBlank(l.Company)
+                    ? l.FirstName + ' ' + l.LastName
+                    : l.Company,
+                Phone = String.isBlank(l.Company) ? l.Phone : l.Company_Phone__c,
+                Email__c = String.isBlank(l.Company) ? l.Email : l.Company_Email__c,
+                House_Phone__c = phone.phoneNumber,
+                House_Phone_Area__c = phone.area,
+                Account_Segment__c = l.Account_Segment__c,
+                Account_Sub_Segment__c = l.Account_Sub_Segment__c,
+                Type = l.Account_Type__c,
+                Account_Channel__c = l.Channel__c,
+                Account_Pipeline_Status__c = l.Account_Pipeline_Status__c,
+                Business_Segmentation__c = l.Business_Segmentation__c,
+                Province__c = l.Province__c,
+                City__c = l.City__c,
+                Village__c = l.Village__c,
+                Zip__c = l.Zip__c,
+                Address__c = l.Description,
+                Address_LU__c = l.Address__c,
+                RecordTypeId = rtId,
+                OwnerId = l.OwnerId,
+                ParentId = l.Account__c,
                 Has_Beneficial_Owner__c = 'Y',
-                Interest_COB__c = lead.Interest_COB__c
+                Interest_COB__c = l.Interest_COB__c,
+                Marital_Status__c = '0',
+                Employment__c = '0',
+                Yearly_Income__c = '0',
+                Source_of_Income__c = '0'
             );
+            
+            System.debug('|||||||||||||ACC|||||||||||||| ' + acc);
+
             accountsToInsert.add(acc);
+            leadToAccount.put(l.Id, acc);
         }
 
-        // Insert Accounts in bulk
-        if(accountsToInsert.size()>=1){
-            insert accountsToInsert;
-        }
-        
-        // Link Leads to Accounts
-        for (Integer i = 0; i < leads.size(); i++) {
-            Lead lead = leads[i];
-            Account acc = accountsToInsert[i];
-           
+        insert accountsToInsert;
 
-            String rawPhone = lead.Phone;
-            String phoneArea = '';
-            String phoneNumber = '';
-            System.debug('Process Account' + rawPhone);
+        List<Contact> contactsToInsert = new List<Contact>();
+        Map<Id, Contact> leadToContact = new Map<Id, Contact>();
 
-            if (!String.isBlank(rawPhone)) {
-                rawPhone = rawPhone != null ? rawPhone.trim() : '';
+        for (Lead l : leadMap.values()) {
+            PhoneWrapper phone = parsePhone(l.Phone);
 
-                // If number starts with "0"
-                if (rawPhone.startsWith('0')) {
-                    phoneArea = '+62';
-                    phoneNumber = rawPhone.substring(1); 
-                    // remove leading zero
-                    System.debug('Process with 0' + phoneArea);
-                    System.debug('Process with 0' + phoneNumber);
-                } 
-                // If number already starts with +62
-                else if (rawPhone.startsWith('+62')) {
-                    phoneArea = '+62';
-                    phoneNumber = rawPhone.replace('+62', '');
-                    
-                    System.debug('Process with +62' + phoneArea);
-                    System.debug('Process with +62' + phoneNumber);
-                } 
-                // If number starts with 62 (no +)
-                else if (rawPhone.startsWith('62')) {
-                    phoneArea = '+62';
-                    phoneNumber = rawPhone.substring(2);
-                    
-                    System.debug('Process with 62' + phoneArea);
-                    System.debug('Process with 62' + phoneNumber);
-                } 
-                // Fallback: unknown format
-                else {
-                    phoneArea = '';
-                    phoneNumber = rawPhone;
-                    
-                    System.debug('Process with +62' + phoneArea);
-                    System.debug('Process with +62' + phoneNumber);
-                }
-            }
-
-
-            Contact con = new Contact(
-                FirstName = lead.FirstName,
-                LastName = lead.LastName,
-                Email = lead.Email,
-                AccountId = acc.Id,
+            Contact c = new Contact(
+                FirstName = l.FirstName,
+                LastName = l.LastName,
+                Email = l.Email,
+                AccountId = l.Account__c != null
+                    ? l.Account__c
+                    : leadToAccount.get(l.Id).Id,
+                Phone_Area__c = phone.area,
+                Phone = phone.phoneNumber,
+                Address__c = l.Description,
                 Status__c = 'CP',
-                Phone_Area__c  = phoneArea,
-                Phone = phoneNumber,
-                Address__c = lead.Description,
                 Actived__c = '1'
             );
 
-            System.debug('con: ' + con);
-            contactsToInsert.add(con);
+            contactsToInsert.add(c);
+            leadToContact.put(l.Id, c);
         }
 
-        if(contactsToInsert.size()>=1){
-        // Insert Contacts in bulk
-            insert contactsToInsert;
-        }
-        
+        insert contactsToInsert;
 
-        if(leads.size()>=1){
-        // Convert Leads
-            for (Integer i = 0; i < leads.size(); i++) {
-                Lead lead = leads[i];
-                Account acc = new Account();
-                Contact con = new Contact();
-                if(accountsToInsert.size()>=1){
-                    acc = accountsToInsert[i];
-                }
-                if(contactsToInsert.size()>=1){
-                    con = contactsToInsert[i];
-                }
-                LeadConvertResultWrapper resultWrapper = new LeadConvertResultWrapper();
+        String convertedStatus = getConvertedStatus();
 
-                try {
-                    Database.LeadConvert lc = new Database.LeadConvert();
-                    lc.setLeadId(lead.Id);
-                    lc.setConvertedStatus(getConvertedStatus());
-                    lc.setAccountId(acc.Id);
-                    lc.setContactId(con.Id);
-                    lc.setDoNotCreateOpportunity(true); // Set false if you want to create Opp
+        for (Lead l : leadMap.values()) {
+            LeadConvertResultWrapper r = new LeadConvertResultWrapper();
 
-                    Database.LeadConvertResult lcr = Database.convertLead(lc);
+            try {
+                Database.LeadConvert lc = new Database.LeadConvert();
+                lc.setLeadId(l.Id);
+                lc.setConvertedStatus(convertedStatus);
+                lc.setAccountId(leadToAccount.get(l.Id).Id);
+                lc.setContactId(leadToContact.get(l.Id).Id);
+                lc.setDoNotCreateOpportunity(true);
 
-                    resultWrapper.success = lcr.isSuccess();
-                    resultWrapper.message = 'Lead converted successfully.';
-                    resultWrapper.convertedAccountId = acc.Id;
-                    resultWrapper.convertedContactId = con.Id;
+                Database.convertLead(lc);
 
-                } catch (Exception e) {
-                    resultWrapper.success = false;
-                    resultWrapper.message = e.getMessage();
-                }
+                r.success = true;
+                r.message = 'Lead converted successfully';
+                r.convertedAccountId = leadToAccount.get(l.Id).Id;
+                r.convertedContactId = leadToContact.get(l.Id).Id;
 
-                leadResultsMap.put(lead.Id, resultWrapper);
+            } catch (Exception e) {
+                r.success = false;
+                r.message = e.getMessage();
             }
 
+            resultMap.put(l.Id, r);
         }
-        // Preserve order of original input
-        for (LeadIdWrapper wrapper : leadIdWrappers) {
-            results.add(leadResultsMap.get(wrapper.leadId));
+
+        for (LeadIdWrapper w : leadIdWrappers) {
+            results.add(resultMap.get(w.leadId));
         }
 
         return results;
     }
 
+    /* ===================== HELPERS ===================== */
+
+    private class PhoneWrapper {
+        String area;
+        String phoneNumber;
+        PhoneWrapper(String a, String n) {
+            area = a; phoneNumber = n;
+        }
+    }
+
+    private static PhoneWrapper parsePhone(String raw) {
+        if (String.isBlank(raw)) return new PhoneWrapper('', '');
+
+        raw = raw.trim();
+        if (raw.startsWith('+62')) return new PhoneWrapper('+62', raw.substring(3));
+        if (raw.startsWith('62'))  return new PhoneWrapper('+62', raw.substring(2));
+        if (raw.startsWith('0'))   return new PhoneWrapper('+62', raw.substring(1));
+
+        return new PhoneWrapper('', raw);
+    }
+
+    private static String getConvertedStatus() {
+        return [
+            SELECT MasterLabel
+            FROM LeadStatus
+            WHERE IsConverted = true
+            LIMIT 1
+        ].MasterLabel;
+    }
+
+    /* ===================== WRAPPERS ===================== */
+
     public class LeadIdWrapper {
-        @InvocableVariable(label='Lead ID' required=true)
+        @InvocableVariable(required=true)
         public Id leadId;
     }
 
@@ -243,12 +188,5 @@ public with sharing class Aswata_Lead_Convert {
         @InvocableVariable public String message;
         @InvocableVariable public Id convertedAccountId;
         @InvocableVariable public Id convertedContactId;
-    }
-
-    private static String getConvertedStatus() {
-        for (LeadStatus status : [SELECT MasterLabel FROM LeadStatus WHERE IsConverted = true LIMIT 1]) {
-            return status.MasterLabel;
-        }
-        return 'Qualified'; // fallback
     }
 }
