@@ -1101,6 +1101,7 @@ public without sharing class ClsNewRequest {
                     if(opty.sumInsuredIDR != null){ asset1.Amount_Insured__c = opty.sumInsuredIDR; }
                     asset1.Section__c = assetSection;
                     if(assetCategory != null){ asset1.Category__c = assetCategory; }
+                    if(opty.description != null){ asset1.Description = opty.description; }
                     system.debug('asset1:'+asset1);
                     List<Asset> checkAT = [SELECT Id FROM Asset 
                                            WHERE Name =:asset1.Name 
@@ -1702,6 +1703,7 @@ public without sharing class ClsNewRequest {
                         if(opty.sumInsuredIDR != null){ asset2.Amount_Insured__c = opty.sumInsuredIDR; }
                         asset2.Section__c = assetSection2;
                         if(assetCategory2 != null){ asset2.Category__c = assetCategory2; }
+                        if(opty.description != null){ asset2.Description = opty.description; }
                         Database.SaveResult sr = Database.insert(asset2);
                     }
                     
