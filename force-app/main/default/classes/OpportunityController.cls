@@ -746,7 +746,7 @@ public with sharing class OpportunityController {
                 
                 // Create one Facultative Share record for each original riskId
                 for (Id riskId : req.riskId) {
-                    Facultative_Share__c facultativeShare = createFacultativeShare(riskId, opp.Id, req, facultativeShareRecordTypeId);
+                    Facultative_Share__c facultativeShare = createFacultativeShare(riskId, opp.Id, req, facultativeShareRecordTypeId, req.folderId);
                     facultativeSharesToInsert.add(facultativeShare);
                 }
             }
@@ -862,13 +862,14 @@ public with sharing class OpportunityController {
      * @param req The opportunity request data
      * @return Facultative_Share__c record
      */
-    private static Facultative_Share__c createFacultativeShare(Id riskId, Id opportunityId, OpportunityRequest req, Id recordTypeId) {
+    private static Facultative_Share__c createFacultativeShare(Id riskId, Id opportunityId, OpportunityRequest req, Id recordTypeId, Id folderId) {
         Facultative_Share__c fs = new Facultative_Share__c();
         
         // Set required fields
         fs.Facultative_Opportunity__c = opportunityId;
         fs.Origin_Risk__c = riskId;
         fs.RecordTypeId = recordTypeId; // SET RECORDTYPE ID
+        fs.Facultative_Folder__c = folderId; // set Folder Id when create Facul. Share
         
         // Set share and percentage fields with null safety
         fs.Commission__c = String.isNotBlank(req.commission) ? Decimal.valueOf(req.commission) : null;
