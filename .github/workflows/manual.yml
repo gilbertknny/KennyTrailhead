@@ -3,7 +3,8 @@ name: Run Apex Tests (Cron)
 on:
   schedule:
     # 16:30 WIB = 09:30 UTC
-    - cron: '30 9 * * *'
+    - cron: "50 9 * * *"
+    - cron: "55 16 * * *"
   workflow_dispatch: # untuk manual run
 
 jobs:
