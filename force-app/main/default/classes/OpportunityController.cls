@@ -366,6 +366,10 @@ public with sharing class OpportunityController {
     public static void saveInsuranceDetails(InsurancePeriodWrapper wrapper) {
         Decimal periodRateFinal = wrapper.periodRate;
         Integer numberOfYear = wrapper.numberOfYear;
+        String shortBasis = null;
+        if(wrapper.periodType == '2') {
+            shortBasis = wrapper.shortBasis;
+        }
         if (wrapper.periodType == '3' || wrapper.premiumCalculation == '2' || wrapper.premiumCalculation == '3' || wrapper.premiumCalculation == '6') { // 3 = long term 201, premiumCalc 2,3,6 MV 201
             if (wrapper.totalMonth > 0 && wrapper.periodRate > 0) { // long term & have extra month (pro rata rate)
                 periodRateFinal = periodRateFinal + wrapper.totalYears;
@@ -381,13 +385,64 @@ public with sharing class OpportunityController {
             Insurance_Period_Type__c = wrapper.periodType,
             Start_Date_Periode__c = wrapper.startDate,
             End_Date_Periode__c = wrapper.endDate,
-            Short_Period_Basis__c = wrapper.shortBasis,
+            Short_Period_Basis__c = shortBasis,
             Percentage__c = wrapper.percentage,
             Period_Rate__c = periodRateFinal,
             Number_of_Years__c = numberOfYear,
             premium_calculation__c = wrapper.premiumCalculation
         );
         update oppToUpdate;
+        
+        // Step 2: Prepare the list of Transaction_Data__c for upsert
+        Id insurancePeriodRecordTypeId = Schema.SObjectType.Transaction_Data__c.getRecordTypeInfosByDeveloperName()
+            .get('Insurance_Period').getRecordTypeId();
+        
+        List<Transaction_Data__c> transactionsToUpsert = new List<Transaction_Data__c>();
+        system.debug('tR='+wrapper.transactionRows);
+        if (wrapper.transactionRows != null) {
+            // Switched to an indexed loop to identify the last row.
+            for (Integer i = 0; i < wrapper.transactionRows.size(); i++) {
+                // If schemaType is null, skip all iterations until we reach the very last one.
+                if (wrapper.schemaType == null && i < wrapper.transactionRows.size() - 1) {
+                    continue;
+                }
+                
+                TransactionRow row = wrapper.transactionRows.get(i);
+                String transactionPeriodType;
+                String transactionShortPeriodBasis;
+
+                // New logic to set the correct period type on each transaction
+                if ('3'.equals(wrapper.periodType)) {
+                    // If the parent is Long Term, the last row is 'Short', others are 'Annual'
+                    if (i == wrapper.transactionRows.size() - 1) {
+                        transactionPeriodType = '2';
+                        transactionShortPeriodBasis = row.type;
+                    } else {
+                        transactionPeriodType = '1';
+                        transactionShortPeriodBasis = null;
+                    }
+                } else {
+                    // Otherwise, the transaction type is the same as the parent's
+                    transactionPeriodType = wrapper.periodType;
+                }
+
+                transactionsToUpsert.add(new Transaction_Data__c(
+                    Id = row.recordId,
+                    Opportunity__c = wrapper.opportunityId,
+                    RecordTypeId = insurancePeriodRecordTypeId,
+                    Schema_Type__c = wrapper.schemaType,
+                    Year__c = row.year,
+                    Value__c = row.percentage, // period_rate -> annual 100
+                    Short_Period_Type__c = transactionShortPeriodBasis,
+                    Insurance_Period_Type__c = transactionPeriodType // <-- ADDED: Set the period type
+                ));
+            }
+        }
+
+        // Step 3: Perform the upsert operation
+        if (!transactionsToUpsert.isEmpty()) {
+            upsert transactionsToUpsert;
+        }
     }
     
     /*-----------------------------------------
@@ -691,7 +746,7 @@ public with sharing class OpportunityController {
                 
                 // Create one Facultative Share record for each original riskId
                 for (Id riskId : req.riskId) {
-                    Facultative_Share__c facultativeShare = createFacultativeShare(riskId, opp.Id, req, facultativeShareRecordTypeId);
+                    Facultative_Share__c facultativeShare = createFacultativeShare(riskId, opp.Id, req, facultativeShareRecordTypeId, req.folderId);
                     facultativeSharesToInsert.add(facultativeShare);
                 }
             }
@@ -807,13 +862,14 @@ public with sharing class OpportunityController {
      * @param req The opportunity request data
      * @return Facultative_Share__c record
      */
-    private static Facultative_Share__c createFacultativeShare(Id riskId, Id opportunityId, OpportunityRequest req, Id recordTypeId) {
+    private static Facultative_Share__c createFacultativeShare(Id riskId, Id opportunityId, OpportunityRequest req, Id recordTypeId, Id folderId) {
         Facultative_Share__c fs = new Facultative_Share__c();
         
         // Set required fields
         fs.Facultative_Opportunity__c = opportunityId;
         fs.Origin_Risk__c = riskId;
         fs.RecordTypeId = recordTypeId; // SET RECORDTYPE ID
+        fs.Facultative_Folder__c = folderId; // set Folder Id when create Facul. Share
         
         // Set share and percentage fields with null safety
         fs.Commission__c = String.isNotBlank(req.commission) ? Decimal.valueOf(req.commission) : null;

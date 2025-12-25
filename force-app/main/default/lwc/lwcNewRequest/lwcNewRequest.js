@@ -38,6 +38,7 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
     activeSections = [];//['A'];
     activeSectionsMessage = '';
 
+    //<-- PERIOD 1
     // public inputs
     periodType     = null;
     years          = null;
@@ -47,6 +48,9 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
     endDate        = null;
     calculatedRate = null;
     @track schemaType = null;
+    @track showPeriodTypeValidationError = false;
+    @track periodTypeValidationMessage = '';
+    @track expectedPeriodType = null;
 
     // reactive values
     @track dayCount        = null;
@@ -58,13 +62,78 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
     _computedMonths = 0;
 
     // ------ Template getters ------
-    get isLongTerm()        { return this.periodType === '3'; }
+    get isLongTerm()        { return (this.cob1 === '201' && this.periodType === '3'); }
     get isAnnual()          { return this.periodType === '1'; }
     get isShort()           { return this.periodType === '2'; }
     get isPercentageBasis() { return this.shortBasis === '1'; }
     get isProRataBasis()    { return this.shortBasis === '2'; }
-    get showInfo() { return !this.isAnnual; }
+    get showInfo() { 
+        // For COB 301/302/303, show info based on premium calculation
+        if (['301', '302', '303'].includes(this.cob1)) {
+            return this.premiumCalculationId && this.premiumCalculationId !== '1';
+        }
+        // Original logic for COB 201
+        return (this.cob1 === '201' && !this.isAnnual); 
+    }
+    get showInsuranceType() { return !this.isLimitedForm && !this.showPremium;}
+    get isPremiumProRata() {
+        return ['301', '302', '303'].includes(this.cob1) && this.premiumCalculationId === '4';
+    }
+    get isPremiumPercentage() {
+        return ['301', '302', '303'].includes(this.cob1) && this.premiumCalculationId === '5';
+    }
+    get isPremiumLongTerm() {
+        return ['301', '302', '303'].includes(this.cob1) && 
+               (this.premiumCalculationId === '6' || this.premiumCalculationId === '2' || this.premiumCalculationId === '3');
+    }
+    get isPremiumPercentageInput() {
+        return ['301', '302', '303'].includes(this.cob1) && this.premiumCalculationId === '5';
+    }
+    get isAutoDeterminePeriodType() {
+        return ['201', '202', '203', '204'].includes(this.cob1);
+    }
+    get formattedCalculatedRate() {
+        return this.calculatedRate !== null && this.calculatedRate !== undefined 
+            ? this.calculatedRate.toFixed(6)
+            : '0.000000';
+    }
+    get isLimitedForm() {
+        return ['101', '602', '851', '852'].includes(this.cob1);
+    }
+    get isEndDateRequired() {
+        return this.cob1 !== '101';
+    }
+    get showPremium() {
+        return this.cob1 === '301' || this.cob1 === '302' || this.cob1 === '303';
+    }
+    get insuranceTypeOptions() {
+        return [
+        { label: 'Annual',       value: '1' },
+        { label: 'Short-Period', value: '2' },
+        { label: 'Long Term',    value: '3' }
+        ];
+    }
+    get shortBasisOptions() {
+        return [
+        { label: 'Percentage',value: '1'},
+        { label: 'Pro-Rata Basis', value: '2' }
+        ];
+    }
+    schemaOptions = [
+        { label: '--None--', value: null },
+        { label: 'Sum Insured Adjustment', value: 'Sum Insured Adjustment' },
+        { label: 'Discounted Premium', value: 'Discounted Premium' }
+    ];
+    get displayRows() {
+        return this.adjustmentRows.filter(r => r.year !== 1);
+    }
+    get hasSchemaType() {
+        return this.schemaType !== null && this.schemaType !== undefined && String(this.schemaType).trim() !== '';
+    }
+    //--> PERIOD 1
 
+
+    //<-- PERIOD 2
     // public inputs 2
     periodType2     = '';
     years2          = null;
@@ -74,6 +143,9 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
     endDate2        = '';
     calculatedRate2 = null;
     @track schemaType2 = null;
+    @track showPeriodTypeValidationError2 = false;
+    @track periodTypeValidationMessage2 = '';
+    @track expectedPeriodType2 = null;
 
     // reactive values 2
     @track dayCount2        = null;
@@ -85,12 +157,57 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
     _computedMonths2 = 0;
 
     // ------ Template getters 2 ------
-    get isLongTerm2()        { return this.periodType2 === '3'; }
+    get isLongTerm2()        { return (this.cob2 === '201' && this.periodType2 === '3'); }
     get isAnnual2()          { return this.periodType2 === '1'; }
     get isShort2()           { return this.periodType2 === '2'; }
     get isPercentageBasis2() { return this.shortBasis2 === '1'; }
     get isProRataBasis2()    { return this.shortBasis2 === '2'; }
-    get showInfo2() { return !this.isAnnual2; }
+    get showInfo2() { 
+        // For COB 301/302/303, show info based on premium calculation
+        if (['301', '302', '303'].includes(this.cob2)) {
+            return this.premiumCalculationId2 && this.premiumCalculationId2 !== '1';
+        }
+        // Original logic for COB 201
+        return (this.cob2 === '201' && !this.isAnnual2); 
+    }
+    get showInsuranceType2() { return !this.isLimitedForm2 && !this.showPremium2;}
+    get isPremiumProRata2() {
+        return ['301', '302', '303'].includes(this.cob2) && this.premiumCalculationId2 === '4';
+    }
+    get isPremiumPercentage2() {
+        return ['301', '302', '303'].includes(this.cob2) && this.premiumCalculationId2 === '5';
+    }
+    get isPremiumLongTerm2() {
+        return ['301', '302', '303'].includes(this.cob2) && 
+               (this.premiumCalculationId2 === '6' || this.premiumCalculationId2 === '2' || this.premiumCalculationId2 === '3');
+    }
+    get isPremiumPercentageInput2() {
+        return ['301', '302', '303'].includes(this.cob2) && this.premiumCalculationId2 === '5';
+    }
+    get isAutoDeterminePeriodType2() {
+        return ['201', '202', '203', '204'].includes(this.cob2);
+    }
+    get formattedCalculatedRate2() {
+        return this.calculatedRate2 !== null && this.calculatedRate2 !== undefined 
+            ? this.calculatedRate2.toFixed(6)
+            : '0.000000';
+    }
+    get isLimitedForm2() {
+        return ['101', '602', '851', '852'].includes(this.cob2);
+    }
+    get isEndDateRequired2() {
+        return this.cob2 !== '101';
+    }
+    get showPremium2() {
+        return this.cob2 === '301' || this.cob2 === '302' || this.cob2 === '303';
+    }
+    get displayRows2() {
+        return this.adjustmentRows2.filter(r => r.year !== 1);
+    }
+    get hasSchemaType2() {
+        return this.schemaType2 !== null && this.schemaType2 !== undefined && String(this.schemaType2).trim() !== '';
+    }
+    //--> PERIOD 2
 
     @api recordId;
     @api account;
@@ -183,8 +300,6 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
     @track premiumCalculation2;
     @track premiumCalculationId;
     @track premiumCalculationId2;
-    @track showPremium;
-    @track showPremium2;
 
     //MOU
     @track showMOU;
@@ -387,39 +502,6 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
         additionalFields: [{ fieldPath: 'Additional__c' }],
     };
 
-    get insuranceTypeOptions() {
-        return [
-        { label: 'Annual',       value: '1' },
-        { label: 'Short-Period', value: '2' },
-        { label: 'Long Term',    value: '3' }
-        ];
-    }
-
-    get shortBasisOptions() {
-        return [
-        { label: 'Percentage',     value: '1'     },
-        { label: 'Pro-Rata Basis', value: '2' }
-        ];
-    }
-
-    schemaOptions = [
-        { label: '--None--', value: null },
-        { label: 'Sum Insured Adjustment', value: 'Sum Insured Adjustment' },
-        { label: 'Discounted Premium', value: 'Discounted Premium' }
-    ];
-
-    get displayRows() {
-        return this.adjustmentRows.filter(r => r.year !== 1);
-    }
-
-    get hasSchemaType() {
-        return this.schemaType !== null && this.schemaType !== undefined && String(this.schemaType).trim() !== '';
-    }
-
-    get hasSchemaType2() {
-        return this.schemaType2 !== null && this.schemaType2 !== undefined && String(this.schemaType2).trim() !== '';
-    }
-
     currentPageReference = null;
 
     //<-- START ONLOAD
@@ -481,19 +563,22 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
         if(this.recordId == undefined){
             getFocusedTabInfo().then(tabInfo => {
                 this.tabId = tabInfo.tabId;
-                setTabLabel(this.tabId, 'Opportunity');
-                setTabIcon(this.tabId, 'standard:opportunity', { iconAlt: 'Opportunity' });
+                if(this.tabId != undefined){
+                    setTabLabel(this.tabId, 'New Submission');
+                    setTabIcon(this.tabId, 'standard:opportunity', { iconAlt: 'New Submission' });
+                }
             }); 
             this.showFull = true;
         }
         this.getPicklistOpportunityType();
+        this.getPicklistContractType();
+        this.getPicklistContractType2();
         if(this.account != undefined){
             this.accountId = this.account;
             this.getAccountDetail(this.accountId);
             if(this.accountId != undefined) this.disabledAccount = true;
             this.showFull = false;
         }
-        console.log('Gerry3');
     }
     //GET PICKLIST OPPORTUNITY TYPE
     getPicklistOpportunityType(){
@@ -850,15 +935,9 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
         if(single.checked == true){
             this.showSingle = true;
             this.showMultiple = false;
-            this.contractTypeId = undefined;
-            this.contractTypeId2 = undefined;
-            this.getPicklistContractType();
         }else if(multiple.checked == true){
             this.showSingle = true;
             this.showMultiple = true;
-            this.contractTypeId2 = undefined;
-            this.getPicklistContractType();
-            this.getPicklistContractType2();
         }
     }
 
@@ -878,7 +957,6 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
     handleChangeCOB1(event) {
         let value = event.detail.value;
         this.cob1 = value;
-        this.showPremium = false;
         this.assetSectionId = undefined;
         this.assetSection = [];
         this.assetCategoryId = undefined;
@@ -886,13 +964,13 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
         if(value != '' && value != undefined){
             this.changeCOB(value,'change');
             if(this.cob1  == '301' || this.cob1  == '302' || this.cob1  == '303'){
-                this.showPremium = true;
                 this.getPremiumCalculation();
                 this.adjustPremiumCalculationBasedOnDuration();
             }
         }
         this.getShowMOU();
         this.getShowRealisasi();
+        this.resetPeriod();
     }
     //FUNCTION CHANGE COB 1
     changeCOB(value,type){
@@ -1034,10 +1112,12 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
     //GET FIELD RISK - REALISASI 1
     async getRiskRealisasi(){
         let value = this.cob1;
+        let contracttype = this.contractTypeId;
+        if(value == '101' && this.opportunityTypeId == 'Declaration'){ contracttype = undefined;}
         if(value!= '' && value != undefined){
             await getMasterDataSection({
                 cob: value,
-                contracttype : this.contractTypeId
+                contracttype : contracttype
             })
             .then(result => {
                 this.isLoading = false;
@@ -1063,7 +1143,6 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
     handleChangeCOB2(event) {
         let value = event.detail.value;
         this.cob2 = value;
-        this.showPremium2 = false;
         this.assetSectionId2 = undefined;
         this.assetSection2 = [];
         this.assetCategoryId2 = undefined;
@@ -1071,12 +1150,12 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
         if(value != '' && value != undefined){
             this.changeCOB2(value,'change');
             if(value == '301' || value == '302' || value == '303'){
-                this.showPremium2 = true;
                 this.getPremiumCalculation2();
                 this.adjustPremiumCalculationBasedOnDuration2();
             }
         }
         this.getShowMOU2();
+        this.resetPeriod2();
     }
     //FUNCTION COB 2
     changeCOB2(value,type){
@@ -1269,7 +1348,7 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
     handleContractType(event){
         this.contractTypeId = event.detail.value;
         if(this.cob1 != undefined && this.cob1 != ''){
-            if(this.cob1 == '101'){
+            if(this.cob1 == '101' && this.opportunityTypeId != 'Declaration' && this.realisasiId1 == undefined){
                 this.changeCOB(this.cob1,'contract');
             }
         }
@@ -1284,7 +1363,10 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
 
     //CHANGE PREMIUM CALCULATION 1
     handlePremiumCalculation(event){
-        this.premiumCalculationId = event.detail.value;
+        const newValue = event.detail.value;
+        this.premiumCalculationId = newValue;
+        if (newValue != '5') { this.percentage = null; }
+        this.calculateDuration();
     }
 
     //<-- INSURANCE PERIOD 1
@@ -1309,12 +1391,16 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
             dt.setFullYear(dt.getFullYear() + 1);
             this.endDate = dt.toISOString().slice(0, 10);
         }
+        this.adjustmentRows = [];
         this.calculateDuration();
+        this.calculateExpectedPeriodType();
         this.adjustPremiumCalculationBasedOnDuration();
     }
     handleEndDateChange(event) { 
         this.endDate = event.detail.value; 
+        this.adjustmentRows = [];
         this.calculateDuration(); 
+        this.calculateExpectedPeriodType();
         this.adjustPremiumCalculationBasedOnDuration();
     }
     handleRowTypeChange(event) {
@@ -1323,7 +1409,7 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
         this.adjustmentRows = this.adjustmentRows.map(r => {
             if (r.year === year) {
                 let newPct = (type === '2') ? this.calculatedRate : r.percentage;
-                return { ...r, type, percentage: newPct };
+                return { ...r, type, percentage: newPct, showBasisPicklist: r.showBasisPicklist};
             }
             return r;
         });
@@ -1350,7 +1436,7 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
         const year = parseInt(input.dataset.year, 10);
         const percentage = sanitized;
         this.adjustmentRows = this.adjustmentRows.map(r =>
-            r.year === year ? { ...r, percentage } : r
+            r.year === year ? { ...r, percentage: percentage } : r
         );
     }
     handleRowPercentagePaste(event) {
@@ -1395,19 +1481,19 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
         } else {
             // if user typed comma, convert it to dot for immediate insertion
             if (key === ',') {
-            event.preventDefault();
-            const newValue = wouldBe; // already uses dot above
-            input.value = newValue;
-            // move caret after inserted dot
-            const newPos = before.length + 1;
-            input.setSelectionRange(newPos, newPos);
+                event.preventDefault();
+                const newValue = wouldBe; // already uses dot above
+                input.value = newValue;
+                // move caret after inserted dot
+                const newPos = before.length + 1;
+                input.setSelectionRange(newPos, newPos);
 
-            // sync model immediately
-            const year = parseInt(input.dataset.year, 10);
-            const percentage = this.sanitizePercentageString(newValue);
-            this.adjustmentRows = this.adjustmentRows.map(r =>
-                r.year === year ? { ...r, percentage } : r
-            );
+                // sync model immediately
+                const year = parseInt(input.dataset.year, 10);
+                const percentage = this.sanitizePercentageString(newValue);
+                this.adjustmentRows = this.adjustmentRows.map(r =>
+                    r.year === year ? { ...r, percentage: percentage } : r
+                );
             }
         }
     }
@@ -1415,17 +1501,20 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
         const year = parseInt(event.target.dataset.year, 10);
         const raw = event?.detail?.value ?? event.target.value;
         const percentage = this.sanitizePercentageString(raw);
-        try { event.target.value = percentage; }
-        catch (e) {}
         this.adjustmentRows = this.adjustmentRows.map(r =>
-            r.year === year ? { ...r, percentage } : r
+            r.year === year ? { ...r, percentage: percentage } : r
         );
         this.updateYearsMonthsInfo();
     }
     // ------ Core calculation ------
     calculateDuration() {
         if (!this.startDate || !this.endDate) {
-            this.dayCount = null; this.yearsMonthsInfo = null; this.calculatedRate = null; this.adjustmentRows = [];
+            this.dayCount = null; 
+            this.yearsMonthsInfo = null; 
+            this.calculatedRate = null; 
+            this.adjustmentRows = [];
+            this.expectedPeriodType = null;
+            this.showPeriodTypeValidationError = false;
             return;
         }
         const start  = new Date(this.startDate);
@@ -1434,23 +1523,31 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
         let y = end.getFullYear() - start.getFullYear();
         let m = end.getMonth() - start.getMonth();
         let d = end.getDate() - start.getDate();
-        if (d < 0) { m--; }
-        if (d >= 30) { m++; }
+        if (d < 0) {
+            m--; 
+            const prevMonth = new Date(end.getFullYear(), end.getMonth(), 0);
+            d = prevMonth.getDate() - start.getDate() + end.getDate();
+        }
         if (m < 0) { y--; m += 12; }
         this._computedYears  = y;
         this._computedMonths = m;
 
-        if (this.isShort && this.isProRataBasis) {
+        this.calculateExpectedPeriodType();
+
+        if ((this.isShort && this.isProRataBasis) || 
+            (['301', '302', '303'].includes(this.cob1) && this.premiumCalculationId === '4')) {
             this.calculatedRate = parseFloat((this.dayCount / 365).toFixed(6));
-        } else if (this.isLongTerm && y >= 1) {
+        } else if ((this.isLongTerm || this.isPremiumLongTerm) && y >= 1) {
             const fullYearsLater = new Date(start);
             fullYearsLater.setFullYear(start.getFullYear() + y);
             const extraMs = end - fullYearsLater;
-            const extraDays = Math.floor(extraMs / (1000 * 60 * 60 * 24)) + 1; 
+            const extraDays = Math.floor(extraMs / (1000 * 60 * 60 * 24));
             this.calculatedRate = extraDays > 0 ? parseFloat((extraDays / 365).toFixed(6)) : 0;
         } else {
             this.calculatedRate = null;
         }
+
+        this.updateYearsMonthsInfo();
 
         if (this.isLongTerm && this.schemaType != null) {
             const hasExtra = m > 0 || d > 0;
@@ -1465,28 +1562,34 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
 
                 let rowType = null;
                 let rowPercentage = null;
+                let showBasisPicklist = false;
+
+                let recordId = oldUiRow?.recordId || null;
                 
                 if (i === 0) {
                     rowPercentage = 100;
-                    rowType = null; // First row doesn't need type
+                    rowType = null; 
+                    showBasisPicklist = false;
                 } else if (isExtraRow) {
-                    // Ensure type always has a value, default to '2'
                     rowType = oldUiRow?.type || '2';
                     if (rowType === '2') {
                         rowPercentage = this.calculatedRate; 
                     } else {
                         rowPercentage = oldUiRow?.percentage ?? null;
                     }
+                    showBasisPicklist = true;
                 } else {
-                    // For other rows, ensure type has a value
                     rowType = oldUiRow?.type || '2';
                     rowPercentage = oldUiRow?.percentage ?? null;
+                    showBasisPicklist = false;
                 }
 
                 newRows.push({ 
+                    recordId: recordId,
                     year: yearNum, 
                     percentage: rowPercentage, 
-                    type: rowType  // This ensures every row has a type (except first row)
+                    type: rowType,
+                    showBasisPicklist: showBasisPicklist 
                 });
             }
             this.adjustmentRows = [...newRows];
@@ -1494,36 +1597,61 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
             this.adjustmentRows = [];
         }
 
-        this.updateYearsMonthsInfo();
+        
     }
     // build the human‐readable period string
     updateYearsMonthsInfo() {
+        if (['301', '302', '303'].includes(this.cob1)) {
+            if (this.premiumCalculationId === '4') {
+                const formattedRate = this.calculatedRate !== null && this.calculatedRate !== undefined 
+                    ? this.calculatedRate.toFixed(6)
+                    : '0.000000';
+                this.yearsMonthsInfo = `Rate ${formattedRate}`;
+            } else if (this.premiumCalculationId === '5') {
+                this.yearsMonthsInfo = `Percentage ${this.percentage || 0}%`;
+            } else if (this.premiumCalculationId === '6' || this.premiumCalculationId === '2' || this.premiumCalculationId === '3') {
+                const y = this._computedYears || 0;
+                const m = this._computedMonths || 0;
+                let base = `${y} Year${y !== 1 ? 's' : ''}`;
+                if (m > 0) {
+                    base += ` and ${m} Month${m !== 1 ? 's' : ''}`;
+                }
+                
+                if (this.calculatedRate !== null && this.calculatedRate !== undefined) {
+                    const totalRate = y + this.calculatedRate;
+                    const formattedRate = totalRate.toFixed(6);
+                    this.yearsMonthsInfo = `${base} | Rate: ${formattedRate}`;
+                } else {
+                    const formattedRate = y.toFixed(6);
+                    this.yearsMonthsInfo = `${base} | Rate: ${formattedRate}`;
+                }
+            }
+            return;
+        }
+
         if (this.isAnnual) { this.yearsMonthsInfo = '1 Year'; return; }
         if (this.isShort) {
-            if (this.isProRataBasis) { this.yearsMonthsInfo = `Rate ${this.calculatedRate}`; } 
+            if (this.isProRataBasis) { 
+                const formattedRate = this.calculatedRate !== null && this.calculatedRate !== undefined 
+                    ? this.calculatedRate.toFixed(6)
+                    : '0.000000';
+                this.yearsMonthsInfo = `Rate ${formattedRate}`; 
+            } 
             else { this.yearsMonthsInfo = `Percentage ${this.percentage || 0}%`; }
             return;
         }
-        const y = this._computedYears;
-        const m = this._computedMonths;
+        const y = this._computedYears || 0;
+        const m = this._computedMonths || 0;
         let base = `${y} Year${y !== 1 ? 's' : ''}`;
         if (m > 0) {
             base += ` and ${m} Month${m !== 1 ? 's' : ''}`;
         }
-        if (m === 0 && this._computedDays === 0) { this.yearsMonthsInfo = base; return; }
-        const lastRow = this.adjustmentRows && this.adjustmentRows.length > 0 
-            ? this.adjustmentRows[this.adjustmentRows.length - 1] 
-            : null;
-        if(lastRow){
-            if (lastRow.type === '1') { this.yearsMonthsInfo = `${base} | Percentage ${lastRow.percentage || 0}%`; }
-            else if (lastRow.type === '2') { this.yearsMonthsInfo = `${base} | Total Rate ${ (this._computedYears + this.calculatedRate) }`; }
-            else { this.yearsMonthsInfo = base; }
-        }else{
-            if(this._computedYears >= 1 && this._computedMonths > 0){
-                this.yearsMonthsInfo = `${base} | Total Rate ${ (this._computedYears + this.calculatedRate) }`;
-            }else{
-                this.yearsMonthsInfo = base;
-            }
+        if (this.calculatedRate !== null && this.calculatedRate !== undefined) {
+            const totalRate = y + this.calculatedRate;
+            const formattedRate = totalRate.toFixed(6);
+            this.yearsMonthsInfo = `${base} | Rate: ${formattedRate}`;
+        } else {
+            this.yearsMonthsInfo = base;
         }
     }
     // Method to adjust premium calculation value when dates change
@@ -1543,34 +1671,100 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
             actualYearDiff--;
         }
         
-        let newPremiumCalculation = null;
-        
-        if (actualYearDiff === 0) {
-            // Less than 1 year - Default to "Pro Rata" (4), but user can also select "Percentage" (5)
-            // Only set default if not already set to one of the allowed options
-            if (!this.premiumCalculationId || 
-                (this.premiumCalculationId !== '4' && this.premiumCalculationId !== '5')) {
+        if (this.premiumCalculationId === null || this.premiumCalculationId === undefined) {
+            let newPremiumCalculation = null;
+            
+            if (actualYearDiff === 0) {
                 newPremiumCalculation = '4';
-            }
-        } else if (actualYearDiff === 1 && monthDiff === 0 && dayDiff === 0) {
-            // Exactly 1 year - Set to "Flat" (1)
-            newPremiumCalculation = '1';
-        } else {
-            // More than 1 year - Default to "Long Period" (6), but user can also select 
-            // "Decreasing Sum Insured" (2) or "Discount Rate" (3)
-            // Only set default if not already set to one of the allowed options
-            if (!this.premiumCalculationId || 
-                (this.premiumCalculationId !== '6' && 
-                 this.premiumCalculationId !== '2' && 
-                 this.premiumCalculationId !== '3')) {
+            } else if (actualYearDiff === 1 && monthDiff === 0 && dayDiff === 0) {
+                newPremiumCalculation = '1';
+            } else {
                 newPremiumCalculation = '6';
             }
+            
+            if (newPremiumCalculation !== null && this.premiumCalculationId !== newPremiumCalculation) {
+                this.premiumCalculationId = newPremiumCalculation;
+            }
+        }
+    }
+    // ------ Period Type Validation Methods ------
+    calculateExpectedPeriodType() {
+        if (!this.startDate || !this.endDate) {
+            this.expectedPeriodType = null;
+            this.showPeriodTypeValidationError = false;
+            return;
+        }
+
+        const start = new Date(this.startDate);
+        const end = new Date(this.endDate);
+
+        let yearDiff = end.getFullYear() - start.getFullYear();
+        let monthDiff = end.getMonth() - start.getMonth();
+        let dayDiff = end.getDate() - start.getDate();
+        
+        if (dayDiff < 0) {
+            monthDiff--;
+            const prevMonth = new Date(end.getFullYear(), end.getMonth(), 0);
+            dayDiff = prevMonth.getDate() - start.getDate() + end.getDate();
+        }
+
+        if (monthDiff < 0) { yearDiff--; monthDiff += 12; }
+        
+        if (yearDiff === 0 && monthDiff === 0 && dayDiff === 0) { this.expectedPeriodType = '1'; } 
+        else if (yearDiff === 0) { this.expectedPeriodType = '2'; } 
+        else if (yearDiff === 1 && monthDiff === 0 && dayDiff === 0) { this.expectedPeriodType = '1';} 
+        else { this.expectedPeriodType = '3';}
+
+        if (this.isAutoDeterminePeriodType) {
+            if (this.periodType !== this.expectedPeriodType) {
+                this.periodType = this.expectedPeriodType;
+                if (this.periodType === '2' && !this.shortBasis) { this.shortBasis = '2'; }
+            }
+        }
+        this.validatePeriodType();
+    }
+    //show validasi
+    validatePeriodType() {
+        // Skip validation for auto-determined COBs and premium calculation COBs
+        if (this.isAutoDeterminePeriodType || this.showPremium) {
+            this.showPeriodTypeValidationError = false;
+            return;
         }
         
-        // Only update if we have a new value to set
-        if (newPremiumCalculation !== null && this.premiumCalculationId !== newPremiumCalculation) {
-            this.premiumCalculationId = newPremiumCalculation;
+        if (!this.expectedPeriodType || !this.periodType) {
+            this.showPeriodTypeValidationError = false;
+            return;
         }
+        
+        if (this.periodType !== this.expectedPeriodType) {
+            this.showPeriodTypeValidationError = true;
+            
+            const expectedTypeLabel = this.insuranceTypeOptions.find(
+                opt => opt.value === this.expectedPeriodType
+            )?.label || 'the expected type';
+            
+            const currentTypeLabel = this.insuranceTypeOptions.find(
+                opt => opt.value === this.periodType
+            )?.label || 'the selected type';
+                    
+            this.periodTypeValidationMessage = 
+                `Berdasarkan tanggal yang dipilih, seharusnya Insurance Period Type adalah "${expectedTypeLabel}", namun Anda memilih type "${currentTypeLabel}". Mohon periksa kembali pilihan Insurance Period Type Anda.`;
+        } else {
+            this.showPeriodTypeValidationError = false;
+        }
+    }
+    //reset
+    resetPeriod(){
+        this.periodType = undefined;
+        this.shortBasis = undefined;
+        this.startDate = undefined;
+        this.endDate = undefined;
+        this.percentage = undefined;
+        this.premiumCalculationId = undefined;
+        this.schemaType = undefined;
+        this.calculateDuration();
+        this.calculateExpectedPeriodType();
+
     }
     //--> INSURANCE PERIOD 1
 
@@ -2582,7 +2776,10 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
 
     //CHANGE PREMIUM CALCULATION 2
     handlePremiumCalculation2(event){
-        this.premiumCalculationId2 = event.detail.value;
+        const newValue = event.detail.value;
+        this.premiumCalculationId2 = newValue;
+        if (newValue != '5') { this.percentage2 = null; }
+        this.calculateDuration2();
     }
 
     //<-- INSURANCE PERIOD 2
@@ -2608,12 +2805,16 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
             dt.setFullYear(dt.getFullYear() + 1);
             this.endDate2 = dt.toISOString().slice(0, 10);
         }
+        this.adjustmentRows2 = [];
         this.calculateDuration2();
+        this.calculateExpectedPeriodType2();
         this.adjustPremiumCalculationBasedOnDuration2();
     }
     handleEndDateChange2(event) { 
         this.endDate2 = event.detail.value; 
+        this.adjustmentRows2 = [];
         this.calculateDuration2(); 
+        this.calculateExpectedPeriodType2();
         this.adjustPremiumCalculationBasedOnDuration2();
     }
     handleRowTypeChange2(event) {
@@ -2622,7 +2823,7 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
         this.adjustmentRows2 = this.adjustmentRows2.map(r => {
             if (r.year === year) {
                 let newPct = (type === '2') ? this.calculatedRate2 : r.percentage;
-                return { ...r, type, percentage: newPct };
+                return { ...r, type, percentage: newPct, showBasisPicklist: r.showBasisPicklist};
             }
             return r;
         });
@@ -2639,7 +2840,7 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
         const year = parseInt(input.dataset.year, 10);
         const percentage = sanitized;
         this.adjustmentRows2 = this.adjustmentRows2.map(r =>
-            r.year === year ? { ...r, percentage } : r
+            r.year === year ? { ...r, percentage: percentage } : r
         );
     }
     handleRowPercentagePaste2(event) {
@@ -2695,7 +2896,7 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
             const year = parseInt(input.dataset.year, 10);
             const percentage = this.sanitizePercentageString(newValue);
             this.adjustmentRows2 = this.adjustmentRows2.map(r =>
-                r.year === year ? { ...r, percentage } : r
+                r.year === year ? { ...r, percentage: percentage } : r
             );
             }
         }
@@ -2707,14 +2908,19 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
         try { event.target.value = percentage; }
         catch (e) {}
         this.adjustmentRows2 = this.adjustmentRows2.map(r =>
-            r.year === year ? { ...r, percentage } : r
+            r.year === year ? { ...r, percentage: percentage } : r
         );
         this.updateYearsMonthsInfo2();
     }
     // ------ Core calculation ------
     calculateDuration2() {
         if (!this.startDate2 || !this.endDate2) {
-            this.dayCount2 = null; this.yearsMonthsInfo2 = null; this.calculatedRate2 = null; this.adjustmentRows2 = [];
+            this.dayCount2 = null; 
+            this.yearsMonthsInfo2 = null; 
+            this.calculatedRate2 = null; 
+            this.adjustmentRows2 = [];
+            this.expectedPeriodType2 = null;
+            this.showPeriodTypeValidationError2 = false;
             return;
         }
         const start  = new Date(this.startDate2);
@@ -2723,23 +2929,31 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
         let y = end.getFullYear()  - start.getFullYear();
         let m = end.getMonth()     - start.getMonth();
         let d = end.getDate()      - start.getDate();
-        if (d < 0) { m--; }
-        if (d >= 30) { m++; }
+        if (d < 0) {
+            m--; 
+            const prevMonth = new Date(end.getFullYear(), end.getMonth(), 0);
+            d = prevMonth.getDate() - start.getDate() + end.getDate();
+        }
         if (m < 0) { y--; m += 12; }
         this._computedYears2  = y;
         this._computedMonths2 = m;
 
-        if (this.isShort2 && this.isProRataBasis2) {
+        this.calculateExpectedPeriodType2();
+
+        if ((this.isShort2 && this.isProRataBasis2) || 
+            (['301', '302', '303'].includes(this.cob2) && this.premiumCalculationId2 === '4')) {
             this.calculatedRate2 = parseFloat((this.dayCount2 / 365).toFixed(6));
-        } else if (this.isLongTerm2 && y >= 1) {
+        } else if ((this.isLongTerm2 || this.isPremiumLongTerm2) && y >= 1) {
             const fullYearsLater = new Date(start);
             fullYearsLater.setFullYear(start.getFullYear() + y);
             const extraMs = end - fullYearsLater;
-            const extraDays = Math.floor(extraMs / (1000 * 60 * 60 * 24)) + 1; 
+            const extraDays = Math.floor(extraMs / (1000 * 60 * 60 * 24));
             this.calculatedRate2 = extraDays > 0 ? parseFloat((extraDays / 365).toFixed(6)) : 0;
         } else {
             this.calculatedRate2 = null;
         }
+
+        this.updateYearsMonthsInfo2();
 
         if (this.isLongTerm2 && this.schemaType2 != null) {
             const hasExtra = m > 0 || d > 0;
@@ -2754,63 +2968,91 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
 
                 let rowType = null;
                 let rowPercentage = null;
+                let showBasisPicklist = false;
                 
                 if (i === 0) {
                     rowPercentage = 100;
-                    rowType = null; // First row doesn't need type
+                    rowType = null;
+                    showBasisPicklist = false;
                 } else if (isExtraRow) {
-                    // Ensure type always has a value, default to '2'
                     rowType = oldUiRow?.type || '2';
                     if (rowType === '2') {
                         rowPercentage = this.calculatedRate2; 
                     } else {
                         rowPercentage = oldUiRow?.percentage ?? null;
                     }
+                    showBasisPicklist = true;
                 } else {
-                    // For other rows, ensure type has a value
                     rowType = oldUiRow?.type || '2';
                     rowPercentage = oldUiRow?.percentage ?? null;
+                    showBasisPicklist = false;
                 }
 
                 newRows.push({ 
                     year: yearNum, 
                     percentage: rowPercentage, 
-                    type: rowType  // This ensures every row has a type (except first row)
+                    type: rowType,
+                    showBasisPicklist: showBasisPicklist 
                 });
             }
             this.adjustmentRows2 = [...newRows];
         } else {
             this.adjustmentRows2 = [];
         }
-
-        this.updateYearsMonthsInfo2();
     }
     // build the human‐readable period string
     updateYearsMonthsInfo2() {
+        if (['301', '302', '303'].includes(this.cob2)) {
+            if (this.premiumCalculationId2 === '4') {
+                const formattedRate = this.calculatedRate2 !== null && this.calculatedRate2 !== undefined 
+                    ? this.calculatedRate2.toFixed(6)
+                    : '0.000000';
+                this.yearsMonthsInfo2 = `Rate ${formattedRate}`;
+            } else if (this.premiumCalculationId2 === '5') {
+                this.yearsMonthsInfo2 = `Percentage ${this.percentage2 || 0}%`;
+            } else if (this.premiumCalculationId2 === '6' || this.premiumCalculationId2 === '2' || this.premiumCalculationId2 === '3') {
+                const y = this._computedYears2 || 0;
+                const m = this._computedMonths2 || 0;
+                let base = `${y} Year${y !== 1 ? 's' : ''}`;
+                if (m > 0) {
+                    base += ` and ${m} Month${m !== 1 ? 's' : ''}`;
+                }
+                
+                if (this.calculatedRate2 !== null && this.calculatedRate2 !== undefined) {
+                    const totalRate = y + this.calculatedRate2;
+                    const formattedRate = totalRate.toFixed(6);
+                    this.yearsMonthsInfo2 = `${base} | Rate: ${formattedRate}`;
+                } else {
+                    const formattedRate = y.toFixed(6);
+                    this.yearsMonthsInfo2 = `${base} | Rate: ${formattedRate}`;
+                }
+            }
+            return;
+        }
+
         if (this.isAnnual2) { this.yearsMonthsInfo2 = '1 Year'; return; }
         if (this.isShort2) {
-            if (this.isProRataBasis2) { this.yearsMonthsInfo2 = `Rate ${this.calculatedRate2}`; } 
+            if (this.isProRataBasis2) { 
+                const formattedRate = this.calculatedRate2 !== null && this.calculatedRate2 !== undefined 
+                    ? this.calculatedRate2.toFixed(6)
+                    : '0.000000';
+                this.yearsMonthsInfo2 = `Rate ${formattedRate}`; 
+            } 
             else { this.yearsMonthsInfo2 = `Percentage ${this.percentage2 || 0}%`; }
             return;
         }
-        const y = this._computedYears2;
-        const m = this._computedMonths2;
+        const y = this._computedYears2 || 0;
+        const m = this._computedMonths2 || 0;
         let base = `${y} Year${y !== 1 ? 's' : ''}`;
         if (m > 0) {
             base += ` and ${m} Month${m !== 1 ? 's' : ''}`;
         }
-        if (m === 0 && this._computedDays2 === 0) { this.yearsMonthsInfo2 = base; return; }
-        const lastRow = this.adjustmentRows2[this.adjustmentRows2.length - 1];
-        if(lastRow){
-            if (lastRow.type === '1') { this.yearsMonthsInfo2 = `${base} | Percentage ${lastRow.percentage || 0}%`; }
-            else if (lastRow.type === '2') { this.yearsMonthsInfo2 = `${base} | Total Rate ${ (this._computedYears2 + this.calculatedRate2) }`; }
-            else { this.yearsMonthsInfo2 = base; }
-        }else{
-            if(this._computedYears2 >= 1 && this._computedMonths2 > 0){
-                this.yearsMonthsInfo2 = `${base} | Total Rate ${ (this._computedYears2 + this.calculatedRate2) }`;
-            }else{
-                this.yearsMonthsInfo2 = base;
-            }
+        if (this.calculatedRate2 !== null && this.calculatedRate2 !== undefined) {
+            const totalRate = y + this.calculatedRate2;
+            const formattedRate = totalRate.toFixed(6);
+            this.yearsMonthsInfo2 = `${base} | Rate: ${formattedRate}`;
+        } else {
+            this.yearsMonthsInfo2 = base;
         }
     }
     // Method to adjust premium calculation value when dates change
@@ -2830,34 +3072,100 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
             actualYearDiff--;
         }
         
-        let newPremiumCalculation = null;
-        
-        if (actualYearDiff === 0) {
-            // Less than 1 year - Default to "Pro Rata" (4), but user can also select "Percentage" (5)
-            // Only set default if not already set to one of the allowed options
-            if (!this.premiumCalculationId2 || 
-                (this.premiumCalculationId2 !== '4' && this.premiumCalculationId2 !== '5')) {
+        if (this.premiumCalculationId2 === null || this.premiumCalculationId2 === undefined) {
+            let newPremiumCalculation = null;
+            
+            if (actualYearDiff === 0) {
                 newPremiumCalculation = '4';
-            }
-        } else if (actualYearDiff === 1 && monthDiff === 0 && dayDiff === 0) {
-            // Exactly 1 year - Set to "Flat" (1)
-            newPremiumCalculation = '1';
-        } else {
-            // More than 1 year - Default to "Long Period" (6), but user can also select 
-            // "Decreasing Sum Insured" (2) or "Discount Rate" (3)
-            // Only set default if not already set to one of the allowed options
-            if (!this.premiumCalculationId2 || 
-                (this.premiumCalculationId2 !== '6' && 
-                 this.premiumCalculationId2 !== '2' && 
-                 this.premiumCalculationId2 !== '3')) {
+            } else if (actualYearDiff === 1 && monthDiff === 0 && dayDiff === 0) {
+                newPremiumCalculation = '1';
+            } else {
                 newPremiumCalculation = '6';
             }
+            
+            if (newPremiumCalculation !== null && this.premiumCalculationId2 !== newPremiumCalculation) {
+                this.premiumCalculationId2 = newPremiumCalculation;
+            }
+        }
+    }
+    // ------ Period Type Validation Methods ------
+    calculateExpectedPeriodType2() {
+        if (!this.startDate2 || !this.endDate2) {
+            this.expectedPeriodType2 = null;
+            this.showPeriodTypeValidationError2 = false;
+            return;
+        }
+
+        const start = new Date(this.startDate2);
+        const end = new Date(this.endDate2);
+
+        let yearDiff = end.getFullYear() - start.getFullYear();
+        let monthDiff = end.getMonth() - start.getMonth();
+        let dayDiff = end.getDate() - start.getDate();
+        
+        if (dayDiff < 0) {
+            monthDiff--;
+            const prevMonth = new Date(end.getFullYear(), end.getMonth(), 0);
+            dayDiff = prevMonth.getDate() - start.getDate() + end.getDate();
+        }
+
+        if (monthDiff < 0) { yearDiff--; monthDiff += 12; }
+        
+        if (yearDiff === 0 && monthDiff === 0 && dayDiff === 0) { this.expectedPeriodType2 = '1'; } 
+        else if (yearDiff === 0) { this.expectedPeriodType2 = '2'; } 
+        else if (yearDiff === 1 && monthDiff === 0 && dayDiff === 0) { this.expectedPeriodType2 = '1';} 
+        else { this.expectedPeriodType2 = '3';}
+
+        if (this.isAutoDeterminePeriodType2) {
+            if (this.periodType2 !== this.expectedPeriodType2) {
+                this.periodType2 = this.expectedPeriodType2;
+                if (this.periodType2 === '2' && !this.shortBasis2) { this.shortBasis2 = '2'; }
+            }
+        }
+        this.validatePeriodType2();
+    }
+    //show validasi
+    validatePeriodType2() {
+        // Skip validation for auto-determined COBs and premium calculation COBs
+        if (this.isAutoDeterminePeriodType2 || this.showPremium2) {
+            this.showPeriodTypeValidationError2 = false;
+            return;
         }
         
-        // Only update if we have a new value to set
-        if (newPremiumCalculation !== null && this.premiumCalculationId2 !== newPremiumCalculation) {
-            this.premiumCalculationId2 = newPremiumCalculation;
+        if (!this.expectedPeriodType2 || !this.periodType2) {
+            this.showPeriodTypeValidationError2 = false;
+            return;
         }
+        
+        if (this.periodType2 !== this.expectedPeriodType2) {
+            this.showPeriodTypeValidationError2 = true;
+            
+            const expectedTypeLabel = this.insuranceTypeOptions.find(
+                opt => opt.value === this.expectedPeriodType2
+            )?.label || 'the expected type';
+            
+            const currentTypeLabel = this.insuranceTypeOptions.find(
+                opt => opt.value === this.periodType2
+            )?.label || 'the selected type';
+                    
+            this.periodTypeValidationMessage2 = 
+                `Berdasarkan tanggal yang dipilih, seharusnya Insurance Period Type adalah "${expectedTypeLabel}", namun Anda memilih type "${currentTypeLabel}". Mohon periksa kembali pilihan Insurance Period Type Anda.`;
+        } else {
+            this.showPeriodTypeValidationError2 = false;
+        }
+    }
+    //reset
+    resetPeriod2(){
+        this.periodType2 = undefined;
+        this.shortBasis2 = undefined;
+        this.startDate2 = undefined;
+        this.endDate2 = undefined;
+        this.percentage2 = undefined;
+        this.premiumCalculationId2 = undefined;
+        this.schemaType2 = undefined;
+        this.calculateDuration2();
+        this.calculateExpectedPeriodType2();
+
     }
     //--> INSURANCE PERIOD 2
 
@@ -3419,7 +3727,7 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
 
         if(this.showStandard2 == true){type2 = 'Standard';}
         else if(this.showMOU2 == true){type2 = 'MOU';}
-        //else if(this.showRealisasi2 == true){type1 = 'Realisasi';}
+        else if(this.showRealisasi2 == true){type2 = 'Realisasi';}
         console.log('type1:'+type1);
         console.log('type2:'+type2);
 
@@ -3551,10 +3859,11 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
         data.totalyear = this._computedYears;
         data.totalmonth = this._computedMonths;
         if(data.insuranceperiod == '1'){
+            this.years = 1;
             data.yearperiod = this.years;
         }else{
             data.shortperiod = this.shortBasis;
-            data.percentageperiod = this.isPercentageBasis ? this.percentage : undefined;
+            data.percentageperiod = this.percentage;
             data.rateperiod = this.calculatedRate;
         }
         data.premiumcalculation = this.premiumCalculationId;
@@ -3611,10 +3920,11 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
             data.totalyear2 = this._computedYears2;
             data.totalmonth2 = this._computedMonths2;
             if(data.insuranceperiod2 == '1'){
+                this.years2 = 1;
                 data.yearperiod2 = this.years2;
             }else{
                 data.shortperiod2 = this.shortBasis2;
-                data.percentageperiod2 = this.isPercentageBasis2 ? this.percentage2 : undefined;
+                data.percentageperiod2 = this.percentage2;
                 data.rateperiod2 = this.calculatedRate2;
             }
             data.premiumcalculation2 = this.premiumCalculationId2;
@@ -3720,6 +4030,32 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
                     }
                 });
             }
+        }else if(type1 == 'Realisasi'){
+            if(data.risk1 != '{}'){
+                this.mapInputRealisasi1.forEach((value, key) => {
+                    if(value == undefined || value == ''){
+                        for(let j=0;j<this.datafieldRealisasi1.length;j++){
+                            let field = this.datafieldRealisasi1[j].data;
+                            for(let i=0;i<field.length;i++){
+                                if(field[i].datafield == key && field[i].datatype != 'Readonly' && field[i].datarequired == true) msg1 += '['+field[i].datalabel+']';
+                            } 
+                        }
+                    }else if(value.indexOf('{')!=-1){
+                        let mapData = JSON.parse(value);
+                        if(mapData.latitude == undefined || mapData.latitude == '' 
+                            || mapData.longitude == undefined || mapData.longitude == ''
+                            || mapData.latitude > 90 || mapData.latitude < -90
+                            || mapData.longitude > 180 || mapData.longitude < -180){
+                            for(let j=0;j<this.datafieldRealisasi1.length;j++){
+                                let field = this.datafieldRealisasi1[j].data;
+                                for(let i=0;i<field.length;i++){
+                                    if(field[i].datafield == key) msg1 += '['+field[i].datalabel+']';
+                                }
+                            }
+                        }
+                    }
+                });
+            }
         }
 
         let msg2 = '';
@@ -3794,6 +4130,8 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
             }
         }
 
+        const percentageNum = parseFloat(this.percentage);
+        const percentageNum2 = parseFloat(this.percentage2);
         let isValid,isValid2;
         if(data.opportunitytype === undefined || data.opportunitytype === ''){
             this.errorMessage('Please Select Opportunity Type!');
@@ -3831,7 +4169,11 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
         //    this.errorMessage('Please input Fire Type!');
         }else if(this.showIAR === true && (data.wording === undefined || data.wording === '')){
             this.errorMessage('Please input Wording Standard!');
-        }else if(this.showPremium == false && (data.insuranceperiod === undefined || data.insuranceperiod === '' || data.insuranceperiod  == null)){
+        }else if(data.startdateperiod === undefined || data.startdateperiod === '' || data.startdateperiod === null){
+            this.errorMessage('Please input Start Date Period!');
+        }else if(data.enddateperiod === undefined || data.enddateperiod === '' || data.enddateperiod === null){
+            this.errorMessage('Please input End Date Period!');
+        }else if(this.showInsuranceType == true && (data.insuranceperiod === undefined || data.insuranceperiod === '' || data.insuranceperiod  == null)){
             this.errorMessage('Please input Insurance Period!');
         }else if(data.insuranceperiod == '1' && (data.yearperiod === undefined || data.yearperiod === '' || data.yearperiod === null)){ // Annual
             this.errorMessage('Please input Number of Years!');
@@ -3839,10 +4181,10 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
             this.errorMessage('Please input Short-Period Basis!');
         }else if(data.insuranceperiod == '2' && data.shortperiod === '1' && (data.percentageperiod === undefined || data.percentageperiod === '' || data.percentageperiod === null)){ // Short & Percentage
             this.errorMessage('Please input Percentage (%)!');
-        }else if(data.startdateperiod === undefined || data.startdateperiod === '' || data.startdateperiod === null){
-            this.errorMessage('Please input Start Date Period!');
-        }else if(data.enddateperiod === undefined || data.enddateperiod === '' || data.enddateperiod === null){
-            this.errorMessage('Please input End Date Period!');
+        }else if(this.isPremiumPercentageInput == true && (data.percentageperiod === undefined || data.percentageperiod === '' || data.percentageperiod === null)){
+            this.errorMessage('Please input Percentage (%)!');
+        }else if(data.percentageperiod != undefined && data.percentageperiod != null && (isNaN(percentageNum) || percentageNum < 0 || percentageNum > 100)){
+            this.errorMessage('Please input Percentage (%) between 0 - 100!');
         }else if(data.riskName === undefined || data.riskName === ''){
             this.errorMessage('Please input Risk Name!');
         }else if(msg1 != ''){
@@ -3907,7 +4249,11 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
         //    this.errorMessage('Please input Fire Type (2)!');
         }else if(data.risk == 'multiple' && this.showIAR2 === true && (data.wording2 === undefined || data.wording2 === '')){
             this.errorMessage('Please input Wording Standard (2)!');
-        }else if(data.risk == 'multiple' && this.showPremium2 == false && (data.insuranceperiod2 === undefined || data.insuranceperiod2 === '' || data.insuranceperiod2 === null)){
+        }else if(data.risk == 'multiple' && (data.startdateperiod2 === undefined || data.startdateperiod2 === '' || data.startdateperiod2 === null)){
+            this.errorMessage('Please input Start Date Period (2)!');
+        }else if(data.risk == 'multiple' && (data.enddateperiod2 === undefined || data.enddateperiod2 === '' || data.enddateperiod2 === null)){
+            this.errorMessage('Please input End Date Period (2)!');
+        }else if(data.risk == 'multiple' && this.showInsuranceType2 == true && (data.insuranceperiod2 === undefined || data.insuranceperiod2 === '' || data.insuranceperiod2 === null)){
             this.errorMessage('Please input Insurance Period (2)!');
         }else if(data.risk == 'multiple' && data.insuranceperiod2 == '1' && (data.yearperiod2 === undefined || data.yearperiod2 === '' || data.yearperiod2 === null)){ // Annual
             this.errorMessage('Please input Number of Years (2)!');
@@ -3915,10 +4261,10 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
             this.errorMessage('Please input Short-Period Basis (2)!');
         }else if(data.risk == 'multiple' && data.insuranceperiod2 == '2' && data.shortperiod2 === '1' && (data.percentageperiod2 === undefined || data.percentageperiod2 === '' || data.percentageperiod2 === null)){ // Short & Percentage
             this.errorMessage('Please input Percentage (%) (2)!');
-        }else if(data.risk == 'multiple' && (data.startdateperiod2 === undefined || data.startdateperiod2 === '' || data.startdateperiod2 === null)){
-            this.errorMessage('Please input Start Date Period (2)!');
-        }else if(data.risk == 'multiple' && (data.enddateperiod2 === undefined || data.enddateperiod2 === '' || data.enddateperiod2 === null)){
-            this.errorMessage('Please input End Date Period (2)!');
+        }else if(data.risk == 'multiple' && this.isPremiumPercentageInput2 == true && (data.percentageperiod2 === undefined || data.percentageperiod2 === '' || data.percentageperiod2 === null)){
+            this.errorMessage('Please input Percentage (%) (2)!');
+        }else if(data.risk == 'multiple' && data.percentageperiod2 != undefined && data.percentageperiod2 != null && (isNaN(percentageNum2) || percentageNum2 < 0 || percentageNum2 > 100)){
+            this.errorMessage('Please input Percentage (%) (2) between 0 - 100!');
         }else if(data.risk == 'multiple' && (data.riskName2 === undefined || data.riskName2 === '')){
             this.errorMessage('Please input Risk Name (2)!');
         }else if(data.risk == 'multiple' && (msg2 != '')){

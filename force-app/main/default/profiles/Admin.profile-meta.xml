@@ -17684,11 +17684,11 @@
         <field>Opportunity.Overriding_Commission__c</field>
         <readable>true</readable>
     </fieldPermissions>
-    <!-- <fieldPermissions>
+    <fieldPermissions>
         <editable>false</editable>
         <field>Opportunity.Owner_Branch__c</field>
         <readable>true</readable>
-    </fieldPermissions> -->
+    </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
         <field>Opportunity.Panel_Setting__c</field>
@@ -19591,6 +19591,11 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
+        <field>Quote.Stage__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
         <field>Quote.Stamp_Duty__c</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -19629,11 +19634,11 @@
         <field>Quote.TotalPrice</field>
         <readable>true</readable>
     </fieldPermissions>
-    <!-- <fieldPermissions>
+    <fieldPermissions>
         <editable>false</editable>
         <field>Quote.Total_Sum_Insured__c</field>
         <readable>true</readable>
-    </fieldPermissions> -->
+    </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
         <field>Quote.Treaty_Distribution_Response__c</field>
@@ -23773,6 +23778,14 @@
         <recordType>Product2.Product</recordType>
     </layoutAssignments>
     <layoutAssignments>
+        <layout>Facultative_Share__c-Facultative Share Layout</layout>
+        <recordType>Facultative_Share__c.Facultative_Share</recordType>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Facultative_Share__c-Folder</layout>
+        <recordType>Facultative_Share__c.Folder</recordType>
+    </layoutAssignments>
+    <layoutAssignments>
         <layout>Transaction_Data__c-Clause</layout>
     </layoutAssignments>
     <layoutAssignments>
@@ -26945,6 +26958,16 @@
         <recordType>Event.FinServ__ClientAssociateEvent</recordType>
         <visible>false</visible>
     </recordTypeVisibilities>
+     <recordTypeVisibilities>
+        <default>true</default>
+        <recordType>Facultative_Share__c.Facultative_Share</recordType>
+        <visible>true</visible>
+    </recordTypeVisibilities>
+    <recordTypeVisibilities>
+        <default>false</default>
+        <recordType>Facultative_Share__c.Folder</recordType>
+        <visible>true</visible>
+    </recordTypeVisibilities>
     <recordTypeVisibilities>
         <default>true</default>
         <recordType>FinServ__AssetsAndLiabilities__c.FinServ__Liability</recordType>
@@ -27433,7 +27456,7 @@
     <tabVisibilities>
         <tab>Edit_Coverage</tab>
         <visibility>DefaultOn</visibility>
-    </tabVisibilities> -->->
+    </tabVisibilities> -->
     <tabVisibilities>
         <tab>Error_Log__c</tab>
         <visibility>DefaultOn</visibility>

@@ -21,6 +21,7 @@ export default class CustomPathQuotation extends LightningElement {
         "Approved": "action:approval",
         "Rejected": "action:close",
         "Draft": "action:preview",
+        "Waiting KYC Approval": "action:new_custom77",
         "Closed Won": "action:following"
     };
 

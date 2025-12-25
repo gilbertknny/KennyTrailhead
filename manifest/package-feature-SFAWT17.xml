@@ -9,6 +9,11 @@
 		<name>ApexClass</name>
 	</types>
 	<types>
+		<members>Account.KYC_Approval</members>
+		<name>ApprovalProcess</name>
+	</types>
+	<types>
+		<members>Account.Approval_Process__c</members>
 		<members>Account.IsSchedule__c</members>
 		<members>Account.Lintaswata_CreatedbyId__c</members>
 		<members>Account.Lintaswata_Createddate__c</members>
@@ -83,6 +88,43 @@
 		<members>Endpoint__mdt</members>
 		<members>Schedule__c</members>
 		<name>CustomObject</name>
+	</types>
+	<types>
+		<members>Account.Approval_Process__c</members>
+		<name>CustomField</name>
+	</types>
+	<types>
+		<members>Account_Final_Approve_KYC</members>
+		<members>Call_Flow_to_IP_API</members>
+		<members>KYC_Call_SFAWT_01_17</members>
+		<name>Flow</name>
+	</types>
+	<types>
+		<members>Account_Final_Approve_KYC</members>
+		<members>Call_Flow_to_IP_API</members>
+		<members>KYC_Call_SFAWT_01_17</members>
+		<name>FlowDefinition</name>
+	</types>
+	<types>
+		<members>Account.FinServ__IndustriesBusiness</members>
+		<members>Account.Individual</members>
+		<members>Account.Insurance</members>
+		<members>Account.Loss_Adjuster</members>
+		<members>Account.Surveyor</members>
+		<members>Account.Workshop</members>
+		<name>RecordType</name>
+	</types>
+	<types>
+		<members>Account.Approve</members>
+		<members>Account.Reject_Status</members>
+		<members>Account.Submit_Status</members>
+		<members>Account.isSchedule_False</members>
+		<members>Account.isSchedule_True</members>
+		<name>WorkflowFieldUpdate</name>
+	</types>
+	<types>
+		<members>Account.KYC_Approval</members>
+		<name>WorkflowTask</name>
 	</types>
 	<version>65.0</version>
 </Package>
