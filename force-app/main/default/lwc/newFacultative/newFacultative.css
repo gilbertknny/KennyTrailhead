@@ -85,3 +85,13 @@
 .icon-btn:hover .icon-label {
     text-decoration: underline;
 }
+
+.custom-medium-modal .slds-modal__container {
+    width: 60% !important;  /* between default (40%) and large (70%) */
+    max-width: 60% !important;
+}
+
+.custom-medium-modal .slds-modal__content {
+    max-height: 65vh;       /* make datatable scrollable if needed */
+    overflow-y: auto;
+}

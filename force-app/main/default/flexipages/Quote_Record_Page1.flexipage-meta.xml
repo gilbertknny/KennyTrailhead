@@ -67,7 +67,7 @@
                                 </criteria>
                             </visibilityRule>
                         </valueListItems>
-                        <!-- <valueListItems>
+                        <valueListItems>
                             <value>Quote.Binding_Quotation</value>
                             <visibilityRule>
                                 <booleanFilter>(1 OR 4) AND (2 OR 3)</booleanFilter>
@@ -92,7 +92,7 @@
                                     <rightValue>Approve On Hold Binding</rightValue>
                                 </criteria>
                             </visibilityRule>
-                        </valueListItems> -->
+                        </valueListItems>
                     </valueList>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
@@ -255,7 +255,7 @@
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
-        <!-- <itemInstances>
+        <itemInstances>
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
@@ -264,7 +264,7 @@
                 <fieldItem>Record.Total_Sum_Insured__c</fieldItem>
                 <identifier>RecordTotal_Sum_Insured_cField</identifier>
             </fieldInstance>
-        </itemInstances> -->
+        </itemInstances>
         <itemInstances>
             <fieldInstance>
                 <fieldInstanceProperties>
@@ -811,16 +811,6 @@
     <flexiPageRegions>
         <itemInstances>
             <componentInstance>
-                <componentName>addFacultative</componentName>
-                <identifier>c_addFacultative</identifier>
-            </componentInstance>
-        </itemInstances>
-        <name>Facet-226d5f2e-712b-410e-86b0-78532e0516f5</name>
-        <type>Facet</type>
-    </flexiPageRegions>
-    <flexiPageRegions>
-        <itemInstances>
-            <componentInstance>
                 <componentName>forceChatter:recordFeedContainer</componentName>
                 <identifier>forceChatter_recordFeedContainer</identifier>
             </componentInstance>
@@ -877,33 +867,6 @@
                 </componentInstanceProperties>
                 <componentName>flexipage:tab</componentName>
                 <identifier>flexipage_tab3</identifier>
-                <visibilityRule>
-                    <booleanFilter>1 OR 2</booleanFilter>
-                    <criteria>
-                        <leftValue>{!$User.Profile.Name}</leftValue>
-                        <operator>CONTAINS</operator>
-                        <rightValue>System Administrator</rightValue>
-                    </criteria>
-                    <criteria>
-                        <leftValue>{!$User.Profile.Name}</leftValue>
-                        <operator>CONTAINS</operator>
-                        <rightValue>Underwriting</rightValue>
-                    </criteria>
-                </visibilityRule>
-            </componentInstance>
-        </itemInstances>
-        <itemInstances>
-            <componentInstance>
-                <componentInstanceProperties>
-                    <name>body</name>
-                    <value>Facet-226d5f2e-712b-410e-86b0-78532e0516f5</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>title</name>
-                    <value>Facultative</value>
-                </componentInstanceProperties>
-                <componentName>flexipage:tab</componentName>
-                <identifier>flexipage_tab2</identifier>
                 <visibilityRule>
                     <booleanFilter>1 OR 2</booleanFilter>
                     <criteria>

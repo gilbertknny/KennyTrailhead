@@ -49,7 +49,7 @@ export default class NewFacultative extends LightningElement {
 
     handleRowSelection(event) {
         this.selectedOpportunities = event.detail.selectedRows;
-        console.log('Row Selected: ',this.selectedOpportunities);
+        console.log('Row Selected: ',JSON.stringify(this.selectedOpportunities));
     }
 
     handleRowAction(event) {
