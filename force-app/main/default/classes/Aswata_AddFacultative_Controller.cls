@@ -13,6 +13,7 @@ public with sharing class Aswata_AddFacultative_Controller {
                 FROM Asset WHERE RecordType.Name = 'Risk' 
                 AND Has_Facultative__c = true 
                 AND Facultative_Owner__c =: UserInfo.getUserId() 
+                AND Opportunity__r.Busreq_ID__c != null
                 AND Facultative_Folder__c = null WITH SECURITY_ENFORCED  
         ];
     }
