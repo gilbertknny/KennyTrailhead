@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Call_Integration_Procedure_SFAWT_02</name>
+        <label>Call Integration Procedure SFAWT-02</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <actionName>VlocityMappingFlowBridge</actionName>
+        <actionType>apex</actionType>
+        <connector>
+            <targetReference>Cek_Status_Response</targetReference>
+        </connector>
+        <flowTransactionModel>Automatic</flowTransactionModel>
+        <inputParameters>
+            <name>ipName</name>
+            <value>
+                <stringValue>SFAWT02_Facultative</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>jsonInput</name>
+            <value>
+                <elementReference>jsonInput</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>VlocityMappingFlowBridge</nameSegment>
+        <offset>0</offset>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </actionCalls>
+    <apiVersion>65.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <customProperties>
+        <name>ScreenProgressIndicator</name>
+        <value>
+            <stringValue>{&quot;location&quot;:&quot;top&quot;,&quot;type&quot;:&quot;simple&quot;}</stringValue>
+        </value>
+    </customProperties>
+    <decisions>
+        <name>Cek_Status_Response</name>
+        <label>Cek Status Response</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Show_Failed_Message</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Status_Success</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>responseStatus</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <numberValue>0.0</numberValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Folder_Status</targetReference>
+            </connector>
+            <label>Status Success</label>
+        </rules>
+    </decisions>
+    <environments>Default</environments>
+    <formulas>
+        <name>responseStatus</name>
+        <dataType>Number</dataType>
+        <expression>VALUE(
+ MID(
+  {!Call_Integration_Procedure_SFAWT_02.resultJson},
+   FIND(&apos;&quot;status&quot;:&quot;&apos;,{!Call_Integration_Procedure_SFAWT_02.resultJson}) + 10,
+   FIND(&apos;&quot;&apos;, {!Call_Integration_Procedure_SFAWT_02.resultJson}, FIND(&apos;&quot;status&quot;:&quot;&apos;, {!Call_Integration_Procedure_SFAWT_02.resultJson}) + 10) - 
+   (FIND(&apos;&quot;status&quot;:&quot;&apos;, {!Call_Integration_Procedure_SFAWT_02.resultJson}) + 10)
+ )
+)</expression>
+        <scale>0</scale>
+    </formulas>
+    <interviewLabel>[Folder] Close Folder Screen Flow {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>[Folder] Close Folder Screen Flow</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>Flow</processType>
+    <recordUpdates>
+        <name>Update_Folder_Status</name>
+        <label>Update Folder Status</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Show_Success_Message</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Folder_Status__c</field>
+            <value>
+                <stringValue>Closed</stringValue>
+            </value>
+        </inputAssignments>
+        <object>Facultative_Share__c</object>
+    </recordUpdates>
+    <screens>
+        <name>Show_Failed_Message</name>
+        <label>Show Failed Message</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>Copy_1_of_DisplaySuccess</name>
+            <fieldText>&lt;p&gt;Close Folder Gagal, Silahkan Hubungi Administrator System !&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <nextOrFinishButtonLabel>Selesai</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <name>Show_Success_Message</name>
+        <label>Show Success Message</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>DisplaySuccess</name>
+            <fieldText>&lt;p&gt;Close Folder Berhasil !&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <nextOrFinishButtonLabel>Selesai</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Call_Integration_Procedure_SFAWT_02</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <textTemplates>
+        <name>jsonInput</name>
+        <isViewedAsPlainText>false</isViewedAsPlainText>
+        <text>&lt;p&gt;{&quot;recordId&quot;: &quot;&lt;span style=&quot;background-color: rgb(255, 255, 255);&quot;&gt;{!recordId}&lt;/span&gt;&quot;}&lt;/p&gt;</text>
+    </textTemplates>
+    <variables>
+        <name>recordId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>
