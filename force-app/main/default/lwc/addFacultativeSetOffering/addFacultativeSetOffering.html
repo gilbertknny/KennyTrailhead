@@ -127,32 +127,19 @@
                         <div class="slds-m-top_large">
                             <div class="section-divider slds-m-bottom_small">
                                 <h1 class="slds-text-heading_small slds-text-heading_small_bold">
-                                    SHARE, RATE & COMMISSION
+                                    SHARE & WARRANTY
                                 </h1>
                             </div>
 
                             <lightning-layout multiple-rows class="slds-m-top_large">
-                                <lightning-layout-item class="slds-size_1-of-2 slds-p-around_small">
+                                <lightning-layout-item class="slds-size_1-of-3 slds-p-around_small">
                                     <div class="columnBorder">
-                                        <lightning-input label="Rate" name="Rate__c" type="number" value={formData.Rate__c}  onchange={handleInputChange}></lightning-input>
+                                        <lightning-input label="Rate" name="Rate__c" type="number" value={formData.Rate__c}  onchange={handleInputChange}
+                                        min="0"
+                                        max="100"
+                                        step="0.00000001"
+                                        ></lightning-input> <!-- edited by Marco Lie 26/11/2025 14:42 (add pre-defined step decimals to number field)-->
                                         <lightning-input label="Commission" name="Commission__c" type="number" value={formData.Commission__c}  onchange={handleInputChange}></lightning-input>
-                                        <!--div class="slds-form-element share-row">
-                                            <label class="slds-form-element__label">Premium on Ceded Portion</label>
-                                            <div class="slds-form-element__control">
-                                                <span class="slds-form-element__static">{formData.Premium_Ceded__c}</span>
-                                            </div>
-                                        </div-->
-                                        <!--div class="slds-form-element share-row">
-                                            <label class="slds-form-element__label">Rebate / Commission Ceded Portion</label>
-                                            <div class="slds-form-element__control">
-                                                <span class="slds-form-element__static">{formData.rebateCeded}</span>
-                                            </div>
-                                        </div-->
-                                    </div>
-                                </lightning-layout-item>
-
-                                <lightning-layout-item class="slds-size_1-of-2 slds-p-around_small">
-                                    <div class="columnBorder">
                                         <lightning-input 
                                             label="Share Offered (% of TSI)" 
                                             type="number"
@@ -167,8 +154,30 @@
                                         <!--p class="slds-text-body_small slds-m-top_xx-small">
                                             IDR: {totalSumInsuredIdr} | Total: {shareOfferedIdr}
                                         </p-->
+                                    </div>
+                                </lightning-layout-item>
 
-                                        <lightning-input 
+                                <lightning-layout-item class="slds-size_2-of-3 slds-p-around_small">
+                                    <div class="columnBorder">
+                                        <label class="slds-form-element__label" for="terms">Facultative Subjectivity or Provisonal Term (Clauses)</label>
+                                        <div class="slds-form-element__control">
+                                            <textarea id="clausesWarranty"
+                                                    name="clausesWarranty" 
+                                                    class="slds-textarea" 
+                                                    rows="8" 
+                                                    oninput={handleInputChange} 
+                                                    >
+                                                    {formData.clausesWarranty} 
+                                            </textarea>
+                                        </div>
+                                    </div>
+                                </lightning-layout-item>
+                                <!--lightning-layout-item class="slds-size_1-of-2 slds-p-around_small">
+                                    <div class="columnBorder"-->
+                                        
+                                        
+
+                                        <!--lightning-input 
                                             label="Share Accepted / Approved (% of TSI)" 
                                             type="number" 
                                             value={shareAcceptedPercent}
@@ -179,11 +188,11 @@
                                             onchange={handleInputChange}
                                             name="Share_Accepted_Approved__c">
                                         </lightning-input>
-                                        <!--p class="slds-text-body_small slds-m-top_xx-small">
+                                        <p class="slds-text-body_small slds-m-top_xx-small">
                                             IDR: {totalSumInsuredIdr} | Total: {shareAcceptedIdr}
                                         </p-->
 
-                                        <lightning-input 
+                                        <!--lightning-input 
                                             label="Share Binding (% of TSI)" 
                                             type="number" 
                                             value={shareBindingPercent}
@@ -194,11 +203,11 @@
                                             onchange={handleInputChange}
                                             name="Share_Binding__c">
                                         </lightning-input>
-                                        <!--p class="slds-text-body_small slds-m-top_xx-small">
+                                        <p class="slds-text-body_small slds-m-top_xx-small">
                                             IDR: {totalSumInsuredIdr} | Total: {shareBindingIdr}
-                                        </p-->
+                                        </p>
                                     </div>
-                                </lightning-layout-item>
+                                </lightning-layout-item-->
                             </lightning-layout>                        
                         </div>
                     </div>
@@ -207,15 +216,15 @@
                     <!-- =============================================== -->
                     <!-- Added: CLAUSES AND WARRANTY Section -->
                     <!-- =============================================== -->
-                    <div class="slds-box slds-p-around_small slds-theme_default slds-m-top_large">
+                    <!--div class="slds-box slds-p-around_small slds-theme_default slds-m-top_large">
                         <div class="slds-m-top_large">
                             <div class="section-divider slds-m-bottom_small">
                                 <h1 class="slds-text-heading_small slds-text-heading_small_bold">
                                     CLAUSES AND WARRANTY
                                 </h1>
-                            </div>
+                            </div-->
 
-                            <lightning-layout multiple-rows class="slds-m-top_large">
+                            <!--lightning-layout multiple-rows class="slds-m-top_large">
                                 <lightning-layout-item class="slds-size_1-of-1 slds-p-around_small">
                                     <label class="slds-form-element__label" for="terms">Facultative Subjectivity or Provisonal Term (Clauses)</label>
                                     <div class="slds-form-element__control">
@@ -228,8 +237,8 @@
                                                 {formData.clausesWarranty} 
                                         </textarea>
                                     </div>
-                                </lightning-layout-item>
-                                <lightning-layout-item class="slds-size_1-of-1 slds-p-around_small">
+                                </lightning-layout-item-->
+                                <!--lightning-layout-item class="slds-size_1-of-1 slds-p-around_small">
                                     <label class="slds-form-element__label" for="terms">Facultative Subjectivity or Provisonal Term (Coverage)</label>
                                     <div class="slds-form-element__control">
                                         <textarea id="coverageWarranty"
@@ -241,10 +250,10 @@
                                                 {formData.coverageWarranty} 
                                         </textarea>
                                     </div>
-                                </lightning-layout-item>
-                            </lightning-layout>                        
+                                </lightning-layout-item-->
+                            <!--/lightning-layout>                        
                         </div>
-                    </div>
+                    </div-->
                     <!-- =============================================== -->
                 </div>
 

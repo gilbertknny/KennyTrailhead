@@ -73,7 +73,8 @@ export default class AddFacultativeSetOffering extends LightningElement {
         // ✅ Update your formData in the same consistent pattern
         this.formData = {
             ...this.formData,
-            accountIds: selectedIds
+            accountIds: selectedIds,
+            offeringStatus: 'Offering'
         };
 
         console.log('Updated formData:', JSON.stringify(this.formData, null, 2));
@@ -142,9 +143,22 @@ export default class AddFacultativeSetOffering extends LightningElement {
         console.log('Modal opened with:', JSON.stringify(this.selectedOpportunities));
         if (this.selectedOpportunities && this.selectedOpportunities.length > 0) {
             this.riskNameOptions = this.selectedOpportunities.map(item => ({
-                label: item.BusreqID,
+                label: item.busreqId + ' - ' + item.Risk_ID__c,
                 value: item.Id
             }));
+
+            const totalAmountInsured = this.selectedOpportunities.reduce((sum, item) => {
+                const amount = Number(item.Amount_Insured__c) || 0;
+                return sum + amount;
+            }, 0);
+
+            console.log('riskNameOptions: ', JSON.stringify(this.riskNameOptions));
+
+            // === Store in formData ===
+            this.formData = {
+                ...this.formData,
+                totalAmountInsured: totalAmountInsured
+            };
         } else {
             this.riskNameOptions = [];
         }
