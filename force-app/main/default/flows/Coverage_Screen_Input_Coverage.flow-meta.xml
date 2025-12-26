@@ -59,6 +59,19 @@
         </connector>
     </assignments>
     <assignments>
+        <name>AssignOutput_to_Null</name>
+        <label>AssignOutput to Null</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>CoverageRateOutput</assignToReference>
+            <operator>Assign</operator>
+        </assignmentItems>
+        <connector>
+            <targetReference>ValidationData</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
         <name>checkIdPolis</name>
         <label>checkIdPolis</label>
         <locationX>0</locationX>
@@ -166,7 +179,7 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <defaultConnector>
-            <targetReference>ValidationData</targetReference>
+            <targetReference>AssignOutput_to_Null</targetReference>
         </defaultConnector>
         <defaultConnectorLabel>NotSelected</defaultConnectorLabel>
         <rules>

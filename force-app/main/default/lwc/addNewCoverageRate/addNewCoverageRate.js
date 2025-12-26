@@ -128,6 +128,7 @@ export default class AddNewCoverageRate extends LightningElement {
                 rowType: 'BREAKDOWN_RATE',
                 covTahun: this.buttonClickedValue,
                 isSelected: false,
+                isExisting: false,
                 isDisabledInput: true,
                 isSingleRate: false,
                 coverageSetting:'BREAKDOWN_DEDUCTIBLE',
@@ -172,6 +173,7 @@ export default class AddNewCoverageRate extends LightningElement {
                 isDisabledSelection: true,
                 rowType: 'SINGLE_RATE',
                 isSingleRate: true,
+                isExisting: false,
                 coverageSetting:'BREAKDOWN_DEDUCTIBLE',
                 rate:{
                     fixedAmount: null,
@@ -200,7 +202,7 @@ export default class AddNewCoverageRate extends LightningElement {
             };
             let baseDataList = [...dynamicRows, singleRateRow];
             const idList = baseDataList.map(item => item.id);
-            console.log('Daftar semua ID:', JSON.stringify(idList));
+            // console.log('Daftar semua ID:', JSON.stringify(idList));
             if (this.jsonString) {
                 console.log('✅ Success parsing JSON from Flow CoverageRate:', this.jsonString);
                 const parsedData = JSON.parse(this.jsonString);
@@ -252,90 +254,124 @@ export default class AddNewCoverageRate extends LightningElement {
                 }
                 this.finalizeData(baseDataList);
             }else{
-                // this.getCoverageData()
-                // .then(existingResult => {
-                //     if (existingResult && existingResult.length > 0) {
-                //         console.log('existingResult', existingResult);
-                //         this.disableModeCoverage = true;
-                //         this.selectedMode = existingResult[0].existing.coverageSetting;
-                //         const initialDataList = baseDataList;
-                //         let currentDataList = JSON.parse(JSON.stringify(initialDataList));
-                //         existingResult.forEach(existingItem => {
-                //             const targetId = existingItem.coverageId;
-                //             const selectedIdString = existingItem.existing.listSelectedId; 
-                //             const selectedIds = selectedIdString ? selectedIdString.split(',') : [];
+                this.getCoverageData()
+                .then(existingResult => {
+                    if (existingResult && existingResult.length > 0) {
+                        console.log('existingResult', existingResult);
+                        this.disableModeCoverage = true;
+                        this.selectedMode = existingResult[0].existing.coverageSetting;
+                        const initialDataList = baseDataList;
+                        let currentDataList = JSON.parse(JSON.stringify(initialDataList));
+                        existingResult.forEach(existingItem => {
+                            const targetId = existingItem.coverageId;
+                            const selectedIdString = existingItem.existing.listSelectedId; 
+                            const selectedIds = selectedIdString ? selectedIdString.split(',') : [];
     
-                //             if (existingItem.coverageName.includes('+') || selectedIds.length > 1) {
-                //                 this.selectedCoverageNames.add(existingItem.coverageName);
-                                
-                //                 const singleTargetItem = currentDataList.find(item => item.id === 'SINGLE_RATE_ID');
-                //                 if (singleTargetItem) {
-                //                     const rateValue = existingItem.rate;
-                //                     let calculatedPremium1 =0;
-                //                     let calculatedPremium2 =0;
-                //                     let calculatedPremium3 =0;
-                //                     let calculatedPremium4 =0;
-                //                     if(rateValue && rateValue.coverageRate) calculatedPremium1 = (Number(rateValue.coverageRate) * singleTargetItem.amountInsurance) / 100;                                    
-                //                     if(rateValue && rateValue.coverageRate2) calculatedPremium2 = (Number(rateValue.coverageRate2) * singleTargetItem.amountInsurance) / 100;                                    
-                //                     if(rateValue && rateValue.coverageRate3) calculatedPremium3 = (Number(rateValue.coverageRate3) * singleTargetItem.amountInsurance) / 100;                                    
-                //                     if(rateValue && rateValue.coverageRate4) calculatedPremium4 = (Number(rateValue.coverageRate4) * singleTargetItem.amountInsurance) / 100;                                    
-                //                     singleTargetItem.isSelected = true;
-                //                     singleTargetItem.disableModeCoverage= true;
-                //                     // singleTargetItem.descriptionRate= existingItem.coverageName;
-                //                     singleTargetItem.rate = {
-                //                         ...rateValue,
-                //                         // descriptionRate:existingItem.coverageName,
-                //                         fixedAmount: calculatedPremium1,
-                //                         fixedAmount2: calculatedPremium2,
-                //                         fixedAmount3: calculatedPremium3,
-                //                         fixedAmount4: calculatedPremium4
-                //                     };
-                //                 }
-                //                 currentDataList.forEach(targetItem => {
-                //                     if (selectedIds.includes(targetItem.id)) {
-                //                         targetItem.isSelected = true; 
-                //                         targetItem.disableModeCoverage= true;
-                //                     }
-                //                 });
-                //             }else{
-                //                 const targetItem = currentDataList.find(item => item.id === targetId);
-                //                 console.log('existingResult targetItem', JSON.stringify(targetItem));
-                //                 if (targetItem) {
-                //                     const rateValue = existingItem.rate;
-                //                     let calculatedPremium1 =0;
-                //                     let calculatedPremium2 =0;
-                //                     let calculatedPremium3 =0;
-                //                     let calculatedPremium4 =0;
-                //                     if(rateValue.coverageRate) calculatedPremium1 = (Number(rateValue.coverageRate) * targetItem.amountInsurance) / 100;                                    
-                //                     if(rateValue.coverageRate2) calculatedPremium2 = (Number(rateValue.coverageRate2) * targetItem.amountInsurance) / 100;                                    
-                //                     if(rateValue.coverageRate3) calculatedPremium3 = (Number(rateValue.coverageRate3) * targetItem.amountInsurance) / 100;                                    
-                //                     if(rateValue.coverageRate4) calculatedPremium4 = (Number(rateValue.coverageRate4) * targetItem.amountInsurance) / 100;                                    
-                //                     targetItem.isSelected = true;
-                //                     targetItem.disableModeCoverage= true;
-                //                     // targetItem.rate = existingItem.rate;
-                //                     targetItem.rate = {
-                //                         ...rateValue,
-                //                         fixedAmount: calculatedPremium1,
-                //                         fixedAmount2: calculatedPremium2,
-                //                         fixedAmount3: calculatedPremium3,
-                //                         fixedAmount4: calculatedPremium4
-                //                     }
-                //                 }
-                //             } 
-                //         });
-                //         let finalDataList = [...currentDataList];
-                //         finalDataList = currentDataList.filter(item => 
-                //             (item.rowType == 'BREAKDOWN_RATE' && item.isSelected != true) || 
-                //             (item.id === 'SINGLE_RATE_ID') 
-                //         );
-                //         this.finalizeData(finalDataList);
-                //     }else{
-                //         this.finalizeData(baseDataList);
-                //     }
-                // })
-                // .catch(error => {
-                //     console.error('Error fetching existing coverage:', error);
-                // });
+                            if (existingItem.coverageName.includes('+') || selectedIds.length > 1) {
+                                this.selectedCoverageNames.add(existingItem.coverageName);
+                                const singleTargetItem = currentDataList.find(item => item.id === 'SINGLE_RATE_ID');
+                                if (singleTargetItem) {
+                                    const rateValue = existingItem.rate;
+                                    console.log('rateValue',rateValue);
+                                    const deductibleValue = existingItem.deductible;
+                                    console.log('rateValue Deduct',deductibleValue);
+                                    const rebateValue = existingItem.rebate;
+                                    console.log('rateValue rebate',rebateValue);
+                                    let calculatedPremium1 =0;
+                                    let calculatedPremium2 =0;
+                                    let calculatedPremium3 =0;
+                                    let calculatedPremium4 =0;
+                                    if(rateValue && rateValue.coverageRate) calculatedPremium1 = (Number(rateValue.coverageRate) * singleTargetItem.amountInsurance) / 100;                                    
+                                    if(rateValue && rateValue.coverageRate2) calculatedPremium2 = (Number(rateValue.coverageRate2) * singleTargetItem.amountInsurance) / 100;                                    
+                                    if(rateValue && rateValue.coverageRate3) calculatedPremium3 = (Number(rateValue.coverageRate3) * singleTargetItem.amountInsurance) / 100;                                    
+                                    if(rateValue && rateValue.coverageRate4) calculatedPremium4 = (Number(rateValue.coverageRate4) * singleTargetItem.amountInsurance) / 100;                                    
+                                    singleTargetItem.isSelected = true;
+                                    singleTargetItem.disableModeCoverage= true;
+                                    // singleTargetItem.descriptionRate= existingItem.coverageName;
+                                    singleTargetItem.rate = {
+                                        ...rateValue,
+                                        // descriptionRate:existingItem.coverageName,
+                                        fixedAmount: calculatedPremium1,
+                                        fixedAmount2: calculatedPremium2,
+                                        fixedAmount3: calculatedPremium3,
+                                        fixedAmount4: calculatedPremium4
+                                    };
+                                    singleTargetItem.deductible = {
+                                        ...deductibleValue
+                                    };
+                                    singleTargetItem.rebate = {
+                                        ...rebateValue
+                                    };
+                                    singleTargetItem.compositeDisable = false;
+                                }
+                                currentDataList.forEach(targetItem => {
+                                    if (selectedIds.includes(targetItem.id)) {
+                                        targetItem.isExisting = true;
+                                        targetItem.isSelected = true; 
+                                        targetItem.disableModeCoverage= true;
+                                    }
+                                });
+                            }else{
+                                const targetItem = currentDataList.find(item => item.id === targetId);
+                                console.log('existingResult targetItem', JSON.stringify(targetItem));
+                                if (targetItem) {
+                                    const rateValue = existingItem.rate;
+                                    console.log('rateValue',rateValue);
+                                    const deductibleValue = existingItem.deductible;
+                                    console.log('rateValue Deduct',deductibleValue);
+                                    const rebateValue = existingItem.rebate;
+                                    console.log('rateValue rebate',rebateValue);
+                                    let calculatedPremium1 =0;
+                                    let calculatedPremium2 =0;
+                                    let calculatedPremium3 =0;
+                                    let calculatedPremium4 =0;
+                                    if(rateValue.coverageRate) calculatedPremium1 = (Number(rateValue.coverageRate) * targetItem.amountInsurance) / 100;                                    
+                                    if(rateValue.coverageRate2) calculatedPremium2 = (Number(rateValue.coverageRate2) * targetItem.amountInsurance) / 100;                                    
+                                    if(rateValue.coverageRate3) calculatedPremium3 = (Number(rateValue.coverageRate3) * targetItem.amountInsurance) / 100;                                    
+                                    if(rateValue.coverageRate4) calculatedPremium4 = (Number(rateValue.coverageRate4) * targetItem.amountInsurance) / 100;                                    
+                                    targetItem.isSelected = true;
+                                    targetItem.isExisting = true;
+                                    targetItem.disableModeCoverage= true;
+                                    targetItem.rate = existingItem.rate;
+                                    targetItem.rate = {
+                                        ...rateValue,
+                                        fixedAmount: calculatedPremium1,
+                                        fixedAmount2: calculatedPremium2,
+                                        fixedAmount3: calculatedPremium3,
+                                        fixedAmount4: calculatedPremium4
+                                    };
+                                    targetItem.deductible = {
+                                        ...deductibleValue
+                                    };
+                                    targetItem.rebate = {
+                                        ...rebateValue
+                                    };
+                                    targetItem.compositeDisable = false;
+                                }
+                            } 
+                        });
+                        let finalDataList = [...currentDataList];
+                        if (this.bsnId === '301') {
+                            const selectedParent = currentDataList.find(item => 
+                                item.parentCoverageId == '0' && item.isSelected == true
+                            );
+                            if (selectedParent) {
+                                console.log('✅ CoverageRate selectedParent IF');
+                                this.selectedCoverageId = selectedParent.coverageId;
+                            }
+                        }
+                        // finalDataList = currentDataList.filter(item => 
+                        //     (item.rowType == 'BREAKDOWN_RATE' && item.isSelected != true) || 
+                        //     (item.id === 'SINGLE_RATE_ID') 
+                        // );
+                        this.finalizeData(finalDataList);
+                    }else{
+                        this.finalizeData(baseDataList);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching existing coverage:', error);
+                });
                 this.finalizeData(baseDataList);
             }
             // this.coverageData = [...dynamicRows, singleRateRow];
@@ -452,14 +488,20 @@ export default class AddNewCoverageRate extends LightningElement {
                     coverageRate4: singleCoverageRate4,
                     descriptionRate: descriptionRate
                 },
+                deductible: {
+                    deductibleSetting: ''
+                },
+                rebate: {
+                    totalRebate: 0
+                },
                 descriptionRate: descriptionRate
             };
         });
         this.coverageDataFormated = this.formatDeepClone(JSON.parse(JSON.stringify(this.coverageData)));
         
-        this.handleChangeCoverageName(event);
+        // this.handleChangeCoverageName();
         this.jsonString = JSON.stringify(this.coverageData.filter(item => item.isSelected));
-        console.log('Selected New Data:', this.jsonString);
+        // console.log('Selected New Data:', this.jsonString);
     }
     get thisCoverageData() {
         return this.coverageDataFormated;
@@ -655,17 +697,17 @@ export default class AddNewCoverageRate extends LightningElement {
                 this.selectedCoverageNames.delete(selectedRow.coverageName);
             }
         }
-        this.handleChangeCoverageName();
+        // this.handleChangeCoverageName();
         console.log(`Baris ${rowId} dipilih: ${isChecked}`,event);
         this.coverageDataFormated = this.formatDeepClone(JSON.parse(JSON.stringify(this.coverageData)));
         this.jsonString = JSON.stringify(this.coverageData.filter(item => item.isSelected));
         console.log('Selected New Data:', this.jsonString);
-
     }
     
     handleChangeCoverageName(){
         let newCoverageNameEdit;
-        console.log('selectedCoverageNames',this.selectedCoverageNames);
+        console.log('selectedCoverageNames Mode',this.selectedMode);
+        console.log('selectedCoverageNames',JSON.stringify(this.selectedCoverageNames));
         if (this.selectedMode === 'COMPOSITE' && this.selectedCoverageNames.size > 0) {
             newCoverageNameEdit = Array.from(this.selectedCoverageNames).join(' + ');
         } else if (this.selectedCoverageNames.size === 0) {

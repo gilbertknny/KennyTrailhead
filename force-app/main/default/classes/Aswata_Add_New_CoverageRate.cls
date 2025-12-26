@@ -1,7 +1,7 @@
 /**
  * @description       : Controller LWC Input Coverage
  * @author            : Ahmad Yazid Munif
- * @last modified on  : 12-11-2025
+ * @last modified on  : 12-20-2025
  * @last modified by  : Ahmad Yazid Munif
 **/
 public with sharing class Aswata_Add_New_CoverageRate {
@@ -168,15 +168,16 @@ public with sharing class Aswata_Add_New_CoverageRate {
                 );
             }
             coverageList = Aswata_Coverage_Data_301.coverageByAssetCategory(coverageList,risk,coverageParentId);
-            // System.debug('### AWT coverageList : '+coverageList.size());
-            List<Database.SaveResult> saveResults;
+            System.debug('### AWT coverageList : '+coverageList.size());
+            coverageList = Aswata_Coverage_Data_301.getExistingIdCoverage(coverageList,risk);
+            List<Database.UpsertResult> saveResults;
             if(coverageList.size() > 0) {
-                saveResults = Database.insert(coverageList, true);
+                saveResults = Database.upsert(coverageList, true);
                 Asset riskUpdate = Aswata_Coverage_Data_301.calculateAllRate(coverageList,risk);
                 update riskUpdate;
             }
             Set<Id> newIds = new Set<Id>();
-            for (Database.SaveResult sr : saveResults) {
+            for (Database.UpsertResult sr : saveResults) {
                 newIds.add(sr.getId());
             }
             if (!newIds.isEmpty()) {

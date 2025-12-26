@@ -1,7 +1,7 @@
 /**
  * @description       : Data Handler per Section
  * @author            : Ahmad Yazid Munif
- * @last modified on  : 12-17-2025
+ * @last modified on  : 12-22-2025
  * @last modified by  : Ahmad Yazid Munif
 **/
 public with sharing class Aswata_Coverage_SectionData_Handler {
@@ -110,5 +110,89 @@ public with sharing class Aswata_Coverage_SectionData_Handler {
             coverage.Minimum_Amount_Section_4__c = wrapper.deductibles[2].minimumAmount;
         }
         return coverage;
+    }
+    /**
+     * @description function for generate InsurancePolicyCoverage for 301
+     * @param listCoverage list of InsurancePolicyCoverage
+     * @param getByParentId
+     * @return List<InsurancePolicyCoverage>
+     */
+    public static List<InsurancePolicyCoverage> getAmountInsuredfromAsset(List<InsurancePolicyCoverage> listCoverage,List<Asset> getByParentId){
+        Decimal totalSumAsset = 0;
+        Set<String> validAssetNames = new Set<String>{
+            'CASCO',
+            'NON STANDARD EQUIPMENT',
+            'Box/Truck Bed/Container'
+        };
+        for (Asset ast : getByParentId) {
+            if (ast.Category__r.Name != null && validAssetNames.contains(ast.Category__r.Name)) {
+                if (ast.Amount_IDR_new__c != null) {
+                    totalSumAsset += ast.Amount_IDR_new__c;
+                }
+            }
+        }
+        for (InsurancePolicyCoverage cov : listCoverage) {
+            cov.amount_insured__c = totalSumAsset;
+        }
+        return listCoverage;
+    }
+    /**
+     * @description function for mapping from asset to coverage
+     * @param risk
+     * @return List<Asset>
+     */
+    public static List<Asset> getAssetByParentId(Asset risk){
+        List<Asset> getByParentId = [
+            SELECT Id,Amount_Insured__c,Category__c,ParentId,Amount_IDR_new__c, Currency__r.Name,
+            Indemnity_Type__c, Declare_Value__c, Category__r.Name
+            FROM Asset
+            WHERE ParentId = :risk.Id
+            WITH SECURITY_ENFORCED
+        ];
+        return getByParentId;
+    }
+    /**
+     * @description function for mapping from asset to coverage
+     * @param type
+     * @param picklistValue
+     * @return String
+     */
+    public static String getShortCode(String type,String picklistValue){
+        if(type == 'indemnity'){
+            if (String.isBlank(picklistValue)) {
+                return null;
+            }
+            String normalizedValue = picklistValue.toUpperCase().trim();
+            if (normalizedValue.contains('FIRST LOSS')) {
+                return 'FL';
+            }else if (normalizedValue.contains('LOSS LIMIT')) {
+                return 'LL';
+            }else if (normalizedValue.contains('SUM INSURED')) {
+                return 'SI';
+            }
+        }else{
+            List<String> picklistCurrency = new List<String>();
+            Schema.DescribeFieldResult ddtibleField = InsurancePolicyCoverage.Claim_UR_Id__c.getDescribe();
+            for (Schema.PicklistEntry f : ddtibleField.getPicklistValues()) {
+                picklistCurrency.add(f.getValue());
+            }
+            if(picklistCurrency.contains(picklistValue)){
+                return picklistValue;
+            }else{
+                return 'IDR';
+            }
+        }
+        return null;
+    }
+    /**
+     * @description function for mapping from asset to coverage
+     * @param dataValue
+     * @return Decimal
+     */
+    public static Decimal getSafeDecimal(Decimal dataValue){
+        if(dataValue == null){
+            return 0;
+        }
+        return dataValue;
     }
 }

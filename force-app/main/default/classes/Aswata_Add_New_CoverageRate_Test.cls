@@ -1,7 +1,7 @@
 /**
  * @description       : Test Class for Aswata_Add_New_CoverageRate
  * @author            : Ahmad Yazid Munif
- * @last modified on  : 12-17-2025
+ * @last modified on  : 12-22-2025
  * @last modified by  : Ahmad Yazid Munif
 **/
 
@@ -212,10 +212,10 @@ private class Aswata_Add_New_CoverageRate_Test {
             rate.coverageRate3 = 1.25;
             rate.coverageRate4 = 1.25;
             rate.descriptionRate = 'Testing Rate';
-            Aswata_Coverage_Data_301.getSafeDecimal(null);
-            Aswata_Coverage_Data_301.getShortCode('indemnity','LOSS LIMIT');
-            Aswata_Coverage_Data_301.getShortCode('indemnity','SUM INSURED');
-            Aswata_Coverage_Data_301.getShortCode('picklist','USD');
+            Aswata_Coverage_SectionData_Handler.getSafeDecimal(null);
+            Aswata_Coverage_SectionData_Handler.getShortCode('indemnity','LOSS LIMIT');
+            Aswata_Coverage_SectionData_Handler.getShortCode('indemnity','SUM INSURED');
+            Aswata_Coverage_SectionData_Handler.getShortCode('picklist','USD');
         }
         Test.stopTest();
         System.assertEquals('COV-001', config.coverageId, 'coverageId should be set correctly.');
@@ -324,6 +324,22 @@ private class Aswata_Add_New_CoverageRate_Test {
         if(deductibleSetting != 'Flat'){
             riskIdSett = asset.Id;
         }
+        Master_Data__c masterCoverageAsset = [SELECT Id FROM Master_Data__c WHERE COVERAGE_REF_ID__c = '301101' LIMIT 1];
+        List<InsurancePolicyCoverage> coverages = new List<InsurancePolicyCoverage>();
+        coverages.add(new InsurancePolicyCoverage(
+            CoverageName = 'Coverage1 + Coverage 2',
+            Proposed_Fixed_Amount__c=123123,
+            InsurancePolicyId = policy.Id,
+            Risk_ID__c = risk.Id
+        ));
+        coverages.add(new InsurancePolicyCoverage(
+            CoverageName = 'CASCO',
+            Proposed_Fixed_Amount__c=123123,
+            Coverage_Name__c = masterCoverageAsset.Id,
+            InsurancePolicyId = policy.Id,
+            Risk_ID__c = risk.Id
+        ));
+        insert coverages;
         Aswata_Coverage_Data_Wrapper.CoverageDetailWrapper wrapper =new Aswata_Coverage_Data_Wrapper.CoverageDetailWrapper();
         wrapper.id = idWrapper;
         wrapper.policyId = policy.Id;
