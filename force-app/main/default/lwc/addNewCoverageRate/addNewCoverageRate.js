@@ -488,14 +488,20 @@ export default class AddNewCoverageRate extends LightningElement {
                     coverageRate4: singleCoverageRate4,
                     descriptionRate: descriptionRate
                 },
+                deductible: {
+                    deductibleSetting: ''
+                },
+                rebate: {
+                    totalRebate: 0
+                },
                 descriptionRate: descriptionRate
             };
         });
         this.coverageDataFormated = this.formatDeepClone(JSON.parse(JSON.stringify(this.coverageData)));
         
-        this.handleChangeCoverageName(event);
+        // this.handleChangeCoverageName();
         this.jsonString = JSON.stringify(this.coverageData.filter(item => item.isSelected));
-        console.log('Selected New Data:', this.jsonString);
+        // console.log('Selected New Data:', this.jsonString);
     }
     get thisCoverageData() {
         return this.coverageDataFormated;
@@ -691,17 +697,17 @@ export default class AddNewCoverageRate extends LightningElement {
                 this.selectedCoverageNames.delete(selectedRow.coverageName);
             }
         }
-        this.handleChangeCoverageName();
+        // this.handleChangeCoverageName();
         console.log(`Baris ${rowId} dipilih: ${isChecked}`,event);
         this.coverageDataFormated = this.formatDeepClone(JSON.parse(JSON.stringify(this.coverageData)));
         this.jsonString = JSON.stringify(this.coverageData.filter(item => item.isSelected));
         console.log('Selected New Data:', this.jsonString);
-
     }
     
     handleChangeCoverageName(){
         let newCoverageNameEdit;
-        console.log('selectedCoverageNames',this.selectedCoverageNames);
+        console.log('selectedCoverageNames Mode',this.selectedMode);
+        console.log('selectedCoverageNames',JSON.stringify(this.selectedCoverageNames));
         if (this.selectedMode === 'COMPOSITE' && this.selectedCoverageNames.size > 0) {
             newCoverageNameEdit = Array.from(this.selectedCoverageNames).join(' + ');
         } else if (this.selectedCoverageNames.size === 0) {

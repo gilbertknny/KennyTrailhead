@@ -1,7 +1,7 @@
 /**
  * @description       : Class for create new Coverage 301
  * @author            : Ahmad Yazid Munif
- * @last modified on  : 12-20-2025
+ * @last modified on  : 12-22-2025
  * @last modified by  : Ahmad Yazid Munif
 **/
 public without sharing class Aswata_Coverage_Data_301 {
@@ -23,7 +23,7 @@ public without sharing class Aswata_Coverage_Data_301 {
         }
         singleComposite = 'false';
         List<String> listCategoryId = new List<String>();
-        List<Asset> getByParentId = getAssetByParentId(risk);
+        List<Asset> getByParentId = Aswata_Coverage_SectionData_Handler.getAssetByParentId(risk);
         List<InsurancePolicyCoverage> newListCoverage = listCoverage;
         if(getByParentId.isEmpty()){
             return newListCoverage;
@@ -40,7 +40,7 @@ public without sharing class Aswata_Coverage_Data_301 {
         if(mdCoverage301 == null){
             return listCoverage;
         }
-        newListCoverage = getAmountInsuredfromAsset(newListCoverage,getByParentId);
+        newListCoverage = Aswata_Coverage_SectionData_Handler.getAmountInsuredfromAsset(newListCoverage,getByParentId);
         // System.debug('### AWT mdCoverage301 : '+mdCoverage301);
         for(Asset assetItem : getByParentId){
             if(assetItem.Category__c == null){
@@ -58,47 +58,6 @@ public without sharing class Aswata_Coverage_Data_301 {
         return newListCoverage;
     }
     /**
-     * @description function for generate InsurancePolicyCoverage for 301
-     * @param listCoverage list of InsurancePolicyCoverage
-     * @param risk
-     * @param idParentCoverage
-     * @return InsurancePolicyCoverage
-     */
-    public static List<InsurancePolicyCoverage> getAmountInsuredfromAsset(List<InsurancePolicyCoverage> listCoverage,List<Asset> getByParentId){
-        Decimal totalSumAsset = 0;
-        Set<String> validAssetNames = new Set<String>{
-            'CASCO', 
-            'NON STANDARD EQUIPMENT', 
-            'Box/Truck Bed/Container'
-        };
-        for (Asset ast : getByParentId) {
-            if (ast.Category__r.Name != null && validAssetNames.contains(ast.Category__r.Name)) {
-                if (ast.Amount_IDR_new__c != null) {
-                    totalSumAsset += ast.Amount_IDR_new__c;
-                }
-            }
-        }
-        for (InsurancePolicyCoverage cov : listCoverage) {
-            cov.amount_insured__c = totalSumAsset;
-        }
-        return listCoverage;
-    }
-    /**
-     * @description function for mapping from asset to coverage
-     * @param risk
-     * @return List<Asset>
-     */
-    public static List<Asset> getAssetByParentId(Asset risk){
-        List<Asset> getByParentId = [
-            SELECT Id,Amount_Insured__c,Category__c,ParentId,Amount_IDR_new__c, Currency__r.Name,
-            Indemnity_Type__c, Declare_Value__c, Category__r.Name
-            FROM Asset
-            WHERE ParentId = :risk.Id
-            WITH SECURITY_ENFORCED
-        ];
-        return getByParentId;
-    }
-    /**
      * @description function for mapping from asset to coverage
      * @param newCov
      * @param matchingMasterData
@@ -111,54 +70,10 @@ public without sharing class Aswata_Coverage_Data_301 {
         newCov.Coverage_Id__c = matchingMasterData.COVERAGE_REF_ID__c;
         newCov.amount_insured__c = assetItem.Amount_IDR_new__c;
         newCov.Currency__c = assetItem.Currency__r.Name;
-        newCov.Claim_Options__c = getShortCode('indemnity',assetItem.Indemnity_Type__c);
-        newCov.Claim_Loss_Amount__c = getSafeDecimal(assetItem.Declare_Value__c);
-        newCov.Claim_UR_Id__c = getShortCode('currency',assetItem.Currency__r.Name);
+        newCov.Claim_Options__c = Aswata_Coverage_SectionData_Handler.getShortCode('indemnity',assetItem.Indemnity_Type__c);
+        newCov.Claim_Loss_Amount__c = Aswata_Coverage_SectionData_Handler.getSafeDecimal(assetItem.Declare_Value__c);
+        newCov.Claim_UR_Id__c = Aswata_Coverage_SectionData_Handler.getShortCode('currency',assetItem.Currency__r.Name);
         return newCov;
-    }
-    /**
-     * @description function for mapping from asset to coverage
-     * @param type
-     * @param picklistValue
-     * @return String
-     */
-    public static String getShortCode(String type,String picklistValue){
-        if(type == 'indemnity'){
-            if (String.isBlank(picklistValue)) {
-                return null;
-            }
-            String normalizedValue = picklistValue.toUpperCase().trim();
-            if (normalizedValue.contains('FIRST LOSS')) {
-                return 'FL';
-            }else if (normalizedValue.contains('LOSS LIMIT')) {
-                return 'LL';
-            }else if (normalizedValue.contains('SUM INSURED')) {
-                return 'SI';
-            }
-        }else{
-            List<String> picklistCurrency = new List<String>();
-            Schema.DescribeFieldResult ddtibleField = InsurancePolicyCoverage.Claim_UR_Id__c.getDescribe();
-            for (Schema.PicklistEntry f : ddtibleField.getPicklistValues()) {
-                picklistCurrency.add(f.getValue());
-            }
-            if(picklistCurrency.contains(picklistValue)){
-                return picklistValue;
-            }else{
-                return 'IDR';
-            }
-        }
-        return null;
-    }
-    /**
-     * @description function for mapping from asset to coverage
-     * @param dataValue
-     * @return Decimal
-     */
-    public static Decimal getSafeDecimal(Decimal dataValue){
-        if(dataValue == null){
-            return 0;
-        }
-        return dataValue;
     }
     /**
      * @description function for get reference coverage Asset
@@ -286,7 +201,20 @@ public without sharing class Aswata_Coverage_Data_301 {
             FROM InsurancePolicyCoverage
             WHERE (Coverage_Name__c IN :listCovMasterData OR CoverageName LIKE '%+%')
             AND Risk_ID__c =: risk.Id
+            WITH SECURITY_ENFORCED
         ];
+        if(existingCoverage.isEmpty()){
+            return coverageList;
+        }
+        return applyExistingIds(coverageList, existingCoverage);
+    }
+    /**
+     * @description function for generate ListCoverageId
+     * @param coverageList
+     * @param existingCoverage
+     * @return List<InsurancePolicyCoverage>
+     */
+    public static List<InsurancePolicyCoverage> applyExistingIds(List<InsurancePolicyCoverage> coverageList, List<InsurancePolicyCoverage> existingCoverage) {
         Map<String,String> mappExistingCoverage = new Map<String,String>();
         for (InsurancePolicyCoverage cov : existingCoverage) {
             if(cov.Coverage_Name__c!=null){
@@ -298,13 +226,13 @@ public without sharing class Aswata_Coverage_Data_301 {
         for (InsurancePolicyCoverage cov : coverageList) {
             if (mappExistingCoverage.containsKey(cov.Coverage_Name__c)) {
                 cov.Id = mappExistingCoverage.get(cov.Coverage_Name__c);
-            }else if(cov.CoverageName.contains('+')){
+            } else if (cov.CoverageName != null && cov.CoverageName.contains('+')) {
                 cov.Id = mappExistingCoverage.get('Single');
             }
         }
-        for (InsurancePolicyCoverage cov : coverageList) {
-            System.debug('listCovMasterData >> '+cov.Id+' - '+cov.CoverageName);
-        }
+        // for (InsurancePolicyCoverage cov : coverageList) {
+        //     System.debug('listCovMasterData >> '+cov.Id+' - '+cov.CoverageName);
+        // }
         return coverageList;
     }
 }

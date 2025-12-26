@@ -1,7 +1,7 @@
 /**
  * @description       : Generate Data for Insert Coverage
  * @author            : Ahmad Yazid Munif
- * @last modified on  : 12-20-2025
+ * @last modified on  : 12-22-2025
  * @last modified by  : Ahmad Yazid Munif
 **/
 public without sharing class Aswata_Coverage_Data_Handler {
@@ -47,9 +47,9 @@ public without sharing class Aswata_Coverage_Data_Handler {
             coverage.Broker_Comission__c = wrapper.rebate.brokerCommissionValue;
             coverage.Finance_Commision_PCT__c = wrapper.rebate.financialCommissionValue;
         }
-        // if(wrapper.rebates.size()>0){
-        //     coverage = Aswata_Coverage_SectionData_Handler.wrapperRebate4(coverage,wrapper,risk);
-        // }
+        if(wrapper.rebates.size()>0){
+            coverage = Aswata_Coverage_SectionData_Handler.wrapperRebate4(coverage,wrapper,risk);
+        }
         return coverage;
     }
     /**
@@ -74,14 +74,14 @@ public without sharing class Aswata_Coverage_Data_Handler {
             }else{
                 coverage.DeductibleAmount = null;
                 coverage.Deductible_PCT__c = wrapper.deductible.deductibleAmount;
+                coverage.Minimum_Amount__c = wrapper.deductible.minimumAmount;
             }
             coverage.Description = wrapper.deductible.descriptionDeductible;
             coverage.Description__c = wrapper.deductible.descriptionValue;
-            coverage.Minimum_Amount__c = wrapper.deductible.minimumAmount;
 
-            // if(wrapper.deductibles.size()>0){
-            //     coverage = Aswata_Coverage_SectionData_Handler.wrapperDeductible4(coverage,wrapper,risk);
-            // }
+            if(wrapper.deductibles.size()>0){
+                coverage = Aswata_Coverage_SectionData_Handler.wrapperDeductible4(coverage,wrapper,risk);
+            }
         }
         return coverage;
     }
@@ -169,6 +169,7 @@ public without sharing class Aswata_Coverage_Data_Handler {
                 FROM Master_Data__c WHERE BSN_ID__c = :cob
                 AND RecordTypeId = :rtId AND Asset_Section__c = null
                 WITH SECURITY_ENFORCED
+                ORDER BY PARENT_COVERAGE_ID__c,COVERAGE_REF_ID__c
             ];
         }else{
             configs = [
@@ -176,6 +177,7 @@ public without sharing class Aswata_Coverage_Data_Handler {
                 FROM Master_Data__c WHERE BSN_ID__c = :cob
                 AND RecordTypeId = :rtId AND PARENT_COVERAGE_ID__c != '0' AND Asset_Section__c = null
                 WITH SECURITY_ENFORCED
+                ORDER BY COVERAGE_REF_ID__c
             ];
         }
         if (configs.isEmpty()) {
