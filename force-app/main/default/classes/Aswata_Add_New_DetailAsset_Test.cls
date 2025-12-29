@@ -195,4 +195,54 @@ private class Aswata_Add_New_DetailAsset_Test {
         insert adminUser;
         return adminUser;
     }
+
+    @isTest
+    static void testGetDetailAssetsByRisk() {
+        Account testAcc = [SELECT Id FROM Account WHERE Name = 'Jhon' LIMIT 1];
+        Opportunity testOpp = Aswata_TestDataFactory.createOpportunity(testAcc, 'Test Opp for Risk');
+        
+        Asset testRisk = Aswata_TestDataFactory.createRisk(testOpp, 'Test Risk for Assets');
+        
+        List<RecordType> assetRT = [SELECT Id FROM RecordType 
+                                     WHERE SObjectType = 'Asset' 
+                                     AND DeveloperName = 'Asset' 
+                                     LIMIT 1];
+        
+        List<Asset> childAssets = new List<Asset>();
+        for (Integer i = 0; i < 3; i++) {
+            Asset childAsset = new Asset(
+                Name = 'Child Asset ' + i,
+                ParentId = testRisk.Id,
+                Opportunity__c = testOpp.Id,
+                Interest_Insured_Detail_Description__c = 'Description ' + i,
+                Amount_IDR__c = 1000000 * (i + 1),
+                Amount__c = 1000 * (i + 1)
+            );
+            
+            if (!assetRT.isEmpty()) {
+                childAsset.RecordTypeId = assetRT[0].Id;
+            }
+            
+            childAssets.add(childAsset);
+        }
+        insert childAssets;
+        
+        Asset emptyRisk = Aswata_TestDataFactory.createRisk(testOpp, 'Empty Risk');
+        Test.startTest();
+        
+        List<Asset> results = Aswata_Add_New_DetailAsset_Controller.getDetailAssetsByRisk(testRisk.Id);        
+        List<Asset> emptyResults = Aswata_Add_New_DetailAsset_Controller.getDetailAssetsByRisk(emptyRisk.Id);
+        List<Asset> nullResults = Aswata_Add_New_DetailAsset_Controller.getDetailAssetsByRisk(null);
+        
+        Test.stopTest();
+        
+        System.assertEquals(3, results.size(), 'Should return 3 child assets');
+        System.assertNotEquals(null, results[0].Interest_Insured_Detail_Description__c, 'Should have description');
+        System.assertNotEquals(null, results[0].Amount_IDR__c, 'Should have amount');
+        
+        System.assertEquals(0, emptyResults.size(), 'Risk with no children should return empty list');
+        System.assertEquals(0, nullResults.size(), 'Null riskId should return empty list');
+        
+        System.assert(results[0].CreatedDate >= results[1].CreatedDate, 'Should be ordered by CreatedDate DESC');
+    }
 }

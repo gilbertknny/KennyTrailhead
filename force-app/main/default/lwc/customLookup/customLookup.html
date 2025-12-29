@@ -1,6 +1,11 @@
 <template>
     <div class="slds-form-element">
-        <label class="slds-form-element__label">{label}</label>
+        <label class="slds-form-element__label">
+            <template if:true={required}>
+                <abbr class="slds-required" title="required">*</abbr>
+            </template>
+            {label}
+        </label>
         <div class="slds-form-element__control">
             <div class="slds-combobox_container">
                 <div class={comboboxClass} aria-expanded={isDropdownOpen} aria-haspopup="listbox" role="combobox">

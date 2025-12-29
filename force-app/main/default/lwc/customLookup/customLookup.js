@@ -20,6 +20,7 @@ export default class CustomLookup extends LightningElement {
     @api showData; 
     @api cobField; 
     @api readOnly = false;
+    @api required = false;
 
     _recordId;
     @api

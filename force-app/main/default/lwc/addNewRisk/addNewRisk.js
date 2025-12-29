@@ -4,6 +4,7 @@ import getActiveFields from '@salesforce/apex/Aswata_Add_New_Asset_Controller.ge
 import upsertAsset from '@salesforce/apex/Aswata_Add_New_Asset_Controller.upsertAsset';
 import { getPicklistValuesByRecordType } from 'lightning/uiObjectInfoApi';
 import getRecordTypeIdByObject from '@salesforce/apex/Aswata_Add_New_Asset_Controller.getRecordTypeIdByObject';
+import getRequiredFieldsByCob from '@salesforce/apex/Aswata_Add_New_Asset_Controller.getRequiredFieldsByCob';
 import { getRecord } from 'lightning/uiRecordApi';
 import COB_FIELD from '@salesforce/schema/Opportunity.COB__c';
 import NUMBER_OF_RISK from '@salesforce/schema/Opportunity.Number_Of_Risk__c';
@@ -28,6 +29,8 @@ export default class AddNewRisk extends LightningElement {
     @track picklistValues;
     @track activeFieldData;
     
+    @track requiredFieldApiNames = new Set();
+
     provinceId;
     cityId;
 
@@ -110,6 +113,41 @@ export default class AddNewRisk extends LightningElement {
     //         console.error('❌ Error fetching RecordTypeId:', error);
     //     }
     // }
+
+    // ✅ NEW: Wire to get required fields from Master Data
+    @wire(getRequiredFieldsByCob, { cobValue: '$cobValue' })
+    wiredRequiredFields({ error, data }) {
+        if (data) {
+            console.log('✅ Required fields from Master Data:', data);
+            
+            // Convert array to Set for fast lookup
+            this.requiredFieldApiNames = new Set(data);
+            
+            console.log('📋 Required fields Set:', Array.from(this.requiredFieldApiNames));
+            console.log('📊 Total required fields:', this.requiredFieldApiNames.size);
+            
+            // Rebuild fields to update isRequired flags
+            if (this.activeFieldData) {
+                this.buildFields();
+            }
+        } else if (error) {
+            console.error('❌ Error loading required fields:', error);
+            console.error('   Error details:', error.body?.message || error.message);
+            
+            // Fallback to default required fields if query fails
+            this.requiredFieldApiNames = new Set([
+                'Address__c',
+                'Occupation_Code__c',
+                'Class__c'
+            ]);
+            
+            console.log('⚠️ Using fallback required fields');
+            
+            if (this.activeFieldData) {
+                this.buildFields();
+            }
+        }
+    }
      
     @wire(getPicklistValuesByRecordType, {
         objectApiName: '$objectName',
@@ -142,6 +180,14 @@ export default class AddNewRisk extends LightningElement {
         if (!this.activeFieldData) {
             return;
         }
+
+        // ✅ Use dynamic required fields from Master Data
+        // Falls back to default if not loaded yet
+        const requiredFieldApiNames = this.requiredFieldApiNames.size > 0 
+            ? this.requiredFieldApiNames 
+            : new Set(['Address__c', 'Occupation_Code__c', 'Class__c']);
+        
+        console.log('🔧 Building fields with required:', Array.from(requiredFieldApiNames));
         
         this.fields = this.activeFieldData.map(f => {
             const typeData = (f.dataType || '').toLowerCase().trim();
@@ -172,6 +218,7 @@ export default class AddNewRisk extends LightningElement {
                 order: f.order,
                 fieldsToQuery: lookupFields,
                 showData: f.showData ? f.showData : '',
+                isRequired: requiredFieldApiNames.has(f.apiName), // ✅ Dynamic!
                 isText: typeData === 'text',
                 isReadonly: typeData ==='readonly',
                 isNumber: typeData === 'number',
@@ -217,7 +264,48 @@ export default class AddNewRisk extends LightningElement {
         });
 
         this.fields.sort((a, b) => (a.order || 0) - (b.order || 0));
-        console.log('Fields built:', this.fields.length, 'total');
+        
+        const requiredCount = this.fields.filter(f => f.isRequired).length;
+        console.log(`✅ Fields built: ${this.fields.length} total, ${requiredCount} required`);
+    }
+
+    validateRequiredFields() {
+        // Build required fields list dynamically from fields array
+        const requiredFields = [];
+        
+        this.fields.forEach(field => {
+            if (field.isRequired) {
+                requiredFields.push({
+                    apiName: field.apiName,
+                    label: field.label
+                });
+            }
+        });
+        
+        console.log('🔍 Validating required fields:', requiredFields.map(f => f.label).join(', '));
+
+        const missingFields = [];
+
+        requiredFields.forEach(field => {
+            const value = this.formData[field.apiName];
+            if (!value || value === '' || value === null || value === undefined) {
+                missingFields.push(field.label);
+            }
+        });
+
+        if (missingFields.length > 0) {
+            const fieldList = missingFields.join(', ');
+            this.dispatchEvent(
+                new ShowToastEvent({
+                    title: 'Required Fields Missing',
+                    message: `Please fill in the following required fields: ${fieldList}`,
+                    variant: 'error'
+                })
+            );
+            return false;
+        }
+
+        return true;
     }
 
     handleInputChange(event) {
@@ -369,6 +457,11 @@ export default class AddNewRisk extends LightningElement {
     }
 
     handleSaveAsset() {
+        if (!this.validateRequiredFields()) {
+            console.log('❌ Validation failed');
+            return;
+        }
+        
         upsertAsset({ fieldValues: this.formData })
             .then(resultId => {
                 console.log('Asset saved! Id:', resultId);

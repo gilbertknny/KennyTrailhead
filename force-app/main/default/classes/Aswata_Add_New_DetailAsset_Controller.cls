@@ -95,17 +95,19 @@ public with sharing class Aswata_Add_New_DetailAsset_Controller {
         //     && !Schema.sObjectType.Asset.isCreateable()){
         //     throw new SecurityException('Insufficient permissions to access or modify Asset record.');
         // }
-        if (!checkPermission()) {
+        System.debug('record: ' + record);
+        /*if (!checkPermission()) {
             throw new SecurityException('Insufficient permissions to access or modify Asset record.');
-        }
+        }*/
         try {
             if (isUpdate) {
                 Database.update(record, AccessLevel.USER_MODE);
             } else {
                 Decimal newRiskNumber = 1;
                 if(record.Opportunity__c != null){
-                    // System.debug('record.Opportunity__c'+record.Opportunity__c);
+                    
                     String policyId = Aswata_GlobalFunction.createInsurancePolicy(record.Opportunity__c);
+                    System.debug('policyId: '+ policyId);
                     List<Asset> latestAssetList = [
                         SELECT risk_detail_id__c
                         FROM Asset WHERE Opportunity__c = :record.Opportunity__c
@@ -125,7 +127,10 @@ public with sharing class Aswata_Add_New_DetailAsset_Controller {
             return record.Id;
         } catch (Exception e) {
             // System.debug('An unexpected error occurred during save: ' + e.getMessage());
-            throw new AuraHandledException('An unexpected error occurred during save: ' + e.getMessage());
+            //throw new AuraHandledException('An unexpected error occurred during save: ' + e);
+            System.debug('+++');
+            System.debug(LoggingLevel.ERROR, e);
+            throw e; // DO NOT wrap it
         }
     }
     /**
