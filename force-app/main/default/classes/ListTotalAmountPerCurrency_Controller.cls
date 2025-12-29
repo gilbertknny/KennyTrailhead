@@ -7,7 +7,7 @@ public with sharing class ListTotalAmountPerCurrency_Controller {
                 Section__c sectionId, 
                 Currency__c currencyId, 
                 SUM(Amount__c) totalAmount,
-                SUM(Amount_IDR__c) totalAmountIDR
+                SUM(Amount_IDR_New__c) totalAmountIDR
             FROM Asset
             WHERE ParentId = :riskId
             GROUP BY Section__c, Currency__c

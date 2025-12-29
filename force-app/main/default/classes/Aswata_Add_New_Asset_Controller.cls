@@ -8,29 +8,69 @@
 public with sharing class Aswata_Add_New_Asset_Controller {
     @AuraEnabled
     public static List<AssetWrapper> getAssetsByOpportunity(String opportunityId) {
+        Integer sequenceNumber = 1;
+
         List<AssetWrapper> results = new List<AssetWrapper>();
-        for (Asset a : [
-            SELECT Id, Name, risk_address__c, Risk_ID__c, City__r.Name, Zip_Code__r.Name, RecordType.Id
+        List<Asset> assets = [
+            SELECT 
+                Id, 
+                Name, 
+                risk_address__c,
+                Address__r.Name,
+                Risk_ID__c, 
+                City__r.Name, 
+                Zip_Code__r.Name, 
+                RecordType.Id,
+                RecordType.Name
             FROM Asset 
-            WHERE Opportunity__c = :opportunityId WITH SECURITY_ENFORCED
-        ]) {
+            WHERE Opportunity__c = :opportunityId 
+            AND RecordType.Name = 'Risk'
+            WITH SECURITY_ENFORCED
+            ORDER BY CreatedDate DESC
+        ];
+        
+        System.debug('Found ' + assets.size() + ' Risk records for Opportunity: ' + opportunityId);
+        
+        for (Asset a : assets) {
             AssetWrapper wrap = new AssetWrapper();
             wrap.id = a.Id;
+
+            // ✅ Risk ID with fallback
+            if(String.isNotBlank(a.Risk_ID__c)){
+                wrap.riskId = a.Risk_ID__c;
+            } else if (String.isNotBlank(a.Name)){
+                wrap.riskId = a.Name;
+            } else {
+                wrap.riskId = 'RISK-' + sequenceNumber;
+                sequenceNumber++;
+            }
+
             wrap.riskName = a.Name;
-            wrap.riskId = a.Risk_ID__c;
-            wrap.address = a.risk_address__c;
+            
+            // ✅ Address with proper priority
+            if (a.Address__r != null && String.isNotBlank(a.Address__r.Name)) {
+                wrap.address = a.Address__r.Name;  // Primary: Address lookup Name
+            } else if (String.isNotBlank(a.risk_address__c)) {
+                wrap.address = a.risk_address__c; 
+            } else {
+                wrap.address = null; 
+            }
+            
             wrap.cityName = (a.City__r != null) ? a.City__r.Name : null;
             wrap.zipName = (a.Zip_Code__r != null) ? a.Zip_Code__r.Name : null;
             wrap.recordTypeId = a.RecordType.Id;
+            
+            System.debug('Wrapper created: ' + JSON.serialize(wrap));
+            
             results.add(wrap);
         }
+
+        System.debug('Returning ' + results.size() + ' Risk wrappers');
         return results;
     }
 
     @AuraEnabled
-    public static String upsertAsset(Map<String, Object> fieldValues) {
-
-       
+    public static String upsertAsset(Map<String, Object> fieldValues) {       
         List<RecordType> lstRt = [Select id from RecordType where SObjectType = 'Asset' and DeveloperName = 'Risk' WITH SECURITY_ENFORCED limit 1];
         
         if(lstRt.size() == 0){
@@ -39,9 +79,20 @@ public with sharing class Aswata_Add_New_Asset_Controller {
         
         Asset a = new Asset();
 
+        Map<String, Schema.SObjectField> assetFieldMap = Schema.SObjectType.Asset.fields.getMap();
+
         //System.debug('fieldValues: ' + fieldValues);
         for (String key : fieldValues.keySet()) {
+            Schema.SObjectField field = assetFieldMap.get(key);
             
+            if (field != null) {
+                Schema.DescribeFieldResult fieldDescribe = field.getDescribe();
+                 
+                if (fieldDescribe.isCalculated() || fieldDescribe.isAutoNumber() || !fieldDescribe.isUpdateable()){
+                   continue;
+                }
+            }
+
             a.put(key, fieldValues.get(key));
         }
         a.RecordTypeId = lstRt[0].Id;
@@ -50,8 +101,6 @@ public with sharing class Aswata_Add_New_Asset_Controller {
         //Auto-generate Risk_ID__c for new records
         if(String.isBlank((String)a.get('Id'))){
             // This is INSERT (new record)
-            
-        
             System.debug('📝 Creating new Asset (INSERT)');
             String opportunityId = (String)a.get('Opportunity__c');
             //Tambahan Fikri untuk membuat Insurance Policy otomatis saat buat Risk baru
@@ -194,6 +243,42 @@ public with sharing class Aswata_Add_New_Asset_Controller {
 
         //System.debug('Results: ' + results);
         return results;
+    }
+
+    @AuraEnabled(cacheable=true)
+    public static List<String> getRequiredFieldsByCob(String cobValue) {
+        List<String> requiredFields = new List<String>();
+        
+        if (String.isBlank(cobValue)) {
+            return requiredFields;
+        }
+        
+        try {
+            // Query Master_Data__c for required fields
+            List<Master_Data__c> requiredMasterData = [
+                SELECT Id, Name
+                FROM Master_Data__c 
+                WHERE BSN_ID__c = :cobValue 
+                AND Required__c = true
+                WITH SECURITY_ENFORCED
+                ORDER BY Name
+            ];
+            
+            // Extract field API names
+            for (Master_Data__c md : requiredMasterData) {
+                if (String.isNotBlank(md.Name)) {
+                    requiredFields.add(md.Name);
+                }
+            }
+            
+            System.debug('✅ Required fields for COB ' + cobValue + ': ' + requiredFields);
+            
+        } catch (Exception e) {
+            System.debug('❌ Error fetching required fields: ' + e.getMessage());
+            throw new AuraHandledException('Error fetching required fields: ' + e.getMessage());
+        }
+        
+        return requiredFields;
     }
 
     public class DynamicFieldConfig {

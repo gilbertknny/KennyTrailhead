@@ -13,12 +13,13 @@
                             
                             <!-- TEXT -->
                              <template if:true={field.isText}>
-                                <div key={field.apiName} class="slds-col slds-size_2-of-2 slds-p-around_x-small">
+                                <div key={field.apiName} class="slds-col slds-size_1-of-2 slds-p-around_x-small">
                                     <lightning-input 
                                         type="text" 
                                         label={field.label} 
                                         name={field.apiName} 
                                         value={field.value}
+                                        required={field.isRequired}
                                         onchange={handleInputChange}>
                                     </lightning-input>
                                 </div>
@@ -26,7 +27,7 @@
 
                             <!-- TEXT AREA -->
                             <template if:true={field.isTextArea}>
-                                <div key={field.apiName} class="slds-col slds-size_2-of-2 slds-p-around_x-small">
+                                <div key={field.apiName} class="slds-col slds-size_1-of-2 slds-p-around_x-small">
                                     <lightning-textarea
                                         label={field.label}
                                         name={field.apiName}
@@ -38,7 +39,7 @@
 
                             <!-- Read Only -->
                             <template if:true={field.isReadonly}>
-                                <div key={field.apiName} class="slds-col slds-size_2-of-2 slds-p-around_x-small">
+                                <div key={field.apiName} class="slds-col slds-size_1-of-2 slds-p-around_x-small">
                                     <lightning-input 
                                         type="text" 
                                         label={field.label} 
@@ -52,7 +53,7 @@
 
                             <!-- NUMBER -->
                             <template if:true={field.isNumber}>
-                                <div key={field.apiName} class="slds-col slds-size_2-of-2 slds-p-around_x-small">
+                                <div key={field.apiName} class="slds-col slds-size_1-of-2 slds-p-around_x-small">
                                     <lightning-input 
                                         type="number" 
                                         label={field.label} 
@@ -65,7 +66,7 @@
 
                             <!-- GEOLOCATION -->
                             <template if:true={field.isGeolocation}>
-                                <div key={field.apiName} class="slds-col slds-size_2-of-2 slds-p-around_x-small slds-grid slds-wrap">
+                                <div key={field.apiName} class="slds-col slds-size_1-of-2 slds-p-around_x-small slds-grid slds-wrap">
                                     <div class="slds-col slds-size_1-of-2 slds-p-around_x-small">
                                         <lightning-input
                                             type="number"
@@ -91,13 +92,14 @@
 
                             <!-- PICKLIST -->
                             <template if:true={field.isPicklist}>
-                                <div key={field.apiName} class="slds-col slds-size_2-of-2 slds-p-around_x-small">
+                                <div key={field.apiName} class="slds-col slds-size_1-of-2 slds-p-around_x-small">
                                     <lightning-combobox
                                         label={field.label}
                                         name={field.apiName}
                                         value={field.value}
                                         placeholder="Select an option"
                                         options={field.options}
+                                        required={field.isRequired}
                                         onchange={handleInputChange}>
                                     </lightning-combobox>
                                 </div>
@@ -105,7 +107,7 @@
 
                             <!-- LOOKUP -->
                             <template if:true={field.isLookup}>
-                                <div key={field.apiName}  class="slds-col slds-size_2-of-2 slds-p-horizontal_x-small slds-p-vertical_none">
+                                <div key={field.apiName}  class="slds-col slds-size_1-of-2 slds-p-horizontal_x-small slds-p-vertical_none">
                                     <c-custom-lookup
                                         label={field.label}
                                         placeholder={field.label}
@@ -118,6 +120,7 @@
                                         city-id={cityId}
                                         record-id={field.value}
                                         show-data={field.showData}
+                                        required={field.isRequired}
                                         onrecordselected={handleLookUpSelected}
                                         onrecordcleared={handleLookUpCleared}
                                         >
@@ -130,6 +133,7 @@
                                             placeholder="Enter street / building details"
                                             value={addressDescription}
                                             name="Address_Description__c"
+                                            required={field.isRequired}
                                             onchange={handleInputChange}>
                                         </lightning-input>
                                     </template>

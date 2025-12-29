@@ -1,0 +1,784 @@
+import { LightningElement, track, wire, api } from 'lwc';
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+import getActiveFields from '@salesforce/apex/Aswata_Add_New_Asset_Controller.getActiveFields';
+import upsertAsset from '@salesforce/apex/Aswata_Add_New_Asset_Controller.upsertAsset';
+import getAssetsByOpportunity from '@salesforce/apex/Aswata_Add_New_Asset_Controller.getAssetsByOpportunity';
+import { getPicklistValuesByRecordType } from 'lightning/uiObjectInfoApi';
+import getRecordTypeIdByObject from '@salesforce/apex/Aswata_Add_New_Asset_Controller.getRecordTypeIdByObject';
+import getRequiredFieldsByCob from '@salesforce/apex/Aswata_Add_New_Asset_Controller.getRequiredFieldsByCob';
+import { getRecord } from 'lightning/uiRecordApi';
+import COB_FIELD from '@salesforce/schema/Opportunity.COB__c';
+import NUMBER_OF_RISK from '@salesforce/schema/Opportunity.Number_Of_Risk__c';
+import CLOSING_TYPE from '@salesforce/schema/Opportunity.Policy_Closing_Type__c';
+
+import { CloseActionScreenEvent } from 'lightning/actions';
+
+export default class AswataNewRisk extends LightningElement {
+
+    @api objectName = 'Asset';
+    @api cobValue;
+    @api cobLabel;
+    @api recordId;
+    @api noRisk;
+    @api closingType;
+
+    @track addressDescription = '';
+    @track formData = {};
+    @track fields = [];
+    @track recordTypeId;
+    @track picklistValues;
+    @track activeFieldData;
+    
+    // For List View
+    @track savedRisks = [];
+    @track showFormView = true;
+    @track isLoading = false;
+    
+    // ✅ For Detail Asset Modal
+    @track isDetailAssetModalOpen = false;
+    @track selectedRiskId = null;
+
+    // ✅ For Coverage Flow Modal
+    @track isCoverageFlowOpen = false;
+    @track selectedRiskIdForCoverage = null;
+
+    // ✅ For Edit Risk Modal
+    @track isEditRiskModalOpen = false;
+    @track selectedRiskIdForEdit = null;
+    
+    // ✅ NEW: Dynamic required fields from Master Data
+    @track requiredFieldApiNames = new Set();
+    
+    provinceId;
+    cityId;
+
+    // Pagination for Risk List
+    riskPage = 1;
+    riskPageSize = 5;
+
+    get riskTotalPages() {
+        return Math.ceil(this.savedRisks.length / this.riskPageSize);
+    }
+
+    get paginatedRiskData() {
+        const start = (this.riskPage - 1) * this.riskPageSize;
+        return this.savedRisks.slice(start, start + this.riskPageSize);
+    }
+
+    handleNextRisk() {
+        if (this.riskPage < this.riskTotalPages) {
+            this.riskPage++;
+        }
+    }
+
+    handlePrevRisk() {
+        if (this.riskPage > 1) {
+            this.riskPage--;
+        }
+    }
+
+    // ✅ Columns for Risk List with Add Asset and Coverage Buttons
+    listRiskColumns = [
+        { label: 'Risk ID', fieldName: 'riskId', type: 'text' },
+        { label: 'Name', fieldName: 'name', type: 'text' },
+        { label: 'Address', fieldName: 'address', type: 'text' },
+        { label: 'Treaty', fieldName: 'treaty', type: 'text' },
+        { 
+            type: 'action',
+            typeAttributes: {
+                rowActions: [
+                    {
+                        label: 'Edit Risk',
+                        name: 'edit_risk',
+                        iconName: 'utility:edit'
+                    },
+                    {
+                        label: 'Add Asset',
+                        name: 'add_asset',
+                        iconName: 'utility:add'
+                    },
+                    {
+                        label: 'Add Coverage',
+                        name: 'add_coverage',
+                        iconName: 'utility:layers'
+                    }
+                ]
+            },
+            cellAttributes: {
+                alignment: 'center'
+            }
+        }
+    ];
+
+    get flowInputVariables() {
+        return [
+            {
+                name: 'recordId',
+                type: 'String',
+                value: this.selectedRiskIdForCoverage
+            }
+        ];
+    }
+
+    connectedCallback() {
+        this.fetchRiskRecordType();
+        this.loadExistingRisks();
+    }
+
+    fetchRiskRecordType() {
+        console.log('🎯 Fetching Risk RecordTypeId for:', this.objectName);
+        
+        getRecordTypeIdByObject({ 
+            objectName: this.objectName 
+        })
+        .then(result => {
+            if (result) {
+                this.recordTypeId = result;
+                console.log('✅ Risk RecordTypeId fetched:', this.recordTypeId);
+            } else {
+                console.error('❌ Risk Record Type not found');
+                this.dispatchEvent(
+                    new ShowToastEvent({
+                        title: 'Error',
+                        message: 'Risk Record Type not found',
+                        variant: 'error'
+                    })
+                );
+            }
+        })
+        .catch(error => {
+            console.error('❌ Error fetching Risk RecordTypeId:', error);
+        });
+    }
+
+    @wire(getRecord, { recordId: '$recordId', fields: [COB_FIELD, NUMBER_OF_RISK, CLOSING_TYPE] })
+    wiredOpportunity({ error, data }) {
+        if (data) {
+            this.cobValue = data.fields.COB__c.value;
+            this.cobLabel = data.fields.COB__c.displayValue;
+            this.noRisk = data.fields.Number_Of_Risk__c.value;
+            this.closingType = data.fields.Policy_Closing_Type__c.value;
+            this.formData = {
+                ...this.formData,
+                Opportunity__c: this.recordId
+            };
+            
+            console.log('✅ COB Value loaded:', this.cobValue);
+            
+            this.loadExistingRisks();
+        } else if (error) {
+            console.error('❌ Error fetching Opportunity:', error);
+        }
+    }
+
+    // ✅ NEW: Wire to get required fields from Master Data
+    @wire(getRequiredFieldsByCob, { cobValue: '$cobValue' })
+    wiredRequiredFields({ error, data }) {
+        if (data) {
+            console.log('✅ Required fields from Master Data:', data);
+            
+            // Convert array to Set for fast lookup
+            this.requiredFieldApiNames = new Set(data);
+            
+            console.log('📋 Required fields Set:', Array.from(this.requiredFieldApiNames));
+            console.log('📊 Total required fields:', this.requiredFieldApiNames.size);
+            
+            // Rebuild fields to update isRequired flags
+            if (this.activeFieldData) {
+                this.buildFields();
+            }
+        } else if (error) {
+            console.error('❌ Error loading required fields:', error);
+            console.error('   Error details:', error.body?.message || error.message);
+            
+            // Fallback to default required fields if query fails
+            this.requiredFieldApiNames = new Set([
+                'Address__c',
+                'Occupation_Code__c',
+                'Class__c'
+            ]);
+            
+            console.log('⚠️ Using fallback required fields');
+            
+            if (this.activeFieldData) {
+                this.buildFields();
+            }
+        }
+    }
+
+    async loadExistingRisks() {
+        if (!this.recordId) {
+            console.log('⏳ Waiting for recordId...');
+            return;
+        }
+
+        try {
+            console.log('🔄 Loading risks from database for Opportunity:', this.recordId);
+            
+            const wrappers = await getAssetsByOpportunity({ opportunityId: this.recordId });
+            
+            console.log('✅ Loaded risks:', wrappers.length);
+            console.log('📦 Risk data:', JSON.stringify(wrappers));
+            
+            this.savedRisks = wrappers.map((wrapper, index) => {
+                let displayRiskId;
+                
+                if (wrapper.riskId && wrapper.riskId !== 'N/A') {
+                    displayRiskId = wrapper.riskId;
+                } else if (wrapper.name) {
+                    displayRiskId = wrapper.name;
+                } else if (wrapper.riskName) {
+                    displayRiskId = wrapper.riskName;
+                } else {
+                    displayRiskId = `RISK-${index + 1}`;
+                }
+                
+                console.log(`📋 Risk ${index}: ID=${displayRiskId}, Wrapper:`, wrapper);
+                
+                return {
+                    id: wrapper.id,
+                    riskId: displayRiskId,
+                    address: wrapper.address || wrapper.riskName || 'N/A',
+                    treaty: 'TREATY',
+                    salesforceId: wrapper.id,
+                    cityName: wrapper.cityName,
+                    zipName: wrapper.zipName,
+                    name: wrapper.riskName,          
+                    riskName: wrapper.riskName,
+                };
+            });
+            
+            if (this.savedRisks.length === 0) {
+                console.log('📝 No risks found, showing form');
+                this.showFormView = true;
+            } else {
+                console.log('📋 Risks found, showing list');
+                this.showFormView = false;
+            }
+            
+            console.log('📊 Total risks:', this.savedRisks.length);
+            
+        } catch (error) {
+            console.error('❌ Error loading risks:', error);
+            console.error('Error details:', JSON.stringify(error));
+            this.showFormView = true;
+        }
+    }
+        
+    @wire(getPicklistValuesByRecordType, {
+        objectApiName: '$objectName',
+        recordTypeId: '$recordTypeId'
+    })
+    wiredPicklistValues({ error, data }) {
+        if (data) {
+            this.picklistValues = data;
+            
+            if (this.activeFieldData) {
+                this.buildFields();
+            }
+        } else if (error) {
+            console.error('Error loading picklist metadata:', error);
+        }
+    }
+
+    @wire(getActiveFields, { objectName: '$objectName', interestCob: '$cobValue', contractType: '$closingType' })
+    wiredFields({ error, data }) {
+        if (data) {
+            this.activeFieldData = data;
+            this.buildFields();
+        } else if (error) {
+            console.error('Error loading fields:', error);
+        }
+    }
+
+    // ✅ UPDATED: Use dynamic required fields from Master Data
+    buildFields() {
+        if (!this.activeFieldData) {
+            return;
+        }
+
+        // ✅ Use dynamic required fields from Master Data
+        // Falls back to default if not loaded yet
+        const requiredFieldApiNames = this.requiredFieldApiNames.size > 0 
+            ? this.requiredFieldApiNames 
+            : new Set(['Address__c', 'Occupation_Code__c', 'Class__c']);
+        
+        console.log('🔧 Building fields with required:', Array.from(requiredFieldApiNames));
+        
+        this.fields = this.activeFieldData.map(f => {
+            const typeData = (f.dataType || '').toLowerCase().trim();
+
+            let lookupFields = 'Name';
+            if (f.dataType === 'Lookup') {
+                switch (f.filter) {
+                    case 'City':
+                        lookupFields = 'Name, City_ID__c, Province__r.Name, Country__r.Name';
+                        break;
+                    case 'Province':
+                        lookupFields = 'Name, Country__r.Name';
+                        break;
+                    case 'Address':
+                        lookupFields = 'Name, City__r.Name, Zip_Code__r.Name';
+                        break;
+                    default:
+                        lookupFields = 'Name';
+                }
+            }
+
+            const fieldObj = {
+                apiName: f.apiName,
+                label: f.label,
+                dataType: f.dataType,
+                lookupObject: f.lookupObject,
+                filter: f.filter,
+                order: f.order,
+                fieldsToQuery: lookupFields,
+                showData: f.showData ? f.showData : '',
+                isRequired: requiredFieldApiNames.has(f.apiName), // ✅ Dynamic!
+                isText: typeData === 'text',
+                isReadonly: typeData ==='readonly',
+                isNumber: typeData === 'number',
+                isLookup: typeData === 'lookup',
+                isTextArea: typeData === 'textarea',
+                isPicklist: typeData === 'picklist',
+                isGeolocation: typeData === 'geolocation',
+                isAddress: (f.filter || '').toLowerCase() === 'address',
+                
+                value: (this.formData && this.formData[f.apiName] !== undefined)
+                    ? this.formData[f.apiName]
+                    : null
+            };
+
+            if (fieldObj.isPicklist) {
+                if (this.picklistValues?.picklistFieldValues?.[fieldObj.apiName]) {
+                    const picklistMeta = this.picklistValues.picklistFieldValues[fieldObj.apiName];
+                    fieldObj.options = picklistMeta.values.map(v => ({ 
+                        label: v.label, 
+                        value: v.value 
+                    }));
+                } else {
+                    fieldObj.options = [];
+                }
+            } else {
+                fieldObj.options = [];
+            }
+
+            if (typeData === 'geolocation') {
+                fieldObj.isGeolocation = true;
+                const baseName = f.apiName.replace('__c','');
+                fieldObj.latitudeName = `${baseName}__Latitude__s`;
+                fieldObj.longitudeName = `${baseName}__Longitude__s`;
+                fieldObj.latitudeLabel = `${f.label} (Latitude)`;
+                fieldObj.longitudeLabel = `${f.label} (Longitude)`;
+
+                fieldObj.latitude = this.formData?.[fieldObj.latitudeName] || null;
+                fieldObj.longitude = this.formData?.[fieldObj.longitudeName] || null;
+            }
+
+            return fieldObj;
+        });
+
+        this.fields.sort((a, b) => (a.order || 0) - (b.order || 0));
+        
+        const requiredCount = this.fields.filter(f => f.isRequired).length;
+        console.log(`✅ Fields built: ${this.fields.length} total, ${requiredCount} required`);
+    }
+
+    handleInputChange(event) {
+        try {
+            const fieldName = event.target.name;
+            let value = event.target.value;
+
+            if (event.target.type === 'number' || 
+                fieldName.endsWith('__Latitude__s') || 
+                fieldName.endsWith('__Longitude__s')) {
+                value = (value !== '' && value !== null) ? parseFloat(value) : null;
+            }
+
+            if (fieldName.endsWith('__Latitude__s')) {
+                if (value !== null && (value < -90 || value > 90)) {
+                    this.dispatchEvent(
+                        new ShowToastEvent({
+                            title: 'Error',
+                            message: 'Latitude must be between -90 and 90',
+                            variant: 'error'
+                        })
+                    );
+                    return;
+                }
+            }
+
+            if (fieldName.endsWith('__Longitude__s')) {
+                if (value !== null && (value < -180 || value > 180)) {
+                    this.dispatchEvent(
+                        new ShowToastEvent({
+                            title: 'Error',
+                            message: 'Longitude must be between -180 and 180',
+                            variant: 'error'
+                        })
+                    );
+                    return;
+                }
+            }
+
+            this.formData = {
+                ...this.formData,
+                [fieldName]: value
+            };
+
+            this.fields = this.fields.map(f => {
+                if (f.latitudeName === fieldName) {
+                    return { ...f, latitude: value };
+                }
+                if (f.longitudeName === fieldName) {
+                    return { ...f, longitude: value };
+                }
+                if (f.apiName === fieldName) {
+                    return { ...f, value: value };
+                }
+                return f;
+            });
+        } catch (e) {
+            console.error('Error in handleInputChange:', e);
+        }
+    }
+
+    handleLookUpSelected(event) {
+        const fieldApiName = event.target.dataset.field;
+        const record = event.detail;
+        const fieldMap = (record && record.FieldMap) ? record.FieldMap : {};
+        const recordId = record.Id;
+        const recordName = record.Name;
+
+        this.formData = {
+            ...this.formData,
+            [fieldApiName]: recordId
+        };
+
+        if (Object.keys(fieldMap).length > 0) {
+            this.formData = {
+                ...this.formData,
+                ...fieldMap
+            };
+        }
+
+        this.fields = this.fields.map(f => {
+            if (fieldMap && fieldMap.hasOwnProperty(f.apiName)) {
+                return { ...f, value: fieldMap[f.apiName] };
+            }
+            if (f.apiName === fieldApiName) {
+                return { ...f, value: recordId };
+            }
+            return f;
+        });
+
+        if (fieldApiName === 'Province__c') {
+            this.provinceId = recordId;
+        }
+        if (fieldApiName === 'City__c') {
+            this.cityId = recordId;
+        }
+        if (fieldApiName === 'Address__c') {
+            this.addressDescription = recordName;
+            this.formData = {
+                ...this.formData,
+                Address_Description__c: this.addressDescription
+            };
+        }
+    }
+
+    handleLookUpCleared(event) {
+        const fieldApiName = event.target.dataset.field;
+
+        console.log('🗑️ Clearing lookup field:', fieldApiName);
+        console.log('📦 Before clear:', JSON.stringify(this.formData));
+
+        const protectedFields = new Set([
+            'Name',
+            'Asset_Name__c',
+            'Interest_Insured_Detail_Description__c'
+        ]);
+
+        this.formData = {
+            ...this.formData,
+            [fieldApiName]: null
+        };
+
+        this.fields = this.fields.map(f => {
+            if (f.apiName === fieldApiName) {
+                return { ...f, value: null };
+            }
+            return f;
+        });
+
+        if (fieldApiName === 'Province__c') {
+            this.provinceId = null;
+            this.formData = {
+                ...this.formData,
+                'City__c': null
+            };
+            this.fields = this.fields.map(f => {
+                if (f.apiName === 'City__c') {
+                    return { ...f, value: null };
+                }
+                return f;
+            });
+        }
+        
+        if (fieldApiName === 'City__c') {
+            this.cityId = null;
+        }
+        
+        if (fieldApiName === 'Address__c') {
+            this.addressDescription = null;
+            this.formData = {
+                ...this.formData,
+                'Address_Description__c': null
+            };
+        }
+
+        const possibleFieldMapKeys = this.fields
+            .filter(f => f.apiName !== fieldApiName)
+            .map(f => f.apiName);
+
+        possibleFieldMapKeys.forEach(apiName => {
+            if (protectedFields.has(apiName)) {
+                console.log(`🛡️ Protecting field: ${apiName}`);
+                return;
+            }
+            
+            if (this.formData.hasOwnProperty(apiName)) {
+                this.formData[apiName] = null;
+            }
+        });
+
+        this.fields = this.fields.map(f => {
+            if (protectedFields.has(f.apiName)) {
+                return f;
+            }
+            
+            return {
+                ...f,
+                value: this.formData[f.apiName] || null
+            };
+        });
+
+        console.log('📦 After clear:', JSON.stringify(this.formData));
+    }
+
+    // ✅ UPDATED: Dynamic validation based on isRequired flag
+    validateRequiredFields() {
+        // Build required fields list dynamically from fields array
+        const requiredFields = [];
+        
+        this.fields.forEach(field => {
+            if (field.isRequired) {
+                requiredFields.push({
+                    apiName: field.apiName,
+                    label: field.label
+                });
+            }
+        });
+        
+        console.log('🔍 Validating required fields:', requiredFields.map(f => f.label).join(', '));
+
+        const missingFields = [];
+
+        requiredFields.forEach(field => {
+            const value = this.formData[field.apiName];
+            if (!value || value === '' || value === null || value === undefined) {
+                missingFields.push(field.label);
+            }
+        });
+
+        if (missingFields.length > 0) {
+            const fieldList = missingFields.join(', ');
+            this.dispatchEvent(
+                new ShowToastEvent({
+                    title: 'Required Fields Missing',
+                    message: `Please fill in the following required fields: ${fieldList}`,
+                    variant: 'error'
+                })
+            );
+            return false;
+        }
+
+        return true;
+    }
+
+    async handleCreateRisk() {
+        if (!this.validateRequiredFields()) {
+            console.log('❌ Validation failed');
+            return;
+        }
+
+        this.isLoading = true;
+
+        try {
+            console.log('💾 Creating risk in database...');
+            console.log('📦 Form data:', JSON.stringify(this.formData));
+            
+            const savedId = await upsertAsset({ fieldValues: this.formData });
+            
+            console.log('✅ Risk created with ID:', savedId);
+
+            this.dispatchEvent(
+                new ShowToastEvent({
+                    title: 'Success',
+                    message: 'Risk created successfully',
+                    variant: 'success'
+                })
+            );
+
+            await this.loadExistingRisks();
+            
+            this.showFormView = false;
+
+            this.resetForm();
+            
+        } catch (error) {
+            console.error('❌ Error creating risk:', error);
+            const errorMessage = error?.body?.message || error.message || 'Unknown error';
+            this.dispatchEvent(
+                new ShowToastEvent({
+                    title: 'Error',
+                    message: 'Failed to create risk: ' + errorMessage,
+                    variant: 'error'
+                })
+            );
+        } finally {
+            this.isLoading = false;
+        }
+    }
+
+    resetForm() {
+        this.formData = { Opportunity__c: this.recordId };
+        this.fields = this.fields.map(f => ({ ...f, value: null }));
+        this.provinceId = null;
+        this.cityId = null;
+        this.addressDescription = '';
+    }
+
+    handleAddNewRisk() {
+        this.resetForm();
+        this.showFormView = true;
+    }
+
+    handleRowAction(event) {
+        const actionName = event.detail.action.name;
+        const row = event.detail.row;
+        
+        if (actionName === 'edit_risk') {
+            console.log('✏️ Edit Risk clicked for Risk:', row);
+            console.log('   Risk ID:', row.riskId);
+            console.log('   Salesforce ID:', row.salesforceId);
+            
+            this.selectedRiskIdForEdit = row.salesforceId;
+            this.isEditRiskModalOpen = true;
+            
+            this.hideParentModal();
+        }
+        
+        if (actionName === 'add_asset') {
+            console.log('🎯 Add Asset clicked for Risk:', row);
+            console.log('   Risk ID:', row.riskId);
+            console.log('   Salesforce ID:', row.salesforceId);
+            
+            this.selectedRiskId = row.salesforceId;
+            this.isDetailAssetModalOpen = true;
+            
+            this.hideParentModal();
+        }
+        
+        if (actionName === 'add_coverage') {
+            console.log('🎯 Add Coverage clicked for Risk:', row);
+            
+            this.selectedRiskIdForCoverage = row.salesforceId;
+            this.isCoverageFlowOpen = true;
+            
+            this.hideParentModal();
+        }
+    }
+
+    handleEditRiskModalClose() {
+        console.log('🔴 Closing Edit Risk modal');
+        this.isEditRiskModalOpen = false;
+        this.selectedRiskIdForEdit = null;
+        
+        this.loadExistingRisks();
+        
+        this.showParentModal();
+    }
+
+    handleDetailAssetModalClose() {
+        console.log('🔴 Closing Detail Asset modal');
+        this.isDetailAssetModalOpen = false;
+        this.selectedRiskId = null;
+        
+        this.showParentModal();
+    }
+
+    handleCoverageFlowFinish() {
+        console.log('✅ Coverage Flow finished');
+        this.isCoverageFlowOpen = false;
+        this.selectedRiskIdForCoverage = null;
+        
+        this.showParentModal();
+        
+        this.dispatchEvent(
+            new ShowToastEvent({
+                title: 'Success',
+                message: 'Coverage created successfully',
+                variant: 'success'
+            })
+        );
+    }
+
+    handleCoverageFlowStatusChange(event) {
+        console.log('📊 Flow status:', event.detail.status);
+        
+        if (event.detail.status === 'FINISHED') {
+            this.handleCoverageFlowFinish();
+        }
+    }
+
+    handleCloseAssetModal() {
+        if (this.showFormView) {
+            console.log('🔙 Closing form, returning to list view');
+            this.showFormView = false;
+            this.resetForm();
+            return;
+        }
+        
+        console.log('🚪 Closing Quick Action');
+        this.dispatchEvent(new CloseActionScreenEvent());
+    }
+
+    handleSaveAllRisks() {
+        this.dispatchEvent(new CloseActionScreenEvent());
+    }
+
+    hideParentModal() {
+        try {
+            const parentCard = this.template.querySelector('.wide-card');
+            if (parentCard) {
+                parentCard.style.display = 'none';
+                console.log('✅ Parent Risk modal hidden');
+            }
+        } catch (error) {
+            console.warn('⚠️ Could not hide parent modal:', error);
+        }
+    }
+
+    showParentModal() {
+        try {
+            const parentCard = this.template.querySelector('.wide-card');
+            if (parentCard) {
+                parentCard.style.display = 'block';
+                console.log('✅ Parent Risk modal shown');
+            }
+        } catch (error) {
+            console.warn('⚠️ Could not show parent modal:', error);
+        }
+    }
+}

@@ -1,0 +1,303 @@
+<template>
+    <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open" style="z-index: 10001;">
+        <div class="slds-modal__container" style="max-width: 90%; width: 90%;">
+            <!-- Header -->
+            <header class="slds-modal__header">
+                <lightning-icon icon-name="custom:custom57" size="small" class="icon-left"></lightning-icon>
+                <span class="card-title">{modalTitle}</span>
+            </header>
+
+            <!-- Modal Body -->
+            <div class="slds-modal__content slds-p-around_medium">
+                
+                <!-- ✅ FORM VIEW -->
+                <template if:true={showFormView}>
+                    <lightning-card>
+                        <div class="section-header">
+                            <div class="section-title">
+                                <lightning-icon 
+                                    icon-name="custom:custom57"
+                                    size="small"
+                                    class="slds-m-right_x-small">
+                                </lightning-icon>
+                                <span>ASSET DETAILS</span>
+                            </div>
+                        </div>
+
+                        <div class="slds-p-around_medium">
+                            <!-- Currency & Exchange Rate -->
+                            <div class="slds-grid slds-gutters">
+                                <div class="slds-col slds-size_1-of-2">
+                                    <c-custom-lookup
+                                        label="Currency"
+                                        placeholder="currency"
+                                        data-field="Currency__c"
+                                        icon-name="standard:location"
+                                        object-api-name="Master_Data__c"
+                                        fields="Name, Exchange_Rate__c"
+                                        record-type-name="Exchange Rate"
+                                        record-id={formData.Currency__c}
+                                        onrecordselected={handleLookUpSelected}
+                                        onrecordcleared={handleLookUpCleared}>
+                                    </c-custom-lookup>
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <lightning-input 
+                                        name="Exchange_Rate__c" 
+                                        label="Exchange Rate" 
+                                        value={exchangeRate} 
+                                        type="number" 
+                                        disabled>
+                                    </lightning-input>
+                                </div>
+                            </div>
+
+                            <!-- Amount & Amount IDR -->
+                            <div class="slds-grid slds-gutters">
+                                <div class="slds-col slds-size_1-of-2">
+                                    <lightning-input 
+                                        name="Amount__c" 
+                                        label="Amount" 
+                                        value={formData.Amount__c} 
+                                        type="number" 
+                                        onchange={handleInputChange}>
+                                    </lightning-input>
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <lightning-input 
+                                        name="Amount_IDR__c" 
+                                        label="Amount IDR" 
+                                        value={formData.Amount_IDR__c} 
+                                        type="number" 
+                                        disabled>
+                                    </lightning-input>
+                                </div>
+                            </div>
+
+                            <!-- Section & Category -->
+                            <div class="slds-grid slds-gutters">
+                                <div class="slds-col slds-size_1-of-2">
+                                    <c-custom-lookup
+                                        label="Section"
+                                        placeholder="Section"
+                                        data-field="Section__c"
+                                        icon-name="standard:location"
+                                        object-api-name="Master_Data__c"
+                                        fields="Name, Section__c, Section_Title__c, BSN_ID__c, BSN__r.Name"
+                                        record-type-name="Asset Section"
+                                        cob-field={cobValue}
+                                        onrecordselected={handleLookUpSelected}
+                                        onrecordcleared={handleLookUpCleared}
+                                        record-id={formData.Section__c}>
+                                    </c-custom-lookup>
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <c-custom-lookup
+                                        label="Category"
+                                        placeholder="Category..."
+                                        data-field="Category__c"
+                                        icon-name="standard:location"
+                                        object-api-name="Master_Data__c"
+                                        fields="Name, Section__c, Section__Title__c, BSN_ID__c, BSN__r.Name"
+                                        record-type-name="Asset Category"
+                                        section-name={section}
+                                        province-id={sectionId}
+                                        record-id={formData.Category__c}
+                                        cob-field={cobValue}
+                                        onrecordselected={handleLookUpSelected}
+                                        onrecordcleared={handleLookUpCleared}>
+                                    </c-custom-lookup>
+                                </div>
+                            </div>
+
+                            <!-- Dynamic Sections -->
+                            <template for:each={sectionList} for:item="section">
+                                <div class="slds-m-top_medium" key={section.id}>
+                                    <lightning-card>    
+                                        <div class="section-header">
+                                            <div class="section-title">
+                                                <lightning-icon 
+                                                    icon-name="custom:custom27"
+                                                    size="small"
+                                                    class="slds-m-right_x-small">
+                                                </lightning-icon>
+                                                <span>{section.label}</span>
+                                            </div>
+                                        </div>
+                                        <div class="slds-grid slds-wrap slds-gutters slds-p-around_medium">
+                                            <template for:each={section.fields} for:item="field">
+                                                <!-- TEXT -->
+                                                <template if:true={field.isText}>
+                                                    <div key={field.apiName} class="slds-col slds-size_1-of-2">
+                                                        <lightning-input 
+                                                            type="text" 
+                                                            label={field.label} 
+                                                            name={field.apiName} 
+                                                            value={field.value}
+                                                            onchange={handleInputChange}>
+                                                        </lightning-input>
+                                                    </div>
+                                                </template>
+
+                                                <!-- TEXT AREA -->
+                                                <template if:true={field.isTextArea}>
+                                                    <div key={field.apiName} class="slds-col slds-size_1-of-2">
+                                                        <lightning-textarea
+                                                            label={field.label}
+                                                            name={field.apiName}
+                                                            value={field.value}
+                                                            onchange={handleInputChange}>
+                                                        </lightning-textarea>
+                                                    </div>
+                                                </template>
+
+                                                <!-- NUMBER -->
+                                                <template if:true={field.isNumber}>
+                                                    <div key={field.apiName} class="slds-col slds-size_1-of-2">
+                                                        <lightning-input 
+                                                            type="number" 
+                                                            label={field.label} 
+                                                            name={field.apiName} 
+                                                            value={field.value}
+                                                            onchange={handleInputChangeNumber}>
+                                                        </lightning-input>
+                                                    </div>
+                                                </template>
+
+                                                <!-- PICKLIST -->
+                                                <template if:true={field.isPicklist}>
+                                                    <div key={field.apiName} class="slds-col slds-size_1-of-2">
+                                                        <lightning-combobox
+                                                            label={field.label}
+                                                            name={field.apiName}
+                                                            value={field.value}
+                                                            placeholder="Select an option"
+                                                            options={field.options}
+                                                            onchange={handleInputChange}>
+                                                        </lightning-combobox>
+                                                    </div>
+                                                </template>
+
+                                                <!-- LOOKUP -->
+                                                <template if:true={field.isLookup}>
+                                                    <div key={field.apiName} class="slds-col slds-size_1-of-2">
+                                                        <c-custom-lookup
+                                                            label={field.label}
+                                                            placeholder={field.label}
+                                                            icon-name="standard:location"
+                                                            object-api-name={field.lookupObject}
+                                                            fields={field.fieldsToQuery}
+                                                            record-type-name={field.filter}
+                                                            data-field={field.apiName}
+                                                            record-id={field.value}
+                                                            show-data={field.showData}
+                                                            onrecordselected={handleLookUpSelected}
+                                                            onrecordcleared={handleLookUpCleared}>
+                                                        </c-custom-lookup>
+                                                    </div>
+                                                </template>
+                                            </template>
+                                        </div>
+                                    </lightning-card>
+                                </div>
+                            </template>
+                        </div>
+
+                        <!-- ✅ Form Footer with Right Alignment -->
+                        <footer class="slds-card__footer">
+                            <div class="slds-grid slds-grid_align-end slds-m-around_medium">
+                                <lightning-button 
+                                    variant="neutral" 
+                                    label="Cancel" 
+                                    onclick={handleCloseDetailAsset}
+                                    class="slds-m-right_x-small"
+                                    disabled={isLoading}>
+                                </lightning-button>
+                                <lightning-button 
+                                    variant="brand" 
+                                    label={saveButtonLabel} 
+                                    onclick={handleSaveDetailAsset}
+                                    disabled={isLoading}>
+                                </lightning-button>
+                            </div>
+                        </footer>
+                    </lightning-card>
+                </template>
+
+                <!-- ✅ LIST VIEW -->
+                <template if:false={showFormView}>
+                    <lightning-card>
+                        <div class="section-header">
+                            <div class="section-title">
+                                <lightning-icon 
+                                    icon-name="custom:custom21"
+                                    size="small"
+                                    class="slds-m-right_x-small">
+                                </lightning-icon>
+                                <span>LIST OF ASSET</span>
+                            </div>
+                        </div>
+
+                        <!-- Datatable -->
+                        <lightning-datatable
+                            key-field="id"
+                            data={paginatedAssetData}
+                            columns={listAssetColumns}
+                            show-row-number-column
+                            hide-checkbox-column="true"
+                            onrowaction={handleRowAction}>
+                        </lightning-datatable>
+
+                        <!-- Custom Pagination -->
+                        <div class="slds-p-around_small slds-grid slds-grid_align-spread slds-grid_vertical-align-center">
+                            <!-- Left: Add Button -->
+                            <div>
+                                <lightning-button 
+                                    variant="brand" 
+                                    label="Add" 
+                                    icon-name="utility:add" 
+                                    onclick={handleAddNewAsset}>
+                                </lightning-button>
+                            </div>
+                            
+                            <!-- Right: Pagination Buttons -->
+                            <div class="pagination-container">
+                                <!-- Previous Button -->
+                                <template if:true={showPrevButton}>
+                                    <lightning-button 
+                                        label="« Previous"
+                                        variant="neutral"
+                                        onclick={handlePrevAsset}
+                                        class="pagination-btn">
+                                    </lightning-button>
+                                </template>
+
+                                <!-- Next Button -->
+                                <template if:true={showNextButton}>
+                                    <lightning-button 
+                                        label="Next »"
+                                        variant="success"
+                                        onclick={handleNextAsset}
+                                        class="pagination-btn slds-m-left_x-small">
+                                    </lightning-button>
+                                </template>
+                            </div>
+                        </div>
+
+                        <!-- ✅ List Footer with Right Alignment -->
+                        <footer class="slds-card__footer">
+                            <div class="slds-grid slds-grid_align-end slds-m-around_medium">
+                                <lightning-button 
+                                    variant="neutral"
+                                    label="Close" 
+                                    onclick={handleCloseDetailAsset}>
+                                </lightning-button>
+                            </div>
+                        </footer>
+                    </lightning-card>
+                </template>
+
+            </div>
+        </div>
+    </section>
+</template>

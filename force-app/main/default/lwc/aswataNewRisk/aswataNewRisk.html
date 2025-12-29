@@ -1,0 +1,288 @@
+<template>
+    <!-- FORM VIEW -->
+    <template if:true={showFormView}>
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open form-modal">
+            <div class="slds-modal__container">
+                <!-- Form Header -->
+                <header class="slds-modal__header">
+                    <lightning-icon 
+                        icon-name="custom:custom57"
+                        size="small"
+                        class="icon-left">
+                    </lightning-icon>
+                    <span class="card-title">ADD NEW RISK</span>
+                </header>
+
+                <!-- Form Body -->
+                <div class="slds-modal__content slds-p-around_medium">
+                    <template if:true={fields}>
+                        <div class="slds-grid slds-wrap">
+                            <template for:each={fields} for:item="field">
+                                
+                                <!-- TEXT -->
+                                <template if:true={field.isText}>
+                                    <div key={field.apiName} class="slds-col slds-size_1-of-2 slds-p-around_x-small slds-p-vertical_none">
+                                        <lightning-input 
+                                            type="text" 
+                                            label={field.label} 
+                                            name={field.apiName} 
+                                            value={field.value}
+                                            required={field.isRequired}
+                                            onchange={handleInputChange}>
+                                        </lightning-input>
+                                    </div>
+                                </template>
+
+                                <!-- TEXT AREA -->
+                                <template if:true={field.isTextArea}>
+                                    <div key={field.apiName} class="slds-col slds-size_1-of-2 slds-p-around_x-small slds-p-vertical_none">
+                                        <lightning-textarea
+                                            label={field.label}
+                                            name={field.apiName}
+                                            value={field.value}
+                                            onchange={handleInputChange}>
+                                        </lightning-textarea>
+                                    </div>
+                                </template>
+
+                                <!-- Read Only -->
+                                <template if:true={field.isReadonly}>
+                                    <div key={field.apiName} class="slds-col slds-size_1-of-2 slds-p-around_x-small slds-p-vertical_none">
+                                        <lightning-input 
+                                            type="text" 
+                                            label={field.label} 
+                                            name={field.apiName} 
+                                            value={field.value}
+                                            onchange={handleInputChange} 
+                                            disabled>
+                                        </lightning-input>
+                                    </div>
+                                </template>
+
+                                <!-- NUMBER -->
+                                <template if:true={field.isNumber}>
+                                    <div key={field.apiName} class="slds-col slds-size_1-of-2 slds-p-around_x-small slds-p-vertical_none">
+                                        <lightning-input 
+                                            type="number" 
+                                            label={field.label} 
+                                            name={field.apiName} 
+                                            value={field.value}
+                                            onchange={handleInputChange}>
+                                        </lightning-input>
+                                    </div>
+                                </template>
+
+                                <!-- GEOLOCATION -->
+                                <template if:true={field.isGeolocation}>
+                                    <div key={field.apiName} class="slds-col slds-size_1-of-2 slds-p-around_x-small slds-p-vertical_none">
+                                        <div class="slds-grid slds-wrap">
+                                            <div class="slds-col slds-size_1-of-2 slds-p-around_x-small slds-p-vertical_none">
+                                                <lightning-input
+                                                    type="number"
+                                                    step="0.000001"
+                                                    label={field.latitudeLabel}
+                                                    name={field.latitudeName}
+                                                    value={field.latitude}
+                                                    onchange={handleInputChange}>
+                                                </lightning-input>
+                                            </div>
+                                            <div class="slds-col slds-size_1-of-2 slds-p-around_x-small slds-p-vertical_none">
+                                                <lightning-input
+                                                    type="number"
+                                                    step="0.000001"
+                                                    label={field.longitudeLabel}
+                                                    name={field.longitudeName}
+                                                    value={field.longitude}
+                                                    onchange={handleInputChange}>
+                                                </lightning-input>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </template>
+
+                                <!-- PICKLIST -->
+                                <template if:true={field.isPicklist}>
+                                    <div key={field.apiName} class="slds-col slds-size_1-of-2 slds-p-around_x-small slds-p-vertical_none">
+                                        <lightning-combobox
+                                            label={field.label}
+                                            name={field.apiName}
+                                            value={field.value}
+                                            placeholder="Select an option"
+                                            options={field.options}
+                                            required={field.isRequired}
+                                            onchange={handleInputChange}>
+                                        </lightning-combobox>
+                                    </div>
+                                </template>
+
+                                <!-- LOOKUP -->
+                                <template if:true={field.isLookup}>
+                                    <div key={field.apiName} class="slds-col slds-size_1-of-2 slds-p-horizontal_x-small slds-p-vertical_none">
+                                        <c-custom-lookup
+                                            label={field.label}
+                                            placeholder={field.label}
+                                            icon-name="standard:location"
+                                            object-api-name={field.lookupObject}
+                                            fields={field.fieldsToQuery}
+                                            record-type-name={field.filter}
+                                            data-field={field.apiName}
+                                            province-id={provinceId} 
+                                            city-id={cityId}
+                                            record-id={field.value}
+                                            show-data={field.showData}
+                                            required={field.isRequired}
+                                            onrecordselected={handleLookUpSelected}
+                                            onrecordcleared={handleLookUpCleared}>
+                                        </c-custom-lookup>
+
+                                        <template if:true={field.isAddress}>
+                                            <lightning-input 
+                                                type="text" 
+                                                label="Address Description"
+                                                placeholder="Enter street / building details"
+                                                value={addressDescription}
+                                                name="Address_Description__c"
+                                                required={field.isRequired}
+                                                onchange={handleInputChange}>
+                                            </lightning-input>
+                                        </template>
+                                    </div>
+                                </template>
+
+                            </template>
+                        </div>
+                    </template>
+                </div>
+
+                <!-- Form Footer -->
+                <footer class="slds-modal__footer">
+                    <div class="slds-grid slds-grid_align-end slds-m-around_medium">
+                        <lightning-button 
+                            variant="neutral"
+                            label="Close" 
+                            onclick={handleCloseAssetModal}
+                            class="slds-m-right_x-small"
+                            disabled={isLoading}>
+                        </lightning-button>
+                        <lightning-button 
+                            variant="brand" 
+                            label="Create Risk" 
+                            onclick={handleCreateRisk}
+                            disabled={isLoading}>
+                        </lightning-button>
+                    </div>
+                </footer>
+            </div>
+        </section>
+    </template>
+    
+    <!-- LIST VIEW -->
+    <template if:false={showFormView}>
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open list-modal">
+            <div class="slds-modal__container">
+                <!-- List Header -->
+                <header class="slds-modal__header">
+                    <lightning-icon 
+                        icon-name="custom:custom21"
+                        size="small"
+                        class="icon-left">
+                    </lightning-icon>
+                    <span class="card-title">LIST OF RISK</span>
+                </header>
+
+                <!-- List Body -->
+                <div class="slds-modal__content slds-p-around_medium">
+                    <!-- Datatable -->
+                    <lightning-datatable
+                        key-field="id"
+                        data={paginatedRiskData}
+                        columns={listRiskColumns}
+                        show-row-number-column
+                        hide-checkbox-column="true"
+                        onrowaction={handleRowAction}>
+                    </lightning-datatable>
+
+                    <!-- Pagination Controls -->
+                    <div class="slds-p-around_small slds-grid slds-grid_align-spread slds-grid_vertical-align-center">
+                        <!-- Left: Add Button -->
+                        <div>
+                            <lightning-button 
+                                variant="brand" 
+                                label="Add" 
+                                icon-name="utility:add" 
+                                onclick={handleAddNewRisk}>
+                            </lightning-button>
+                        </div>  
+                        <!-- Right: Pagination -->
+                        <div class="slds-p-around_small slds-text-align_right">
+                            <lightning-button-icon 
+                                icon-name="utility:chevronleft" 
+                                alternative-text="Previous" 
+                                onclick={handlePrevRisk}>
+                            </lightning-button-icon>
+                            <span class="slds-m-horizontal_small">
+                                Page {riskPage} of {riskTotalPages}
+                            </span>
+                            <lightning-button-icon 
+                                icon-name="utility:chevronright" 
+                                alternative-text="Next" 
+                                onclick={handleNextRisk}>
+                            </lightning-button-icon>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- List Footer -->
+                <footer class="slds-modal__footer">
+                    <div class="slds-grid slds-grid_align-end slds-m-around_medium">
+                        <lightning-button 
+                            variant="neutral"
+                            label="Close" 
+                            onclick={handleCloseAssetModal}>
+                        </lightning-button>
+                    </div>
+                </footer>
+            </div>
+        </section>
+    </template>
+
+    <!-- Edit Risk Modal -->
+    <template if:true={isEditRiskModalOpen}>
+        <c-edit-risk 
+            record-id={selectedRiskIdForEdit}
+            onclose={handleEditRiskModalClose}>
+        </c-edit-risk>
+    </template>
+
+    <!-- Detail Asset Modal -->
+    <template if:true={isDetailAssetModalOpen}>
+        <c-aswata-new-risk-detail-asset 
+            record-id={selectedRiskId}
+            cob-value={cobValue}
+            opportunity-id={recordId}
+            from-opportunity-modal={isDetailAssetModalOpen}
+            onclosemodal={handleDetailAssetModalClose}>
+        </c-aswata-new-risk-detail-asset>
+    </template>
+
+    <!-- Coverage Flow Modal -->
+    <template if:true={isCoverageFlowOpen}>
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <lightning-icon icon-name="custom:custom57" size="small"></lightning-icon>
+                    <span class="slds-modal__title">ADD COVERAGE</span>
+                </header>
+
+                <div class="slds-modal__content slds-p-around_medium">
+                    <lightning-flow
+                        flow-api-name="Coverage_Screen_Input_Coverage"
+                        flow-input-variables={flowInputVariables}
+                        onstatuschange={handleCoverageFlowStatusChange}>
+                    </lightning-flow>
+                </div>
+            </div>
+        </section>
+        <!--div class="slds-backdrop slds-backdrop_open"></div-->
+    </template>
+</template>
