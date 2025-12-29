@@ -60,6 +60,13 @@
                 <elementReference>Get_All_Transhipment</elementReference>
             </value>
         </assignmentItems>
+        <assignmentItems>
+            <assignToReference>varOpportunityId</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Risk_Detail.Opportunity__c</elementReference>
+            </value>
+        </assignmentItems>
         <connector>
             <targetReference>Transhipment</targetReference>
         </connector>
@@ -304,7 +311,7 @@
         <inputAssignments>
             <field>Opportunity__c</field>
             <value>
-                <elementReference>Risk_Detail.Opportunity__c</elementReference>
+                <elementReference>varOpportunityId</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -926,6 +933,13 @@
     </variables>
     <variables>
         <name>varCountry</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>varOpportunityId</name>
         <dataType>String</dataType>
         <isCollection>false</isCollection>
         <isInput>false</isInput>
