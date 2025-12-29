@@ -84,6 +84,46 @@
                 <identifier>RecordFinal_Approved_Rate_cField</identifier>
             </fieldInstance>
         </itemInstances>
+        <!-- <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Premi_Blank__c</fieldItem>
+                <identifier>RecordPremi_Blank__cField</identifier>
+            </fieldInstance>
+        </itemInstances> 
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Commission_Blank__c</fieldItem>
+                <identifier>RecordCommission_Blank__cField</identifier>
+            </fieldInstance>
+        </itemInstances> -->
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Proposed_Fixed_Amount_Section_2__c</fieldItem>
+                <identifier>RecordProposed_Rate_Section_2_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <!-- <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Final_Approved_Rate_Section_2__c</fieldItem>
+                <identifier>RecordFinal_Approved_Rate_Section_2_cField</identifier>
+            </fieldInstance>
+        </itemInstances> -->
         <name>Facet-09462b35-2478-4ee4-a330-6efc612dfa12</name>
         <type>Facet</type>
     </flexiPageRegions>
@@ -128,6 +168,56 @@
                 <identifier>RecordFinal_Approved_Premi_Amount_cField</identifier>
             </fieldInstance>
         </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Claim_Options__c</fieldItem>
+                <identifier>RecordClaim_Options_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Claim_Loss_Amount__c</fieldItem>
+                <identifier>RecordClaim_Loss_Amount_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Claim_UR_Id__c</fieldItem>
+                <identifier>RecordClaim_UR_Id_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Premi_Amount_Section_2__c</fieldItem>
+                <identifier>RecordPremi_Amount_Section_2_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <!-- <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Final_Approved_Premi_Amount_Section_2__c</fieldItem>
+                <identifier>RecordFinal_Approved_Premi_Amount_Section_2_cField</identifier>
+            </fieldInstance>
+        </itemInstances> -->
         <name>Facet-4d0b2bb2-47a8-451a-81b7-b4b893a8007e</name>
         <type>Facet</type>
     </flexiPageRegions>
@@ -206,16 +296,6 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Deductible_Currency__c</fieldItem>
-                <identifier>RecordDeductible_Currency_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
                 <fieldItem>Record.Deductible_Type__c</fieldItem>
                 <identifier>RecordDeductible_Type_cField</identifier>
             </fieldInstance>
@@ -265,6 +345,98 @@
             </componentInstance>
         </itemInstances>
         <name>Facet-36437b1e-a2b6-413e-9dc9-b1ba351e7958</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Deductible_Section_2__c</fieldItem>
+                <identifier>RecordDeductible_Section_2_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Deductible_PCT_Section_2__c</fieldItem>
+                <identifier>RecordDeductible_PCT_Section_2_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Deductible_Amount_Section_2__c</fieldItem>
+                <identifier>RecordDeductible_Amount_Section_2_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Deductible_Currency_Section_2__c</fieldItem>
+                <identifier>RecordDeductible_Currency_Section_2_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <name>Facet-756d1577-3f4e-488e-aa9d-73fc3dfb6456</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Deductible_Type_Section_2__c</fieldItem>
+                <identifier>RecordDeductible_Type_Section_2_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Minimum_Amount_Section_2__c</fieldItem>
+                <identifier>RecordMinimum_Amount_Section_2_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <name>Facet-e62fed7f-cb30-4569-8458-e3c0a4aa50e9</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>body</name>
+                    <value>Facet-756d1577-3f4e-488e-aa9d-73fc3dfb6456</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:column</componentName>
+                <identifier>flexipage_column7</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>body</name>
+                    <value>Facet-e62fed7f-cb30-4569-8458-e3c0a4aa50e9</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:column</componentName>
+                <identifier>flexipage_column8</identifier>
+            </componentInstance>
+        </itemInstances>
+        <name>Facet-56eee5ea-4669-48f1-a4f4-71a0a7867e93</name>
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
@@ -599,6 +771,24 @@
                 </componentInstanceProperties>
                 <componentName>flexipage:fieldSection</componentName>
                 <identifier>flexipage_fieldSection2</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>columns</name>
+                    <value>Facet-56eee5ea-4669-48f1-a4f4-71a0a7867e93</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>horizontalAlignment</name>
+                    <value>false</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>label</name>
+                    <value>Deductible Section 2</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:fieldSection</componentName>
+                <identifier>flexipage_fieldSection4</identifier>
             </componentInstance>
         </itemInstances>
         <itemInstances>

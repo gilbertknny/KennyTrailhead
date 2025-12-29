@@ -36,7 +36,7 @@
                         <valueListItems>
                             <value>Opportunity.Add_New_Risk</value>
                             <visibilityRule>
-                                <booleanFilter>1 AND (2 OR 3)</booleanFilter>
+                                <booleanFilter>1 AND (2 OR 3) AND (4 OR 5 OR 6)</booleanFilter>
                                 <criteria>
                                     <leftValue>{!Record.Submission_Format__c}</leftValue>
                                     <operator>EQUAL</operator>
@@ -51,13 +51,28 @@
                                     <leftValue>{!$User.Profile.Name}</leftValue>
                                     <operator>CONTAINS</operator>
                                     <rightValue>System Administrator</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.StageName}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>Potential/ Prospect</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.StageName}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>Opportunity</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.StageName}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>Quote</rightValue>
                                 </criteria>
                             </visibilityRule>
                         </valueListItems>
                         <valueListItems>
                             <value>Opportunity.Add_Clause</value>
                             <visibilityRule>
-                                <booleanFilter>1 AND (2 OR 3)</booleanFilter>
+                                <booleanFilter>1 AND (2 OR 3) AND (4 OR 5 OR 6)</booleanFilter>
                                 <criteria>
                                     <leftValue>{!Record.Submission_Format__c}</leftValue>
                                     <operator>EQUAL</operator>
@@ -73,12 +88,27 @@
                                     <operator>CONTAINS</operator>
                                     <rightValue>System Administrator</rightValue>
                                 </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.StageName}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>Potential/ Prospect</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.StageName}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>Opportunity</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.StageName}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>Quote</rightValue>
+                                </criteria>
                             </visibilityRule>
                         </valueListItems>
                         <valueListItems>
                             <value>Opportunity.Closed_Lost</value>
                             <visibilityRule>
-                                <booleanFilter>(1 OR 2 OR 3) AND 4</booleanFilter>
+                                <booleanFilter>(1 OR 2 OR 3 OR 5) AND 4</booleanFilter>
                                 <criteria>
                                     <leftValue>{!Record.StageName}</leftValue>
                                     <operator>EQUAL</operator>
@@ -99,12 +129,17 @@
                                     <operator>CONTAINS</operator>
                                     <rightValue>Sales</rightValue>
                                 </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.StageName}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>Underwriting Approval</rightValue>
+                                </criteria>
                             </visibilityRule>
                         </valueListItems>
                         <valueListItems>
                             <value>Opportunity.Generate_Quote</value>
                             <visibilityRule>
-                                <booleanFilter>(1 OR 2) AND (3 OR 4)</booleanFilter>
+                                <booleanFilter>(1 OR 2 OR 5) AND (3 OR 4)</booleanFilter>
                                 <criteria>
                                     <leftValue>{!Record.StageName}</leftValue>
                                     <operator>EQUAL</operator>
@@ -124,6 +159,11 @@
                                     <leftValue>{!$User.Profile.Name}</leftValue>
                                     <operator>CONTAINS</operator>
                                     <rightValue>System Administrator</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.StageName}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>Underwriting Approval</rightValue>
                                 </criteria>
                             </visibilityRule>
                         </valueListItems>
@@ -221,6 +261,27 @@
                                 </criteria>
                             </visibilityRule>
                         </valueListItems>
+                        <!-- <valueListItems>
+                            <value>Opportunity.Aswata_New_Risk</value>
+                            <visibilityRule>
+                                <booleanFilter>1 AND (2 OR 3)</booleanFilter>
+                                <criteria>
+                                    <leftValue>{!Record.Submission_Format__c}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>Specific</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!$User.Profile.Name}</leftValue>
+                                    <operator>CONTAINS</operator>
+                                    <rightValue>Sales</rightValue>
+                                </criteria>
+                                <criteria>
+                                    <leftValue>{!$User.Profile.Name}</leftValue>
+                                    <operator>CONTAINS</operator>
+                                    <rightValue>System Administrator</rightValue>
+                                </criteria>
+                            </visibilityRule>
+                        </valueListItems> -->
                     </valueList>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
@@ -2335,6 +2396,15 @@
         <itemInstances>
             <componentInstance>
                 <componentInstanceProperties>
+                    <name>recordId</name>
+                </componentInstanceProperties>
+                <componentName>theInsuredLWC</componentName>
+                <identifier>c_theInsuredLWC</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
                     <name>parentFieldApiName</name>
                     <value>Opportunity.Id</value>
                 </componentInstanceProperties>
@@ -2356,15 +2426,6 @@
                 </componentInstanceProperties>
                 <componentName>force:relatedListSingleContainer</componentName>
                 <identifier>force_relatedListSingleContainer5</identifier>
-            </componentInstance>
-        </itemInstances>
-        <itemInstances>
-            <componentInstance>
-                <componentInstanceProperties>
-                    <name>recordId</name>
-                </componentInstanceProperties>
-                <componentName>theInsuredLWC</componentName>
-                <identifier>c_theInsuredLWC</identifier>
             </componentInstance>
         </itemInstances>
         <name>Facet-9d1af8ca-3deb-4184-b279-4ae941a11a00</name>
@@ -2615,6 +2676,85 @@
             <componentInstance>
                 <componentInstanceProperties>
                     <name>actionNames</name>
+                    <valueList>
+                        <valueListItems>
+                            <value>New</value>
+                        </valueListItems>
+                    </valueList>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>adminFilters</name>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>maxRecordsToDisplay</name>
+                    <value>10</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>parentFieldApiName</name>
+                    <value>Opportunity.Id</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>relatedListApiName</name>
+                    <value>Insurance_Policy_Coverages__r</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>relatedListDisplayType</name>
+                    <value>ADVGRID</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>relatedListFieldAliases</name>
+                    <valueList>
+                        <valueListItems>
+                            <value>Risk_ID__c</value>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>Name</value>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>cov_tahun_id__c</value>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>CoverageName</value>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>Proposed_Fixed_Amount__c</value>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>PremiumAmount</value>
+                        </valueListItems>
+                    </valueList>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>relatedListLabel</name>
+                    <value>Insurance Policy Coverages</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>showActionBar</name>
+                    <value>true</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>sortFieldAlias</name>
+                    <value>__DEFAULT__</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>sortFieldOrder</name>
+                    <value>Default</value>
+                </componentInstanceProperties>
+                <componentName>lst:dynamicRelatedList</componentName>
+                <identifier>lst_dynamicRelatedList</identifier>
+                <visibilityRule>
+                    <criteria>
+                        <leftValue>{!Record.COB__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>301</rightValue>
+                    </criteria>
+                </visibilityRule>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>actionNames</name>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>adminFilters</name>
@@ -2673,6 +2813,13 @@
                 </componentInstanceProperties>
                 <componentName>lst:dynamicRelatedList</componentName>
                 <identifier>lst_dynamicRelatedList5</identifier>
+                <visibilityRule>
+                    <criteria>
+                        <leftValue>{!Record.COB__c}</leftValue>
+                        <operator>NE</operator>
+                        <rightValue>301</rightValue>
+                    </criteria>
+                </visibilityRule>
             </componentInstance>
         </itemInstances>
         <name>Facet-2a5c24a9-0136-495d-9900-957595f6e03a</name>
@@ -2705,7 +2852,7 @@
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>title</name>
-                    <value>Asset</value>
+                    <value>Interest</value>
                 </componentInstanceProperties>
                 <componentName>flexipage:tab</componentName>
                 <identifier>flexipage_tab14</identifier>
@@ -3587,7 +3734,7 @@
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>title</name>
-                    <value>Standard.Tab.detail</value>
+                    <value>Summary</value>
                 </componentInstanceProperties>
                 <componentName>flexipage:tab</componentName>
                 <identifier>detailTab</identifier>
@@ -3601,7 +3748,7 @@
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>title</name>
-                    <value>The Insured</value>
+                    <value>The Insured &amp; Partner</value>
                 </componentInstanceProperties>
                 <componentName>flexipage:tab</componentName>
                 <identifier>flexipage_tab8</identifier>
