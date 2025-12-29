@@ -66,12 +66,16 @@ public class Aswata_TestDataFactory {
      * @return Account
      */
     public static Account createAccount(String name) {
-        Account acc = new Account(
+       	Account acc = new Account(
             Name = name,
             Phone = '0211234567',
             Email__c = 'account@test.com'
         );
-        insert acc;
+    
+        Database.DMLOptions opts = new Database.DMLOptions();
+        opts.DuplicateRuleHeader.allowSave = true;
+    
+        Database.insert(acc, opts);
         return acc;
     }
     /**
@@ -186,7 +190,7 @@ public class Aswata_TestDataFactory {
      */
     public static Map<String, SObject> createStandardDataSet() {
         Map<String, SObject> data = new Map<String, SObject>();
-        Account acc = createAccount('Test Account');
+        Account acc = createAccount('Test Account Opty');
         Contact con = createContact(acc, 'John', 'Doe');
         Opportunity opp = createOpportunity(acc, 'Test Opportunity');
         data.put('Account', acc);

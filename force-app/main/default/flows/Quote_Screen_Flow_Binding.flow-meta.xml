@@ -49,6 +49,58 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </actionCalls>
     <actionCalls>
+        <name>Lock_Record</name>
+        <label>Lock Record</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <actionName>lockRecord</actionName>
+        <actionType>lockRecord</actionType>
+        <connector>
+            <targetReference>Screen_Show_Result</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>recordId</name>
+            <value>
+                <elementReference>Get_Quote.Id</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>action</name>
+            <value>
+                <stringValue>Lock</stringValue>
+            </value>
+        </inputParameters>
+        <nameSegment>lockRecord</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <actionCalls>
+        <name>Lock_Record_2</name>
+        <label>Lock Record 2</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <actionName>lockRecord</actionName>
+        <actionType>lockRecord</actionType>
+        <connector>
+            <targetReference>Notif_UW_Account_Pending_KYC</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>recordId</name>
+            <value>
+                <elementReference>Get_Quote.Id</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>action</name>
+            <value>
+                <stringValue>Lock</stringValue>
+            </value>
+        </inputParameters>
+        <nameSegment>lockRecord</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <actionCalls>
         <name>Send_Notif_To_User</name>
         <label>Send Notif To User</label>
         <locationX>0</locationX>
@@ -90,6 +142,32 @@
             </value>
         </inputParameters>
         <nameSegment>customNotificationAction</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <actionCalls>
+        <name>Unlock_Quote</name>
+        <label>Unlock Quote</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <actionName>lockRecord</actionName>
+        <actionType>lockRecord</actionType>
+        <connector>
+            <targetReference>Call_Update_Policy_Distribution</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>recordId</name>
+            <value>
+                <elementReference>Get_Quote.Id</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>action</name>
+            <value>
+                <stringValue>Unlock</stringValue>
+            </value>
+        </inputParameters>
+        <nameSegment>lockRecord</nameSegment>
         <offset>0</offset>
     </actionCalls>
     <apiVersion>65.0</apiVersion>
@@ -240,7 +318,7 @@
         <locationY>0</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Call_Update_Policy_Distribution</targetReference>
+            <targetReference>Unlock_Quote</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -260,7 +338,7 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Screen_Show_Result</targetReference>
+            <targetReference>Lock_Record</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -284,7 +362,7 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Notif_UW_Account_Pending_KYC</targetReference>
+            <targetReference>Lock_Record_2</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
