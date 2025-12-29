@@ -1399,9 +1399,13 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
     handleEndDateChange(event) { 
         this.endDate = event.detail.value; 
         this.adjustmentRows = [];
-        this.calculateDuration(); 
-        this.calculateExpectedPeriodType();
         this.adjustPremiumCalculationBasedOnDuration();
+        this.isLoading = true;
+        setTimeout(() => { 
+            this.calculateDuration(); 
+            this.calculateExpectedPeriodType();
+            this.isLoading = false;
+        }, 1);
     }
     handleRowTypeChange(event) {
         const year = parseInt(event.target.dataset.year, 10);
@@ -2813,9 +2817,14 @@ export default class LwcNewRequest extends NavigationMixin(LightningElement) {
     handleEndDateChange2(event) { 
         this.endDate2 = event.detail.value; 
         this.adjustmentRows2 = [];
-        this.calculateDuration2(); 
-        this.calculateExpectedPeriodType2();
         this.adjustPremiumCalculationBasedOnDuration2();
+        this.isLoading = true;
+        setTimeout(() => { 
+            this.calculateDuration2(); 
+            this.calculateExpectedPeriodType2();
+            this.isLoading = false;
+        },1);
+        
     }
     handleRowTypeChange2(event) {
         const year = parseInt(event.target.dataset.year, 10);

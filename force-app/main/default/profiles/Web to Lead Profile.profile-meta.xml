@@ -8464,6 +8464,11 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
+        <field>Facultative_Share__c.Facultative_Folder__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
         <field>Facultative_Share__c.Facultative_Mode__c</field>
         <readable>false</readable>
     </fieldPermissions>
@@ -8475,6 +8480,11 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>Facultative_Share__c.Folder_Id_Lintas__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Facultative_Share__c.Folder_Status__c</field>
         <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -23781,10 +23791,6 @@
     </layoutAssignments>
     <layoutAssignments>
         <layout>Opportunity-Opportunity Layout</layout>
-        <recordType>Opportunity.Facultative</recordType>
-    </layoutAssignments>
-    <layoutAssignments>
-        <layout>Opportunity-Opportunity Layout</layout>
         <recordType>Opportunity.FinServ__General</recordType>
     </layoutAssignments>
     <layoutAssignments>
@@ -23798,6 +23804,10 @@
     <layoutAssignments>
         <layout>Opportunity-Opportunity Layout</layout>
         <recordType>Opportunity.MoU</recordType>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Opportunity-Facultative Opportunity</layout>
+        <recordType>Opportunity.Facultative</recordType>
     </layoutAssignments>
     <layoutAssignments>
         <layout>PersonAccount-Person Account Layout</layout>
