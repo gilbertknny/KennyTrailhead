@@ -108,6 +108,9 @@ global without sharing class VlocityMapping implements callable{
         List<Object> ldocumentclauses = inputMap.containsKey('document_clauses')? (List<Object>) inputMap.get('document_clauses') : new List<Object>() ;
         Object documentPolicy = (Object) inputMap.get('documentPolicy');
         Object businessrequest = (Object) inputMap.get('business_request');
+        if(lasset==null){
+            lasset = new List<Object>();
+        }
         Map<String, Object> mapobjsp = documentPolicy!=null ? (Map<String, Object>) documentPolicy : new Map<String, Object>();
         String extid = mapobjsp.containsKey('policy_number') ? (String) mapobjsp.get('policy_number') : '';
         if(String.isNotBlank(extid) && Schema.sObjectType.InsurancePolicy.isAccessible()){
@@ -247,6 +250,7 @@ global without sharing class VlocityMapping implements callable{
         
         if(!mapobj5.isEmpty()){
             for(Object obj:lcoverages){
+                mapobj7 = new Map<String,Object>();
                 x++;
                 String jsobj = JSON.serialize(obj);
                 jsobj = jsobj.replace('"busreqId"','"busreq_id"');
