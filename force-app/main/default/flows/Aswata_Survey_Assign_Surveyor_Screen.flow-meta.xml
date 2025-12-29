@@ -7,6 +7,9 @@
         <locationY>0</locationY>
         <actionName>customNotificationAction</actionName>
         <actionType>customNotificationAction</actionType>
+        <connector>
+            <targetReference>Decrease_Var_Counter_Risk</targetReference>
+        </connector>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>customNotifTypeId</name>
@@ -44,6 +47,59 @@
     <apiVersion>65.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <assignments>
+        <name>Assign_Risk_Name_to_Var</name>
+        <label>Assign Risk Name to Var</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>varRiskName</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Loop_For_Risk_Selected.Name</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>varRiskSelected</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>Loop_For_Risk_Selected.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_For_Risk_Selected</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_to_Aswata_Survey_Record_Variable</name>
+        <label>Assign to Aswata Survey Record Variable</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>varRiskSingle.Id</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Select_Risk</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>varRiskSingle.Risk_Need_Survey__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>varRiskCollection</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>varRiskSingle</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Get_Record_Type_for_Aswata_Underwriting_Survey</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
         <name>Assign_User_Input_to_Var</name>
         <label>Assign User Input to Var</label>
         <locationX>0</locationX>
@@ -53,6 +109,20 @@
             <operator>Assign</operator>
             <value>
                 <elementReference>Select_User</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>varRiskId</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Select_Risk</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>varCountRisk</assignToReference>
+            <operator>AssignCount</operator>
+            <value>
+                <elementReference>Get_Risk_Need_Survey</elementReference>
             </value>
         </assignmentItems>
         <connector>
@@ -82,6 +152,76 @@
             <targetReference>Loop_For_User_Assignment</targetReference>
         </connector>
     </assignments>
+    <assignments>
+        <name>Decrease_Var_Counter_Risk</name>
+        <label>Decrease Var Counter Risk</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>varCountRisk</assignToReference>
+            <operator>Subtract</operator>
+            <value>
+                <numberValue>1.0</numberValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Success_Create_Survey</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Reset_Variable</name>
+        <label>Reset Variable</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>varUserIdCollections</assignToReference>
+            <operator>Assign</operator>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>varAswataSurveyId</assignToReference>
+            <operator>Assign</operator>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>varRiskId</assignToReference>
+            <operator>Assign</operator>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>varRiskName</assignToReference>
+            <operator>Assign</operator>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>varUserId</assignToReference>
+            <operator>Assign</operator>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>varUserName</assignToReference>
+            <operator>Assign</operator>
+        </assignmentItems>
+        <connector>
+            <targetReference>Get_Record_Quote</targetReference>
+        </connector>
+    </assignments>
+    <collectionProcessors>
+        <name>Filter_Risk_Selected</name>
+        <elementSubtype>FilterCollectionProcessor</elementSubtype>
+        <label>Filter Risk Selected</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNextValueToReference>currentItem_Filter_Risk_Selected</assignNextValueToReference>
+        <collectionProcessorType>FilterCollectionProcessor</collectionProcessorType>
+        <collectionReference>Get_Risk_Need_Survey</collectionReference>
+        <conditionLogic>and</conditionLogic>
+        <conditions>
+            <leftValueReference>currentItem_Filter_Risk_Selected.Id</leftValueReference>
+            <operator>EqualTo</operator>
+            <rightValue>
+                <elementReference>Select_Risk</elementReference>
+            </rightValue>
+        </conditions>
+        <connector>
+            <targetReference>Loop_For_Risk_Selected</targetReference>
+        </connector>
+    </collectionProcessors>
     <collectionProcessors>
         <name>Filter_User_Selected</name>
         <elementSubtype>FilterCollectionProcessor</elementSubtype>
@@ -110,6 +250,57 @@
         </value>
     </customProperties>
     <decisions>
+        <name>Button_Decision</name>
+        <label>Button Decision?</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Copy_1_of_Update_Risk_Survey_Flag</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Add</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>btnNextNewSurvey.value</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Add</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <isGoTo>true</isGoTo>
+                <targetReference>Reset_Variable</targetReference>
+            </connector>
+            <label>Add</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_Counter_Risk</name>
+        <label>Check Counter Risk</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Succes_Create_Survey_Screen</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>All_Risk_Assigned</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>varCountRisk</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <numberValue>0.0</numberValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Risk_Survey_Flag</targetReference>
+            </connector>
+            <label>All Risk Assigned</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>Check_Need_Survey_Flag</name>
         <label>Check Need Survey Flag</label>
         <locationX>0</locationX>
@@ -136,6 +327,9 @@
         <label>Check Quote Records</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>No_Survey_Need_Screen</targetReference>
+        </defaultConnector>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>Quote_Found</name>
@@ -153,7 +347,65 @@
             <label>Quote Found</label>
         </rules>
     </decisions>
-    <description>add validation survey date must be greater than current datetime</description>
+    <decisions>
+        <name>Check_Risk_Need_Survey_Found</name>
+        <label>Check Risk Need Survey Found?</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>No_Risk_Found_Screen</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Risk_Found</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Risk_Need_Survey</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_User_for_Underwriting_Survey</targetReference>
+            </connector>
+            <label>Risk Found</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Success_Create_Survey</name>
+        <label>Success Create Survey?</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Failed_Create_Survey_Screen</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Survey_Success_Created</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>varAswataSurveyId</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Check_Counter_Risk</targetReference>
+            </connector>
+            <label>Survey Success Created</label>
+        </rules>
+    </decisions>
+    <description>add survey per risk</description>
+    <dynamicChoiceSets>
+        <name>riskNeedSurverCollection</name>
+        <collectionReference>Get_Risk_Need_Survey</collectionReference>
+        <dataType>String</dataType>
+        <displayField>Name</displayField>
+        <object>Asset</object>
+        <valueField>Id</valueField>
+    </dynamicChoiceSets>
     <dynamicChoiceSets>
         <name>SurveyorUserCollections</name>
         <collectionReference>Get_All_User_for_Survey_Underwriting</collectionReference>
@@ -166,7 +418,7 @@
     <formulas>
         <name>formulaSurveyName</name>
         <dataType>String</dataType>
-        <expression>&apos;UW_Survey_&apos;&amp;{!Get_Record_Quote.Opportunity.Name}</expression>
+        <expression>&apos;UW_Survey_&apos;&amp;{!Loop_For_Risk_Selected.Name}</expression>
     </formulas>
     <formulas>
         <name>notificationBodyTemplate</name>
@@ -175,6 +427,20 @@
     </formulas>
     <interviewLabel>[Aswata Survey] Assign Surveyor Screen {!$Flow.CurrentDateTime}</interviewLabel>
     <label>[Aswata Survey] Assign Surveyor Screen</label>
+    <loops>
+        <name>Loop_For_Risk_Selected</name>
+        <label>Loop For Risk Selected</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <collectionReference>Filter_Risk_Selected</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Assign_Risk_Name_to_Var</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>Confirmation_Screen</targetReference>
+        </noMoreValuesConnector>
+    </loops>
     <loops>
         <name>Loop_For_User_Assignment</name>
         <label>Loop For User Assignment</label>
@@ -186,7 +452,7 @@
             <targetReference>Assign_User_Name_to_Var</targetReference>
         </nextValueConnector>
         <noMoreValuesConnector>
-            <targetReference>Confirmation_Screen</targetReference>
+            <targetReference>Filter_Risk_Selected</targetReference>
         </noMoreValuesConnector>
     </loops>
     <processMetadataValues>
@@ -267,7 +533,7 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Update_Flag_Need_Survey_Quote</targetReference>
+            <targetReference>Notification_for_Assigned_User</targetReference>
         </connector>
         <inputAssignments>
             <field>ActivityDate</field>
@@ -321,7 +587,7 @@
         <locationY>0</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Assign_User_for_Underwriting_Survey</targetReference>
+            <targetReference>Get_Risk_Need_Survey</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -406,6 +672,41 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordLookups>
+        <name>Get_Risk_Need_Survey</name>
+        <label>Get Risk Need Survey</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Check_Risk_Need_Survey_Found</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Opportunity__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Record_Quote.OpportunityId</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>Risk_Need_Survey__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Id</field>
+            <operator>NotIn</operator>
+            <value>
+                <elementReference>varRiskSelected</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>Asset</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
         <name>Get_User_Role</name>
         <label>Get User Role</label>
         <locationX>0</locationX>
@@ -427,12 +728,40 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordUpdates>
+        <name>Copy_1_of_Update_Flag_Need_Survey_Quote</name>
+        <label>Copy 1 of Update Flag Need Survey Quote</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Record_Quote.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>isNeedSurvey__c</field>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </inputAssignments>
+        <object>Quote</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Copy_1_of_Update_Risk_Survey_Flag</name>
+        <label>Copy 1 of Update Risk Survey Flag</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <inputReference>varRiskCollection</inputReference>
+    </recordUpdates>
+    <recordUpdates>
         <name>Update_Flag_Need_Survey_Quote</name>
         <label>Update Flag Need Survey Quote</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Notification_for_Assigned_User</targetReference>
+            <targetReference>Done_All_Risk_Assigned_Screen</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -449,6 +778,16 @@
             </value>
         </inputAssignments>
         <object>Quote</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Risk_Survey_Flag</name>
+        <label>Update Risk Survey Flag</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Update_Flag_Need_Survey_Quote</targetReference>
+        </connector>
+        <inputReference>varRiskCollection</inputReference>
     </recordUpdates>
     <screens>
         <name>Assign_User_for_Underwriting_Survey</name>
@@ -474,6 +813,23 @@
                 <booleanValue>true</booleanValue>
             </isReadOnly>
             <isRequired>false</isRequired>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <fields>
+            <name>Select_Risk</name>
+            <choiceReferences>riskNeedSurverCollection</choiceReferences>
+            <dataType>String</dataType>
+            <fieldText>Select Risk</fieldText>
+            <fieldType>DropdownBox</fieldType>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>true</isRequired>
             <styleProperties>
                 <verticalAlignment>
                     <stringValue>top</stringValue>
@@ -534,7 +890,7 @@
         <allowPause>false</allowPause>
         <backButtonLabel>Kembali</backButtonLabel>
         <connector>
-            <targetReference>Get_Record_Type_for_Aswata_Underwriting_Survey</targetReference>
+            <targetReference>Assign_to_Aswata_Survey_Record_Variable</targetReference>
         </connector>
         <fields>
             <name>Opportunity</name>
@@ -543,6 +899,28 @@
                 <elementReference>Get_Record_Quote.Opportunity.Name</elementReference>
             </defaultValue>
             <fieldText>Opportunity</fieldText>
+            <fieldType>InputField</fieldType>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isReadOnly>
+                <booleanValue>true</booleanValue>
+            </isReadOnly>
+            <isRequired>false</isRequired>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <fields>
+            <name>Risk_Name</name>
+            <dataType>String</dataType>
+            <defaultValue>
+                <elementReference>varRiskName</elementReference>
+            </defaultValue>
+            <fieldText>Risk Name</fieldText>
             <fieldType>InputField</fieldType>
             <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
             <isReadOnly>
@@ -619,14 +997,199 @@
         <showFooter>true</showFooter>
         <showHeader>false</showHeader>
     </screens>
+    <screens>
+        <name>Done_All_Risk_Assigned_Screen</name>
+        <label>Done All Risk Assigned Screen</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>allRiskAssignedMsg</name>
+            <fieldText>&lt;p&gt;Semua Risk pada Opportunity {!Get_Record_Quote.Opportunity.Name} telah diassign ke Surveyor&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <nextOrFinishButtonLabel>Selesai</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+    <screens>
+        <name>Failed_Create_Survey_Screen</name>
+        <label>Failed Create Survey Screen</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>errorTechnicalMsg</name>
+            <fieldText>&lt;p&gt;Failed to create Survey. Please contact Administrator for more information&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <nextOrFinishButtonLabel>Exit</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+    <screens>
+        <name>No_Risk_Found_Screen</name>
+        <label>No Risk Found Screen</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>Copy_1_of_Update_Flag_Need_Survey_Quote</targetReference>
+        </connector>
+        <fields>
+            <name>noRiskMsg</name>
+            <fieldText>&lt;p&gt;&lt;span style=&quot;font-size: 16px;&quot;&gt;Tidak Ada Risk Yang Membutuhkan Survey Pada Submission Ini.&lt;/span&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <nextOrFinishButtonLabel>Keluar</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+    <screens>
+        <name>No_Survey_Need_Screen</name>
+        <label>No Survey Need Screen</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>NoSurveyNeededMsg</name>
+            <fieldText>&lt;p&gt;Tidak Ada Risk Yang Membutuhkan Survey Pada Opportunity {!Get_Record_Quote.Opportunity.Name}&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <nextOrFinishButtonLabel>Keluar</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+    <screens>
+        <name>Succes_Create_Survey_Screen</name>
+        <label>Succes Create Survey Screen</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>Button_Decision</targetReference>
+        </connector>
+        <fields>
+            <name>successCreateSurveyMsg</name>
+            <fieldText>&lt;p&gt;Data Assignment Survey berhasil dibuat&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <fields>
+            <name>btnNextNewSurvey</name>
+            <extensionName>c:fsc_flowButtonBar</extensionName>
+            <fieldType>ComponentInstance</fieldType>
+            <inputParameters>
+                <name>alignment</name>
+                <value>
+                    <stringValue>center</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>orientation</name>
+                <value>
+                    <stringValue>horizontal</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>showLines</name>
+                <value>
+                    <stringValue>neither</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>actionMode</name>
+                <value>
+                    <stringValue>navigation</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>buttons</name>
+                <value>
+                    <stringValue>[{&quot;label&quot;:&quot;Buat Survey Baru&quot;,&quot;value&quot;:&quot;Add&quot;,&quot;iconPosition&quot;:&quot;left&quot;,&quot;variant&quot;:&quot;brand-outline&quot;,&quot;iconName&quot;:&quot;utility:add&quot;,&quot;index&quot;:0}]</stringValue>
+                </value>
+            </inputParameters>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>true</isRequired>
+            <storeOutputAutomatically>true</storeOutputAutomatically>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <nextOrFinishButtonLabel>Finish</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
     <start>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Get_Record_Quote</targetReference>
+            <targetReference>Reset_Variable</targetReference>
         </connector>
     </start>
     <status>Active</status>
+    <variables>
+        <name>currentItem_Filter_Risk_Selected</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Asset</objectType>
+    </variables>
     <variables>
         <name>currentItem_Filter_User_Selected</name>
         <dataType>SObject</dataType>
@@ -648,6 +1211,54 @@
         <isCollection>false</isCollection>
         <isInput>false</isInput>
         <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>varCountRisk</name>
+        <dataType>Number</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <scale>0</scale>
+        <value>
+            <numberValue>0.0</numberValue>
+        </value>
+    </variables>
+    <variables>
+        <name>varRiskCollection</name>
+        <dataType>SObject</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Asset</objectType>
+    </variables>
+    <variables>
+        <name>varRiskId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>varRiskName</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>varRiskSelected</name>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>varRiskSingle</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Asset</objectType>
     </variables>
     <variables>
         <name>varUserId</name>
