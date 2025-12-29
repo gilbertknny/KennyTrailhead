@@ -748,7 +748,10 @@ public without sharing class ClsNewRequest {
         if(type == 'mou'){
             List<Contract> listct = [SELECT Id,SourceOpportunityId FROM Contract WHERE Id=:contractid];
             if(listct.size()>0){opptyId = listct[0].SourceOpportunityId; }
-        }else{opptyId = contractid;}
+        }else{
+            opptyId = contractid;
+            suminsured = null;
+        }
         
         List<String> listSection1 = new List<String>();
         List<String> listSection2 = new List<String>();
@@ -768,7 +771,7 @@ public without sharing class ClsNewRequest {
                 if(assetcategory != null){strQuery += ' AND Asset__r.Category__c =:assetcategory';}
                 if(suminsured != null){strQuery += ' AND Sum_Insured_Min__c <=:suminsured AND Sum_Insured_Max__c >=:suminsured';}
                 if(strCategory != null){ strQuery += ' AND Coverage_Name__r.Name !=:strCategory'; } 
-                strQuery += ' AND Asset__r.Section__c =:strSection';
+                if(type == 'mou'){ strQuery += ' AND Asset__r.Section__c =:strSection'; }
                 strQuery += ' GROUP BY Coverage_Name__r.Name,Coverage_Name__c'; 
                 strQuery += ' ORDER BY Coverage_Name__r.Name ASC'; 
                 List<AggregateResult> listar = Database.query(strQuery);
