@@ -45,7 +45,7 @@ export default class WebToLeadLWC extends LightningElement {
   }
 
   connectedCallback() {
-    console.log('Last updated 15/12/2025 14:14 by Marco');
+    console.log('Last updated 30/12/2025 16:09 by Marco');
   }
 
   get backgroundStyle() {
@@ -257,7 +257,7 @@ export default class WebToLeadLWC extends LightningElement {
     console.log('Original First Name = "' + this.originalFirstName + '"');
     console.log('Original Last Name = "' + this.originalLastName + '"');
     console.log('Company Name = "' + this.leadData.Company + '"');
-
+    /*
     if (this.leadData.Customer_Type__c === 'E') {
         // Enterprise: Company becomes First & Last Name
         // Original names go to Lead_Referral_Name__c
@@ -275,7 +275,8 @@ export default class WebToLeadLWC extends LightningElement {
         // Individual: Use original names
         firstName = this.originalFirstName || '';
         lastName = this.originalLastName || '';
-        company = `${this.originalFirstName || ''} ${this.originalLastName || ''}`.trim();
+        //company = `${this.originalFirstName || ''} ${this.originalLastName || ''}`.trim();
+        company = this.leadData.Company || '';
         leadReferralName = null;
         
         console.log('INDIVIDUAL CUSTOMER DETECTED - USING ORIGINAL NAMES:');
@@ -283,7 +284,13 @@ export default class WebToLeadLWC extends LightningElement {
         console.log('  LastName will be set to: "' + lastName + '"');
         console.log('  Company will be set to: "' + company + '" (Combined names)');
         console.log('  Lead_Referral_Name__c will be set to: null');
-    }
+    } */
+    // Back to original
+    firstName = this.originalFirstName || '';
+    lastName = this.originalLastName || '';
+    //company = `${this.originalFirstName || ''} ${this.originalLastName || ''}`.trim();
+    company = this.leadData.Company || '';
+    //leadReferralName = null;
 
     // Prepare the data object for Apex call
     const leadDataToSend = {
@@ -297,8 +304,8 @@ export default class WebToLeadLWC extends LightningElement {
         zipCodeId: this.leadData.ZipCode__c,
         villageId: this.leadData.Village__c,
         customerType: this.leadData.Customer_Type__c,
-        userDescription: this.leadData.User_Description__c,
-        leadReferralName: leadReferralName
+        userDescription: this.leadData.User_Description__c
+        //,leadReferralName: leadReferralName
     };
 
     console.log('=== FINAL DATA BEING SENT TO APEX ===');
