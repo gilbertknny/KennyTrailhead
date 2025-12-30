@@ -153,8 +153,8 @@ public with sharing class LeadController {
       String zipCodeId,
       String villageId,
       String customerType,
-      String userDescription,
-      String leadReferralName
+      String userDescription
+      //,String leadReferralName
   ) {
       
     try {
@@ -163,7 +163,6 @@ public with sharing class LeadController {
         LastName         = lastName,
         Email            = email,
         Phone            = phone,
-        Company          = company,
         City__c          = cityId,
         Province__c      = provinceId,
         Zip__c           = zipCodeId,
@@ -178,11 +177,17 @@ public with sharing class LeadController {
       
       // Set Lead_Referral_Name__c if provided (for Enterprise leads)
       // Note: Only set referral name, not email/phone since they're already captured in main fields
-      if (String.isNotBlank(leadReferralName)) {
+      /*if (String.isNotBlank(leadReferralName)) {
           newLead.Lead_Referral_Name__c = leadReferralName;
           newLead.Lead_Referral_Email__c = email;
           newLead.Lead_Referral_Phone__c = phone;
-      }
+      }*/
+        // Set Company Email and Phone if provided (for Business/Enterprise leads)
+        if (String.isNotBlank(company)) {
+            newLead.Company = company;
+            newLead.Company_Email__c = email;
+            newLead.Company_Phone__c = phone;
+        }
       
       insert newLead;
       return newLead.Id;
