@@ -738,15 +738,33 @@ public with sharing class OpportunityController {
             }
             */
             
+            Map<Id, String> assetNameMap = new Map<Id, String>();
+            for (Asset ast : originalAssets) {
+                assetNameMap.put(ast.Id, ast.Name);
+            }
+            
             List<Facultative_Share__c> facultativeSharesToInsert = new List<Facultative_Share__c>();
             Map<Id, List<FacultativeShareDetail>> opportunityToFacultativeSharesMap = new Map<Id, List<FacultativeShareDetail>>();
 
             for (Opportunity opp : opportunitiesToInsert) {
                 opportunityToFacultativeSharesMap.put(opp.Id, new List<FacultativeShareDetail>());
                 
+                // Get the account name for this opportunity
+                String accountName = accountMap.get(opp.AccountId).Name;
+                
                 // Create one Facultative Share record for each original riskId
                 for (Id riskId : req.riskId) {
-                    Facultative_Share__c facultativeShare = createFacultativeShare(riskId, opp.Id, opp.AccountId, req, facultativeShareRecordTypeId, req.folderId);
+                    String assetName = assetNameMap.get(riskId);
+                    Facultative_Share__c facultativeShare = createFacultativeShare(
+                        riskId, 
+                        opp.Id, 
+                        opp.AccountId, 
+                        req, 
+                        facultativeShareRecordTypeId, 
+                        req.folderId,
+                        accountName,
+                        assetName
+                    );
                     facultativeSharesToInsert.add(facultativeShare);
                 }
             }
@@ -862,7 +880,7 @@ public with sharing class OpportunityController {
      * @param req The opportunity request data
      * @return Facultative_Share__c record
      */
-    private static Facultative_Share__c createFacultativeShare(Id riskId, Id opportunityId, Id accountId, OpportunityRequest req, Id recordTypeId, Id folderId) {
+    private static Facultative_Share__c createFacultativeShare(Id riskId, Id opportunityId, Id accountId, OpportunityRequest req, Id recordTypeId, Id folderId, String accountName, String assetName) {
         Facultative_Share__c fs = new Facultative_Share__c();
         
         // Set required fields
@@ -881,6 +899,26 @@ public with sharing class OpportunityController {
         
         String clauses = String.isNotBlank(req.clausesWarranty) ? req.clausesWarranty : '';
         fs.Subjectivity_Clauses__c = clauses;
+        
+        // Set the Name field with format: "Offering - Co Insurer Name - Origin Risk"
+        // Ensure we handle null values and truncate if necessary (max 80 characters for Name field)
+        String namePrefix = 'Offering';
+        String formattedName = namePrefix;
+        
+        if (String.isNotBlank(accountName)) {
+            formattedName += ' - ' + accountName;
+        }
+        
+        if (String.isNotBlank(assetName)) {
+            formattedName += ' - ' + assetName;
+        }
+        
+        // Truncate to 80 characters if necessary
+        if (formattedName.length() > 80) {
+            formattedName = formattedName.substring(0, 77) + '...';
+        }
+        
+        fs.Name = formattedName;
         
         return fs;
     }
