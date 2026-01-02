@@ -3,15 +3,6 @@
     <fullName>Province__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
     <label>Province</label>
-    <lookupFilter>
-        <active>true</active>
-        <filterItems>
-            <field>Location.RecordTypeId</field>
-            <operation>equals</operation>
-            <value>Province</value>
-        </filterItems>
-        <isOptional>false</isOptional>
-    </lookupFilter>
     <referenceTo>Location</referenceTo>
     <relationshipLabel>Leads and Referrals</relationshipLabel>
     <relationshipName>Leads_and_Referrals</relationshipName>

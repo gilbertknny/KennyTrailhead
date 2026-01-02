@@ -3,20 +3,6 @@
     <fullName>Village__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
     <label>Village</label>
-    <lookupFilter>
-        <active>true</active>
-        <filterItems>
-            <field>Location.RecordType.Name</field>
-            <operation>equals</operation>
-            <value>Village</value>
-        </filterItems>
-        <filterItems>
-            <field>$Source.City__c</field>
-            <operation>equals</operation>
-            <valueField>Location.City__c</valueField>
-        </filterItems>
-        <isOptional>true</isOptional>
-    </lookupFilter>
     <referenceTo>Location</referenceTo>
     <relationshipLabel>Leads and Referrals (Kecamatan)</relationshipLabel>
     <relationshipName>Leads_and_Referrals2</relationshipName>
