@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
 	<types>
-		<members>Aswata_Additional_Sales_Permission</members>
-		<members>Marketing_Corp_Dept_Head</members>
-		<members>Marketing_Corp_Staff</members>
-		<members>Marketing_Corp_Supervisor</members>
-		<members>Marketing_Retail_Dept_Head</members>
-		<members>Marketing_Retail_Supervisor</members>
-		<name>PermissionSet</name>
+		<members>Lead.Account_Options__c</members>
+		<members>Lead.Address__c</members>
+		<members>Lead.Company_Email__c</members>
+		<members>Lead.Company_Phone__c</members>
+		<members>Lead.Country__c</members>
+		<members>Lead.Lead_scoring__c</members>
+		<members>Lead.Province__c</members>
+		<members>Lead.Village__c</members>
+		<members>Lead.Zip__c</members>
+		<name>CustomField</name>
 	</types>
 	<types>
-		<members>Sales_Corp_DeptHead_Group</members>
-		<members>Sales_Corp_Manager_Group</members>
-		<members>Sales_Corp_SPV_Group</members>
-		<members>Sales_Corp_Staff_Group</members>
-		<members>Sales_Retail_DeptHead_Group</members>
-		<members>Sales_Retail_Manager_Group</members>
-		<members>Sales_Retail_SPV_Group</members>
-		<members>Sales_Retail_Staff_Group</members>
-		<name>PermissionSetGroup</name>
+		<members>Lead_and_Referral_Record_Page</members>
+		<name>FlexiPage</name>
+	</types>
+	<types>
+		<members>Lead.Branch_Not_In_ZIP_Code</members>
+		<name>ValidationRule</name>
 	</types>
 	<version>65.0</version>
 </Package>

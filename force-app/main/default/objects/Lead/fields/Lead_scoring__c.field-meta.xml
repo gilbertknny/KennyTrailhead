@@ -3,16 +3,16 @@
     <fullName>Lead_scoring__c</fullName>
     <externalId>false</externalId>
     <formula>IMAGE(
-    &quot;/img/samples/stars_&quot; &amp;
-    TEXT(
-        (IF(NOT(ISBLANK( Email )), 1, 0)) +
-        (IF(NOT(ISBLANK(  City__c )), 1, 0)) +
-        (IF(NOT(ISBLANK( Interest_COB__c )), 1, 0)) +
-        (IF( Task__c , 1, 0)) + 
-        (IF(NOT(ISBLANK( Address__c )), 1, 0))
-    ) &amp;
-    &quot;00.gif&quot;,
-    &quot;rating&quot;
+&quot;/img/samples/stars_&quot; &amp;
+TEXT(
+(IF(NOT(ISBLANK( Email )), 1, 0)) +
+(IF(NOT(ISPICKVAL( Account_Segment__c , &quot;&quot;)), 1, 0)) +
+(IF(NOT(ISBLANK( Interest_COB__c )), 1, 0)) +
+(IF( Task__c , 1, 0)) +
+(IF(NOT(ISPICKVAL(Branch__c, &quot;&quot;)), 1, 0))
+) &amp;
+&quot;00.gif&quot;,
+&quot;rating&quot;
 )</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
     <inlineHelpText>Field berikut harus diisi
@@ -21,11 +21,11 @@
 
 2. Email
 
-3. City
+3. Account Segment
 
 4. Interest COB
 
-5. Address</inlineHelpText>
+5. Branch</inlineHelpText>
     <label>Lead scoring</label>
     <required>false</required>
     <trackHistory>false</trackHistory>
