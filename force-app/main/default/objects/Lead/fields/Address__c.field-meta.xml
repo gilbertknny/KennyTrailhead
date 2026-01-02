@@ -3,6 +3,15 @@
     <fullName>Address__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
     <label>Search Address</label>
+    <lookupFilter>
+        <active>true</active>
+        <filterItems>
+            <field>Location.RecordTypeId</field>
+            <operation>equals</operation>
+            <value>Address</value>
+        </filterItems>
+        <isOptional>true</isOptional>
+    </lookupFilter>
     <referenceTo>Location</referenceTo>
     <relationshipLabel>Leads and Referrals (Address)</relationshipLabel>
     <relationshipName>Leads_and_Referrals4</relationshipName>

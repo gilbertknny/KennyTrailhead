@@ -3,6 +3,15 @@
     <fullName>Zip__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
     <label>Zip</label>
+    <lookupFilter>
+        <active>true</active>
+        <filterItems>
+            <field>Location.RecordTypeId</field>
+            <operation>equals</operation>
+            <value>Zip Code</value>
+        </filterItems>
+        <isOptional>false</isOptional>
+    </lookupFilter>
     <referenceTo>Location</referenceTo>
     <relationshipLabel>Leads and Referrals (Zip)</relationshipLabel>
     <relationshipName>Leads_and_Referrals3</relationshipName>
