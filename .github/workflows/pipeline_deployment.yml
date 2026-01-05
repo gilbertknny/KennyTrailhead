@@ -67,7 +67,7 @@ jobs:
             exit 0
           fi
 
-          sfdx sgd:source:delta \
+          sf sgd:source:delta \
             --from "$FROM_COMMIT" \
             --to "$TO_COMMIT" \
             --output-dir . \
