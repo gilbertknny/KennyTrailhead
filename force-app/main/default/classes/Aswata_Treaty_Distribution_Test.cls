@@ -1,7 +1,7 @@
 /**
  * @description       : Test Class for Aswata_Treaty_Distribution
  * @author            : Ahmad Yazid Munif
- * @last modified on  : 12-15-2025
+ * @last modified on  : 01-05-2026
  * @last modified by  : Ahmad Yazid Munif
 **/
 
@@ -47,7 +47,7 @@ private class Aswata_Treaty_Distribution_Test {
         ];
 
         Accumulation__c acc = new Accumulation__c(
-            json_accumulation__c = '80811'
+            Group_ID__c = '80811'
         );
         insert acc;
         // Create Asset record
