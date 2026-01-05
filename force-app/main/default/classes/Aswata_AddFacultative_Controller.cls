@@ -84,6 +84,54 @@ public with sharing class Aswata_AddFacultative_Controller {
     }
 
 
+    @AuraEnabled(cacheable=true)
+    public static Boolean validateCoverage(List<String> riskIds) {
+
+        // Query coverages for all selected risks
+        List<InsurancePolicyCoverage> coverages = [
+            SELECT Risk_ID__c, Coverage_Id__c
+            FROM InsurancePolicyCoverage
+            WHERE Risk_ID__c IN :riskIds WITH SECURITY_ENFORCED
+        ];
+
+        if (coverages.isEmpty()) {
+            return false;
+        }
+
+        // Map Risk → Set of Coverage Ids
+        Map<String, Set<String>> riskToCoverageMap = new Map<String, Set<String>>();
+
+        for (InsurancePolicyCoverage c : coverages) {
+            if (!riskToCoverageMap.containsKey(c.Risk_ID__c)) {
+                riskToCoverageMap.put(c.Risk_ID__c, new Set<String>());
+            }
+            riskToCoverageMap.get(c.Risk_ID__c).add(c.Coverage_Id__c);
+        }
+
+        // If any selected risk has NO coverage → invalid
+        if (riskToCoverageMap.size() != riskIds.size()) {
+            return false;
+        }
+
+        // Reference coverage set (first risk)
+        Set<String> referenceSet;
+        for (String riskId : riskToCoverageMap.keySet()) {
+            referenceSet = riskToCoverageMap.get(riskId);
+            break;
+        }
+
+        // Compare all risks against reference
+        for (Set<String> coverageSet : riskToCoverageMap.values()) {
+            if (coverageSet.size() != referenceSet.size()) {
+                return false;
+            }
+            if (!coverageSet.equals(referenceSet)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
     
 
 }
