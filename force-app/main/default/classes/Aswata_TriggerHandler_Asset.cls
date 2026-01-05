@@ -48,6 +48,7 @@ public with sharing class Aswata_TriggerHandler_Asset extends TriggerHandler {
      */
     public override void afterUpdate() {
         handleAssetChanges((List<Asset>) Trigger.new, (Map<Id, Asset>) Trigger.oldMap);
+        facultativeUserMatrix((List<Asset>) Trigger.new, (Map<Id, Asset>) Trigger.oldMap);
     }
     
     /**
@@ -57,6 +58,72 @@ public with sharing class Aswata_TriggerHandler_Asset extends TriggerHandler {
         handleAssetChanges((List<Asset>) Trigger.old, null);
     }
     
+
+    private void facultativeUserMatrix(List<Asset> assets, Map<Id, Asset> oldMap) {
+
+        // 1️⃣ Collect Asset Ids
+        Set<Id> assetIds = new Set<Id>();
+        for (Asset a : assets) {
+            if (a.Facultative__c != oldMap.get(a.Id).Facultative__c) {
+                assetIds.add(a.Id);
+            }
+        }
+        if (assetIds.isEmpty()) return;
+    
+        // 2️⃣ Re-query with parent fields
+        List<Asset> queriedAssets = [
+            SELECT Id,
+                   Facultative__c,
+                   Opportunity__c,
+                   Opportunity__r.COB__c,
+                   Opportunity__r.Owner_Branch__c
+            FROM Asset
+            WHERE Id IN :assetIds
+        ];
+    
+        List<Asset> lstAssetToUpdate = new List<Asset>();
+        Map<Id, Set<Id>> oppToUserIds = new Map<Id, Set<Id>>();
+    
+        // 3️⃣ Business logic
+        for (Asset a : queriedAssets) {
+    
+            if (a.Opportunity__r.COB__c != null &&
+                a.Opportunity__r.Owner_Branch__c != null &&
+                a.Facultative__c != null) {
+    
+                String userId = Aswata_GlobalFunction.matrixUserFacultativeCached(
+                    a.Opportunity__r.Owner_Branch__c,
+                    a.Opportunity__r.COB__c,
+                    a.Facultative__c
+                );
+    
+                if (userId != null) {
+                    a.Facultative_Owner__c = userId;
+                    lstAssetToUpdate.add(a);
+                
+                    if (!oppToUserIds.containsKey(a.Opportunity__c)) {
+                        oppToUserIds.put(a.Opportunity__c, new Set<Id>());
+                    }
+                    oppToUserIds.get(a.Opportunity__c).add(userId);
+                }
+            }
+        }
+    
+        // 4️⃣ DML
+        if (!lstAssetToUpdate.isEmpty()) {
+            update lstAssetToUpdate;
+        }
+    
+        // 5️⃣ Team assignment
+        if (!oppToUserIds.isEmpty()) {
+            Aswata_GlobalFunction.addUsersToOpportunityTeamBulk(
+                oppToUserIds,
+                'Facultative Owner',
+                'Edit'
+            );
+        }
+    }
+
     /**
      * Main handler method untuk process Asset changes
      * Handles both Asset (RecordType=Asset) and Risk (RecordType=Risk) changes
