@@ -101,6 +101,44 @@
         <offset>0</offset>
     </actionCalls>
     <actionCalls>
+        <name>New_Task_Action_1</name>
+        <label>Create Task</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <actionName>NewTask</actionName>
+        <actionType>quickAction</actionType>
+        <connector>
+            <targetReference>Lock_Record_2</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>contextId</name>
+            <value>
+                <elementReference>Get_Quote.Opportunity.Account.OwnerId</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>Subject</name>
+            <value>
+                <stringValue>Action Needed (KYC)</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>OwnerId</name>
+            <value>
+                <elementReference>Get_Quote.Opportunity.Account.OwnerId</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>WhatId</name>
+            <value>
+                <elementReference>accountId</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>NewTask</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <actionCalls>
         <name>Send_Notif_To_User</name>
         <label>Send Notif To User</label>
         <locationX>0</locationX>
@@ -182,6 +220,13 @@
             <operator>Add</operator>
             <value>
                 <elementReference>Get_Quote.Opportunity.Owner.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>accountId</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Quote.Opportunity.AccountId</elementReference>
             </value>
         </assignmentItems>
         <connector>
@@ -362,7 +407,7 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Lock_Record_2</targetReference>
+            <targetReference>New_Task_Action_1</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -466,6 +511,13 @@
         <isViewedAsPlainText>true</isViewedAsPlainText>
         <text>{&quot;recordId&quot;: &quot;{!Get_Quote.OpportunityId}&quot;}</text>
     </textTemplates>
+    <variables>
+        <name>accountId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
     <variables>
         <name>listUser</name>
         <dataType>String</dataType>
