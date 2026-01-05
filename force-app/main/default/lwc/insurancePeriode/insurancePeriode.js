@@ -261,7 +261,7 @@ export default class InsurancePeriode extends NavigationMixin(LightningElement) 
     }
 
     connectedCallback() {
-        console.log('last update 23/12/2025 16.59');
+        console.log('last update 05/01/2026 15.34');
         console.log('opptyId: ' + this.recordId);
         console.log('isOwner: ' + this.isOwner);
     }
@@ -752,7 +752,49 @@ export default class InsurancePeriode extends NavigationMixin(LightningElement) 
 
     handleEndDateChange(event) { 
         console.log('handleEndDateChange called with value: ' + event.detail.value);
-        this.endDate = event.detail.value; 
+        const newEndDate = event.detail.value;
+        
+        // Validation: End date must be later than start date
+        if (this.startDate && newEndDate) {
+            const start = new Date(this.startDate);
+            const end = new Date(newEndDate);
+            
+            // Check if end date is same as or earlier than start date
+            if (end <= start) {
+                // First dispatch the toast (before any state changes)
+                try {
+                    this.dispatchEvent(new ShowToastEvent({
+                        title: 'Validation Error',
+                        message: 'End Date must be later than Start Date.',
+                        variant: 'error'
+                    }));
+                } catch (toastError) {
+                    console.error('Toast error:', toastError);
+                }
+                
+                // Then set endDate to null
+                this.endDate = null;
+                
+                // Clear duration calculation since date is invalid
+                this.dayCount = null;
+                this.yearsMonthsInfo = null;
+                this.calculatedRate = null;
+                this.expectedPeriodType = null;
+                this.showPeriodTypeValidationError = false;
+                this.adjustmentRows = [];
+                
+                // Reset period type to original value or null
+                this.periodType = this.originalForm ? this.originalForm.periodType : null;
+
+                console.log('End date reset due to validation error to: ' + this.endDate);
+                console.log('Period type reset due to validation error to: ' + this.periodType);
+
+                return; // Exit early since date is invalid
+            }
+        }
+        
+        // If validation passes, set the new end date
+        this.endDate = newEndDate; 
         this.calculateDuration();
         this.calculateExpectedPeriodType();
         
@@ -1203,11 +1245,11 @@ export default class InsurancePeriode extends NavigationMixin(LightningElement) 
         if (this.startDate && this.endDate) {
             const start = new Date(this.startDate);
             const end = new Date(this.endDate);
-            if (isNaN(start.getTime()) || isNaN(end.getTime()) || start > end) {
+            if (isNaN(start.getTime()) || isNaN(end.getTime()) || start >= end) {
                 this.isLoading = false;
                 this.dispatchEvent(new ShowToastEvent({
                     title: 'Validation Error',
-                    message: 'Start Date must be before or equal to End Date.',
+                    message: 'End Date must be later than Start Date.',
                     variant: 'error'
                 }));
                 return;
