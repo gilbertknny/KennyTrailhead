@@ -223,6 +223,31 @@
         </rules>
     </decisions>
     <decisions>
+        <name>Check_Facultative</name>
+        <label>Check Facultative</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Create_Quotation_Only</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Not_Facultative</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Opportunity.RecordType.DeveloperName</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>Facultative</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Send_Busreq_When_Quote_Created</targetReference>
+            </connector>
+            <label>Not Facultative</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>Check_Stage_Opportunity</name>
         <label>Check Stage Opportunity</label>
         <locationX>0</locationX>
@@ -446,6 +471,16 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordCreates>
     <recordCreates>
+        <name>Create_Quotation_Only</name>
+        <label>Create Quotation Only</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Update_Facultative_Opportunity_Stage</targetReference>
+        </connector>
+        <inputReference>Transform_Opportunity_to_Quote</inputReference>
+    </recordCreates>
+    <recordCreates>
         <name>Create_Records</name>
         <label>Create Records</label>
         <locationX>0</locationX>
@@ -592,6 +627,30 @@
         <object>RecordType</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
+    <recordUpdates>
+        <name>Update_Facultative_Opportunity_Stage</name>
+        <label>Update Facultative Opportunity Stage</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Screen_Success</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>StageName</field>
+            <value>
+                <stringValue>Quote</stringValue>
+            </value>
+        </inputAssignments>
+        <object>Opportunity</object>
+    </recordUpdates>
     <recordUpdates>
         <name>Update_Opportunity_Stage</name>
         <label>Update Opportunity Stage</label>
@@ -889,7 +948,7 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Send_Busreq_When_Quote_Created</targetReference>
+            <targetReference>Check_Facultative</targetReference>
         </connector>
         <dataType>SObject</dataType>
         <isCollection>false</isCollection>
