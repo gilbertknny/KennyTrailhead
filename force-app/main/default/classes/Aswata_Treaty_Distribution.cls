@@ -163,53 +163,59 @@ public without sharing class Aswata_Treaty_Distribution {
      */
     @AuraEnabled
     public static String saveTreatyDistribution(String quoteId, String jsonData,String listId) {
-        // 1. Deserialisasi Data
-        List<RiskPairWrapper> riskPairs = deserializeRiskPairs(listId);
-        // 2. Kueri Asset & Pembaruan Quote (DML)
-        List<Asset> assetsToUpdate = findAssetsForUpdate(riskPairs);
-        // 3. Insert Transaction Folder & Final Update Asset
-        if (!assetsToUpdate.isEmpty()) {
-            processAssetUpdates(assetsToUpdate, riskPairs[0].setFacultative);
-        }
-        Quote oldQuote = [
-            SELECT Id, Treaty_Distribution_Response__c 
-            FROM Quote 
-            WHERE Id = :quoteId 
-            WITH SECURITY_ENFORCED 
-            LIMIT 1
-        ];
-        Map<String, Map<String, Object>> riskMap = new Map<String, Map<String, Object>>();
-        List<Object> finalJsonArray = new List<Object>();
-        String existingJson = oldQuote.Treaty_Distribution_Response__c;
-        if (String.isNotBlank(existingJson)) {
-            List<Object> oldArray = (List<Object>)JSON.deserializeUntyped(existingJson);
-            for (Object obj : oldArray) {
-                Map<String, Object> oldObjectMap = (Map<String, Object>)obj;
-                String riskId = (String)oldObjectMap.get('riskId');
-                riskMap.put(riskId, oldObjectMap);
+        try {
+            // 1. Deserialisasi Data
+            List<RiskPairWrapper> riskPairs = deserializeRiskPairs(listId);
+            // 2. Kueri Asset & Pembaruan Quote (DML)
+            List<Asset> assetsToUpdate = findAssetsForUpdate(riskPairs);
+            // 3. Insert Transaction Folder & Final Update Asset
+            if (!assetsToUpdate.isEmpty()) {
+                processAssetUpdates(assetsToUpdate, riskPairs[0].setFacultative);
             }
-        }
-        if (String.isNotBlank(jsonData)) {
-            Map<String, Object> newObjectMap = (Map<String, Object>)JSON.deserializeUntyped(jsonData);
-            String newRiskId = (String)newObjectMap.get('riskId');
-            if (String.isNotBlank(newRiskId)) {
-                riskMap.put(newRiskId, newObjectMap);
+            Quote oldQuote = [
+                SELECT Id, Treaty_Distribution_Response__c 
+                FROM Quote 
+                WHERE Id = :quoteId 
+                WITH SECURITY_ENFORCED 
+                LIMIT 1
+            ];
+            Map<String, Map<String, Object>> riskMap = new Map<String, Map<String, Object>>();
+            List<Object> finalJsonArray = new List<Object>();
+            String existingJson = oldQuote.Treaty_Distribution_Response__c;
+            if (String.isNotBlank(existingJson)) {
+                List<Object> oldArray = (List<Object>)JSON.deserializeUntyped(existingJson);
+                for (Object obj : oldArray) {
+                    Map<String, Object> oldObjectMap = (Map<String, Object>)obj;
+                    String riskId = (String)oldObjectMap.get('riskId');
+                    riskMap.put(riskId, oldObjectMap);
+                }
             }
+            if (String.isNotBlank(jsonData)) {
+                Map<String, Object> newObjectMap = (Map<String, Object>)JSON.deserializeUntyped(jsonData);
+                String newRiskId = (String)newObjectMap.get('riskId');
+                if (String.isNotBlank(newRiskId)) {
+                    riskMap.put(newRiskId, newObjectMap);
+                }
+            }
+            finalJsonArray.addAll(riskMap.values());
+            String mergedJsonArrayString = JSON.serialize(finalJsonArray);
+            // 4. Update Quote
+            // unlock Quote
+            Approval.UnlockResult unlockResult = Approval.unlock(quoteId,false);
+            Quote updateQuote = new Quote(
+                Id = quoteId,
+                Treaty_Distribution_Response__c = mergedJsonArrayString
+            );
+            // System.debug('### AWT updateQuote'+updateQuote);
+            // OperationDML
+            Database.update(updateQuote, AccessLevel.USER_MODE);
+            Approval.LockResult lockResult = Approval.lock(quoteId,false);
+            return 'Success';
+        }catch (Exception e) {
+            // Log error di console Salesforce
+            // System.debug('### Error in saveTreatyDistribution: ' + e.getMessage() + ' at line ' + e.getLineNumber());
+            throw new AuraHandledException('Error System: ' + e.getMessage());
         }
-        finalJsonArray.addAll(riskMap.values());
-        String mergedJsonArrayString = JSON.serialize(finalJsonArray);
-        // 4. Update Quote
-        // unlock Quote
-        Approval.UnlockResult unlockResult = Approval.unlock(quoteId,false);
-        Quote updateQuote = new Quote(
-            Id = quoteId,
-            Treaty_Distribution_Response__c = mergedJsonArrayString
-        );
-        // System.debug('### AWT updateQuote'+updateQuote);
-        // OperationDML
-        Database.update(updateQuote, AccessLevel.USER_MODE);
-        Approval.LockResult lockResult = Approval.lock(quoteId,false);
-        return 'Success';
     }
     /**
      * @description Class wrapper JSON String
@@ -277,40 +283,40 @@ public without sharing class Aswata_Treaty_Distribution {
         if(setFacultativeValue != null && setFacultativeValue != 0){
             facultativeValue = setFacultativeValue;
         }
-        String folderFaculId = null;
-        String groupId = assetsToUpdate[0].Accumulation__r.Group_ID__c;
-        List<Asset> assetsByGroup = [
-            SELECT Id, Opportunity__r.Busreq_ID__c,Risk_ID__c,
-            Accumulation__r.Group_ID__c,Facultative_Folder__c,Has_Facultative__c
-            FROM Asset
-            WHERE Accumulation__r.Group_ID__c = :groupId
-            AND Facultative_Folder__c != null
-            WITH SECURITY_ENFORCED LIMIT 1
-        ];
-        if (!assetsByGroup.isEmpty()) {
-            folderFaculId = assetsByGroup[0].Facultative_Folder__c;
-        }else{
-            RecordType rtFolder = [
-                SELECT Id,Name
-                FROM RecordType
-                WHERE SobjectType = 'Transaction_Data__c' AND Name = 'Facultative Folder'
-                WITH SECURITY_ENFORCED LIMIT 1
-            ];
-            Transaction_Data__c transacData = new Transaction_Data__c(
-                Detail_Description__c = 'Treaty Distribution',
-                RecordTypeId = rtFolder.Id
-            );
-            // OperationDML
-            Database.insert(transacData, AccessLevel.USER_MODE);
-            folderFaculId = transacData.Id;
-        }
+        // String folderFaculId = null;
+        // String groupId = assetsToUpdate[0].Accumulation__r.Group_ID__c;
+        // List<Asset> assetsByGroup = [
+        //     SELECT Id, Opportunity__r.Busreq_ID__c,Risk_ID__c,
+        //     Accumulation__r.Group_ID__c,Facultative_Folder__c,Has_Facultative__c
+        //     FROM Asset
+        //     WHERE Accumulation__r.Group_ID__c = :groupId
+        //     AND Facultative_Folder__c != null
+        //     WITH SECURITY_ENFORCED LIMIT 1
+        // ];
+        // if (!assetsByGroup.isEmpty()) {
+        //     folderFaculId = assetsByGroup[0].Facultative_Folder__c;
+        // }else{
+        //     RecordType rtFolder = [
+        //         SELECT Id,Name
+        //         FROM RecordType
+        //         WHERE SobjectType = 'Facultative_Share__c' AND Name = 'Facultative Folder'
+        //         WITH SECURITY_ENFORCED LIMIT 1
+        //     ];
+        //     Facultative_Share__c transacData = new Facultative_Share__c(
+        //         Name = 'Facultative Folder - '+ groupId,
+        //         RecordTypeId = rtFolder.Id
+        //     );
+        //     // OperationDML
+        //     Database.insert(transacData, AccessLevel.USER_MODE);
+        //     folderFaculId = transacData.Id;
+        // }
         List<Asset> updateAssetList = new List<Asset>();
         for(Asset a : assetsToUpdate){
             updateAssetList.add(new Asset(
                 Id = a.Id,
                 Facultative__c = facultativeValue,
-                Has_Facultative__c = true,
-                Facultative_Folder__c = folderFaculId
+                Has_Facultative__c = true
+                // Facultative_Folder__c = folderFaculId
             ));
         }
         System.debug('### AWT updateAssetList'+updateAssetList);
