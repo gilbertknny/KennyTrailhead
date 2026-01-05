@@ -15,9 +15,6 @@ jobs:
 
     container:
       image: ghcr.io/rizkinuriman12/sf-cli-image:latest
-      credentials:
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
     
     steps:
       - name: Checkout repo
