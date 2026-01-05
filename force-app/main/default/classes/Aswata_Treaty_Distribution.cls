@@ -1,7 +1,7 @@
 /**
  * @description       : Data Handler for LWC Treaty Distribution
  * @author            : Ahmad Yazid Munif
- * @last modified on  : 12-15-2025
+ * @last modified on  : 01-05-2026
  * @last modified by  : Ahmad Yazid Munif
 **/
 public without sharing class Aswata_Treaty_Distribution {
@@ -199,6 +199,8 @@ public without sharing class Aswata_Treaty_Distribution {
         finalJsonArray.addAll(riskMap.values());
         String mergedJsonArrayString = JSON.serialize(finalJsonArray);
         // 4. Update Quote
+        // unlock Quote
+        Approval.UnlockResult unlockResult = Approval.unlock(quoteId,false);
         Quote updateQuote = new Quote(
             Id = quoteId,
             Treaty_Distribution_Response__c = mergedJsonArrayString
@@ -206,6 +208,7 @@ public without sharing class Aswata_Treaty_Distribution {
         // System.debug('### AWT updateQuote'+updateQuote);
         // OperationDML
         Database.update(updateQuote, AccessLevel.USER_MODE);
+        Approval.LockResult lockResult = Approval.lock(quoteId,false);
         return 'Success';
     }
     /**
