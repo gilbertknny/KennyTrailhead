@@ -4,10 +4,20 @@ on:
   push:
     branches:
       - master
+  workflow_dispatch:
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read   # ⬅️ WAJIB untuk pull image GHCR
+
+    container:
+      image: ghcr.io/rizkinuriman12/sf-cli-image:latest
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
     
     steps:
       - name: Checkout repo
@@ -15,16 +25,16 @@ jobs:
         with:
           fetch-depth: 0   # ambil semua history supaya FROM_COMMIT valid
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
+      # - name: Setup Node.js
+      #   uses: actions/setup-node@v4
+      #   with:
+      #     node-version: 20
 
-      - name: Install dependencies
-        run: |
-          sudo apt-get update && sudo apt-get install -y unzip curl openjdk-17-jdk
-          npm install --global @salesforce/cli
-          echo "y" | sf plugins:install sfdx-git-delta
+      # - name: Install dependencies
+      #   run: |
+      #     sudo apt-get update && sudo apt-get install -y unzip curl openjdk-17-jdk
+      #     npm install --global @salesforce/cli
+      #     echo "y" | sf plugins:install sfdx-git-delta
 
       - name: Prepare commit range
         id: commits
