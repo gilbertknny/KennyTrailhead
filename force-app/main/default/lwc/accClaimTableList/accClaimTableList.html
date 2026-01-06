@@ -1,0 +1,22 @@
+<template>
+    <div class="slds-box slds-theme_default slds-p-around_none">
+        
+        <template if:true={processedData}>
+            <lightning-datatable
+                key-field="registration_number"
+                data={processedData}
+                columns={columns}
+                hide-checkbox-column
+                resize-column-disabled
+                suppress-bottom-bar>
+            </lightning-datatable>
+        </template>
+        
+        <template if:false={processedData}>
+            <div class="slds-p-around_medium slds-text-align_center">
+                No Claim Data Available
+            </div>
+        </template>
+
+    </div>
+</template>
