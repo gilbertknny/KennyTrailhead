@@ -16,12 +16,12 @@
             </value>
         </assignmentItems>
         <connector>
-            <targetReference>Checking_Parameter</targetReference>
+            <targetReference>Is_There_Risk_Need_Survey</targetReference>
         </connector>
     </assignments>
     <assignments>
-        <name>Assign_Flag_TSI</name>
-        <label>Assign Flag TSI</label>
+        <name>Assign_Flag_TSI_1</name>
+        <label>Assign Flag TSI &gt;= 500mio</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <assignmentItems>
@@ -32,12 +32,12 @@
             </value>
         </assignmentItems>
         <connector>
-            <targetReference>Checking_Parameter</targetReference>
+            <targetReference>Checking_All_Risk_Parameter</targetReference>
         </connector>
     </assignments>
     <assignments>
         <name>Assign_Flag_TSI_2</name>
-        <label>Assign Flag TSI</label>
+        <label>Assign Flag TSI &lt; 500 mio</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <assignmentItems>
@@ -48,7 +48,7 @@
             </value>
         </assignmentItems>
         <connector>
-            <targetReference>Checking_Parameter</targetReference>
+            <targetReference>Checking_All_Risk_Parameter</targetReference>
         </connector>
     </assignments>
     <assignments>
@@ -85,13 +85,6 @@
             </value>
         </assignmentItems>
         <assignmentItems>
-            <assignToReference>varRiskClass</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>Get_Quote_Record.Risk_Class__c</elementReference>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
             <assignToReference>varTSI</assignToReference>
             <operator>Assign</operator>
             <value>
@@ -100,6 +93,126 @@
         </assignmentItems>
         <connector>
             <targetReference>Check_BSN_COB</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Risk_Parameter</name>
+        <label>Assign Risk Parameter</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>varRiskConstructionClass</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Checking_All_Risk_Parameter.Class__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>varRiskExposure</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Checking_All_Risk_Parameter.Exposure__c</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Checking_Parameter_201</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Risk_Parameter_301</name>
+        <label>Assign Risk Parameter</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>varUtilization</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Checking_Risk_Parameter_301.Utilization__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>varTypeVehicle</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Checking_Risk_Parameter_301.Type_Vehicle__c</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Checking_Parameter_301</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Copy_1_of_Update_Risk_Need_Survey</name>
+        <label>Copy 1 of Update Risk Need Survey</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>varRiskSingleObj.Risk_Need_Survey__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>varRiskSingleObj.Id</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Checking_Risk_Parameter_301.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>varRiskNeedSurveyCounter</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <numberValue>1.0</numberValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>varRiskCollection</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>varRiskSingleObj</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Checking_Risk_Parameter_301</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Update_Risk_Need_Survey</name>
+        <label>Update Risk Need Survey</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>varRiskSingleObj.Risk_Need_Survey__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>varRiskSingleObj.Id</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Checking_All_Risk_Parameter.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>varRiskNeedSurveyCounter</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <numberValue>1.0</numberValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>varRiskCollection</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>varRiskSingleObj</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Checking_All_Risk_Parameter</targetReference>
         </connector>
     </assignments>
     <decisions>
@@ -133,6 +246,28 @@
                 <targetReference>Check_Parameter_TSI</targetReference>
             </connector>
             <label>COB 201</label>
+        </rules>
+        <rules>
+            <name>COB_301</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>varBSN</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>varBSN</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>301</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>COB_301_Conditions</targetReference>
+            </connector>
+            <label>COB 301</label>
         </rules>
     </decisions>
     <decisions>
@@ -177,16 +312,19 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Assign_Flag_TSI</targetReference>
+                <targetReference>Assign_Flag_TSI_1</targetReference>
             </connector>
             <label>TSI greater 500mio</label>
         </rules>
     </decisions>
     <decisions>
-        <name>Checking_Parameter</name>
+        <name>Checking_Parameter_201</name>
         <label>Checking Parameter</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Checking_All_Risk_Parameter</targetReference>
+        </defaultConnector>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>Enter_Conditions</name>
@@ -227,19 +365,137 @@
                 </rightValue>
             </conditions>
             <conditions>
-                <leftValueReference>varRiskClass</leftValueReference>
+                <leftValueReference>varRiskConstructionClass</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>varRiskExposure</leftValueReference>
                 <operator>IsNull</operator>
                 <rightValue>
                     <booleanValue>false</booleanValue>
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Update_Flag_Need_Survey</targetReference>
+                <targetReference>Update_Risk_Need_Survey</targetReference>
             </connector>
             <label>Enter Conditions</label>
         </rules>
     </decisions>
-    <description>remove unused flag update</description>
+    <decisions>
+        <name>Checking_Parameter_301</name>
+        <label>Checking Parameter</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Checking_Risk_Parameter_301</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Enter_Conditions_301</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>varBSN</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>varBranch</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>varRiskConstructionClass</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>varRiskExposure</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>varUtilization</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>varTypeVehicle</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Copy_1_of_Update_Risk_Need_Survey</targetReference>
+            </connector>
+            <label>Enter Conditions</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>COB_301_Conditions</name>
+        <label>COB 301 Conditions</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Aswata_Standard_30100_Policy</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Opportunity_Record.Closing_Class__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>1</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_Opportunity_Record.Policy_Closing_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>1</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Checking_Risk_Parameter_301</targetReference>
+            </connector>
+            <label>Aswata - Standard 30100 Policy</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Is_There_Risk_Need_Survey</name>
+        <label>Is There Risk Need Survey?</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Risk_Need_Survey_Found</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>varRiskNeedSurveyCounter</leftValueReference>
+                <operator>GreaterThan</operator>
+                <rightValue>
+                    <numberValue>0.0</numberValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Bulk_Risk_Need_Survey</targetReference>
+            </connector>
+            <label>Risk Need Survey Found</label>
+        </rules>
+    </decisions>
+    <description>survey check for cob 301 Aswata - Standard 30100 Policy</description>
     <environments>Default</environments>
     <formulas>
         <name>formuaCheckSurveyUW</name>
@@ -248,6 +504,34 @@
     </formulas>
     <interviewLabel>[Quote] Autolaunched Survey Underwriting {!$Flow.CurrentDateTime}</interviewLabel>
     <label>[Quote] Autolaunched Survey Underwriting</label>
+    <loops>
+        <name>Checking_All_Risk_Parameter</name>
+        <label>Checking All Risk Parameter</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <collectionReference>Get_All_Risk_Under_Opportunity</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Assign_Risk_Parameter</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>Is_There_Risk_Need_Survey</targetReference>
+        </noMoreValuesConnector>
+    </loops>
+    <loops>
+        <name>Checking_Risk_Parameter_301</name>
+        <label>Checking Risk Parameter 301</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <collectionReference>Get_All_Risk_Under_Opportunity</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Assign_Risk_Parameter_301</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>Is_There_Risk_Need_Survey</targetReference>
+        </noMoreValuesConnector>
+    </loops>
     <processMetadataValues>
         <name>BuilderType</name>
         <value>
@@ -267,6 +551,34 @@
         </value>
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <name>Get_All_Risk_Under_Opportunity</name>
+        <label>Get All Risk Under Opportunity</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Check_is_Opportunity_Has_Quote</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>RecordTypeId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Record_Type_Risk.Id</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>Opportunity__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Opportunity_Record.Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>Asset</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
     <recordLookups>
         <name>Get_Opportunity_Record</name>
         <label>Get Opportunity Record</label>
@@ -295,7 +607,7 @@
         <locationY>0</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Check_is_Opportunity_Has_Quote</targetReference>
+            <targetReference>Get_Record_Type_Risk</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -311,6 +623,45 @@
         <sortOrder>Desc</sortOrder>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
+    <recordLookups>
+        <name>Get_Record_Type_Risk</name>
+        <label>Get Record Type Risk</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Get_All_Risk_Under_Opportunity</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>SobjectType</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Asset</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>DeveloperName</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Risk</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>RecordType</object>
+        <queriedFields>Id</queriedFields>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordUpdates>
+        <name>Update_Bulk_Risk_Need_Survey</name>
+        <label>Update Bulk Risk Need Survey</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Update_Flag_Need_Survey</targetReference>
+        </connector>
+        <inputReference>varRiskCollection</inputReference>
+    </recordUpdates>
     <recordUpdates>
         <name>Update_Flag_Need_Survey</name>
         <label>Update Flag Need Survey</label>
@@ -386,11 +737,45 @@
         <isOutput>false</isOutput>
     </variables>
     <variables>
-        <name>varRiskClass</name>
+        <name>varRiskCollection</name>
+        <dataType>SObject</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Asset</objectType>
+    </variables>
+    <variables>
+        <name>varRiskConstructionClass</name>
         <dataType>String</dataType>
         <isCollection>false</isCollection>
         <isInput>false</isInput>
         <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>varRiskExposure</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>varRiskNeedSurveyCounter</name>
+        <dataType>Number</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <scale>0</scale>
+        <value>
+            <numberValue>0.0</numberValue>
+        </value>
+    </variables>
+    <variables>
+        <name>varRiskSingleObj</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Asset</objectType>
     </variables>
     <variables>
         <name>varTSI</name>
@@ -399,5 +784,19 @@
         <isInput>false</isInput>
         <isOutput>false</isOutput>
         <scale>0</scale>
+    </variables>
+    <variables>
+        <name>varTypeVehicle</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>varUtilization</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
     </variables>
 </Flow>
