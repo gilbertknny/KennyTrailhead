@@ -1,7 +1,7 @@
 /**
  * @description       : Class for create new Coverage 301
  * @author            : Ahmad Yazid Munif
- * @last modified on  : 12-22-2025
+ * @last modified on  : 01-06-2026
  * @last modified by  : Ahmad Yazid Munif
 **/
 public without sharing class Aswata_Coverage_Data_301 {
@@ -197,7 +197,7 @@ public without sharing class Aswata_Coverage_Data_301 {
             }
         }
         List<InsurancePolicyCoverage> existingCoverage = [
-            SELECT Id,CoverageName,Coverage_Name__c
+            SELECT Id,CoverageName,Coverage_Name__c,cov_tahun_id__c
             FROM InsurancePolicyCoverage
             WHERE (Coverage_Name__c IN :listCovMasterData OR CoverageName LIKE '%+%')
             AND Risk_ID__c =: risk.Id
@@ -217,22 +217,21 @@ public without sharing class Aswata_Coverage_Data_301 {
     public static List<InsurancePolicyCoverage> applyExistingIds(List<InsurancePolicyCoverage> coverageList, List<InsurancePolicyCoverage> existingCoverage) {
         Map<String,String> mappExistingCoverage = new Map<String,String>();
         for (InsurancePolicyCoverage cov : existingCoverage) {
+            String tahunId = String.valueOf(cov.cov_tahun_id__c);
             if(cov.Coverage_Name__c!=null){
-                mappExistingCoverage.put(cov.Coverage_Name__c,cov.Id);
+                mappExistingCoverage.put(cov.Coverage_Name__c+tahunId,cov.Id);
             }else if(cov.CoverageName.contains('+')){
-                mappExistingCoverage.put('Single',cov.Id);
+                mappExistingCoverage.put('Single'+tahunId,cov.Id);
             }
         }
         for (InsurancePolicyCoverage cov : coverageList) {
+            String tahunId = String.valueOf(cov.cov_tahun_id__c);
             if (mappExistingCoverage.containsKey(cov.Coverage_Name__c)) {
-                cov.Id = mappExistingCoverage.get(cov.Coverage_Name__c);
+                cov.Id = mappExistingCoverage.get(cov.Coverage_Name__c+tahunId);
             } else if (cov.CoverageName != null && cov.CoverageName.contains('+')) {
-                cov.Id = mappExistingCoverage.get('Single');
+                cov.Id = mappExistingCoverage.get('Single'+tahunId);
             }
         }
-        // for (InsurancePolicyCoverage cov : coverageList) {
-        //     System.debug('listCovMasterData >> '+cov.Id+' - '+cov.CoverageName);
-        // }
         return coverageList;
     }
 }
