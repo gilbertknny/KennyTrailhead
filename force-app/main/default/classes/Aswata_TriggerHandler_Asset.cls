@@ -52,6 +52,27 @@ public with sharing class Aswata_TriggerHandler_Asset extends TriggerHandler {
     }
     
     /**
+     * After Update - Recalculate parent Risk when Asset amount or parent changes, or Opportunity when Risk amount changes
+     */
+    public override void beforeUpdate() {
+        Boolean isChangedSetFacul = false;
+        for (Asset newAsset : (List<Asset>) Trigger.new) {
+            Asset oldAsset = (Asset) Trigger.oldMap.get(newAsset.Id);
+            
+            if(newAsset.Facultative__c != oldAsset.Facultative__c && newAsset.Facultative__c != null && newAsset.Facultative__c >= 1 ){
+                isChangedSetFacul = true;
+            }
+        	
+        }
+        
+        if(isChangedSetFacul){
+            facultativeUserMatrix((List<Asset>) Trigger.new, (Map<Id, Asset>) Trigger.oldMap);
+        }
+    }
+    
+    
+    
+    /**
      * After Delete - Recalculate parent Risk when Assets are deleted, or Opportunity when Risks are deleted
      */
     public override void afterDelete() {
