@@ -138,17 +138,21 @@ export default class Input extends LightningElement {
     }
 
     get fieldInfo() {
-        if (this.objectInfo && this.objectInfo.data && this.objectInfo.data.fields) {
-            let field = this.objectInfo.data.fields[this.fieldName];
-            field = JSON.parse(JSON.stringify(field));
-            field.dataType = this.dataTypeMapping[this.fieldType];
-            if(this.fieldLabel != undefined && this.fieldLabel != '') field.label = this.fieldLabel;
-            if(this.fieldRequired != undefined) field.required = this.fieldRequired;
-            if(this.fieldType == 'Readonly'){
-                field.required = false;
-                field.disabled = true;
+        try{
+            if (this.objectInfo && this.objectInfo.data && this.objectInfo.data.fields) {
+                let field = this.objectInfo.data.fields[this.fieldName];
+                field = JSON.parse(JSON.stringify(field));
+                field.dataType = this.dataTypeMapping[this.fieldType];
+                if(this.fieldLabel != undefined && this.fieldLabel != '') field.label = this.fieldLabel;
+                if(this.fieldRequired != undefined) field.required = this.fieldRequired;
+                if(this.fieldType == 'Readonly'){
+                    field.required = false;
+                    field.disabled = true;
+                }
+                return field;
             }
-            return field;
+        }catch(error){
+            console.log('error-fieldInfo:'+this.fieldName+'-'+error.message);
         }
         return {};
     }

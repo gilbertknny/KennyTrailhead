@@ -1052,16 +1052,20 @@ public without sharing class ClsNewRequest {
                 if (!transactionsToInsert.isEmpty()){ List<Database.SaveResult> sr = Database.insert(transactionsToInsert); }
                 
                 //QQ
-                listtrans = new List<Transaction_Data__c>();
+                //listtrans = new List<Transaction_Data__c>();
+                List<Partner> listpartner = new List<Partner>();
                 for(Object qq : listQQ){
                     Map<String,Object> mapQQ = (Map<String, Object>)qq;
                     String qqId = (String)mapQQ.get('Id');
                     if(qqId != NULL){
-                        Transaction_Data__c td = createQQ(qqId,opp.Id);
-                        listtrans.add(td);
+                        //Transaction_Data__c td = createQQ(qqId,opp.Id);
+                        //listtrans.add(td);
+                        Partner pr = createQQ(qqId,opp.Id);
+                        listpartner.add(pr);
                     }
                 }
-                if(listtrans.size()>0){ List<Database.SaveResult> sr = Database.insert(listtrans); }
+                //if(listtrans.size()>0){ List<Database.SaveResult> sr = Database.insert(listtrans); }
+                if(listpartner.size()>0){ List<Database.SaveResult> sr = Database.insert(listpartner); }
                 
                 //PRODUCT
                 listopl = new List<OpportunityLineItem>();
@@ -1278,16 +1282,20 @@ public without sharing class ClsNewRequest {
                     if (!transactionsToInsert.isEmpty()){ List<Database.SaveResult> sr = Database.insert(transactionsToInsert); }
                     
                     //QQ
-                    listtrans = new List<Transaction_Data__c>();
+                    //listtrans = new List<Transaction_Data__c>();
+                    List<Partner> listpartner = new List<Partner>();
                     for(Object qq : listQQ){
                         Map<String,Object> mapQQ = (Map<String, Object>)qq;
                         String qqId = (String)mapQQ.get('Id');
                         if(qqId != NULL){
-                            Transaction_Data__c td = createQQ(qqId,opp.Id);
-                            listtrans.add(td);
+                            //Transaction_Data__c td = createQQ(qqId,opp.Id);
+                            //listtrans.add(td);
+                            Partner pr = createQQ(qqId,opp.Id);
+                            listpartner.add(pr);
                         }
                     }
-                    if(listtrans.size()>0){ List<Database.SaveResult> sr = Database.insert(listtrans); }
+                    //if(listtrans.size()>0){ List<Database.SaveResult> sr = Database.insert(listtrans); }
+                    if(listpartner.size()>0){ List<Database.SaveResult> sr = Database.insert(listpartner); }
                     
                     //ASSET
                     List<Object> listAsset = (List<Object>) dataMap.get('asset1');
@@ -1462,16 +1470,20 @@ public without sharing class ClsNewRequest {
                     if (!transactionsToInsert.isEmpty()){ List<Database.SaveResult> sr = Database.insert(transactionsToInsert); }
                     
                     //QQ
-                    listtrans = new List<Transaction_Data__c>();
+                    //listtrans = new List<Transaction_Data__c>();
+                    List<Partner> listpartner = new List<Partner>();
                     for(Object qq : listQQ){
                         Map<String,Object> mapQQ = (Map<String, Object>)qq;
                         String qqId = (String)mapQQ.get('Id');
                         if(qqId != NULL){
-                            Transaction_Data__c td = createQQ(qqId,opp.Id);
-                            listtrans.add(td);
+                            //Transaction_Data__c td = createQQ(qqId,opp.Id);
+                            //listtrans.add(td);
+                            Partner pr = createQQ(qqId,opp.Id);
+                            listpartner.add(pr);
                         }
                     }
-                    if(listtrans.size()>0){ List<Database.SaveResult> sr = Database.insert(listtrans); }
+                    //if(listtrans.size()>0){ List<Database.SaveResult> sr = Database.insert(listtrans); }
+                    if(listpartner.size()>0){ List<Database.SaveResult> sr = Database.insert(listpartner); }
                     
                     //ASSET
                     List<Object> listAsset = (List<Object>) dataMap.get('asset1');
@@ -1655,16 +1667,20 @@ public without sharing class ClsNewRequest {
                     }
                     if (!transactionsToInsert.isEmpty()){ List<Database.SaveResult> sr = Database.insert(transactionsToInsert);}
                     
-                    listtrans = new List<Transaction_Data__c>();
+                    //listtrans = new List<Transaction_Data__c>();
+                    List<Partner> listpartner = new List<Partner>();
                     for(Object qq : listQQ){
                         Map<String,Object> mapQQ = (Map<String, Object>)qq;
                         String qqId = (String)mapQQ.get('Id');
                         if(qqId != NULL){
-                            Transaction_Data__c td = createQQ(qqId,opp2.Id);
-                            listtrans.add(td);
+                            //Transaction_Data__c td = createQQ(qqId,opp2.Id);
+                            //listtrans.add(td);
+                            Partner pr = createQQ(qqId,opp2.Id);
+                            listpartner.add(pr);
                         }
                     }
-                    if(listtrans.size()>0){ List<Database.SaveResult> sr = Database.insert(listtrans);}
+                    //if(listtrans.size()>0){ List<Database.SaveResult> sr = Database.insert(listtrans);}
+                    if(listpartner.size()>0){ List<Database.SaveResult> sr = Database.insert(listpartner);}
                     
                     listopl = new List<OpportunityLineItem>();
                     if(opty.lineCOB != NULL && productType2 != NULL){
@@ -1861,16 +1877,20 @@ public without sharing class ClsNewRequest {
                         if (!transactionsToInsert.isEmpty()){ List<Database.SaveResult> sr = Database.insert(transactionsToInsert); }
                         
                         //QQ
-                        listtrans = new List<Transaction_Data__c>();
+                        //listtrans = new List<Transaction_Data__c>();
+                        List<Partner> listpartner = new List<Partner>();
                         for(Object qq : listQQ){
                             Map<String,Object> mapQQ = (Map<String, Object>)qq;
                             String qqId = (String)mapQQ.get('Id');
                             if(qqId != NULL){
-                                Transaction_Data__c td = createQQ(qqId,opp2.Id);
-                                listtrans.add(td);
+                                //Transaction_Data__c td = createQQ(qqId,opp2.Id);
+                                //listtrans.add(td);
+                                Partner pr = createQQ(qqId,opp2.Id);
+                                listpartner.add(pr);
                             }
                         }
-                        if(listtrans.size()>0){ List<Database.SaveResult> sr = Database.insert(listtrans); }
+                        //if(listtrans.size()>0){ List<Database.SaveResult> sr = Database.insert(listtrans); }
+                        if(listpartner.size()>0){ List<Database.SaveResult> sr = Database.insert(listpartner); }
                         
                         //ASSET
                         List<Object> listAsset = (List<Object>) dataMap.get('asset2');
@@ -2023,16 +2043,23 @@ public without sharing class ClsNewRequest {
         return trans;
     }
     
-    public static Transaction_Data__c createQQ(String qqId,String optId){
+    public static Partner createQQ(String qqId,String optId){
         Account acc = [SELECT Id,Address__c,Name FROM Account WHERE Id=:qqId WITH SECURITY_ENFORCED];
-        String recTypeIdQQ = Schema.SObjectType.Transaction_Data__c.getRecordTypeInfosByName().get('Member of QQ').getRecordTypeId();
+        /*String recTypeIdQQ = Schema.SObjectType.Transaction_Data__c.getRecordTypeInfosByName().get('Member of QQ').getRecordTypeId();
         Transaction_Data__c td = new Transaction_Data__c();
         td.Name = acc.Name;
         td.QQ_Name__c = acc.Id;
         td.QQ_Address__c = acc.Address__c;
         td.Opportunity__c = optId;
         td.RecordTypeId = recTypeIdQQ;
-        return td;
+        return td;*/
+        
+        Partner pr = new Partner();
+        pr.OpportunityId = optId;
+        pr.AccountToId = acc.Id;
+        pr.Role = 'QQ';
+        return pr;
+       	
     }
     
     public static OpportunityLineItem createOpportunityLineItem(String optId,Long premium,Long premiumIDR,String pdId,String pbeId){
