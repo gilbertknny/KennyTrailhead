@@ -14,7 +14,15 @@ public with sharing class Aswata_AddFacultative_Controller_Test {
         Account acc = (Account) data.get('Account');
         Opportunity opp = (Opportunity) data.get('Opportunity');
 		opp.Busreq_ID__c = '1234';
+        opp.Start_Date_Periode__c = Date.today();
+        opp.End_Date_Periode__c = Date.today();
         update opp;
+        
+        Opportunity opp2 = Aswata_TestDataFactory.createOpportunity(acc, 'opportunity 2nd Testing');
+		opp2.Busreq_ID__c = '1235';
+        opp2.Start_Date_Periode__c = Date.today().addDays(1);
+        opp2.End_Date_Periode__c = Date.today().addDays(1);
+        update opp2;
         
         Facultative_Share__c facShare = Aswata_TestDataFactory.createFacultativeShare('Folder Test');
         // Create Risk Asset (tanpa folder)
@@ -24,7 +32,7 @@ public with sharing class Aswata_AddFacultative_Controller_Test {
         update risk1;
 
         // Create Risk Asset (dengan folder)
-        Asset risk2 = Aswata_TestDataFactory.createRisk(opp, 'Risk 2');
+        Asset risk2 = Aswata_TestDataFactory.createRisk(opp2, 'Risk 2');
         risk2.Has_Facultative__c = true;
         risk2.Facultative_Folder__c = facShare.Id;
         update risk2;
@@ -273,7 +281,7 @@ public with sharing class Aswata_AddFacultative_Controller_Test {
         List<String> riskIds = new List<String>();
 
         for (Asset a : [
-            SELECT Id FROM Asset WHERE Has_Facultative__c = true LIMIT 2
+            SELECT Id FROM Asset WHERE Has_Facultative__c = true LIMIT 1
         ]) {
             riskIds.add(a.Id);
         }
@@ -287,6 +295,29 @@ public with sharing class Aswata_AddFacultative_Controller_Test {
             true,
             result,
             'Risks with identical coverage should be valid'
+        );
+    }
+    
+    @IsTest
+    static void testValidateCoverage_Invalid() {
+
+        List<String> riskIds = new List<String>();
+
+        for (Asset a : [
+            SELECT Id FROM Asset WHERE Has_Facultative__c = true LIMIT 2
+        ]) {
+            riskIds.add(a.Id);
+        }
+
+        Test.startTest();
+        Boolean result =
+            Aswata_AddFacultative_Controller.validateCoverage(riskIds);
+        Test.stopTest();
+
+        System.assertEquals(
+            false,
+            result,
+            'Risks with identical coverage should be invalid'
         );
     }
 }
