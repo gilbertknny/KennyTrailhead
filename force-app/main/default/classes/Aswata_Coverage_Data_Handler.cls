@@ -1,7 +1,7 @@
 /**
  * @description       : Generate Data for Insert Coverage
  * @author            : Ahmad Yazid Munif
- * @last modified on  : 12-22-2025
+ * @last modified on  : 01-06-2026
  * @last modified by  : Ahmad Yazid Munif
 **/
 public without sharing class Aswata_Coverage_Data_Handler {
@@ -90,7 +90,7 @@ public without sharing class Aswata_Coverage_Data_Handler {
      * @param riskId : ID Risk
      * @return List<Aswata_Coverage_Data_Wrapper.DynamicFieldConfigure> list coverage
      */
-    @AuraEnabled(cacheable=true)
+    @AuraEnabled(cacheable=false)
     public static List<Aswata_Coverage_Data_Wrapper.DynamicFieldConfigure> getExistingCoverage(String riskId) {
         List<Aswata_Coverage_Data_Wrapper.DynamicFieldConfigure> results = new List<Aswata_Coverage_Data_Wrapper.DynamicFieldConfigure>();
         List<InsurancePolicyCoverage> existingCoverageList = [
