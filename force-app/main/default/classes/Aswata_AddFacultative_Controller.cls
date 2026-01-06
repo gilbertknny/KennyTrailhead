@@ -87,7 +87,66 @@ public with sharing class Aswata_AddFacultative_Controller {
     @AuraEnabled(cacheable=true)
     public static Boolean validateCoverage(List<String> riskIds) {
 
-        // Query coverages for all selected risks
+        if (riskIds == null || riskIds.isEmpty()) {
+            return false;
+        }
+
+        /* =========================
+        1. Get Risk → Opportunity
+        ========================= */
+        Map<Id, Id> riskToOppMap = new Map<Id, Id>();
+
+        for (Asset a : [
+            SELECT Id, Opportunity__c
+            FROM Asset
+            WHERE Id IN :riskIds
+            WITH SECURITY_ENFORCED
+        ]) {
+            if (a.Opportunity__c == null) {
+                return false; // Risk without Opportunity → invalid
+            }
+            riskToOppMap.put(a.Id, a.Opportunity__c);
+        }
+
+        /* =========================
+        2. Fetch Opportunities
+        ========================= */
+        Map<Id, Opportunity> oppMap = new Map<Id, Opportunity>([
+            SELECT Id, Start_Date_Periode__c, End_Date_Periode__c
+            FROM Opportunity
+            WHERE Id IN :riskToOppMap.values()
+            WITH SECURITY_ENFORCED
+        ]);
+        
+        Set<Id> oppIds = new Set<Id>(riskToOppMap.values());
+
+        if (oppMap.size() != oppIds.size()) {
+            return false;
+        }
+
+        /* =========================
+        3. Validate Opportunity Dates
+        ========================= */
+        Date refStartDate;
+        Date refEndDate;
+
+        for (Id oppId : oppMap.keySet()) {
+            Opportunity opp = oppMap.get(oppId);
+
+            if (refStartDate == null && refEndDate == null) {
+                refStartDate = opp.Start_Date_Periode__c;
+                refEndDate   = opp.End_Date_Periode__c;
+            } else {
+                if (opp.Start_Date_Periode__c != refStartDate ||
+                    opp.End_Date_Periode__c   != refEndDate) {
+                    return false;
+                }
+            }
+        }
+
+        /* =========================
+        4. Validate Coverages
+        ========================= */
         List<InsurancePolicyCoverage> coverages = [
             SELECT Risk_ID__c, Coverage_Id__c
             FROM InsurancePolicyCoverage
