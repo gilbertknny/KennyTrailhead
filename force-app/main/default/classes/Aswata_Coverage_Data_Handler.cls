@@ -68,6 +68,7 @@ public without sharing class Aswata_Coverage_Data_Handler {
             coverage.Deductible_Type__c = wrapper.deductible.deductibleSetting;
             coverage.Deductible__c = wrapper.deductible.deductibleFlag;
             coverage.Minimum_Cur_ID__c = wrapper.deductible.currencyName;
+            coverage.Currency__c = wrapper.deductible.currencyName;
             if(wrapper.deductible.deductibleSetting=='FLAT'){
                 coverage.DeductibleAmount = wrapper.deductible.deductibleAmount;
                 coverage.Deductible_PCT__c = null;
