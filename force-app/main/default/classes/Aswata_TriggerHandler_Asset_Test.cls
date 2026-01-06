@@ -19,20 +19,29 @@ private class Aswata_TriggerHandler_Asset_Test {
         
         Test.startTest();
         
+        System.debug('amount before = ' + asset.Amount__c);
+        
         asset.Amount__c = 5000000;
         asset.Exchange_Rate__c = 1;
         update asset;
 
         Test.stopTest();
         
-        // Asset verifyAsset = [SELECT Amount__c, Exchange_Rate__c, Amount_IDR_new__c FROM Asset WHERE Id = :asset.Id];
-        // System.assertEquals(5000000, verifyAsset.Amount_IDR_new__c, 'Formula field should calculate: 5000000 * 1 = 5000000');
+        System.debug('amount update = ' + asset.Amount__c);
         
-        // Asset updatedRisk = [SELECT Amount_Insured__c FROM Asset WHERE Id = :risk.Id];
-        // System.assertEquals(5000000, updatedRisk.Amount_Insured__c, 'AfterInsert handler should trigger calculation for Risk');
+        Asset verifyAsset = [SELECT Amount__c, Exchange_Rate__c, Amount_IDR_new__c FROM Asset WHERE Id = :asset.Id];
         
-        // Opportunity updatedOpp = [SELECT Total_Sum_Insured__c FROM Opportunity WHERE Id = :opp.Id];
-        // System.assertEquals(5000000, updatedOpp.Total_Sum_Insured__c, 'AfterInsert handler should cascade to Opportunity');
+        System.debug('amount Amount_IDR_new__c update = ' + verifyAsset.Amount_IDR_new__c);
+        
+        System.assertEquals(5000000, verifyAsset.Amount_IDR_new__c, 'Formula field should calculate: 5000000 * 1 = 5000000');
+        
+        Asset updatedRisk = [SELECT Amount_Insured__c FROM Asset WHERE Id = :risk.Id];
+        
+        System.debug('amount Amount_Insured__c asset = ' + updatedRisk.Amount_Insured__c);
+        System.assertEquals(5000000, updatedRisk.Amount_Insured__c, 'AfterInsert handler should trigger calculation for Risk');
+        
+        Opportunity updatedOpp = [SELECT Total_Sum_Insured__c FROM Opportunity WHERE Id = :opp.Id];
+        System.assertEquals(5000000, updatedOpp.Total_Sum_Insured__c, 'AfterInsert handler should cascade to Opportunity');
     }
     
     /**
@@ -61,11 +70,11 @@ private class Aswata_TriggerHandler_Asset_Test {
        
         Test.stopTest();
         
-        // Asset updatedRisk = [SELECT Amount_Insured__c FROM Asset WHERE Id = :risk.Id];
-        // System.assertEquals(55000000, updatedRisk.Amount_Insured__c, 'Risk should have sum of all 10 assets = 55M');
+        Asset updatedRisk = [SELECT Amount_Insured__c FROM Asset WHERE Id = :risk.Id];
+        System.assertEquals(55000000, updatedRisk.Amount_Insured__c, 'Risk should have sum of all 10 assets = 55M');
         
-        // Opportunity updatedOpp = [SELECT Total_Sum_Insured__c FROM Opportunity WHERE Id = :opp.Id];
-        // System.assertEquals(55000000, updatedOpp.Total_Sum_Insured__c, 'Opportunity should cascade from Risk = 55M');
+        Opportunity updatedOpp = [SELECT Total_Sum_Insured__c FROM Opportunity WHERE Id = :opp.Id];
+        System.assertEquals(55000000, updatedOpp.Total_Sum_Insured__c, 'Opportunity should cascade from Risk = 55M');
     }
     
     /**
@@ -90,11 +99,11 @@ private class Aswata_TriggerHandler_Asset_Test {
         
         Test.stopTest(); 
         
-        // Asset updatedRisk = [SELECT Amount_Insured__c FROM Asset WHERE Id = :risk.Id];
-        // System.assertEquals(5000000, updatedRisk.Amount_Insured__c, 'Risk should be updated to 5M (latest amount)');
+        Asset updatedRisk = [SELECT Amount_Insured__c FROM Asset WHERE Id = :risk.Id];
+        System.assertEquals(5000000, updatedRisk.Amount_Insured__c, 'Risk should be updated to 5M (latest amount)');
         
-        // Opportunity updatedOpp = [SELECT Total_Sum_Insured__c FROM Opportunity WHERE Id = :opp.Id];
-        // System.assertEquals(5000000, updatedOpp.Total_Sum_Insured__c, 'Opportunity should cascade to 5M');
+        Opportunity updatedOpp = [SELECT Total_Sum_Insured__c FROM Opportunity WHERE Id = :opp.Id];
+        System.assertEquals(5000000, updatedOpp.Total_Sum_Insured__c, 'Opportunity should cascade to 5M');
     }
     
     /**
@@ -120,14 +129,14 @@ private class Aswata_TriggerHandler_Asset_Test {
 
         Test.stopTest();
         
-        // Asset updatedRisk1 = [SELECT Amount_Insured__c FROM Asset WHERE Id = :risk1.Id];
-        // System.assertEquals(0, updatedRisk1.Amount_Insured__c, 'Risk 1 should be recalculated to 0 after asset moved out');
+        Asset updatedRisk1 = [SELECT Amount_Insured__c FROM Asset WHERE Id = :risk1.Id];
+        System.assertEquals(0, updatedRisk1.Amount_Insured__c, 'Risk 1 should be recalculated to 0 after asset moved out');
         
-        // Asset updatedRisk2 = [SELECT Amount_Insured__c FROM Asset WHERE Id = :risk2.Id];
-        // System.assertEquals(4000000, updatedRisk2.Amount_Insured__c, 'Risk 2 should have 4M after asset moved in');
+        Asset updatedRisk2 = [SELECT Amount_Insured__c FROM Asset WHERE Id = :risk2.Id];
+        System.assertEquals(4000000, updatedRisk2.Amount_Insured__c, 'Risk 2 should have 4M after asset moved in');
         
-        // Opportunity updatedOpp = [SELECT Total_Sum_Insured__c FROM Opportunity WHERE Id = :opp.Id];
-        // System.assertEquals(4000000, updatedOpp.Total_Sum_Insured__c, 'Opportunity should have 4M (0 from Risk 1 + 4M from Risk 2)');
+        Opportunity updatedOpp = [SELECT Total_Sum_Insured__c FROM Opportunity WHERE Id = :opp.Id];
+        System.assertEquals(4000000, updatedOpp.Total_Sum_Insured__c, 'Opportunity should have 4M (0 from Risk 1 + 4M from Risk 2)');
     }
     
     /**
@@ -150,17 +159,18 @@ private class Aswata_TriggerHandler_Asset_Test {
         Test.stopTest();
         
         Asset updatedRisk = [SELECT Amount_Insured__c FROM Asset WHERE Id = :risk.Id];
-        // System.assertEquals(2000000, updatedRisk.Amount_Insured__c,'Risk should have 2M');
+        System.assertEquals(2000000, updatedRisk.Amount_Insured__c,
+            'Risk should have 2M');
         
         Integer calloutsBefore = Limits.getFutureCalls();
         asset.Name = 'Updated Name';
         update asset;
         Integer calloutsAfter = Limits.getFutureCalls();
         
-        // System.assertEquals(calloutsBefore, calloutsAfter, 'No future calls should be made for irrelevant field changes');
+        System.assertEquals(calloutsBefore, calloutsAfter, 'No future calls should be made for irrelevant field changes');
         
-        // updatedRisk = [SELECT Amount_Insured__c FROM Asset WHERE Id = :risk.Id];
-        // System.assertEquals(2000000, updatedRisk.Amount_Insured__c, 'Risk amount should remain 2M');
+        updatedRisk = [SELECT Amount_Insured__c FROM Asset WHERE Id = :risk.Id];
+        System.assertEquals(2000000, updatedRisk.Amount_Insured__c, 'Risk amount should remain 2M');
     }
     
     /**
@@ -194,8 +204,9 @@ private class Aswata_TriggerHandler_Asset_Test {
         
         Test.stopTest();
         
-        // Asset updatedRisk = [SELECT Amount_Insured__c FROM Asset WHERE Id = :risk.Id];
-        // System.assertEquals(30000000, updatedRisk.Amount_Insured__c,'Risk should have doubled sum = 30M (2+4+6+8+10 = 30M)');
+        Asset updatedRisk = [SELECT Amount_Insured__c FROM Asset WHERE Id = :risk.Id];
+        System.assertEquals(30000000, updatedRisk.Amount_Insured__c,
+            'Risk should have doubled sum = 30M (2+4+6+8+10 = 30M)');
     }
     
     /**
@@ -222,11 +233,11 @@ private class Aswata_TriggerHandler_Asset_Test {
         
         Test.stopTest();
         
-        // Asset updatedRisk = [SELECT Amount_Insured__c FROM Asset WHERE Id = :risk.Id];
-        // System.assertEquals(2000000, updatedRisk.Amount_Insured__c, 'Risk should have 2M after deleting 3M asset (only asset2 remains)');
+        Asset updatedRisk = [SELECT Amount_Insured__c FROM Asset WHERE Id = :risk.Id];
+        System.assertEquals(2000000, updatedRisk.Amount_Insured__c, 'Risk should have 2M after deleting 3M asset (only asset2 remains)');
         
-        // Opportunity updatedOpp = [SELECT Total_Sum_Insured__c FROM Opportunity WHERE Id = :opp.Id];
-        // System.assertEquals(2000000, updatedOpp.Total_Sum_Insured__c, 'Opportunity should cascade to 2M');
+        Opportunity updatedOpp = [SELECT Total_Sum_Insured__c FROM Opportunity WHERE Id = :opp.Id];
+        System.assertEquals(2000000, updatedOpp.Total_Sum_Insured__c, 'Opportunity should cascade to 2M');
     }
     
     /**
@@ -258,11 +269,11 @@ private class Aswata_TriggerHandler_Asset_Test {
         
         Test.stopTest();
         
-        // Asset updatedRisk = [SELECT Amount_Insured__c FROM Asset WHERE Id = :risk.Id];
-        // System.assertEquals(9000000, updatedRisk.Amount_Insured__c, 'Risk should have 9M (4M+5M) after deleting first 3 assets (6M)');
+        Asset updatedRisk = [SELECT Amount_Insured__c FROM Asset WHERE Id = :risk.Id];
+        System.assertEquals(9000000, updatedRisk.Amount_Insured__c, 'Risk should have 9M (4M+5M) after deleting first 3 assets (6M)');
         
-        // Opportunity updatedOpp = [SELECT Total_Sum_Insured__c FROM Opportunity WHERE Id = :opp.Id];
-        // System.assertEquals(9000000, updatedOpp.Total_Sum_Insured__c, 'Opportunity should cascade to 9M (4M+5M)');
+        Opportunity updatedOpp = [SELECT Total_Sum_Insured__c FROM Opportunity WHERE Id = :opp.Id];
+        System.assertEquals(9000000, updatedOpp.Total_Sum_Insured__c, 'Opportunity should cascade to 9M (4M+5M)');
     }
     
     /**
@@ -290,9 +301,9 @@ private class Aswata_TriggerHandler_Asset_Test {
         
         Test.stopTest();
         
-        // Asset verifyAsset = [SELECT Id, Amount__c, ParentId FROM Asset WHERE Id = :orphanAsset.Id];
-        // System.assertEquals(2000000, verifyAsset.Amount__c, 'Asset should be updated');
-        // System.assertEquals(null, verifyAsset.ParentId, 'Asset should have no parent');
+        Asset verifyAsset = [SELECT Id, Amount__c, ParentId FROM Asset WHERE Id = :orphanAsset.Id];
+        System.assertEquals(2000000, verifyAsset.Amount__c, 'Asset should be updated');
+        System.assertEquals(null, verifyAsset.ParentId, 'Asset should have no parent');
     }
     
     /**
@@ -316,11 +327,11 @@ private class Aswata_TriggerHandler_Asset_Test {
         
         Test.stopTest();
         
-        // Asset updatedRisk = [SELECT Amount_Insured__c FROM Asset WHERE Id = :risk.Id];
-        // System.assertEquals(5000000, updatedRisk.Amount_Insured__c, 'Risk should have cascaded amount from Asset = 5M');
+        Asset updatedRisk = [SELECT Amount_Insured__c FROM Asset WHERE Id = :risk.Id];
+        System.assertEquals(5000000, updatedRisk.Amount_Insured__c, 'Risk should have cascaded amount from Asset = 5M');
         
-        // Opportunity updatedOpp = [SELECT Total_Sum_Insured__c FROM Opportunity WHERE Id = :opp.Id];
-        // System.assertEquals(5000000, updatedOpp.Total_Sum_Insured__c, 'Opportunity should cascade = 5M');
+        Opportunity updatedOpp = [SELECT Total_Sum_Insured__c FROM Opportunity WHERE Id = :opp.Id];
+        System.assertEquals(5000000, updatedOpp.Total_Sum_Insured__c, 'Opportunity should cascade = 5M');
     }
     
     /**
@@ -348,14 +359,14 @@ private class Aswata_TriggerHandler_Asset_Test {
        
         Test.stopTest();
         
-        // Asset updatedRisk1 = [SELECT Amount_Insured__c FROM Asset WHERE Id = :risk1.Id];
-        // System.assertEquals(3000000, updatedRisk1.Amount_Insured__c, 'Risk 1 should have 3M');
+        Asset updatedRisk1 = [SELECT Amount_Insured__c FROM Asset WHERE Id = :risk1.Id];
+        System.assertEquals(3000000, updatedRisk1.Amount_Insured__c, 'Risk 1 should have 3M');
         
-        // Asset updatedRisk2 = [SELECT Amount_Insured__c FROM Asset WHERE Id = :risk2.Id];
-        // System.assertEquals(7000000, updatedRisk2.Amount_Insured__c, 'Risk 2 should have 7M');
+        Asset updatedRisk2 = [SELECT Amount_Insured__c FROM Asset WHERE Id = :risk2.Id];
+        System.assertEquals(7000000, updatedRisk2.Amount_Insured__c, 'Risk 2 should have 7M');
         
-        // Opportunity updatedOpp = [SELECT Total_Sum_Insured__c FROM Opportunity WHERE Id = :opp.Id];
-        // System.assertEquals(10000000, updatedOpp.Total_Sum_Insured__c, 'Opportunity should have total 10M (3M+7M)');
+        Opportunity updatedOpp = [SELECT Total_Sum_Insured__c FROM Opportunity WHERE Id = :opp.Id];
+        System.assertEquals(10000000, updatedOpp.Total_Sum_Insured__c, 'Opportunity should have total 10M (3M+7M)');
     }
     
     /**
@@ -386,8 +397,8 @@ private class Aswata_TriggerHandler_Asset_Test {
         
         Integer soqlUsed = Limits.getQueries();
         
-        // Asset updatedRisk = [SELECT Amount_Insured__c FROM Asset WHERE Id = :risk.Id];
-        // System.assertEquals(5000000, updatedRisk.Amount_Insured__c, 'Risk should have 5M from 5 assets');
+        Asset updatedRisk = [SELECT Amount_Insured__c FROM Asset WHERE Id = :risk.Id];
+        System.assertEquals(5000000, updatedRisk.Amount_Insured__c, 'Risk should have 5M from 5 assets');
     }
     
     /**
@@ -431,16 +442,16 @@ private class Aswata_TriggerHandler_Asset_Test {
         Integer dmlAfter = Limits.getDmlStatements();
         Integer futureAfter = Limits.getFutureCalls();
         
-        // System.assert(soqlAfter < Limits.getLimitQueries(), 'Should not hit SOQL limit');
-        // System.assert(dmlAfter < Limits.getLimitDmlStatements(), 'Should not hit DML limit');
+        System.assert(soqlAfter < Limits.getLimitQueries(), 'Should not hit SOQL limit');
+        System.assert(dmlAfter < Limits.getLimitDmlStatements(), 'Should not hit DML limit');
         
-        // List<Asset> updatedRisks = [SELECT Amount_Insured__c FROM Asset WHERE Id IN :risks];
-        // for (Asset risk : updatedRisks) {
-        //     System.assertEquals(500000, risk.Amount_Insured__c, 'Each risk should have 500k (5 assets × 100k)');
-        // }
+        List<Asset> updatedRisks = [SELECT Amount_Insured__c FROM Asset WHERE Id IN :risks];
+        for (Asset risk : updatedRisks) {
+            System.assertEquals(500000, risk.Amount_Insured__c, 'Each risk should have 500k (5 assets × 100k)');
+        }
         
-        // Opportunity updatedOpp = [SELECT Total_Sum_Insured__c FROM Opportunity WHERE Id = :opp.Id];
-        // System.assertEquals(2500000, updatedOpp.Total_Sum_Insured__c, 'Opportunity should have 2.5M (5 risks × 500k each)');
+        Opportunity updatedOpp = [SELECT Total_Sum_Insured__c FROM Opportunity WHERE Id = :opp.Id];
+        System.assertEquals(2500000, updatedOpp.Total_Sum_Insured__c, 'Opportunity should have 2.5M (5 risks × 500k each)');
     }
     
     /**
@@ -467,14 +478,14 @@ private class Aswata_TriggerHandler_Asset_Test {
         
         Test.stopTest();
         
-        // Asset updatedRisk1 = [SELECT Amount_Insured__c FROM Asset WHERE Id = :risk1.Id];
-        // System.assertEquals(0, updatedRisk1.Amount_Insured__c,'Risk 1 should be 0 after asset moved');
+        Asset updatedRisk1 = [SELECT Amount_Insured__c FROM Asset WHERE Id = :risk1.Id];
+        System.assertEquals(0, updatedRisk1.Amount_Insured__c,'Risk 1 should be 0 after asset moved');
         
-        // Asset updatedRisk2 = [SELECT Amount_Insured__c FROM Asset WHERE Id = :risk2.Id];
-        // System.assertEquals(5000000, updatedRisk2.Amount_Insured__c, 'Risk 2 should have 5M');
+        Asset updatedRisk2 = [SELECT Amount_Insured__c FROM Asset WHERE Id = :risk2.Id];
+        System.assertEquals(5000000, updatedRisk2.Amount_Insured__c, 'Risk 2 should have 5M');
         
-        // Opportunity updatedOpp = [SELECT Total_Sum_Insured__c FROM Opportunity WHERE Id = :opp.Id];
-        // System.assertEquals(5000000, updatedOpp.Total_Sum_Insured__c,'Opportunity should have 5M (0 from Risk 1 + 5M from Risk 2)');
+        Opportunity updatedOpp = [SELECT Total_Sum_Insured__c FROM Opportunity WHERE Id = :opp.Id];
+        System.assertEquals(5000000, updatedOpp.Total_Sum_Insured__c,'Opportunity should have 5M (0 from Risk 1 + 5M from Risk 2)');
     }
     
     /**
@@ -496,11 +507,11 @@ private class Aswata_TriggerHandler_Asset_Test {
         
         Test.stopTest();
         
-        // Asset updatedRisk = [SELECT Amount_Insured__c FROM Asset WHERE Id = :risk.Id];
-        // System.assertEquals(4000000, updatedRisk.Amount_Insured__c, 'Risk should have 4M');
+        Asset updatedRisk = [SELECT Amount_Insured__c FROM Asset WHERE Id = :risk.Id];
+        System.assertEquals(4000000, updatedRisk.Amount_Insured__c, 'Risk should have 4M');
         
-        // Opportunity updatedOpp = [SELECT Total_Sum_Insured__c FROM Opportunity WHERE Id = :opp.Id];
-        // System.assertEquals(4000000, updatedOpp.Total_Sum_Insured__c, 'Opportunity should cascade to 4M');
+        Opportunity updatedOpp = [SELECT Total_Sum_Insured__c FROM Opportunity WHERE Id = :opp.Id];
+        System.assertEquals(4000000, updatedOpp.Total_Sum_Insured__c, 'Opportunity should cascade to 4M');
     }
     
     /**
@@ -527,13 +538,72 @@ private class Aswata_TriggerHandler_Asset_Test {
         
         Test.stopTest();
         
-        // Asset updatedRisk1 = [SELECT Amount_Insured__c FROM Asset WHERE Id = :risk1.Id];
-        // System.assertEquals(2000000, updatedRisk1.Amount_Insured__c, 'Risk 1 should have 2M');
+        Asset updatedRisk1 = [SELECT Amount_Insured__c FROM Asset WHERE Id = :risk1.Id];
+        System.assertEquals(2000000, updatedRisk1.Amount_Insured__c, 'Risk 1 should have 2M');
         
-        // Asset updatedRisk2 = [SELECT Amount_Insured__c FROM Asset WHERE Id = :risk2.Id];
-        // System.assertEquals(3000000, updatedRisk2.Amount_Insured__c, 'Risk 2 should have 3M');
+        Asset updatedRisk2 = [SELECT Amount_Insured__c FROM Asset WHERE Id = :risk2.Id];
+        System.assertEquals(3000000, updatedRisk2.Amount_Insured__c, 'Risk 2 should have 3M');
         
-        // Opportunity updatedOpp = [SELECT Total_Sum_Insured__c FROM Opportunity WHERE Id = :opp.Id];
-        // System.assertEquals(5000000, updatedOpp.Total_Sum_Insured__c,'Opportunity should have 5M (2M+3M)');
+        Opportunity updatedOpp = [SELECT Total_Sum_Insured__c FROM Opportunity WHERE Id = :opp.Id];
+        System.assertEquals(5000000, updatedOpp.Total_Sum_Insured__c,'Opportunity should have 5M (2M+3M)');
     }
+    
+    @isTest
+    static void updateFacultative_facultativeOwnerMatrix() {
+        Account acc = Aswata_TestDataFactory.createAccount('Test Account Multi Risk Update');
+        Opportunity opp = Aswata_TestDataFactory.createOpportunity(acc, 'Test Opp Multi Risk Update');
+        Asset risk1 = Aswata_TestDataFactory.createRisk(opp, 'Risk 1');
+        User stdusr = Aswata_TestDataFactory.createTestUser('TestUser1211');
+        User stdusr2 = Aswata_TestDataFactory.createTestUser('TestUser1222');
+        //User usr = [Select Id from user Limit 1];
+        Master_Data__c brch = Aswata_TestDataFactory.createMasterData('Bandung', 'Master Branch');
+        brch.BRANCH_ID__c = '11';
+        update brch;
+        
+        Product2 pdt = Aswata_TestDataFactory.createProduct('201');
+        pdt.IsActive = true;
+        pdt.ProductCode = '201';
+        update pdt;
+        
+        Master_Data__c md = Aswata_TestDataFactory.createMasterData('User name', 'Facultative User Limit');
+        md.USER_ID__c = stdusr.id;
+        md.LIMIT_AMOUNT__c = 2000000;
+        md.Branch__c = brch.id;
+        md.BSN__c = pdt.id;
+        update md;
+        
+        OpportunityTeamMember otm =  new OpportunityTeamMember(
+                    OpportunityId = opp.Id,
+                    UserId = stdusr2.Id,
+                    TeamMemberRole = 'Underwriting',
+                    OpportunityAccessLevel = 'edit'
+                );
+        insert otm;
+        
+        //System.debug('opp.COB__c: ' + opp.COB__c);
+                     
+        //System.debug('riskWithOpp.COB__c: ' + riskWithOpp.Opportunity__r.COB__c + 'opp.Branch: ' + opp.Owner_Branch__c);
+        Test.startTest();
+        
+        risk1.Facultative__c = 2000000;
+        
+        update risk1;
+        
+        Test.stopTest();
+        
+        /*OpportunityTeamMember otm = [
+            SELECT Id
+            FROM OpportunityTeamMember
+            WHERE OpportunityId = :opp.Id
+            AND UserId = :stdusr.Id
+            LIMIT 1
+        ];*/
+        
+        Asset updatedRisk1 = [SELECT Facultative__c FROM Asset WHERE Id = :risk1.Id];
+        System.assertEquals(2000000, updatedRisk1.Facultative__c, 'Facultative Value should equal to 2000000');
+        
+      
+    }
+    
+    
 }

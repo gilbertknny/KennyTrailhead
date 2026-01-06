@@ -104,13 +104,51 @@ public class Aswata_TestDataFactory {
      * @return Contact
      */
     public static Opportunity createOpportunity(Account acc, String name) {
+        
+        Profile p = [
+            SELECT Id
+            FROM Profile
+            WHERE Name = 'System Administrator'
+            LIMIT 1
+        ];
+    
+        String branchValue;
+
+        Schema.DescribeFieldResult dfr =
+            User.Branch__c.getDescribe();
+        
+        for (Schema.PicklistEntry ple : dfr.getPicklistValues()) {
+            if (ple.isActive()) {
+                branchValue = ple.getValue(); // API VALUE
+                break;
+            }
+        }
+        
+        User u = new User(
+            Alias = 'tusr',
+            Email = 'user@test.com',
+            EmailEncodingKey = 'UTF-8',
+            LastName = 'Test',
+            //UserType = 'Standard',
+            IsActive = true,
+            Area__c = '71',
+            LanguageLocaleKey = 'en_US',
+            LocaleSidKey = 'en_US',
+            ProfileId = p.Id,
+            TimeZoneSidKey = 'Asia/Jakarta',
+            UserName = 'user' + System.currentTimeMillis() + '@test.com',
+            Branch__c = branchValue   // ✅ SAFE
+        );
+        insert u;
+            
         Opportunity opp = new Opportunity(
             Name = name,
             AccountId = acc.Id,
             StageName = 'Prospecting',
             CloseDate = System.today().addDays(30),
             Amount = 50000,
-            COB__c = '201'
+            COB__c = '201',
+            OwnerId = u.Id
         );
         insert opp;
         return opp;
@@ -144,6 +182,7 @@ public class Aswata_TestDataFactory {
             AND Name = 'Risk'
             LIMIT 1
         ];
+        Opportunity op = [Select id from Opportunity where id =: oppty.Id];
 
         // Create Asset record
         Asset risk = new Asset(
@@ -372,7 +411,8 @@ public class Aswata_TestDataFactory {
             LocaleSidKey   = 'en_US',
             EmailEncodingKey = 'UTF-8',
             LanguageLocaleKey = 'en_US',
-            ProfileId = p.Id
+            ProfileId = p.Id,
+            isActive = true
         );
         insert u;
         return u;
@@ -408,5 +448,53 @@ public class Aswata_TestDataFactory {
         );
         insert share;
         return share;
+    }
+    
+    /* =========================
+       GET STANDARD PRICEBOOK
+    ========================= */
+    public static Id getStandardPricebookId() {
+        return Test.getStandardPricebookId();
+    }
+
+    /* =========================
+       CREATE PRODUCT
+    ========================= */
+    public static Product2 createProduct(String name) {
+        Product2 p = new Product2(
+            Name = name,
+            IsActive = true
+        );
+        insert p;
+        return p;
+    }
+    
+     /* =========================
+       CREATE PRICEBOOK ENTRY
+    ========================= */
+    public static PricebookEntry createPricebookEntry(
+        Product2 product,
+        Decimal unitPrice
+    ) {
+        PricebookEntry pbe = new PricebookEntry(
+            Pricebook2Id = getStandardPricebookId(),
+            Product2Id   = product.Id,
+            UnitPrice    = unitPrice,
+            IsActive     = true
+        );
+        insert pbe;
+        return pbe;
+    }
+
+    /* =========================
+       CREATE PRODUCT + PBE
+    ========================= */
+    public static Product2 createProductWithPrice(
+        String name,
+        Decimal unitPrice
+    ) {
+        Product2 p = createProduct(name);
+        createPricebookEntry(p, unitPrice);
+        return p;
     }
 }
