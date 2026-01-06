@@ -565,7 +565,7 @@ private class Aswata_TriggerHandler_Asset_Test {
         pdt.ProductCode = '201';
         update pdt;
         
-        Master_Data__c md = Aswata_TestDataFactory.createMasterData('User name', 'Facultative User Limit');
+        Master_Data__c md = Aswata_TestDataFactory.createMasterData('User name', 'Limit Reas');
         md.USER_ID__c = stdusr.id;
         md.LIMIT_AMOUNT__c = 2000000;
         md.Branch__c = brch.id;

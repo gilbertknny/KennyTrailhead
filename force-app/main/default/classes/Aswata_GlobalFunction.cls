@@ -74,7 +74,7 @@ public with sharing class Aswata_GlobalFunction {
             WHERE Branch__r.BRANCH_ID__c = :branchId
             AND BSN__r.ProductCode = :cobId
             AND LIMIT_AMOUNT__c >= :amount
-            AND RecordType.DeveloperName = 'Facultative_User_Limit'
+            AND RecordType.DeveloperName = 'Limit_Reas'
             ORDER BY LIMIT_AMOUNT__c ASC
             LIMIT 1
         ];
