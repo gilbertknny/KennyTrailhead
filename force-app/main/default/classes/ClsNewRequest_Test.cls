@@ -44,6 +44,11 @@ public class ClsNewRequest_Test {
         acc.RecordTypeId = strRTIndividual;
         insert acc;
         
+        Account acc2 = new Account();
+        acc2.Name = 'QQ';
+        acc2.RecordTypeId = strRTIndividual;
+        insert acc2;
+        
         String RT1 = Schema.SObjectType.Master_Data__c.getRecordTypeInfosByName().get('Field COB').getRecordTypeId();
         Master_Data__c md = new Master_Data__c();
         md.RecordTypeId = RT1;
@@ -119,7 +124,8 @@ public class ClsNewRequest_Test {
     static void setTestMethod(){
        	Schema.Location l = [SELECT Id FROM Location LIMIT 1];
         Master_Data__c md = [SELECT Id FROM Master_Data__c WHERE Name = '1' LIMIT 1];
-        Account acc = [SELECT Id FROM Account LIMIT 1];
+        Account acc = [SELECT Id FROM Account WHERE Name = 'ACC12345' LIMIT 1];
+        Account acc2 = [SELECT Id FROM Account WHERE Name = 'QQ' LIMIT 1];
         Account acc1 = ClsNewRequest.getAccountDetail(acc.Id);
         List<Account> listacc = ClsNewRequest.searchQQAccounts('ACC');
         String cob = '201';
@@ -166,7 +172,7 @@ public class ClsNewRequest_Test {
         ClsNewRequest.getSectionDetail(listSectionids);
 
         List<String> listdata1 = new List<String>();
-        listdata1.add('Name');
+        listdata1.add('Name'); 
         Asset ass = new Asset();
         ass.Name = 'Test';
         ClsNewRequest.setData(listdata1, ass);        
@@ -185,7 +191,7 @@ public class ClsNewRequest_Test {
         data += '"opportunitytype":"NB"';
         data += ',"accountId":"'+acc.Id+'"';
         data += ',"insuredId":"'+acc.Id+'"';
-        data += ',"qqmember":[{"Id":"'+acc.Id+'"}]';
+        data += ',"qqmember":[{"Id":"'+acc2.Id+'"}]';
         data += ',"risk":"multiple"';
         data += ',"cob":"201"';
         data += ',"riskName":"Test"';
@@ -231,7 +237,7 @@ public class ClsNewRequest_Test {
         data += ',"percentageperiod2":"1"';
         data += ',"rateperiod2":1';
         data += ',"type2":"Standard"';
-        data += ',"contracttype2":"1"';
+        data += ',"contracttype2":"1"'; 
         data += ',"risksituation2":' + JSON.serialize(situation1);
         data += ',"producttype2":"'+pd.Id+'"';
         data += ',"assetsection2":"'+keysAssetSection.get(0)+'"';
@@ -250,6 +256,8 @@ public class ClsNewRequest_Test {
         system.assertNotEquals(result,null);
         String data2 = data.replaceAll('Standard','MOU');
         string result2 = ClsNewRequest.saveData(data2);
+        String data3 = data.replaceAll('Standard','Realisasi');
+        string result3 = ClsNewRequest.saveData(data3);
         ClsNewRequest.deleteFile(cd.Id);
         ClsNewRequest.getOpportunity(result); 
         ClsNewRequest.getSectionAmount(result,'Material Damage',null);
