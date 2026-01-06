@@ -443,8 +443,32 @@ public class Aswata_TestDataFactory {
      * @return Returning Facultative_Share__c
      */
     public static Facultative_Share__c createFacultativeShare(String folderName) {
+        
+        RecordType rt = [
+            SELECT Id FROM RecordType
+            WHERE SObjectType = 'Facultative_Share__c' AND Name =: 'Folder'
+            LIMIT 1
+        ];
+        
         Facultative_Share__c share = new Facultative_Share__c(
-            Name = folderName
+            Name = folderName,
+            RecordTypeId = rt.Id
+        );
+        insert share;
+        return share;
+    }
+
+    public static Facultative_Share__c createOfferingShare(String name) {
+        
+        RecordType rt = [
+            SELECT Id FROM RecordType
+            WHERE SObjectType = 'Facultative_Share__c' AND Name =: 'Facultative Share'
+            LIMIT 1
+        ];
+        
+        Facultative_Share__c share = new Facultative_Share__c(
+            Name = name,
+            RecordTypeId = rt.Id
         );
         insert share;
         return share;

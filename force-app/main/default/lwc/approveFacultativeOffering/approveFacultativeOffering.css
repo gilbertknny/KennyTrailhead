@@ -1,0 +1,27 @@
+/* This targets the base container of the lightning-card */
+.rounded-card {
+    --slds-c-card-radius-border: 1rem; /* Adjust this value to match your top corner */
+    display: block;
+}
+
+/* To ensure the footer doesn't have sharp edges that 'leak' over the curve */
+.rounded-card :interop-sub-element .slds-card {
+    border-radius: 1rem;
+    overflow: hidden;
+}
+
+/* Global fallback if the tokens don't apply directly in your environment */
+:host .rounded-card article {
+    border-radius: 1rem !important;
+    overflow: hidden;
+}
+
+.table-scroll {
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+/* Prevent Salesforce from shrinking columns */
+.table-scroll lightning-datatable {
+    min-width: 1200px;
+}
