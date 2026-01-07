@@ -14,7 +14,7 @@ import getRecordTypeIdByCob from '@salesforce/apex/Aswata_Add_New_Asset_Controll
 import { CloseActionScreenEvent } from 'lightning/actions';
 // import { NavigationMixin } from 'lightning/navigation';
 
-export default class AddNewPolicyDetailInsured extends LightningElement {
+export default class addNewDetailAsset extends LightningElement {
     @api objectName = 'Asset';
     @api recordId;
     @api currentId;
@@ -25,11 +25,22 @@ export default class AddNewPolicyDetailInsured extends LightningElement {
     @api recordTypeId;
     @api parentAsset;
     
+    // ✅ NEW: Flag to detect if opened from addNewRisk modal
+    _fromOpportunityModal = false;
+
+    @api
+    get fromOpportunityModal() {
+        return this._fromOpportunityModal;
+    }
+    set fromOpportunityModal(value) {
+        // normalize: only true / 'true' become true
+        this._fromOpportunityModal = (value === true || value === 'true');
+    }
+    
     @track dynamicFields = [];
     @track formData = {};
     @track picklistValues; 
     @track transactionData = [];
-
     @track currency = 'IDR';
     @track exchangeRate = 1;
     @track detailInsuredName;
@@ -47,6 +58,7 @@ export default class AddNewPolicyDetailInsured extends LightningElement {
     @track showSectionFields = false; // controls Section & below visibility
     @track showDataTable = false;
     @track groupedDynamicFields = {};
+    @track hideParentModal = false; 
     controllingValue;
 
     recordTypeIdAsset;
@@ -289,14 +301,8 @@ export default class AddNewPolicyDetailInsured extends LightningElement {
                 
                 };
             }
-            let declareValue = this.formData.Declare_Value__c;
             if (fieldName === 'Indemnity_Type__c') {
-                //remove declare value
                 this.controllingValue = value;
-                if(value != 'First Loss' && value != 'Lost Limit'){
-                    console.log('Indemnity_Type__c Change : ',value);
-                    declareValue = null;
-                }
             }
             if (fieldName === 'Interest_Insured_Detail_Description__c') {
                 this.formData = {
@@ -309,8 +315,7 @@ export default class AddNewPolicyDetailInsured extends LightningElement {
             // update formData
             this.formData = {
                 ...this.formData,
-                [fieldName]: value,
-                Declare_Value__c: declareValue
+                [fieldName]: value
             };
 
             // also update fields so UI re-renders safely
@@ -332,6 +337,7 @@ export default class AddNewPolicyDetailInsured extends LightningElement {
         console.error('💥 Error in handleInputChange:', e);
         }
     }
+    
     handleInputChangeNumber(event) {
         try {
             const fieldName = event.target.name;
@@ -425,24 +431,39 @@ export default class AddNewPolicyDetailInsured extends LightningElement {
                 [fieldApiName]: null
             };
         }        
-        console.log('📝 formData clearance:', JSON.stringify(this.formData));
+        
     }
     
     /* Start Action Button */
     handleCloseDetailAsset(){
-        //this.dispatchEvent(new CloseActionScreenEvent());
-        if(this.currentId != null){
+        // ✅ CASE 1: Opened from Opportunity Modal (addNewRisk)
+        console.log(' 777: '+this.fromOpportunityModal);
+
+        if (this.fromOpportunityModal === false || this.fromOpportunityModal === 'false') {
+            console.log('🔴 Closing Quick Action modal');
+            this.dispatchEvent(new CloseActionScreenEvent());
+            return;
+        }
+
+        // ✅ CASE 2: Edit mode with currentId (from action button on record page)
+        if (this.currentId != null) {
+            console.log('🔴 Closing from edit mode - redirect to parent');
             
             if (this.parentAsset) {
                 this.recordId = this.parentAsset;
             }
-            console.log('this.recordId: ' + this.recordId);
+            
             const recordUrl = `/lightning/r/Asset/${this.recordId}/view`;
             window.location.assign(recordUrl);
-        } else {
-            this.dispatchEvent(new CloseActionScreenEvent());
+            return;
         }
-        
+
+        // ✅ CASE 3: Default - close action screen
+        console.log('🔴 Custom close - CloseActionScreenEvent');
+        //this.dispatchEvent(new CloseActionScreenEvent());
+
+        const closeEvent = new CustomEvent('closemodal');
+        this.dispatchEvent(closeEvent);
     }
 
     validateRequiredFields() {
@@ -472,15 +493,18 @@ export default class AddNewPolicyDetailInsured extends LightningElement {
             delete dataToSave.Section_Name__c;
             delete dataToSave.Section_Title__c;
             delete dataToSave.COB__c;
+            delete dataToSave.Amount_IDR__c;
             
             if (dataToSave.Parent_Asset__c) {
                 dataToSave.ParentId = dataToSave.Parent_Asset__c;
                 delete dataToSave.Parent_Asset__c;
             }
             
+            console.log('📝 formData to SAVE:', JSON.stringify(dataToSave));
             const response = await saveDetailAsset({ formData : dataToSave });
             const newRecordId = response;
             console.log('Saved record Id : ', newRecordId);
+            
             if (!newRecordId) {
                 throw new Error('Insert failed. Record ID is null.');
             }
@@ -496,9 +520,21 @@ export default class AddNewPolicyDetailInsured extends LightningElement {
                 })
             );
             
+            // ✅ CASE 1: Opened from Opportunity Modal (addNewRisk)
+            if (this.fromOpportunityModal === false || this.fromOpportunityModal === 'false') {
+                console.log('🔴 Closing Quick Action modal');
+                this.dispatchEvent(new CloseActionScreenEvent());
+                return;
+            }
+
+            const closeEvent = new CustomEvent('closemodal');
+            this.dispatchEvent(closeEvent);
+            
+            // ✅ CASE 2 & 3: Redirect to Risk record page
+            /*console.log('✅ Saved - redirect to Risk record page');
             const recordUrl = `/lightning/r/Asset/${this.recordId}/view`;
             window.location.href = recordUrl;
-            // this.dispatchEvent(new CloseActionScreenEvent());
+            */
         } catch (error) {
             this.dispatchEvent(
                 new ShowToastEvent({
