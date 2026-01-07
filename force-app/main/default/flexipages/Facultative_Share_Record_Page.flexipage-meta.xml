@@ -52,6 +52,26 @@
                 <identifier>RecordFolder_Name_cField</identifier>
             </fieldInstance>
         </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Facultative_Folder__c</fieldItem>
+                <identifier>RecordFacultative_Folder__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Closing_Id__c</fieldItem>
+                <identifier>RecordClosing_Id__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
         <name>Facet-f928d3d3-c88b-4971-b74d-e2efe4fd702e</name>
         <type>Facet</type>
     </flexiPageRegions>
@@ -288,6 +308,16 @@
                 <identifier>RecordRebate_Commission_Ceded_Portion_cField</identifier>
             </fieldInstance>
         </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Additional_Notes__c</fieldItem>
+                <identifier>RecordAdditional_Notes_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
         <name>Facet-b1686a2d-705c-499e-b20e-fd001af15c24</name>
         <type>Facet</type>
     </flexiPageRegions>
@@ -458,6 +488,16 @@
                 </fieldInstanceProperties>
                 <fieldItem>Record.Subjectivity_Clauses_Lintas__c</fieldItem>
                 <identifier>RecordSubjectivity_Clauses_Lintas_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Additional_Notes_Lintas__c</fieldItem>
+                <identifier>RecordAdditional_Notes_Lintas_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <name>Facet-4854425b-472e-46db-9e53-07983a14a544</name>
@@ -639,22 +679,6 @@
     <flexiPageRegions>
         <itemInstances>
             <componentInstance>
-                <componentName>newFacultative</componentName>
-                <identifier>c_newFacultative</identifier>
-            </componentInstance>
-        </itemInstances>
-        <itemInstances>
-            <componentInstance>
-                <componentName>addFacultative</componentName>
-                <identifier>c_addFacultative</identifier>
-            </componentInstance>
-        </itemInstances>
-        <name>Facet-8e34f895-e026-46db-ab09-209716c6d670</name>
-        <type>Facet</type>
-    </flexiPageRegions>
-    <flexiPageRegions>
-        <itemInstances>
-            <componentInstance>
                 <componentInstanceProperties>
                     <name>active</name>
                     <value>true</value>
@@ -669,20 +693,6 @@
                 </componentInstanceProperties>
                 <componentName>flexipage:tab</componentName>
                 <identifier>detailTab</identifier>
-            </componentInstance>
-        </itemInstances>
-        <itemInstances>
-            <componentInstance>
-                <componentInstanceProperties>
-                    <name>body</name>
-                    <value>Facet-8e34f895-e026-46db-ab09-209716c6d670</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>title</name>
-                    <value>Facultative Summary</value>
-                </componentInstanceProperties>
-                <componentName>flexipage:tab</componentName>
-                <identifier>flexipage_tab</identifier>
             </componentInstance>
         </itemInstances>
         <name>maintabs</name>
