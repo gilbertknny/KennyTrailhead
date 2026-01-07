@@ -20,6 +20,17 @@ export default class ApproveFacultativeOffering extends LightningElement {
         { label: 'Co Insurer Name', fieldName: 'coInsurerName', type: 'text', initialWidth: 200 },
         { label: 'Origin Risk', fieldName: 'originRiskName', type: 'text', initialWidth: 200 }, 
         {
+            label: 'Share Offered (%)',
+            fieldName: 'Share_Offered__c',
+            type: 'number',
+            typeAttributes: {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 4
+            },
+            initialWidth: 150,
+            cellAttributes: { alignment: 'right' }
+        },
+        {
             label: 'Share Accepted (%)',
             fieldName: 'Share_Accepted_Approved__c',
             type: 'number',
@@ -28,7 +39,7 @@ export default class ApproveFacultativeOffering extends LightningElement {
                 maximumFractionDigits: 4
             },
             editable: true,
-            initialWidth: 100,
+            initialWidth: 150,
             cellAttributes: { alignment: 'right' }
         },
         {
@@ -40,7 +51,7 @@ export default class ApproveFacultativeOffering extends LightningElement {
                 maximumFractionDigits: 4
             },
             editable: true,
-            initialWidth: 100,
+            initialWidth: 150,
             cellAttributes: { alignment: 'right' }
         },
         {
@@ -52,7 +63,7 @@ export default class ApproveFacultativeOffering extends LightningElement {
                 maximumFractionDigits: 4
             },
             editable: true,
-            initialWidth: 100,
+            initialWidth: 150,
             cellAttributes: { alignment: 'right' }
         },
         { label: 'Subjectivity Clause', fieldName: 'Subjectivity_Clauses__c', type: 'text', editable: true, initialWidth: 500  }
