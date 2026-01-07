@@ -11,9 +11,23 @@
                         </valueListItems>
                         <valueListItems>
                             <value>Quote.Approve_Offering</value>
+                            <visibilityRule>
+                                <criteria>
+                                    <leftValue>{!Record.Opportunity.Offering_status__c}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>Offering</rightValue>
+                                </criteria>
+                            </visibilityRule>
                         </valueListItems>
                         <valueListItems>
                             <value>Quote.Reject_Offering</value>
+                            <visibilityRule>
+                                <criteria>
+                                    <leftValue>{!Record.Opportunity.Offering_status__c}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>Offering</rightValue>
+                                </criteria>
+                            </visibilityRule>
                         </valueListItems>
                     </valueList>
                 </componentInstanceProperties>
