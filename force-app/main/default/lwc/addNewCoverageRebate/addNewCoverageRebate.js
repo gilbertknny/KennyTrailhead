@@ -23,10 +23,6 @@ export default class AddNewCoverageRebate extends LightningElement {
     @track descriptionRate= '';
     @track disableModeCoverage = false;
     @api buttonClickedValue;
-    @track hasSection1 = false;
-    @track hasSection2 = false;
-    @track hasSection3 = false;
-    @track hasSection4 = false;
     get modeOptions() {
         return [
             { label: 'Breakdown', value: 'BREAKDOWN_DEDUCTIBLE' },
@@ -49,19 +45,28 @@ export default class AddNewCoverageRebate extends LightningElement {
                     updateItem.isDisabledTotalRebate = true;
                     updateItem.isDisabledInputRebate = true;
                     updateItem.rebate = {
-                        discountValue: null,discountValue2: null,discountValue3: null,discountValue4: null,
-                        commissionValue: null,commissionValue2: null,commissionValue3: null,commissionValue4: null,
-                        agentCommissionValue: null,agentCommissionValue2: null,agentCommissionValue3: null,agentCommissionValue4: null,
-                        brokerCommissionValue: null,brokerCommissionValue2: null,brokerCommissionValue3: null,brokerCommissionValue4: null,
-                        financialCommissionValue: null,financialCommissionValue2: null,financialCommissionValue3: null,financialCommissionValue4: null,
-                        leasingValue: null,leasingValue2: null,leasingValue3: null,leasingValue4: null,
-                        bankFeeValue: null,bankFeeValue2: null,bankFeeValue3: null,bankFeeValue4: null,
-                        overridingValue: null,overridingValue2: null,overridingValue3: null,overridingValue4: null,
-                        bspValue: null,bspValue2: null,bspValue3: null,bspValue4: null,
+                        discountValue: null,
+                        // discountValue2: null,discountValue3: null,discountValue4: null,
+                        commissionValue: null,
+                        // commissionValue2: null,commissionValue3: null,commissionValue4: null,
+                        agentCommissionValue: null,
+                        // agentCommissionValue2: null,agentCommissionValue3: null,agentCommissionValue4: null,
+                        brokerCommissionValue: null,
+                        // brokerCommissionValue2: null,brokerCommissionValue3: null,brokerCommissionValue4: null,
+                        financialCommissionValue: null,
+                        // financialCommissionValue2: null,financialCommissionValue3: null,financialCommissionValue4: null,
+                        leasingValue: null,
+                        // leasingValue2: null,leasingValue3: null,leasingValue4: null,
+                        bankFeeValue: null,
+                        // bankFeeValue2: null,bankFeeValue3: null,bankFeeValue4: null,
+                        overridingValue: null,
+                        // overridingValue2: null,overridingValue3: null,overridingValue4: null,
+                        bspValue: null,
+                        // bspValue2: null,bspValue3: null,bspValue4: null,
                         totalRebate: null,
-                        totalRebate2: null,
-                        totalRebate3: null,
-                        totalRebate4: null,
+                        // totalRebate2: null,
+                        // totalRebate3: null,
+                        // totalRebate4: null,
                     }
                 }
             } else {
@@ -69,19 +74,28 @@ export default class AddNewCoverageRebate extends LightningElement {
                 updateItem.isDisabledInputRebate = false;
                 if(row.id == 'SINGLE_RATE_ID'){
                     updateItem.rebate = {
-                        discountValue: null,discountValue2: null,discountValue3: null,discountValue4: null,
-                        commissionValue: null,commissionValue2: null,commissionValue3: null,commissionValue4: null,
-                        agentCommissionValue: null,agentCommissionValue2: null,agentCommissionValue3: null,agentCommissionValue4: null,
-                        brokerCommissionValue: null,brokerCommissionValue2: null,brokerCommissionValue3: null,brokerCommissionValue4: null,
-                        financialCommissionValue: null,financialCommissionValue2: null,financialCommissionValue3: null,financialCommissionValue4: null,
-                        leasingValue: null,leasingValue2: null,leasingValue3: null,leasingValue4: null,
-                        bankFeeValue: null,bankFeeValue2: null,bankFeeValue3: null,bankFeeValue4: null,
-                        overridingValue: null,overridingValue2: null,overridingValue3: null,overridingValue4: null,
-                        bspValue: null,bspValue2: null,bspValue3: null,bspValue4: null,
+                        discountValue: null,
+                        // discountValue2: null,discountValue3: null,discountValue4: null,
+                        commissionValue: null,
+                        // commissionValue2: null,commissionValue3: null,commissionValue4: null,
+                        agentCommissionValue: null,
+                        // agentCommissionValue2: null,agentCommissionValue3: null,agentCommissionValue4: null,
+                        brokerCommissionValue: null,
+                        // brokerCommissionValue2: null,brokerCommissionValue3: null,brokerCommissionValue4: null,
+                        financialCommissionValue: null,
+                        // financialCommissionValue2: null,financialCommissionValue3: null,financialCommissionValue4: null,
+                        leasingValue: null,
+                        // leasingValue2: null,leasingValue3: null,leasingValue4: null,
+                        bankFeeValue: null,
+                        // bankFeeValue2: null,bankFeeValue3: null,bankFeeValue4: null,
+                        overridingValue: null,
+                        // overridingValue2: null,overridingValue3: null,overridingValue4: null,
+                        bspValue: null,
+                        // bspValue2: null,bspValue3: null,bspValue4: null,
                         totalRebate: null,
-                        totalRebate2: null,
-                        totalRebate3: null,
-                        totalRebate4: null,
+                        // totalRebate2: null,
+                        // totalRebate3: null,
+                        // totalRebate4: null,
                     }
                 }
             }
@@ -105,18 +119,9 @@ export default class AddNewCoverageRebate extends LightningElement {
             console.error('Error fetching picklist values from Apex:', error);
         }
     }
-    setSectionAsset(sectionList){
-        this.hasSection1 = sectionList.includes(1);
-        this.hasSection2 = sectionList.includes(2);
-        this.hasSection3 = sectionList.includes(3);
-        this.hasSection4 = sectionList.includes(4);
-        // console.log('this.hasSection',this.hasSection1);
-    }
     initializeCoverageData() {
         if (this.jsonString) {
             let parsedData = JSON.parse(this.jsonString);
-            this.setSectionAsset(parsedData[0].sectionList);
-            // this.disableModeCoverage = parsedData[0].disableModeCoverage;
             this.selectedMode = parsedData[0].coverageSetting ? parsedData[0].coverageSetting:'BREAKDOWN_DEDUCTIBLE';
             const isCompositeMode = (this.selectedMode === 'COMPOSITE');
             console.log('✅ Initializing Rebate Mode:', this.selectedMode);
@@ -128,9 +133,9 @@ export default class AddNewCoverageRebate extends LightningElement {
                     rebate:{
                         ...rebateData,
                         totalRebate: rebateData.totalRebate || 0,
-                        totalRebate2: rebateData.totalRebate2 || 0,
-                        totalRebate3: rebateData.totalRebate3 || 0,
-                        totalRebate4: rebateData.totalRebate4 || 0,
+                        // totalRebate2: rebateData.totalRebate2 || 0,
+                        // totalRebate3: rebateData.totalRebate3 || 0,
+                        // totalRebate4: rebateData.totalRebate4 || 0,
                         // profitValue: rebateData.profitValue,
                         // bspValue:rebateData.bspValue,
                         // overridingValue:rebateData.overridingValue,
@@ -183,7 +188,7 @@ export default class AddNewCoverageRebate extends LightningElement {
         const value = event.detail.value;
         console.log(`Perubahan di Baris ID: ${rowId}, Field: ${fieldName}, Nilai: ${value}`);
         this.coverageData = this.coverageData.map(item => {
-            if (item.id === rowId) {
+            if (item.coverageIdSection=== rowId) {
                 let updatedItem = { ...item, [fieldName]: value };
                 if (fieldName === 'deductibleSetting') {
                     const isFlatSelected = (value === 'number');
@@ -214,7 +219,7 @@ export default class AddNewCoverageRebate extends LightningElement {
         const value = event.detail.value;
         console.log(`Perubahan di Baris ID: ${rowId}, Field: ${fieldName}, Nilai: ${value}`);
         this.coverageData = this.coverageData.map(item => {
-            // if (item.id === rowId) {
+            // if (item.coverageIdSection=== rowId) {
                 let updatedItem = { ...item, [fieldName]: value };
                 if (fieldName === 'deductibleSetting') {
                     const isFlatSelected = (value === 'number');
@@ -262,14 +267,14 @@ export default class AddNewCoverageRebate extends LightningElement {
         return total;
     };
     handleInputChange(event) {
-        console.log('Change Data from Flow:');
         const rowId = event.target.dataset.id;
         const fieldName = event.target.dataset.fieldname;
         const value = event.detail.value;
-
+        console.log('Change Data from Flow:',rowId,fieldName,value)
         this.coverageData = this.coverageData.map(item => {
-            if (item.id === rowId) {
+            if (item.coverageIdSection === rowId) {
                 // return { ...item, [fieldName]: Number(value) };
+                console.log('Change OPEN',fieldName,Number(value))
                 let updatedItem = { 
                     ...item, 
                     // [fieldName]: Number(value),
@@ -282,36 +287,15 @@ export default class AddNewCoverageRebate extends LightningElement {
                 updatedItem.rebate={
                     ...updatedItem.rebate,
                     totalRebate : Number(this.calculateTotalRebate(rebate, 1)) || 0,
-                    totalRebate2 : Number(this.calculateTotalRebate(rebate, 2)) || 0,
-                    totalRebate3 : Number(this.calculateTotalRebate(rebate, 3)) || 0,
-                    totalRebate4 : Number(this.calculateTotalRebate(rebate, 4)) || 0
+                    // totalRebate2 : Number(this.calculateTotalRebate(rebate, 2)) || 0,
+                    // totalRebate3 : Number(this.calculateTotalRebate(rebate, 3)) || 0,
+                    // totalRebate4 : Number(this.calculateTotalRebate(rebate, 4)) || 0
                 }
                 return updatedItem;
             }
             return item;
         });
-        /* // Commission Average 
-        if (fieldName === 'commissionValue') {
-            const filteredBreakdownRates = this.coverageData.filter(item => 
-                item.isSelected && item.rowType === "BREAKDOWN_RATE"
-            );
-            console.log('filteredBreakdownRates:', filteredBreakdownRates);
-            const totalBreakdownRatesSelected = filteredBreakdownRates.length;
-            const totalSumOfRates = filteredBreakdownRates.reduce((sum, row) => {
-                return sum + (Number(row.rebate.commissionValue) || 0); 
-            }, 0);
-            let newAverageRate = 0;
-            if (totalBreakdownRatesSelected > 0) {
-                newAverageRate = totalSumOfRates / totalBreakdownRatesSelected;
-            }
-            console.log('Rata-rata Coverage Rate Baru:', newAverageRate);
-            this.coverageData = this.coverageData.map(item => ({
-                ...item,
-                commisionAllRate: newAverageRate
-            }));
-        }
-        */
-        // this.jsonString = JSON.stringify(this.coverageData);
+        this.jsonString = JSON.stringify(this.coverageData);
         this.coverageDataFinal = this.coverageData.filter(item => item.Id !== 'SINGLE_RATE_ID');
         console.log('Final Data to Flow:', this.jsonString);
         // this.logFinalData();
@@ -323,7 +307,7 @@ export default class AddNewCoverageRebate extends LightningElement {
         const value = event.detail.value;
 
         this.coverageData = this.coverageData.map(item => {
-            if (item.id === rowId) {
+            if (item.coverageIdSection=== rowId) {
                 // return { ...item, [fieldName]: Number(value) };
                 let updatedItem = { 
                     ...item, 
@@ -337,15 +321,15 @@ export default class AddNewCoverageRebate extends LightningElement {
                 updatedItem.rebate={
                     ...updatedItem.rebate,
                     totalRebate : Number(this.calculateTotalRebate(rebate, 1)) || 0,
-                    totalRebate2 : Number(this.calculateTotalRebate(rebate, 2)) || 0,
-                    totalRebate3 : Number(this.calculateTotalRebate(rebate, 3)) || 0,
-                    totalRebate4 : Number(this.calculateTotalRebate(rebate, 4)) || 0
+                    // totalRebate2 : Number(this.calculateTotalRebate(rebate, 2)) || 0,
+                    // totalRebate3 : Number(this.calculateTotalRebate(rebate, 3)) || 0,
+                    // totalRebate4 : Number(this.calculateTotalRebate(rebate, 4)) || 0
                 }
                 return updatedItem;
             }
             return item;
         });
-        // this.jsonString = JSON.stringify(this.coverageData);
+        this.jsonString = JSON.stringify(this.coverageData);
         this.coverageDataFinal = this.coverageData.filter(item => item.Id !== 'SINGLE_RATE_ID');
         console.log('Final Data to Flow:', this.jsonString);
     }
@@ -455,55 +439,55 @@ export default class AddNewCoverageRebate extends LightningElement {
     }
     
     handleNext() {
-        const flattenDeductibles = (deductibleObj) => {
-            const deductiblesArray = [];
-            for (let i = 2; i <= 4; i++) {
-                const suffix = String(i);
-                const deductibleItem = {
-                    deductibleAmount: deductibleObj['deductibleAmount' + suffix],
-                    minimumAmount: deductibleObj['minimumAmount' + suffix],
-                    currencyId: deductibleObj['currencyId' + suffix],
-                    currencyName: deductibleObj['currencyName' + suffix],
-                    deductibleSetting: deductibleObj['deductibleSetting' + suffix],
-                    deductibleFlag: deductibleObj['deductibleFlag' + suffix],
-                    descriptionValue: deductibleObj['descriptionValue' + suffix],
-                    descriptionDeductible: deductibleObj['descriptionDeductible' + suffix]
-                };
-                deductiblesArray.push(deductibleItem);
-            }
-            return deductiblesArray;
-        };
-        const flattenRebates = (rebateObj) => {
-            const rebatesArray = [];
-            for (let i = 2; i <= 4; i++) {
-                const suffix = String(i);
-                const rebateItem = {
-                    totalRebate: rebateObj['totalRebate' + suffix],
-                    bspValue: rebateObj['bspValue' + suffix],
-                    overridingValue: rebateObj['overridingValue' + suffix],
-                    leasingValue: rebateObj['leasingValue' + suffix],
-                    bankFeeValue: rebateObj['bankFeeValue' + suffix],
-                    commissionValue: rebateObj['commissionValue' + suffix],
-                    agentCommissionValue: rebateObj['agentCommissionValue' + suffix],
-                    brokerCommissionValue: rebateObj['brokerCommissionValue' + suffix],
-                    financialCommissionValue: rebateObj['financialCommissionValue' + suffix],
-                    discountValue: rebateObj['discountValue' + suffix],
-                };
-                rebatesArray.push(rebateItem);
-            }
-            return rebatesArray;
-        };
-        this.coverageData = this.coverageData.map(item => {
-            const deductibleObj = item.deductible || {};
-            const rebateObj = item.rebate || {};
-            const newDeductibles = flattenDeductibles(deductibleObj);
-            const newRebates = flattenRebates(rebateObj);
-            return {
-                ...item,
-                deductibles: newDeductibles,
-                rebates: newRebates,
-            };
-        });
+        // const flattenDeductibles = (deductibleObj) => {
+        //     const deductiblesArray = [];
+        //     for (let i = 2; i <= 4; i++) {
+        //         const suffix = String(i);
+        //         const deductibleItem = {
+        //             deductibleAmount: deductibleObj['deductibleAmount' + suffix],
+        //             minimumAmount: deductibleObj['minimumAmount' + suffix],
+        //             currencyId: deductibleObj['currencyId' + suffix],
+        //             currencyName: deductibleObj['currencyName' + suffix],
+        //             deductibleSetting: deductibleObj['deductibleSetting' + suffix],
+        //             deductibleFlag: deductibleObj['deductibleFlag' + suffix],
+        //             descriptionValue: deductibleObj['descriptionValue' + suffix],
+        //             descriptionDeductible: deductibleObj['descriptionDeductible' + suffix]
+        //         };
+        //         deductiblesArray.push(deductibleItem);
+        //     }
+        //     return deductiblesArray;
+        // };
+        // const flattenRebates = (rebateObj) => {
+        //     const rebatesArray = [];
+        //     for (let i = 2; i <= 4; i++) {
+        //         const suffix = String(i);
+        //         const rebateItem = {
+        //             totalRebate: rebateObj['totalRebate' + suffix],
+        //             bspValue: rebateObj['bspValue' + suffix],
+        //             overridingValue: rebateObj['overridingValue' + suffix],
+        //             leasingValue: rebateObj['leasingValue' + suffix],
+        //             bankFeeValue: rebateObj['bankFeeValue' + suffix],
+        //             commissionValue: rebateObj['commissionValue' + suffix],
+        //             agentCommissionValue: rebateObj['agentCommissionValue' + suffix],
+        //             brokerCommissionValue: rebateObj['brokerCommissionValue' + suffix],
+        //             financialCommissionValue: rebateObj['financialCommissionValue' + suffix],
+        //             discountValue: rebateObj['discountValue' + suffix],
+        //         };
+        //         rebatesArray.push(rebateItem);
+        //     }
+        //     return rebatesArray;
+        // };
+        // this.coverageData = this.coverageData.map(item => {
+        //     const deductibleObj = item.deductible || {};
+        //     const rebateObj = item.rebate || {};
+        //     const newDeductibles = flattenDeductibles(deductibleObj);
+        //     const newRebates = flattenRebates(rebateObj);
+        //     return {
+        //         ...item,
+        //         deductibles: newDeductibles,
+        //         rebates: newRebates,
+        //     };
+        // });
         this.jsonString = JSON.stringify(this.coverageData);
         console.log('Final Data to Flow:', this.jsonString);
         this.buttonClickedValue = 'Next';

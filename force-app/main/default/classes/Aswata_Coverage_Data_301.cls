@@ -197,7 +197,7 @@ public without sharing class Aswata_Coverage_Data_301 {
             }
         }
         List<InsurancePolicyCoverage> existingCoverage = [
-            SELECT Id,CoverageName,Coverage_Name__c,cov_tahun_id__c
+            SELECT Id,CoverageName,Coverage_Name__c,cov_tahun_id__c,Master_Data__c
             FROM InsurancePolicyCoverage
             WHERE (Coverage_Name__c IN :listCovMasterData OR CoverageName LIKE '%+%')
             AND Risk_ID__c =: risk.Id
@@ -217,19 +217,23 @@ public without sharing class Aswata_Coverage_Data_301 {
     public static List<InsurancePolicyCoverage> applyExistingIds(List<InsurancePolicyCoverage> coverageList, List<InsurancePolicyCoverage> existingCoverage) {
         Map<String,String> mappExistingCoverage = new Map<String,String>();
         for (InsurancePolicyCoverage cov : existingCoverage) {
-            String tahunId = String.valueOf(cov.cov_tahun_id__c);
+            String covTahun = String.valueOf(cov.cov_tahun_id__c);
+            String keySection = cov.Coverage_Name__c+ '-'+ covTahun+'-'+ cov.Master_Data__c;
+            System.debug('cov.Coverage_Name__c+keySection : '+keySection);
             if(cov.Coverage_Name__c!=null){
-                mappExistingCoverage.put(cov.Coverage_Name__c+tahunId,cov.Id);
+                mappExistingCoverage.put(keySection,cov.Id);
             }else if(cov.CoverageName.contains('+')){
-                mappExistingCoverage.put('Single'+tahunId,cov.Id);
+                mappExistingCoverage.put('Single-'+covTahun,cov.Id);
             }
         }
         for (InsurancePolicyCoverage cov : coverageList) {
-            String tahunId = String.valueOf(cov.cov_tahun_id__c);
-            if (mappExistingCoverage.containsKey(cov.Coverage_Name__c)) {
-                cov.Id = mappExistingCoverage.get(cov.Coverage_Name__c+tahunId);
+            String covTahun = String.valueOf(cov.cov_tahun_id__c);
+            String keySection = cov.Coverage_Name__c+ '-'+ covTahun+'-'+ cov.Master_Data__c;
+            System.debug('tryGetId with keySection : '+keySection);
+            if (mappExistingCoverage.containsKey(keySection)) {
+                cov.Id = mappExistingCoverage.get(keySection);
             } else if (cov.CoverageName != null && cov.CoverageName.contains('+')) {
-                cov.Id = mappExistingCoverage.get('Single'+tahunId);
+                cov.Id = mappExistingCoverage.get('Single-'+covTahun);
             }
         }
         return coverageList;

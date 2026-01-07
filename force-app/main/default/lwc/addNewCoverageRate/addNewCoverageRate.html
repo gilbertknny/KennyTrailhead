@@ -2,108 +2,89 @@
   @description       : Untuk Milih Coverage Saja
   @author            : Ahmad Yazid Munif
   @group             : 
-  @last modified on  : 12-20-2025
+  @last modified on  : 01-06-2026
   @last modified by  : Ahmad Yazid Munif
 -->
 <template>
-    <div class="slds-p-around_medium slds-scrollable_x">
-        <lightning-radio-group
-            label="Coverage & Rate Setting"
-            options={modeOptions}
-            value={selectedMode}
-            onchange={handleModeChange}
-            required
-            class="slds-m-bottom_medium"
-            disabled={settingCoverage}>
-        </lightning-radio-group>
-        <div style="padding: 10px;">
-            <lightning-input
-                type="search"
-                label="Cari Coverage"
-                value={searchTerm}
-                onchange={handleSearchChange}
-                placeholder="Masukkan Nama Coverage..."
-            ></lightning-input>
-        </div>
-        <template if:true={coverageData}>
-            <table class="slds-table slds-table_cell-buffer slds-table_bordered"
-                style="width: 100%;">
-                <thead>
-                    <tr class="slds-line-height_reset">
-                        <th class="slds-text-align_center" scope="col" style="width: 10%;"> 
-                            <div class="wrap-header" title="Pilih"></div>
-                        </th>
-                        <th class="slds-text-align_left" scope="col" style="width: 20%;"> 
-                            <div class="wrap-header" title="ID Coverage">ID</div>
-                        </th>
-                        <th class="slds-text-align_left" scope="col" style="width: 70%;">
-                            <div class="slds-cell-wrap" title="Nama Cakupan">Coverage Name</div>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <template for:each={filteredCoverageData} for:item="row">
-                        <template if:false={row.isSingleRate}> 
-                            <tr key={row.id}> 
-                                <td class="slds-text-align_center">
-                                    <template if:false={row.isDisabledSelection}> 
-                                        <lightning-input
-                                            type="checkbox"
-                                            checked={row.isSelected}
-                                            data-id={row.id}
-                                            onchange={handleRowSelection}
-                                            disabled={row.isExisting}
-                                            variant="label-hidden">
-                                        </lightning-input>
-                                    </template>
-                                </td>
-                                <td data-label="ID Coverage">{row.coverageId}</td>
-                                <td data-label="Coverage Name" class="slds-cell-wrap">{row.coverageName}</td>
-                            </tr>
-                        </template>
-                    </template>
-                    <template if:false={isModeBreakdown}>
-                        <template for:each={thisCoverageData} for:item="row">
-                            <template if:true={row.isSingleRate}> 
+    <div class="main-container">
+        <div class="content-body slds-p-around_medium slds-scrollable_x">
+            <lightning-radio-group
+                label="Coverage & Rate Setting"
+                options={modeOptions}
+                value={selectedMode}
+                onchange={handleModeChange}
+                required
+                class="slds-m-bottom_medium"
+                disabled={settingCoverage}>
+            </lightning-radio-group>
+            <div style="padding: 10px;">
+                <lightning-input
+                    type="search"
+                    label="Cari Coverage"
+                    value={searchTerm}
+                    onchange={handleSearchChange}
+                    placeholder="Masukkan Nama Coverage..."
+                ></lightning-input>
+            </div>
+            <template if:true={coverageData}>
+                <table class="slds-table slds-table_cell-buffer slds-table_bordered"
+                    style="width: 100%;">
+                    <thead>
+                        <tr class="slds-line-height_reset">
+                            <th class="slds-text-align_center" scope="col" style="width: 10%;"> 
+                                <div class="wrap-header" title="Pilih"></div>
+                            </th>
+                            <th class="slds-text-align_left" scope="col" style="width: 20%;"> 
+                                <div class="wrap-header" title="ID Coverage">ID</div>
+                            </th>
+                            <th class="slds-text-align_left" scope="col" style="width: 70%;">
+                                <div class="slds-cell-wrap" title="Nama Cakupan">Coverage Name</div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={filteredCoverageData} for:item="row">
+                            <template if:false={row.isSingleRate}> 
                                 <tr key={row.id}> 
                                     <td class="slds-text-align_center">
                                         <template if:false={row.isDisabledSelection}> 
                                             <lightning-input
                                                 type="checkbox"
-                                                checked=false
+                                                checked={row.isSelected}
                                                 data-id={row.id}
                                                 onchange={handleRowSelection}
+                                                disabled={row.isExisting}
                                                 variant="label-hidden">
                                             </lightning-input>
                                         </template>
                                     </td>
                                     <td data-label="ID Coverage">{row.coverageId}</td>
-                                    <td data-label="Coverage Name" class="slds-text-title_bold">{row.coverageName}</td>
+                                    <td data-label="Coverage Name" class="slds-cell-wrap">{row.coverageName}</td>
                                 </tr>
                             </template>
                         </template>
-                    </template>
-                </tbody>
-            </table>
-        </template>
-    </div>
-    <footer class="slds-modal__footer">
-        <div class="slds-grid slds-grid_align-end slds-m-top_large">
-            <div class="slds-grid slds-grid_align-center slds-gap_small">
-                <template if:true={isCOB301}>
-                    <lightning-button 
-                        label="Previous" 
-                        onclick={handlePrevious} 
-                        variant="neutral">
-                    </lightning-button>
-                </template>
-                <lightning-button 
-                    label="Next" 
-                    onclick={handleNext} 
-                    class="slds-m-left_small"
-                    variant="brand">
-                </lightning-button>
-            </div>
+                    </tbody>
+                </table>
+            </template>
         </div>
-    </footer>
+        <footer class="fixed-footer slds-modal__footer">
+            <div class="slds-grid slds-grid_align-end">
+                <!-- <div class="slds-grid slds-grid_align-center slds-gap_small"> -->
+                    <template if:true={isCOB301}>
+                        <lightning-button 
+                            label="Previous" 
+                            onclick={handlePrevious} 
+                            variant="neutral">
+                        </lightning-button>
+                    </template>
+                    <lightning-button 
+                        label="Next" 
+                        onclick={handleNext} 
+                        class="slds-m-left_small"
+                        variant="brand">
+                    </lightning-button>
+                <!-- </div> -->
+            </div>
+        </footer>
+    </div>
 </template>
