@@ -87,7 +87,7 @@ public without sharing class ClsUserLimit {
             String strQueryMDMin = 'SELECT Id,LIMIT_AMOUNT__c FROM Master_Data__c';
             strQueryMDMin += ' WHERE RecordType.DeveloperName = \''+ 'Approval_Limit'+'\'';
             strQueryMDMin += ' AND AUTHORITY_TYPE__c = \''+'UW'+'\'';
-            strQueryMDMin += ' AND LIMIT_AMOUNT__c <=: amount';
+            strQueryMDMin += ' AND LIMIT_AMOUNT__c >=: amount';
             strQueryMDMin += ' AND Status__c = \''+'Approved'+'\'';
             if(queryfield != '' && queryfield != null) {strQueryMDMin += queryfield;}
             strQueryMDMin += ' ORDER BY Counter_Date__c ASC';
@@ -101,7 +101,7 @@ public without sharing class ClsUserLimit {
                 String strQueryMD = 'SELECT Id,USER_ID__c FROM Master_Data__c';
                 strQueryMD += ' WHERE RecordType.DeveloperName = \''+ 'Approval_Limit'+'\'';
                 strQueryMD += ' AND AUTHORITY_TYPE__c = \''+'UW'+'\'';
-                strQueryMD += ' AND LIMIT_AMOUNT__c <=: limitAmount';
+                strQueryMD += ' AND LIMIT_AMOUNT__c >=: limitAmount';
                 strQueryMD += ' AND Status__c = \''+'Approved'+'\'';
                 if(queryfield != '' && queryfield != null) {strQueryMD += queryfield;}
                 strQueryMD += ' ORDER BY Counter_Date__c ASC';

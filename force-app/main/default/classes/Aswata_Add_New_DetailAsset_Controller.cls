@@ -59,7 +59,7 @@ public with sharing class Aswata_Add_New_DetailAsset_Controller {
     private static Asset mapFormDataToAsset(Map<String, Object> formData, Asset record) {
         // Asset updateData = record;
         Set<String> numericFields = new Set<String>{
-            'Exchange_Rate__c', 'Amount__c', 'Amount_IDR__c', 'Amount_IDR_new__c', 'Declare_Value__c', 'Amount_Insured__c'
+            'Exchange_Rate__c', 'Amount__c', 'Amount_IDR_new__c', 'Declare_Value__c', 'Amount_Insured__c'
         };
 
         for (String fieldApi : formData.keySet()) {
@@ -246,7 +246,6 @@ public with sharing class Aswata_Add_New_DetailAsset_Controller {
                 Currency__c,
                 Exchange_Rate__c,
                 Amount__c,
-                Amount_IDR__c,
                 Amount_IDR_new__c,
                 Category_ID__c,
                 Section_ID__c,
@@ -273,7 +272,6 @@ public with sharing class Aswata_Add_New_DetailAsset_Controller {
         result.put('Currency__c', detailAsset.Currency__c);
         result.put('Exchange_Rate__c', detailAsset.Exchange_Rate__c);
         result.put('Amount__c', detailAsset.Amount__c);
-        result.put('Amount_IDR__c', detailAsset.Amount_IDR__c);
         result.put('Amount_IDR_new__c', detailAsset.Amount_IDR_new__c);
         result.put('Category_ID__c', detailAsset.Category_ID__c);
         result.put('Section_ID__c', detailAsset.Section_ID__c);
@@ -310,7 +308,6 @@ public with sharing class Aswata_Add_New_DetailAsset_Controller {
                     Section__r.Name,
                     Category__c,
                     Category__r.Name,
-                    Amount_IDR__c,
                     Amount_IDR_new__c,
                     Amount__c,
                     Currency__c,

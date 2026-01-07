@@ -494,13 +494,14 @@ export default class addNewDetailAsset extends LightningElement {
             delete dataToSave.Section_Title__c;
             delete dataToSave.COB__c;
             delete dataToSave.Amount_IDR__c;
+            delete dataToSave.Amount_IDR_new__c;
             
             if (dataToSave.Parent_Asset__c) {
                 dataToSave.ParentId = dataToSave.Parent_Asset__c;
                 delete dataToSave.Parent_Asset__c;
             }
             
-            console.log('📝 formData to SAVE:', JSON.stringify(dataToSave));
+            console.log('📝 formData to SAVE 11:', JSON.stringify(dataToSave));
             const response = await saveDetailAsset({ formData : dataToSave });
             const newRecordId = response;
             console.log('Saved record Id : ', newRecordId);
