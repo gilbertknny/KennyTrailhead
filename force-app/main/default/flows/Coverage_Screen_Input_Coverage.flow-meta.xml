@@ -104,6 +104,22 @@
         </connector>
     </assignments>
     <assignments>
+        <name>editCoverage</name>
+        <label>editCoverage</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>isNewCoverage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>checkPolis</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
         <name>GroupMatrixAssignment</name>
         <label>GroupMatrixAssignment</label>
         <locationX>0</locationX>
@@ -124,6 +140,19 @@
         </assignmentItems>
         <connector>
             <targetReference>Screen_Input_Coverage_Rebate</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>toEmptyValue</name>
+        <label>toEmptyValue</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>CoverageRateOutput</assignToReference>
+            <operator>Assign</operator>
+        </assignmentItems>
+        <connector>
+            <targetReference>addCounter</targetReference>
         </connector>
     </assignments>
     <choices>
@@ -171,6 +200,31 @@
                 <targetReference>ConfirmationNextYear2</targetReference>
             </connector>
             <label>NextYear</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>checkCoverageRisk</name>
+        <label>checkCoverageRisk</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>editCoverage</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>editCoverage</defaultConnectorLabel>
+        <rules>
+            <name>emptyCoverage</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>getExistingCoverage</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>checkPolis</targetReference>
+            </connector>
+            <label>emptyCoverage</label>
         </rules>
     </decisions>
     <decisions>
@@ -268,9 +322,34 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>addCounter</targetReference>
+                <targetReference>newOrEdit</targetReference>
             </connector>
             <label>to Next Year</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>newOrEdit</name>
+        <label>newOrEdit</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>toEmptyValue</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>EditCoverage</defaultConnectorLabel>
+        <rules>
+            <name>NewCoverage</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>isNewCoverage</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>addCounter</targetReference>
+            </connector>
+            <label>NewCoverage</label>
         </rules>
     </decisions>
     <decisions>
@@ -377,8 +456,14 @@
             <label>NextSavingData</label>
         </rules>
     </decisions>
-    <description>New Activate</description>
+    <description>Activate New</description>
     <environments>Default</environments>
+    <formulas>
+        <name>getTotalPeriod</name>
+        <dataType>Number</dataType>
+        <expression>ROUND({!Get_Asset.Opportunity__r.Period_Rate__c}, 0)</expression>
+        <scale>0</scale>
+    </formulas>
     <interviewLabel>[Coverage]Screen Input Coverage {!$Flow.CurrentDateTime}</interviewLabel>
     <label>[Coverage]Screen Input Coverage</label>
     <processMetadataValues>
@@ -541,13 +626,34 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordLookups>
+        <name>getExistingCoverage</name>
+        <label>getExistingCoverage</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>checkCoverageRisk</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Risk_ID__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>InsurancePolicyCoverage</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
         <name>GetInsurancePolicy</name>
         <label>GetInsurancePolicy</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>checkPolis</targetReference>
+            <targetReference>getExistingCoverage</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -1058,6 +1164,16 @@
         <objectType>InsurancePolicyCoverage</objectType>
     </variables>
     <variables>
+        <name>isNewCoverage</name>
+        <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <booleanValue>true</booleanValue>
+        </value>
+    </variables>
+    <variables>
         <name>polisId</name>
         <dataType>String</dataType>
         <isCollection>false</isCollection>
@@ -1093,7 +1209,7 @@
         <isOutput>false</isOutput>
         <scale>0</scale>
         <value>
-            <elementReference>Get_Asset.Opportunity__r.Period_Rate__c</elementReference>
+            <elementReference>getTotalPeriod</elementReference>
         </value>
     </variables>
 </Flow>
