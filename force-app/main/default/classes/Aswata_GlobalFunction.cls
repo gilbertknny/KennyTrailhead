@@ -73,7 +73,7 @@ public without sharing class Aswata_GlobalFunction {
             FROM Master_Data__c
             WHERE Branch__r.BRANCH_ID__c = :branchId
             AND BSN_ID__c = :cobId
-            AND LIMIT_AMOUNT__c <= :amount
+            AND LIMIT_AMOUNT__c >= :amount
             AND RecordType.DeveloperName = 'Limit_Reas'
             ORDER BY LIMIT_AMOUNT__c ASC
             LIMIT 1
