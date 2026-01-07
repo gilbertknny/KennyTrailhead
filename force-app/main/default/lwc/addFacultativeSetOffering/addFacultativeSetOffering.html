@@ -164,10 +164,22 @@
                                             <textarea id="clausesWarranty"
                                                     name="clausesWarranty" 
                                                     class="slds-textarea" 
-                                                    rows="8" 
+                                                    rows="6" 
                                                     oninput={handleInputChange} 
                                                     >
                                                     {formData.clausesWarranty} 
+                                            </textarea>
+                                        </div>
+
+                                        <label class="slds-form-element__label" for="terms">Additional Notes</label>
+                                        <div class="slds-form-element__control">
+                                            <textarea id="additionalNotes"
+                                                    name="additionalNotes" 
+                                                    class="slds-textarea" 
+                                                    rows="6" 
+                                                    oninput={handleInputChange} 
+                                                    >
+                                                    {formData.additionalNotes} 
                                             </textarea>
                                         </div>
                                     </div>
