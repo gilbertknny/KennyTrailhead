@@ -1,7 +1,7 @@
 /**
  * @description       : Generate Data for Insert Coverage
  * @author            : Ahmad Yazid Munif
- * @last modified on  : 01-06-2026
+ * @last modified on  : 01-07-2026
  * @last modified by  : Ahmad Yazid Munif
 **/
 public without sharing class Aswata_Coverage_Data_Handler {
@@ -26,6 +26,7 @@ public without sharing class Aswata_Coverage_Data_Handler {
         // Rate
         coverage.Proposed_Fixed_Amount__c = wrapper.rate.coverageRate;
         coverage.Premi_Amount__c = wrapper.rate.fixedAmount;
+        coverage.Master_Data__c = wrapper.sectionId;
         // coverage.Proposed_Fixed_Amount_Section_2__c = wrapper.rate.coverageRate2;
         // coverage.Premi_Amount_Section_2__c = wrapper.rate.fixedAmount2;
         // coverage.Proposed_Fixed_Amount_Section_3__c = wrapper.rate.coverageRate3;
@@ -47,9 +48,9 @@ public without sharing class Aswata_Coverage_Data_Handler {
             coverage.Broker_Comission__c = wrapper.rebate.brokerCommissionValue;
             coverage.Finance_Commision_PCT__c = wrapper.rebate.financialCommissionValue;
         }
-        if(wrapper.rebates.size()>0){
-            coverage = Aswata_Coverage_SectionData_Handler.wrapperRebate4(coverage,wrapper,risk);
-        }
+        // if(wrapper.rebates.size()>0){
+        //     coverage = Aswata_Coverage_SectionData_Handler.wrapperRebate4(coverage,wrapper,risk);
+        // }
         return coverage;
     }
     /**
@@ -80,9 +81,9 @@ public without sharing class Aswata_Coverage_Data_Handler {
             coverage.Description = wrapper.deductible.descriptionDeductible;
             coverage.Description__c = wrapper.deductible.descriptionValue;
 
-            if(wrapper.deductibles.size()>0){
-                coverage = Aswata_Coverage_SectionData_Handler.wrapperDeductible4(coverage,wrapper,risk);
-            }
+            // if(wrapper.deductibles.size()>0){
+            //     coverage = Aswata_Coverage_SectionData_Handler.wrapperDeductible4(coverage,wrapper,risk);
+            // }
         }
         return coverage;
     }
@@ -92,22 +93,30 @@ public without sharing class Aswata_Coverage_Data_Handler {
      * @return List<Aswata_Coverage_Data_Wrapper.DynamicFieldConfigure> list coverage
      */
     @AuraEnabled(cacheable=false)
-    public static List<Aswata_Coverage_Data_Wrapper.DynamicFieldConfigure> getExistingCoverage(String riskId) {
+    public static List<Aswata_Coverage_Data_Wrapper.DynamicFieldConfigure> getExistingCoverage(String riskId,Integer tahun) {
         List<Aswata_Coverage_Data_Wrapper.DynamicFieldConfigure> results = new List<Aswata_Coverage_Data_Wrapper.DynamicFieldConfigure>();
+        SOQL_SOBJECT.SOQL_Param sp = new SOQL_SOBJECT.SOQL_Param();
+        // sp.sobjectName = 'InsurancePolicyCoverage';
+        // sp.condition = 'Risk_ID__c = :riskId AND cov_tahun_id__c = :tahun';
+        // sp.fields = 'Id,CoverageName,Coverage_Name__c,Coverage_Name__r.COVERAGE_REF_ID__c,Proposed_Fixed_Amount__c,Selected_Coverages_ID__c,Deductible_Type__c,DeductibleAmount,Deductible_PCT__c,Deductible__c,Minimum_Cur_ID__c,Description,Description__c,Minimum_Amount__c,Discount__c,Commision__c,Banks_Fee_Comission__c,Risk_Closing_Survey_Fee_BSP__c,Leasing_Fee__c,Overdng_Comission__c,Agent_Comission__c,Broker_Comission__c,Finance_Commision_PCT__c,Master_Data__c, Master_Data__r.Section__c';
+        // String dpquery = SOQL_SOBJECT.SOQL(sp)+' WITH SECURITY_ENFORCED';
+        // List<InsurancePolicyCoverage> existingCoverageList = Database.query(dpquery);
         List<InsurancePolicyCoverage> existingCoverageList = [
             SELECT Id,CoverageName,Coverage_Name__c,
             Coverage_Name__r.COVERAGE_REF_ID__c,Proposed_Fixed_Amount__c,Selected_Coverages_ID__c,
             Deductible_Type__c,DeductibleAmount,Deductible_PCT__c,Deductible__c,
             Minimum_Cur_ID__c,Description,Description__c,Minimum_Amount__c,
             Discount__c,Commision__c,Banks_Fee_Comission__c,Risk_Closing_Survey_Fee_BSP__c,
-            Leasing_Fee__c,Overdng_Comission__c,Agent_Comission__c,Broker_Comission__c,Finance_Commision_PCT__c
+            Leasing_Fee__c,Overdng_Comission__c,Agent_Comission__c,Broker_Comission__c,Finance_Commision_PCT__c,
+            Master_Data__c, Master_Data__r.Section__c
             FROM InsurancePolicyCoverage
-            WHERE Risk_ID__c = :riskId
+            WHERE Risk_ID__c = :riskId AND cov_tahun_id__c = :tahun
             WITH SECURITY_ENFORCED
         ];
         for (InsurancePolicyCoverage cfg : existingCoverageList) {
             Aswata_Coverage_Data_Wrapper.DynamicFieldConfigure config = new Aswata_Coverage_Data_Wrapper.DynamicFieldConfigure();
             config.coverageId = cfg.Coverage_Name__r.COVERAGE_REF_ID__c;
+            config.coverageIdSection = cfg.Coverage_Name__r.COVERAGE_REF_ID__c+'_SEC'+cfg.Master_Data__r.Section__c;
             config.coverageName = cfg.CoverageName;
             config.rate.coverageRate = cfg.Proposed_Fixed_Amount__c;
             config.deductible.deductibleSetting = cfg.Deductible_Type__c;
@@ -151,17 +160,19 @@ public without sharing class Aswata_Coverage_Data_Handler {
      */
     @AuraEnabled(cacheable=true)
     public static List<Aswata_Coverage_Data_Wrapper.DynamicFieldConfig> getCoverageFields(String rtId, String cob,String riskId) {
-        List<Decimal> sectionList = new List<Decimal>();
+        // List<Decimal> sectionList = new List<Decimal>();
         List<Asset> assetRisk = [
-            SELECT Id, Name, Section__r.Section__c
+            SELECT Section__c, Section__r.Name, Section__r.Section__c
             FROM Asset
             WHERE ParentId = :riskId
             WITH SECURITY_ENFORCED
         ];
+        Map<Id, Asset> uniqueSectionsMap = new Map<Id, Asset>();
         for (Asset detailAsset : assetRisk) {
-            sectionList.add(detailAsset.Section__r.Section__c);
+            if (detailAsset.Section__c != null && !uniqueSectionsMap.containsKey(detailAsset.Section__c)) {
+                uniqueSectionsMap.put(detailAsset.Section__c, detailAsset);
+            }
         }
-
         List<Aswata_Coverage_Data_Wrapper.DynamicFieldConfig> results = new List<Aswata_Coverage_Data_Wrapper.DynamicFieldConfig>();
         List<Master_Data__c> configs = new List<Master_Data__c>();
         if(cob == '301'){
@@ -210,13 +221,19 @@ public without sharing class Aswata_Coverage_Data_Handler {
             if (covRate != null && covRate.Tarif_Bawah__c != null) {
                 tarifBawahValue = covRate.Tarif_Bawah__c * 100;
             }
-            Aswata_Coverage_Data_Wrapper.DynamicFieldConfig configField = new Aswata_Coverage_Data_Wrapper.DynamicFieldConfig();
-            configField.coverageId = cfg.COVERAGE_REF_ID__c;
-            configField.parentCoverageId = cfg.PARENT_COVERAGE_ID__c;
-            configField.coverageName = cfg.Name;
-            configField.batasBawah = tarifBawahValue;
-            configField.sectionList = sectionList;
-            results.add(configField);
+            for (Asset section : uniqueSectionsMap.values()) {
+                Aswata_Coverage_Data_Wrapper.DynamicFieldConfig configField = new Aswata_Coverage_Data_Wrapper.DynamicFieldConfig();
+                configField.coverageId = cfg.COVERAGE_REF_ID__c;
+                configField.coverageIdSection = cfg.COVERAGE_REF_ID__c+'_SEC'+section.Section__r.Section__c;
+                configField.parentCoverageId = cfg.PARENT_COVERAGE_ID__c;
+                configField.coverageName = cfg.Name;
+                configField.batasBawah = tarifBawahValue;
+                configField.sectionId = section.Section__c;
+                configField.sectionName = section.Section__r.Name;
+                configField.sectionDisplay = section.Section__r.Section__c;
+                // configField.sectionList = sectionList;
+                results.add(configField);
+            }
         }
         return results;
     }

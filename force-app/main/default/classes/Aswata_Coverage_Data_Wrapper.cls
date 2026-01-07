@@ -1,7 +1,7 @@
 /**
  * @description       : Wrapper Coverage
  * @author            : Ahmad Yazid Munif
- * @last modified on  : 12-20-2025
+ * @last modified on  : 01-02-2026
  * @last modified by  : Ahmad Yazid Munif
 **/
 public with sharing class Aswata_Coverage_Data_Wrapper {
@@ -9,6 +9,8 @@ public with sharing class Aswata_Coverage_Data_Wrapper {
     public class DynamicFieldConfigure {
         /** @description Coverage REF ID */
         @AuraEnabled public String coverageId   {get;set;}
+        /** @description Section Id */
+        @AuraEnabled public String coverageIdSection   {get;set;}
         /** @description coverage Name */
         @AuraEnabled public String coverageName {get;set;}
         /** @description batas bawah coverage */
@@ -39,6 +41,14 @@ public with sharing class Aswata_Coverage_Data_Wrapper {
         @AuraEnabled public String coverageName {get;set;}
         /** @description Nilai batas bawah or tarif dasar (Tarif_Bawah__c) from coverage */
         @AuraEnabled public Decimal batasBawah {get;set;}
+        /** @description section Section No from detail asset */
+        @AuraEnabled public String coverageIdSection {get;set;}
+        /** @description section Id from detail asset */
+        @AuraEnabled public String sectionId {get;set;}
+        /** @description section Name from detail asset */
+        @AuraEnabled public String sectionName {get;set;}
+        /** @description section Number from detail asset */
+        @AuraEnabled public Decimal sectionDisplay {get;set;}
         /** @description section from detail asset */
         @AuraEnabled public List<Decimal> sectionList {get;set;}
     }
@@ -56,6 +66,7 @@ public with sharing class Aswata_Coverage_Data_Wrapper {
         public String policyId;
         public String riskId;
         public String coverageId;
+        public String sectionId;
         public String parentCoverageId;
         public String coverageName;
         public Decimal batasBawah;
@@ -63,8 +74,8 @@ public with sharing class Aswata_Coverage_Data_Wrapper {
         public CoverageRate rate = new CoverageRate();
         public Deductible deductible = new Deductible();
         public Rebate rebate = new Rebate();
-        public List<Deductible> deductibles = new List<Deductible>();
-        public List<Rebate> rebates = new List<Rebate>();
+        // public List<Deductible> deductibles = new List<Deductible>();
+        // public List<Rebate> rebates = new List<Rebate>();
         public ExistingCoverage existing = new ExistingCoverage();
     }
     /** @description class wrapper JSON String input CoverageRate */
