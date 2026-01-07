@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
 	<types>
-		<members>Account.IsOpenSync__c</members>
+		<members>Asset.Destination_Country__c</members>
+		<members>Asset.Origin_Country__c</members>
+		<members>Asset.Port_Of_Destination__c</members>
+		<members>Asset.Port_Of_Origin__c</members>
 		<name>CustomField</name>
 	</types>
 	<types>
-		<members>Account.Send_to_Lintaswata</members>
-		<members>Account.Sync_Data</members>
-		<members>InsurancePolicy.Renewal_Agreement</members>
-		<name>WebLink</name>
+		<members>Master_Country</members>
+		<name>GlobalValueSet</name>
 	</types>
 	<version>65.0</version>
 </Package>
