@@ -252,7 +252,7 @@
             <name>Account_Already_KYC</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>Get_Quote.QuoteAccount.Is_General__c</leftValueReference>
+                <leftValueReference>Get_Quote.Opportunity.Account.Is_General__c</leftValueReference>
                 <operator>EqualTo</operator>
                 <rightValue>
                     <booleanValue>true</booleanValue>
