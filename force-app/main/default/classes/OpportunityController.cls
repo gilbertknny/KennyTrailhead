@@ -463,6 +463,7 @@ public with sharing class OpportunityController {
         @AuraEnabled public String inputMode { get; set; }
         @AuraEnabled public String offeringStatus { get; set; }
         @AuraEnabled public String folderId { get; set; }
+        @AuraEnabled public String additionalNotes { get; set; }
         @AuraEnabled public Decimal totalAmountInsured { get; set; }
         @AuraEnabled public List<Id> riskId { get; set; }
         @AuraEnabled public List<Id> accountIds { get; set; }
@@ -494,6 +495,7 @@ public with sharing class OpportunityController {
             req.inputMode = (String) data.get('inputMode');
             req.offeringStatus = (String) data.get('offeringStatus');
             req.folderId = (String) data.get('folderId');
+            req.additionalNotes = (String) data.get('additionalNotes');
             
             Object totalAmtObj = data.get('totalAmountInsured');
             if (totalAmtObj != null && String.isNotBlank(String.valueOf(totalAmtObj))) {
@@ -763,7 +765,8 @@ public with sharing class OpportunityController {
                         facultativeShareRecordTypeId, 
                         req.folderId,
                         accountName,
-                        assetName
+                        assetName,
+                        req.additionalNotes
                     );
                     facultativeSharesToInsert.add(facultativeShare);
                 }
@@ -880,7 +883,7 @@ public with sharing class OpportunityController {
      * @param req The opportunity request data
      * @return Facultative_Share__c record
      */
-    private static Facultative_Share__c createFacultativeShare(Id riskId, Id opportunityId, Id accountId, OpportunityRequest req, Id recordTypeId, Id folderId, String accountName, String assetName) {
+    private static Facultative_Share__c createFacultativeShare(Id riskId, Id opportunityId, Id accountId, OpportunityRequest req, Id recordTypeId, Id folderId, String accountName, String assetName, String additionalNotes) {
         Facultative_Share__c fs = new Facultative_Share__c();
         
         // Set required fields
@@ -899,6 +902,7 @@ public with sharing class OpportunityController {
         
         String clauses = String.isNotBlank(req.clausesWarranty) ? req.clausesWarranty : '';
         fs.Subjectivity_Clauses__c = clauses;
+        fs.Additional_Notes__c = additionalNotes;
         
         // Set the Name field with format: "Offering - Co Insurer Name - Origin Risk"
         // Ensure we handle null values and truncate if necessary (max 80 characters for Name field)
