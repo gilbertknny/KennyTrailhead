@@ -23,7 +23,7 @@ public class ClsPolicyDistribution_Test {
         opp.COB__c = '201';
         insert opp;
         
-        String strRTMd = Schema.SObjectType.Master_Data__c.getRecordTypeInfosByName().get('Approval Limit').getRecordTypeId();
+        String strRTMd = Schema.SObjectType.Master_Data__c.getRecordTypeInfosByName().get('Policy Distribution').getRecordTypeId();
         Master_Data__c md = new Master_Data__c();
         md.RecordTypeId = strRTMd;
         md.AUTHORITY_TYPE__c = 'UW';
@@ -31,6 +31,7 @@ public class ClsPolicyDistribution_Test {
         md.Status__c = 'Approved';
         md.BSN_ID__c = '201';
         md.USER_PIC__c = ct.Id;
+        md.USER_ID__c = UserInfo.getUserId();
         insert md;
         
         String strRT2 = Schema.SObjectType.Master_Data__c.getRecordTypeInfosByName().get('Filter Policy Distribution').getRecordTypeId();
