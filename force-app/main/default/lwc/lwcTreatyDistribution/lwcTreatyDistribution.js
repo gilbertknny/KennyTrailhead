@@ -342,30 +342,38 @@ export default class LwcTreatyDistribution extends LightningElement {
         return parseFloat(cleanValue);
     }
     async formatDeepClone(sourceObject) {
-        if (!sourceObject) return null;
-        let formattedClone = JSON.parse(JSON.stringify(sourceObject));
-        let finalFormattedData = { ...formattedClone }; 
-        this.RISK_KEYS.forEach(key => {
-            const component = formattedClone[key];
-            if (component && typeof component === 'object') {
-                const accumulation = component.accumulation ?? 0;
-                const capacity = component.capacity ?? 0;
-                const tempLimit = component.limit !== undefined 
-                        ? component.limit
-                        : (capacity - accumulation);
-                finalFormattedData[key] = {    
-                    limit: this.formatNumber(tempLimit ?? 0),
-                    accumulation: this.formatNumber(component.accumulation ?? 0),
-                    capacity: this.formatNumber(component.capacity ?? 0)
-                };
+        try {
+            console.log('sourceObject',JSON.stringify(sourceObject));
+            if (!sourceObject) {
+                console.log('formatDeepClone sourceObject is null');
+                return null;
             }
-        });
-        finalFormattedData.totalSumInsured100 = this.formatNumber(finalFormattedData.totalSumInsured100 ?? 0);
-        finalFormattedData.totalSumInsuredShare = this.formatNumber(finalFormattedData.totalSumInsuredShare ?? 0);
-        finalFormattedData.accumulatedSumInsured100 = this.formatNumber(finalFormattedData.accumulatedSumInsured100 ?? 0);
-        finalFormattedData.accumulatedSumInsuredShare = this.formatNumber(finalFormattedData.accumulatedSumInsuredShare ?? 0);
-        console.log('finalFormattedData',JSON.stringify(finalFormattedData));
-        return finalFormattedData;
+            let formattedClone = JSON.parse(JSON.stringify(sourceObject));
+            let finalFormattedData = { ...formattedClone }; 
+            this.RISK_KEYS.forEach(key => {
+                const component = formattedClone[key];
+                if (component && typeof component === 'object') {
+                    const accumulation = component.accumulation ?? 0;
+                    const capacity = component.capacity ?? 0;
+                    const tempLimit = component.limit !== undefined 
+                            ? component.limit
+                            : (capacity - accumulation);
+                    finalFormattedData[key] = {    
+                        limit: this.formatNumber(tempLimit ?? 0),
+                        accumulation: this.formatNumber(component.accumulation ?? 0),
+                        capacity: this.formatNumber(component.capacity ?? 0)
+                    };
+                }
+            });
+            finalFormattedData.totalSumInsured100 = this.formatNumber(finalFormattedData.totalSumInsured100 ?? 0);
+            finalFormattedData.totalSumInsuredShare = this.formatNumber(finalFormattedData.totalSumInsuredShare ?? 0);
+            finalFormattedData.accumulatedSumInsured100 = this.formatNumber(finalFormattedData.accumulatedSumInsured100 ?? 0);
+            finalFormattedData.accumulatedSumInsuredShare = this.formatNumber(finalFormattedData.accumulatedSumInsuredShare ?? 0);
+            console.log('formatDeepClone Success',JSON.stringify(finalFormattedData));
+            return finalFormattedData;
+        } catch (error) {
+            console.log('formatDeepClone Error',error);
+        }
     }
     initialDataTreaty(){
         if (this.masterData.length > 0) {
@@ -414,42 +422,50 @@ export default class LwcTreatyDistribution extends LightningElement {
         this.initialDataTreaty();
     }
     async handleBusreqIdChange(event){
-        this.isRiskSelectorDisabled = true;
-        this.isLoading = true;
-        let selectRisk = event.detail.value;
-        this.selectedRiskId = selectRisk;
-        console.log('change',selectRisk);
-        // const dataTrxData = this.responseJson;
-        const dataTrxData = await getResponseTreaty({ recordId: selectRisk });
-        const checkStatusData = this.masterData.find(item => item.riskId == selectRisk && item.status == "200");
-        if(!checkStatusData){
-            console.log('statusAPI','Hit Baru');
-            if (dataTrxData && dataTrxData?.status == "00") {
-                await this.getSelectedObject(dataTrxData.data);
-            }else{
-                this.dispatchEvent(new ShowToastEvent({
-                    title: 'Error',
-                    message: dataTrxData?.message || 'Gagal memuat data',
-                    variant: 'error',
-                }));
+        try {
+            this.isRiskSelectorDisabled = true;
+            this.isLoading = true;
+            let selectRisk = event.detail.value;
+            this.selectedRiskId = selectRisk;
+            console.log('change',selectRisk);
+            const selectedObject = this.masterData.find(item => item.riskId === selectRisk);
+            console.log('change this.masterData',JSON.stringify(this.masterData));
+            // const dataTrxData = this.responseJson;
+            const dataTrxData = await getResponseTreaty({ recordId: selectRisk });
+            const checkStatusData = this.masterData.find(item => item.riskId == selectRisk && item.status == "200");
+            if(!checkStatusData){
+                console.log('statusAPI','Hit Baru');
+                if (dataTrxData && dataTrxData?.status == "00") {
+                    await this.getSelectedObject(dataTrxData.data);
+                }else{
+                    this.dispatchEvent(new ShowToastEvent({
+                        title: 'Error',
+                        message: dataTrxData?.message || 'Gagal memuat data',
+                        variant: 'error',
+                    }));
+                }
+            }else{ 
+                console.log('statusAPI','Sudah ada'); 
             }
-        }else{ 
-            console.log('statusAPI','Sudah ada'); 
+            console.log('change selectedObject',selectedObject);
+            if (selectedObject) {
+                this.currentRisk = selectedObject;
+                this.currentFormated = await this.formatDeepClone(selectedObject);
+            } 
+            // else {
+            //     this.currentRisk = {};
+            //     this.currentFormated = {};
+            // }
+            this.isRiskSelectorDisabled = false;
+            this.isLoading = false;
+            // this.saveChanges();
+            // window.setTimeout(() => {
+            //     this.isRiskSelectorDisabled = false;
+            // }, 3500);
+            console.log('handleBusreqIdChange Success',error);
+        } catch (error) {
+            console.log('handleBusreqIdChange Error',error.message());
         }
-        const selectedObject = this.masterData.find(item => item.riskId === selectRisk);
-        if (selectedObject) {
-            this.currentRisk = selectedObject;
-            this.currentFormated = await this.formatDeepClone(selectedObject);
-        } else {
-            this.currentRisk = {};
-            this.currentFormated = {};
-        }
-        this.isRiskSelectorDisabled = false;
-        this.isLoading = false;
-        // this.saveChanges();
-        // window.setTimeout(() => {
-        //     this.isRiskSelectorDisabled = false;
-        // }, 3500);
     }
     async getSelectedObject(apiData) {
         console.log('apiData',apiData);
@@ -463,56 +479,55 @@ export default class LwcTreatyDistribution extends LightningElement {
         console.log('MasterData setelah update:', JSON.stringify(this.masterData));
     }
     getUpdatedTreatyData(originalResult, apiData) {
-        const dist = apiData.treaty_dist?.[0] || {};
-        const accum = apiData.treaty_dist_accum?.[0] || {};
-        const max = apiData.max_treaty || {};
-        this.aswataShare = Number(dist.tsi_wt);
-        this.totalSumInsured = Number(originalResult.totalSumInsured100)
-        console.log('this.aswataShare',this.aswataShare);
-        console.log('this.totalSumInsured',this.totalSumInsured);
-        let underlyingAmount = 0;
-        // this.totalSumInsured = Number(dist.tsi_jp);
-        let newResult = {
-            ...originalResult,
-            status: '200',
-            busreq_id: dist.busreq_id,
-            totalSumInsured100: Number(originalResult.totalSumInsured100),
-            totalSumInsuredShare: Number(dist.tsi_wt),
-            accumulatedSumInsured100: Number(accum.tsi_jp),
-            accumulatedSumInsuredShare: Number(accum.tsi_wt),
-            // idAccumulation:accum.accum_id,
-            dateAccumulation:accum.inception_date
-        };
-        const updateComponent = (componentName, distVal, accumVal, maxVal) => {
-            let amountLimit = Number(maxVal)?Number(maxVal)-Number(accumVal):Number(distVal);
-            const currentComponent = originalResult[componentName] || {}; 
-            if(componentName == 'underlying' || componentName == 'excessLoss'){
-                underlyingAmount+=amountLimit;
-            }
-            newResult[componentName] = {
-                ...currentComponent,
-                limit: amountLimit,
-                accumulation: Number(accumVal),
-                capacity: Number(maxVal)
+        try {
+            const dist = apiData.treaty_dist?.[0] || {};
+            const accum = apiData.treaty_dist_accum?.[0] || {};
+            const max = apiData.max_treaty || {};
+            this.aswataShare = Number(dist.tsi_wt);
+            this.totalSumInsured = Number(originalResult.totalSumInsured100)
+            console.log('this.aswataShare',this.aswataShare);
+            console.log('this.totalSumInsured',this.totalSumInsured);
+            let underlyingAmount = 0;
+            // this.totalSumInsured = Number(dist.tsi_jp);
+            let newResult = {
+                ...originalResult,
+                status: '200',
+                busreq_id: dist.busreq_id,
+                totalSumInsured100: Number(originalResult.totalSumInsured100),
+                totalSumInsuredShare: Number(dist.tsi_wt),
+                accumulatedSumInsured100: Number(accum.tsi_jp),
+                accumulatedSumInsuredShare: Number(accum.tsi_wt),
+                // idAccumulation:accum.accum_id,
+                dateAccumulation:accum.inception_date
             };
-            // newResult[componentName] = {
-            //     ...currentComponent,
-            //     limit: Number(distVal),
-            //     accumulation: Number(accumVal),
-            //     capacity: Number(maxVal)
-            // };
-        };
-        updateComponent('bppda', dist.bppdan_amt, accum.bppdan_amt, max.bppdan_amt);
-        updateComponent('poolEq', dist.maipark_amt, accum.maipark_amt, max.maipark_amt);
-        updateComponent('poolCustomBond', dist.cbond_amt, accum.cbond_amt, max.cbond_amt);
-        updateComponent('kark', dist.kark_amt, accum.kark_amt, max.kark_amt);
-        updateComponent('underlying', dist.ur_amt, accum.ur_amt, max.ur_amt);
-        updateComponent('excessLoss', dist.xl_amt, accum.xl_amt, max.xl_amt);
-        updateComponent('grossRetention', underlyingAmount, accum.gr_amt, max.gr_amt);
-        updateComponent('quotaShare', dist.qs_amt, accum.qs_amt, max.qs_amt);
-        updateComponent('surplus', dist.sp1_amt, accum.sp1_amt, max.sp1_amt);
-        updateComponent('facoblig', dist.facoblig_amt, accum.facoblig_amt, max.facoblig_amt);
-        return newResult;
+            const updateComponent = (componentName, distVal, accumVal, maxVal) => {
+                let amountLimit = Number(maxVal)?Number(maxVal)-Number(accumVal):Number(distVal);
+                const currentComponent = originalResult[componentName] || {}; 
+                if(componentName == 'underlying' || componentName == 'excessLoss'){
+                    underlyingAmount+=amountLimit;
+                }
+                newResult[componentName] = {
+                    ...currentComponent,
+                    limit: amountLimit,
+                    accumulation: Number(accumVal),
+                    capacity: Number(maxVal)
+                };
+            };
+            updateComponent('bppda', dist.bppdan_amt, accum.bppdan_amt, max.bppdan_amt);
+            updateComponent('poolEq', dist.maipark_amt, accum.maipark_amt, max.maipark_amt);
+            updateComponent('poolCustomBond', dist.cbond_amt, accum.cbond_amt, max.cbond_amt);
+            updateComponent('kark', dist.kark_amt, accum.kark_amt, max.kark_amt);
+            updateComponent('underlying', dist.ur_amt, accum.ur_amt, max.ur_amt);
+            updateComponent('excessLoss', dist.xl_amt, accum.xl_amt, max.xl_amt);
+            updateComponent('grossRetention', underlyingAmount, accum.gr_amt, max.gr_amt);
+            updateComponent('quotaShare', dist.qs_amt, accum.qs_amt, max.qs_amt);
+            updateComponent('surplus', dist.sp1_amt, accum.sp1_amt, max.sp1_amt);
+            updateComponent('facoblig', dist.facoblig_amt, accum.facoblig_amt, max.facoblig_amt);
+            console.log('getUpdatedTreatyData Success');
+            return newResult;   
+        } catch (error) {
+            console.log('getUpdatedTreatyData Error',error);
+        }
     }
     async mappingData(responseJson){
         const formattedResponse = {
@@ -559,18 +574,22 @@ export default class LwcTreatyDistribution extends LightningElement {
         return (parseFloat(pembilang) / pembagi) * 100;
     }
     getComponentLimitPercentage(componentName) {
-        const component = this.currentRisk[componentName];
-        const tsi100 = this.totalSumInsured;
-        if (!component) return '0';
-        const safeLimit = component && component.limit ? component.limit : 0;
-        const value = this.calculatePercentageValue(safeLimit, tsi100);
-        const numericValue = Number(value);
-        return new Intl.NumberFormat('id-ID', {
-            useGrouping: false,
-            minimumFractionDigits: 1,
-            maximumFractionDigits: 2
-        }).format(numericValue);
-        // return value.toFixed(2);
+        try {
+            const component = this.currentRisk[componentName];
+            const tsi100 = this.totalSumInsured;
+            if (!component) return '0';
+            const safeLimit = component && component?.limit ? component.limit : 0;
+            const value = this.calculatePercentageValue(safeLimit, tsi100);
+            const numericValue = Number(value);
+            return new Intl.NumberFormat('id-ID', {
+                useGrouping: false,
+                minimumFractionDigits: 1,
+                maximumFractionDigits: 2
+            }).format(numericValue);
+            // return value.toFixed(2);
+        } catch (error) {
+            console.log('getComponentLimitPercentage',error);
+        }
     }
     getFacultative(componentName) {
         const component = this.currentRisk[componentName];
@@ -602,6 +621,7 @@ export default class LwcTreatyDistribution extends LightningElement {
         }
         event.preventDefault();
     }
+
     handleInputFocus(event) {
         const objectName = event.target.dataset.object;
         const field = event.target.dataset.field;
@@ -726,8 +746,8 @@ export default class LwcTreatyDistribution extends LightningElement {
     }
 
     saveChanges() {
-        const currentbusreq_id = this.currentRisk.busreq_id;
-        const indexToUpdate = this.masterData.findIndex(item => item.busreq_id === currentbusreq_id);
+        const currentRiskId = this.currentRisk.riskId;
+        const indexToUpdate = this.masterData.findIndex(item => item.riskId === currentRiskId);
         let updatedMasterData = [...this.masterData];
         updatedMasterData[indexToUpdate] = this.currentRisk;
         // updatedMasterData = this.currentRisk;
@@ -796,8 +816,12 @@ export default class LwcTreatyDistribution extends LightningElement {
     }
 
     get totalLimitDisplay() {
-        const total = this.formatNumber(this.totalRiskComponentValues.limit);
-        return total;
+        try {
+            const total = this.formatNumber(this.totalRiskComponentValues.limit);
+            return total;
+        } catch (error) {
+            console.log('totalLimitDisplay',error);
+        }
     }
     
     get totalTsiDisplay() {
