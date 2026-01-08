@@ -31,6 +31,7 @@ export default class AswataNewRiskDetailAsset extends LightningElement {
     @track showFormView = false;
     @track savedAssets = [];
     @track isLoading = false;
+    @track isOpportunityOpen = true;
     
     @track dynamicFields = [];
     @track formData = {};
@@ -40,13 +41,17 @@ export default class AswataNewRiskDetailAsset extends LightningElement {
     @track sectionId;
     @track resultSection = [];
     @track groupedDynamicFields = {};
+
+    // ✅ For Add/Edit Asset Modal
+    @track isAddEditAssetModalOpen = false;
+    @track selectedAssetIdForEdit = null;
     
     controllingValue;
     fieldsReady = false;
     picklistReady = false;
     recordTypeValue = null;
 
-    // ✅ Pagination
+    // Pagination for Risk List
     assetPage = 1;
     assetPageSize = 5;
 
@@ -55,24 +60,15 @@ export default class AswataNewRiskDetailAsset extends LightningElement {
     }
 
     get paginatedAssetData() {
-        const start = (this.assetPage - 1) * this.assetPageSize;
-        return this.savedAssets.slice(start, start + this.assetPageSize);
-    }
-
-    get isPrevDisabled() {
-        return this.assetPage === 1;
-    }
-
-    get isNextDisabled() {
-        return this.assetPage === this.assetTotalPages;
-    }
-
-    get showPrevButton() {
-        return this.assetPage > 1;
-    }
-
-    get showNextButton() {
-        return this.assetPage < this.assetTotalPages;
+        const startIndex = (this.assetPage - 1) * this.assetPageSize;
+        const endIndex = startIndex + this.assetPageSize;
+        
+        return this.savedAssets
+            .slice(startIndex, endIndex)
+            .map((asset, index) => ({
+                ...asset,
+                rowNumber: startIndex + index + 1  // ✅ Add sequential row number
+            }));
     }
 
     handleNextAsset() {
@@ -89,6 +85,13 @@ export default class AswataNewRiskDetailAsset extends LightningElement {
 
     // ✅ Columns with Row Actions (Edit Asset)
     listAssetColumns = [
+        { 
+            label: 'No', 
+            fieldName: 'rowNumber', 
+            type: 'number',
+            cellAttributes: { alignment: 'left' },
+            initialWidth: 60
+        },
         { label: 'Asset Name', fieldName: 'name', type: 'text' },
         { label: 'Section', fieldName: 'sectionName', type: 'text' },
         { label: 'Category', fieldName: 'categoryName', type: 'text' },
@@ -152,18 +155,30 @@ export default class AswataNewRiskDetailAsset extends LightningElement {
                     name: asset.Interest_Insured_Detail_Description__c || asset.Name || `Asset ${index + 1}`,
                     sectionName: sectionName,
                     categoryName: categoryName,
-                    amountIDR: asset.Amount_IDR__c || 0,
+                    amountIDR: asset.Amount_IDR_new__c || 0,
                     salesforceId: asset.Id
                 };
             });
             
-            this.showFormView = this.savedAssets.length === 0;
+            // ✅ LOGIKA: Jika tidak ada asset, langsung buka form Add
+            if (this.savedAssets.length === 0) {
+                console.log('📝 No assets found, opening Add Asset form');
+                this.selectedAssetIdForEdit = this.recordId; // Pass Risk ID
+                this.isAddEditAssetModalOpen = true;
+                this.showFormView = false; // Tetap false untuk hide list
+            } else {
+                console.log('📋 Assets found, showing list');
+                this.showFormView = false; // Show list view
+            }
             
             console.log('📊 Total assets:', this.savedAssets.length);
             
         } catch (error) {
             console.error('❌ Error loading assets:', error);
-            this.showFormView = true;
+            // Jika error, tetap coba buka form
+            this.selectedAssetIdForEdit = this.recordId;
+            this.isAddEditAssetModalOpen = true;
+            this.showFormView = false;
         }
     }
 
@@ -268,18 +283,22 @@ export default class AswataNewRiskDetailAsset extends LightningElement {
         
         if (actionName === 'edit_asset') {
             console.log('✏️ Edit Asset clicked for:', row);
-            console.log('   Asset ID:', row.name);
-            console.log('   Salesforce ID:', row.salesforceId);
+            console.log('   Asset Salesforce ID:', row.salesforceId);
             
-            this.loadAssetForEdit(row.salesforceId);
+            this.selectedAssetIdForEdit = row.salesforceId;
+            this.isAddEditAssetModalOpen = true;
+            
+            this.hideParentModal();
         }
     }
 
+
     handleAddNewAsset() {
-        this.resetForm();
-        this.currentId = null; // ✅ Clear currentId for add mode
-        this.fetchActiveFields(this.cobValue);
-        this.showFormView = true;
+        console.log('➕ Opening Add Asset modal');
+        this.selectedAssetIdForEdit = this.recordId; // Pass Risk ID as recordId
+        this.isAddEditAssetModalOpen = true;
+        
+        this.hideParentModal();
     }
 
     async fetchActiveFields(cob) {
@@ -316,7 +335,7 @@ export default class AswataNewRiskDetailAsset extends LightningElement {
         if(fieldName === 'Amount__c' ){
             this.formData = {
                 ...this.formData,
-                Amount_IDR__c: event.target.value * this.exchangeRate
+                Amount_IDR_new__c: event.target.value * this.exchangeRate
             };
         }
         if (fieldName === 'Indemnity_Type__c') {
@@ -413,16 +432,27 @@ export default class AswataNewRiskDetailAsset extends LightningElement {
         }
     }
     
-    handleCloseDetailAsset() {
-        // ✅ If in form, return to list
-        if (this.showFormView && this.savedAssets.length > 0) {
-            console.log('🔙 Return to list');
-            this.showFormView = false;
-            this.resetForm();
-            return;
+    handleAddEditAssetModalClose() {
+        console.log('🔴 Closing Add/Edit Asset modal');
+        this.isAddEditAssetModalOpen = false;
+        this.selectedAssetIdForEdit = null;
+        
+        // ✅ Reload assets setelah save/close
+        this.loadExistingAssets();
+        
+        // ✅ Jika ada asset, show parent modal (list)
+        if (this.savedAssets.length > 0) {
+            this.showParentModal();
+        } else {
+            // ✅ Jika masih tidak ada asset, close ke parent Risk modal
+            if (this.fromOpportunityModal) {
+                const closeEvent = new CustomEvent('closemodal');
+                this.dispatchEvent(closeEvent);
+            }
         }
-
-        // ✅ Close modal
+    }
+    
+    handleCloseDetailAsset() {
         if (this.fromOpportunityModal) {
             const closeEvent = new CustomEvent('closemodal');
             this.dispatchEvent(closeEvent);
@@ -430,6 +460,30 @@ export default class AswataNewRiskDetailAsset extends LightningElement {
         }
 
         this.dispatchEvent(new CloseActionScreenEvent());
+    }
+
+    hideParentModal() {
+        try {
+            const listModal = this.template.querySelector('.list-modal');
+            if (listModal) {
+                listModal.style.display = 'none';
+                console.log('✅ Asset LIST modal hidden');
+            }
+        } catch (error) {
+            console.warn('⚠️ Could not hide parent modal:', error);
+        }
+    }
+
+    showParentModal() {
+        try {
+            const listModal = this.template.querySelector('.list-modal');
+            if (listModal) {
+                listModal.style.display = 'flex';
+                console.log('✅ Asset LIST modal shown');
+            }
+        } catch (error) {
+            console.warn('⚠️ Could not show parent modal:', error);
+        }
     }
 
     async handleSaveDetailAsset() {

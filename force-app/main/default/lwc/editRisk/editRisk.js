@@ -230,7 +230,7 @@ export default class EditRisk extends LightningElement {
                 isPicklist: typeData === 'picklist',
                 isGeolocation: typeData === 'geolocation',
                 isAddress: (f.filter || '').toLowerCase() === 'address',
-                
+                isDate: typeData === 'date',            
                 //Use existing value from formData
                 value: this.formData[f.apiName] !== undefined ? this.formData[f.apiName] : null
             };
@@ -455,7 +455,6 @@ export default class EditRisk extends LightningElement {
     handleUpdateAsset() {
         console.log('Updating Asset with data:', JSON.stringify(this.formData));
 
-        // Ensure Id is included for update
         if (!this.formData.Id) {
             this.formData.Id = this.recordId;
         }
@@ -468,13 +467,11 @@ export default class EditRisk extends LightningElement {
 
                 this.showToast('Success', 'Risk updated successfully', 'success');
                 
-                // Close modal
-                this.dispatchEvent(new CloseActionScreenEvent());
+                // ✅ Dispatch close event to parent
+                this.dispatchEvent(new CustomEvent('close'));
                 
-                setTimeout(() => {
-
-                    location.reload(true);
-                }, 800);
+                // ✅ Also close standard modal
+                this.dispatchEvent(new CloseActionScreenEvent());
             })
             .catch(error => {
                 console.error('❌ Error updating Asset:', error);
@@ -484,6 +481,10 @@ export default class EditRisk extends LightningElement {
     }
 
     handleCloseModal() {
+        // ✅ Dispatch close event to parent
+        this.dispatchEvent(new CustomEvent('close'));
+        
+        // ✅ Also close standard modal
         this.dispatchEvent(new CloseActionScreenEvent());
     }
 

@@ -7,6 +7,16 @@ public with sharing class Aswata_Add_New_Asset_Controller_Test {
         opp.COB__c = '201';
         update opp;
         
+        Master_Data__c fieldCob = Aswata_TestDataFactory.createMasterData('test', 'Field COB');
+        fieldCob.Name = 'Name';
+        fieldCob.Label__c = 'Asset Name';
+        fieldCob.Data_Type__c = 'Text';
+        fieldCob.Status__c = 'Active';
+        fieldCob.Object__c = 'Asset';
+        fieldCob.BSN_ID__c = '201';
+        fieldCob.Order__c = 1;
+       	update fieldCob;
+        
         Asset risk1 = Aswata_TestDataFactory.createRisk(opp, 'Test Risk 1');
         risk1.Risk_ID__c = '1';
         risk1.risk_address__c = 'Test Address 1';

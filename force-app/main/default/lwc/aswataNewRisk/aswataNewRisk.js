@@ -45,6 +45,9 @@ export default class AswataNewRisk extends LightningElement {
     // ✅ For Edit Risk Modal
     @track isEditRiskModalOpen = false;
     @track selectedRiskIdForEdit = null;
+
+    // ✅ ADD: For Add New Risk Modal
+    @track isAddNewRiskModalOpen = false;
     
     // ✅ NEW: Dynamic required fields from Master Data
     @track requiredFieldApiNames = new Set();
@@ -60,9 +63,20 @@ export default class AswataNewRisk extends LightningElement {
         return Math.ceil(this.savedRisks.length / this.riskPageSize);
     }
 
+    get isFromOpportunityModal() {
+        return true;
+    }
+
     get paginatedRiskData() {
-        const start = (this.riskPage - 1) * this.riskPageSize;
-        return this.savedRisks.slice(start, start + this.riskPageSize);
+         const startIndex = (this.riskPage - 1) * this.riskPageSize;
+        const endIndex = startIndex + this.riskPageSize;
+        
+        return this.savedRisks
+            .slice(startIndex, endIndex)
+            .map((risk, index) => ({
+                ...risk,
+                rowNumber: startIndex + index + 1  // ✅ Add sequential row number
+            }));
     }
 
     handleNextRisk() {
@@ -79,10 +93,27 @@ export default class AswataNewRisk extends LightningElement {
 
     // ✅ Columns for Risk List with Add Asset and Coverage Buttons
     listRiskColumns = [
+        { 
+            label: 'No', 
+            fieldName: 'rowNumber', 
+            type: 'number',
+            cellAttributes: { alignment: 'left' },
+            initialWidth: 60
+        },
         { label: 'Risk ID', fieldName: 'riskId', type: 'text' },
         { label: 'Name', fieldName: 'name', type: 'text' },
         { label: 'Address', fieldName: 'address', type: 'text' },
-        { label: 'Treaty', fieldName: 'treaty', type: 'text' },
+        // { label: 'Treaty', fieldName: 'treaty', type: 'text' },
+        { 
+            label: 'Amount Insured', 
+            fieldName: 'amountInsured', 
+            type: 'currency',
+            typeAttributes: { 
+                currencyCode: 'IDR',
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }
+        },
         { 
             type: 'action',
             typeAttributes: {
@@ -195,7 +226,8 @@ export default class AswataNewRisk extends LightningElement {
             this.requiredFieldApiNames = new Set([
                 'Address__c',
                 'Occupation_Code__c',
-                'Class__c'
+                'Class__c',
+                'Name'
             ]);
             
             console.log('⚠️ Using fallback required fields');
@@ -239,7 +271,8 @@ export default class AswataNewRisk extends LightningElement {
                     id: wrapper.id,
                     riskId: displayRiskId,
                     address: wrapper.address || wrapper.riskName || 'N/A',
-                    treaty: 'TREATY',
+                    // treaty: 'TREATY',
+                    amountInsured: wrapper.amountInsured || 0,
                     salesforceId: wrapper.id,
                     cityName: wrapper.cityName,
                     zipName: wrapper.zipName,
@@ -661,7 +694,18 @@ export default class AswataNewRisk extends LightningElement {
 
     handleAddNewRisk() {
         this.resetForm();
+        this.isAddNewRiskModalOpen = true;
         this.showFormView = true;
+    }
+
+    handleAddNewRiskModalClose() {
+        console.log('🔴 Closing Add New Risk modal');
+        this.isAddNewRiskModalOpen = false;
+        
+        // Reload risks
+        this.loadExistingRisks();
+        
+        this.showParentModal();
     }
 
     handleRowAction(event) {

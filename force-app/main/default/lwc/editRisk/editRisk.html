@@ -5,10 +5,10 @@
     <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
         <div class="slds-modal__container">
             <header class="slds-modal__header">
-                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={handleCloseModal}>
+                <!-- <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={handleCloseModal}>
                     <lightning-icon icon-name="utility:close" alternative-text="close" size="small"></lightning-icon>
                     <span class="slds-assistive-text">Close</span>
-                </button>
+                </button> -->
                 <lightning-icon icon-name="custom:custom57" size="small" class="icon-left"></lightning-icon>
                 <span class="card-title">EDIT RISK</span>
             </header>
@@ -29,7 +29,7 @@
                                 
                                 <!-- TEXT -->
                                 <template if:true={field.isText}>
-                                    <div key={field.apiName} class="slds-col slds-size_2-of-2 slds-p-around_x-small">
+                                    <div key={field.apiName} class="slds-col slds-size_1-of-2 slds-p-around_x-small slds-p-vertical_none">
                                         <lightning-input 
                                             type="text" 
                                             label={field.label} 
@@ -42,7 +42,7 @@
 
                                 <!-- TEXT AREA -->
                                 <template if:true={field.isTextArea}>
-                                    <div key={field.apiName} class="slds-col slds-size_2-of-2 slds-p-around_x-small">
+                                    <div key={field.apiName} class="slds-col slds-size_1-of-2 slds-p-around_x-small slds-p-vertical_none">
                                         <lightning-textarea
                                             label={field.label}
                                             name={field.apiName}
@@ -54,7 +54,7 @@
 
                                 <!-- Read Only -->
                                 <template if:true={field.isReadonly}>
-                                    <div key={field.apiName} class="slds-col slds-size_2-of-2 slds-p-around_x-small">
+                                    <div key={field.apiName} class="slds-col slds-size_1-of-2 slds-p-around_x-small slds-p-vertical_none">
                                         <lightning-input 
                                             type="text" 
                                             label={field.label} 
@@ -68,7 +68,7 @@
 
                                 <!-- NUMBER -->
                                 <template if:true={field.isNumber}>
-                                    <div key={field.apiName} class="slds-col slds-size_2-of-2 slds-p-around_x-small">
+                                    <div key={field.apiName} class="slds-col slds-size_1-of-2 slds-p-around_x-small slds-p-vertical_none">
                                         <lightning-input 
                                             type="number" 
                                             label={field.label} 
@@ -81,8 +81,8 @@
 
                                 <!-- GEOLOCATION -->
                                 <template if:true={field.isGeolocation}>
-                                    <div key={field.apiName} class="slds-col slds-size_2-of-2 slds-p-around_x-small slds-grid slds-wrap">
-                                        <div class="slds-col slds-size_1-of-2 slds-p-around_x-small">
+                                    <div key={field.apiName} class="slds-col slds-size_1-of-2 slds-p-around_x-small slds-grid slds-wrap slds-p-vertical_none">
+                                        <div class="slds-col slds-size_1-of-2 slds-p-around_x-small slds-p-vertical_none">
                                             <lightning-input
                                                 type="number"
                                                 step="0.000001"
@@ -92,7 +92,7 @@
                                                 onchange={handleInputChange}>
                                             </lightning-input>
                                         </div>
-                                        <div class="slds-col slds-size_1-of-2 slds-p-around_x-small">
+                                        <div class="slds-col slds-size_1-of-2 slds-p-around_x-small slds-p-vertical_none">
                                             <lightning-input
                                                 type="number"
                                                 step="0.000001"
@@ -107,7 +107,7 @@
 
                                 <!-- PICKLIST -->
                                 <template if:true={field.isPicklist}>
-                                    <div key={field.apiName} class="slds-col slds-size_2-of-2 slds-p-around_x-small">
+                                    <div key={field.apiName} class="slds-col slds-size_1-of-2 slds-p-around_x-small slds-p-vertical_none">
                                         <lightning-combobox
                                             label={field.label}
                                             name={field.apiName}
@@ -119,9 +119,22 @@
                                     </div>
                                 </template>
 
+                                <!-- Date -->
+                                <template if:true={field.isDate}>
+                                    <div key={field.apiName} class="slds-col slds-size_1-of-2 slds-p-around_x-small slds-p-vertical_none">
+                                        <lightning-input 
+                                            type="date" 
+                                            label={field.label} 
+                                            name={field.apiName} 
+                                            value={field.value}
+                                            onchange={handleInputChange}>
+                                        </lightning-input>
+                                    </div>
+                                </template>
+
                                 <!-- LOOKUP -->
                                 <template if:true={field.isLookup}>
-                                    <div key={field.apiName} class="slds-col slds-size_2-of-2 slds-p-horizontal_x-small slds-p-vertical_none">
+                                    <div key={field.apiName} class="slds-col slds-size_1-of-2 slds-p-horizontal_x-small slds-p-vertical_none slds-p-vertical_none">
                                         <c-custom-lookup
                                             label={field.label}
                                             placeholder={field.label}
@@ -157,12 +170,31 @@
                 </template>
             </div>
 
+            <!-- Form Footer -->
             <footer class="slds-modal__footer">
-                <div class="slds-grid slds-grid_align-center slds-m-around_medium">
+                <div class="slds-grid slds-grid_align-end slds-m-around_medium">
+                    <lightning-button 
+                        variant="neutral"
+                        label="Cancel" 
+                        onclick={handleCloseModal}
+                        class="slds-m-right_x-small"
+                        disabled={isLoading}>
+                    </lightning-button>
+                    <lightning-button 
+                        variant="brand" 
+                        label="Save" 
+                        onclick={handleUpdateAsset}
+                        disabled={isLoading}>
+                    </lightning-button>
+                </div>
+            </footer>
+
+            <!-- <footer class="slds-modal__footer">
+                <div class="slds-grid slds-grid_align-end slds-m-around_medium">
                     <lightning-button label="Close" onclick={handleCloseModal}></lightning-button>
                     <lightning-button variant="brand" label="Update" onclick={handleUpdateAsset}></lightning-button>
                 </div>
-            </footer>
+            </footer> -->
         </div>
     </section>
 </template>

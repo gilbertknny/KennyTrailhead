@@ -40,7 +40,7 @@
                         <lightning-input name="Amount__c" label="Amount" value={formData.Amount__c} type="number" onchange={handleInputChange}></lightning-input>
                     </div>
                     <div class="slds-col slds-size_1-of-2">
-                        <lightning-input name="Amount_IDR_new__c" label="Amount IDR" value={formData.Amount_IDR_new__c} type="number" onchange={handleInputChange} disabled></lightning-input>
+                        <lightning-input name="Amount_IDR__c" label="Amount IDR" value={formData.Amount_IDR__c} type="number" onchange={handleInputChange} disabled></lightning-input>
                     </div>
                 </div>
 
@@ -226,13 +226,30 @@
             </div>
 
             <!-- Modal Footer -->
+            <!-- Form Footer -->
             <footer class="slds-modal__footer">
-                <div class="slds-grid slds-grid_align-center slds-m-around_medium">
-                    <lightning-button variant="neutral" label="Cancel" onclick={handleCloseDetailAsset}></lightning-button>
-                    <lightning-button variant="brand" label="Save" onclick={handleSaveDetailAsset}></lightning-button>
-                    <!-- <lightning-button variant="brand" label="Save" onclick={handleSaveDetailInsured}></lightning-button> -->
+                <div class="slds-grid slds-grid_align-end slds-m-around_medium">
+                    <lightning-button 
+                        variant="neutral"
+                        label="Cancel" 
+                        onclick={handleCloseDetailAsset}
+                        class="slds-m-right_x-small"
+                        disabled={isLoading}>
+                    </lightning-button>
+                    <lightning-button 
+                        variant="brand" 
+                        label="Save" 
+                        onclick={handleSaveDetailAsset}
+                        disabled={isLoading}>
+                    </lightning-button>
                 </div>
             </footer>
+            
+            <!-- <footer class="slds-modal__footer">
+                <lightning-button variant="neutral" label="Cancel" onclick={handleCloseDetailAsset}></lightning-button>
+                <lightning-button variant="brand" label="Save" onclick={handleSaveDetailAsset}></lightning-button>
+                <lightning-button variant="brand" label="Save" onclick={handleSaveDetailInsured}></lightning-button>                
+            </footer> -->
         </div>
     </section>
     <!--div class="slds-backdrop slds-backdrop_open"></div-->

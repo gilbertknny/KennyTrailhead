@@ -34,6 +34,18 @@ export default class AddNewRisk extends LightningElement {
     provinceId;
     cityId;
 
+
+    _fromOpportunityModal = false;
+
+    @api
+    get fromOpportunityModal() {
+        return this._fromOpportunityModal;
+    }
+    set fromOpportunityModal(value) {
+        // normalize: only true / 'true' become true
+        this._fromOpportunityModal = (value === true || value === 'true');
+    }
+
     //Fetch Risk Record Type on component init
     connectedCallback() {
         this.fetchRiskRecordType();
@@ -227,6 +239,7 @@ export default class AddNewRisk extends LightningElement {
                 isPicklist: typeData === 'picklist',
                 isGeolocation: typeData === 'geolocation',
                 isAddress: (f.filter || '').toLowerCase() === 'address',
+                isDate: typeData === 'date',
                 
                 value: (this.formData && this.formData[f.apiName] !== undefined)
                     ? this.formData[f.apiName]
@@ -473,7 +486,14 @@ export default class AddNewRisk extends LightningElement {
                         variant: 'success'
                     })
                 );
-                this.dispatchEvent(new CloseActionScreenEvent());
+                 if (this.fromOpportunityModal === false || this.fromOpportunityModal === 'false') {
+                    console.log('🔴 Closing Quick Action modal');
+                    this.dispatchEvent(new CloseActionScreenEvent());
+                    return;
+                }
+
+                const closeEvent = new CustomEvent('closemodal');
+                this.dispatchEvent(closeEvent);
             })
             .catch(error => {
                 console.error('Error saving Asset:', error);
@@ -488,11 +508,79 @@ export default class AddNewRisk extends LightningElement {
             });
     }
 
-    handleCloseAssetModal(){
-        this.formData = {};
-        this.fields = this.fields.map(f => {
-            return { ...f, value: null };
-        });
-        this.dispatchEvent(new CloseActionScreenEvent());
-    }   
+    handleCloseAssetModal() {
+        // ✅ CASE 1: Opened from Opportunity Modal (addNewRisk)
+        console.log(' 777: '+this.fromOpportunityModal);
+
+        if (this.fromOpportunityModal === false || this.fromOpportunityModal === 'false') {
+            console.log('🔴 Closing Quick Action modal');
+            this.dispatchEvent(new CloseActionScreenEvent());
+            return;
+        }
+
+        // ✅ CASE 2: Edit mode with currentId (from action button on record page)
+        if (this.currentId != null) {
+            console.log('🔴 Closing from edit mode - redirect to parent');
+            
+            if (this.parentAsset) {
+                this.recordId = this.parentAsset;
+            }
+            
+            const recordUrl = `/lightning/r/Asset/${this.recordId}/view`;
+            window.location.assign(recordUrl);
+            return;
+        }
+
+        // ✅ CASE 3: Default - close action screen
+        console.log('🔴 Custom close - CloseActionScreenEvent');
+        //this.dispatchEvent(new CloseActionScreenEvent());
+
+        const closeEvent = new CustomEvent('closemodal');
+        this.dispatchEvent(closeEvent);
+    }
+
+    async handleCreateRisk() {
+        if (!this.validateRequiredFields()) {
+            console.log('❌ Validation failed');
+            return;
+        }
+
+        this.isLoading = true;
+
+        try {
+            console.log('💾 Creating risk in database...');
+            console.log('📦 Form data:', JSON.stringify(this.formData));
+            
+            const savedId = await upsertAsset({ fieldValues: this.formData });
+            
+            console.log('✅ Risk created with ID:', savedId);
+
+            this.dispatchEvent(
+                new ShowToastEvent({
+                    title: 'Success',
+                    message: 'Risk created successfully',
+                    variant: 'success'
+                })
+            );
+
+            // ✅ Close modal after success
+            if (this.fromOpportunityModal) {
+                const closeEvent = new CustomEvent('closemodal');
+                this.dispatchEvent(closeEvent);
+            }
+            
+        } catch (error) {
+            console.error('❌ Error creating risk:', error);
+            const errorMessage = error?.body?.message || error.message || 'Unknown error';
+            this.dispatchEvent(
+                new ShowToastEvent({
+                    title: 'Error',
+                    message: 'Failed to create risk: ' + errorMessage,
+                    variant: 'error'
+                })
+            );
+        } finally {
+            this.isLoading = false;
+        }
+    }
 }

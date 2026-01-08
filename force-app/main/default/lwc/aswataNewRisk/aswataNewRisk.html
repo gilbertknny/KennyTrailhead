@@ -1,9 +1,8 @@
 <template>
     <!-- FORM VIEW -->
-    <template if:true={showFormView}>
+    <!-- <template if:true={showFormView}>
         <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open form-modal">
             <div class="slds-modal__container">
-                <!-- Form Header -->
                 <header class="slds-modal__header">
                     <lightning-icon 
                         icon-name="custom:custom57"
@@ -13,13 +12,11 @@
                     <span class="card-title">ADD NEW RISK</span>
                 </header>
 
-                <!-- Form Body -->
                 <div class="slds-modal__content slds-p-around_medium">
                     <template if:true={fields}>
                         <div class="slds-grid slds-wrap">
                             <template for:each={fields} for:item="field">
                                 
-                                <!-- TEXT -->
                                 <template if:true={field.isText}>
                                     <div key={field.apiName} class="slds-col slds-size_1-of-2 slds-p-around_x-small slds-p-vertical_none">
                                         <lightning-input 
@@ -33,7 +30,6 @@
                                     </div>
                                 </template>
 
-                                <!-- TEXT AREA -->
                                 <template if:true={field.isTextArea}>
                                     <div key={field.apiName} class="slds-col slds-size_1-of-2 slds-p-around_x-small slds-p-vertical_none">
                                         <lightning-textarea
@@ -45,7 +41,6 @@
                                     </div>
                                 </template>
 
-                                <!-- Read Only -->
                                 <template if:true={field.isReadonly}>
                                     <div key={field.apiName} class="slds-col slds-size_1-of-2 slds-p-around_x-small slds-p-vertical_none">
                                         <lightning-input 
@@ -59,7 +54,6 @@
                                     </div>
                                 </template>
 
-                                <!-- NUMBER -->
                                 <template if:true={field.isNumber}>
                                     <div key={field.apiName} class="slds-col slds-size_1-of-2 slds-p-around_x-small slds-p-vertical_none">
                                         <lightning-input 
@@ -72,7 +66,6 @@
                                     </div>
                                 </template>
 
-                                <!-- GEOLOCATION -->
                                 <template if:true={field.isGeolocation}>
                                     <div key={field.apiName} class="slds-col slds-size_1-of-2 slds-p-around_x-small slds-p-vertical_none">
                                         <div class="slds-grid slds-wrap">
@@ -100,7 +93,6 @@
                                     </div>
                                 </template>
 
-                                <!-- PICKLIST -->
                                 <template if:true={field.isPicklist}>
                                     <div key={field.apiName} class="slds-col slds-size_1-of-2 slds-p-around_x-small slds-p-vertical_none">
                                         <lightning-combobox
@@ -115,7 +107,6 @@
                                     </div>
                                 </template>
 
-                                <!-- LOOKUP -->
                                 <template if:true={field.isLookup}>
                                     <div key={field.apiName} class="slds-col slds-size_1-of-2 slds-p-horizontal_x-small slds-p-vertical_none">
                                         <c-custom-lookup
@@ -154,7 +145,6 @@
                     </template>
                 </div>
 
-                <!-- Form Footer -->
                 <footer class="slds-modal__footer">
                     <div class="slds-grid slds-grid_align-end slds-m-around_medium">
                         <lightning-button 
@@ -166,7 +156,7 @@
                         </lightning-button>
                         <lightning-button 
                             variant="brand" 
-                            label="Create Risk" 
+                            label="Save" 
                             onclick={handleCreateRisk}
                             disabled={isLoading}>
                         </lightning-button>
@@ -174,7 +164,7 @@
                 </footer>
             </div>
         </section>
-    </template>
+    </template> -->
     
     <!-- LIST VIEW -->
     <template if:false={showFormView}>
@@ -197,7 +187,6 @@
                         key-field="id"
                         data={paginatedRiskData}
                         columns={listRiskColumns}
-                        show-row-number-column
                         hide-checkbox-column="true"
                         onrowaction={handleRowAction}>
                     </lightning-datatable>
@@ -205,6 +194,37 @@
                     <!-- Pagination Controls -->
                     <div class="slds-p-around_small slds-grid slds-grid_align-spread slds-grid_vertical-align-center">
                         <!-- Left: Add Button -->
+                        <!-- <div>
+                            <lightning-button 
+                                variant="brand" 
+                                label="Add" 
+                                icon-name="utility:add" 
+                                onclick={handleAddNewRisk}>
+                            </lightning-button>
+                        </div>   -->
+                        <!-- Right: Pagination -->
+                        <!-- <div class="slds-p-around_small slds-text-align_right">
+                            <lightning-button-icon 
+                                icon-name="utility:chevronleft" 
+                                alternative-text="Previous" 
+                                onclick={handlePrevRisk}>
+                            </lightning-button-icon>
+                            <span class="slds-m-horizontal_small">
+                                Page {riskPage} of {riskTotalPages}
+                            </span>
+                            <lightning-button-icon 
+                                icon-name="utility:chevronright" 
+                                alternative-text="Next" 
+                                onclick={handleNextRisk}>
+                            </lightning-button-icon>
+                        </div> -->
+                    </div>
+                </div>
+                
+                <!-- List Footer -->
+                <footer class="slds-modal__footer">
+                    <div class="slds-grid slds-grid_vertical-align-center slds-m-around_medium">
+                        <!-- Left side: empty spacer with same width as Close button -->
                         <div>
                             <lightning-button 
                                 variant="brand" 
@@ -213,8 +233,9 @@
                                 onclick={handleAddNewRisk}>
                             </lightning-button>
                         </div>  
-                        <!-- Right: Pagination -->
-                        <div class="slds-p-around_small slds-text-align_right">
+                        
+                        <!-- Center: Pagination - flex-grow to fill space and center content -->
+                        <div class="slds-col slds-grid slds-grid_align-center slds-grid_vertical-align-center" style="flex-grow: 1;">
                             <lightning-button-icon 
                                 icon-name="utility:chevronleft" 
                                 alternative-text="Previous" 
@@ -229,21 +250,29 @@
                                 onclick={handleNextRisk}>
                             </lightning-button-icon>
                         </div>
-                    </div>
-                </div>
-                
-                <!-- List Footer -->
-                <footer class="slds-modal__footer">
-                    <div class="slds-grid slds-grid_align-end slds-m-around_medium">
-                        <lightning-button 
-                            variant="neutral"
-                            label="Close" 
-                            onclick={handleCloseAssetModal}>
-                        </lightning-button>
+                        
+                        <!-- Right: Close Button with fixed width -->
+                        <div style="width: 80px; text-align: right;">
+                            <lightning-button 
+                                variant="neutral"
+                                label="Close" 
+                                onclick={handleCloseAssetModal}>
+                            </lightning-button>
+                        </div>
                     </div>
                 </footer>
             </div>
         </section>
+    </template>
+
+    <template if:true={isAddNewRiskModalOpen}>
+        <c-add-new-risk 
+            record-id={recordId}
+            cob-value={cobValue}
+            closing-type={closingType}
+            from-opportunity-modal={isFromOpportunityModal}
+            onclosemodal={handleAddNewRiskModalClose}>
+        </c-add-new-risk>
     </template>
 
     <!-- Edit Risk Modal -->

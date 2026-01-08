@@ -20,6 +20,7 @@ public with sharing class Aswata_Add_New_Asset_Controller {
                 Risk_ID__c, 
                 City__r.Name, 
                 Zip_Code__r.Name, 
+                Amount_Insured__c,
                 RecordType.Id,
                 RecordType.Name
             FROM Asset 
@@ -59,6 +60,8 @@ public with sharing class Aswata_Add_New_Asset_Controller {
             wrap.cityName = (a.City__r != null) ? a.City__r.Name : null;
             wrap.zipName = (a.Zip_Code__r != null) ? a.Zip_Code__r.Name : null;
             wrap.recordTypeId = a.RecordType.Id;
+
+            wrap.amountInsured = a.Amount_Insured__c;
             
             System.debug('Wrapper created: ' + JSON.serialize(wrap));
             
@@ -70,58 +73,139 @@ public with sharing class Aswata_Add_New_Asset_Controller {
     }
 
     @AuraEnabled
-    public static String upsertAsset(Map<String, Object> fieldValues) {       
-        List<RecordType> lstRt = [Select id from RecordType where SObjectType = 'Asset' and DeveloperName = 'Risk' WITH SECURITY_ENFORCED limit 1];
+    public static String upsertAsset(Map<String, Object> fieldValues) {
+        String recordId = (String)fieldValues.get('Id');
         
-        if(lstRt.size() == 0){
-            throw new AuraHandledException('Record Type Risk not found');
-        }
+        // Get RecordType
+        List<RecordType> lstRt = [
+            SELECT Id 
+            FROM RecordType 
+            WHERE SObjectType = 'Asset' 
+            AND DeveloperName = 'Risk' 
+            WITH SECURITY_ENFORCED 
+            LIMIT 1
+        ];
         
+        // Load or create Asset
         Asset a = new Asset();
+        
+        if (String.isNotBlank(recordId)) {
+            a.Id = recordId; // 🔑 THIS FIXES THE ERROR
+        }
+        // Apply field values
+        applyFieldValues(a, fieldValues);
+        
+        // Set RecordType
+        a.RecordTypeId = lstRt[0].Id;
+        
+        // Save and return
+        return saveAssetRecord(a, recordId);
+    }
 
-        Map<String, Schema.SObjectField> assetFieldMap = Schema.SObjectType.Asset.fields.getMap();
+    private static void applyFieldValues(Asset a, Map<String, Object> fieldValues) {
+        Map<String, Schema.SObjectField> assetFieldMap =
+            Schema.SObjectType.Asset.fields.getMap();
 
-        //System.debug('fieldValues: ' + fieldValues);
         for (String key : fieldValues.keySet()) {
-            Schema.SObjectField field = assetFieldMap.get(key);
-            
-            if (field != null) {
-                Schema.DescribeFieldResult fieldDescribe = field.getDescribe();
-                 
-                if (fieldDescribe.isCalculated() || fieldDescribe.isAutoNumber() || !fieldDescribe.isUpdateable()){
-                   continue;
-                }
+
+            // Skip Id
+            if (key == 'Id') {
+                continue;
             }
 
-            a.put(key, fieldValues.get(key));
+            // Skip unknown fields
+            if (!assetFieldMap.containsKey(key)) {
+                System.debug('⚠️ Unknown field skipped: ' + key);
+                continue;
+            }
+
+            Object value = fieldValues.get(key);
+            if (value == null) {
+                continue;
+            }
+
+            Schema.DescribeFieldResult d =
+                assetFieldMap.get(key).getDescribe();
+
+            // 🚫 Skip formula, auto-number, non-updateable
+            if (d.isCalculated() || d.isAutoNumber() || !d.isUpdateable()) {
+                System.debug('⚠️ Skipping non-updateable field: ' + key);
+                continue;
+            }
+
+            try {
+                switch on d.getType() {
+
+                    when Date {
+                        a.put(key, Date.valueOf((String)value));
+                    }
+
+                    when DateTime {
+                        a.put(key, DateTime.valueOf((String)value));
+                    }
+
+                    when Boolean {
+                        a.put(key, (Boolean)value);
+                    }
+
+                    when Integer {
+                        a.put(key, Integer.valueOf(String.valueOf(value)));
+                    }
+
+                    when Double, Currency, Percent {
+                        a.put(key, Decimal.valueOf(String.valueOf(value)));
+                    }
+
+                    when Reference {
+                        a.put(key, (Id)value);
+                    }
+
+                    when else {
+                        // String, Picklist, Text, Email, Phone, etc.
+                        a.put(key, value);
+                    }
+                }
+
+                System.debug('✅ Set field: ' + key + ' = ' + value);
+
+            } catch (Exception e) {
+                throw new AuraHandledException(
+                    'Invalid value for field ' + key + ': ' + e.getMessage()
+                );
+            }
         }
-        a.RecordTypeId = lstRt[0].Id;
-        System.debug('🎯 Asset object prepared: ' + a);
+    }
+
+    private static String saveAssetRecord(Asset a, String recordId) {
+        System.debug('🎯 Asset prepared for save');
+        System.debug('   - Id: ' + a.Id);
+        System.debug('   - Name: ' + a.Name);
+        System.debug('   - Risk_ID__c: ' + a.Risk_ID__c);
         
-        //Auto-generate Risk_ID__c for new records
-        if(String.isBlank((String)a.get('Id'))){
-            // This is INSERT (new record)
+        if (String.isBlank(recordId)) {
+            // INSERT
             System.debug('📝 Creating new Asset (INSERT)');
             String opportunityId = (String)a.get('Opportunity__c');
-            //Tambahan Fikri untuk membuat Insurance Policy otomatis saat buat Risk baru
-            String policyId = Aswata_GlobalFunction.createInsurancePolicy(opportunityId);
-            a.Insurance_Policy__c = policyId;
-            System.debug('Policy Id: ' + policyId);
-            if(String.isNotBlank(opportunityId)) {
+            
+            if (String.isNotBlank(opportunityId)) {
+                String policyId = Aswata_GlobalFunction.createInsurancePolicy(opportunityId);
+                a.Insurance_Policy__c = policyId;
+                System.debug('Policy Id: ' + policyId);
+                
                 a.Risk_ID__c = generateNextRiskId(opportunityId);
                 System.debug('Generated Risk_ID__c: ' + a.Risk_ID__c);
             } else {
-                System.debug('⚠️ No Opportunity__c provided, Risk_ID__c will be null');
+                System.debug('⚠️ No Opportunity__c provided');
             }
             
             if (Schema.sObjectType.Asset.isCreateable()) {
                 insert a;
-                System.debug('✅ Asset created successfully with Id: ' + a.Id);
+                System.debug('✅ Asset created with Id: ' + a.Id);
             }
         } else {
-            // This is UPDATE (existing record)
-            System.debug('Updating existing Asset (UPDATE)');
-            System.debug('Risk_ID__c will NOT be changed');
+            // UPDATE
+            System.debug('🔄 Updating existing Asset (UPDATE)');
+            System.debug('   - Preserving Risk_ID__c: ' + a.Risk_ID__c);
             
             if (Schema.sObjectType.Asset.isUpdateable()) {
                 update a;
@@ -373,6 +457,7 @@ public with sharing class Aswata_Add_New_Asset_Controller {
         @AuraEnabled public String cityName;
         @AuraEnabled public String zipName;
         @AuraEnabled public String recordTypeId;
+        @AuraEnabled public Decimal amountInsured;
     }
 
 }
