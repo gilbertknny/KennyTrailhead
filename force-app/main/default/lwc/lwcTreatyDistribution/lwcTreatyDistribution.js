@@ -346,9 +346,13 @@ export default class LwcTreatyDistribution extends LightningElement {
         let formattedClone = JSON.parse(JSON.stringify(sourceObject));
         let finalFormattedData = { ...formattedClone }; 
         this.RISK_KEYS.forEach(key => {
-            const component = formattedClone[key];            
-            if (component) {
-                const tempLimit = component.limit !== undefined ? component.limit : (component.capacity - component.accumulation);
+            const component = formattedClone[key];
+            if (component && typeof component === 'object') {
+                const accumulation = component.accumulation ?? 0;
+                const capacity = component.capacity ?? 0;
+                const tempLimit = component.limit !== undefined 
+                        ? component.limit
+                        : (capacity - accumulation);
                 finalFormattedData[key] = {    
                     limit: this.formatNumber(tempLimit ?? 0),
                     accumulation: this.formatNumber(component.accumulation ?? 0),
@@ -558,7 +562,8 @@ export default class LwcTreatyDistribution extends LightningElement {
         const component = this.currentRisk[componentName];
         const tsi100 = this.totalSumInsured;
         if (!component) return '0';
-        const value = this.calculatePercentageValue(component.limit, tsi100);
+        const safeLimit = component && component.limit ? component.limit : 0;
+        const value = this.calculatePercentageValue(safeLimit, tsi100);
         const numericValue = Number(value);
         return new Intl.NumberFormat('id-ID', {
             useGrouping: false,
@@ -754,7 +759,8 @@ export default class LwcTreatyDistribution extends LightningElement {
         const getSumOpptyPercentage = 0;
         this.RISK_KEYS.forEach(key => {
             const component = this.currentRisk[key];
-            const resultTotal = totals.limit + parseFloat(component.limit) || 0;
+            const componentLimit = parseFloat(component?.limit) || 0;
+            const resultTotal = (totals.limit || 0) + componentLimit;
             // const excess = this.aswataShare - resultTotal;
             const excess = Math.max(0, this.aswataShare - resultTotal);
             let acceptedValue = getFromFacultative;
