@@ -15,7 +15,7 @@
     width: 100% !important;
     max-width: 80rem !important;
     min-width: 40rem;
-    height: auto !important;           /* ✅ Changed from 95vh to auto */
+    height: auto !important;           
     max-height: 95vh !important;
     display: flex !important;
     flex-direction: column !important;
@@ -25,10 +25,10 @@
    Modal Content - Remove Fixed Height
    ======================================== */
 .slds-modal__content {
-    /* ❌ REMOVE: height: 60vh !important; */
-    flex: 1 1 auto;                   /* ✅ Grow/shrink as needed */
-    overflow-y: auto;                 /* ✅ Scroll if content is long */
-    min-height: 0;                    /* ✅ Allow shrinking */
+    /*height: 60vh !important; */
+    flex: 1 1 auto;                   
+    overflow-y: auto;                
+    min-height: 40vh;                    
 }
 
 /* ========================================
@@ -170,20 +170,20 @@
    FORM VIEW Modal - Higher Z-index
    ======================================== */
 .form-modal {
-    z-index: 10000 !important;  /* ✅ Higher than LIST */
+    z-index: 10000 !important; 
 }
 
 .form-modal .slds-backdrop {
-    z-index: 9999 !important;   /* ✅ Backdrop below modal */
+    z-index: 9999 !important;  
 }
 
 /* ========================================
    LIST VIEW Modal - Lower Z-index
    ======================================== */
 .list-modal {
-    z-index: 9998 !important;   /* ✅ Below FORM */
+    z-index: 9998 !important;   
 }
 
 .list-modal .slds-backdrop {
-    z-index: 9997 !important;   /* ✅ Backdrop below modal */
+    z-index: 9997 !important;   
 }

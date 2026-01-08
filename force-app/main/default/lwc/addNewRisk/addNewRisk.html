@@ -105,6 +105,19 @@
                                 </div>
                             </template>
 
+                            <!-- Date -->
+                                <template if:true={field.isDate}>
+                                    <div key={field.apiName} class="slds-col slds-size_1-of-2 slds-p-around_x-small slds-p-vertical_none">
+                                        <lightning-input 
+                                            type="date" 
+                                            label={field.label} 
+                                            name={field.apiName} 
+                                            value={field.value}
+                                            onchange={handleInputChange}>
+                                        </lightning-input>
+                                    </div>
+                                </template>
+
                             <!-- LOOKUP -->
                             <template if:true={field.isLookup}>
                                 <div key={field.apiName}  class="slds-col slds-size_1-of-2 slds-p-horizontal_x-small slds-p-vertical_none">
@@ -148,10 +161,22 @@
 <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->            
             </div>
 
-            <footer class="slds-modal__footer ">
-                <div class="slds-grid slds-grid_align-center slds-m-around_medium">
-                    <lightning-button label="Close" onclick={handleCloseAssetModal}></lightning-button>
-                    <lightning-button variant="brand" label="Save" onclick={handleSaveAsset}></lightning-button>
+            <!-- Form Footer -->
+            <footer class="slds-modal__footer">
+                <div class="slds-grid slds-grid_align-end slds-m-around_medium">
+                    <lightning-button 
+                        variant="neutral"
+                        label="Cancel" 
+                        onclick={handleCloseAssetModal}
+                        class="slds-m-right_x-small"
+                        disabled={isLoading}>
+                    </lightning-button>
+                    <lightning-button 
+                        variant="brand" 
+                        label="Save" 
+                        onclick={handleCreateRisk}
+                        disabled={isLoading}>
+                    </lightning-button>
                 </div>
             </footer>
         </div>
