@@ -13,7 +13,7 @@ public without sharing class ClsPolicyDistribution {
                     Opportunity opp = new Opportunity();
                     opp.Id = oppId;
                     opp.Policy_Distribution__c = dt.id; 
-                    opp.User_PIC__c = dt.userid;
+                    opp.USER_ID__c = dt.userid;
                     Database.SaveResult sr1 = Database.update(opp);
                     
                     Master_Data__c md = new Master_Data__c();
@@ -87,8 +87,7 @@ public without sharing class ClsPolicyDistribution {
         if(amount != null){
             Decimal limitAmount;
             String strQueryMDMin = 'SELECT Id,LIMIT_AMOUNT__c FROM Master_Data__c';
-            strQueryMDMin += ' WHERE RecordType.DeveloperName = \''+ 'Approval_Limit'+'\'';
-            strQueryMDMin += ' AND AUTHORITY_TYPE__c = \''+'UW'+'\'';
+            strQueryMDMin += ' WHERE RecordType.DeveloperName = \''+ 'Policy_Distribution'+'\'';
             strQueryMDMin += ' AND LIMIT_AMOUNT__c >=: amount';
             strQueryMDMin += ' AND Status__c = \''+'Approved'+'\'';
             if(queryfield != '' && queryfield != null) {strQueryMDMin += queryfield;}
@@ -100,9 +99,8 @@ public without sharing class ClsPolicyDistribution {
             
             if(listMDmin.size()>0){limitAmount = listMDmin[0].LIMIT_AMOUNT__c;}
             if(limitAmount != null){
-                String strQueryMD = 'SELECT Id,USER_PIC__c FROM Master_Data__c';
-                strQueryMD += ' WHERE RecordType.DeveloperName = \''+ 'Approval_Limit'+'\'';
-                strQueryMD += ' AND AUTHORITY_TYPE__c = \''+'UW'+'\'';
+                String strQueryMD = 'SELECT Id,USER_PIC__c,USER_ID__c FROM Master_Data__c';
+                strQueryMD += ' WHERE RecordType.DeveloperName = \''+ 'Policy_Distribution'+'\'';
                 strQueryMD += ' AND LIMIT_AMOUNT__c =: limitAmount';
                 strQueryMD += ' AND Status__c = \''+'Approved'+'\'';
                 if(queryfield != '' && queryfield != null) {strQueryMD += queryfield;}
@@ -111,7 +109,7 @@ public without sharing class ClsPolicyDistribution {
                 List<Master_Data__c> listMD = Database.query(strQueryMD);
                 Master_Data__c md = listMD[0];
                 result.id = md.Id;
-                result.userid = md.USER_PIC__c;
+                result.userid = md.USER_ID__c; //md.USER_PIC__c -> Change Hilmi BY 8/1/26 GS
             } 
         }
         return result;

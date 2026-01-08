@@ -1,6 +1,6 @@
 @IsTest(SeeAllData=false)
 public class ClsPolicyDistribution_Test {
-	@TestSetup
+    @TestSetup
     static void setTestData(){
         String strRTIndividual = Schema.SObjectType.Account.getRecordTypeInfosByName().get('Insurance').getRecordTypeId();
         Account acc = new Account();
