@@ -4,6 +4,8 @@ import { CurrentPageReference } from 'lightning/navigation';
 import approveOffering from '@salesforce/apex/Aswata_ApproveOffering_Controller.approveOffering';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { CloseActionScreenEvent } from 'lightning/actions';
+import modal from '@salesforce/resourceUrl/modal';
+import { loadStyle} from 'lightning/platformResourceLoader';
 
 export default class ApproveFacultativeOffering extends LightningElement {
 
@@ -85,6 +87,10 @@ export default class ApproveFacultativeOffering extends LightningElement {
             console.log('Final RecordId:', this.recordId);
             this.loadShares(); // 🔥 call Apex ONLY when recordId exists
         }
+
+        Promise.all([
+            loadStyle(this, modal)
+        ]);
     }
 
     getRecordIdFromUrl() {

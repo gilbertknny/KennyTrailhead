@@ -13,6 +13,8 @@ import RECORD_TYPE_FIELD from '@salesforce/schema/Asset.Record_Type__c';
 import { getRecord } from 'lightning/uiRecordApi';
 import getRecordTypeIdByCob from '@salesforce/apex/Aswata_Add_New_Asset_Controller.getRecordTypeIdByCob';
 import { CloseActionScreenEvent } from 'lightning/actions';
+import modal from '@salesforce/resourceUrl/modal';
+import { loadStyle} from 'lightning/platformResourceLoader';
 // import { NavigationMixin } from 'lightning/navigation';
 
 export default class AswataNewRiskDetailAsset extends LightningElement {
@@ -69,6 +71,12 @@ export default class AswataNewRiskDetailAsset extends LightningElement {
                 ...asset,
                 rowNumber: startIndex + index + 1  // ✅ Add sequential row number
             }));
+    }
+
+    connectedCallback() {
+        Promise.all([
+            loadStyle(this, modal)
+        ]);
     }
 
     handleNextAsset() {

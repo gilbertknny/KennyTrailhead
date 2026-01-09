@@ -9,6 +9,8 @@ import { getRecord } from 'lightning/uiRecordApi';
 import COB_FIELD from '@salesforce/schema/Opportunity.COB__c';
 import NUMBER_OF_RISK from '@salesforce/schema/Opportunity.Number_Of_Risk__c';
 import CLOSING_TYPE from '@salesforce/schema/Opportunity.Policy_Closing_Type__c';
+import modal from '@salesforce/resourceUrl/modal';
+import { loadStyle} from 'lightning/platformResourceLoader';
 
 import { CloseActionScreenEvent } from 'lightning/actions';
 
@@ -49,6 +51,9 @@ export default class AddNewRisk extends LightningElement {
     //Fetch Risk Record Type on component init
     connectedCallback() {
         this.fetchRiskRecordType();
+        Promise.all([
+            loadStyle(this, modal)
+        ]);
     }
 
     //SIMPLIFIED: Only pass objectName (DeveloperName is always "Risk")

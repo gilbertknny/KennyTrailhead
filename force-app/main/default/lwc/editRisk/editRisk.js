@@ -3,11 +3,13 @@ import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { CloseActionScreenEvent } from 'lightning/actions';
 import { getRecord, getFieldValue, getRecordNotifyChange } from 'lightning/uiRecordApi';
 import { refreshApex } from '@salesforce/apex';
-
+import modal from '@salesforce/resourceUrl/modal';
+import { loadStyle} from 'lightning/platformResourceLoader';
 import getActiveFields from '@salesforce/apex/Aswata_Add_New_Asset_Controller.getActiveFields';
 import upsertAsset from '@salesforce/apex/Aswata_Add_New_Asset_Controller.upsertAsset';
 import { getPicklistValuesByRecordType } from 'lightning/uiObjectInfoApi';
 import getRecordTypeIdByCob from '@salesforce/apex/Aswata_Add_New_Asset_Controller.getRecordTypeIdByCob';
+import getRequiredFieldsByCob from '@salesforce/apex/Aswata_Add_New_Asset_Controller.getRequiredFieldsByCob';
 
 export default class EditRisk extends LightningElement {
 
@@ -24,6 +26,8 @@ export default class EditRisk extends LightningElement {
     @track isLoading = true;
     @track dynamicFields = [];
     @track contractType;
+
+    @track requiredFieldApiNames = new Set();
     
     picklistValues;
     activeFieldData;
@@ -65,6 +69,40 @@ export default class EditRisk extends LightningElement {
             console.error('Error loading Asset:', error);
             this.showToast('Error', 'Failed to load Asset data', 'error');
             this.isLoading = false;
+        }
+    }
+
+    @wire(getRequiredFieldsByCob, { cobValue: '$cobValue' })
+    wiredRequiredFields({ error, data }) {
+        if (data) {
+            console.log('✅ Required fields from Master Data:', data);
+            
+            // Convert array to Set for fast lookup
+            this.requiredFieldApiNames = new Set(data);
+            
+            console.log('📋 Required fields Set:', Array.from(this.requiredFieldApiNames));
+            console.log('📊 Total required fields:', this.requiredFieldApiNames.size);
+            
+            // Rebuild fields to update isRequired flags
+            if (this.activeFieldData && this.assetRecord) {
+                this.buildFields();
+            }
+        } else if (error) {
+            console.error('❌ Error loading required fields:', error);
+            console.error('   Error details:', error.body?.message || error.message);
+            
+            // Fallback to default required fields if query fails
+            this.requiredFieldApiNames = new Set([
+                'Address__c',
+                'Occupation_Code__c',
+                'Class__c'
+            ]);
+            
+            console.log('⚠️ Using fallback required fields');
+            
+            if (this.activeFieldData && this.assetRecord) {
+                this.buildFields();
+            }
         }
     }
 
@@ -193,6 +231,13 @@ export default class EditRisk extends LightningElement {
     buildFields() {
         if (!this.activeFieldData) return;
 
+        // ✅ Use dynamic required fields from Master Data
+        const requiredFieldApiNames = this.requiredFieldApiNames.size > 0 
+            ? this.requiredFieldApiNames 
+            : new Set(['Address__c', 'Occupation_Code__c', 'Class__c']);
+        
+        console.log('🔧 Building fields with required:', Array.from(requiredFieldApiNames));
+
         this.fields = this.activeFieldData.map(f => {
             const typeData = (f.dataType || '').toLowerCase().trim();
             
@@ -222,6 +267,7 @@ export default class EditRisk extends LightningElement {
                 order: f.order,
                 fieldsToQuery: lookupFields,
                 showData: f.showData ? f.showData : '',
+                isRequired: requiredFieldApiNames.has(f.apiName), // ✅ Dynamic!
                 isText: typeData === 'text',
                 isReadonly: typeData === 'readonly',
                 isNumber: typeData === 'number',
@@ -231,7 +277,6 @@ export default class EditRisk extends LightningElement {
                 isGeolocation: typeData === 'geolocation',
                 isAddress: (f.filter || '').toLowerCase() === 'address',
                 isDate: typeData === 'date',            
-                //Use existing value from formData
                 value: this.formData[f.apiName] !== undefined ? this.formData[f.apiName] : null
             };
 
@@ -260,11 +305,83 @@ export default class EditRisk extends LightningElement {
         });
 
         this.fields.sort((a, b) => (a.order || 0) - (b.order || 0));
-        console.log('Fields built for edit mode:', JSON.stringify(this.fields));
+        
+        const requiredCount = this.fields.filter(f => f.isRequired).length;
+        console.log(`✅ Fields built: ${this.fields.length} total, ${requiredCount} required`);
+    }
+
+    validateRequiredFields() {
+        const requiredFields = [];
+        
+        this.fields.forEach(field => {
+            if (field.isRequired) {
+                requiredFields.push({
+                    apiName: field.apiName,
+                    label: field.label
+                });
+            }
+        });
+        
+        console.log('🔍 Validating required fields:', requiredFields.map(f => f.label).join(', '));
+
+        const missingFields = [];
+
+        requiredFields.forEach(field => {
+            const value = this.formData[field.apiName];
+            if (!value || value === '' || value === null || value === undefined) {
+                missingFields.push(field.label);
+            }
+        });
+
+        if (missingFields.length > 0) {
+            const fieldList = missingFields.join(', ');
+            this.showToast(
+                'Required Fields Missing',
+                `Please fill in the following required fields: ${fieldList}`,
+                'error'
+            );
+            return false;
+        }
+
+        return true;
+    }
+
+    handleUpdateAsset() {
+        // ✅ Add validation before save
+        if (!this.validateRequiredFields()) {
+            console.log('❌ Validation failed');
+            return;
+        }
+        
+        console.log('Updating Asset with data:', JSON.stringify(this.formData));
+
+        if (!this.formData.Id) {
+            this.formData.Id = this.recordId;
+        }
+
+        upsertAsset({ fieldValues: this.formData })
+            .then(resultId => {
+                console.log('✅ Asset updated! Id:', resultId);
+
+                getRecordNotifyChange([{ recordId: this.recordId }]);
+
+                this.showToast('Success', 'Risk updated successfully', 'success');
+                
+                this.dispatchEvent(new CustomEvent('close'));
+                this.dispatchEvent(new CloseActionScreenEvent());
+            })
+            .catch(error => {
+                console.error('❌ Error updating Asset:', error);
+                const errorMessage = error?.body?.message || error.message || 'Unknown error';
+                this.showToast('Error', 'Failed to update Risk: ' + errorMessage, 'error');
+            });
     }
 
     connectedCallback() {
         console.log('Edit Risk Component initialized for recordId:', this.recordId);
+        Promise.all([
+            loadStyle(this, modal)
+        ]);
     }
 
     handleInputChange(event) {
@@ -453,12 +570,20 @@ export default class EditRisk extends LightningElement {
     }
 
     handleUpdateAsset() {
+        // ✅ Add validation FIRST
+        if (!this.validateRequiredFields()) {
+            console.log('❌ Validation failed - required fields missing');
+            return; // ✅ Stop here, don't proceed to save
+        }
+        
+        console.log('✅ Validation passed, proceeding to update...');
         console.log('Updating Asset with data:', JSON.stringify(this.formData));
 
         if (!this.formData.Id) {
             this.formData.Id = this.recordId;
         }
 
+        // ✅ Add try-catch for better error handling
         upsertAsset({ fieldValues: this.formData })
             .then(resultId => {
                 console.log('✅ Asset updated! Id:', resultId);
@@ -467,15 +592,32 @@ export default class EditRisk extends LightningElement {
 
                 this.showToast('Success', 'Risk updated successfully', 'success');
                 
-                // ✅ Dispatch close event to parent
                 this.dispatchEvent(new CustomEvent('close'));
-                
-                // ✅ Also close standard modal
                 this.dispatchEvent(new CloseActionScreenEvent());
             })
             .catch(error => {
                 console.error('❌ Error updating Asset:', error);
-                const errorMessage = error?.body?.message || error.message || 'Unknown error';
+                console.error('   Error body:', error.body);
+                console.error('   Error message:', error.message);
+                
+                // ✅ Better error message handling
+                let errorMessage = 'Unknown error occurred';
+                
+                if (error.body) {
+                    if (error.body.message) {
+                        errorMessage = error.body.message;
+                    } else if (error.body.pageErrors && error.body.pageErrors.length > 0) {
+                        errorMessage = error.body.pageErrors[0].message;
+                    } else if (error.body.fieldErrors) {
+                        const fieldErrors = Object.values(error.body.fieldErrors).flat();
+                        if (fieldErrors.length > 0) {
+                            errorMessage = fieldErrors[0].message;
+                        }
+                    }
+                } else if (error.message) {
+                    errorMessage = error.message;
+                }
+                
                 this.showToast('Error', 'Failed to update Risk: ' + errorMessage, 'error');
             });
     }

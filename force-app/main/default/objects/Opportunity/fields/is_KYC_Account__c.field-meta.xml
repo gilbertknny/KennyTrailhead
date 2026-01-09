@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>is_KYC_Account__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF(
+	AND(
+		NOT(ISBLANK(AccountId)),
+		NOT(Account.Is_General__c),
+		OR(
+			Account.Prioritized__c = TRUE,
+			ISPICKVAL(Account.Type, &quot;0&quot;),
+			ISPICKVAL(Account.Type, &quot;1&quot;),
+			ISPICKVAL(Account.Type, &quot;2&quot;),
+			ISPICKVAL(Account.Type, &quot;3&quot;),
+			ISPICKVAL(Account.Type, &quot;4&quot;)
+		)
+	),
+	1,
+	0
+)
++
+IF(
+	AND(
+		NOT(ISBLANK(The_Insured_Name__c)),
+		NOT(The_Insured_Name__r.Is_General__c),
+		OR(
+			The_Insured_Name__r.Prioritized__c = TRUE,
+			ISPICKVAL(The_Insured_Name__r.Type, &quot;0&quot;),
+			ISPICKVAL(The_Insured_Name__r.Type, &quot;1&quot;),
+			ISPICKVAL(The_Insured_Name__r.Type, &quot;2&quot;),
+			ISPICKVAL(The_Insured_Name__r.Type, &quot;3&quot;),
+			ISPICKVAL(The_Insured_Name__r.Type, &quot;4&quot;)
+		)
+	),
+	1,
+	0
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>is KYC Account</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackHistory>false</trackHistory>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

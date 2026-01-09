@@ -107,7 +107,7 @@
 
                             <!-- Date -->
                                 <template if:true={field.isDate}>
-                                    <div key={field.apiName} class="slds-col slds-size_1-of-2 slds-p-around_x-small slds-p-vertical_none">
+                                    <div key={field.apiName} class="slds-col slds-size_1-of-2 slds-p-around_x-small">
                                         <lightning-input 
                                             type="date" 
                                             label={field.label} 
@@ -120,36 +120,38 @@
 
                             <!-- LOOKUP -->
                             <template if:true={field.isLookup}>
-                                <div key={field.apiName}  class="slds-col slds-size_1-of-2 slds-p-horizontal_x-small slds-p-vertical_none">
-                                    <c-custom-lookup
-                                        label={field.label}
-                                        placeholder={field.label}
-                                        icon-name="standard:location"
-                                        object-api-name={field.lookupObject}
-                                        fields={field.fieldsToQuery}
-                                        record-type-name={field.filter}
-                                        data-field={field.apiName}
-                                        province-id={provinceId} 
-                                        city-id={cityId}
-                                        record-id={field.value}
-                                        show-data={field.showData}
-                                        required={field.isRequired}
-                                        onrecordselected={handleLookUpSelected}
-                                        onrecordcleared={handleLookUpCleared}
-                                        >
-                                    </c-custom-lookup>
-
-                                     <template if:true={field.isAddress}>
-                                        <lightning-input 
-                                            type="text" 
-                                            label="Address Description"
-                                            placeholder="Enter street / building details"
-                                            value={addressDescription}
-                                            name="Address_Description__c"
+                                <div key={field.apiName}  class="slds-col slds-size_1-of-2 slds-p-horizontal_x-small">
+                                    <div class="lookup-spacing">
+                                        <c-custom-lookup
+                                            label={field.label}
+                                            placeholder={field.label}
+                                            icon-name="standard:location"
+                                            object-api-name={field.lookupObject}
+                                            fields={field.fieldsToQuery}
+                                            record-type-name={field.filter}
+                                            data-field={field.apiName}
+                                            province-id={provinceId} 
+                                            city-id={cityId}
+                                            record-id={field.value}
+                                            show-data={field.showData}
                                             required={field.isRequired}
-                                            onchange={handleInputChange}>
-                                        </lightning-input>
-                                    </template>
+                                            onrecordselected={handleLookUpSelected}
+                                            onrecordcleared={handleLookUpCleared}
+                                            >
+                                        </c-custom-lookup>
+
+                                        <template if:true={field.isAddress}>
+                                            <lightning-input 
+                                                type="text" 
+                                                label="Address Description"
+                                                placeholder="Enter street / building details"
+                                                value={addressDescription}
+                                                name="Address_Description__c"
+                                                required={field.isRequired}
+                                                onchange={handleInputChange}>
+                                            </lightning-input>
+                                        </template>
+                                    </div>
                                 </div>
                             </template>
 

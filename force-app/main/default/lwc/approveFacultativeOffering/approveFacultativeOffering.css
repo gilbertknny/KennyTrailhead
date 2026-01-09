@@ -1,15 +1,10 @@
-/* This targets the base container of the lightning-card */
-.rounded-card {
-    --slds-c-card-radius-border: 1rem; /* Adjust this value to match your top corner */
-    display: block;
+.footer-shell {
+    width: 100%;
+    background: var(--lwc-colorBackgroundAlt, #f3f3f3);
+    padding: 0.75rem;
+    border-top: 1px solid #d8dde6;
+    border-radius: 0 0 0.75rem 0.75rem;
 }
-
-/* To ensure the footer doesn't have sharp edges that 'leak' over the curve */
-.rounded-card :interop-sub-element .slds-card {
-    border-radius: 1rem;
-    overflow: hidden;
-}
-
 /* Global fallback if the tokens don't apply directly in your environment */
 :host .rounded-card article {
     border-radius: 1rem !important;
