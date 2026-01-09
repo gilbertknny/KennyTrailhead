@@ -1,6 +1,7 @@
 <template>
-    <lightning-card title="Facultative Shares" class="rounded-card">
-        <div class="slds-p-horizontal_small table-scroll">
+    <lightning-quick-action-panel header="Facultative Shares">
+        
+        <div class="slds-p-around_medium">
             <lightning-datatable
                 key-field="Id"
                 data={data}
@@ -11,12 +12,13 @@
             </lightning-datatable>
         </div>
 
-        <div slot="footer" class="card-footer slds-align_absolute-center">
+        <div slot="footer" class="footer-shell slds-align_absolute-center">
             <lightning-button
                 label="Approve"
                 variant="brand"
                 onclick={handleApprove}>
             </lightning-button>
         </div>
-    </lightning-card>
+
+    </lightning-quick-action-panel>
 </template>

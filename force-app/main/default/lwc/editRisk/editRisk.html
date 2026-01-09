@@ -35,6 +35,7 @@
                                             label={field.label} 
                                             name={field.apiName} 
                                             value={field.value}
+                                            required={field.isRequired}
                                             onchange={handleInputChange}>
                                         </lightning-input>
                                     </div>
@@ -74,6 +75,7 @@
                                             label={field.label} 
                                             name={field.apiName} 
                                             value={field.value}
+                                            required={field.isRequired}
                                             onchange={handleInputChange}>
                                         </lightning-input>
                                     </div>
@@ -114,6 +116,7 @@
                                             value={field.value}
                                             placeholder="Select an option"
                                             options={field.options}
+                                            required={field.isRequired}
                                             onchange={handleInputChange}>
                                         </lightning-combobox>
                                     </div>
@@ -127,6 +130,7 @@
                                             label={field.label} 
                                             name={field.apiName} 
                                             value={field.value}
+                                            required={field.isRequired}
                                             onchange={handleInputChange}>
                                         </lightning-input>
                                     </div>
@@ -134,7 +138,7 @@
 
                                 <!-- LOOKUP -->
                                 <template if:true={field.isLookup}>
-                                    <div key={field.apiName} class="slds-col slds-size_1-of-2 slds-p-horizontal_x-small slds-p-vertical_none slds-p-vertical_none">
+                                    <div key={field.apiName} class="slds-col slds-size_1-of-2 slds-p-around_x-small slds-p-vertical_none">
                                         <c-custom-lookup
                                             label={field.label}
                                             placeholder={field.label}
@@ -148,6 +152,7 @@
                                             record-id={field.value}
                                             show-data={field.showData}
                                             onrecordselected={handleLookUpSelected}
+                                            required={field.isRequired}
                                             onrecordcleared={handleLookUpCleared}>
                                         </c-custom-lookup>
 
@@ -158,6 +163,7 @@
                                                 placeholder="Enter street / building details"
                                                 value={addressDescription}
                                                 name="Address_Description__c"
+                                                required={field.isRequired}
                                                 onchange={handleInputChange}>
                                             </lightning-input>
                                         </template>

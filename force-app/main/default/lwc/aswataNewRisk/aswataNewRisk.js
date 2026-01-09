@@ -10,6 +10,8 @@ import { getRecord } from 'lightning/uiRecordApi';
 import COB_FIELD from '@salesforce/schema/Opportunity.COB__c';
 import NUMBER_OF_RISK from '@salesforce/schema/Opportunity.Number_Of_Risk__c';
 import CLOSING_TYPE from '@salesforce/schema/Opportunity.Policy_Closing_Type__c';
+import modal from '@salesforce/resourceUrl/modal';
+import { loadStyle} from 'lightning/platformResourceLoader';
 
 import { CloseActionScreenEvent } from 'lightning/actions';
 
@@ -154,6 +156,10 @@ export default class AswataNewRisk extends LightningElement {
     connectedCallback() {
         this.fetchRiskRecordType();
         this.loadExistingRisks();
+
+        Promise.all([
+            loadStyle(this, modal)
+        ]);
     }
 
     fetchRiskRecordType() {

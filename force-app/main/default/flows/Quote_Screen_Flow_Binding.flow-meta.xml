@@ -49,6 +49,44 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </actionCalls>
     <actionCalls>
+        <name>Copy_1_of_Create_Task</name>
+        <label>Create Task for Each Account</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <actionName>NewTask</actionName>
+        <actionType>quickAction</actionType>
+        <connector>
+            <targetReference>Loop_1</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>contextId</name>
+            <value>
+                <elementReference>Loop_1.OwnerId</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>Subject</name>
+            <value>
+                <stringValue>New Task for KYC Account</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>OwnerId</name>
+            <value>
+                <elementReference>Loop_1.OwnerId</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>WhatId</name>
+            <value>
+                <elementReference>Loop_1.Id</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>NewTask</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <actionCalls>
         <name>Lock_Record</name>
         <label>Lock Record</label>
         <locationX>0</locationX>
@@ -98,44 +136,6 @@
             </value>
         </inputParameters>
         <nameSegment>lockRecord</nameSegment>
-        <offset>0</offset>
-    </actionCalls>
-    <actionCalls>
-        <name>New_Task_Action_1</name>
-        <label>Create Task</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <actionName>NewTask</actionName>
-        <actionType>quickAction</actionType>
-        <connector>
-            <targetReference>Lock_Record_2</targetReference>
-        </connector>
-        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
-        <inputParameters>
-            <name>contextId</name>
-            <value>
-                <elementReference>Get_Quote.Opportunity.Account.OwnerId</elementReference>
-            </value>
-        </inputParameters>
-        <inputParameters>
-            <name>Subject</name>
-            <value>
-                <stringValue>Action Needed (KYC)</stringValue>
-            </value>
-        </inputParameters>
-        <inputParameters>
-            <name>OwnerId</name>
-            <value>
-                <elementReference>Get_Quote.Opportunity.Account.OwnerId</elementReference>
-            </value>
-        </inputParameters>
-        <inputParameters>
-            <name>WhatId</name>
-            <value>
-                <elementReference>accountId</elementReference>
-            </value>
-        </inputParameters>
-        <nameSegment>NewTask</nameSegment>
         <offset>0</offset>
     </actionCalls>
     <actionCalls>
@@ -211,8 +211,8 @@
     <apiVersion>65.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <assignments>
-        <name>Set_User_List</name>
-        <label>Set User List</label>
+        <name>Set_List_for_AccountId</name>
+        <label>Set List for AccountId</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <assignmentItems>
@@ -223,10 +223,33 @@
             </value>
         </assignmentItems>
         <assignmentItems>
-            <assignToReference>accountId</assignToReference>
-            <operator>Assign</operator>
+            <assignToReference>lstAccountRecords</assignToReference>
+            <operator>Add</operator>
             <value>
-                <elementReference>Get_Quote.Opportunity.AccountId</elementReference>
+                <elementReference>Get_AccountID</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Check_Client_Type</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Set_List_for_AccountId_and_The_Insured</name>
+        <label>Set List for AccountId and The Insured</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>listUser</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>Get_Quote.Opportunity.Owner.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>lstAccountRecords</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>Get_The_Insured</elementReference>
             </value>
         </assignmentItems>
         <connector>
@@ -245,23 +268,48 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <defaultConnector>
-            <targetReference>Set_User_List</targetReference>
+            <targetReference>Get_AccountID</targetReference>
         </defaultConnector>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>Account_Already_KYC</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>Get_Quote.Opportunity.Account.Is_General__c</leftValueReference>
+                <leftValueReference>Get_Submission.is_KYC_Account__c</leftValueReference>
                 <operator>EqualTo</operator>
                 <rightValue>
-                    <booleanValue>true</booleanValue>
+                    <numberValue>0.0</numberValue>
                 </rightValue>
             </conditions>
             <connector>
                 <targetReference>Call_Vlocity_Bridge</targetReference>
             </connector>
             <label>Account Already KYC</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_Client_Type</name>
+        <label>Check Client Type</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Get_Notif</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Client_and_The_Insured_Need_KYC</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Submission.is_KYC_Account__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <numberValue>2.0</numberValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_The_Insured</targetReference>
+            </connector>
+            <label>Client and The Insured Need KYC</label>
         </rules>
     </decisions>
     <decisions>
@@ -316,6 +364,20 @@
     </formulas>
     <interviewLabel>[Quote] Screen Flow Binding {!$Flow.CurrentDateTime}</interviewLabel>
     <label>[Quote] Screen Flow Binding</label>
+    <loops>
+        <name>Loop_1</name>
+        <label>Loop All Account</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <collectionReference>lstAccountRecords</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Copy_1_of_Create_Task</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>Lock_Record_2</targetReference>
+        </noMoreValuesConnector>
+    </loops>
     <processMetadataValues>
         <name>BuilderType</name>
         <value>
@@ -335,6 +397,27 @@
         </value>
     </processMetadataValues>
     <processType>Flow</processType>
+    <recordLookups>
+        <name>Get_AccountID</name>
+        <label>Get AccountID</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Set_List_for_AccountId</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Submission.Account.Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Account</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
     <recordLookups>
         <name>Get_Notif</name>
         <label>Get Notif</label>
@@ -363,7 +446,7 @@
         <locationY>0</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Unlock_Quote</targetReference>
+            <targetReference>Get_Submission</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -375,6 +458,48 @@
         </filters>
         <getFirstRecordOnly>true</getFirstRecordOnly>
         <object>Quote</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Submission</name>
+        <label>Get Submission</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Unlock_Quote</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Quote.OpportunityId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Opportunity</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_The_Insured</name>
+        <label>Get The Insured</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Set_List_for_AccountId_and_The_Insured</targetReference>
+        </connector>
+        <filterLogic>or</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Submission.The_Insured_Name__c</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Account</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordUpdates>
@@ -407,7 +532,7 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>New_Task_Action_1</targetReference>
+            <targetReference>Loop_1</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -524,6 +649,21 @@
         <isCollection>true</isCollection>
         <isInput>false</isInput>
         <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>lstAccountIds</name>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>lstAccountRecords</name>
+        <dataType>SObject</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Account</objectType>
     </variables>
     <variables>
         <name>recordId</name>

@@ -2,6 +2,8 @@ import { LightningElement, api, track } from 'lwc';
 import createOpportunitiesAndCloneAssets from '@salesforce/apex/OpportunityController.createOpportunitiesAndCloneAssets';
 import searchAccounts from '@salesforce/apex/Aswata_AddFacultative_Controller.searchAccounts';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+import modal from '@salesforce/resourceUrl/modal';
+import { loadStyle} from 'lightning/platformResourceLoader';
 
 
 export default class AddFacultativeSetOffering extends LightningElement {
@@ -18,6 +20,13 @@ export default class AddFacultativeSetOffering extends LightningElement {
     @track searchResults = [];
     @track listReasurance = [];
     @track showDropdown = false;
+
+    connectedCallback() {
+        //console.log('recordId:'+this.recordId);
+        Promise.all([
+            loadStyle(this, modal)
+        ]);
+    }
 
     handleSearchChange(event) {
         this.searchKey = event.target.value.trim();
