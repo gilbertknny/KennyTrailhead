@@ -24,12 +24,6 @@ export default class LwcTreatyDistribution extends LightningElement {
     @track isRiskSelectorDisabled = false;
     @track isLoading = false;
 
-    // RISK_KEYS = [
-    //     'bppda', 'poolEq', 'poolCustomBond', 
-    //     'kark',
-    //     'grossRetention', 'quotaShare','surplus', 'facoblig'
-    // ];
-    // FORMULA_KEYS = ['grossRetention'];
     FORMULA_KEYS = ['underlying','excessLoss'];
     RISK_KEYS = [
         'bppda', 'poolEq', 'poolCustomBond', 
@@ -339,14 +333,13 @@ export default class LwcTreatyDistribution extends LightningElement {
         }
         let cleanValue = formattedString.toString().replace(/\./g, '');
         cleanValue = cleanValue.replace(',', '.');
-        console.log();
         return parseFloat(cleanValue);
     }
     async formatDeepClone(sourceObject) {
         try {
             console.log('formatDeepClone Try');
             let formattedClone = JSON.parse(JSON.stringify(sourceObject));
-            let finalFormattedData = { ...formattedClone }; 
+            let finalFormattedData = { ...formattedClone };
             this.RISK_KEYS.forEach(key => {
                 const component = formattedClone[key];
                 if (component && typeof component === 'object') {
@@ -423,13 +416,12 @@ export default class LwcTreatyDistribution extends LightningElement {
             let selectRisk = event.detail.value;
             this.selectedRiskId = selectRisk;
             console.log('change',selectRisk);
-            const selectedObject = this.masterData.find(item => item.riskId === selectRisk);
-            if(selectedObject && selectedObject.status != "200"){
+            const checkStatusData = this.masterData.find(item => item.riskId == selectRisk && item.status == "200");
+            if(!checkStatusData){
                 console.log('statusAPI','Hit Baru');
                 try {
                     // let dataTrxData = this.responseJson;
                     const dataTrxData = await getResponseTreaty({ recordId: selectRisk });
-                    
                     if (dataTrxData && dataTrxData?.status == "00") {
                         await this.getSelectedObject(dataTrxData.data);
                     } else {
@@ -456,7 +448,7 @@ export default class LwcTreatyDistribution extends LightningElement {
             }else{
                 console.log('statusAPI','Sudah ada'); 
             }
-            console.log('change selectedObject',selectedObject);
+            const selectedObject = this.masterData.find(item => item.riskId === selectRisk);
             if (selectedObject) {
                 this.currentRisk = selectedObject;
                 this.currentFormated = await this.formatDeepClone(selectedObject);
@@ -514,6 +506,7 @@ export default class LwcTreatyDistribution extends LightningElement {
                     capacity: Number(maxVal)
                 };
             };
+            // console.log('bppda', dist.bppdan_amt, accum.bppdan_amt, max.bppdan_amt);
             updateComponent('bppda', dist.bppdan_amt, accum.bppdan_amt, max.bppdan_amt);
             updateComponent('poolEq', dist.maipark_amt, accum.maipark_amt, max.maipark_amt);
             updateComponent('poolCustomBond', dist.cbond_amt, accum.cbond_amt, max.cbond_amt);
