@@ -16,7 +16,11 @@ global without sharing class VlocityMappingOmniFlow implements callable{
         List<Object> ldclauses = new List<Object>();
         List<ApexDefinedFlow> listClause = new List<ApexDefinedFlow>();
         String recid = null;
+        String objnm = null;
+        String fldnm = null;
+        String val = null;
         Map<String,Object> maplc = new Map<String,Object>();
+        Map<String,Object> maprec = new Map<String,Object>();
         String methodName = vp.methodName;
         Map<String, Object> inputMap = vp.inputMap;
         Map<String, Object> outMap = vp.outMap;
@@ -48,6 +52,17 @@ global without sharing class VlocityMappingOmniFlow implements callable{
                 recid = (String) inputMap.get('recid');
                 outMap.put('result',getclause('InsurancePolicyProductClause','Opportunity__c',recid));
             }
+            else if(methodName.equals('GetPicklistLabel')){
+                objnm = (String) inputMap.get('objnm');
+                fldnm = (String) inputMap.get('fldnm');
+                val = (String) inputMap.get('val');
+                outMap.put('result',getPicklistLabel(objnm, fldnm, val));
+            }
+            else if(methodName.equals('ConvertTemplate')){
+                objnm = (String) inputMap.get('objnm');
+                maprec = (Map<String,Object>) inputMap.get('record');
+                outMap.put('result',convertTemplate(objnm, maprec));
+            }
         }
         catch(Exception exc){
             ErrorLogRecord.DebugLog dl = ErrorLogRecord.setError(null, 'VlocityMappingOmniFlow', exc);
@@ -68,5 +83,29 @@ global without sharing class VlocityMappingOmniFlow implements callable{
         String dpquery = SOQL_SOBJECT.SOQL(sp);// +' WITH SECURITY_ENFORCED';
         lippc = (List<InsurancePolicyProductClause>) database.query(dpquery);
         return lippc;
+    }
+    /** @description getPicklistLabel  @param objnm @param fldnm @param val @return mapval */
+    public static Map<String,Object> getPicklistLabel(String objnm,String fldnm,String val){
+        Map<String,Object> mapobj = SOQL_SOBJECT.getPicklistValue(objnm,fldnm);
+        Map<String,Object> mapval = new Map<String,Object>();
+        if(mapobj.containsKey(val)){
+           mapval.put(val,mapobj.get(val)); 
+        }
+        return mapval;
+    }
+    /** @description convertTemplate  @param objnm @param maprec @return mapobj */
+    public static Map<String,Object> convertTemplate(String objnm,Map<String,Object> maprec){
+        Map<String,Object> mapobj = new Map<String,Object>();
+        Map<String,Object> mapval = new Map<String,Object>();
+        for(String fldnm:maprec.keySet()){
+            mapval = getPicklistLabel(objnm, fldnm,(String) maprec.get(fldnm));
+            if(mapval.size()>0){
+                mapobj.put(fldnm,mapval.get((String) maprec.get(fldnm)));
+            }
+            else{
+                mapobj.put(fldnm,maprec.get(fldnm));
+            }
+        }
+        return mapobj;
     }
 }

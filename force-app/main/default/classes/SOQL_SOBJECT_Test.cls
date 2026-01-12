@@ -12,6 +12,7 @@ private class SOQL_SOBJECT_Test {
             prod.Name = 'anjay';
             insert prod;
             String field = SOQL_SOBJECT.getallfield('product2');
+            SOQL_SOBJECT.getPicklistValue('Account','Type');
             SOQL_SOBJECT.SOQL_Param sq = new SOQL_SOBJECT.SOQL_Param();
             sq.fields = field;
             sq.addField = '';
