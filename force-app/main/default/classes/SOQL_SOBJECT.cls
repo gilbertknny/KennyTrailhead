@@ -67,6 +67,15 @@ public without sharing class SOQL_SOBJECT {
     public static Id getRecordTypeIdbyDevName(String objectName, String strRecordTypeName){
         return  Schema.getGlobalDescribe().get(objectName).getDescribe().getRecordTypeInfosByDeveloperName().get(strRecordTypeName).getRecordTypeId();
     }
+    /** @description getPicklistValue  @param objnm @param fldnm  @return p */
+    public static Map<String,Object> getPicklistValue(String objnm,String fldnm){
+        Map<String,Object> mappl = new Map<String,String>();
+        Schema.DescribeFieldResult f = Schema.getGlobalDescribe().get(objnm).getDescribe().fields.getMap().get(fldnm).getDescribe();
+        for(Schema.PicklistEntry p:f.getPicklistValues()){
+            mappl.put(p.getValue(),p.getLabel());
+        }
+        return mappl;
+    }
     /** @description SOQL_Param */
     public class SOQL_Param{
         /** @description SOQL_Param */

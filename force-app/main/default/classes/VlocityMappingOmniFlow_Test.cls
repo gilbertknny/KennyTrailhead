@@ -84,4 +84,35 @@ private class VlocityMappingOmniFlow_Test {
             System.assertEquals(result, result);
         }
     }
+
+    // TEST 4: GetPicklistLabel
+    @IsTest
+    static void testGetPicklistLabel(){
+        User currentUser = [SELECT Id FROM User WHERE Id = :UserInfo.getUserId()];
+        System.runAs(currentUser) {
+            Test.startTest();
+            Map<String,Object> input = new Map<String,Object>{ 'objnm' => 'Account','fldnm' => 'Type','val' => '1' };
+            Map<String,Object> args = new Map<String,Object>{ 'input' => input };
+            VlocityMappingOmniFlow vp = new VlocityMappingOmniFlow();
+            Boolean result = (Boolean) vp.call('GetPicklistLabel', args);
+            Test.stopTest();
+            System.assertEquals(result, result);
+        }
+    }
+
+    // TEST 5: ConvertTemplate
+    @IsTest
+    static void testConvertTemplate(){
+        User currentUser = [SELECT Id FROM User WHERE Id = :UserInfo.getUserId()];
+        System.runAs(currentUser) {
+            Test.startTest();
+            Map<String,Object> rec = new Map<String,Object>{ 'Name' => 'Budi','Type' => '1' };
+            Map<String,Object> input = new Map<String,Object>{ 'objnm' => 'Account','record' => rec };
+            Map<String,Object> args = new Map<String,Object>{ 'input' => input };
+            VlocityMappingOmniFlow vp = new VlocityMappingOmniFlow();
+            Boolean result = (Boolean) vp.call('ConvertTemplate', args);
+            Test.stopTest();
+            System.assertEquals(result, result);
+        }
+    }
 }
