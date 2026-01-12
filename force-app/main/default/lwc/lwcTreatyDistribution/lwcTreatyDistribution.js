@@ -36,119 +36,121 @@ export default class LwcTreatyDistribution extends LightningElement {
         'kark', 'underlying', 'excessLoss', 
         'grossRetention', 'quotaShare','surplus', 'facoblig'
     ];
+    
     @track responseJson = {
             "status" : "00",
             "message" : "Success",
             "data" : {
-            "treaty_dist" : [ {
-                "busreq_id" : "024.1010.201.2025.000514.00",
-                "risk_id" : "1",
-                "seq_id" : "332348428",
-                "inception_date" : "2025-12-05 00:00:00.0",
-                "currency_code" : "IDR",
-                "accum_id" : "685572",
-                "tsi100" : null,
-                "tsi_wt" : "5000000000.00",
-                "tsi_jp" : "0.00",
-                "maipark_amt" : "0.00",
-                "cbond_amt" : "0.00",
-                "bppdan_amt" : "125000000.00",
-                "kark_amt" : "0.00",
-                "ur_amt" : "4875000000.00",
-                "anr_amt" : "4875000000.00",
-                "jrofur_amt" : "0.00",
-                "xl_amt" : "0.00",
-                "gr_amt" : "4875000000.00",
-                "jrofgr_amt" : "0.00",
-                "qs_amt" : "0.00",
-                "sp1_amt" : "0.00",
-                "sp2_amt" : "0.00",
-                "facoblig_amt" : "0.00",
-                "fc_prop_amt" : "0.00",
-                "fc_nonprop_pl_amt" : "0.00",
-                "fc_nonprop_placed_amt" : "0.00",
-                "fc_nonprop_unplaced_amt" : "0.00",
-                "sf_amt" : "0.00",
-                "sum_distribution_amt" : "5000000000.00",
-                "ts_distribution_amt" : "0.00",
-                "ts_fc_prop_amt" : "0.00",
-                "ts_fc_nonprop_pl_amt" : "0.00",
-                "ts_fc_nonprop_placed_amt" : "0.00",
-                "ts_fc_nonprop_unplaced_amt" : "0.00",
-                "ts_sf_amt" : "0.00",
-                "ts_sum_distribution_amt" : "0.00",
-                "created_date" : "2025-12-04 14:29:04.0",
-                "created_by" : "17",
-                "lastupdate_date" : "2025-12-04 14:29:04.0",
-                "lastupdate_by" : "17"
-                } ],
-                "treaty_dist_accum" : [ {
-                "busreq_id" : "024.1010.201.2025.000514.00",
-                "risk_id" : "1",
-                "seq_id" : "332348428",
-                "inception_date" : "2025-12-05 00:00:00.0",
-                "currency_code" : "IDR",
-                "accum_id" : "685572",
-                "tsi100" : null,
-                "tsi_wt" : "9500000000.00",
-                "tsi_jp" : "0.00",
-                "maipark_amt" : "0.00",
-                "cbond_amt" : "0.00",
-                "bppdan_amt" : "237500000.00",
-                "kark_amt" : "0.00",
-                "ur_amt" : "9262500000.00",
-                "anr_amt" : "9262500000.00",
-                "jrofur_amt" : "0.00",
-                "xl_amt" : "0.00",
-                "gr_amt" : "9262500000.00",
-                "jrofgr_amt" : "0.00",
-                "qs_amt" : "0.00",
-                "sp1_amt" : "0.00",
-                "sp2_amt" : "0.00",
-                "facoblig_amt" : "0.00",
-                "fc_prop_amt" : "0.00",
-                "fc_nonprop_pl_amt" : "0.00",
-                "fc_nonprop_placed_amt" : "0.00",
-                "fc_nonprop_unplaced_amt" : "0.00",
-                "sf_amt" : "0.00",
-                "sum_distribution_amt" : "9500000000.00",
-                "ts_distribution_amt" : "0.00",
-                "ts_fc_prop_amt" : "0.00",
-                "ts_fc_nonprop_pl_amt" : "0.00",
-                "ts_fc_nonprop_placed_amt" : "0.00",
-                "ts_fc_nonprop_unplaced_amt" : "0.00",
-                "ts_sf_amt" : "0.00",
-                "ts_sum_distribution_amt" : "0.00",
-                "created_date" : "2025-12-04 14:29:01.0",
-                "created_by" : "17",
-                "lastupdate_date" : "2025-12-04 14:29:04.0",
-                "lastupdate_by" : "17"
-                } 
-            ],
-            "max_treaty": {
-                "sp1_amt": "850000000000.00",
-                "sp2_amt": "0.00",
-                "qs_amt": "0.00",
-                "ur_amt": "15000000000.00",
-                "xl_amt": "35000000000.00",
-                "jrofur_amt": "0.00",
-                "jrofgr_amt": "0.00",
-                "cbond_amt": "0.00",
-                "bppdan_amt": "500000000.00",
-                "kark_amt": "0.00",
-                "maipark_amt": "0.00",
-                "anr_amt": "0.00",
-                "gr_amt": "50000000000.00",
-                "maxtreaty_amt": "900000000000.00",
-                "cbond_pct": "0.0",
-                "bppdan_pct": "2.5",
-                "kark_pct": "100.0",
-                "maipark_pct": "0.0",
-                "jfur_pct": "0.0",
-                "jfgr_pct": "0.0",
-                "qs_pct": "0.0"
+                "max_treaty": {
+                    "qs_pct": "0.0",
+                    "jfgr_pct": "0.0",
+                    "jfur_pct": "0.0",
+                    "maipark_pct": "0.0",
+                    "kark_pct": "100.0",
+                    "bppdan_pct": "2.5",
+                    "cbond_pct": "0.0",
+                    "maxtreaty_amt": "900000000000.00",
+                    "gr_amt": "50000000000.00",
+                    "anr_amt": "0.00",
+                    "maipark_amt": "0.00",
+                    "kark_amt": "0.00",
+                    "bppdan_amt": "500000000.00",
+                    "cbond_amt": "0.00",
+                    "jrofgr_amt": "0.00",
+                    "jrofur_amt": "0.00",
+                    "xl_amt": "35000000000.00",
+                    "ur_amt": "15000000000.00",
+                    "qs_amt": "0.00",
+                    "sp2_amt": "0.00",
+                    "sp1_amt": "850000000000.00"
+                },
+                "treaty_dist_accum": [
+                    {
+                        "lastupdate_by": "17",
+                        "lastupdate_date": "2026-01-12 11:05:44.0",
+                        "created_by": "17",
+                        "created_date": "2026-01-12 11:05:42.0",
+                        "ts_sum_distribution_amt": "0.00",
+                        "ts_sf_amt": "0.00",
+                        "ts_fc_nonprop_unplaced_amt": "0.00",
+                        "ts_fc_nonprop_placed_amt": "0.00",
+                        "ts_fc_nonprop_pl_amt": "0.00",
+                        "ts_fc_prop_amt": "0.00",
+                        "ts_distribution_amt": "0.00",
+                        "sum_distribution_amt": "517316000.00",
+                        "sf_amt": "0.00",
+                        "fc_nonprop_unplaced_amt": "0.00",
+                        "fc_nonprop_placed_amt": "0.00",
+                        "fc_nonprop_pl_amt": "0.00",
+                        "fc_prop_amt": "0.00",
+                        "facoblig_amt": "0.00",
+                        "sp2_amt": "0.00",
+                        "sp1_amt": "0.00",
+                        "qs_amt": "0.00",
+                        "jrofgr_amt": "0.00",
+                        "gr_amt": "504383100.00",
+                        "xl_amt": "0.00",
+                        "jrofur_amt": "0.00",
+                        "anr_amt": "504383100.00",
+                        "ur_amt": "504383100.00",
+                        "kark_amt": "0.00",
+                        "bppdan_amt": "12932900.00",
+                        "cbond_amt": "0.00",
+                        "maipark_amt": "0.00",
+                        "tsi_jp": "0.00",
+                        "tsi_wt": "517316000.00",
+                        "accum_id": "689285",
+                        "currency_code": "IDR",
+                        "inception_date": "2026-01-12 00:00:00.0",
+                        "seq_id": "332601227",
+                        "risk_id": "1",
+                        "busreq_id": "024.1010.201.2026.000023.00"
+                    }
+                ],
+                "treaty_dist": [
+                    {
+                        "lastupdate_by": "17",
+                        "lastupdate_date": "2026-01-12 11:05:42.0",
+                        "created_by": "17",
+                        "created_date": "2026-01-12 11:05:42.0",
+                        "ts_sum_distribution_amt": "0.00",
+                        "ts_sf_amt": "0.00",
+                        "ts_fc_nonprop_unplaced_amt": "0.00",
+                        "ts_fc_nonprop_placed_amt": "0.00",
+                        "ts_fc_nonprop_pl_amt": "0.00",
+                        "ts_fc_prop_amt": "0.00",
+                        "ts_distribution_amt": "0.00",
+                        "sum_distribution_amt": "258658000.00",
+                        "sf_amt": "0.00",
+                        "fc_nonprop_unplaced_amt": "0.00",
+                        "fc_nonprop_placed_amt": "0.00",
+                        "fc_nonprop_pl_amt": "0.00",
+                        "fc_prop_amt": "0.00",
+                        "facoblig_amt": "0.00",
+                        "sp2_amt": "0.00",
+                        "sp1_amt": "0.00",
+                        "qs_amt": "0.00",
+                        "jrofgr_amt": "0.00",
+                        "gr_amt": "252191550.00",
+                        "xl_amt": "0.00",
+                        "jrofur_amt": "0.00",
+                        "anr_amt": "252191550.00",
+                        "ur_amt": "252191550.00",
+                        "kark_amt": "0.00",
+                        "bppdan_amt": "6466450.00",
+                        "cbond_amt": "0.00",
+                        "maipark_amt": "0.00",
+                        "tsi_jp": "0.00",
+                        "tsi_wt": "258658000.00",
+                        "accum_id": "689285",
+                        "currency_code": "IDR",
+                        "inception_date": "2026-01-12 00:00:00.0",
+                        "seq_id": "332601227",
+                        "risk_id": "1",
+                        "busreq_id": "024.1010.201.2026.000023.00"
+                    }
+                ]
             }
-        }
     }
     @track masterData =[
         {
@@ -233,7 +235,7 @@ export default class LwcTreatyDistribution extends LightningElement {
     }
     @wire(CurrentPageReference)
     getStateParameters(currentPageReference) {
-        console.log('Page Reference:', JSON.stringify(currentPageReference));
+        // console.log('Page Reference:', JSON.stringify(currentPageReference));
         console.log('recordId from @api:', this.recordId);
         if (!this.recordId && currentPageReference) {
             this.recordId = currentPageReference.state?.recordId || currentPageReference.attributes?.recordId;
@@ -255,7 +257,7 @@ export default class LwcTreatyDistribution extends LightningElement {
             const data = await getRelatedListRisk({ recordId: this.recordId });
             if (data) {
                 this.relatedRisk=data;
-                console.log('relatedList ',JSON.stringify(this.relatedRisk));
+                // console.log('relatedList ',JSON.stringify(this.relatedRisk));
                 const startDate = this.formattedDate(data[0].oppStartDatePeriode);
                 const endDate = this.formattedDate(data[0].oppEndDatePeriode);
                 this.totalSumInsured = data[0].oppTotalSumInsured;
@@ -294,8 +296,7 @@ export default class LwcTreatyDistribution extends LightningElement {
                     };
                     return newMasterItem;
                 });
-                // this.initialDataTreaty();
-                console.log('Fetching Opportunity Data:', JSON.stringify(this.masterData));
+                // console.log('Fetching Opportunity Data:', JSON.stringify(this.masterData));
             } else if (error) {
                 console.error('Error fetching Opportunity Data:', error);
             }
@@ -343,11 +344,7 @@ export default class LwcTreatyDistribution extends LightningElement {
     }
     async formatDeepClone(sourceObject) {
         try {
-            console.log('sourceObject',JSON.stringify(sourceObject));
-            if (!sourceObject) {
-                console.log('formatDeepClone sourceObject is null');
-                return null;
-            }
+            console.log('formatDeepClone Try');
             let formattedClone = JSON.parse(JSON.stringify(sourceObject));
             let finalFormattedData = { ...formattedClone }; 
             this.RISK_KEYS.forEach(key => {
@@ -369,7 +366,7 @@ export default class LwcTreatyDistribution extends LightningElement {
             finalFormattedData.totalSumInsuredShare = this.formatNumber(finalFormattedData.totalSumInsuredShare ?? 0);
             finalFormattedData.accumulatedSumInsured100 = this.formatNumber(finalFormattedData.accumulatedSumInsured100 ?? 0);
             finalFormattedData.accumulatedSumInsuredShare = this.formatNumber(finalFormattedData.accumulatedSumInsuredShare ?? 0);
-            console.log('formatDeepClone Success',JSON.stringify(finalFormattedData));
+            // console.log('formatDeepClone Success',JSON.stringify(finalFormattedData));
             return finalFormattedData;
         } catch (error) {
             console.log('formatDeepClone Error',error);
@@ -393,11 +390,9 @@ export default class LwcTreatyDistribution extends LightningElement {
             this.RISK_KEYS.forEach(key => {
                 const component = this.currentRisk[key];
                 const componentFormat = this.currentFormated[key];
-                // let isFacultative = (this.currentRisk.setFacultative != null);
                 let tempLimit = component?.limit ?? component.capacity - component.accumulation;
                 this.currentRisk = {
                     ...this.currentRisk,
-                    // isSetFacultativeDisabled:isFacultative,
                     [key]: {
                         ...component,
                         limit: tempLimit
@@ -405,7 +400,6 @@ export default class LwcTreatyDistribution extends LightningElement {
                 };
                 this.currentFormated = {
                     ...this.currentFormated,
-                    // isSetFacultativeDisabled:isFacultative,
                     [key]: {
                         ...componentFormat,
                         limit: this.formatNumber(tempLimit),
@@ -422,6 +416,7 @@ export default class LwcTreatyDistribution extends LightningElement {
         this.initialDataTreaty();
     }
     async handleBusreqIdChange(event){
+        console.log('handleBusreqIdChange',event);
         try {
             this.isRiskSelectorDisabled = true;
             this.isLoading = true;
@@ -429,22 +424,36 @@ export default class LwcTreatyDistribution extends LightningElement {
             this.selectedRiskId = selectRisk;
             console.log('change',selectRisk);
             const selectedObject = this.masterData.find(item => item.riskId === selectRisk);
-            console.log('change this.masterData',JSON.stringify(this.masterData));
-            // const dataTrxData = this.responseJson;
-            const dataTrxData = await getResponseTreaty({ recordId: selectRisk });
-            const checkStatusData = this.masterData.find(item => item.riskId == selectRisk && item.status == "200");
-            if(!checkStatusData){
+            if(selectedObject && selectedObject.status != "200"){
                 console.log('statusAPI','Hit Baru');
-                if (dataTrxData && dataTrxData?.status == "00") {
-                    await this.getSelectedObject(dataTrxData.data);
-                }else{
+                try {
+                    // let dataTrxData = this.responseJson;
+                    const dataTrxData = await getResponseTreaty({ recordId: selectRisk });
+                    
+                    if (dataTrxData && dataTrxData?.status == "00") {
+                        await this.getSelectedObject(dataTrxData.data);
+                    } else {
+                        this.dispatchEvent(new ShowToastEvent({
+                            title: 'Error',
+                            message: dataTrxData?.message || 'Gagal memuat data',
+                            variant: 'error',
+                        }));
+                        this.isRiskSelectorDisabled = false;
+                        this.isLoading = false;
+                        return;
+                    }
+                } catch (apiError) {
+                    console.error('Error fetching treaty data:', apiError);
                     this.dispatchEvent(new ShowToastEvent({
                         title: 'Error',
-                        message: dataTrxData?.message || 'Gagal memuat data',
+                        message: 'Gagal mengambil data treaty',
                         variant: 'error',
                     }));
+                    this.isRiskSelectorDisabled = false;
+                    this.isLoading = false;
+                    return;
                 }
-            }else{ 
+            }else{
                 console.log('statusAPI','Sudah ada'); 
             }
             console.log('change selectedObject',selectedObject);
@@ -452,17 +461,9 @@ export default class LwcTreatyDistribution extends LightningElement {
                 this.currentRisk = selectedObject;
                 this.currentFormated = await this.formatDeepClone(selectedObject);
             } 
-            // else {
-            //     this.currentRisk = {};
-            //     this.currentFormated = {};
-            // }
             this.isRiskSelectorDisabled = false;
             this.isLoading = false;
-            // this.saveChanges();
-            // window.setTimeout(() => {
-            //     this.isRiskSelectorDisabled = false;
-            // }, 3500);
-            console.log('handleBusreqIdChange Success',error);
+            console.log('handleBusreqIdChange Success');
         } catch (error) {
             console.log('handleBusreqIdChange Error',error.message());
         }
@@ -476,7 +477,7 @@ export default class LwcTreatyDistribution extends LightningElement {
             }
             return treatyResult;
         });
-        console.log('MasterData setelah update:', JSON.stringify(this.masterData));
+        // console.log('MasterData setelah update:', JSON.stringify(this.masterData));
     }
     getUpdatedTreatyData(originalResult, apiData) {
         try {
@@ -716,13 +717,6 @@ export default class LwcTreatyDistribution extends LightningElement {
             riskId: item.riskId,
             setFacultative: item.setFacultative?? 0,
         })));
-        // const jsonDataString = JSON.stringify(this.currentRisk);
-        // const idListString = JSON.stringify(this.currentRisk
-        //     .map(item => ({
-        //     busreqId: item.busreq_id,
-        //     riskId: item.riskId,
-        //     setFacultative: item.setFacultative?? 0,
-        // })));
         console.log('Saving jsonDataString'+jsonDataString);
         saveTreatyDistribution({
             quoteId:this.recordId,
@@ -752,7 +746,7 @@ export default class LwcTreatyDistribution extends LightningElement {
         updatedMasterData[indexToUpdate] = this.currentRisk;
         // updatedMasterData = this.currentRisk;
         this.masterData = updatedMasterData;
-        console.log('updatedMasterData',JSON.stringify(this.masterData));
+        // console.log('updatedMasterData',JSON.stringify(this.masterData));
     }
 
     get totalRiskComponentValues() {
